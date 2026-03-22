@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "version": "2026-03-22",
+    "maintained_by": "Claude",
+    "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
+  },
+  "brand": {
+    "id": "FPHs",
+    "name": "ForumPHs",
+    "formerly": "PHAS / PH Administradores & Servicios, S.A.",
+    "ruc": "15576814-2-2025",
+    "constituted": "2025-06-03",
+    "tagline": "Construiste tu patrimonio. Nosotros le construimos un sistema.",
+    "identity_system": "Amatista Carbon",
+    "wordmark_rule": "Puramente tipográfico — sin PNG ni raster"
+  },
+  "people": {
+    "sam": {
+      "role": "socio",
+      "also": "Unrealville Studio — gestión de marca y tecnología"
+    },
+    "ivette_flores": {
+      "role": "Gerente General",
+      "title": "Abogada especialista en propiedad horizontal",
+      "cedula": "8-368-46",
+      "decision_style": "Ver BP_Brand_Context.md capa relacional"
+    },
+    "cpa": {
+      "name": "Marlene Molina",
+      "cedula": "PE-11-2157",
+      "cpa": "0488-2020"
+    }
+  },
+  "portfolio": {
+    "total_phs": 8,
+    "monthly_income": 17307.50,
+    "phs": [
+      { "name": "Torres de Castilla", "fee": 3700.00, "note": "Impuesto complementario" },
+      { "name": "PH Venezia Tower", "fee": 3300.00 },
+      { "name": "PH Luxor 300", "fee": 3100.00, "note": "Tasa única" },
+      { "name": "PH Parque Lefevre 75", "fee": 2407.50, "note": "⚠ Prorrateo pendiente confirmar" },
+      { "name": "Los Álamos", "fee": 2000.00 },
+      { "name": "PH Firenze", "fee": 1200.00 },
+      { "name": "PH Plaza España", "fee": 1000.00, "note": "Revisar rentabilidad real" },
+      { "name": "PH Parque Central Arraiján", "fee": 600.00, "note": "Revisar rentabilidad real" }
+    ]
+  },
+  "financials": {
+    "eeff_2025": {
+      "period": "Nov–Dic 2025 (2 meses)",
+      "ingresos": 18207.50,
+      "gastos": 17251.19,
+      "utilidad_neta": 956.31,
+      "margen": "5.25%",
+      "efectivo_propio_cierre": 956.31,
+      "capital_social": 10000,
+      "capital_social_nota": "Pendiente cobro a socios — no es efectivo disponible"
+    },
+    "eeff_2026_ytd": {
+      "period": "Ene–Feb 2026",
+      "enero": { "ingresos": 17307.50, "gastos": 13879.74, "utilidad": 3427.76, "margen": "19.8%" },
+      "febrero": { "ingresos": 17307.50, "gastos": 15458.17, "utilidad": 1849.33, "margen": "10.7%" },
+      "acumulado": { "ingresos": 34615.00, "gastos": 29337.91, "utilidad": 5277.09 }
+    },
+    "pasivo_laboral_historico": {
+      "estimado": 25000,
+      "registrado_eeff_2025": 0,
+      "linea_dgi_172": 0,
+      "status": "⚠ No provisionado — validar monto exacto con CPA",
+      "plan_recomendado": "24 meses — $1,041.67/mes"
+    },
+    "reservas_laborales_corrientes": {
+      "status": "No iniciadas",
+      "monto_mensual_requerido": 1014.89,
+      "breakdown": {
+        "cesantia_2.25pct": 120.73,
+        "vacaciones_8.33pct": 447.08,
+        "decimo_tercero_8.33pct": 447.08
+      }
+    },
+    "isr_2025": {
+      "impuesto_causado": 239.08,
+      "impuesto_complementario": 28.69,
+      "total": 267.77,
+      "status": "Pagado"
+    }
+  },
+  "active_projects": [
+    {
+      "id": "FPH-001",
+      "name": "Financial Intelligence Engine — BI 2026",
+      "status": "delivered",
+      "output": "ForumPHs_BI_2026.html (7 paneles + simulador timing)",
+      "next_action": "Subir al repo CoreProject cuando PAT/conexión disponible",
+      "blocking": false
+    },
+    {
+      "id": "FPH-002",
+      "name": "Plan Estratégico v3.0",
+      "status": "delivered — pendiente aprobación IF",
+      "output": "ForumPHs_Plan_Estrategico_v3.docx",
+      "next_action": "Reunión aprobación con Ivette Flores",
+      "blocking": false
+    },
+    {
+      "id": "FPH-003",
+      "name": "Document Factory — Actas",
+      "status": "85% completado",
+      "next_action": "Completar al 100% en los próximos 30 días",
+      "blocking": false
+    },
+    {
+      "id": "FPH-004",
+      "name": "Acta Generator — Instrucciones DOCX",
+      "status": "instrucciones definidas en este proyecto",
+      "next_action": "Generar primera acta real cuando IF provea transcripción",
+      "blocking": false
+    },
+    {
+      "id": "FPH-005",
+      "name": "4 Fondos de Sostenibilidad — Implementación",
+      "status": "diseñado — no iniciado",
+      "next_action": "Abrir cuentas bancarias separadas · iniciar transferencias mes 1",
+      "blocking": true,
+      "blocking_reason": "Requiere acción de IF esta semana"
+    }
+  ],
+  "pending_decisions": [
+    "Confirmar monto exacto pasivo laboral histórico con CPA Marlene Molina",
+    "Confirmar fee definitivo PH Lefevre 75 (prorrateo pendiente)",
+    "Resolver doble compensación Irja Saldaña + Yarisel Jaén (planilla + honorarios)",
+    "Revisar rentabilidad real de Arraiján ($600) y Plaza España ($1,000)",
+    "Aprobar Plan Estratégico v3.0"
+  ],
+  "alerts": [
+    { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — empezar plan 24m esta semana" },
+    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — iniciar $1,014.89/mes inmediatamente" },
+    { "level": "warning", "msg": "Lefevre 75: fee pendiente confirmar — puede impactar hasta $892/mes" },
+    { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo para bajar" }
+  ],
+  "identity": {
+    "palette": {
+      "amatista": "#5C3472",
+      "carbon_profundo": "#1C2233",
+      "terra": "#C4622D"
+    },
+    "typography": ["EB Garamond", "DM Sans", "Cormorant Garamond"]
+  }
+}

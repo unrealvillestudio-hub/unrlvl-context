@@ -1,0 +1,43 @@
+{
+  "_meta": { "version": "2026-03-22", "maintained_by": "Claude" },
+  "brand": {
+    "id": "Neurone",
+    "name": "Neurone SCF",
+    "domain": "neuronescmiami.com",
+    "market": "Florida, USA",
+    "channel": "Shopify",
+    "status": "active",
+    "health": "yellow"
+  },
+  "active_projects": [
+    {
+      "id": "NEU-001",
+      "name": "Pricing Model v5",
+      "status": "completado — pendiente subir al repo",
+      "output": "Neurone_Pricing_v5.xlsx + neurone_pricing_analysis_v1.html",
+      "next_action": "Subir Neurone_Pricing_v5.xlsx al repo — archivo generado localmente, no está en ningún repo aún"
+    },
+    {
+      "id": "NEU-002",
+      "name": "Inventario y SKUs",
+      "status": "analizado",
+      "next_action": "Decidir sistema SKU definitivo (proveedor vs modelo) antes de activar Shopify"
+    },
+    {
+      "id": "NEU-003",
+      "name": "Shopify — lanzamiento",
+      "status": "bloqueado",
+      "blocking_reason": "17+ SKUs con stock 0 · precios en $0.00 placeholder · autorización marca Neurone para dominio US pendiente"
+    }
+  ],
+  "pending_decisions": [
+    "Confirmar volumen mensual real con PO (modelo usa 1,000 uds/mes como base)",
+    "Decidir SKU definitivo: proveedor (L014, T025) vs modelo (L034, T068)",
+    "Confirmar precios de venta finales",
+    "Resolver autorización formal marca Neurone para dominio US"
+  ],
+  "alerts": [
+    { "level": "warning", "msg": "Neurone_Pricing_v5.xlsx no está en el repo — riesgo de pérdida" },
+    { "level": "warning", "msg": "17+ SKUs out_of_stock deben marcarse antes de lanzar Shopify" }
+  ]
+}

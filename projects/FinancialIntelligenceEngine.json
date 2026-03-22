@@ -1,0 +1,44 @@
+{
+  "_meta": { "version": "2026-03-22", "maintained_by": "Claude" },
+  "project": {
+    "id": "PROJ-FIE",
+    "name": "Financial Intelligence Engine",
+    "type": "cross-brand-tool",
+    "lab_origin": true,
+    "status": "active — lab-to-service",
+    "unrlvl_role": "laboratorio en ForumPHs + futuro filtro de onboarding UNRLVL"
+  },
+  "what_it_does": "Transforma EEFF crudos (xlsx/pdf) en BI interactivo accionable con simulador de timing para metas financieras. 7 paneles navegables + simulador con sliders en tiempo real.",
+  "stack": "HTML + Chart.js + vanilla JS — cero dependencias externas",
+  "outputs_generated": [
+    { "brand": "ForumPHs", "file": "ForumPHs_BI_2026.html", "status": "entregado" },
+    { "brand": "ForumPHs", "file": "ForumPHs_EEFF_2026_v1.html", "status": "entregado" },
+    { "brand": "ForumPHs", "file": "FPHs_Business_Intelligence_2025.html", "status": "entregado" }
+  ],
+  "simulation_model": {
+    "constants": {
+      "BASE_INCOME": 17307.50,
+      "BASE_OPS": 14669,
+      "COST_PER_NEW_PH": 1300,
+      "LABOR_RES_MONTHLY": 1014.89,
+      "CONTINGENCY_MONTHLY": 500,
+      "HISTORIC_LIABILITY": 25000
+    },
+    "key_findings": {
+      "sustainability_threshold": 20500,
+      "gap_to_threshold": 3193,
+      "conservador_100k": "May 2037 + Nov 2034",
+      "optimo_100k": "Jul–Ago 2028 (2.3–2.4 años)"
+    }
+  },
+  "evolution_roadmap": [
+    { "level": 1, "name": "Servicio manual", "status": "activo", "price": "$400–800/análisis" },
+    { "level": 2, "name": "App semi-automatizada", "status": "pendiente", "stack": "React + Anthropic API + Chart.js" },
+    { "level": 3, "name": "SaaS ForumPHs → clientes PH", "status": "futuro", "revenue_potential": "$4k/año con 10 PHs" }
+  ],
+  "next_actions": [
+    "Definir template xlsx estándar de ingesta para otros clientes",
+    "Construir BI de clientes PH (Luxor, Venezia, Torres de Castilla...)",
+    "Decidir arquitectura: HTML artifact vs React app vs módulo WebLab"
+  ]
+}

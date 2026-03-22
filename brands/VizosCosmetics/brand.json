@@ -1,0 +1,34 @@
+{
+  "_meta": { "version": "2026-03-22", "maintained_by": "Claude" },
+  "brand": {
+    "id": "Vizos",
+    "name": "Vizos Cosmetics",
+    "domain": "vizoscosmetics.com",
+    "stack": "WordPress + Hostinger + Cloudflare",
+    "status": "active",
+    "health": "green",
+    "site_status": "Live v8"
+  },
+  "active_projects": [
+    {
+      "id": "VIZ-001",
+      "name": "Site v8",
+      "status": "live",
+      "deploy": "Pipeline FTP automático via GitHub Actions",
+      "workflow": "deploy-vizos-wp.yml",
+      "next_action": "Revisar rendering en mobile"
+    },
+    {
+      "id": "VIZ-002",
+      "name": "Logo UNRLVL en curvas",
+      "status": "bloqueado",
+      "blocking_reason": "PNGs actuales sin alpha — fondo negro visible. Requiere Sam: Affinity Designer → Bebas Neue → Convert to Curves. NO embeber hasta tener alpha real."
+    }
+  ],
+  "pending_decisions": [
+    "Logo PNG con alpha — acción de Sam en Affinity Designer"
+  ],
+  "alerts": [
+    { "level": "warning", "msg": "Logo sin alpha — no embeber en HTML hasta corrección" }
+  ]
+}

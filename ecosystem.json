@@ -1,0 +1,94 @@
+{
+  "_meta": {
+    "version": "2026-03-22",
+    "maintained_by": "Claude — do not edit manually",
+    "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
+    "update_protocol": "Claude updates at end of each session via Vercel deploy"
+  },
+  "studio": {
+    "name": "Unreal>ille Studio",
+    "owner": "Sam",
+    "tagline": "Not for everyone.",
+    "team_id": "team_fEH94Irp6BAI9YGm4btGna5n"
+  },
+  "brands": [
+    {
+      "id": "FPHs",
+      "name": "ForumPHs",
+      "formerly": "PHAS / PH Administradores & Servicios",
+      "type": "brand",
+      "sam_role": "socio",
+      "key_person": "Ivette Flores (Gerente General, abogada)",
+      "status": "active",
+      "health": "green",
+      "context_file": "/brands/ForumPHs/brand.json",
+      "bp_file": "/brands/ForumPHs/BP_Brand_Context.md",
+      "last_updated": "2026-03-22"
+    },
+    {
+      "id": "Neurone",
+      "name": "Neurone SCF",
+      "type": "brand",
+      "sam_role": "studio",
+      "status": "active",
+      "health": "yellow",
+      "context_file": "/brands/NeuroneSCF/brand.json",
+      "bp_file": "/brands/NeuroneSCF/BP_Brand_Context.md",
+      "last_updated": "2026-03-22"
+    },
+    {
+      "id": "Vizos",
+      "name": "Vizos Cosmetics",
+      "type": "brand",
+      "sam_role": "studio",
+      "status": "active",
+      "health": "green",
+      "context_file": "/brands/VizosCosmetics/brand.json",
+      "bp_file": "/brands/VizosCosmetics/BP_Brand_Context.md",
+      "last_updated": "2026-03-22"
+    }
+  ],
+  "projects": [
+    {
+      "id": "PROJ-FIE",
+      "name": "Financial Intelligence Engine",
+      "type": "cross-brand-tool",
+      "lab_origin": true,
+      "status": "active",
+      "current_deployment": "ForumPHs",
+      "serves_brands": ["ForumPHs"],
+      "future_brands": ["NeuroneSCF", "VizosCosmetics"],
+      "unrlvl_role": "laboratorio + filtro de onboarding",
+      "context_file": "/projects/FinancialIntelligenceEngine.json",
+      "last_updated": "2026-03-22"
+    },
+    {
+      "id": "PROJ-DF",
+      "name": "Document Factory",
+      "type": "cross-brand-tool",
+      "status": "active",
+      "current_deployment": "ForumPHs",
+      "serves_brands": ["ForumPHs"],
+      "context_file": "/projects/DocumentFactory.json",
+      "last_updated": "2026-03-22"
+    },
+    {
+      "id": "PROJ-WL",
+      "name": "WebLab",
+      "type": "lab",
+      "status": "active",
+      "vercel_url": "https://web-lab.vercel.app",
+      "context_file": "/projects/WebLab.json",
+      "last_updated": "2026-03-22"
+    },
+    {
+      "id": "PROJ-PM",
+      "name": "Project Management System",
+      "type": "ecosystem-infrastructure",
+      "status": "building",
+      "description": "Este sistema — context files + dashboard + protocolo de sesión",
+      "context_file": "/projects/ProjectManagement.json",
+      "last_updated": "2026-03-22"
+    }
+  ]
+}
