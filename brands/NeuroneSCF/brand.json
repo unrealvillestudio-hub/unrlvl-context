@@ -13,58 +13,83 @@
     {
       "id": "NEU-001",
       "name": "Pricing Model v9",
-      "status": "completado — en repo BluePrints",
-      "output": "docs/reports/Neurone_Pricing_v9.xlsx",
-      "next_action": "Completar montos reales en OPERATIVOS con PO antes de usar como definitivo"
+      "status": "completado — en BluePrints repo",
+      "output": "BluePrints/docs/reports/Neurone_Pricing_v9.xlsx",
+      "tabs": ["INTAKE PO", "CONFIG", "LOGISTICA", "TRANSACCION", "MARKETING", "OPERATIVOS", "CALCULADORA", "ESCENARIOS", "KITS", "PROYECCION", "MARKUP", "CATALOGO PRODUCTO", "RESUMEN CLAUDE"],
+      "next_action": "Completar OPERATIVOS con montos reales de PO — afecta viabilidad real del modelo"
     },
     {
       "id": "NEU-002",
       "name": "Inventario y SKUs",
-      "status": "analizado",
+      "status": "analizado — decisión pendiente",
       "next_action": "Decidir sistema SKU definitivo (proveedor vs modelo) antes de activar Shopify"
     },
     {
       "id": "NEU-003",
       "name": "Shopify — lanzamiento",
       "status": "bloqueado",
-      "blocking_reason": "17+ SKUs con stock 0 · precios $0.00 placeholder · autorización marca Neurone para dominio US pendiente"
+      "blocking_reason": "17+ SKUs stock 0 · precios $0.00 placeholder · autorización marca Neurone US pendiente"
     },
     {
       "id": "NEU-004",
       "name": "Estrategia Comercial B2C v4",
       "status": "checkpoint — pending PO + Laura approval",
-      "output": "docs/reports/neurone_estrategia_v4.html",
-      "next_action": "Revisión y aprobación de PO y Laura — ajustes si necesario"
+      "output": "BluePrints/docs/reports/neurone_estrategia_v4.html",
+      "recipients": ["Sam", "Patricia Osorio", "Laura"],
+      "next_action": "Revisión y aprobación PO + Laura — ajustes si necesario"
     }
   ],
   "pricing_strategy": {
     "model": "Portfolio pricing — 3 tiers",
     "canal_activo": "B2C exclusivo fase 1",
+    "b2b_profesional": "NO activo — diferido a fase 2",
     "kits": [
-      { "id": "K1", "name": "HUMIT Deep Moisturizing", "price": 45, "margin_pct": 42.9 },
-      { "id": "K2", "name": "KERASIN HB + VELVETY Intensive Repair", "price": 48, "margin_pct": 46.4 },
-      { "id": "K3", "name": "TOTAL VIOLET Color Guard", "price": 55, "margin_pct": 51.3 },
-      { "id": "SOS", "name": "DYFENSOR + SERUM Rescue Treatment", "price": 79, "margin_pct": 59.7 }
+      { "id": "K1",  "name": "HUMIT Deep Moisturizing",       "price": 45, "margin_pct": 42.9, "contrib": 18.03 },
+      { "id": "K2",  "name": "KERASIN HB + VELVETY Repair",   "price": 48, "margin_pct": 46.4, "contrib": 20.83 },
+      { "id": "K3",  "name": "TOTAL VIOLET Color Guard",       "price": 55, "margin_pct": 51.3, "contrib": 26.35 },
+      { "id": "SOS", "name": "DYFENSOR + SERUM Rescue",        "price": 79, "margin_pct": 59.7, "contrib": 44.10 }
     ],
     "shipping": {
       "kits": "GRATIS — incluido en precio",
-      "individuales": "$9.99 cobrado al cliente"
+      "individuales": "$9.99 cobrado al cliente — mejora contrib. +$9.34/orden"
     },
-    "breakeven_sc_b": "~270 ordenes/mes",
-    "runway_necesario": "$27,000–$30,000"
+    "aov_blended": 52.08,
+    "contrib_blended": 25.35,
+    "breakeven_ordenes_mes": "~270 órdenes/mes (Sc.B con cobro envío individuales)",
+    "runway_necesario": "$27,000–$30,000 antes del lanzamiento",
+    "promos": [
+      "PATRICIA15 — código referido PO, 15% primera compra, CAC $6.31",
+      "Early bird — 50ml gratis primeras 50 órdenes, costo total $51",
+      "Add-on checkout — 50ml por $12, contribución $10.19 sin costo logístico extra",
+      "Suscripción mensual — 10% off, Kit SOS $441 LTV anual",
+      "Kit del mes PO — $5 off + video mensual PO"
+    ]
+  },
+  "ramp_up_projection": {
+    "scenario": "Sc.B — $7,840/mes fijos",
+    "months": [
+      { "mes": 1, "ordenes": 35,  "neto": -6953, "ads_total": 1000 },
+      { "mes": 2, "ordenes": 65,  "neto": -6192, "ads_total": 1000 },
+      { "mes": 3, "ordenes": 120, "neto": -5298, "ads_total": 1500 },
+      { "mes": 4, "ordenes": 200, "neto": -3570, "ads_total": 1800 },
+      { "mes": 5, "ordenes": 290, "neto": -1789, "ads_total": 2300 },
+      { "mes": 6, "ordenes": 380, "neto": 293,   "ads_total": 2500 }
+    ],
+    "breakeven_mes": 6
   },
   "pending_decisions": [
-    "Aprobar informe estrategia v4 (PO + Laura)",
-    "Confirmar precios finales por SKU con lógica de tiers",
-    "Completar OPERATIVOS con montos reales (Contador, Seguro, Transporte, Mantenimiento) — confirmar con PO",
-    "Decidir SKU definitivo: proveedor (L014, T025) vs modelo (L034, T068)",
-    "Resolver autorización formal marca Neurone para dominio US",
-    "Ingresar precio compra C180 y C166 desde factura pendiente",
-    "Benchmarking COLOR B2B campo (PO): precios Wella/Redken/Joico 90ml en South Florida salones"
+    "Aprobar informe estrategia v4 — PO + Laura",
+    "Precios finales por SKU con lógica de tiers — Sam + PO",
+    "Montos reales OPERATIVOS (Contador, Seguro, Transporte, Mantenimiento) — confirmar con PO",
+    "Sistema SKU definitivo: proveedor (L014) vs modelo (L034)",
+    "Autorización formal marca Neurone para dominio US",
+    "Precio compra C180 TOTAL VIOLET INK y C166 FANZI MIX TONE DOWN — desde factura",
+    "Benchmarking COLOR B2B campo: precios Wella/Redken 90ml en salones South FL — tarea PO"
   ],
   "alerts": [
-    { "level": "warning", "msg": "Informe estrategia v4 pendiente aprobación PO y Laura antes de usar" },
-    { "level": "warning", "msg": "17+ SKUs out_of_stock en Shopify — no activar tienda sin resolver" },
-    { "level": "warning", "msg": "Montos reales OPERATIVOS incompletos — afectan viabilidad real del modelo" }
+    { "level": "warning",  "msg": "Informe v4 pending approval PO + Laura — no usar con terceros aún" },
+    { "level": "warning",  "msg": "17+ SKUs out_of_stock en Shopify — no activar tienda sin resolver" },
+    { "level": "warning",  "msg": "OPERATIVOS incompletos — Contador, Seguro, Transporte, Mantenimiento en $0" },
+    { "level": "blocking", "msg": "Autorización marca Neurone US pendiente — bloquea lanzamiento dominio" }
   ]
 }
