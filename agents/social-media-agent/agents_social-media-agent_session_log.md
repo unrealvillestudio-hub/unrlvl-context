@@ -9,7 +9,7 @@
 
 ### COMPLETADO
 - ✅ Definición de 7 aliases de email por función bajo neuronescflorida.com
-- ✅ Estrategia de números telefónicos: comercial dedicado separado del personal de PO
+- ✅ Estrategia de números: comercial dedicado separado del personal de PO
 - ✅ Compliance Meta verificado: un número por Business Manager
 
 ### EN CURSO
@@ -28,7 +28,7 @@
 
 ### DECISIONES
 - 7 aliases: admin@, ig@, waba@, tiktok@, ads@, support@, hello@
-- Número comercial separado del personal de PO — obligatorio para compliance Meta
+- Número comercial separado del personal de PO — obligatorio compliance Meta
 - Un BM por marca para evitar suspensiones cruzadas
 - OpenPhone o NumberBarn para WABA
 
@@ -37,7 +37,7 @@ Crear los 7 aliases en servidor de email y coordinar con Laura adquisición del 
 
 ---
 
-## 2026-03-23 — Inicialización
+## 2026-03-23 — Inicialización del sistema de log
 
 - Agente deployado con contexto Neurone SCF + PO
 - KV activo (Upstash Redis, región iad1, TTL 90 días)
