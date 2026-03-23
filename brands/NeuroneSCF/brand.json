@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-03-22", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-03-23", "maintained_by": "Claude" },
   "brand": {
     "id": "Neurone",
     "name": "Neurone SCF",
@@ -12,10 +12,10 @@
   "active_projects": [
     {
       "id": "NEU-001",
-      "name": "Pricing Model v5",
-      "status": "completado — pendiente subir al repo",
-      "output": "Neurone_Pricing_v5.xlsx + neurone_pricing_analysis_v1.html",
-      "next_action": "Subir Neurone_Pricing_v5.xlsx al repo — archivo generado localmente, no está en ningún repo aún"
+      "name": "Pricing Model v9",
+      "status": "completado — en repo BluePrints",
+      "output": "docs/reports/Neurone_Pricing_v9.xlsx",
+      "next_action": "Completar montos reales en OPERATIVOS con PO antes de usar como definitivo"
     },
     {
       "id": "NEU-002",
@@ -27,17 +27,44 @@
       "id": "NEU-003",
       "name": "Shopify — lanzamiento",
       "status": "bloqueado",
-      "blocking_reason": "17+ SKUs con stock 0 · precios en $0.00 placeholder · autorización marca Neurone para dominio US pendiente"
+      "blocking_reason": "17+ SKUs con stock 0 · precios $0.00 placeholder · autorización marca Neurone para dominio US pendiente"
+    },
+    {
+      "id": "NEU-004",
+      "name": "Estrategia Comercial B2C v4",
+      "status": "checkpoint — pending PO + Laura approval",
+      "output": "docs/reports/neurone_estrategia_v4.html",
+      "next_action": "Revisión y aprobación de PO y Laura — ajustes si necesario"
     }
   ],
+  "pricing_strategy": {
+    "model": "Portfolio pricing — 3 tiers",
+    "canal_activo": "B2C exclusivo fase 1",
+    "kits": [
+      { "id": "K1", "name": "HUMIT Deep Moisturizing", "price": 45, "margin_pct": 42.9 },
+      { "id": "K2", "name": "KERASIN HB + VELVETY Intensive Repair", "price": 48, "margin_pct": 46.4 },
+      { "id": "K3", "name": "TOTAL VIOLET Color Guard", "price": 55, "margin_pct": 51.3 },
+      { "id": "SOS", "name": "DYFENSOR + SERUM Rescue Treatment", "price": 79, "margin_pct": 59.7 }
+    ],
+    "shipping": {
+      "kits": "GRATIS — incluido en precio",
+      "individuales": "$9.99 cobrado al cliente"
+    },
+    "breakeven_sc_b": "~270 ordenes/mes",
+    "runway_necesario": "$27,000–$30,000"
+  },
   "pending_decisions": [
-    "Confirmar volumen mensual real con PO (modelo usa 1,000 uds/mes como base)",
+    "Aprobar informe estrategia v4 (PO + Laura)",
+    "Confirmar precios finales por SKU con lógica de tiers",
+    "Completar OPERATIVOS con montos reales (Contador, Seguro, Transporte, Mantenimiento) — confirmar con PO",
     "Decidir SKU definitivo: proveedor (L014, T025) vs modelo (L034, T068)",
-    "Confirmar precios de venta finales",
-    "Resolver autorización formal marca Neurone para dominio US"
+    "Resolver autorización formal marca Neurone para dominio US",
+    "Ingresar precio compra C180 y C166 desde factura pendiente",
+    "Benchmarking COLOR B2B campo (PO): precios Wella/Redken/Joico 90ml en South Florida salones"
   ],
   "alerts": [
-    { "level": "warning", "msg": "Neurone_Pricing_v5.xlsx no está en el repo — riesgo de pérdida" },
-    { "level": "warning", "msg": "17+ SKUs out_of_stock deben marcarse antes de lanzar Shopify" }
+    { "level": "warning", "msg": "Informe estrategia v4 pendiente aprobación PO y Laura antes de usar" },
+    { "level": "warning", "msg": "17+ SKUs out_of_stock en Shopify — no activar tienda sin resolver" },
+    { "level": "warning", "msg": "Montos reales OPERATIVOS incompletos — afectan viabilidad real del modelo" }
   ]
 }
