@@ -1,9 +1,9 @@
 {
-  "_meta": { "version": "2026-03-23", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-03-24", "maintained_by": "Claude" },
   "brand": {
     "id": "Neurone",
     "name": "Neurone SCF",
-    "domain": "neuronescmiami.com",
+    "domain": "neuronescflorida.com",
     "market": "Florida, USA",
     "channel": "Shopify",
     "status": "active",
@@ -27,8 +27,8 @@
     {
       "id": "NEU-003",
       "name": "Shopify — lanzamiento",
-      "status": "bloqueado",
-      "blocking_reason": "17+ SKUs stock 0 · precios $0.00 placeholder · autorización marca Neurone US pendiente"
+      "status": "en progreso",
+      "blocking_reason": "17+ SKUs stock 0 · precios $0.00 placeholder"
     },
     {
       "id": "NEU-004",
@@ -37,6 +37,12 @@
       "output": "BluePrints/docs/reports/neurone_estrategia_v4.html",
       "recipients": ["Sam", "Patricia Osorio", "Laura"],
       "next_action": "Revisión y aprobación PO + Laura — ajustes si necesario"
+    },
+    {
+      "id": "NEU-005",
+      "name": "Dominio neuronescflorida.com — Cloudflare",
+      "status": "en progreso",
+      "next_action": "Configurar aliases para cuentas redes sociales — Laura"
     }
   ],
   "pricing_strategy": {
@@ -82,14 +88,12 @@
     "Precios finales por SKU con lógica de tiers — Sam + PO",
     "Montos reales OPERATIVOS (Contador, Seguro, Transporte, Mantenimiento) — confirmar con PO",
     "Sistema SKU definitivo: proveedor (L014) vs modelo (L034)",
-    "Autorización formal marca Neurone para dominio US",
     "Precio compra C180 TOTAL VIOLET INK y C166 FANZI MIX TONE DOWN — desde factura",
     "Benchmarking COLOR B2B campo: precios Wella/Redken 90ml en salones South FL — tarea PO"
   ],
   "alerts": [
     { "level": "warning",  "msg": "Informe v4 pending approval PO + Laura — no usar con terceros aún" },
     { "level": "warning",  "msg": "17+ SKUs out_of_stock en Shopify — no activar tienda sin resolver" },
-    { "level": "warning",  "msg": "OPERATIVOS incompletos — Contador, Seguro, Transporte, Mantenimiento en $0" },
-    { "level": "blocking", "msg": "Autorización marca Neurone US pendiente — bloquea lanzamiento dominio" }
+    { "level": "warning",  "msg": "OPERATIVOS incompletos — Contador, Seguro, Transporte, Mantenimiento en $0" }
   ]
 }

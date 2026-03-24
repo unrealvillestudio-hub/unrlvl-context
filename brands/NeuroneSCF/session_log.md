@@ -3,6 +3,29 @@
 
 ---
 
+## 2026-03-24 — Corrección dominio + Cloudflare + aliases redes sociales
+
+### CERRADO EN ESTA SESIÓN
+- **CORRECCIÓN CRÍTICA:** Dominio corregido a `neuronescflorida.com` en brand.json — `neuronescmiami.com` era incorrecto y nunca existió. Error persistía en contexto desde múltiples sesiones anteriores. CORREGIDO DEFINITIVAMENTE.
+- **Autorización distribución Neurone US:** ✅ COMPLETADA — desbloqueado. Eliminado de blocking alerts.
+- **NEU-005 creado:** Dominio neuronescflorida.com en Cloudflare — en progreso. AI crawlers: "Block on all pages" + robots.txt ON. Correcto para e-commerce marca propia.
+
+### EN CURSO
+- **Aliases dominio neuronescflorida.com:** configuración para cuentas redes sociales de Laura — pendiente esta sesión
+
+### PENDIENTE (sin cambios)
+- **Aprobación PO + Laura:** neurone_estrategia_v4.html en repo — pendiente revisión
+- **Precios finales por SKU:** pendiente decisión Sam + PO
+- **OPERATIVOS:** montos reales Contador, Seguro, Transporte, Mantenimiento — confirmar con PO
+- **SKU sistema definitivo:** proveedor vs. modelo — bloquea activación Shopify
+- **Shopify:** 17+ SKUs out_of_stock · precios $0.00 placeholder · no activar hasta resolver
+- **C180 TOTAL VIOLET INK + C166 FANZI MIX TONE DOWN:** precio compra pendiente desde factura
+- **Benchmarking COLOR B2B:** tarea de PO — precios Wella/Redken/Joico 90ml en salones South Florida
+- **Video PO en cámara Kit SOS:** asset más urgente antes de escalar TikTok ads
+- **PO VoiceBlueprint:** re-recording pendiente (audio espontáneo 2–3 min)
+
+---
+
 ## 2026-03-23 — Sesión de pricing, estrategia, brand y cierre
 
 ### CERRADO EN ESTA SESIÓN (segunda pasada)
@@ -25,24 +48,6 @@
 - **Breakeven Sc.B:** ~270 órdenes/mes (con cobro de envío individuales) · mes 6 de ramp-up
 - **Runway necesario:** $27,000–$30,000 disponibles antes del lanzamiento
 - **Brand standard definitivo:** chevron SIEMPRE blinking incluyendo favicon (SMIL) · STUDIO dimmed 0.32 · ICR en todo output · favicon obligatorio en todo HTML · 2 signatures (A web / B docs)
-
-### EN CURSO / PENDIENTE
-- **Aprobación PO + Laura:** neurone_estrategia_v4.html en repo — pendiente revisión y aprobación antes de usar con terceros
-- **Precios finales por SKU:** pendiente decisión Sam + PO con lógica de tiers
-- **OPERATIVOS:** montos reales Contador, Seguro, Transporte, Mantenimiento — confirmar con PO antes de usar modelo como definitivo
-- **SKU sistema definitivo:** proveedor vs. modelo — bloquea activación Shopify
-- **Autorización marca Neurone US:** sigue bloqueada — bloquea lanzamiento dominio
-- **C180 TOTAL VIOLET INK + C166 FANZI MIX TONE DOWN:** precio compra pendiente desde factura
-- **Benchmarking COLOR B2B:** tarea de PO — precios Wella/Redken/Joico 90ml en salones South Florida
-- **Shopify:** 17+ SKUs out_of_stock · precios $0.00 placeholder · no activar hasta resolver
-- **Video PO en cámara Kit SOS:** asset más urgente antes de escalar TikTok ads
-- **PO VoiceBlueprint:** re-recording pendiente (audio espontáneo 2–3 min)
-
-### PRÓXIMA SESIÓN
-1. Revisión/aprobación informe v4 → PO + Laura → ajustes si los hay
-2. Decisión precios finales por SKU
-3. Completar OPERATIVOS con montos reales de PO
-4. Shopify: resolver precios + stock antes de lanzar
 
 ---
 
