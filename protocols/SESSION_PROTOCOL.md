@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-03-23-v5 | **Mantenido por:** Claude
+**Versión:** 2026-03-25-v6 | **Mantenido por:** Claude
 
 ---
 
@@ -13,9 +13,26 @@ Cada marca tiene 3 archivos. Cada uno con un propósito distinto:
 | `BP_Brand_Context.md` | ADN permanente + capa relacional | Solo si cambia algo estructural |
 | `session_log.md` | Hilo vivo entre sesiones — qué está en curso, caliente, pendiente | No — acumulativo, solo se añade al tope |
 
-El `session_log.md` es el archivo más importante para el día a día. Contiene lo que viaja entre sesiones — decisiones a medias, temas calientes, contexto vivo que no encaja en un estado fijo.
+El `session_log.md` es el archivo más importante para el día a día. Los agentes autónomos tienen su propio log en `agents/[nombre]/session_log.md`.
 
-Los agentes autónomos (ver sección Agentes) tienen su propio log separado en `agents/[nombre]/session_log.md`.
+---
+
+## NOMENCLATURA DE ARCHIVOS — REGLA CRÍTICA
+
+**Claude genera SIEMPRE los outputs con el nombre EXACTO del archivo en el repo. Sin prefijos de marca.**
+
+| ✅ CORRECTO | ❌ INCORRECTO |
+|---|---|
+| `session_log.md` | `ForumPHs_session_log.md` |
+| `brand.json` | `ForumPHs_brand.json` |
+| `ecosystem.json` | `UNRLVL_ecosystem.json` |
+| `BP_Brand_Context.md` | `ForumPHs_BP_Brand_Context.md` |
+
+**Razón:** Sam arrastra los outputs directamente a `brands/[Marca]/` en el repo. Si el nombre difiere del canónico, GitHub crea un archivo nuevo en vez de reemplazar el existente. La ruta de destino ya da el contexto — el nombre del archivo no necesita incluir la marca.
+
+**Señal de alerta en GitHub Desktop:** si aparecen archivos nuevos en vez de modificaciones verdes, los nombres no son canónicos. Corregir antes de hacer commit.
+
+**Excepción:** el log del Social Media Agent se descarga como `social_media_agent_session_log.md` porque Sam necesita identificarlo antes de moverlo a `agents/social-media-agent/session_log.md`.
 
 ---
 
@@ -40,67 +57,55 @@ Claude confirma:
 Cuando Sam escribe **"Actualiza"**, Claude ejecuta sin preguntar:
 
 1. **Determina** qué cambió en esta sesión
-2. **Verifica agentes** — hace fetch a `https://unrlvl-social-media-agent.vercel.app/api/export` con header `x-export-secret: [EXPORT_SECRET]`:
-   - Si hay log pendiente → lo descarga y lo genera como output descargable `social_media_agent_session_log.md`
+2. **Verifica agentes** — fetch a `https://unrlvl-social-media-agent.vercel.app/api/export` con header `x-export-secret: [EXPORT_SECRET]`:
+   - Si hay log → genera output `social_media_agent_session_log.md`
    - Si no hay → confirma "Sin novedades del Social Media Agent" y continúa
-3. **Genera** como outputs individuales descargables todos los archivos que cambiaron:
-   - `session_log.md` — **siempre**, añadiendo las novedades del día al tope
+3. **Genera** outputs con **nombre canónico exacto**:
+   - `session_log.md` — **siempre**, novedades al tope
    - `brand.json` — si cambió estado, proyectos o alertas
    - `ecosystem.json` — si hubo cambio cross-brand
    - `BP_Brand_Context.md` — solo si cambió ADN o capa relacional
-   - `agents/social-media-agent/session_log.md` — si había log pendiente del agente
-4. **Provee** el mensaje de commit listo para pegar (incluye todos los archivos)
-5. **Recuerda** a Sam los pasos de GitHub Desktop
-6. **Verifica** con `Vercel:web_fetch_vercel_url` y confirma: *"Listo Sam. Sistema actualizado."*
+   - `social_media_agent_session_log.md` — si había log del agente
+4. **Provee** mensaje de commit con rutas exactas en el repo
+5. **Recuerda** pasos de GitHub Desktop
+6. **Verifica** con `Vercel:web_fetch_vercel_url` en el nuevo deploy y confirma: *"Listo Sam. Sistema actualizado."*
 
-**Sam no especifica qué archivos generar. Claude decide.**
-
----
-
-## ACTUALIZACIÓN DIARIA
-
-Claude pregunta una vez al día al detectar que Sam está por irse:
-> *"Sam, antes de que te vayas — ¿Actualiza?"*
-
-Si Sam dice sí o escribe "Actualiza" → ejecutar el flujo completo.
+**Sam no especifica qué archivos. Claude decide.**
 
 ---
 
-## FLUJO DE COMMIT — GitHub Desktop (siempre igual)
+## FLUJO DE COMMIT — GitHub Desktop
 
-1. Descargar los archivos que Claude generó como outputs
-2. Arrastrarlos a la carpeta local `unrlvl-context` (reemplazar existentes)
-   - Archivos de marca van en `brands/[Marca]/`
-   - Archivos de agentes van en `agents/[nombre]/`
-3. GitHub Desktop muestra los cambios automáticamente
-4. Pegar el mensaje que Claude provee en "Summary"
+1. Descargar outputs generados por Claude
+2. Arrastrar a la carpeta correcta en `unrlvl-context`:
+   - Marca → `brands/[Marca]/` (reemplazar existentes)
+   - Agente → `agents/[nombre]/`
+3. Verificar en GitHub Desktop que son **modificaciones**, no archivos nuevos
+4. Pegar el mensaje de commit que Claude provee
 5. "Commit to main" → "Push origin"
 6. Vercel redesploya en ~30 segundos
 7. Claude verifica y confirma
 
 ---
 
+## ACTUALIZACIÓN DIARIA
+
+Claude pregunta al detectar que Sam se va:
+> *"Sam, antes de que te vayas — ¿Actualiza?"*
+
+---
+
 ## AGENTES AUTÓNOMOS — Protocolo de log
 
-Los agentes (Social Media Agent, y futuros) tienen su propio ciclo de vida de contexto, separado del de las marcas.
-
-**Estructura en repo:**
 ```
 unrlvl-context/
-  brands/          ← contexto de marcas (Sam)
+  brands/
   agents/
     social-media-agent/
-      session_log.md   ← progreso de Laura/PO (generado por el agente)
+      session_log.md
 ```
 
-**Flujo:**
-1. Laura/PO trabaja con el agente
-2. El agente le recuerda actualizar cada 10 mensajes de usuario
-3. Laura escribe "Actualiza" → el agente genera el log y lo guarda en KV
-4. Cuando Sam dice "Actualiza" en su chat → Claude verifica el endpoint del agente, descarga el log si existe, lo incluye en el commit
-5. Una vez en el repo, el agente lo lee dinámicamente en la próxima sesión de Laura/PO
-
-**El agente lee el session_log de NeuroneSCF** (`brands/NeuroneSCF/session_log.md`) dinámicamente en cada sesión — así Laura siempre sabe el estado real del proyecto sin que nadie se lo tenga que explicar.
+El agente lee `brands/NeuroneSCF/session_log.md` dinámicamente. Laura escribe "Actualiza" → KV → Sam descarga en su próximo Actualiza.
 
 **Agentes activos:**
 
@@ -110,22 +115,19 @@ unrlvl-context/
 
 ---
 
-## DISCIPLINA DE CHAT — Un chat por marca
+## DISCIPLINA DE CHAT
 
-Un chat = una marca. Si Sam mezcla sin intención:
+Un chat = una marca. Si Sam mezcla:
 > *"Sam, esto es de [Marca X]. ¿Lo anoto en su session_log y seguimos, o cambiamos de chat?"*
-
-**Excepción — chats de ecosistema:** declarados al inicio. Actualizan `ecosystem.json`.
 
 ---
 
 ## SEÑALES DE ALERTA
 
-Claude interrumpe activamente si:
-- Sam se va sin haber actualizado ese día
-- Sesión con más de 24h sin actualización y hubo decisiones importantes
-- `blocking: true` sin resolverse en más de 7 días
-- `pending_decision` crítico sin resolverse en más de 30 días
+- Sam se va sin actualizar ese día
+- Sesión +24h sin actualización con decisiones importantes
+- `blocking: true` sin resolverse +7 días
+- `pending_decision` crítico sin resolverse +30 días
 
 ---
 
@@ -143,4 +145,3 @@ Claude interrumpe activamente si:
 | VizosCosmetics log | `https://unrlvl-context.vercel.app/brands/VizosCosmetics/session_log.md` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
 | Social Media Agent log | `https://unrlvl-social-media-agent.vercel.app/api/export` |
-| Agents log (repo) | `agents/social-media-agent/session_log.md` |

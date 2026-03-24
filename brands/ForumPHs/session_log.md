@@ -3,6 +3,54 @@
 
 ---
 
+## 2026-03-25 — Sesión Agenda Estratégica + Documento IF
+
+### EN CURSO / CALIENTE
+- **Reunión IF mañana (25 Mar):** Documento de sesión ejecutiva entregado — `forumphs_sesion_v2.html`. Decisiones urgentes, plan de captación, roadmap tecnológico, capacitación, compromisos con firma.
+- **Lefevre 75 fee:** Prorrateo pendiente confirmar. Deadline fijado: **31 Marzo 2026**. Impacto hasta $892/mes.
+- **Pasivo laboral histórico ~$25k:** Reunión con CPA Marlene Molina deadline **15 Abril 2026**.
+- **4 Fondos de sostenibilidad:** Mandato de apertura debe salir de la reunión de mañana. **Bloqueado — acción de IF esta semana.**
+- **Plan Estratégico v3.0:** Aprobación formal pendiente en reunión del 25 Mar.
+- **Doble compensación nómina:** Irja Saldaña + Yarisel Jaén — validar con CPA, deadline 15 Abril.
+- **ForumPHs Speaks testing:** IF debe completar testing y enviar reporte de feedback — deadline a fijar en reunión.
+- **Foto IF para FPHs Web Institucional:** Pendiente dentro del plan de lanzamiento — deadline a fijar.
+
+### COMPLETADO ESTA SESIÓN
+- ✅ Documento de sesión ejecutiva `forumphs_sesion_v2.html` entregado — ICR QA, Amatista Carbon, header/footer UNRLVL canónico
+- ✅ Arquitectura del sistema completo mapeada: ForumPHs Speaks, FPHs Landings, FPHs Web Institucional, UNRLVL CRM, DataBase, OPS, Orchestrator, AgentLab, WebLab
+- ✅ Separación conceptual clarificada: UNRLVL = agencia/stack · ForumPHs = cliente/socio · activos de marca = propiedad FPHs
+- ✅ Funnel de captación completo definido: 5 etapas (Siembra → Captura → Nurturing → Propuesta → Cierre)
+- ✅ Track A (outreach directo IF con guión UNRLVL) + Track B (marketing suave + Branded Sales Kit) diseñados
+- ✅ 3 perfiles de PH definidos con impacto financiero: Perfil A ($2k–3.5k/mes, cierra brecha), Perfil B (largo plazo, PHs nuevos), Perfil C (efecto red referidos)
+- ✅ Sistema de tickets definido: Urgente (2–4h) · Prioritario (24–48h) · Común (3–5 días) con vista de propietario
+- ✅ Mapa de tareas de campo completo: diario/semanal/mensual + protocolos para eventos no rutinarios
+- ✅ Programa de capacitación 5 módulos diseñado con certificación interna ForumPHs
+- ✅ Roadmap tecnológico Mes 1–6 con tags UNRLVL vs FPHs vs Sam
+- ✅ BP_Voice IF clarificado: para material de redes sociales y ads (no para ForumPHs Speaks que opera en modo texto)
+- ✅ Orchestrator UNRLVL → gestión redes sociales ForumPHs (no depende de tiempo de IF ni del equipo de campo)
+- ✅ Inversión tecnológica: $170/mes tools + ~$10/500 consultas Speaks + $500/mes ads estimado
+- ✅ Header/footer UNRLVL corregido: chevron blinking, STUDIO en Bebas Neue, footer full-width fuera de page-wrap
+- ✅ Nomenclatura de activos FPHs fijada: ForumPHs Speaks · FPHs Landings · FPHs Web Institucional · WhatsApp Business
+- ✅ Decisiones de Bloque 2 con deadlines asignados: Lefevre 75 (31 Mar), CPA (15 Abr), reservas laborales (1 May)
+- ✅ Regla de QA establecida: verificar BP_Brand_id antes de cualquier output con identidad UNRLVL
+
+### NÚMEROS CLAVE A RECORDAR
+- Ingreso mensual: $17,307.50 (8 PHs)
+- Umbral de sostenibilidad con todos los fondos: $20,500/mes
+- Brecha actual: $3,193/mes = 1 PH mediano nuevo (Perfil A)
+- Escenario óptimo ($50k+$50k): julio–agosto 2028 con 4 PHs nuevos antes de junio 2026
+- Inversión tech+ads: ~$670–800/mes → cubierta por 1 cierre en menos de 2 semanas
+
+### PRÓXIMA SESIÓN ForumPHs — continuar con:
+- Feedback de IF tras la reunión del 25 Mar — decisiones tomadas y compromisos firmados
+- Micro-relatos Track A: escribir 5–8 versiones para WhatsApp Business (IF adapta a su voz)
+- Branded Sales Kit v1: arrancar producción (one-pager, calculadora branded, BI demo anonimizado)
+- Confirmar prorrateo Lefevre 75 (deadline 31 Mar)
+- Confirmar pasivo laboral exacto una vez IF hable con CPA (15 Abr)
+- Seguimiento implementación 4 fondos de sostenibilidad
+
+---
+
 ## 2026-03-22 — Sesión ecosistema + ForumPHs
 
 ### EN CURSO / CALIENTE
@@ -29,8 +77,3 @@
 - Umbral de sostenibilidad con todos los fondos: $20,500/mes
 - Brecha actual: $3,193/mes = 1 PH mediano nuevo
 - Escenario óptimo ($50k+$50k): julio–agosto 2028 con 4 PHs nuevos antes de junio 2026
-
-### PRÓXIMA SESIÓN ForumPHs — continuar con:
-- EEFF de clientes PH (Luxor, Venezia, Torres de Castilla...) para construir benchmark de cartera
-- Confirmar pasivo laboral exacto una vez IF hable con CPA
-- Seguimiento implementación 4 fondos

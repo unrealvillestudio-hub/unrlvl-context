@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-03-22",
+    "version": "2026-03-25",
     "maintained_by": "Claude",
     "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
   },
@@ -12,18 +12,20 @@
     "constituted": "2025-06-03",
     "tagline": "Construiste tu patrimonio. Nosotros le construimos un sistema.",
     "identity_system": "Amatista Carbon",
-    "wordmark_rule": "Puramente tipográfico — sin PNG ni raster"
+    "wordmark_rule": "Puramente tipográfico — sin PNG ni raster",
+    "domain": "forumphs.com"
   },
   "people": {
     "sam": {
-      "role": "socio",
-      "also": "Unrealville Studio — gestión de marca y tecnología"
+      "role": "socio + director de sistemas UNRLVL",
+      "also": "Unrealville Studio — gestión de marca, tecnología y marketing"
     },
     "ivette_flores": {
       "role": "Gerente General",
       "title": "Abogada especialista en propiedad horizontal",
       "cedula": "8-368-46",
-      "decision_style": "Ver BP_Brand_Context.md capa relacional"
+      "decision_style": "Ver BP_Brand_Context.md capa relacional",
+      "signature_authority": "Total — Sam define viabilidad contractual caso a caso como proceso"
     },
     "cpa": {
       "name": "Marlene Molina",
@@ -38,11 +40,11 @@
       { "name": "Torres de Castilla", "fee": 3700.00, "note": "Impuesto complementario" },
       { "name": "PH Venezia Tower", "fee": 3300.00 },
       { "name": "PH Luxor 300", "fee": 3100.00, "note": "Tasa única" },
-      { "name": "PH Parque Lefevre 75", "fee": 2407.50, "note": "⚠ Prorrateo pendiente confirmar" },
+      { "name": "PH Parque Lefevre 75", "fee": 2407.50, "note": "⚠ Prorrateo pendiente confirmar — deadline 31 Mar" },
       { "name": "Los Álamos", "fee": 2000.00 },
       { "name": "PH Firenze", "fee": 1200.00 },
-      { "name": "PH Plaza España", "fee": 1000.00, "note": "Revisar rentabilidad real" },
-      { "name": "PH Parque Central Arraiján", "fee": 600.00, "note": "Revisar rentabilidad real" }
+      { "name": "PH Plaza España", "fee": 1000.00, "note": "⚠ Revisar rentabilidad — decisión proceso pendiente 25 Mar" },
+      { "name": "PH Parque Central Arraiján", "fee": 600.00, "note": "⚠ Revisar rentabilidad — decisión proceso pendiente 25 Mar" }
     ]
   },
   "financials": {
@@ -66,11 +68,11 @@
       "estimado": 25000,
       "registrado_eeff_2025": 0,
       "linea_dgi_172": 0,
-      "status": "⚠ No provisionado — validar monto exacto con CPA",
+      "status": "⚠ No provisionado — validar monto exacto con CPA deadline 15 Abr",
       "plan_recomendado": "24 meses — $1,041.67/mes"
     },
     "reservas_laborales_corrientes": {
-      "status": "No iniciadas",
+      "status": "No iniciadas — inicio comprometido 1 Mayo 2026",
       "monto_mensual_requerido": 1014.89,
       "breakdown": {
         "cesantia_2.25pct": 120.73,
@@ -83,7 +85,10 @@
       "impuesto_complementario": 28.69,
       "total": 267.77,
       "status": "Pagado"
-    }
+    },
+    "umbral_sostenibilidad": 20500,
+    "brecha_actual": 3193,
+    "brecha_nota": "= 1 PH mediano nuevo (Perfil A $2k–3.5k/mes)"
   },
   "active_projects": [
     {
@@ -97,10 +102,11 @@
     {
       "id": "FPH-002",
       "name": "Plan Estratégico v3.0",
-      "status": "delivered — pendiente aprobación IF",
+      "status": "pendiente aprobación IF — reunión 25 Mar",
       "output": "ForumPHs_Plan_Estrategico_v3.docx",
-      "next_action": "Reunión aprobación con Ivette Flores",
-      "blocking": false
+      "next_action": "Aprobación formal en reunión 25 Mar 2026",
+      "blocking": true,
+      "blocking_reason": "Bisagra de todo el plan operativo y de captación"
     },
     {
       "id": "FPH-003",
@@ -111,39 +117,121 @@
     },
     {
       "id": "FPH-004",
-      "name": "Acta Generator — Instrucciones DOCX",
-      "status": "instrucciones definidas en este proyecto",
-      "next_action": "Generar primera acta real cuando IF provea transcripción",
+      "name": "Agenda Estratégica IF — Documento Sesión 25 Mar",
+      "status": "delivered — ICR QA",
+      "output": "forumphs_sesion_v2.html",
+      "next_action": "Reunión 25 Mar — IF firma compromisos",
       "blocking": false
     },
     {
       "id": "FPH-005",
       "name": "4 Fondos de Sostenibilidad — Implementación",
       "status": "diseñado — no iniciado",
-      "next_action": "Abrir cuentas bancarias separadas · iniciar transferencias mes 1",
+      "next_action": "IF abre cuentas bancarias esta semana (comprometido en reunión 25 Mar)",
       "blocking": true,
-      "blocking_reason": "Requiere acción de IF esta semana"
+      "blocking_reason": "Requiere acción de IF"
+    },
+    {
+      "id": "FPH-006",
+      "name": "ForumPHs Speaks — Lead Capture Activo",
+      "status": "funcional en testing con IF · lead capture pendiente UNRLVL-CRM",
+      "stack": "Claude Sonnet · proxy Vercel · ~$1.20/100 consultas · 5 gratis → email → 5 bonus",
+      "next_action": "IF completa testing + reporte feedback — deadline a fijar 25 Mar",
+      "blocking": false
+    },
+    {
+      "id": "FPH-007",
+      "name": "FPHs Web Institucional (Sitelab v2) — forumphs.com",
+      "status": "ICR-ready — pendiente foto IF",
+      "next_action": "IF agenda sesión fotográfica — deadline dentro del plan de lanzamiento",
+      "blocking": false
+    },
+    {
+      "id": "FPH-008",
+      "name": "FPHs Landings (AGGRO v2) — captación pagada",
+      "status": "pendiente cirugía a landing pura (sin nav, H1 dolor, CTA único)",
+      "next_action": "Sam ejecuta cirugía — Mes 1 Abril",
+      "blocking": false
+    },
+    {
+      "id": "FPH-009",
+      "name": "Branded Sales Kit v1",
+      "status": "diseñado — no iniciado",
+      "next_action": "Sam produce en Mes 1–2 (Abril–Mayo): one-pager, calculadora, BI demo, propuesta template",
+      "blocking": false
+    },
+    {
+      "id": "FPH-010",
+      "name": "Sistema Operativo de Campo + Ticket System",
+      "status": "diseñado — no iniciado · via UNRLVL-OPS",
+      "categorias": "Urgente (2–4h) · Prioritario (24–48h) · Común (3–5 días)",
+      "next_action": "UNRLVL-OPS scaffolding Mes 1 → app de campo Mes 3",
+      "blocking": false
+    },
+    {
+      "id": "FPH-011",
+      "name": "Programa de Capacitación — 5 Módulos",
+      "status": "diseñado — no iniciado",
+      "modulos": ["ForumPHs: quiénes somos", "Ley 284 aplicada al campo", "Administración de alto estándar", "Herramientas y sistemas", "Conducta y representación"],
+      "next_action": "Sam produce contenido Mes 2–3 · IF graba módulos Ley 284 y cultura",
+      "blocking": false
     }
   ],
+  "captacion": {
+    "objetivo_q2_q3": "+2–3 PHs nuevos antes de sep 2026",
+    "funnel": {
+      "etapas": ["Siembra", "Captura", "Nurturing", "Propuesta", "Cierre"],
+      "track_a": "Outreach directo IF con guión UNRLVL — red legal, colegas, notarías, JDs actuales",
+      "track_b": "Marketing suave + Branded Sales Kit — Web Institucional, Landings, Orchestrator RRSS",
+      "filosofia_cierre": "IF no cierra — el funnel hace que el prospecto llegue sediento. Propuesta UNRLVL ICR QA convence en asamblea."
+    },
+    "perfiles": {
+      "A": { "fee_rango": "$2000–3500/mes", "tipo": "PH mediano consolidado con dolor activo", "impacto": "Cierra brecha $3193" },
+      "B": { "fee_rango": "$800–1800/mes inicial", "tipo": "PH en construcción o recién constituido", "impacto": "Largo plazo 5–10 años" },
+      "C": { "fee_rango": "variable", "tipo": "Referido de propietario actual", "impacto": "Efecto red" }
+    },
+    "inversion_tech": "$170/mes tools + ~$10/500 consultas Speaks",
+    "inversion_ads": "$500/mes estimado Meta + Google",
+    "roi_nota": "1 PH Perfil A cubre 3–5 meses de inversión total"
+  },
+  "unrlvl_stack_para_fphs": {
+    "AgentLab": "Motor de ForumPHs Speaks — agente Ley 284",
+    "WebLab": "FPHs Web Institucional + FPHs Landings",
+    "DataBase": "Fuente única de verdad — clientes, prospectos, interacciones",
+    "CRM": "Gestión ciclo completo: lead → cliente → historial tickets",
+    "OPS": "Ticket system + app de campo + dashboard calidad",
+    "Orchestrator": "Gestión redes sociales + ads ForumPHs — sin depender de IF ni campo"
+  },
   "pending_decisions": [
-    "Confirmar monto exacto pasivo laboral histórico con CPA Marlene Molina",
-    "Confirmar fee definitivo PH Lefevre 75 (prorrateo pendiente)",
-    "Resolver doble compensación Irja Saldaña + Yarisel Jaén (planilla + honorarios)",
-    "Revisar rentabilidad real de Arraiján ($600) y Plaza España ($1,000)",
-    "Aprobar Plan Estratégico v3.0"
+    "Aprobación Plan Estratégico v3.0 — reunión 25 Mar",
+    "Confirmar monto exacto pasivo laboral histórico con CPA Marlene Molina — deadline 15 Abr",
+    "Confirmar fee definitivo PH Lefevre 75 (prorrateo pendiente) — deadline 31 Mar",
+    "Resolver doble compensación Irja Saldaña + Yarisel Jaén (planilla + honorarios) — deadline 15 Abr",
+    "Decisión de proceso Arraiján ($600) y Plaza España ($1,000) — reunión 25 Mar",
+    "Inicio reservas laborales corrientes $1,014.89/mes — deadline 1 Mayo 2026",
+    "Foto IF para FPHs Web Institucional — dentro del plan de lanzamiento",
+    "Deadline testing ForumPHs Speaks por IF — fijar en reunión 25 Mar"
   ],
   "alerts": [
-    { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — empezar plan 24m esta semana" },
-    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — iniciar $1,014.89/mes inmediatamente" },
-    { "level": "warning", "msg": "Lefevre 75: fee pendiente confirmar — puede impactar hasta $892/mes" },
-    { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo para bajar" }
+    { "level": "critical", "msg": "Plan Estratégico v3.0 pendiente aprobación IF — bisagra de todo el plan 2026" },
+    { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — reunión CPA deadline 15 Abr" },
+    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — inicio comprometido 1 Mayo 2026 ($1,014.89/mes)" },
+    { "level": "warning", "msg": "Lefevre 75: fee pendiente confirmar — deadline 31 Mar — puede impactar hasta $892/mes" },
+    { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo para bajar" },
+    { "level": "warning", "msg": "Arraiján + Plaza España: rentabilidad cuestionada — decisión de proceso pendiente 25 Mar" }
   ],
   "identity": {
     "palette": {
       "amatista": "#5C3472",
       "carbon_profundo": "#1C2233",
-      "terra": "#C4622D"
+      "terra": "#C4622D",
+      "parch": "#F0EDE8"
     },
-    "typography": ["EB Garamond", "DM Sans", "Cormorant Garamond"]
+    "typography": ["EB Garamond", "DM Sans", "Cormorant Garamond"],
+    "bp_voice_ivette": {
+      "status": "pendiente — audio IF por grabar",
+      "uso": "Material audiovisual para redes sociales y ads — NO aplica a ForumPHs Speaks (modo texto)",
+      "nota": "Arquitectura: BP_VOICE_Ivette separado de BP_PERSON_Ivette_ForumPHs · roadmap Mes 4–6"
+    }
   }
 }
