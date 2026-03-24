@@ -3,6 +3,48 @@
 
 ---
 
+## 2026-03-24 — Cloudflare completo + Email Routing + Gmail filters
+
+### CERRADO EN ESTA SESIÓN
+- **neuronescflorida.com → Cloudflare:** dominio migrado desde GoDaddy. Nameservers propagados. Status: ✅ activo y protegido.
+- **AI Crawlers:** Block on all pages + robots.txt ON ✅
+- **DNS corregido:** registro A + CNAME www cambiados a DNS only (Shopify maneja SSL propio) ✅
+- **Email Routing activado:** Cloudflare añadió automáticamente MX (route1/2/3.mx.cloudflare.net), DKIM (cf2024-1._domainkey) y SPF ✅
+- **9 aliases creados** → todos a neuronescflorida@gmail.com ✅
+  - admin@neuronescflorida.com → Meta Business Manager
+  - ig@neuronescflorida.com → Instagram Business
+  - wabi@neuronescflorida.com → WhatsApp Business API
+  - tiktok@neuronescflorida.com → TikTok for Business
+  - ads@neuronescflorida.com → Meta Ads Manager
+  - support@neuronescflorida.com → Atención cliente
+  - hello@neuronescflorida.com → Contacto público
+  - ops@neuronescflorida.com → Ops / Laura
+  - patriciaosorio@neuronescflorida.com → Patricia Osorio
+- **DMARC Management activado:** Cloudflare añadió RUA propio manteniendo el registro existente ✅
+- **9 filtros Gmail creados** en neuronescflorida@gmail.com ✅
+  - Skip Inbox + Never spam + Apply label por cada alias
+  - Labels con formato "[Plataforma] - NSCF" con colores asignados
+- **NEU-005 cerrado:** dominio neuronescflorida.com en Cloudflare completamente configurado ✅
+
+### NOTAS DE SESIÓN
+- Hostinger NO entra en este stack — Cloudflare es suficiente para Shopify + email routing
+- alias wabi@ (no waba@) — decisión intencional de Sam, consistente en Cloudflare y Gmail
+- Claude in Chrome MCP usado activamente para navegar Cloudflare durante la sesión
+
+### PENDIENTE (sin cambios)
+- **Cuentas redes sociales:** crear con aliases NSCF — tarea de Laura
+- **Aprobación PO + Laura:** neurone_estrategia_v4.html en repo — pendiente revisión
+- **Precios finales por SKU:** pendiente decisión Sam + PO
+- **OPERATIVOS:** montos reales Contador, Seguro, Transporte, Mantenimiento — confirmar con PO
+- **SKU sistema definitivo:** proveedor vs. modelo — bloquea activación Shopify
+- **Shopify:** 17+ SKUs out_of_stock · precios $0.00 placeholder · no activar hasta resolver
+- **C180 TOTAL VIOLET INK + C166 FANZI MIX TONE DOWN:** precio compra pendiente desde factura
+- **Benchmarking COLOR B2B:** tarea de PO — precios Wella/Redken/Joico 90ml en salones South Florida
+- **Video PO en cámara Kit SOS:** asset más urgente antes de escalar TikTok ads
+- **PO VoiceBlueprint:** re-recording pendiente (audio espontáneo 2–3 min)
+
+---
+
 ## 2026-03-24 — Corrección dominio + Cloudflare + aliases redes sociales
 
 ### CERRADO EN ESTA SESIÓN

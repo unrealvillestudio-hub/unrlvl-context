@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-03-24", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-03-24b", "maintained_by": "Claude" },
   "brand": {
     "id": "Neurone",
     "name": "Neurone SCF",
@@ -41,8 +41,18 @@
     {
       "id": "NEU-005",
       "name": "Dominio neuronescflorida.com — Cloudflare",
-      "status": "en progreso",
-      "next_action": "Configurar aliases para cuentas redes sociales — Laura"
+      "status": "completado",
+      "completed": "2026-03-24",
+      "deliverables": [
+        "Dominio migrado GoDaddy → Cloudflare. Nameservers activos.",
+        "AI crawlers: Block on all pages + robots.txt ON",
+        "DNS: A + CNAME www en DNS only (Shopify SSL)",
+        "Email Routing activado: MX + DKIM + SPF automáticos",
+        "9 aliases → neuronescflorida@gmail.com: admin, ig, wabi, tiktok, ads, support, hello, ops, patriciaosorio",
+        "DMARC Management activado",
+        "9 filtros Gmail con labels [Plataforma] - NSCF + colores"
+      ],
+      "next_action": "Crear cuentas redes sociales con aliases NSCF — tarea Laura"
     }
   ],
   "pricing_strategy": {
@@ -92,8 +102,8 @@
     "Benchmarking COLOR B2B campo: precios Wella/Redken 90ml en salones South FL — tarea PO"
   ],
   "alerts": [
-    { "level": "warning",  "msg": "Informe v4 pending approval PO + Laura — no usar con terceros aún" },
-    { "level": "warning",  "msg": "17+ SKUs out_of_stock en Shopify — no activar tienda sin resolver" },
-    { "level": "warning",  "msg": "OPERATIVOS incompletos — Contador, Seguro, Transporte, Mantenimiento en $0" }
+    { "level": "warning", "msg": "Informe v4 pending approval PO + Laura — no usar con terceros aún" },
+    { "level": "warning", "msg": "17+ SKUs out_of_stock en Shopify — no activar tienda sin resolver" },
+    { "level": "warning", "msg": "OPERATIVOS incompletos — Contador, Seguro, Transporte, Mantenimiento en $0" }
   ]
 }
