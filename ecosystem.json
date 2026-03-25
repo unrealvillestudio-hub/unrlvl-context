@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-25",
+    "version": "2026-03-25b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-25 — DB_VARIABLES_v6_4 auditado, taxonomía corregida, BlueprintLab documentado"
+    "last_audit": "2026-03-25 — DB_VARIABLES_v6_4 auditado completo. Schema Supabase 23 tablas diseñado. seed_phase1.sql generado. Supabase MCP conectado."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -191,6 +191,7 @@
       "provee": ["Imágenes para ads, social, web, video"],
       "icr_qa": "Nivel 1 (slotValidation.ts, WarningBanner, isExecutionBlocked) — Nivel 2 en desarrollo",
       "icr_policy": "E-Comm Studio: estricto (gate duro). Scene Gen: flexible (reintentos). Avatar: flexible + ⚠️ marcador.",
+      "supabase_tables": ["brands", "imagelab_presets", "person_blueprints", "location_blueprints", "product_blueprints", "compliance_rules", "output_templates", "canal_blocks", "geomix"],
       "last_updated": "2026-03-25"
     },
     {
@@ -209,6 +210,7 @@
       "consumes": ["DB_VARIABLES (brand identity, colores)", "Shopify Admin API"],
       "provee": ["Temas Liquid para Shopify", "Secciones personalizadas", "Templates de colección"],
       "icr_qa": false,
+      "supabase_tables": ["brands", "brand_palette", "brand_typography", "humanize_profiles", "product_blueprints", "page_sections", "brand_assets"],
       "last_updated": "2026-03-25"
     },
     {
@@ -237,6 +239,7 @@
       "consumes": ["brand session_log (dinámico)", "DB_VARIABLES (brand context)"],
       "provee": ["Agentes IA para clientes y operaciones"],
       "icr_qa": false,
+      "supabase_tables": ["brands", "compliance_rules", "humanize_profiles"],
       "last_updated": "2026-03-25"
     },
     {
@@ -251,6 +254,7 @@
       "role": "Pipeline completo del ecosistema (n8n/Make)",
       "consumes": ["todos los labs"],
       "provee": ["outputs automatizados multi-lab"],
+      "supabase_tables": ["brands", "humanize_profiles", "output_templates", "canal_blocks", "compliance_rules", "imagelab_presets", "videolab_params", "voicelab_params", "blueprint_schemas"],
       "last_updated": "2026-03-25"
     },
     {
@@ -264,6 +268,7 @@
       "consumes": ["PersonBlueprints", "LocationBlueprints", "DB_VARIABLES (videolab params)"],
       "provee": ["Videos talking-head", "Storyboards", "Video podcasts"],
       "icr_qa": "Estricto en compliance, flexible en composición",
+      "supabase_tables": ["brands", "compliance_rules", "imagelab_presets", "videolab_params", "voicelab_params", "location_blueprints"],
       "last_updated": "2026-03-25"
     },
     {
@@ -276,6 +281,7 @@
       "voice_engine": "ElevenLabs Turbo v2 (actual) → Chatterbox Turbo (roadmap)",
       "consumes": ["PersonBlueprints (voicelab section)", "DB_VARIABLES (voicelab params)"],
       "provee": ["Scripts de audio", "Voces clonadas para ads y content"],
+      "supabase_tables": ["brands", "voicelab_params", "person_blueprints", "script_templates", "voice_packs", "compliance_rules"],
       "last_updated": "2026-03-25"
     },
     {
@@ -288,6 +294,7 @@
       "canal_blocks": 13,
       "consumes": ["DB_VARIABLES (Output_Templates, Canal_Blocks, CTAs, Keywords, GeoMix, HUMANIZE, Compliance)", "BP_COPY_1.0 blueprints"],
       "provee": ["Ad copy", "Social posts", "SEO content", "Landing pages", "YouTube scripts", "Email", "Brand kits"],
+      "supabase_tables": ["brands", "brand_palette", "brand_typography", "humanize_profiles", "output_templates", "canal_blocks", "ctas", "keywords", "geomix", "compliance_rules", "imagelab_presets", "voicelab_params", "blueprint_schemas", "person_blueprints", "location_blueprints"],
       "last_updated": "2026-03-25"
     },
     {
@@ -298,6 +305,7 @@
       "role": "Social engine con metodología TOFU/MOFU/BOFU + templates",
       "consumes": ["DB_VARIABLES", "CopyLab outputs"],
       "provee": ["Calendarios de contenido", "Posts programados"],
+      "supabase_tables": ["brands", "humanize_profiles", "output_templates", "canal_blocks", "keywords", "imagelab_presets", "videolab_params", "platform_configs"],
       "last_updated": "2026-03-25"
     }
   ],
@@ -379,7 +387,7 @@
       "status": "FROZEN — v6_4 es la versión final en Google Sheets",
       "sheets_count": 40,
       "migration_target": "Supabase",
-      "migration_status": "Auditoría completada 2026-03-25 — schema design pendiente en nuevo chat",
+      "migration_status": "Schema completo — 23 tablas DDL diseñadas, seed_phase1.sql generado. Próximo paso: crear proyecto Supabase y correr DDL + seed.",
       "_note": "CRÍTICO: v6_4 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va al diseño de Supabase.",
       "last_updated": "2026-03-25"
     },
@@ -391,6 +399,27 @@
       "status": "active",
       "role": "Custodia y versioning de blueprints JSON exportados desde BlueprintLab",
       "_note": "Intermediario temporal — cuando migre a Supabase este repo dejará de ser necesario",
+      "last_updated": "2026-03-25"
+    },
+    {
+      "id": "INFRA-SB",
+      "name": "Supabase DB",
+      "taxonomy": "infrastructure",
+      "status": "pending — cuenta creada, proyecto pendiente de crear",
+      "mcp_connected": true,
+      "role": "DB centralizada del ecosistema — target de migración de DB_VARIABLES v6_4",
+      "schema_version": "v1.0 — 23 tablas DDL completo",
+      "tables": [
+        "brands", "brand_palette", "brand_typography",
+        "humanize_profiles", "compliance_rules",
+        "output_templates", "canal_blocks", "keywords", "ctas", "geomix",
+        "imagelab_presets", "videolab_params", "voicelab_params",
+        "person_blueprints", "location_blueprints", "product_blueprints",
+        "blueprint_schemas", "script_templates", "voice_packs",
+        "brand_assets", "page_sections", "platform_configs",
+        "stakeholders"
+      ],
+      "seed_files": ["seed_phase1.sql — brands(8), humanize(5), compliance(10), imagelab_presets(7)"],
       "last_updated": "2026-03-25"
     }
   ],
@@ -419,23 +448,27 @@
       "16 Output_Templates (SMPC completo) + 13 Canal_Blocks",
       "Patricia Osorio tiene 3 brand_ids separados — solo 'PatriciaOsorio' genérico en DB_VARIABLES actual",
       "Voice IDs todos TBD_* — VoiceLab bloqueado",
-      "has_reference_photos = false en todos los blueprints — fotos pendientes"
+      "has_reference_photos = false en todos los blueprints — fotos pendientes",
+      "GeoMix solo existe para DiamondDetails y D7Herbal — falta para VizosCosmetics, PatriciaOsorio, Neurone, VivoseMask",
+      "Neurone Cosmética usa idioma mixto es-FL + EN (bilingual Miami) — único caso en el ecosistema"
     ],
     "pendientes_criticos": [
       "Asignar voice IDs reales en ElevenLabs",
       "Subir fotos referencia → has_reference_photos = true",
-      "Completar K>PO (22 keywords incompletas)",
+      "Completar K>PO (keywords incompletas)",
       "Añadir GeoMix para VizosCosmetics, PatriciaOsorio, Neurone, VivoseMask",
-      "Integrar BP_COPY_1.0 en DB_VARIABLES",
-      "Normalizar Patricia Osorio: 3 brand_ids canónicos"
+      "Integrar BP_COPY_1.0 en DB_VARIABLES / Supabase",
+      "Normalizar Patricia Osorio: 3 brand_ids canónicos en Supabase"
     ],
     "supabase_migration": {
-      "status": "pending — diseño de schema es el siguiente paso",
-      "decision_pendiente_1": "¿brands monolítica (44 cols) o normalizada (brand_core + brand_imagelab + brand_videolab + brand_voicelab)?",
-      "decision_pendiente_2": "¿Output_Templates y Canal_Blocks en Supabase como config o en código del lab?",
-      "decision_pendiente_3": "¿HUMANIZE como tabla propia o JSONB dentro de brands?",
-      "decision_pendiente_4": "¿DV_* (validación) como tablas de referencia o enums en código?",
-      "decision_pendiente_5": "¿ForumPHs y NeuroneSCF se integran a DB_VARIABLES o siguen en context system?"
+      "status": "SCHEMA COMPLETO — listo para ejecutar en Supabase",
+      "schema_doc": "UNRLVL_Supabase_Schema.md — 23 tablas DDL completo",
+      "seed_file": "seed_phase1.sql — Fase 1 lista (brands, humanize, compliance, imagelab_presets)",
+      "decision_1": "RESUELTA — Schema NORMALIZADO (no monolítico)",
+      "decision_2": "RESUELTA — Output_Templates y Canal_Blocks en Supabase como config",
+      "decision_3": "RESUELTA — HUMANIZE como tabla propia (pattern DEFAULT + overrides)",
+      "decision_4": "RESUELTA — DV_* como enums en código + applies_to JSONB en compliance_rules",
+      "decision_5": "PENDIENTE SAM — ForumPHs y NeuroneSCF: ¿entran en Supabase o siguen en context system?"
     }
   },
 
@@ -448,7 +481,7 @@
   },
 
   "humanize_f25": {
-    "_note": "Hallazgo crítico de la auditoría — no estaba documentado en ningún context anterior",
+    "_note": "Hallazgo crítico de la auditoría — documentado en Supabase schema como tabla humanize_profiles",
     "definition": "Capa transversal de autenticidad inyectada automáticamente en cada prompt del ecosistema",
     "mediums": ["copy", "image", "video", "voice", "web"],
     "pattern": "DEFAULT aplica a todas las marcas. Overrides por brand_id sobreescriben el DEFAULT.",
@@ -456,19 +489,20 @@
   },
 
   "creativity_protection": {
-    "_note": "Decisión arquitectónica tomada en sesión 2026-03-25",
+    "_note": "Decisión arquitectónica tomada en sesión 2026-03-25 — pendiente implementar en Supabase y CopyLab",
     "problema": "La estructura condicionada de DB_VARIABLES puede homogeneizar outputs si no se protege el ángulo creativo",
-    "solucion_1": "Angle Randomizer — catálogo de 8-12 ángulos creativos por marca que el SMPC rote activamente (como INPUT, no como output)",
+    "solucion_1": "Angle Randomizer — catálogo de 8-12 ángulos creativos por marca que el SMPC rote activamente",
     "solucion_2": "Temperature variable por tipo de output: conversión directa 0.5 / orgánico 1.1 / discovery creativo 1.3",
-    "solucion_3": "Log de ángulos usados recientemente (AnalyticsLab) para evitar repetición — query simple contra output_log",
+    "solucion_3": "Log de ángulos usados recientemente para evitar repetición — query contra output_log",
     "status": "pending — implementar en diseño de Supabase y CopyLab"
   },
 
   "next_session_agenda": [
-    "1. Conectar GitHub MCP para leer código de todos los repos",
-    "2. Completar mapa de labs con código real (VideoLab, CopyLab repos pendientes)",
-    "3. Diseñar schema completo de Supabase (tablas, tipos, relaciones, RLS)",
-    "4. Tomar las 5 decisiones arquitectónicas pendientes",
-    "5. Definir plan de migración Sheets → Supabase sin romper labs activos"
+    "1. Crear proyecto Supabase 'unrlvl-db' vía MCP (región us-east-1)",
+    "2. Correr DDL completo (23 tablas) en SQL Editor de Supabase",
+    "3. Correr seed_phase1.sql — poblar brands, humanize_profiles, compliance_rules, imagelab_presets",
+    "4. Verificar datos en Supabase Studio",
+    "5. Generar seed_phase2.sql — output_templates (16 SMPC), canal_blocks (13), ctas, keywords",
+    "6. Decidir D5: ¿ForumPHs y NeuroneSCF entran en Supabase?"
   ]
 }
