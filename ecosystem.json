@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-25c",
+    "version": "2026-03-25e",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-25 — Supabase fases 1-3 completadas. 11 tablas pobladas, 444 keywords, 47 CTAs, 12 geomix rows."
+    "last_audit": "2026-03-25 — D5 resuelta: ForumPHs y NeuroneSCF entran en Supabase como marcas completas."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -134,8 +134,8 @@
       "language_primary": "es-PA",
       "status": "active",
       "health": "green",
-      "db_variables_context": false,
-      "_note": "Contexto vive en context system (Vercel), no en DB_VARIABLES. Pendiente: decidir si integrar.",
+      "db_variables_context": true,
+      "_note": "Pipeline creativo completo (ads, social, avatares) + agentes especializados + skills. Entra en Supabase como marca completa.",
       "last_updated": "2026-03-25"
     },
     {
@@ -147,8 +147,8 @@
       "language_primary": "es-FL",
       "status": "active",
       "health": "yellow",
-      "db_variables_context": false,
-      "_note": "Contexto vive en context system (Vercel), no en DB_VARIABLES. Pendiente: decidir si integrar.",
+      "db_variables_context": true,
+      "_note": "Entra en Supabase como marca completa. Social Media Agent ya activo.",
       "last_updated": "2026-03-25"
     }
   ],
@@ -542,7 +542,7 @@
       "status": "FROZEN — v6_4 es la versión final en Google Sheets",
       "sheets_count": 40,
       "migration_target": "Supabase",
-      "migration_status": "Fases 1-3 completadas — schema 23 tablas activo, 11 tablas con datos reales. Phase 4 pendiente (blueprints + assets + configs).",
+      "migration_status": "Fases 1-4 completadas — 19 tablas pobladas. Pendiente: brand_palette, brand_typography, D5 (ForumPHs/NeuroneSCF), Fase 5 (conectar labs).",
       "_note": "CRÍTICO: v6_4 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va al diseño de Supabase.",
       "last_updated": "2026-03-25"
     },
@@ -563,7 +563,7 @@
       "status": "active",
       "mcp_connected": true,
       "role": "DB centralizada del ecosistema — target de migración de DB_VARIABLES v6_4",
-      "schema_version": "v1.0 — 23 tablas DDL completo",
+      "schema_version": "v1.1 — 23 tablas DDL, fix imagelab_presets constraint",
       "tables": [
         "brands",
         "brand_palette",
@@ -593,7 +593,7 @@
         "seed_phase1.sql — brands(8), humanize(5), compliance(10), imagelab_presets(7)"
       ],
       "last_updated": "2026-03-25",
-      "migration_status": "Fases 1-3 completadas — 11 tablas pobladas con datos reales de DB_VARIABLES_v6_4",
+      "migration_status": "Fases 1-4 completadas — 19 tablas pobladas con datos reales",
       "tables_populated": {
         "phase1": [
           "brands(8)",
@@ -613,18 +613,20 @@
           "voicelab_params(8)"
         ],
         "phase4_pending": [
-          "brand_palette",
-          "brand_typography",
-          "person_blueprints",
-          "location_blueprints",
-          "product_blueprints",
-          "blueprint_schemas",
+          "brand_palette (vacía — esperando hexes confirmados)",
+          "brand_typography (vacía — esperando fuentes confirmadas)",
           "script_templates",
           "voice_packs",
           "brand_assets",
           "page_sections",
           "platform_configs",
           "stakeholders"
+        ],
+        "phase4": [
+          "person_blueprints(5)",
+          "location_blueprints(7)",
+          "product_blueprints(2)",
+          "blueprint_schemas(4)"
         ]
       }
     }
@@ -678,7 +680,7 @@
       "decision_2": "RESUELTA — Output_Templates y Canal_Blocks en Supabase como config",
       "decision_3": "RESUELTA — HUMANIZE como tabla propia (pattern DEFAULT + overrides)",
       "decision_4": "RESUELTA — DV_* como enums en código + applies_to JSONB en compliance_rules",
-      "decision_5": "PENDIENTE SAM — ForumPHs y NeuroneSCF: ¿entran en Supabase o siguen en context system?"
+      "decision_5": "RESUELTA — ForumPHs Y NeuroneSCF entran en Supabase como marcas completas. ForumPHs tiene pipeline creativo completo (ads, social, avatares, keywords) + agentes especializados (ForumPHs Speaks) + skills (Document Factory). NeuroneSCF ídem. La diferencia con otras marcas es que además tienen agentes y skills, no en vez de. db_variables_context → true para ambas."
     }
   },
   "icr_qa": {
@@ -718,10 +720,10 @@
     "status": "pending — implementar en diseño de Supabase y CopyLab"
   },
   "next_session_agenda": [
-    "1. Phase 4 seed — brand_palette, brand_typography (desde Marcas sheet)",
-    "2. Phase 4 seed — person_blueprints (4) y location_blueprints (4) desde PersonBlueprints/LocationBlueprints sheets",
-    "3. Phase 4 seed — product_blueprints (D7Herbal, VivoseMask) + blueprint_schemas",
-    "4. Decidir D5 — ForumPHs y NeuroneSCF en Supabase?",
-    "5. Fase 5 — conectar labs a Supabase (arrancar con ImageLab o CopyLab)"
+    "1. Añadir ForumPHs y NeuroneSCF a Supabase brands — seed desde sus brand.json del context system",
+    "2. brand_palette y brand_typography — confirmar hexes y fuentes por marca",
+    "3. INCI VivoseMask — rellenar cuando llegue ficha de Vizos",
+    "4. Voice IDs reales en ElevenLabs — desbloquear VoiceLab",
+    "5. Fase 5 — conectar primer lab a Supabase (CopyLab recomendado)"
   ]
 }
