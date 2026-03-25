@@ -1,5 +1,5 @@
 # UNRLVL — Supabase Schema Design
-**Versión:** 1.0 · **Fecha:** 2026-03-25  
+**Versión:** 1.1 · **Fecha:** 2026-03-25 · **Fix:** constraint imagelab_presets corregido de (brand_id, canal) a (brand_id, preset_id)  
 **Basado en:** Auditoría real de código de 9 labs + lectura completa DB_VARIABLES_v6_4.xlsx (40 hojas)  
 **Estado:** FINAL — listo para ejecutar en Supabase
 
@@ -320,7 +320,8 @@ CREATE TABLE imagelab_presets (
   negative_prompt TEXT,
   extra_params    JSONB,
   notes           TEXT,
-  UNIQUE NULLS NOT DISTINCT (brand_id, canal)
+  UNIQUE NULLS NOT DISTINCT (brand_id, preset_id)
+  -- Fix 2026-03-25: canal no es unique por brand — puede haber múltiples presets por canal (L0101+L0201 ambos LANDING, M0101+M0201 ambos META)
 );
 ```
 
