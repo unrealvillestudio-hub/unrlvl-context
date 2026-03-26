@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-25f",
+    "version": "2026-03-26a",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-25 — Migración DB→Supabase completa (fases 1-4). 10 marcas, 19 tablas. Listo para Fase 5: conectar labs."
+    "last_audit": "2026-03-26 — CopyLab desplegado en Vercel. Listo para Fase 5: conectar a Supabase."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -400,7 +400,7 @@
       "id": "LAB-CPL",
       "name": "CopyLab",
       "taxonomy": "lab",
-      "status": "active",
+      "status": "active — pendiente conexión Supabase",
       "role": "Generación de todo texto vía SMPC (buildCopyPrompt). Consume DB_VARIABLES + HUMANIZE.",
       "smpc_templates": 16,
       "canal_blocks": 13,
@@ -434,7 +434,11 @@
         "person_blueprints",
         "location_blueprints"
       ],
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-26",
+      "repo": "unrealvillestudio-hub/CopyLab",
+      "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
+      "vercel_url": "unrlvl-copy-lab.vercel.app",
+      "stack": "Vite + React — conectar a Supabase pendiente (Fase 5)"
     },
     {
       "id": "LAB-SL",
@@ -721,10 +725,10 @@
     "status": "pending — implementar en diseño de Supabase y CopyLab"
   },
   "next_session_agenda": [
-    "1. Fase 5 — conectar primer lab a Supabase (CopyLab recomendado por mayor dependencia de tablas)",
-    "2. brand_palette y brand_typography — confirmar hexes y fuentes por marca",
-    "3. INCI VivoseMask — cuando llegue ficha de Vizos",
-    "4. Voice IDs reales en ElevenLabs — desbloquear VoiceLab",
-    "5. GeoMix para VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask"
+    "1. Fase 5 — conectar CopyLab a Supabase (prj_5FebBMfTpo4aP5I7iJ98libUkTTe)",
+    "2. CopyLab debe leer en tiempo real: brands, output_templates, canal_blocks, keywords, ctas, humanize_profiles, compliance_rules, geomix",
+    "3. brand_palette y brand_typography — confirmar hexes y fuentes por marca",
+    "4. INCI VivoseMask — cuando llegue ficha de Vizos",
+    "5. Voice IDs reales en ElevenLabs — desbloquear VoiceLab"
   ]
 }
