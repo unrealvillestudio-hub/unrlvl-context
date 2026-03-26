@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-25e",
+    "version": "2026-03-25f",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-25 — D5 resuelta: ForumPHs y NeuroneSCF entran en Supabase como marcas completas."
+    "last_audit": "2026-03-25 — Migración DB→Supabase completa (fases 1-4). 10 marcas, 19 tablas. Listo para Fase 5: conectar labs."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -542,7 +542,7 @@
       "status": "FROZEN — v6_4 es la versión final en Google Sheets",
       "sheets_count": 40,
       "migration_target": "Supabase",
-      "migration_status": "Fases 1-4 completadas — 19 tablas pobladas. Pendiente: brand_palette, brand_typography, D5 (ForumPHs/NeuroneSCF), Fase 5 (conectar labs).",
+      "migration_status": "Fases 1-4 COMPLETADAS — 10 marcas, 19 tablas pobladas. Pendiente: brand_palette/typography, Fase 5 (conectar labs).",
       "_note": "CRÍTICO: v6_4 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va al diseño de Supabase.",
       "last_updated": "2026-03-25"
     },
@@ -593,7 +593,7 @@
         "seed_phase1.sql — brands(8), humanize(5), compliance(10), imagelab_presets(7)"
       ],
       "last_updated": "2026-03-25",
-      "migration_status": "Fases 1-4 completadas — 19 tablas pobladas con datos reales",
+      "migration_status": "Fases 1-4 completadas — 10 marcas en brands, 19 tablas pobladas con datos reales",
       "tables_populated": {
         "phase1": [
           "brands(8)",
@@ -623,6 +623,7 @@
           "stakeholders"
         ],
         "phase4": [
+          "brands(10) — ecosistema completo incluyendo ForumPHs y NeuroneSCF",
           "person_blueprints(5)",
           "location_blueprints(7)",
           "product_blueprints(2)",
@@ -720,10 +721,10 @@
     "status": "pending — implementar en diseño de Supabase y CopyLab"
   },
   "next_session_agenda": [
-    "1. Añadir ForumPHs y NeuroneSCF a Supabase brands — seed desde sus brand.json del context system",
+    "1. Fase 5 — conectar primer lab a Supabase (CopyLab recomendado por mayor dependencia de tablas)",
     "2. brand_palette y brand_typography — confirmar hexes y fuentes por marca",
-    "3. INCI VivoseMask — rellenar cuando llegue ficha de Vizos",
+    "3. INCI VivoseMask — cuando llegue ficha de Vizos",
     "4. Voice IDs reales en ElevenLabs — desbloquear VoiceLab",
-    "5. Fase 5 — conectar primer lab a Supabase (CopyLab recomendado)"
+    "5. GeoMix para VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask"
   ]
 }
