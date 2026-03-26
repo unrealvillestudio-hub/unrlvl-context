@@ -1,68 +1,77 @@
-# HANDOFF — Sesión 2026-03-25 (FINAL)
+# HANDOFF — Sesión 2026-03-26 (Fase 5 infra CopyLab ✅)
 **Para:** Próximo chat  
-**Estado:** Migración DB_VARIABLES → Supabase FASES 1-4 COMPLETAS  
-**Próximo paso:** Fase 5 — conectar labs a Supabase
+**Estado:** Fase 5 infra CopyLab COMPLETA — capa de datos Supabase lista  
+**Próximo paso:** Integrar fetchBrandContext en buildCopyPrompt / SMPC
+
+---
+
+## ESTADO COPYLAB — POST FASE 5
+
+| Componente | Estado |
+|---|---|
+| Repo | `unrealvillestudio-hub/CopyLab` |
+| Vercel | `prj_5FebBMfTpo4aP5I7iJ98libUkTTe` · `unrlvl-copy-lab.vercel.app` |
+| Commit activo | `7bb1adf` — "Create queries.ts" |
+| `src/lib/supabaseClient.ts` | ✅ fetch nativo, sin SDK |
+| `src/lib/queries.ts` | ✅ 15 funciones + `fetchBrandContext()` entry point |
+| `src/lib/db/types.ts` | ✅ tipos completos del schema real |
+| Env vars Vercel | ✅ `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` |
+| RLS Supabase | ✅ 14 tablas con policy `copylab_read` |
+| Build | ✅ `✓ 2101 modules transformed` — sin errores TS |
+
+**Decisión técnica clave:** se usó `fetch` nativo contra la REST API de Supabase (PostgREST) en lugar de `@supabase/supabase-js` — evita cambios en `package.json` y `package-lock.json`.
 
 ---
 
 ## ESTADO FINAL DE SUPABASE
 
-| Tabla | Rows | Notas |
-|---|---|---|
-| `brands` | **10** | Ecosistema completo — ver detalle abajo |
-| `humanize_profiles` | 12 | 5 DEFAULT + 7 overrides por marca |
-| `compliance_rules` | 10 | 3 globales + 7 por marca |
-| `imagelab_presets` | 7 | W0101, L0101, L0201, M0101, M0201, T0101, T0201 |
-| `canal_blocks` | 13 | WEB, LANDING, BLOG, META_ADS, TIKTOK_ADS, RSA, PMAX, YOUTUBE, IG, TIKTOK, OMNICANAL, EMAIL, ECOMMERCE |
-| `output_templates` | 16 | SMPC_full, Ads_FullPro, SEO_FullPro, SEO_Brand_FullPro, YouTube×6, + más |
-| `keywords` | 444 | Todas las marcas del xlsx |
-| `ctas` | 47 | Por marca × servicio |
-| `geomix` | 12 | DD×5 + D7H×7 |
-| `videolab_params` | 6 | 6 formatos |
-| `voicelab_params` | 8 | Por persona — todos voice_id TBD_* |
-| `person_blueprints` | 5 | po_patricia, dd_host_01, vizos_host_01, d7h_host_01, neurone_host_01 |
-| `location_blueprints` | 7 | 3×PO Miami, 2×DD Alicante, event_stage, Neurone Salon |
-| `product_blueprints` | 2 | D7Herbal (INCI completo), VivoseMask (INCI pendiente) |
-| `blueprint_schemas` | 4 | BP_PERSON_1.0, BP_LOCATION_1.0, BP_PRODUCT_1.0, BP_COPY_1.0 |
-| `brand_palette` | 0 | ⏳ Vacía — esperando hexes confirmados |
-| `brand_typography` | 0 | ⏳ Vacía — esperando fuentes confirmadas |
-
-### 10 marcas en `brands`
-`DiamondDetails`, `VizosCosmetics`, `D7Herbal`, `VivoseMask`, `PatriciaOsorioPersonal`, `PatriciaOsorioComunidad`, `PatriciaOsorioVizosSalon`, `NeuroneCosmetics`, `ForumPHs`, `NeuroneSCF`
-
-**ForumPHs notes:** RUC, portafolio, brecha, CPA, agent deployment  
-**NeuroneSCF notes:** pricing model, status Shopify, infra dominio, kits, relación con NeuroneCosmetics y PO
+| Tabla | Rows | RLS | Notas |
+|---|---|---|---|
+| `brands` | 10 | ✅ | Ecosistema completo |
+| `humanize_profiles` | 12 | ✅ | 5 DEFAULT + 7 overrides |
+| `compliance_rules` | 10 | ✅ | 3 globales + 7 por marca |
+| `imagelab_presets` | 7 | ✅ | W0101, L0101/0201, M0101/0201, T0101/0201 |
+| `canal_blocks` | 13 | ✅ | 13 canales |
+| `output_templates` | 16 | ✅ | SMPC completo |
+| `keywords` | 444 | ✅ | Todas las marcas |
+| `ctas` | 47 | ✅ | Por marca × servicio |
+| `geomix` | 12 | ✅ | DD×5 + D7H×7 |
+| `videolab_params` | 6 | — | No en scope CopyLab |
+| `voicelab_params` | 8 | ✅ | TBD_* — VoiceLab bloqueado |
+| `person_blueprints` | 5 | ✅ | |
+| `location_blueprints` | 7 | ✅ | |
+| `product_blueprints` | 2 | — | |
+| `blueprint_schemas` | 4 | ✅ | BP_PERSON/LOCATION/PRODUCT/COPY |
+| `brand_palette` | 0 | ✅ | ⏳ Vacía — esperando hexes |
+| `brand_typography` | 0 | ✅ | ⏳ Vacía — esperando fuentes |
 
 ---
 
-## DECISIONES ARQUITECTÓNICAS — TODAS RESUELTAS
+## FASE 5B — LO QUE FALTA: INTEGRAR EN EL SMPC
 
-| # | Decisión | Resolución |
-|---|---|---|
-| D1 | ¿brands monolítica o normalizada? | Normalizada — 23 tablas |
-| D2 | ¿Output_Templates/Canal_Blocks en Supabase o código? | Supabase |
-| D3 | ¿HUMANIZE como tabla propia o JSONB? | Tabla propia — patrón DEFAULT + overrides |
-| D4 | ¿DV_* como tablas o enums? | Enums en código |
-| D5 | ¿ForumPHs y NeuroneSCF en Supabase? | ✅ SÍ — ambas como marcas completas con pipeline creativo |
+La capa de infraestructura está lista. Ahora hay que conectarla al código que genera copy.
 
----
+**Entry point disponible:**
+```typescript
+import { fetchBrandContext } from '@/lib/queries'
+const ctx = await fetchBrandContext('DiamondDetails')
+// ctx.brand, ctx.humanize, ctx.output_templates, ctx.canal_blocks,
+// ctx.keywords, ctx.ctas, ctx.geomix, ctx.imagelab_presets,
+// ctx.compliance, ctx.persons, ctx.locations, ctx.palette, ctx.typography
+```
 
-## FIXES APLICADOS (no repetir errores)
-
-1. **imagelab_presets constraint** → `UNIQUE NULLS NOT DISTINCT (brand_id, preset_id)` — NO (brand_id, canal) porque hay múltiples presets por canal
-2. **Patricia Osorio** → `po_patricia` y `loc_po_*` mapeados a `PatriciaOsorioPersonal` con nota en raw_config indicando que aplica a los 3 brand_ids
-3. **loc_generic_event_stage** → seed en PatriciaOsorioPersonal con nota de uso multi-marca
-4. **brand_palette/typography** → NO inferir de visual_identity — esperar hexes/fuentes reales de Sam
-
----
-
-## FASE 5 — CONECTAR LABS A SUPABASE
-
-**Orden recomendado:** CopyLab → ImageLab → WebLab → SocialLab → VideoLab → VoiceLab → AgentLab → Orchestrator
-
-**Por qué CopyLab primero:** Consume 15 tablas — el que más se beneficia de datos centralizados.
-
-Para cada lab: modificar código para leer de Supabase en vez de DB_VARIABLES. Requiere credenciales Supabase (URL + anon key).
+**Trabajo pendiente:**
+1. Localizar `buildCopyPrompt` (o equivalente SMPC) en el repo CopyLab
+2. Reemplazar las llamadas actuales a DB_VARIABLES por `fetchBrandContext`
+3. Mapear `BrandContext` → parámetros del prompt:
+   - `output_templates` → estructura del output según template elegido
+   - `canal_blocks` → instrucciones por canal (Meta, IG, TikTok, etc.)
+   - `humanize` → capa de autenticidad (DEFAULT + override de marca)
+   - `compliance` → reglas hard/soft a inyectar en el prompt
+   - `keywords` → pool de keywords a integrar
+   - `ctas` → CTAs por servicio e idioma
+   - `geomix` → contexto geográfico y cultural
+4. Implementar `creativity_protection`: Angle Randomizer + temperature variable
 
 ---
 
@@ -76,23 +85,24 @@ Para cada lab: modificar código para leer de Supabase en vez de DB_VARIABLES. R
 
 ---
 
+## CÓMO ARRANCAR EL PRÓXIMO CHAT
+
+> **"Ecosistema — cargar handoff de sesión. CopyLab Fase 5b: integrar fetchBrandContext en buildCopyPrompt."**
+
+Cargar: `ecosystem.json` + `db/SESSION_HANDOFF.md`  
+Luego explorar estructura del repo CopyLab para localizar el SMPC/buildCopyPrompt.
+
+---
+
 ## ARCHIVOS CLAVE
 
 ```
-https://unrlvl-context.vercel.app/ecosystem.json                    ← v2026-03-25f
+https://unrlvl-context.vercel.app/ecosystem.json                    ← v2026-03-26b
 https://unrlvl-context.vercel.app/db/UNRLVL_Supabase_Schema.md      ← v1.1 DDL 23 tablas
-https://unrlvl-context.vercel.app/db/DB_VARIABLES_audit_summary.md  ← mapa 40 hojas
-https://unrlvl-context.vercel.app/brands/ForumPHs/brand.json        ← contexto ForumPHs
-https://unrlvl-context.vercel.app/brands/NeuroneSCF/brand.json      ← contexto NeuroneSCF
+https://unrlvl-context.vercel.app/db/SESSION_HANDOFF.md             ← este archivo
+https://unrlvl-context.vercel.app/brands/ForumPHs/brand.json
+https://unrlvl-context.vercel.app/brands/NeuroneSCF/brand.json
 ```
 
 ---
-
-## CÓMO ARRANCAR EL PRÓXIMO CHAT
-
-> **"Ecosistema — cargar handoff de sesión. Fase 5: conectar CopyLab a Supabase."**
-
-Cargar: `ecosystem.json` + `db/UNRLVL_Supabase_Schema.md` + `db/SESSION_HANDOFF.md`
-
----
-*Claude — Unreal>ille Studio · 2026-03-25 · unrlvl-context/db/SESSION_HANDOFF.md*
+*Claude — Unreal>ille Studio · 2026-03-26 · unrlvl-context/db/SESSION_HANDOFF.md*

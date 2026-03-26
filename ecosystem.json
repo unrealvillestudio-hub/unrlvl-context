@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-26a",
+    "version": "2026-03-26b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-26 — CopyLab desplegado en Vercel. Listo para Fase 5: conectar a Supabase."
+    "last_audit": "2026-03-26 — Fase 5 infra CopyLab COMPLETA. supabaseClient.ts + queries.ts + db/types.ts en repo. RLS aplicado en 14 tablas Supabase. Env vars en Vercel. Build limpio. Siguiente: integrar fetchBrandContext en buildCopyPrompt/SMPC."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -282,11 +282,7 @@
       "role": "Plataforma de agentes IA multi-rol. Cada deployment es un agente configurado para un cliente/marca.",
       "auth": {
         "format": "CODE:Name:Role:YYYY-MM-DD",
-        "roles": [
-          "admin",
-          "po",
-          "ops"
-        ],
+        "roles": ["admin", "po", "ops"],
         "role_map": {
           "SAM/SAMDEV/UNRLVL": "admin",
           "PATY/PO/PATRICIA": "po",
@@ -322,12 +318,8 @@
       "status": "initialized",
       "_note": "1 solo commit 'Creation' — recién inicializado. Hub que conectará todos los labs.",
       "role": "Pipeline completo del ecosistema (n8n/Make)",
-      "consumes": [
-        "todos los labs"
-      ],
-      "provee": [
-        "outputs automatizados multi-lab"
-      ],
+      "consumes": ["todos los labs"],
+      "provee": ["outputs automatizados multi-lab"],
       "supabase_tables": [
         "brands",
         "humanize_profiles",
@@ -400,12 +392,29 @@
       "id": "LAB-CPL",
       "name": "CopyLab",
       "taxonomy": "lab",
-      "status": "active — pendiente conexión Supabase",
+      "repo": "unrealvillestudio-hub/CopyLab",
+      "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
+      "vercel_url": "unrlvl-copy-lab.vercel.app",
+      "stack": "Vite + React + TypeScript — fetch nativo (sin SDK Supabase)",
+      "status": "active — Supabase infra conectada ✅ · buildCopyPrompt pendiente",
       "role": "Generación de todo texto vía SMPC (buildCopyPrompt). Consume DB_VARIABLES + HUMANIZE.",
       "smpc_templates": 16,
       "canal_blocks": 13,
+      "supabase_connected": true,
+      "supabase_layer": {
+        "files": [
+          "src/lib/supabaseClient.ts",
+          "src/lib/queries.ts",
+          "src/lib/db/types.ts"
+        ],
+        "entry_point": "fetchBrandContext(brandId) → BrandContext completo en paralelo",
+        "rls_applied": true,
+        "tables_rls": 14,
+        "env_vars": ["VITE_SUPABASE_URL", "VITE_SUPABASE_ANON_KEY"],
+        "commit": "7bb1adf"
+      },
       "consumes": [
-        "DB_VARIABLES (Output_Templates, Canal_Blocks, CTAs, Keywords, GeoMix, HUMANIZE, Compliance)",
+        "Supabase: brands, output_templates, canal_blocks, keywords, ctas, humanize_profiles, compliance_rules, geomix, imagelab_presets, voicelab_params, blueprint_schemas, person_blueprints, location_blueprints, brand_palette, brand_typography",
         "BP_COPY_1.0 blueprints"
       ],
       "provee": [
@@ -434,11 +443,8 @@
         "person_blueprints",
         "location_blueprints"
       ],
-      "last_updated": "2026-03-26",
-      "repo": "unrealvillestudio-hub/CopyLab",
-      "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
-      "vercel_url": "unrlvl-copy-lab.vercel.app",
-      "stack": "Vite + React — conectar a Supabase pendiente (Fase 5)"
+      "next_action": "Integrar fetchBrandContext en buildCopyPrompt — reemplazar llamadas a DB_VARIABLES por queries Supabase",
+      "last_updated": "2026-03-26"
     },
     {
       "id": "LAB-SL",
@@ -546,9 +552,9 @@
       "status": "FROZEN — v6_4 es la versión final en Google Sheets",
       "sheets_count": 40,
       "migration_target": "Supabase",
-      "migration_status": "Fases 1-4 COMPLETADAS — 10 marcas, 19 tablas pobladas. Pendiente: brand_palette/typography, Fase 5 (conectar labs).",
+      "migration_status": "Fases 1-4 COMPLETADAS — 10 marcas, 19 tablas pobladas. Fase 5 infra CopyLab COMPLETA. Pendiente: integrar buildCopyPrompt, brand_palette/typography.",
       "_note": "CRÍTICO: v6_4 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va al diseño de Supabase.",
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-26"
     },
     {
       "id": "INFRA-BP",
@@ -569,69 +575,41 @@
       "role": "DB centralizada del ecosistema — target de migración de DB_VARIABLES v6_4",
       "schema_version": "v1.1 — 23 tablas DDL, fix imagelab_presets constraint",
       "tables": [
-        "brands",
-        "brand_palette",
-        "brand_typography",
-        "humanize_profiles",
-        "compliance_rules",
-        "output_templates",
-        "canal_blocks",
-        "keywords",
-        "ctas",
-        "geomix",
-        "imagelab_presets",
-        "videolab_params",
-        "voicelab_params",
-        "person_blueprints",
-        "location_blueprints",
-        "product_blueprints",
-        "blueprint_schemas",
-        "script_templates",
-        "voice_packs",
-        "brand_assets",
-        "page_sections",
-        "platform_configs",
-        "stakeholders"
+        "brands", "brand_palette", "brand_typography", "humanize_profiles",
+        "compliance_rules", "output_templates", "canal_blocks", "keywords",
+        "ctas", "geomix", "imagelab_presets", "videolab_params", "voicelab_params",
+        "person_blueprints", "location_blueprints", "product_blueprints",
+        "blueprint_schemas", "script_templates", "voice_packs", "brand_assets",
+        "page_sections", "platform_configs", "stakeholders"
       ],
       "seed_files": [
         "seed_phase1.sql — brands(8), humanize(5), compliance(10), imagelab_presets(7)"
       ],
-      "last_updated": "2026-03-25",
-      "migration_status": "Fases 1-4 completadas — 10 marcas en brands, 19 tablas pobladas con datos reales",
+      "last_updated": "2026-03-26",
+      "migration_status": "Fases 1-4 completadas — 10 marcas, 19 tablas pobladas. RLS aplicado en 14 tablas para CopyLab (Fase 5 infra ✅).",
       "tables_populated": {
-        "phase1": [
-          "brands(8)",
-          "humanize_profiles(12)",
-          "compliance_rules(10)",
-          "imagelab_presets(7)"
-        ],
-        "phase2": [
-          "canal_blocks(13)",
-          "output_templates(16)",
-          "keywords(444)",
-          "ctas(47)"
-        ],
-        "phase3": [
-          "geomix(12)",
-          "videolab_params(6)",
-          "voicelab_params(8)"
-        ],
-        "phase4_pending": [
-          "brand_palette (vacía — esperando hexes confirmados)",
-          "brand_typography (vacía — esperando fuentes confirmadas)",
-          "script_templates",
-          "voice_packs",
-          "brand_assets",
-          "page_sections",
-          "platform_configs",
-          "stakeholders"
-        ],
+        "phase1": ["brands(8)", "humanize_profiles(12)", "compliance_rules(10)", "imagelab_presets(7)"],
+        "phase2": ["canal_blocks(13)", "output_templates(16)", "keywords(444)", "ctas(47)"],
+        "phase3": ["geomix(12)", "videolab_params(6)", "voicelab_params(8)"],
         "phase4": [
           "brands(10) — ecosistema completo incluyendo ForumPHs y NeuroneSCF",
           "person_blueprints(5)",
           "location_blueprints(7)",
           "product_blueprints(2)",
           "blueprint_schemas(4)"
+        ],
+        "phase4_pending": [
+          "brand_palette (vacía — esperando hexes confirmados)",
+          "brand_typography (vacía — esperando fuentes confirmadas)",
+          "script_templates", "voice_packs", "brand_assets",
+          "page_sections", "platform_configs", "stakeholders"
+        ],
+        "fase5_rls": [
+          "humanize_profiles ✅", "compliance_rules ✅", "output_templates ✅",
+          "canal_blocks ✅", "keywords ✅", "ctas ✅", "geomix ✅",
+          "imagelab_presets ✅", "voicelab_params ✅", "blueprint_schemas ✅",
+          "person_blueprints ✅", "location_blueprints ✅",
+          "brand_palette ✅", "brand_typography ✅"
         ]
       }
     }
@@ -642,21 +620,12 @@
     "total_sheets": 40,
     "status": "FROZEN",
     "brand_ids_canonicos": [
-      "DiamondDetails",
-      "VizosCosmetics",
-      "D7Herbal",
-      "VivoseMask",
-      "PatriciaOsorioPersonal",
-      "PatriciaOsorioComunidad",
-      "PatriciaOsorioVizosSalon",
-      "NeuroneCosmetics",
-      "MASTER"
+      "DiamondDetails", "VizosCosmetics", "D7Herbal", "VivoseMask",
+      "PatriciaOsorioPersonal", "PatriciaOsorioComunidad", "PatriciaOsorioVizosSalon",
+      "NeuroneCosmetics", "MASTER"
     ],
     "schemas_blueprints_activos": [
-      "BP_PERSON_1.0",
-      "BP_LOCATION_1.0",
-      "BP_PRODUCT_1.0",
-      "BP_COPY_1.0"
+      "BP_PERSON_1.0", "BP_LOCATION_1.0", "BP_PRODUCT_1.0", "BP_COPY_1.0"
     ],
     "hallazgos_clave": [
       "BP_COPY_1.0 existe en BlueprintLab pero NO está documentado en DB_VARIABLES — gap crítico",
@@ -685,7 +654,7 @@
       "decision_2": "RESUELTA — Output_Templates y Canal_Blocks en Supabase como config",
       "decision_3": "RESUELTA — HUMANIZE como tabla propia (pattern DEFAULT + overrides)",
       "decision_4": "RESUELTA — DV_* como enums en código + applies_to JSONB en compliance_rules",
-      "decision_5": "RESUELTA — ForumPHs Y NeuroneSCF entran en Supabase como marcas completas. ForumPHs tiene pipeline creativo completo (ads, social, avatares, keywords) + agentes especializados (ForumPHs Speaks) + skills (Document Factory). NeuroneSCF ídem. La diferencia con otras marcas es que además tienen agentes y skills, no en vez de. db_variables_context → true para ambas."
+      "decision_5": "RESUELTA — ForumPHs Y NeuroneSCF entran en Supabase como marcas completas."
     }
   },
   "icr_qa": {
@@ -698,22 +667,11 @@
   "humanize_f25": {
     "_note": "Hallazgo crítico de la auditoría — documentado en Supabase schema como tabla humanize_profiles",
     "definition": "Capa transversal de autenticidad inyectada automáticamente en cada prompt del ecosistema",
-    "mediums": [
-      "copy",
-      "image",
-      "video",
-      "voice",
-      "web"
-    ],
+    "mediums": ["copy", "image", "video", "voice", "web"],
     "pattern": "DEFAULT aplica a todas las marcas. Overrides por brand_id sobreescriben el DEFAULT.",
     "overrides_activos": [
-      "neuroneCosmetics/copy",
-      "patriciaOsorioVizosSalon/copy",
-      "patriciaOsorioVizosSalon/image",
-      "diamondDetails/copy",
-      "diamondDetails/image",
-      "d7Herbal/copy",
-      "vizosCosmetics/copy"
+      "neuroneCosmetics/copy", "patriciaOsorioVizosSalon/copy", "patriciaOsorioVizosSalon/image",
+      "diamondDetails/copy", "diamondDetails/image", "d7Herbal/copy", "vizosCosmetics/copy"
     ]
   },
   "creativity_protection": {
@@ -725,10 +683,11 @@
     "status": "pending — implementar en diseño de Supabase y CopyLab"
   },
   "next_session_agenda": [
-    "1. Fase 5 — conectar CopyLab a Supabase (prj_5FebBMfTpo4aP5I7iJ98libUkTTe)",
-    "2. CopyLab debe leer en tiempo real: brands, output_templates, canal_blocks, keywords, ctas, humanize_profiles, compliance_rules, geomix",
-    "3. brand_palette y brand_typography — confirmar hexes y fuentes por marca",
+    "1. CopyLab SMPC — integrar fetchBrandContext en buildCopyPrompt: reemplazar llamadas a DB_VARIABLES por queries Supabase en tiempo real",
+    "2. CopyLab SMPC — mapear BrandContext → parámetros del prompt (output_templates, canal_blocks, humanize, compliance, keywords, ctas, geomix)",
+    "3. brand_palette y brand_typography — confirmar hexes y fuentes por marca para poblar tablas vacías",
     "4. INCI VivoseMask — cuando llegue ficha de Vizos",
-    "5. Voice IDs reales en ElevenLabs — desbloquear VoiceLab"
+    "5. Voice IDs reales en ElevenLabs — desbloquear VoiceLab",
+    "6. GeoMix para VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask"
   ]
 }
