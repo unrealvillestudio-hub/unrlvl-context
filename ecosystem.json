@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-27a",
+    "version": "2026-03-28a",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-27 — Supabase migración v7 COMPLETA. Keywords DD(287)+NC(53) con producto/servicio/prioridad. brand_languages(19)+brand_services(39)+channel_prompt_rules(39)+CTAs Patricia(8) poblados. queries.ts+buildCopyPrompt.ts+types.ts actualizados con campos v7 reales y bugs críticos corregidos. Pendiente: brand_palette, brand_typography, GeoMix 4 marcas."
+    "last_audit": "2026-03-28 — Sesión NeuroneSCF consolidación + product blueprints completos. NeuroneCosmetics eliminado. NeuroneSCF = brand_id canónico definitivo. 39 SKUs cargados en product_blueprints. brand_palette(11)+brand_typography(2) NeuroneSCF. brand_services item_type corregido. PatriciaOsorioVizosSalon+D7Herbal+VivoseMask. CopyLab 4 archivos actualizados. RLS brands habilitado. Advisor Center 0 alertas. Storage bucket product-assets creado."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -23,379 +23,95 @@
     "infrastructure": "Sistema de soporte del ecosistema. Context system, session protocol, etc."
   },
   "brands": [
-    {
-      "id": "DiamondDetails",
-      "name": "Diamond Details",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Alicante, España",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "last_updated": "2026-03-27"
-    },
-    {
-      "id": "VizosCosmetics",
-      "name": "Vizos Cosmetics",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Miami + España",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "D7Herbal",
-      "name": "D7 Herbal",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Alicante, España",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "VivoseMask",
-      "name": "Vivosé Mask",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "España",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "yellow",
-      "db_variables_context": true,
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "PatriciaOsorioPersonal",
-      "name": "Patricia Osorio · Personal",
-      "type": "personal_brand",
-      "sam_role": "studio",
-      "market": "Miami, FL",
-      "language_primary": "es-FL",
-      "_note": "brand_id canónico — NO usar 'PatriciaOsorio' a secas",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "last_updated": "2026-03-27"
-    },
-    {
-      "id": "PatriciaOsorioComunidad",
-      "name": "Patricia Osorio · Comunidad",
-      "type": "personal_brand",
-      "sam_role": "studio",
-      "market": "Miami, FL",
-      "language_primary": "es-FL",
-      "_note": "brand_id canónico separado de Personal y VizosSalon",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "last_updated": "2026-03-27"
-    },
-    {
-      "id": "PatriciaOsorioVizosSalon",
-      "name": "Patricia Osorio · Vizos Salón",
-      "type": "personal_brand",
-      "sam_role": "studio",
-      "market": "Miami, FL",
-      "language_primary": "es-FL",
-      "_note": "brand_id canónico separado — contexto específico salón Vizos Miami",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "last_updated": "2026-03-27"
-    },
-    {
-      "id": "NeuroneCosmetics",
-      "name": "Neurone Cosmética",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "South & Central Miami, FL",
-      "language_primary": "es-FL",
-      "_note": "Distribución exclusiva Miami — Patricia Osorio / UNRLVL",
-      "status": "active",
-      "health": "yellow",
-      "db_variables_context": true,
-      "last_updated": "2026-03-27"
-    },
-    {
-      "id": "ForumPHs",
-      "name": "ForumPHs",
-      "formerly": "PHAS / PH Administradores & Servicios",
-      "type": "brand",
-      "sam_role": "socio",
-      "key_person": "Ivette Flores (Gerente General, abogada)",
-      "market": "Panamá",
-      "language_primary": "es-PA",
-      "status": "active",
-      "health": "green",
-      "db_variables_context": true,
-      "_note": "Pipeline creativo completo (ads, social, avatares) + agentes especializados + skills. Entra en Supabase como marca completa.",
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "NeuroneSCF",
-      "name": "Neurone SCF",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Florida, USA",
-      "language_primary": "es-FL",
-      "status": "active",
-      "health": "yellow",
-      "db_variables_context": true,
-      "_note": "Entra en Supabase como marca completa. Social Media Agent ya activo.",
-      "last_updated": "2026-03-25"
-    }
+    { "id": "DiamondDetails", "name": "Diamond Details", "type": "brand", "sam_role": "studio", "market": "Alicante, España", "language_primary": "es-ES", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-27" },
+    { "id": "VizosCosmetics", "name": "Vizos Cosmetics", "type": "brand", "sam_role": "studio", "market": "Miami + España", "language_primary": "es-ES", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-25" },
+    { "id": "D7Herbal", "name": "D7 Herbal", "type": "brand", "sam_role": "studio", "market": "Alicante, España", "language_primary": "es-ES", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-25" },
+    { "id": "VivoseMask", "name": "Vivosé Mask", "type": "brand", "sam_role": "studio", "market": "España", "language_primary": "es-ES", "status": "active", "health": "yellow", "db_variables_context": true, "last_updated": "2026-03-25" },
+    { "id": "PatriciaOsorioPersonal", "name": "Patricia Osorio · Personal", "type": "personal_brand", "sam_role": "studio", "market": "Miami, FL", "language_primary": "es-FL", "_note": "brand_id canónico — NO usar PatriciaOsorio a secas", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-27" },
+    { "id": "PatriciaOsorioComunidad", "name": "Patricia Osorio · Comunidad", "type": "personal_brand", "sam_role": "studio", "market": "Miami, FL", "language_primary": "es-FL", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-27" },
+    { "id": "PatriciaOsorioVizosSalon", "name": "Patricia Osorio · Vizos Salón", "type": "personal_brand", "sam_role": "studio", "market": "Miami, FL", "language_primary": "es-FL", "_note": "brand_id canónico separado. Vende también D7Herbal y VivoseMask como productos.", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-28" },
+    { "id": "NeuroneSCF", "name": "Neurone South & Central Florida", "type": "brand", "sam_role": "studio", "market": "South & Central Florida, USA", "domain": "neuronescflorida.com", "language_primary": "es-FL", "_note": "E-commerce autorizado Neurone Cosmética para South & Central Florida. PO es la distribuidora. brand_id canónico = NeuroneSCF. NeuroneCosmetics = fabricante global, NO en nuestro ecosystem.", "status": "active", "health": "yellow", "db_variables_context": true, "product_catalog": "39 SKUs en product_blueprints — 6 líneas", "last_updated": "2026-03-28" },
+    { "id": "ForumPHs", "name": "ForumPHs", "formerly": "PHAS / PH Administradores & Servicios", "type": "brand", "sam_role": "socio", "key_person": "Ivette Flores (Gerente General, abogada)", "market": "Panamá", "language_primary": "es-PA", "status": "active", "health": "green", "db_variables_context": true, "last_updated": "2026-03-25" }
   ],
   "labs": [
     {
-      "id": "LAB-BPL",
-      "name": "BlueprintLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/BlueprintLab",
-      "deploy": "Google AI Studio",
-      "vercel": false,
-      "_note": "NO está en Vercel — usa window.storage (Claude artifact API) para persistencia. Es el generador de VideoAvatars a partir de Blueprints — apuntará a LoRA/ComfyUI.",
-      "stack": "React 19 + TypeScript + Vite + Tailwind + Gemini 2.0 Flash",
-      "version": "v1.2",
-      "status": "active",
-      "schemas_activos": [
-        "BP_PERSON_1.0",
-        "BP_LOCATION_1.0",
-        "BP_PRODUCT_1.0",
-        "BP_COPY_1.0"
-      ],
-      "role": "Generador de VideoAvatars desde Blueprints. Admin de datos maestros del ecosistema.",
-      "consumes": [],
-      "provee": [
-        "Blueprints JSON → todos los Labs vía BluePrints repo"
-      ],
-      "icr_qa": false,
-      "future": "Cuando migre a Supabase será la UI admin de la DB centralizada",
-      "last_updated": "2026-03-26"
+      "id": "LAB-BPL", "name": "BlueprintLab", "taxonomy": "lab",
+      "repo": "unrealvillestudio-hub/BlueprintLab", "deploy": "Google AI Studio", "vercel": false,
+      "stack": "React 19 + TypeScript + Vite + Tailwind + Gemini 2.0 Flash", "version": "v1.2", "status": "active",
+      "schemas_activos": ["BP_PERSON_1.0","BP_LOCATION_1.0","BP_PRODUCT_1.0","BP_COPY_1.0"],
+      "blueprint_update_flow": "BlueprintLab exporta JSON → commit BluePrints repo → sesión Claude → UPSERT por sku en product_blueprints",
+      "last_updated": "2026-03-28"
     },
     {
-      "id": "LAB-IL",
-      "name": "ImageLab",
-      "taxonomy": "lab",
+      "id": "LAB-IL", "name": "ImageLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/ImageLab",
-      "vercel_project": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb",
-      "vercel_url": "image-lab-unrlvl.vercel.app",
-      "stack": "Vite + React + TypeScript",
-      "version": "v1.1",
-      "status": "active",
-      "_note": "Generador de escenas, promptpacks, avatars (imagen), e-commerce, videoPodcast (composición), social media pack builder. Usa Assets Library con slots (A=Subject, B=Background, C=Subject B, D=Ref1, etc.).",
-      "modules": [
-        "E-Comm Studio",
-        "VideoPodcast",
-        "Scene Gen",
-        "Social Media Pack Builder",
-        "Assets Library (slot-based)"
-      ],
+      "vercel_project": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb", "vercel_url": "image-lab-unrlvl.vercel.app",
+      "stack": "Vite + React + TypeScript", "version": "v1.1", "status": "active",
       "image_engine": "ComfyUI FLUX (local) + fal.ai (cloud)",
-      "consumes": [
-        "DB_VARIABLES (brand params, blueprints, imagelab presets)",
-        "PersonBlueprints",
-        "LocationBlueprints",
-        "ProductBlueprints"
-      ],
-      "provee": [
-        "Imágenes para ads, social, web, video"
-      ],
-      "icr_qa": "Nivel 1 (slotValidation.ts, WarningBanner, isExecutionBlocked) — Nivel 2 en desarrollo",
-      "icr_policy": "E-Comm Studio: estricto (gate duro). Scene Gen: flexible (reintentos). Avatar: flexible + ⚠️ marcador.",
-      "supabase_tables": [
-        "brands", "imagelab_presets", "person_blueprints", "location_blueprints",
-        "product_blueprints", "compliance_rules", "output_templates", "canal_blocks", "geomix"
-      ],
+      "supabase_tables": ["brands","imagelab_presets","person_blueprints","location_blueprints","product_blueprints","compliance_rules","output_templates","canal_blocks","geomix"],
       "last_updated": "2026-03-26"
     },
     {
-      "id": "LAB-WL",
-      "name": "WebLab",
-      "taxonomy": "lab",
+      "id": "LAB-WL", "name": "WebLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/WebLab",
-      "vercel_project": "prj_MzQeqiHG9fxCXYf3j84YCgdf5GZS",
-      "vercel_url": "web-lab.vercel.app",
-      "stack": "React + TypeScript + Node.js serverless (6 functions)",
-      "status": "active",
-      "role": "Generador de temas Shopify multi-marca con push directo a Shopify Admin API",
-      "modules": ["ThemeDeployModule", "SalesLayerPanel", "BrandThemeConfigs"],
-      "brand_themes_activos": [
-        "Neurone Dark", "Neurone Light", "Vizos Dark", "Vizos Light",
-        "ForumPHs Dark", "ForumPHs Light"
-      ],
-      "collection_templates": ["moisture", "restore", "styling", "color-rescue", "scalp"],
-      "consumes": ["DB_VARIABLES (brand identity, colores)", "Shopify Admin API"],
-      "provee": ["Temas Liquid para Shopify", "Secciones personalizadas", "Templates de colección"],
-      "icr_qa": false,
-      "supabase_tables": [
-        "brands", "brand_palette", "brand_typography", "humanize_profiles",
-        "product_blueprints", "page_sections", "brand_assets"
-      ],
+      "vercel_project": "prj_MzQeqiHG9fxCXYf3j84YCgdf5GZS", "vercel_url": "web-lab.vercel.app",
+      "stack": "React + TypeScript + Node.js serverless (6 functions)", "status": "active",
+      "collection_templates": ["moisture","restore","styling","color-rescue","scalp"],
       "last_updated": "2026-03-25"
     },
     {
-      "id": "LAB-AL",
-      "name": "AgentLab",
-      "taxonomy": "lab",
+      "id": "LAB-AL", "name": "AgentLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/AgentLab",
-      "vercel_project": "prj_y1hYcSn2javwg7h6fof3e74uHTne",
-      "vercel_url": "agent-lab.vercel.app",
-      "stack": "Node.js serverless CommonJS + React frontend",
-      "status": "active",
-      "role": "Plataforma de agentes IA multi-rol. Cada deployment es un agente configurado para un cliente/marca.",
-      "auth": {
-        "format": "CODE:Name:Role:YYYY-MM-DD",
-        "roles": ["admin", "po", "ops"],
-        "role_map": {
-          "SAM/SAMDEV/UNRLVL": "admin",
-          "PATY/PO/PATRICIA": "po",
-          "LAURA/OPS": "ops"
-        }
-      },
-      "persistence": "Vercel KV — TTL 90 días, historial por token, cross-device",
-      "history_compression": "Auto-compresión >30 mensajes vía Claude API",
-      "context_injection": "Fetch dinámico de session_log de marca en cada request",
-      "export_endpoint": "/api/export (protegido por EXPORT_SECRET)",
-      "consumes": ["brand session_log (dinámico)", "DB_VARIABLES (brand context)"],
-      "provee": ["Agentes IA para clientes y operaciones"],
-      "icr_qa": false,
-      "supabase_tables": ["brands", "compliance_rules", "humanize_profiles"],
+      "vercel_project": "prj_y1hYcSn2javwg7h6fof3e74uHTne", "vercel_url": "agent-lab.vercel.app",
+      "stack": "Node.js serverless CommonJS + React frontend", "status": "active",
+      "auth": { "format": "CODE:Name:Role:YYYY-MM-DD", "roles": ["admin","po","ops"] },
+      "persistence": "Vercel KV — TTL 90 días",
       "last_updated": "2026-03-25"
     },
     {
-      "id": "LAB-ORCH",
-      "name": "Orchestrator",
-      "taxonomy": "lab",
+      "id": "LAB-ORCH", "name": "Orchestrator", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/Orchestrator",
-      "vercel_project": "prj_93AJfDiY1pcktG7b7fDStBqONYWy",
-      "vercel_url": "orchestrator.vercel.app",
-      "status": "initialized",
-      "_note": "1 solo commit 'Creation' — recién inicializado. Hub que conectará todos los labs.",
-      "role": "Pipeline completo del ecosistema (n8n/Make)",
-      "consumes": ["todos los labs"],
-      "provee": ["outputs automatizados multi-lab"],
-      "supabase_tables": [
-        "brands", "humanize_profiles", "output_templates", "canal_blocks",
-        "compliance_rules", "imagelab_presets", "videolab_params", "voicelab_params", "blueprint_schemas"
-      ],
-      "last_updated": "2026-03-25"
+      "vercel_project": "prj_93AJfDiY1pcktG7b7fDStBqONYWy", "vercel_url": "orchestrator.vercel.app",
+      "status": "initialized", "last_updated": "2026-03-25"
     },
     {
-      "id": "LAB-VL",
-      "name": "VideoLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/VideoLab",
-      "vercel": false,
-      "status": "building",
-      "video_engine": "HeyGen API + Kling",
-      "consumes": ["PersonBlueprints", "LocationBlueprints", "DB_VARIABLES (videolab params)"],
-      "provee": ["Videos talking-head", "Storyboards", "Video podcasts"],
-      "icr_qa": "Estricto en compliance, flexible en composición",
-      "supabase_tables": [
-        "brands", "compliance_rules", "imagelab_presets",
-        "videolab_params", "voicelab_params", "location_blueprints"
-      ],
-      "last_updated": "2026-03-25"
+      "id": "LAB-VL", "name": "VideoLab", "taxonomy": "lab",
+      "repo": "unrealvillestudio-hub/VideoLab", "vercel": false,
+      "status": "building", "video_engine": "HeyGen API + Kling", "last_updated": "2026-03-25"
     },
     {
-      "id": "LAB-VOL",
-      "name": "VoiceLab",
-      "taxonomy": "local_tool",
-      "_note": "Corre localmente. NO en Vercel. Motor: TenzorArt (decisión 2026-03-26, reemplaza ElevenLabs).",
-      "status": "blocked",
-      "blocker": "Voice IDs todos TBD_* — requiere configurar voces reales en TenzorArt",
-      "voice_engine": "TenzorArt (decisión 2026-03-26)",
-      "consumes": ["PersonBlueprints (voicelab section)", "DB_VARIABLES (voicelab params)"],
-      "provee": ["Scripts de audio", "Voces clonadas para ads y content"],
-      "supabase_tables": [
-        "brands", "voicelab_params", "person_blueprints",
-        "script_templates", "voice_packs", "compliance_rules"
-      ],
-      "last_updated": "2026-03-26"
+      "id": "LAB-VOL", "name": "VoiceLab", "taxonomy": "local_tool",
+      "status": "blocked", "blocker": "Voice IDs todos TBD_* — requiere configurar voces reales en TenzorArt",
+      "voice_engine": "TenzorArt", "last_updated": "2026-03-26"
     },
     {
-      "id": "LAB-CPL",
-      "name": "CopyLab",
-      "taxonomy": "lab",
+      "id": "LAB-CPL", "name": "CopyLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/CopyLab",
-      "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
-      "vercel_url": "unrlvl-copy-lab.vercel.app",
+      "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe", "vercel_url": "unrlvl-copy-lab.vercel.app",
       "stack": "Vite + React + TypeScript — fetch nativo (sin SDK Supabase)",
-      "status": "active — Migración v7 ✅ · queries+buildCopyPrompt+types actualizados",
+      "status": "active — v7+products ✅",
       "ai_engine": "Claude Sonnet 4 vía /api/claude proxy Vercel",
-      "role": "Generación de todo texto vía SMPC (buildCopyPrompt). Consume Supabase + HUMANIZE F2.5.",
-      "smpc_templates": 16,
-      "canal_blocks": 14,
-      "supabase_connected": true,
       "supabase_layer": {
-        "files": [
-          "src/lib/supabaseClient.ts",
-          "src/lib/queries.ts",
-          "src/lib/db/types.ts",
-          "src/lib/buildCopyPrompt.ts",
-          "src/hooks/useCopyPrompt.ts",
-          "src/hooks/useBrands.ts",
-          "src/services/promptpack.ts",
-          "src/core/copyEngine.ts",
-          "api/claude.ts"
-        ],
         "entry_point": "fetchBrandContext(brandId, language?, servicio?) → BrandContext → buildCopyPrompt → /api/claude → Claude Sonnet 4",
-        "rls_applied": true,
-        "tables_rls": 17,
-        "env_vars": ["VITE_SUPABASE_URL", "VITE_SUPABASE_ANON_KEY", "ANTHROPIC_API_KEY"],
-        "last_commit": "pending — queries.ts+buildCopyPrompt.ts+types.ts v7"
+        "last_commit": "2026-03-28 — types+queries+CopyCustomizeModule+promptpack (product catalog + optgroup + SKU selector)"
       },
       "modules_status": {
         "CopyPackModule": "✅ COMPLETO",
-        "CopyToolsModule": "✅ COMPLETO (migrado sesión 2026-03-27)",
-        "CopyCustomizeModule": "✅ COMPLETO (migrado sesión 2026-03-27)"
+        "CopyToolsModule": "✅ COMPLETO",
+        "CopyCustomizeModule": "✅ COMPLETO — idioma dinámico + servicio optgroup por item_type + selector SKU condicional"
       },
-      "consumes": [
-        "Supabase: brands, output_templates, canal_blocks, keywords, ctas, humanize_profiles, compliance_rules, geomix, imagelab_presets, voicelab_params, blueprint_schemas, person_blueprints, location_blueprints, brand_palette, brand_typography, brand_languages, brand_services, channel_prompt_rules",
-        "BP_COPY_1.0 blueprints"
-      ],
-      "provee": [
-        "Ad copy", "Social posts", "SEO content", "Landing pages",
-        "YouTube scripts", "Email", "Brand kits"
-      ],
-      "supabase_tables": [
-        "brands", "brand_palette", "brand_typography", "humanize_profiles",
-        "output_templates", "canal_blocks", "ctas", "keywords", "geomix",
-        "compliance_rules", "imagelab_presets", "voicelab_params", "blueprint_schemas",
-        "person_blueprints", "location_blueprints",
-        "brand_languages", "brand_services", "channel_prompt_rules"
-      ],
-      "next_action": "Poblar brand_palette + brand_typography. GeoMix 4 marcas. Actualizar callers de fetchBrandContext con language+servicio.",
-      "last_updated": "2026-03-27"
+      "supabase_tables": ["brands","brand_palette","brand_typography","humanize_profiles","output_templates","canal_blocks","ctas","keywords","geomix","compliance_rules","imagelab_presets","voicelab_params","blueprint_schemas","person_blueprints","location_blueprints","product_blueprints","brand_languages","brand_services","channel_prompt_rules"],
+      "next_action": "Subir imágenes NeuroneSCF a Supabase Storage. GeoMix 4 marcas. Validar fetchProductCatalog en producción.",
+      "last_updated": "2026-03-28"
     },
     {
-      "id": "LAB-SL",
-      "name": "SocialLab",
-      "taxonomy": "lab",
-      "status": "building",
-      "role": "Social engine con metodología TOFU/MOFU/BOFU + templates",
-      "ai_engine_planned": "Claude Sonnet 4 (mismo stack que CopyLab)",
-      "consumes": ["DB_VARIABLES", "CopyLab outputs"],
-      "provee": ["Calendarios de contenido", "Posts programados"],
-      "supabase_tables": [
-        "brands", "humanize_profiles", "output_templates", "canal_blocks",
-        "keywords", "imagelab_presets", "videolab_params", "platform_configs"
-      ],
-      "last_updated": "2026-03-26"
+      "id": "LAB-SL", "name": "SocialLab", "taxonomy": "lab",
+      "status": "building", "ai_engine_planned": "Claude Sonnet 4", "last_updated": "2026-03-26"
     }
   ],
   "agent_deployments": [
     {
-      "id": "AGENT-SMA",
-      "name": "Social Media Agent",
-      "taxonomy": "agent_deployment",
+      "id": "AGENT-SMA", "name": "Social Media Agent", "taxonomy": "agent_deployment",
       "parent_lab": "LAB-AL",
       "vercel_project": "prj_woslSsgsi92lcssFl1MrUQ9pRicd",
       "vercel_url": "unrlvl-social-media-agent.vercel.app",
@@ -403,202 +119,93 @@
       "export_secret_env": "EXPORT_SECRET (6lk8yfcMFdv@L5$3H^oT&AxR)",
       "serves_brand": "NeuroneSCF",
       "operator": "Laura Rodriguez",
-      "role": "Asistente de operaciones digitales para Neurone SCF — gestión infraestructura digital",
+      "role": "Asistente de operaciones digitales para Neurone South & Central Florida",
       "context_source": "brands/NeuroneSCF/session_log.md (fetch dinámico)",
-      "status": "active",
-      "last_updated": "2026-03-25"
+      "status": "active", "last_updated": "2026-03-28"
     },
     {
-      "id": "AGENT-FPH-SPEAKS",
-      "name": "ForumPHs Speaks",
-      "taxonomy": "agent_deployment",
-      "parent_lab": "LAB-AL",
-      "_note": "Output de AgentLab configurado para ForumPHs. NO es una app independiente.",
-      "serves_brand": "ForumPHs",
+      "id": "AGENT-FPH-SPEAKS", "name": "ForumPHs Speaks", "taxonomy": "agent_deployment",
+      "parent_lab": "LAB-AL", "serves_brand": "ForumPHs",
       "role": "Agente IA Ley 284 — chatbot de lead capture para propietarios",
-      "stack": "Claude Sonnet + proxy Vercel",
-      "cost": "~$1.20/100 consultas · 5 gratis → email → 5 bonus",
-      "status": "active — testing con IF",
-      "context_source": "brand context ForumPHs + Ley 284 knowledge",
-      "last_updated": "2026-03-25"
+      "status": "active — testing con IF", "last_updated": "2026-03-25"
     }
   ],
   "skills": [
-    {
-      "id": "SKILL-DF",
-      "name": "Document Factory",
-      "taxonomy": "skill",
-      "_note": "Skill desarrollado en Claude. Sin infraestructura propia. Corre en sesión. NO es una app.",
-      "serves_brand": "ForumPHs",
-      "status": "85% completado",
-      "role": "Generación automatizada de actas y documentos legales para administración de PHs",
-      "next_action": "Completar al 100% en próximos 30 días",
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "SKILL-FIE",
-      "name": "Financial Intelligence Engine",
-      "taxonomy": "skill",
-      "_note": "BI desarrollado como skill/output de Claude para ForumPHs. HTML deliverable, no app.",
-      "serves_brand": "ForumPHs",
-      "future": "Cross-brand — exportable como lab o servicio de onboarding UNRLVL",
-      "status": "delivered",
-      "outputs_entregados": [
-        "ForumPHs_BI_2026.html",
-        "ForumPHs_EEFF_2026_v1.html",
-        "FPHs_Business_Intelligence_2025.html"
-      ],
-      "last_updated": "2026-03-25"
-    }
+    { "id": "SKILL-DF", "name": "Document Factory", "taxonomy": "skill", "serves_brand": "ForumPHs", "status": "85% completado", "last_updated": "2026-03-25" },
+    { "id": "SKILL-FIE", "name": "Financial Intelligence Engine", "taxonomy": "skill", "serves_brand": "ForumPHs", "status": "delivered", "last_updated": "2026-03-25" }
   ],
   "infrastructure": [
     {
-      "id": "INFRA-CTX",
-      "name": "Context System",
-      "taxonomy": "infrastructure",
+      "id": "INFRA-CTX", "name": "Context System", "taxonomy": "infrastructure",
       "vercel_project": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54",
       "vercel_url": "https://unrlvl-context.vercel.app",
-      "status": "active",
-      "role": "Single source of truth para contexto de sesión. brand.json + BP_Brand_Context.md + session_log.md por marca.",
-      "last_updated": "2026-03-27"
+      "status": "active", "last_updated": "2026-03-28"
     },
     {
-      "id": "INFRA-DBV",
-      "name": "DB_VARIABLES",
-      "taxonomy": "infrastructure",
-      "current_version": "v7_0",
-      "status": "FROZEN — v7.0 es la versión final. Supabase es el sistema activo.",
-      "sheets_count": 37,
-      "migration_target": "Supabase",
-      "migration_status": "MIGRACIÓN v7 COMPLETA — todas las fases ejecutadas. Supabase es source of truth.",
-      "_note": "CRÍTICO: v7.0 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va directo a Supabase.",
-      "last_updated": "2026-03-27"
+      "id": "INFRA-DBV", "name": "DB_VARIABLES", "taxonomy": "infrastructure",
+      "current_version": "v7_0", "status": "FROZEN — Supabase es el sistema activo.",
+      "sheets_count": 37, "last_updated": "2026-03-28"
     },
     {
-      "id": "INFRA-BP",
-      "name": "BluePrints Repo",
-      "taxonomy": "infrastructure",
-      "repo": "unrealvillestudio-hub/BluePrints",
-      "status": "active",
-      "role": "Custodia y versioning de blueprints JSON exportados desde BlueprintLab",
-      "_note": "Intermediario temporal — cuando migre a Supabase este repo dejará de ser necesario",
-      "last_updated": "2026-03-25"
+      "id": "INFRA-BP", "name": "BluePrints Repo", "taxonomy": "infrastructure",
+      "repo": "unrealvillestudio-hub/BluePrints", "status": "active",
+      "_note": "39 SKUs NeuroneSCF cargados en Supabase product_blueprints. Flujo: BlueprintLab → commit → sesión Claude → UPSERT por sku.",
+      "last_updated": "2026-03-28"
     },
     {
-      "id": "INFRA-SB",
-      "name": "Supabase DB",
-      "taxonomy": "infrastructure",
-      "status": "active",
-      "mcp_connected": true,
-      "role": "DB centralizada del ecosistema — source of truth post migración v7",
-      "schema_version": "v1.2 — 26 tablas (23 originales + brand_languages + brand_services + channel_prompt_rules)",
-      "tables": [
-        "brands", "brand_palette", "brand_typography", "humanize_profiles",
-        "compliance_rules", "output_templates", "canal_blocks", "keywords",
-        "ctas", "geomix", "imagelab_presets", "videolab_params", "voicelab_params",
-        "person_blueprints", "location_blueprints", "product_blueprints",
-        "blueprint_schemas", "script_templates", "voice_packs", "brand_assets",
-        "page_sections", "platform_configs", "stakeholders",
-        "brand_languages", "brand_services", "channel_prompt_rules"
-      ],
-      "last_updated": "2026-03-27",
+      "id": "INFRA-SB", "name": "Supabase DB", "taxonomy": "infrastructure",
+      "status": "active", "mcp_connected": true,
+      "schema_version": "v1.3 — 26 tablas + product_blueprints extendido (16 campos) + bucket product-assets",
+      "security": "RLS habilitado en brands. Advisor Center 0 alertas.",
+      "storage_buckets": ["product-assets (público, 10MB, PNG/WEBP/JPEG)"],
+      "last_updated": "2026-03-28",
       "migration_status": "v7 COMPLETA. Supabase es source of truth.",
       "tables_populated": {
-        "phase1": ["brands(8)", "humanize_profiles(12)", "compliance_rules(10)", "imagelab_presets(7)"],
-        "phase2": ["canal_blocks(14)", "output_templates(16)", "keywords(444+287+53)", "ctas(55)"],
-        "phase3": ["geomix(12)", "videolab_params(6)", "voicelab_params(8)"],
-        "phase4": [
-          "brands(10) — ecosistema completo",
-          "person_blueprints(5)", "location_blueprints(7)",
-          "product_blueprints(2)", "blueprint_schemas(4)"
-        ],
-        "phase5": [
-          "keywords DiamondDetails: 287 (ES+VAL+EN-UK) ✅",
-          "keywords NeuroneCosmetics: 53 (es-FL+EN) ✅",
-          "todas las demás marcas: keywords con producto/servicio/prioridad ✅"
-        ],
-        "phase7": [
-          "brand_languages: 19 ✅",
-          "brand_services: 39 ✅",
-          "channel_prompt_rules: 39 ✅",
-          "ctas Patricia Osorio: 8 ✅"
+        "completed_2026-03-28": [
+          "brand_palette NeuroneSCF: 11 entradas ✅",
+          "brand_typography NeuroneSCF: 2 entradas ✅",
+          "product_blueprints NeuroneSCF: 39 SKUs ✅ — Moisture(4)+Restore(5)+Styling(9)+Color_Rescue(7)+Scalp(6)+Pro_Salon(8)",
+          "brand_services PatriciaOsorioVizosSalon: D7Herbal+VivoseMask item_type=producto ✅",
+          "brand_services NeuroneSCF: item_type corregido (producto/servicio) ✅"
         ],
         "pending": [
-          "brand_palette (vacía — esperando hexes confirmados)",
-          "brand_typography (vacía — esperando fuentes confirmadas)",
-          "geomix VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask (pendiente datos)",
-          "script_templates", "voice_packs", "brand_assets", "page_sections", "platform_configs", "stakeholders"
+          "Imágenes NeuroneSCF → Supabase Storage bucket product-assets",
+          "brand_palette + brand_typography otras marcas",
+          "geomix VizosCosmetics, PatriciaOsorio*, NeuroneSCF, VivoseMask",
+          "voicelab voice IDs reales TenzorArt",
+          "Corregir imagen NCNEU-6 compartida (Neurona Gloss / Neuroxide)"
         ]
       }
     }
   ],
   "db_variables_audit": {
-    "version": "v7_0",
-    "audit_date": "2026-03-27",
-    "total_sheets": 37,
-    "status": "FROZEN",
+    "version": "v7_0", "audit_date": "2026-03-28", "total_sheets": 37, "status": "FROZEN",
     "brand_ids_canonicos": [
       "DiamondDetails", "VizosCosmetics", "D7Herbal", "VivoseMask",
       "PatriciaOsorioPersonal", "PatriciaOsorioComunidad", "PatriciaOsorioVizosSalon",
-      "NeuroneCosmetics", "ForumPHs", "NeuroneSCF"
+      "NeuroneSCF", "ForumPHs"
     ],
-    "schemas_blueprints_activos": [
-      "BP_PERSON_1.0", "BP_LOCATION_1.0", "BP_PRODUCT_1.0", "BP_COPY_1.0"
-    ],
-    "pendientes_criticos": [
-      "Asignar voice IDs reales en TenzorArt",
-      "Subir fotos referencia → has_reference_photos = true",
-      "Poblar brand_palette (hexes por marca)",
-      "Poblar brand_typography (fuentes por marca)",
-      "GeoMix: añadir VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask",
-      "Actualizar callers de fetchBrandContext() en CopyCustomizeModule con language+servicio"
-    ],
-    "supabase_migration": {
-      "status": "v7 COMPLETA — Supabase es source of truth",
-      "schema_doc": "UNRLVL_Supabase_Schema.md — 26 tablas DDL",
-      "constraint_fix": "keywords UNIQUE ahora es (brand_id, keyword, language) — soporta multi-idioma"
-    }
+    "_note": "NeuroneSCF = brand_id canónico definitivo. NeuroneCosmetics = fabricante global, NO en nuestro ecosystem.",
+    "schemas_blueprints_activos": ["BP_PERSON_1.0","BP_LOCATION_1.0","BP_PRODUCT_1.0","BP_COPY_1.0"]
   },
   "ai_engine_decisions": {
-    "_note": "Decisiones tomadas 2026-03-26 — aplican a todos los labs",
     "copylab": "Claude Sonnet 4 ✅ ACTIVO",
     "sociallab": "Claude Sonnet 4 — cuando se construya",
-    "weblab": "Claude Sonnet 4 — si genera copy para Shopify",
-    "agentlab": "Claude Sonnet 4 ✅ ya era Claude",
-    "blueprintlab": "Gemini 2.0 Flash — mantener (formulario JSON estructurado, no lenguaje de marca)",
-    "imagelab": "ComfyUI FLUX / fal.ai — no aplica LLM de lenguaje",
-    "videolab": "HeyGen / Kling — no aplica LLM de lenguaje",
-    "voicelab": "TenzorArt — no aplica LLM de lenguaje"
-  },
-  "icr_qa": {
-    "_note": "Proceso de autovalidación 100% interno. Invisible para usuario y cliente.",
-    "definition": "Industrial Consistency Ready — garantía de que cada output cumple el standard UNRLVL antes de ser entregado",
-    "flow": "Preflight → Generación → Postflight → Auto-regenerate hasta PASS → Entrega",
-    "rule": "El usuario/cliente NUNCA ve un FAIL. El sistema regenera hasta cumplir.",
-    "status": "embrión en ImageLab (slotValidation.ts) — pendiente implementar Nivel 2 completo"
+    "blueprintlab": "Gemini 2.0 Flash — mantener",
+    "imagelab": "ComfyUI FLUX / fal.ai",
+    "videolab": "HeyGen / Kling",
+    "voicelab": "TenzorArt"
   },
   "humanize_f25": {
-    "_note": "Tabla humanize_profiles en Supabase. Schema: brand_id + medium + parameter + value.",
-    "definition": "Capa transversal de autenticidad inyectada automáticamente en cada prompt del ecosistema",
-    "mediums": ["copy", "image", "video", "voice", "web"],
-    "pattern": "brand_id='DEFAULT' aplica a todas las marcas. Rows con brand_id específico sobreescriben el DEFAULT para ese medium.",
-    "overrides_activos": [
-      "NeuroneCosmetics/copy", "PatriciaOsorioVizosSalon/copy", "PatriciaOsorioVizosSalon/image",
-      "DiamondDetails/copy", "DiamondDetails/image", "D7Herbal/copy", "VizosCosmetics/copy"
-    ]
-  },
-  "creativity_protection": {
-    "_note": "Temperatura implementada en buildCopyPrompt.ts — capeada a 1.0 (Claude API max)",
-    "solucion_2": "Temperature variable por tipo de output: conversión 0.5 / SEO 0.7 / orgánico 1.0 / discovery 1.0 ✅ ACTIVO",
-    "status": "Temperatura implementada ✅ — Angle Randomizer y output_log pendientes"
+    "overrides_activos": ["NeuroneSCF/copy","PatriciaOsorioVizosSalon/copy","PatriciaOsorioVizosSalon/image","DiamondDetails/copy","DiamondDetails/image","D7Herbal/copy","VizosCosmetics/copy"]
   },
   "next_session_agenda": [
-    "1. brand_palette — poblar hexes por marca (tabla vacía, esperando datos de Sam)",
-    "2. brand_typography — poblar fuentes por marca (tabla vacía, esperando datos de Sam)",
-    "3. GeoMix — completar VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask",
-    "4. CopyLab — actualizar callers de fetchBrandContext() en CopyCustomizeModule con language+servicio",
-    "5. CopyLab — verificar deploy en producción post-commit de los 3 archivos",
-    "6. VoiceLab — configurar voces reales en TenzorArt",
-    "7. Brand OnBoarding App — para ForumPHs, NeuroneSCF y nuevas marcas"
+    "1. Subir imágenes NeuroneSCF → Supabase Storage bucket product-assets",
+    "2. GeoMix — VizosCosmetics, PatriciaOsorio*, NeuroneSCF, VivoseMask",
+    "3. brand_palette + brand_typography — otras marcas",
+    "4. VoiceLab — configurar voces reales TenzorArt",
+    "5. Brand OnBoarding App — ForumPHs, NeuroneSCF",
+    "6. Corregir imagen NCNEU-6 compartida (Neurona Gloss vs Neuroxide)",
+    "7. Validar fetchProductCatalog en CopyLab producción con NeuroneSCF"
   ]
 }
