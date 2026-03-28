@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-26c",
+    "version": "2026-03-27a",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-26 — CopyLab Fase 5b COMPLETA. Engine migrado Gemini→Claude. fetchBrandContext integrado en buildCopyPrompt. runCopyPack conectado a Supabase. useBrands hook live. @google/genai eliminado. CopyPackModule leyendo marcas desde Supabase. Deploy limpio en producción. Pendiente: CopyToolsModule + CopyCustomizeModule migración, brand_palette/typography poblar."
+    "last_audit": "2026-03-27 — Supabase migración v7 COMPLETA. Keywords DD(287)+NC(53) con producto/servicio/prioridad. brand_languages(19)+brand_services(39)+channel_prompt_rules(39)+CTAs Patricia(8) poblados. queries.ts+buildCopyPrompt.ts+types.ts actualizados con campos v7 reales y bugs críticos corregidos. Pendiente: brand_palette, brand_typography, GeoMix 4 marcas."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -33,7 +33,7 @@
       "status": "active",
       "health": "green",
       "db_variables_context": true,
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-27"
     },
     {
       "id": "VizosCosmetics",
@@ -82,7 +82,7 @@
       "status": "active",
       "health": "green",
       "db_variables_context": true,
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-27"
     },
     {
       "id": "PatriciaOsorioComunidad",
@@ -95,7 +95,7 @@
       "status": "active",
       "health": "green",
       "db_variables_context": true,
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-27"
     },
     {
       "id": "PatriciaOsorioVizosSalon",
@@ -108,7 +108,7 @@
       "status": "active",
       "health": "green",
       "db_variables_context": true,
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-27"
     },
     {
       "id": "NeuroneCosmetics",
@@ -121,7 +121,7 @@
       "status": "active",
       "health": "yellow",
       "db_variables_context": true,
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-27"
     },
     {
       "id": "ForumPHs",
@@ -328,11 +328,11 @@
       "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
       "vercel_url": "unrlvl-copy-lab.vercel.app",
       "stack": "Vite + React + TypeScript — fetch nativo (sin SDK Supabase)",
-      "status": "active — Fase 5b COMPLETA ✅ · CopyPackModule live con Supabase + Claude",
-      "ai_engine": "Claude Sonnet 4 vía /api/claude proxy Vercel (migrado desde Gemini 2026-03-26)",
+      "status": "active — Migración v7 ✅ · queries+buildCopyPrompt+types actualizados",
+      "ai_engine": "Claude Sonnet 4 vía /api/claude proxy Vercel",
       "role": "Generación de todo texto vía SMPC (buildCopyPrompt). Consume Supabase + HUMANIZE F2.5.",
       "smpc_templates": 16,
-      "canal_blocks": 13,
+      "canal_blocks": 14,
       "supabase_connected": true,
       "supabase_layer": {
         "files": [
@@ -346,28 +346,19 @@
           "src/core/copyEngine.ts",
           "api/claude.ts"
         ],
-        "entry_point": "fetchBrandContext(brandId) → BrandContext completo en paralelo → buildCopyPrompt → /api/claude → Claude Sonnet 4",
+        "entry_point": "fetchBrandContext(brandId, language?, servicio?) → BrandContext → buildCopyPrompt → /api/claude → Claude Sonnet 4",
         "rls_applied": true,
-        "tables_rls": 14,
+        "tables_rls": 17,
         "env_vars": ["VITE_SUPABASE_URL", "VITE_SUPABASE_ANON_KEY", "ANTHROPIC_API_KEY"],
-        "last_commit": "a11860f — copyEngine Gemini→Claude + Supabase"
+        "last_commit": "pending — queries.ts+buildCopyPrompt.ts+types.ts v7"
       },
       "modules_status": {
-        "CopyPackModule": "✅ COMPLETO — marcas desde Supabase, engine Claude, runCopyPack conectado",
-        "CopyToolsModule": "⏳ PENDIENTE — aún usa datos hardcodeados de src/config/",
-        "CopyCustomizeModule": "⏳ PENDIENTE — aún usa datos hardcodeados de src/config/"
+        "CopyPackModule": "✅ COMPLETO",
+        "CopyToolsModule": "✅ COMPLETO (migrado sesión 2026-03-27)",
+        "CopyCustomizeModule": "✅ COMPLETO (migrado sesión 2026-03-27)"
       },
-      "dead_code_pending_removal": [
-        "src/config/brands.ts — reemplazado por useBrands hook",
-        "src/config/channelBlocks.ts — reemplazado por canal_blocks Supabase",
-        "src/config/copyTemplates.ts — reemplazado por output_templates Supabase",
-        "src/config/customizeOutputs.ts — reemplazado por Supabase",
-        "src/config/locationBlueprints.ts — reemplazado por Supabase",
-        "src/config/personBlueprints.ts — reemplazado por Supabase",
-        "src/config/presets.ts — reemplazado por Supabase"
-      ],
       "consumes": [
-        "Supabase: brands, output_templates, canal_blocks, keywords, ctas, humanize_profiles, compliance_rules, geomix, imagelab_presets, voicelab_params, blueprint_schemas, person_blueprints, location_blueprints, brand_palette, brand_typography",
+        "Supabase: brands, output_templates, canal_blocks, keywords, ctas, humanize_profiles, compliance_rules, geomix, imagelab_presets, voicelab_params, blueprint_schemas, person_blueprints, location_blueprints, brand_palette, brand_typography, brand_languages, brand_services, channel_prompt_rules",
         "BP_COPY_1.0 blueprints"
       ],
       "provee": [
@@ -378,10 +369,11 @@
         "brands", "brand_palette", "brand_typography", "humanize_profiles",
         "output_templates", "canal_blocks", "ctas", "keywords", "geomix",
         "compliance_rules", "imagelab_presets", "voicelab_params", "blueprint_schemas",
-        "person_blueprints", "location_blueprints"
+        "person_blueprints", "location_blueprints",
+        "brand_languages", "brand_services", "channel_prompt_rules"
       ],
-      "next_action": "Migrar CopyToolsModule y CopyCustomizeModule a Supabase. Poblar brand_palette y brand_typography. Eliminar src/config/ dead code.",
-      "last_updated": "2026-03-26"
+      "next_action": "Poblar brand_palette + brand_typography. GeoMix 4 marcas. Actualizar callers de fetchBrandContext con language+servicio.",
+      "last_updated": "2026-03-27"
     },
     {
       "id": "LAB-SL",
@@ -389,7 +381,7 @@
       "taxonomy": "lab",
       "status": "building",
       "role": "Social engine con metodología TOFU/MOFU/BOFU + templates",
-      "ai_engine_planned": "Claude Sonnet (mismo stack que CopyLab)",
+      "ai_engine_planned": "Claude Sonnet 4 (mismo stack que CopyLab)",
       "consumes": ["DB_VARIABLES", "CopyLab outputs"],
       "provee": ["Calendarios de contenido", "Posts programados"],
       "supabase_tables": [
@@ -468,19 +460,19 @@
       "vercel_url": "https://unrlvl-context.vercel.app",
       "status": "active",
       "role": "Single source of truth para contexto de sesión. brand.json + BP_Brand_Context.md + session_log.md por marca.",
-      "last_updated": "2026-03-25"
+      "last_updated": "2026-03-27"
     },
     {
       "id": "INFRA-DBV",
       "name": "DB_VARIABLES",
       "taxonomy": "infrastructure",
-      "current_version": "v6_4",
-      "status": "FROZEN — v6_4 es la versión final en Google Sheets",
-      "sheets_count": 40,
+      "current_version": "v7_0",
+      "status": "FROZEN — v7.0 es la versión final. Supabase es el sistema activo.",
+      "sheets_count": 37,
       "migration_target": "Supabase",
-      "migration_status": "Fases 1-5b COMPLETADAS — CopyLab engine live con Supabase+Claude. Pendiente: CopyToolsModule, CopyCustomizeModule, brand_palette, brand_typography.",
-      "_note": "CRÍTICO: v6_4 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va al diseño de Supabase.",
-      "last_updated": "2026-03-26"
+      "migration_status": "MIGRACIÓN v7 COMPLETA — todas las fases ejecutadas. Supabase es source of truth.",
+      "_note": "CRÍTICO: v7.0 está congelada. Nada nuevo entra en Sheets. Todo lo nuevo va directo a Supabase.",
+      "last_updated": "2026-03-27"
     },
     {
       "id": "INFRA-BP",
@@ -498,86 +490,73 @@
       "taxonomy": "infrastructure",
       "status": "active",
       "mcp_connected": true,
-      "role": "DB centralizada del ecosistema — target de migración de DB_VARIABLES v6_4",
-      "schema_version": "v1.1 — 23 tablas DDL, fix imagelab_presets constraint",
+      "role": "DB centralizada del ecosistema — source of truth post migración v7",
+      "schema_version": "v1.2 — 26 tablas (23 originales + brand_languages + brand_services + channel_prompt_rules)",
       "tables": [
         "brands", "brand_palette", "brand_typography", "humanize_profiles",
         "compliance_rules", "output_templates", "canal_blocks", "keywords",
         "ctas", "geomix", "imagelab_presets", "videolab_params", "voicelab_params",
         "person_blueprints", "location_blueprints", "product_blueprints",
         "blueprint_schemas", "script_templates", "voice_packs", "brand_assets",
-        "page_sections", "platform_configs", "stakeholders"
+        "page_sections", "platform_configs", "stakeholders",
+        "brand_languages", "brand_services", "channel_prompt_rules"
       ],
-      "last_updated": "2026-03-26",
-      "migration_status": "Fases 1-5b completadas. CopyPackModule consuming Supabase live. Pendiente: CopyToolsModule, CopyCustomizeModule, brand_palette/typography data.",
+      "last_updated": "2026-03-27",
+      "migration_status": "v7 COMPLETA. Supabase es source of truth.",
       "tables_populated": {
         "phase1": ["brands(8)", "humanize_profiles(12)", "compliance_rules(10)", "imagelab_presets(7)"],
-        "phase2": ["canal_blocks(13)", "output_templates(16)", "keywords(444)", "ctas(47)"],
+        "phase2": ["canal_blocks(14)", "output_templates(16)", "keywords(444+287+53)", "ctas(55)"],
         "phase3": ["geomix(12)", "videolab_params(6)", "voicelab_params(8)"],
         "phase4": [
-          "brands(10) — ecosistema completo incluyendo ForumPHs y NeuroneSCF",
+          "brands(10) — ecosistema completo",
           "person_blueprints(5)", "location_blueprints(7)",
           "product_blueprints(2)", "blueprint_schemas(4)"
         ],
-        "phase4_pending": [
+        "phase5": [
+          "keywords DiamondDetails: 287 (ES+VAL+EN-UK) ✅",
+          "keywords NeuroneCosmetics: 53 (es-FL+EN) ✅",
+          "todas las demás marcas: keywords con producto/servicio/prioridad ✅"
+        ],
+        "phase7": [
+          "brand_languages: 19 ✅",
+          "brand_services: 39 ✅",
+          "channel_prompt_rules: 39 ✅",
+          "ctas Patricia Osorio: 8 ✅"
+        ],
+        "pending": [
           "brand_palette (vacía — esperando hexes confirmados)",
           "brand_typography (vacía — esperando fuentes confirmadas)",
-          "script_templates", "voice_packs", "brand_assets",
-          "page_sections", "platform_configs", "stakeholders"
-        ],
-        "fase5_rls": [
-          "humanize_profiles ✅", "compliance_rules ✅", "output_templates ✅",
-          "canal_blocks ✅", "keywords ✅", "ctas ✅", "geomix ✅",
-          "imagelab_presets ✅", "voicelab_params ✅", "blueprint_schemas ✅",
-          "person_blueprints ✅", "location_blueprints ✅",
-          "brand_palette ✅", "brand_typography ✅"
+          "geomix VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask (pendiente datos)",
+          "script_templates", "voice_packs", "brand_assets", "page_sections", "platform_configs", "stakeholders"
         ]
       }
     }
   ],
   "db_variables_audit": {
-    "version": "v6_4",
-    "audit_date": "2026-03-25",
-    "total_sheets": 40,
+    "version": "v7_0",
+    "audit_date": "2026-03-27",
+    "total_sheets": 37,
     "status": "FROZEN",
     "brand_ids_canonicos": [
       "DiamondDetails", "VizosCosmetics", "D7Herbal", "VivoseMask",
       "PatriciaOsorioPersonal", "PatriciaOsorioComunidad", "PatriciaOsorioVizosSalon",
-      "NeuroneCosmetics", "MASTER"
+      "NeuroneCosmetics", "ForumPHs", "NeuroneSCF"
     ],
     "schemas_blueprints_activos": [
       "BP_PERSON_1.0", "BP_LOCATION_1.0", "BP_PRODUCT_1.0", "BP_COPY_1.0"
     ],
-    "hallazgos_clave": [
-      "BP_COPY_1.0 existe en BlueprintLab pero NO está documentado en DB_VARIABLES — gap crítico",
-      "HUMANIZE F2.5 — capa transversal de autenticidad inyectada en cada prompt, por medium (copy/image/video/voice/web)",
-      "IMAGELAB_PRESETS — 7 presets por canal (WEB/LANDING/META/TIKTOK)",
-      "16 Output_Templates (SMPC completo) + 13 Canal_Blocks",
-      "Patricia Osorio tiene 3 brand_ids separados — solo 'PatriciaOsorio' genérico en DB_VARIABLES actual",
-      "Voice IDs todos TBD_* — VoiceLab bloqueado",
-      "has_reference_photos = false en todos los blueprints — fotos pendientes",
-      "GeoMix solo existe para DiamondDetails y D7Herbal — falta para VizosCosmetics, PatriciaOsorio, Neurone, VivoseMask",
-      "Neurone Cosmética usa idioma mixto es-FL + EN (bilingual Miami) — único caso en el ecosistema"
-    ],
     "pendientes_criticos": [
-      "Asignar voice IDs reales en TenzorArt (motor cambiado desde ElevenLabs 2026-03-26)",
+      "Asignar voice IDs reales en TenzorArt",
       "Subir fotos referencia → has_reference_photos = true",
-      "Completar K>PO (keywords incompletas)",
-      "Añadir GeoMix para VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask",
-      "Integrar BP_COPY_1.0 en DB_VARIABLES / Supabase",
-      "Normalizar Patricia Osorio: 3 brand_ids canónicos en Supabase",
       "Poblar brand_palette (hexes por marca)",
-      "Poblar brand_typography (fuentes por marca)"
+      "Poblar brand_typography (fuentes por marca)",
+      "GeoMix: añadir VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask",
+      "Actualizar callers de fetchBrandContext() en CopyCustomizeModule con language+servicio"
     ],
     "supabase_migration": {
-      "status": "FASES 1-5b COMPLETAS — CopyLab engine live",
-      "schema_doc": "UNRLVL_Supabase_Schema.md — 23 tablas DDL completo",
-      "decision_1": "RESUELTA — Schema NORMALIZADO (no monolítico)",
-      "decision_2": "RESUELTA — Output_Templates y Canal_Blocks en Supabase como config",
-      "decision_3": "RESUELTA — HUMANIZE como tabla propia (pattern DEFAULT + overrides)",
-      "decision_4": "RESUELTA — DV_* como enums en código + applies_to JSONB en compliance_rules",
-      "decision_5": "RESUELTA — ForumPHs Y NeuroneSCF entran en Supabase como marcas completas.",
-      "decision_6": "RESUELTA — AI engine CopyLab = Claude Sonnet 4 (no Gemini). Todos los labs de lenguaje → Claude. BlueprintLab mantiene Gemini Flash para JSON estructurado."
+      "status": "v7 COMPLETA — Supabase es source of truth",
+      "schema_doc": "UNRLVL_Supabase_Schema.md — 26 tablas DDL",
+      "constraint_fix": "keywords UNIQUE ahora es (brand_id, keyword, language) — soporta multi-idioma"
     }
   },
   "ai_engine_decisions": {
@@ -599,30 +578,27 @@
     "status": "embrión en ImageLab (slotValidation.ts) — pendiente implementar Nivel 2 completo"
   },
   "humanize_f25": {
-    "_note": "Hallazgo crítico de la auditoría — documentado en Supabase schema como tabla humanize_profiles",
+    "_note": "Tabla humanize_profiles en Supabase. Schema: brand_id + medium + parameter + value.",
     "definition": "Capa transversal de autenticidad inyectada automáticamente en cada prompt del ecosistema",
     "mediums": ["copy", "image", "video", "voice", "web"],
-    "pattern": "DEFAULT aplica a todas las marcas. Overrides por brand_id sobreescriben el DEFAULT.",
+    "pattern": "brand_id='DEFAULT' aplica a todas las marcas. Rows con brand_id específico sobreescriben el DEFAULT para ese medium.",
     "overrides_activos": [
-      "neuroneCosmetics/copy", "patriciaOsorioVizosSalon/copy", "patriciaOsorioVizosSalon/image",
-      "diamondDetails/copy", "diamondDetails/image", "d7Herbal/copy", "vizosCosmetics/copy"
+      "NeuroneCosmetics/copy", "PatriciaOsorioVizosSalon/copy", "PatriciaOsorioVizosSalon/image",
+      "DiamondDetails/copy", "DiamondDetails/image", "D7Herbal/copy", "VizosCosmetics/copy"
     ]
   },
   "creativity_protection": {
-    "_note": "Decisión arquitectónica tomada 2026-03-25 — temperatura implementada en buildCopyPrompt.ts (Fase 5b)",
-    "problema": "La estructura condicionada de DB_VARIABLES puede homogeneizar outputs si no se protege el ángulo creativo",
-    "solucion_1": "Angle Randomizer — catálogo de 8-12 ángulos creativos por marca que el SMPC rote activamente",
-    "solucion_2": "Temperature variable por tipo de output: conversión directa 0.5 / orgánico 1.1 / discovery creativo 1.3 ✅ IMPLEMENTADO en buildCopyPrompt.ts",
-    "solucion_3": "Log de ángulos usados recientemente para evitar repetición — query contra output_log",
+    "_note": "Temperatura implementada en buildCopyPrompt.ts — capeada a 1.0 (Claude API max)",
+    "solucion_2": "Temperature variable por tipo de output: conversión 0.5 / SEO 0.7 / orgánico 1.0 / discovery 1.0 ✅ ACTIVO",
     "status": "Temperatura implementada ✅ — Angle Randomizer y output_log pendientes"
   },
   "next_session_agenda": [
-    "1. CopyLab — migrar CopyToolsModule a Supabase (necesita contenido del archivo src/modules/tools/CopyToolsModule.tsx)",
-    "2. CopyLab — migrar CopyCustomizeModule a Supabase (necesita src/modules/customize/CopyCustomizeModule.tsx)",
-    "3. CopyLab — eliminar dead code: src/config/brands.ts, channelBlocks.ts, copyTemplates.ts, customizeOutputs.ts, locationBlueprints.ts, personBlueprints.ts, presets.ts",
-    "4. Supabase — poblar brand_palette (hexes confirmados por marca) y brand_typography (fuentes)",
-    "5. INCI VivoseMask — cuando llegue ficha de Vizos",
-    "6. VoiceLab — configurar voces reales en TenzorArt (motor cambiado desde ElevenLabs)",
-    "7. GeoMix — completar para VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask"
+    "1. brand_palette — poblar hexes por marca (tabla vacía, esperando datos de Sam)",
+    "2. brand_typography — poblar fuentes por marca (tabla vacía, esperando datos de Sam)",
+    "3. GeoMix — completar VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask",
+    "4. CopyLab — actualizar callers de fetchBrandContext() en CopyCustomizeModule con language+servicio",
+    "5. CopyLab — verificar deploy en producción post-commit de los 3 archivos",
+    "6. VoiceLab — configurar voces reales en TenzorArt",
+    "7. Brand OnBoarding App — para ForumPHs, NeuroneSCF y nuevas marcas"
   ]
 }
