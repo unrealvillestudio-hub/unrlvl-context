@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-28a",
+    "version": "2026-03-28b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-28 — Sesión NeuroneSCF consolidación + product blueprints completos. NeuroneCosmetics eliminado. NeuroneSCF = brand_id canónico definitivo. 39 SKUs cargados en product_blueprints. brand_palette(11)+brand_typography(2) NeuroneSCF. brand_services item_type corregido. PatriciaOsorioVizosSalon+D7Herbal+VivoseMask. CopyLab 4 archivos actualizados. RLS brands habilitado. Advisor Center 0 alertas. Storage bucket product-assets creado."
+    "last_audit": "2026-03-28b — CopyLab PASSED. Schema audit completo: Brand/OutputTemplate/CanalBlock/GeoMix/ImagelabPreset alineados con Supabase real. RLS habilitado en 8 tablas (product_blueprints+7). Advisor Center 0 alertas. Idioma explícito en todos los módulos. State persistence fix. favicon blinking SMIL. DB_VARIABLES_v7 100% irrequerida."
   },
   "studio": {
     "name": "Unreal>ille Studio",
@@ -89,19 +89,21 @@
       "repo": "unrealvillestudio-hub/CopyLab",
       "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe", "vercel_url": "unrlvl-copy-lab.vercel.app",
       "stack": "Vite + React + TypeScript — fetch nativo (sin SDK Supabase)",
-      "status": "active — v7+products ✅",
+      "status": "PASSED ✅ — v7+products+idioma+state",
       "ai_engine": "Claude Sonnet 4 vía /api/claude proxy Vercel",
       "supabase_layer": {
         "entry_point": "fetchBrandContext(brandId, language?, servicio?) → BrandContext → buildCopyPrompt → /api/claude → Claude Sonnet 4",
-        "last_commit": "2026-03-28 — types+queries+CopyCustomizeModule+promptpack (product catalog + optgroup + SKU selector)"
+        "schema_verified": "2026-03-28b — Brand/OutputTemplate/CanalBlock/GeoMix/ImagelabPreset verificados contra schema real",
+        "last_commit": "2026-03-28b — schema fixes + idioma explícito + state persistence + favicon blink"
       },
       "modules_status": {
-        "CopyPackModule": "✅ COMPLETO",
-        "CopyToolsModule": "✅ COMPLETO",
-        "CopyCustomizeModule": "✅ COMPLETO — idioma dinámico + servicio optgroup por item_type + selector SKU condicional"
+        "CopyPackModule": "✅ PASSED — idioma correcto",
+        "CopyToolsModule": "✅ PASSED — idioma en los 3 tools (Adapter/Analyzer/CTA)",
+        "CopyCustomizeModule": "✅ PASSED — state persiste entre pestañas, reset limpia extraContext"
       },
       "supabase_tables": ["brands","brand_palette","brand_typography","humanize_profiles","output_templates","canal_blocks","ctas","keywords","geomix","compliance_rules","imagelab_presets","voicelab_params","blueprint_schemas","person_blueprints","location_blueprints","product_blueprints","brand_languages","brand_services","channel_prompt_rules"],
-      "next_action": "Subir imágenes NeuroneSCF a Supabase Storage. GeoMix 4 marcas. Validar fetchProductCatalog en producción.",
+      "known_minor": "brief UI en inglés (CopyPack config panel) — cosmético, no afecta output",
+      "next_action": "Subir imágenes NeuroneSCF → Supabase Storage. GeoMix NeuroneSCF. brand_palette otras marcas.",
       "last_updated": "2026-03-28"
     },
     {
@@ -143,7 +145,8 @@
     },
     {
       "id": "INFRA-DBV", "name": "DB_VARIABLES", "taxonomy": "infrastructure",
-      "current_version": "v7_0", "status": "FROZEN — Supabase es el sistema activo.",
+      "current_version": "v7_0",
+      "status": "FROZEN — Supabase es el sistema activo. DB_VARIABLES_v7 100% irrequerida para todo el ecosystem.",
       "sheets_count": 37, "last_updated": "2026-03-28"
     },
     {
@@ -155,18 +158,20 @@
     {
       "id": "INFRA-SB", "name": "Supabase DB", "taxonomy": "infrastructure",
       "status": "active", "mcp_connected": true,
-      "schema_version": "v1.3 — 26 tablas + product_blueprints extendido (16 campos) + bucket product-assets",
-      "security": "RLS habilitado en brands. Advisor Center 0 alertas.",
+      "schema_version": "v1.4 — 27 tablas verificadas contra código. RLS 100% activo.",
+      "security": "RLS habilitado en todas las tablas. Advisor Center 0 alertas.",
       "storage_buckets": ["product-assets (público, 10MB, PNG/WEBP/JPEG)"],
       "last_updated": "2026-03-28",
-      "migration_status": "v7 COMPLETA. Supabase es source of truth.",
+      "migration_status": "v7 COMPLETA + audit 2026-03-28b. Supabase es source of truth. DB_VARIABLES irrequerida.",
+      "rls_status": "✅ COMPLETO — todas las tablas con RLS + políticas anon_read",
       "tables_populated": {
         "completed_2026-03-28": [
           "brand_palette NeuroneSCF: 11 entradas ✅",
           "brand_typography NeuroneSCF: 2 entradas ✅",
           "product_blueprints NeuroneSCF: 39 SKUs ✅ — Moisture(4)+Restore(5)+Styling(9)+Color_Rescue(7)+Scalp(6)+Pro_Salon(8)",
           "brand_services PatriciaOsorioVizosSalon: D7Herbal+VivoseMask item_type=producto ✅",
-          "brand_services NeuroneSCF: item_type corregido (producto/servicio) ✅"
+          "brand_services NeuroneSCF: item_type corregido (producto/servicio) ✅",
+          "RLS: product_blueprints+videolab_params+brand_assets+page_sections+platform_configs+script_templates+stakeholders+voice_packs ✅"
         ],
         "pending": [
           "Imágenes NeuroneSCF → Supabase Storage bucket product-assets",
@@ -179,7 +184,8 @@
     }
   ],
   "db_variables_audit": {
-    "version": "v7_0", "audit_date": "2026-03-28", "total_sheets": 37, "status": "FROZEN",
+    "version": "v7_0", "audit_date": "2026-03-28", "total_sheets": 37,
+    "status": "FROZEN — 100% irrequerida. Supabase es source of truth definitivo.",
     "brand_ids_canonicos": [
       "DiamondDetails", "VizosCosmetics", "D7Herbal", "VivoseMask",
       "PatriciaOsorioPersonal", "PatriciaOsorioComunidad", "PatriciaOsorioVizosSalon",
@@ -201,11 +207,11 @@
   },
   "next_session_agenda": [
     "1. Subir imágenes NeuroneSCF → Supabase Storage bucket product-assets",
-    "2. GeoMix — VizosCosmetics, PatriciaOsorio*, NeuroneSCF, VivoseMask",
+    "2. GeoMix — NeuroneSCF, VizosCosmetics, PatriciaOsorio*, VivoseMask",
     "3. brand_palette + brand_typography — otras marcas",
     "4. VoiceLab — configurar voces reales TenzorArt",
-    "5. Brand OnBoarding App — ForumPHs, NeuroneSCF",
-    "6. Corregir imagen NCNEU-6 compartida (Neurona Gloss vs Neuroxide)",
-    "7. Validar fetchProductCatalog en CopyLab producción con NeuroneSCF"
+    "5. BP_BRAND update — reglas de signature en headers/footers de outputs",
+    "6. Alpha channel skill — PNG background removal",
+    "7. Corregir imagen NCNEU-6 compartida (Neurona Gloss vs Neuroxide)"
   ]
 }

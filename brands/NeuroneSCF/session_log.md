@@ -3,6 +3,59 @@
 
 ---
 
+## 2026-03-28 — CopyLab full debug + schema audit + Supabase RLS
+
+### CERRADO EN ESTA SESIÓN
+
+**CopyLab — bugs de schema resueltos (cascada completa):**
+- `brands` query: `brand_id=eq.` → `id=eq.` (columna no existía) ✅
+- `BRAND_SELECT`: removidos `brand_id`, `active`, `cta_ultrashort`; `brand_type` → `type` ✅
+- `OutputTemplate`: `output_type` no existe → `id` es el identificador funcional; añadidos `name`, `category`, `variables`, `applies_to`, `platforms`, `word_count_min`, `word_count_max` ✅
+- `CanalBlock`: `canal_id` no existe → `id` es el identificador funcional; añadidos `name`, `platform`, `format`, etc. ✅
+- `GeoMix`: `servicio_1..6` no existen → `servicios: string[]` + `combos: string[]` + campos reales verificados ✅
+- `ImagelabPreset`: `channel`/`preset_name` no existen → `canal`, campos extendidos reales ✅
+- `resolveTemplate`: `t.output_type` → `t.id` ✅
+- `resolveCanalBlock`: `c.canal_id` → `c.id` ✅
+- `buildGeomixBlock`: reescrito con `servicios[]` y `combos[]` ✅
+
+**CopyLab — funcionalidades corregidas:**
+- `buildLanguageBlock`: instrucción explícita de idioma inyectada como sección #2 del prompt ✅
+- CopyPack: `language` ahora se pasa a `generateCopyFromInput` → `buildLanguageBlock` aplica ✅
+- CopyToolsModule (Adaptador, Analizador, CTA Generator): `activeLanguage` del store inyectado en `prompt` y `systemPrompt` ✅
+- Customize state loss: `step1`, `selectedSku`, `customText` movidos de `useState` local → `sessionStore` (sobreviven navegación entre pestañas) ✅
+- `activeExtraContext` ahora se limpia en `handleReset` ✅
+
+**CopyLab — favicon:**
+- `favicon.svg`: chevron cyan `#00FFD1`, doble pulso SMIL blink, 3s cycle — en `public/` ✅
+- `index.html`: corregido con `<link rel="icon">` + `<script type="module" src="/src/main.tsx">` (entry point que faltaba) ✅
+- `package.json`: `@vercel/node ^5.0.0` añadido a devDependencies (resuelve TS2307 build warning) ✅
+
+**Supabase — audit completo:**
+- 27 tablas, todas con PK ✅
+- RLS habilitado en 8 tablas que lo tenían desactivado: `product_blueprints`, `videolab_params`, `brand_assets`, `page_sections`, `platform_configs`, `script_templates`, `stakeholders`, `voice_packs` ✅
+- Advisor Center: 0 alertas de seguridad ✅
+- Schema verificado contra código: todas las discrepancias resueltas
+- `db/types.ts`: Brand, OutputTemplate, CanalBlock, GeoMix, ImagelabPreset — todos alineados con schema real ✅
+
+**STATUS FINAL:**
+- CopyLab: PASSED ✅ — generando copy en idioma correcto, state persiste, compliance activo
+- Supabase: PASSED para CopyLab ✅ — estructura completa, RLS limpio, 0 alertas
+
+### PENDIENTE (sin cambios)
+- **Imágenes NeuroneSCF → Supabase Storage:** bucket `product-assets` listo, imágenes pendientes de subir
+- **GeoMix NeuroneSCF:** tabla existe, filas NeuroneSCF pendientes de poblar
+- **brand_palette + brand_typography:** otras marcas pendientes (solo NeuroneSCF completo)
+- **Shopify:** 17+ SKUs out_of_stock · precios $0.00 placeholder · no activar hasta resolver
+- **Aprobación PO + Laura:** neurone_estrategia_v4.html — pendiente revisión
+- **Precios finales por SKU:** pendiente Sam + PO
+- **OPERATIVOS:** montos reales Contador, Seguro, Transporte, Mantenimiento
+- **SKU sistema definitivo:** proveedor vs. modelo — bloquea activación Shopify
+- **Video PO en cámara Kit SOS:** asset más urgente antes de escalar TikTok ads
+- **VoiceLab Voice IDs:** configurar voces reales TenzorArt (todos TBD_*)
+- **Corregir imagen NCNEU-6:** Neurona Gloss vs Neuroxide compartida
+
+---
+
 ## 2026-03-24 — Cloudflare completo + Email Routing + Gmail filters
 
 ### CERRADO EN ESTA SESIÓN
