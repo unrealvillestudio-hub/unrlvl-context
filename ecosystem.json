@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-29b",
+    "version": "2026-03-29c",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-29 — UNRLVL-OPS PASSED y deployado en unrlvl-ops.vercel.app. Stack Vite+React+TS+Supabase. Schema ops_* (5 tablas). Costos históricos cargados. Insights panel con snooze/dismiss. Vercel team_fEH94Irp6BAI9YGm4btGna5n."
+    "last_audit": "2026-03-29 — UNRLVL Onboarding App PASSED y deployado en unrlvl-onboarding-app.vercel.app. Vite+React+TS+Tailwind+Supabase+Claude Sonnet 4. 4 fases AI-powered: Brief Libre → Claude Enrich (side-by-side) → Gap Interview → Write Supabase. BrandGapView con summary de validación Claude. Favicon SVG transparente. UNREAL>ILLE branding con chevron blinking. brand_id UnrealvilleStudio inyectado en system prompts. Fix CommonJS override api/package.json para serverless Vercel. ANTHROPIC_API_KEY scope Production corregido."
   },
   "studio": {
     "name": "Unrealville Studio",
@@ -126,9 +126,31 @@
     {
       "id": "LAB-OBD", "name": "Onboarding App", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/OnboardingApp",
-      "status": "planned — briefing listo",
+      "vercel_project": "onboarding-app",
+      "vercel_url": "unrlvl-onboarding-app.vercel.app",
+      "stack": "Vite + React + TypeScript + Tailwind + Supabase fetch nativo + Claude Sonnet 4",
+      "status": "PASSED — v1.0",
       "last_updated": "2026-03-29",
-      "_note": "AI-powered brand onboarding. 4 fases: Brief Libre → Contexto Estimulado (Claude) → Gaps → Escritura Supabase. Pobla todas las tablas con datos reales."
+      "features": [
+        "Sidebar con 10 marcas + completeness % (barras de progreso por color)",
+        "WelcomeScreen con UNREAL>ILLE branding + chevron blinking",
+        "BrandGapView: dashboard de completeness + campos faltantes por nombre legible",
+        "BrandGapView: '¿Qué sabe Claude de esta marca?' — resumen narrativo de validación pre-generate",
+        "BrandGapView: validación operador (✓ correcto / ✗ hay errores) antes de generar",
+        "Phase 1: editor libre con word count + progress bar + auto-resize",
+        "Phase 2: side-by-side brief/contexto enriquecido + regen por campo con instrucción",
+        "Phase 3: chat interface gap interview + data tracker lateral",
+        "Phase 4: UPSERT a brands, humanize_profiles, compliance_rules, brand_palette, brand_typography",
+        "Botón ← Dashboard en todas las vistas",
+        "brand_id UnrealvilleStudio inyectado en todos los system prompts"
+      ],
+      "architecture_notes": [
+        "api/package.json con type:commonjs — fix crítico para serverless Vercel con ESM root",
+        "vercel.json: rewrite /api eliminado (auto-routing Vercel + SPA fallback)",
+        "ANTHROPIC_API_KEY scope Production requerido en Vercel env vars"
+      ],
+      "tables_written": ["brands","humanize_profiles","compliance_rules","brand_palette","brand_typography"],
+      "ai_engine": "Claude Sonnet 4 via /api/claude proxy Vercel serverless"
     }
   ],
   "agent_deployments": [
@@ -187,10 +209,10 @@
         "ops_insights": "5 insights activos"
       },
       "pending": [
-        "humanize_profiles: 12 filas, todos los campos NULL — poblar via Onboarding App",
-        "brand_palette + brand_typography: solo NeuroneSCF — otras marcas vacias",
+        "humanize_profiles: 12 filas, todos los campos NULL — poblar via Onboarding App (ya disponible)",
+        "brand_palette + brand_typography: solo NeuroneSCF — otras marcas vacias (usar Onboarding App)",
         "geomix: solo DiamondDetails — NeuroneSCF + 4 marcas pendientes",
-        "brands: campos brand_context, icp, tono_base vacios en mayoria de marcas",
+        "brands: campos brand_context, icp, tono_base vacios en mayoria — usar Onboarding App BrandGapView",
         "Imagenes NeuroneSCF → Storage bucket product-assets",
         "ops_thresholds: configurar alertas de gasto por servicio/marca"
       ]
@@ -203,19 +225,19 @@
     "imagelab": "ComfyUI FLUX / fal.ai",
     "videolab": "HeyGen / Kling",
     "voicelab": "TenzorArt",
-    "onboarding": "Claude Sonnet 4 — 4 fases AI-powered"
+    "onboarding": "Claude Sonnet 4 — 4 fases AI-powered ACTIVO"
   },
   "humanize_f25": {
     "overrides_activos": ["NeuroneSCF/copy","PatriciaOsorioVizosSalon/copy","PatriciaOsorioVizosSalon/image","DiamondDetails/copy","DiamondDetails/image","D7Herbal/copy","VizosCosmetics/copy"]
   },
   "next_session_agenda": [
-    "1. Onboarding App — construir (nuevo chat, briefing listo)",
+    "1. Onboarding App → usar BrandGapView para poblar humanize_profiles, brand_palette, brand_context, icp, tono_base en todas las marcas",
     "2. WebLab — verificar build verde post-commits",
     "3. Imágenes NeuroneSCF → Supabase Storage",
-    "4. Onboarding App → poblar humanize_profiles, brand_palette, geomix con datos reales",
-    "5. Shopify precios finales + activacion tienda NeuroneSCF",
-    "6. VoiceLab Voice IDs TenzorArt",
-    "7. UNRLVL-OPS: configurar ops_thresholds + cargar Vercel/Supabase/Cloudflare cuando salgan de free tier"
+    "4. Shopify precios finales + activacion tienda NeuroneSCF",
+    "5. VoiceLab Voice IDs TenzorArt",
+    "6. UNRLVL-OPS: configurar ops_thresholds + cargar Vercel/Supabase/Cloudflare cuando salgan de free tier",
+    "7. Onboarding App v1.1: mode 'edit existing brand' completo — cargar datos actuales en Phase 2, geomix table population"
   ],
   "brand_id_canonical_map": {
     "_note": "Mapa de traduccion WebLab camelCase → Supabase IDs canonicos",
