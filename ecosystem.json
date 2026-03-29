@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-03-29a",
+    "version": "2026-03-29b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem dashboard and session context",
     "update_protocol": "Claude updates at end of each session via Vercel deploy",
-    "last_audit": "2026-03-29 — WebLab Supabase integration (useCatalog hook). brandContexts/humanizeConfig/brandBlueprints fix minimo. UnrealvilleStudio agregado a Supabase. Onboarding App planificada (AI-powered brief narrativo 4 fases). UNRLVL-OPS en construccion (Chat C)."
+    "last_audit": "2026-03-29 — UNRLVL-OPS PASSED y deployado en unrlvl-ops.vercel.app. Stack Vite+React+TS+Supabase. Schema ops_* (5 tablas). Costos históricos cargados. Insights panel con snooze/dismiss. Vercel team_fEH94Irp6BAI9YGm4btGna5n."
   },
   "studio": {
     "name": "Unrealville Studio",
@@ -104,9 +104,24 @@
     },
     {
       "id": "LAB-OPS", "name": "UNRLVL-OPS", "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/OPS",
-      "status": "building — Chat C activo", "last_updated": "2026-03-29",
-      "_note": "Monitor interno de costos operativos del ecosystem. Sin OAuth. En construccion."
+      "repo": "unrealvillestudio-hub/unrlvl-ops",
+      "vercel_project": "prj_LcsIr7EXVokq93tG1XZodvX5R7C6",
+      "vercel_url": "unrlvl-ops.vercel.app",
+      "stack": "Vite + React + TypeScript + Recharts + Supabase fetch nativo",
+      "status": "PASSED",
+      "last_updated": "2026-03-29",
+      "features": [
+        "Dashboard: summary cards, trend 6 meses, alertas RLS",
+        "Tabs: por servicio / por lab / por marca→lab→servicio (accordion)",
+        "/admin: formulario CRUD + tabla con delete",
+        "Insights panel: snooze 30 dias + descartar (tabla ops_insights)",
+        "Renovaciones proximas (tabla ops_renewals)",
+        "Sin auth — acceso directo por URL"
+      ],
+      "supabase_tables": ["ops_services","ops_costs","ops_thresholds","ops_renewals","ops_insights"],
+      "services_seeded": ["anthropic","anthropic_plan","vercel","supabase","heygen","fal_ai","tenzorart","cloudflare","hostinger","shopify","custom"],
+      "costos_cargados": "Mar 2025 → Mar 2026. Anthropic API + Claude.ai Plan + Hostinger + Shopify NeuroneSCF.",
+      "_note": "Vercel free tier. Supabase free tier. Sin auth — uso interno Sam exclusivo."
     },
     {
       "id": "LAB-OBD", "name": "Onboarding App", "taxonomy": "lab",
@@ -159,18 +174,25 @@
     {
       "id": "INFRA-SB", "name": "Supabase DB", "taxonomy": "infrastructure",
       "status": "active", "mcp_connected": true,
-      "schema_version": "v1.4 — 27 tablas + UnrealvilleStudio brand agregada",
-      "security": "RLS habilitado en todas las tablas. Advisor Center 0 alertas.",
+      "schema_version": "v1.5 — 32 tablas (27 ecosystem + 5 ops_*)",
+      "security": "RLS habilitado en todas las tablas incluidas ops_*. GRANTs anon correctos.",
       "storage_buckets": ["product-assets (publico, 10MB, PNG/WEBP/JPEG)"],
       "last_updated": "2026-03-29",
       "migration_status": "COMPLETA. Supabase es source of truth.",
-      "rls_status": "COMPLETO — todas las tablas con RLS + politicas anon_read",
+      "ops_tables": {
+        "ops_services": "11 servicios seeded",
+        "ops_costs": "Costos históricos ago 2025 → mar 2026",
+        "ops_thresholds": "Vacía — configurar alertas",
+        "ops_renewals": "4 renovaciones próximas cargadas",
+        "ops_insights": "5 insights activos"
+      },
       "pending": [
         "humanize_profiles: 12 filas, todos los campos NULL — poblar via Onboarding App",
         "brand_palette + brand_typography: solo NeuroneSCF — otras marcas vacias",
         "geomix: solo DiamondDetails — NeuroneSCF + 4 marcas pendientes",
         "brands: campos brand_context, icp, tono_base vacios en mayoria de marcas",
-        "Imagenes NeuroneSCF → Storage bucket product-assets"
+        "Imagenes NeuroneSCF → Storage bucket product-assets",
+        "ops_thresholds: configurar alertas de gasto por servicio/marca"
       ]
     }
   ],
@@ -188,12 +210,12 @@
   },
   "next_session_agenda": [
     "1. Onboarding App — construir (nuevo chat, briefing listo)",
-    "2. UNRLVL-OPS — verificar estado Chat C",
-    "3. WebLab — verificar build verde post-commits",
-    "4. Imágenes NeuroneSCF → Supabase Storage",
-    "5. Onboarding App → poblar humanize_profiles, brand_palette, geomix con datos reales",
-    "6. Shopify precios finales + activacion tienda",
-    "7. VoiceLab Voice IDs TenzorArt"
+    "2. WebLab — verificar build verde post-commits",
+    "3. Imágenes NeuroneSCF → Supabase Storage",
+    "4. Onboarding App → poblar humanize_profiles, brand_palette, geomix con datos reales",
+    "5. Shopify precios finales + activacion tienda NeuroneSCF",
+    "6. VoiceLab Voice IDs TenzorArt",
+    "7. UNRLVL-OPS: configurar ops_thresholds + cargar Vercel/Supabase/Cloudflare cuando salgan de free tier"
   ],
   "brand_id_canonical_map": {
     "_note": "Mapa de traduccion WebLab camelCase → Supabase IDs canonicos",

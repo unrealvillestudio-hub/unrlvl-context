@@ -1,93 +1,50 @@
-# UNRLVL Session Log
+# UNRLVL-OPS Session Log
 
 ---
 
-## 2026-03-28 — NeuroneSCF Consolidación + Product Blueprints + CopyLab v7+Products + UX Fixes
+## 2026-03-29 — UNRLVL-OPS v0.1 PASSED ✅
 
-### 1. Consolidación NeuroneSCF
+**Chat:** Sesión dedicada UNRLVL-OPS (ecosystem, no brand-specific)
+**Status final:** PASSED — deployed en producción
 
-- `NeuroneSCF` = brand_id canónico definitivo · E-commerce PO · neuronescflorida.com
-- `NeuroneCosmetics` → ELIMINADO de Supabase y ecosystem (fabricante global, no nuestro cliente)
-- `NeuroneSCF Supply Chain Finance` → ELIMINADO (invención de Claude)
-- 11 tablas actualizadas: brands, keywords(53), brand_services(5), brand_languages(2), ctas(12), humanize_profiles(1), compliance_rules(2), voicelab_params(2), person_blueprints(1), location_blueprints(1)
+### Lo que se construyó
 
-### 2. product_blueprints — Schema Extendido
+**Schema Supabase (5 tablas nuevas):**
+- `ops_services` — catálogo de 11 servicios (anthropic, anthropic_plan, vercel, supabase, heygen, fal_ai, tenzorart, cloudflare, hostinger, shopify, custom)
+- `ops_costs` — registros de costos por mes/lab/marca. Costos históricos cargados ago 2025–mar 2026
+- `ops_thresholds` — alertas de gasto (vacía, pendiente configurar)
+- `ops_renewals` — 4 renovaciones próximas (Shopify jun 2026, Hostinger nov/dic 2026, dominio UNRLVL)
+- `ops_insights` — 5 insights activos con snooze/dismiss
 
-ALTER TABLE: 16 columnas nuevas (linea, line_family, b2b_only, barcode, size, is_variant, image_filename, image_dark_filename, description_en, description_es, msrp, shopify_visibility CHECK(public|b2b_only|hidden), cross_sell, hair_type, benefit_claims, related_skus JSONB). Índice brand_linea. Bucket `product-assets` creado en Supabase Storage (público, 10MB).
+**App (unrlvl-ops.vercel.app):**
+- Stack: Vite + React + TypeScript + Recharts + Supabase fetch nativo
+- Repo: unrealvillestudio-hub/unrlvl-ops (prj_LcsIr7EXVokq93tG1XZodvX5R7C6)
+- `/` Dashboard: summary cards, trend 6 meses, alertas, insights panel, tabs por servicio/lab/marca
+- `/admin` Registro manual de costos + tabla editable con delete
+- Sin auth — acceso directo por URL (uso interno Sam)
+- Favicon: SVG `>` UNRLVL brand mark con animación blink
 
-### 3. brand_palette + brand_typography NeuroneSCF
+**Datos cargados:**
+- Claude.ai Plan: ago/sep/oct 2025 ($20/mes), feb 2026 (€21.78), mar 2026 (€297.39 — 13 cargos)
+- Anthropic Console API: mar 2026 ($45 en créditos)
+- Hostinger: hosting d7herbal.com (€65.19 nov 2025), email diamonddetails.es (€5.08 dic 2025)
+- Shopify NeuroneSCF: mar 2026 (€1 promo)
 
-brand_palette: 11 entradas (5 corporativos + 6 líneas). brand_typography: PT Sans Narrow Bold + Montserrat.
+**Insights generados:**
+1. 🔴 Gasto Claude.ai x16 en marzo (€297 vs $20 histórico) → recomendar migrar workloads a API
+2. 🟡 Shopify sube €1→€29 en jun 2026 → evaluar plan anual antes
+3. 🟡 Hosting d7herbal.com €203/año — verificar si brand está activo
+4. 🔴 Dominio unrealvillestudio.com pendiente de setup
+5. 🔴 Auto-reload deshabilitado en Anthropic Console ($23.76 restante)
 
-### 4. brand_services — Correcciones item_type
+### Issues resueltos durante deploy
+- Vercel detectó framework como "Other" → cambiado a Vite manualmente
+- Root directory faltaba → configurado `unrlvl-ops` en Settings
+- RLS sin GRANT → `GRANT SELECT/INSERT/DELETE ON ops_* TO anon` aplicado
+- Env vars VITE_* se hornean en build → requirió redeploy post-configuración
 
-- PatriciaOsorioVizosSalon: D7Herbal + VivoseMask añadidos (item_type=producto, es-FL)
-- NeuroneSCF: Colorimetría Profesional, Tintes Profesionales, Tratamiento Capilar Pro → item_type='producto'
-
-### 5. product_blueprints NeuroneSCF — 39 SKUs
-
-| Línea | Skus | Públicos | B2B | Hidden |
-|---|---|---|---|---|
-| Color_Rescue | 7 | 7 | — | — |
-| Moisture | 4 | 4 | — | — |
-| Pro_Salon | 8 | — | 8 | — |
-| Restore | 5 | 5 | — | — |
-| Scalp | 6 | 3 | — | 3 |
-| Styling | 9 | 9 | — | — |
-| **Total** | **39** | **28** | **8** | **3** |
-
-Hidden (compliance FDA): Capissen Lotion, Capissen Shampoo, Derma Roller.
-Pendiente: imagen NCNEU-6 compartida entre Neurona Gloss y Neuroxide.
-
-### 6. brand_languages NeuroneSCF
-
-- `es-FL` Español (Florida) ★ primary
-- `en-FL` English (Florida / USA)
-- `SPANG` Spanglish Miami
-
-### 7. CopyLab — Archivos actualizados (commit 2026-03-28)
-
-Rutas en repo CopyLab:
-- `src/lib/db/types.ts` — item_type en BrandService + interfaz ProductBlueprint completa
-- `src/lib/queries.ts` — fetchProductCatalog(brandId, linea?) añadida
-- `src/modules/customize/CopyCustomizeModule.tsx` — rediseño completo UX (ver abajo)
-- `src/services/promptpack.ts` — selectedProductData inyectado en extraContext
-
-**CopyCustomizeModule v3 — UX rediseñada:**
-- Paso 1 — Colección/Servicio: optgroup con líneas del catálogo (💧 Moisture, 🔶 Restore, ✂️ Styling, 🟣 Color Rescue, 🌿 Scalp, ⭐ Pro Salon) + servicios puros + Otro (texto libre)
-- Paso 2 — Producto: aparece solo cuando se elige una Colección, filtra productos de esa línea
-- Idioma dinámico desde brand_languages (sin filtrar los servicios por idioma)
-- useMemo en pureServices y productsInLine (fix React #185 loop infinito)
-- fetchProductCatalog carga catálogo completo al cambiar marca (no por idioma)
-
-### 8. Seguridad + Permisos
-
-- RLS habilitado en `brands` table
-- `update_updated_at()` search_path fijado
-- `GRANT SELECT ON product_blueprints TO anon` (fix 401 en CopyLab)
-- Advisor Center: 0 alertas
-
-### 9. Ecosystem.json
-
-- NeuroneCosmetics eliminado del array de brands
-- NeuroneSCF actualizado: domain, market, product_catalog, _note
-- Social Media Agent: serves_brand = NeuroneSCF confirmado
-- CopyLab: modules_status y next_action actualizados
-
-### Pendientes próxima sesión
-
-1. Subir imágenes NeuroneSCF → Supabase Storage bucket `product-assets`
-2. GeoMix: VizosCosmetics, PatriciaOsorio*, NeuroneSCF, VivoseMask
-3. brand_palette + brand_typography otras marcas (datos pendientes de Sam)
-4. VoiceLab: configurar voice IDs reales en TenzorArt
-5. Brand OnBoarding App: ForumPHs, NeuroneSCF
-6. Corregir imagen NCNEU-6 compartida (Neurona Gloss vs Neuroxide en repo BluePrints)
-7. Validar CopyLab NeuroneSCF en producción con nuevo selector Colección → Producto
-
----
-
-## 2026-03-27 — Supabase Migración v7
-
-Migración DB_VARIABLES v6_4 → v7 → Supabase. Keywords DD(287)+NSCF(53). brand_languages(17)+brand_services(39)+channel_prompt_rules(39)+CTAs PO(8). CopyLab queries/buildCopyPrompt/types v7. Claude Sonnet 4 para todos los labs de lenguaje. TenzorArt reemplaza ElevenLabs. SMPC temp: 0.5/1.1/1.3. DB_VARIABLES FROZEN.
-
----
+### Pendiente UNRLVL-OPS
+- Configurar `ops_thresholds` para alertas de gasto
+- Cargar Vercel/Supabase/Cloudflare cuando salgan de free tier
+- v0.2: CRUD de thresholds desde el dashboard
+- v0.2: Export CSV de costos por período
