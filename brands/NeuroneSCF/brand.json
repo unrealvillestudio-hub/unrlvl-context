@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-03-31", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-04-02", "maintained_by": "Claude" },
   "brand": {
     "id": "Neurone",
     "name": "Neurone SCF",
@@ -13,30 +13,28 @@
     {
       "id": "NEU-001",
       "name": "Pricing Model v10",
-      "status": "completado — pendiente subir al repo",
+      "status": "completado — pendiente subir al repo BluePrints",
       "output": "Neurone_Pricing_v10.xlsx",
-      "tabs": ["INTAKE PO","CONFIG","LOGISTICA","TRANSACCION","MARKETING","OPERATIVOS","CALCULADORA","ESCENARIOS","KITS","SKU_MAPPING","PROYECCION","MARKUP","CATALOGO PRODUCTO","RESUMEN CLAUDE"],
-      "next_action": "Subir al repo BluePrints. Decidir escenario de precio (Mínimo/Deseado/Óptimo) con PO."
+      "next_action": "Decidir escenario de precio (Mínimo/Deseado/Óptimo) con PO y cargar en Shopify"
     },
     {
       "id": "NEU-002",
       "name": "Inventario y SKUs",
       "status": "en progreso",
       "nscf_skus_created": ["NSCF-CL-001 a 004","NSCF-TR-001 a 010","NSCF-SR-001 a 003","NSCF-KT-101/101P/102/102P/103/103P/103V/103VP","NSCF-KT-104 pendiente PO"],
-      "next_action": "Aprobar NSCF SKUs → cargar SKU_MAPPING a base de datos. Asignar SKUs para catálogo completo (70 SKUs pendientes)."
+      "next_action": "Aprobar SKUs → cargar SKU_MAPPING a base de datos. Catálogo completo (70 SKUs) pendiente."
     },
     {
       "id": "NEU-003",
       "name": "Shopify — lanzamiento",
       "status": "bloqueado",
-      "blocking_reason": "Precio final pendiente (Mínimo/Deseado/Óptimo) · 17+ SKUs out_of_stock · autorización marca Neurone US pendiente"
+      "blocking_reason": "Precio final pendiente · autorización marca Neurone US pendiente"
     },
     {
       "id": "NEU-004",
       "name": "Estrategia Comercial B2C v5a/v5b",
       "status": "generado — pending PO + Laura approval",
       "outputs": ["neurone_v5a_realista.html","neurone_v5b_real.html"],
-      "recipients": ["Sam","Patricia Osorio","Laura"],
       "next_action": "Revisión y aprobación PO + Laura. Decidir Kit 4 SOS (Opción A o B)."
     },
     {
@@ -44,54 +42,57 @@
       "name": "Dominio neuronescflorida.com — Cloudflare",
       "status": "completado",
       "completed": "2026-03-24"
+    },
+    {
+      "id": "NEU-006",
+      "name": "Propuesta Servicio UNRLVL × Neurone SCF",
+      "status": "generado — pending PO approval",
+      "output": "UNRLVL_Neurone_Propuesta_Servicio.html",
+      "structure": {
+        "fase_1": {"meses":"1-6","retainer":2500,"performance":"ninguno","renovacion":"auto si 290 órd/mes + CAC<18 + recompra>25%"},
+        "fase_2": {"meses":"7-12","retainer":3000,"performance":"ninguno","renovacion":"auto si objetivos cumplidos"},
+        "fase_3": {"meses":"13-24","retainer":3000,"performance":"5% profit sharing mensual sobre beneficio neto"}
+      },
+      "outputs_garantizados": 319,
+      "inversion_ads_6meses": 10100,
+      "clausula_salida": "Sin causa justificada = pago saldo restante del ciclo. 60 días preaviso todas las fases. Impago: suspensión día 10, rescisión día 30."
     }
   ],
   "kits_po": {
-    "note": "9 kits con productos tamaño completo (400ml/200ml). Arancel 20% incluido en costos.",
+    "note": "9 kits con productos 400ml/200ml. Arancel 20% incluido. 3 escenarios de precio.",
+    "logistics_per_order": 20.97,
     "kits": [
-      {"id":"NSCF-KT-101",  "num":"1",   "name":"HUMIT Hydration Ritual",           "prod_cost":15.18, "price_min":64.99,"price_des":74.99,"price_opt":99.99},
-      {"id":"NSCF-KT-101P", "num":"1.1", "name":"HUMIT Hydration Ritual Plus",       "prod_cost":18.78, "price_min":64.99,"price_des":74.99,"price_opt":99.99},
-      {"id":"NSCF-KT-102",  "num":"2",   "name":"KERASIN Repair Ritual",             "prod_cost":17.40, "price_min":64.99,"price_des":74.99,"price_opt":99.99},
-      {"id":"NSCF-KT-102P", "num":"2.1", "name":"KERASIN Repair Ritual Plus",        "prod_cost":21.00, "price_min":64.99,"price_des":84.99,"price_opt":109.99},
-      {"id":"NSCF-KT-103",  "num":"3",   "name":"TOTAL VIOLET Color Ritual",         "prod_cost":17.40, "price_min":64.99,"price_des":74.99,"price_opt":99.99},
-      {"id":"NSCF-KT-103P", "num":"3.1", "name":"TOTAL VIOLET Color Ritual Plus",    "prod_cost":21.00, "price_min":64.99,"price_des":84.99,"price_opt":109.99},
-      {"id":"NSCF-KT-103V", "num":"3.2", "name":"TOTAL VIOLET Control Ritual",       "prod_cost":14.82, "price_min":64.99,"price_des":74.99,"price_opt":84.99},
-      {"id":"NSCF-KT-103VP","num":"3.3", "name":"TOTAL VIOLET Control Ritual Plus",  "prod_cost":18.42, "price_min":64.99,"price_des":74.99,"price_opt":99.99},
-      {"id":"NSCF-KT-104",  "num":"4",   "name":"SOS Signature Treatment Program",   "prod_cost":66.00, "price_min":139.99,"price_des":179.99,"price_opt":219.99,"status":"PENDIENTE_PO"}
+      {"id":"NSCF-KT-101",  "num":"1",   "name":"HUMIT Hydration Ritual",          "prod_cost":15.18,"p_min":64.99,"p_des":74.99,"p_opt":99.99},
+      {"id":"NSCF-KT-101P", "num":"1.1", "name":"HUMIT Hydration Ritual Plus",      "prod_cost":18.78,"p_min":64.99,"p_des":74.99,"p_opt":99.99},
+      {"id":"NSCF-KT-102",  "num":"2",   "name":"KERASIN Repair Ritual",            "prod_cost":17.40,"p_min":64.99,"p_des":74.99,"p_opt":99.99},
+      {"id":"NSCF-KT-102P", "num":"2.1", "name":"KERASIN Repair Ritual Plus",       "prod_cost":21.00,"p_min":64.99,"p_des":84.99,"p_opt":109.99},
+      {"id":"NSCF-KT-103",  "num":"3",   "name":"TOTAL VIOLET Color Ritual",        "prod_cost":17.40,"p_min":64.99,"p_des":74.99,"p_opt":99.99},
+      {"id":"NSCF-KT-103P", "num":"3.1", "name":"TOTAL VIOLET Color Ritual Plus",   "prod_cost":21.00,"p_min":64.99,"p_des":84.99,"p_opt":109.99},
+      {"id":"NSCF-KT-103V", "num":"3.2", "name":"TOTAL VIOLET Control Ritual",      "prod_cost":14.82,"p_min":64.99,"p_des":74.99,"p_opt":84.99},
+      {"id":"NSCF-KT-103VP","num":"3.3", "name":"TOTAL VIOLET Control Ritual Plus", "prod_cost":18.42,"p_min":64.99,"p_des":74.99,"p_opt":99.99},
+      {"id":"NSCF-KT-104",  "num":"4",   "name":"SOS Signature Treatment Program",  "prod_cost":66.00,"p_min":139.99,"p_des":179.99,"p_opt":219.99,"status":"PENDIENTE_PO"}
     ],
-    "shipping": "GRATIS en todos los kits (3PL $20.97 absorbido en precio)",
-    "kit4_sos_options": "A: activar mes 3+ solo por recomendación directa PO sin ads | B: reformular con piezas individuales de serums ($90–110)"
+    "kit4_sos_options": "A: activar mes 3+ sin ads por recomendación directa PO | B: reformular piezas individuales serums → precio $90-110 para ads"
   },
   "pricing_scenarios": {
-    "minimo":  {"margin":"40%","aov":67,  "contrib":26.9, "breakeven_realista":199,"breakeven_real":143},
-    "deseado": {"margin":"~50%","aov":77.49,"contrib":33.45,"breakeven_realista":160,"breakeven_real":115},
-    "optimo":  {"margin":"~60%","aov":99, "contrib":57.4, "breakeven_realista":93, "breakeven_real":67}
+    "minimo":  {"margin":"40%","aov":67,      "contrib":26.9, "be_realista":199,"be_real":143},
+    "deseado": {"margin":"~50%","aov":77.49,  "contrib":33.45,"be_realista":160,"be_real":115},
+    "optimo":  {"margin":"~60%","aov":99,     "contrib":57.4, "be_realista":93, "be_real":67}
   },
   "versions": {
-    "v5a_realista": {
-      "fixed_monthly": 5340,
-      "unrlvl": 1500,
-      "capital_needed": 13776,
-      "breakeven_deseado": 160
-    },
-    "v5b_real": {
-      "fixed_monthly": 3840,
-      "unrlvl": 0,
-      "capital_needed": 8914,
-      "breakeven_deseado": 115
-    }
+    "v5a_realista": {"fixed_monthly":5340,"unrlvl":1500,"capital_needed":13776,"be_deseado":160},
+    "v5b_real":     {"fixed_monthly":3840,"unrlvl":0,   "capital_needed":8914, "be_deseado":115}
   },
   "pending_decisions": [
-    "Kit 4 SOS: Opción A (mes 3+ sin ads) o Opción B (reformular con piezas individuales) — PO decide",
-    "Escenario de precio final: Mínimo / Deseado / Óptimo — Sam + PO deciden",
-    "Aprobar v5a/v5b — PO + Laura",
-    "NSCF SKUs catálogo completo: 70 SKUs pendientes de asignación",
-    "Cargar SKU_MAPPING a base de datos una vez aprobados",
-    "Seguro del negocio / Mantenimiento / Transporte: confirmar si aplican en OPERATIVOS"
+    "Kit 4 SOS: Opción A o B — PO decide",
+    "Escenario de precio final: Mínimo/Deseado/Óptimo — Sam + PO",
+    "Aprobar v5a/v5b + Propuesta Servicio — PO + Laura",
+    "NSCF SKUs catálogo completo: 70 SKUs pendientes",
+    "Cargar SKU_MAPPING a base de datos una vez aprobados"
   ],
   "alerts": [
-    {"level":"warning",  "msg":"neurone_v5a/v5b pending approval PO + Laura — no usar con terceros aún"},
-    {"level":"warning",  "msg":"Shopify: 17+ SKUs out_of_stock · precios $0.00 — no activar tienda sin resolver"},
+    {"level":"warning",  "msg":"v5a/v5b + Propuesta Servicio pending approval — no usar con terceros aún"},
+    {"level":"warning",  "msg":"Shopify: precios $0.00 placeholder — no activar tienda sin resolver"},
     {"level":"blocking", "msg":"Autorización marca Neurone US pendiente — bloquea lanzamiento dominio"},
     {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset más urgente antes de escalar TikTok ads"}
   ]
