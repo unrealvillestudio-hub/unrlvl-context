@@ -1,90 +1,79 @@
 # ECOSYSTEM AUDIT — Protocolo de Radiografía
 **Propósito:** Documentar el ecosistema UNRLVL completo lab por lab para producir `ecosystem.md` y el filemap final.
-**Estado:** EN CURSO
-**Iniciado:** 2026-04-02
+**Estado:** ✅ COMPLETO
+**Iniciado:** 2026-04-02 | **Completado:** 2026-04-02
 
 ---
 
-## OBJETIVO FINAL
+## ENTREGABLES GENERADOS
 
-Dos entregables:
+| Archivo | Ubicación | Descripción |
+|---|---|---|
+| `ecosystem.md` | `unrlvl-context/` raíz | Radiografía narrativa consolidada — Capa A (producción) + Capa B (interno) |
+| `ecosystem_filemap.md` | `unrlvl-context/` raíz | Mapa de dependencias, flujos activos/rotos, gaps vs Neurone SCF, roadmap |
 
-**1. `ecosystem.md`** — Radiografía narrativa completa del ecosistema. Para cada lab: qué hace, cómo funciona, qué puede y qué no puede hoy, integraciones activas, deuda técnica, y cómo encaja en el sistema completo.
-
-**2. `ecosystem_filemap.md`** — Mapa de dependencias entre componentes: qué lab alimenta a cuál, qué flujos existen hoy, qué está desconectado que debería estar conectado, y qué hay que construir para servir la propuesta de servicio de Neurone SCF.
-
----
-
-## MÉTODO
-
-1. Sam sube el filetree de cada lab
-2. Claude identifica los 8-12 archivos clave y los pide
-3. Sam los sube
-4. Claude genera `ecosystem_radiografia_[Lab].md` como entregable descargable
-5. Al final Claude consolida todo en `ecosystem.md` + `ecosystem_filemap.md`
-
-**Regla crítica:** cada radiografía se genera como archivo descargable inmediatamente — no esperar al final. Si el chat se corta, los archivos individuales son la fuente de recuperación.
+Ambos archivos son accesibles en:
+- `https://unrlvl-context.vercel.app/ecosystem.md`
+- `https://unrlvl-context.vercel.app/ecosystem_filemap.md`
 
 ---
 
-## ESTADO DE LABS
+## ESTADO FINAL DE LABS
 
-| Lab | ID | Status auditoría | Archivo |
-|-----|-----|------|------|
+| Componente | ID | Status | Archivo radiografía |
+|---|---|---|---|
 | WebLab | LAB-WL | ✅ COMPLETA | `ecosystem_radiografia_WebLab.md` |
-| CopyLab | LAB-CPL | ⏳ PENDIENTE | — |
-| Onboarding App | LAB-OBD | ⏳ PENDIENTE | — |
-| AgentLab | LAB-AL | ⏳ PENDIENTE | — |
-| Social Media Agent | AGENT-SMA | ⏳ PENDIENTE | — |
-| UNRLVL-OPS | LAB-OPS | ⏳ PENDIENTE | — |
-| Orchestrator | LAB-ORCH | ⏳ PENDIENTE | — |
-| SocialLab | LAB-SL | ⏳ PENDIENTE | — |
-| VideoLab | LAB-VL | ⏳ PENDIENTE | — |
-| ImageLab | LAB-IL | ⏳ PENDIENTE | — |
-| BlueprintLab | LAB-BPL | ⏳ PENDIENTE | — |
-| VoiceLab | LAB-VOL | ⏳ PENDIENTE | — |
-| ForumPHs Speaks | AGENT-FPH | ⏳ PENDIENTE | — |
-
-**Próximo lab:** CopyLab (LAB-CPL) — el más maduro, el más relevante para Neurone SCF
-
----
-
-## CONTEXTO RELEVANTE
-
-**Por qué hacemos esto:**
-La propuesta de servicio UNRLVL × Neurone SCF compromete 319 outputs/mes en 6 meses con alta automatización. Para planificar el roadmap de desarrollo del ecosistema necesitamos saber exactamente qué puede hacer cada lab HOY vs. qué hay que construir.
-
-**Output estratégico esperado del filemap:**
-- Qué gaps hay entre el ecosistema actual y lo que exige la propuesta de Neurone
-- Qué labs necesitan desarrollo prioritario (SocialLab, Orchestrator → Meta API)
-- Qué flujos ya existen y solo necesitan conectarse
-- Estimado de tiempo de desarrollo por gap
-
-**Radiografía de WebLab — resumen ejecutivo:**
-- Generador de copy web multi-marca (HTML/Liquid) para 10 marcas
-- Push directo a Shopify activo
-- Motor: Claude API via proxy serverless
-- Supabase: solo `product_blueprints` conectado — brandContexts/humanize pendiente de migrar
-- Deuda técnica principal: brandContexts hardcoded en config, no en Supabase
+| CopyLab | LAB-CPL | ✅ COMPLETA | `ecosystem_radiografia_CopyLab.md` |
+| ImageLab | LAB-IL | ✅ COMPLETA | `ecosystem_radiografia_ImageLab.md` |
+| VideoLab | LAB-VL | ✅ COMPLETA | `ecosystem_radiografia_VideoLab.md` |
+| VoiceLab | LAB-VOL | ✅ COMPLETA | `ecosystem_radiografia_VoiceLab.md` |
+| SocialLab | LAB-SL | ✅ COMPLETA | `ecosystem_radiografia_SocialLab.md` |
+| Orchestrator | LAB-ORCH | ✅ COMPLETA | `ecosystem_radiografia_Orchestrator.md` |
+| BlueprintLab | LAB-BPL | ✅ COMPLETA | `ecosystem_radiografia_BlueprintLab.md` |
+| AgentLab | LAB-AL | ✅ COMPLETA | `ecosystem_radiografia_AgentLab.md` |
+| OnboardingApp | LAB-OBD | ✅ COMPLETA | `ecosystem_radiografia_OnboardingApp.md` |
+| UNRLVL-OPS | LAB-OPS | ✅ COMPLETA | `ecosystem_radiografia_UNRLVL_OPS.md` |
+| Social Media Agent | AGENT-SMA | ✅ COMPLETA | (incluida en AgentLab) |
+| ForumPHs Speaks | AGENT-FPH | ✅ COMPLETA | `ecosystem_radiografia_ForumPHs_Speaks.md` |
+| Shopify repo | REPO-SHP | ✅ COMPLETA | `ecosystem_radiografia_Shopify.md` |
+| BluePrints repo | REPO-BP | ✅ COMPLETA | `ecosystem_radiografia_BluePrints.md` |
+| CoreProject repo | REPO-CP | ✅ COMPLETA | `ecosystem_radiografia_CoreProject.md` |
+| Herramientas internas | INTERNAL | ✅ COMPLETA | `ecosystem_radiografia_HerramientasInternas.md` |
 
 ---
 
-## INSTRUCCIONES PARA NUEVA SESIÓN
+## HALLAZGOS CLAVE (resumen ejecutivo)
 
-Al iniciar el nuevo chat:
+**El ecosistema tiene ~16 componentes auditados.** Estado general: scaffolding de alta fidelidad con 3-4 labs en producción real.
 
-1. Carga el contexto del ecosistema:
-   - `https://unrlvl-context.vercel.app/ecosystem.json`
+**Labs en producción real:** CopyLab (PASSED v7), WebLab (active), ImageLab (active ICR v1.0), OnboardingApp (PASSED), Social Media Agent (producción activa).
 
-2. Carga este archivo (que estará en el repo):
-   - `https://unrlvl-context.vercel.app/protocols/ECOSYSTEM_AUDIT.md`
+**Labs scaffolding (UI completa, motor mock):** VideoLab, VoiceLab, SocialLab, Orchestrator — todos tienen interfaces correctas pero la lógica de generación es mock o no está conectada a APIs reales.
 
-3. Confirma estado: "WebLab ✅ — siguiente: CopyLab"
+**Los 3 gaps que bloquean el crecimiento:**
+1. `brand_goals` + `brand_personas` vacíos en Supabase → CopyLab genera sin ICP real
+2. Labs no conectados entre sí → sin Orchestrator real, Sam hace el trabajo de coordinación manualmente
+3. NeuroneSCF no configurada en ImageLab → 170 assets visuales/mes bloqueados
 
-4. Pide a Sam el filetree de CopyLab
+**Acción de mayor impacto / menor esfuerzo:**
+- Añadir NeuroneSCF a ImageLab `brands.ts` → 30 minutos
+- Migrar ForumPHs Speaks a AgentLab → 2-3 horas
+- Conectar BP_COPY_1.0 a CopyLab via Supabase → 1 día
 
-5. Al terminar cada lab, genera el archivo de radiografía como descargable ANTES de continuar
+---
 
-6. Al terminar todos los labs, genera `ecosystem.md` + `ecosystem_filemap.md` consolidados
+## PARA PRÓXIMAS SESIONES
 
-**Sam: adjunta `ecosystem_radiografia_WebLab.md` al inicio del nuevo chat** para que Claude lo tenga como referencia al construir el consolidado final.
+Los entregables del audit están disponibles en el Context System. Para cargarlos en un chat de ecosistema:
+
+```
+https://unrlvl-context.vercel.app/ecosystem.md
+https://unrlvl-context.vercel.app/ecosystem_filemap.md
+```
+
+Las radiografías individuales viven en CoreProject como referencia histórica.
+
+---
+
+*Audit completado en una sola sesión — 2026-04-02*
+*Claude Sonnet 4.6 · Unreal>ille Studio*

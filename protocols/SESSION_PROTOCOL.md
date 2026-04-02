@@ -1,38 +1,30 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-03-25-v6 | **Mantenido por:** Claude
+**Versión:** 2026-04-02-v6 | **Mantenido por:** Claude
 
 ---
 
 ## ARQUITECTURA DEL SISTEMA DE CONTEXTO
 
-Cada marca tiene 3 archivos. Cada uno con un propósito distinto:
+### Fuente de verdad única: `ecosystem.json`
 
-| Archivo | Qué contiene | Se reemplaza |
+`ecosystem.json` es el único archivo que Claude carga automáticamente en cada sesión. Contiene el estado completo del ecosistema: marcas, labs, agentes, infraestructura, gaps, agenda.
+
+Los `.md` son **renders derivados** del JSON — nunca se editan directamente.
+
+| Archivo | Rol | Se actualiza cuando |
 |---|---|---|
-| `brand.json` | Estado actual — métricas, proyectos, alertas | Sí — foto de hoy |
-| `BP_Brand_Context.md` | ADN permanente + capa relacional | Solo si cambia algo estructural |
-| `session_log.md` | Hilo vivo entre sesiones — qué está en curso, caliente, pendiente | No — acumulativo, solo se añade al tope |
+| `ecosystem.json` | **Fuente de verdad** — Claude lo carga siempre | Hay cambios en labs, marcas, gaps o agenda |
+| `ecosystem.md` | Render narrativo del ecosistema | `ecosystem.json` cambia → Claude lo regenera |
+| `ecosystem_filemap.md` | Render de dependencias y flujos | `ecosystem.json` cambia → Claude lo regenera |
+| `brands/[Marca]/brand.json` | Estado actual de la marca | Hay cambios en la marca |
+| `brands/[Marca]/BP_Brand_Context.md` | ADN permanente de la marca | Solo si cambia algo estructural |
+| `brands/[Marca]/session_log.md` | Hilo vivo entre sesiones | Siempre — se añade al tope |
+| `agents/[nombre]/session_log.md` | Log de sesiones de agentes | El agente genera y Sam commitea |
 
-El `session_log.md` es el archivo más importante para el día a día. Los agentes autónomos tienen su propio log en `agents/[nombre]/session_log.md`.
-
----
-
-## NOMENCLATURA DE ARCHIVOS — REGLA CRÍTICA
-
-**Claude genera SIEMPRE los outputs con el nombre EXACTO del archivo en el repo. Sin prefijos de marca.**
-
-| ✅ CORRECTO | ❌ INCORRECTO |
-|---|---|
-| `session_log.md` | `ForumPHs_session_log.md` |
-| `brand.json` | `ForumPHs_brand.json` |
-| `ecosystem.json` | `UNRLVL_ecosystem.json` |
-| `BP_Brand_Context.md` | `ForumPHs_BP_Brand_Context.md` |
-
-**Razón:** Sam arrastra los outputs directamente a `brands/[Marca]/` en el repo. Si el nombre difiere del canónico, GitHub crea un archivo nuevo en vez de reemplazar el existente. La ruta de destino ya da el contexto — el nombre del archivo no necesita incluir la marca.
-
-**Señal de alerta en GitHub Desktop:** si aparecen archivos nuevos en vez de modificaciones verdes, los nombres no son canónicos. Corregir antes de hacer commit.
-
-**Excepción:** el log del Social Media Agent se descarga como `social_media_agent_session_log.md` porque Sam necesita identificarlo antes de moverlo a `agents/social-media-agent/session_log.md`.
+### Regla crítica de los `.md`
+Los archivos `ecosystem.md` y `ecosystem_filemap.md` **nunca se editan manualmente**.
+Son generados por Claude a partir de `ecosystem.json` cada vez que ese archivo cambia.
+Cuando Sam los carga, siempre tienen la verdad actual porque son el último render del JSON.
 
 ---
 
@@ -40,15 +32,21 @@ El `session_log.md` es el archivo más importante para el día a día. Los agent
 
 > *"Hola Sam, ¿con qué marca y proyecto vamos a trabajar?"*
 
-Sam responde. Claude carga con `Vercel:web_fetch_vercel_url` — NUNCA `web_fetch`:
+Sam responde. Claude carga con `Vercel:web_fetch_vercel_url` — **NUNCA `web_fetch`** para URLs de Vercel:
 
+**Si Sam indica una marca específica:**
 1. `https://unrlvl-context.vercel.app/ecosystem.json`
 2. `https://unrlvl-context.vercel.app/brands/[Marca]/brand.json`
 3. `https://unrlvl-context.vercel.app/brands/[Marca]/BP_Brand_Context.md`
-4. `https://unrlvl-context.vercel.app/brands/[Marca]/session_log.md` ← **el más importante**
+4. `https://unrlvl-context.vercel.app/brands/[Marca]/session_log.md`
+
+**Si Sam indica trabajo de ecosistema / desarrollo de labs (sin marca específica):**
+1. `https://unrlvl-context.vercel.app/ecosystem.json`
+2. `https://unrlvl-context.vercel.app/ecosystem.md`
+3. `https://unrlvl-context.vercel.app/ecosystem_filemap.md`
 
 Claude confirma:
-> *"Contexto cargado — [Marca] · [fecha] · En curso: [X temas] · Alertas: [Y]. Arrancamos."*
+> *"Contexto cargado — [Marca o Ecosistema] · [fecha] · En curso: [X] · Gaps: [Y]. Arrancamos."*
 
 ---
 
@@ -56,78 +54,110 @@ Claude confirma:
 
 Cuando Sam escribe **"Actualiza"**, Claude ejecuta sin preguntar:
 
-1. **Determina** qué cambió en esta sesión
-2. **Verifica agentes** — fetch a `https://unrlvl-social-media-agent.vercel.app/api/export` con header `x-export-secret: [EXPORT_SECRET]`:
-   - Si hay log → genera output `social_media_agent_session_log.md`
-   - Si no hay → confirma "Sin novedades del Social Media Agent" y continúa
-3. **Genera** outputs con **nombre canónico exacto**:
-   - `session_log.md` — **siempre**, novedades al tope
-   - `brand.json` — si cambió estado, proyectos o alertas
-   - `ecosystem.json` — si hubo cambio cross-brand
-   - `BP_Brand_Context.md` — solo si cambió ADN o capa relacional
-   - `social_media_agent_session_log.md` — si había log del agente
-4. **Provee** mensaje de commit con rutas exactas en el repo
-5. **Recuerda** pasos de GitHub Desktop
-6. **Verifica** con `Vercel:web_fetch_vercel_url` en el nuevo deploy y confirma: *"Listo Sam. Sistema actualizado."*
+**1. Verifica agentes**
+Fetch GET `https://unrlvl-social-media-agent.vercel.app/api/export` con header `x-export-secret: [EXPORT_SECRET]`:
+- Si hay log → generar como output `social_media_agent_session_log.md`
+- Si no hay → confirmar "Sin novedades del agente" y continuar
 
-**Sam no especifica qué archivos. Claude decide.**
+**2. Genera todos los archivos que cambiaron**
+
+**Para chats de marca:**
+- `session_log.md` — **siempre**, novedades al tope
+- `brand.json` — si cambió estado, proyectos o alertas
+- `BP_Brand_Context.md` — solo si cambió ADN o capa relacional
+- `ecosystem.json` — si hubo cambio cross-brand o de labs
+
+**Para chats de ecosistema:**
+- `ecosystem.json` — **siempre**
+- `ecosystem.md` — **siempre que ecosystem.json cambie** (regenerar desde JSON actualizado)
+- `ecosystem_filemap.md` — **siempre que ecosystem.json cambie** (regenerar desde JSON actualizado)
+
+**Regla de regeneración de `.md`:**
+Claude lee el `ecosystem.json` actualizado y genera los `.md` completos desde cero usando la estructura establecida en el audit de 2026-04-02:
+- `ecosystem.md`: radiografía narrativa Capa A/B, estado por lab, gaps principales
+- `ecosystem_filemap.md`: flujos activos/rotos, gaps vs Neurone SCF, roadmap, naming conventions
+El contenido nuevo del JSON se refleja. Lo que no cambió sale igual. Los `.md` nunca se editan directamente.
+
+**3. REGLA CRÍTICA DE NOMENCLATURA**
+Los outputs se generan con el nombre **EXACTO** del archivo en el repo, sin prefijos de marca:
+- `session_log.md` (NO `ForumPHs_session_log.md`)
+- `brand.json` (NO `ForumPHs_brand.json`)
+- `ecosystem.json`
+- `ecosystem.md`
+- `ecosystem_filemap.md`
+- `BP_Brand_Context.md`
+- `SESSION_PROTOCOL.md`
+- `social_media_agent_session_log.md`
+
+Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez de reemplazar — esto es un error.
+
+**4. Provee el mensaje de commit** listo para pegar con rutas exactas.
+
+**5. Recuerda a Sam:**
+- Arrastrar archivos de **marca** a `brands/[Marca]/` (no a la raíz)
+- Arrastrar `ecosystem.json`, `ecosystem.md`, `ecosystem_filemap.md` a la **raíz** del repo
+- Verificar que GitHub Desktop muestre **modificaciones**, no archivos nuevos
+
+**6. Verifica** con `Vercel:web_fetch_vercel_url` post-deploy y confirma:
+> *"Listo Sam. Sistema actualizado."*
+
+**Sam no especifica qué archivos generar. Claude decide.**
+
+---
+
+## ACTUALIZACIÓN DIARIA
+
+Claude pregunta una vez al día al detectar que Sam está por irse:
+> *"Sam, antes de que te vayas — ¿Actualiza?"*
 
 ---
 
 ## FLUJO DE COMMIT — GitHub Desktop
 
-1. Descargar outputs generados por Claude
-2. Arrastrar a la carpeta correcta en `unrlvl-context`:
-   - Marca → `brands/[Marca]/` (reemplazar existentes)
-   - Agente → `agents/[nombre]/`
-3. Verificar en GitHub Desktop que son **modificaciones**, no archivos nuevos
-4. Pegar el mensaje de commit que Claude provee
+1. Descargar los archivos que Claude generó como outputs
+2. Arrastrar a la carpeta local `unrlvl-context` (reemplazar existentes):
+   - Marca: `brands/[Marca]/`
+   - Ecosistema: raíz del repo (`ecosystem.json`, `ecosystem.md`, `ecosystem_filemap.md`)
+   - Agentes: `agents/[nombre]/`
+   - Protocolos: `protocols/`
+3. GitHub Desktop muestra los cambios automáticamente
+4. Pegar el mensaje que Claude provee en "Summary"
 5. "Commit to main" → "Push origin"
 6. Vercel redesploya en ~30 segundos
 7. Claude verifica y confirma
 
 ---
 
-## ACTUALIZACIÓN DIARIA
-
-Claude pregunta al detectar que Sam se va:
-> *"Sam, antes de que te vayas — ¿Actualiza?"*
-
----
-
 ## AGENTES AUTÓNOMOS — Protocolo de log
-
-```
-unrlvl-context/
-  brands/
-  agents/
-    social-media-agent/
-      session_log.md
-```
-
-El agente lee `brands/NeuroneSCF/session_log.md` dinámicamente. Laura escribe "Actualiza" → KV → Sam descarga en su próximo Actualiza.
-
-**Agentes activos:**
 
 | Agente | URL | Export endpoint | Marca |
 |---|---|---|---|
 | Social Media Agent | `unrlvl-social-media-agent.vercel.app` | `/api/export` | NeuroneSCF |
+| ForumPHs Speaks | `unrlvl-forumphs-speaks.vercel.app` (pendiente deploy) | `/api/export` | ForumPHs |
+
+**Flujo del agente:**
+1. Laura/PO trabaja con el agente → escribe "Actualiza" → agente guarda log en KV
+2. Sam dice "Actualiza" en su chat → Claude verifica el endpoint → descarga el log si existe → lo incluye en el commit
+3. Una vez en el repo, el agente lo lee dinámicamente en la próxima sesión
 
 ---
 
-## DISCIPLINA DE CHAT
+## DISCIPLINA DE CHAT — Un chat por marca
 
-Un chat = una marca. Si Sam mezcla:
+Un chat = una marca. Si Sam mezcla sin intención:
 > *"Sam, esto es de [Marca X]. ¿Lo anoto en su session_log y seguimos, o cambiamos de chat?"*
+
+**Excepción:** chats de ecosistema declarados al inicio. Actualizan `ecosystem.json` y sus renders.
 
 ---
 
 ## SEÑALES DE ALERTA
 
-- Sam se va sin actualizar ese día
-- Sesión +24h sin actualización con decisiones importantes
-- `blocking: true` sin resolverse +7 días
-- `pending_decision` crítico sin resolverse +30 días
+Claude interrumpe activamente si:
+- Sam se va sin haber actualizado ese día
+- Sesión con más de 24h sin actualización y hubo decisiones importantes
+- `blocking: true` sin resolverse en más de 7 días
+- `pending_decision` crítico sin resolverse en más de 30 días
 
 ---
 
@@ -135,13 +165,13 @@ Un chat = una marca. Si Sam mezcla:
 
 | Archivo | URL |
 |---|---|
-| Ecosistema | `https://unrlvl-context.vercel.app/ecosystem.json` |
+| Ecosistema (JSON) | `https://unrlvl-context.vercel.app/ecosystem.json` |
+| Ecosistema narrativo | `https://unrlvl-context.vercel.app/ecosystem.md` |
+| Mapa dependencias | `https://unrlvl-context.vercel.app/ecosystem_filemap.md` |
 | ForumPHs brand | `https://unrlvl-context.vercel.app/brands/ForumPHs/brand.json` |
-| ForumPHs BP | `https://unrlvl-context.vercel.app/brands/ForumPHs/BP_Brand_Context.md` |
 | ForumPHs log | `https://unrlvl-context.vercel.app/brands/ForumPHs/session_log.md` |
 | NeuroneSCF brand | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/brand.json` |
 | NeuroneSCF log | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/session_log.md` |
 | VizosCosmetics brand | `https://unrlvl-context.vercel.app/brands/VizosCosmetics/brand.json` |
-| VizosCosmetics log | `https://unrlvl-context.vercel.app/brands/VizosCosmetics/session_log.md` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
-| Social Media Agent log | `https://unrlvl-social-media-agent.vercel.app/api/export` |
+| SMA export | `https://unrlvl-social-media-agent.vercel.app/api/export` |
