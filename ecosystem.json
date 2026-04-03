@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-02a",
+    "version": "2026-04-03a",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem. Loaded by Claude at every session start via Context System.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command + Vercel deploy",
@@ -23,18 +23,16 @@
       "components_audited": 17,
       "conducted_by": "Claude Sonnet 4.6 — sesion unica lectura directa de codigo",
       "top_gaps": [
-        "NeuroneSCF no configurada en ImageLab brands.ts — 170 assets visuales/mes bloqueados (fix: 30 min)",
-        "brand_goals + brand_personas vacios en Supabase — CopyLab sin ICP real",
-        "Labs no conectados entre si — Orchestrator ejecuta mock, sin APIs entre labs",
-        "BP_COPY_1.0 en BlueprintLab no conectado a CopyLab via Supabase",
-        "ForumPHs Speaks API key en browser — debe migrar a AgentLab arquitectura serverless",
-        "SocialLab Meta OAuth no implementado — publicacion es mock 92%"
+        "SocialLab usa Gemini para copy — debe recibir copy de CopyLab, rediseno de rol pendiente",
+        "Orchestrator ejecucion MOCK — labs no conectados entre si",
+        "VideoLab + VoiceLab sin datos reales de marca en Supabase — migracion pendiente",
+        "brand_goals + brand_personas vacios para la mayoria de marcas — poblar via OnboardingApp",
+        "ForumPHs Speaks API key en browser — migrar a AgentLab serverless"
       ],
-      "quick_wins": [
-        "Anadir NeuroneSCF a ImageLab brands.ts → 30 min",
-        "Migrar ForumPHs Speaks a apps/forumphs-speaks/ en AgentLab → 2-3h",
-        "Conectar BP_COPY a Supabase brand_copy_profiles → 1 dia",
-        "Poblar brand_goals + brand_personas via OnboardingApp gap interview → 3-4h"
+      "resolved_since_audit": [
+        "ImageLab — Supabase integration DONE: brands desde DB, NeuroneSCF configurada, psycho_presets creados",
+        "CopyLab — brand_goals + brand_personas conectados al SMPC (posiciones 2 y 3 del stack de 12 capas)",
+        "WebLab — webBrandLoader.ts: humanize/compliance/blueprint desde Supabase, fallback automatico a hardcoded"
       ],
       "production_real": ["CopyLab", "WebLab", "ImageLab", "OnboardingApp", "Social Media Agent", "UNRLVL-OPS"],
       "scaffolding_ui_mock_engine": ["VideoLab", "VoiceLab", "SocialLab", "Orchestrator", "AgentLab-Builder"]
@@ -65,7 +63,7 @@
     { "id": "PatriciaOsorioPersonal", "name": "Patricia Osorio · Personal", "type": "personal_brand", "sam_role": "studio", "market": "Miami, FL", "language_primary": "es-FL", "status": "active", "health": "green", "last_updated": "2026-03-27" },
     { "id": "PatriciaOsorioComunidad", "name": "Patricia Osorio · Comunidad", "type": "personal_brand", "sam_role": "studio", "market": "Miami, FL", "language_primary": "es-FL", "status": "active", "health": "green", "last_updated": "2026-03-27" },
     { "id": "PatriciaOsorioVizosSalon", "name": "Patricia Osorio · Vizos Salon", "type": "personal_brand", "sam_role": "studio", "market": "Miami, FL", "language_primary": "es-FL", "status": "active", "health": "green", "last_updated": "2026-03-28" },
-    { "id": "NeuroneSCF", "name": "Neurone South & Central Florida", "type": "brand", "sam_role": "studio", "market": "South & Central Florida, USA", "domain": "neuronescflorida.com", "language_primary": "es-FL", "status": "active", "health": "yellow", "product_catalog": "39 SKUs en product_blueprints — 6 lineas", "data_completeness": "humanize/goals/personas/geomix completos. Shopify precios pendientes.", "gap_critico": "NeuroneSCF no configurada en ImageLab — anadir a brands.ts (30 min)", "last_updated": "2026-04-02" },
+    { "id": "NeuroneSCF", "name": "Neurone South & Central Florida", "type": "brand", "sam_role": "studio", "market": "South & Central Florida, USA", "domain": "neuronescflorida.com", "language_primary": "es-FL", "status": "active", "health": "yellow", "product_catalog": "39 SKUs en product_blueprints — 6 lineas", "data_completeness": "humanize/goals/personas/geomix completos. Shopify precios pendientes.", "last_updated": "2026-04-03" },
     { "id": "ForumPHs", "name": "ForumPHs", "type": "brand", "sam_role": "socio", "key_person": "Ivette Flores (Gerente General, abogada)", "market": "Panama", "language_primary": "es-PA", "status": "active", "health": "green", "last_updated": "2026-03-25" },
     { "id": "UnrealvilleStudio", "name": "Unrealville Studio", "type": "studio", "sam_role": "owner", "market": "Florida USA + LATAM + Espana", "language_primary": "EN", "status": "active", "health": "green", "data_completeness": "brand_context/story/icp/goals/personas/geomix completos. humanize/palette/typography pendientes.", "last_updated": "2026-03-30" },
     { "id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "sam_role": "owner", "market": "Florida USA — expansion USA", "language_primary": "es-FL", "status": "active", "health": "green", "_note": "Division e-commerce propio. Dropshipping proveedores locales FL.", "data_completeness": "brand_context/story/icp/goals/personas/geomix completos. humanize/palette/typography pendientes.", "last_updated": "2026-03-30" }
@@ -75,37 +73,51 @@
       "id": "LAB-CPL", "name": "CopyLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/CopyLab",
       "vercel_project": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe", "vercel_url": "unrlvl-copy-lab.vercel.app",
-      "status": "PASSED v7 — produccion",
-      "engine": "Claude Sonnet 4 server-side — 100% Supabase-driven, 21 queries paralelas",
-      "gaps": ["brand_goals + brand_personas no conectados al motor", "BP_COPY_1.0 de BlueprintLab ignorado"],
-      "last_updated": "2026-04-02"
+      "status": "PASSED v7.1 — produccion",
+      "engine": "Claude Sonnet 4 server-side — 100% Supabase-driven, 23 queries paralelas",
+      "smpc_layers": "Brand → Goals → Personas → Idioma → Canal → Humanize → GeoMix → Keywords → CTA → Compliance → Extra → Template",
+      "gaps": ["BP_COPY_1.0 de BlueprintLab ignorado — conectar a brand_copy_profiles pendiente"],
+      "model_pending": [],
+      "last_updated": "2026-04-03"
     },
     {
       "id": "LAB-WL", "name": "WebLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/WebLab",
       "vercel_project": "prj_MzQeqiHG9fxCXYf3j84YCgdf5GZS", "vercel_url": "web-lab.vercel.app",
-      "status": "active",
+      "status": "active — Supabase integration DONE",
       "engine": "Claude Sonnet 4 server-side",
-      "supabase_integration": { "product_blueprints": "DONE", "brands_humanize_blueprints": "PENDING — brandContexts.tsx hardcoded, pendiente refactor webEngine.ts" },
-      "gaps": ["brandContexts/humanizeConfig/brandBlueprints hardcoded — debe migrar a Supabase (patron CopyLab)"],
-      "last_updated": "2026-04-02"
+      "supabase_integration": {
+        "product_blueprints": "DONE via useCatalog hook",
+        "humanize_profiles": "DONE via webBrandLoader.ts",
+        "compliance_rules": "DONE via webBrandLoader.ts",
+        "brand_palette_typography": "DONE via webBrandLoader.ts",
+        "fallback": "brandContexts.tsx + humanizeConfig.ts + brandBlueprints.ts como fallback automatico"
+      },
+      "gaps": ["humanize_profiles: poblar para marcas restantes via OnboardingApp"],
+      "model_pending": [],
+      "last_updated": "2026-04-03"
     },
     {
       "id": "LAB-IL", "name": "ImageLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/ImageLab",
       "vercel_project": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb", "vercel_url": "image-lab-unrlvl.vercel.app",
-      "status": "active ICR v1.0",
+      "status": "active ICR v1.0 — Supabase integration DONE",
       "engine": "Google Imagen 3 + Gemini 2.5 Flash multimodal",
-      "gaps": ["NeuroneSCF no configurada en brands.ts — FIX: 30 min, impacto inmediato", "Sin Supabase — marcas hardcoded"],
-      "last_updated": "2026-04-02"
+      "supabase_integration": {
+        "brands": "DONE via BrandsProvider + brandLoader.ts",
+        "imagelab_presets": "DONE — presets por canal en Supabase",
+        "psycho_presets": "FOUNDATION DONE — tabla + 10 presets. Selector en UI pendiente."
+      },
+      "gaps": ["Psycho Layer: selector de preset en UI de generacion pendiente", "brand_assets: tabla vacia — poblar con URLs de BluePrints repo"],
+      "model_pending": [],
+      "last_updated": "2026-04-03"
     },
     {
       "id": "LAB-AL", "name": "AgentLab", "taxonomy": "lab",
       "repo": "unrealvillestudio-hub/AgentLab",
       "vercel_project": "prj_y1hYcSn2javwg7h6fof3e74uHTne", "vercel_url": "unrlvl-agent-lab.vercel.app",
       "status": "builder scaffolding — agent deployments en produccion",
-      "note": "El builder no tiene backend real (cdn.unrlvl.io y api.unrlvl.io no existen). Los agentes standalone si estan en produccion.",
-      "gaps": ["WebChat embed code apunta a dominio inexistente", "WhatsApp webhook URL inexistente", "Sin persistencia del builder"],
+      "gaps": ["WebChat embed code apunta a dominio inexistente", "WhatsApp webhook URL inexistente"],
       "last_updated": "2026-04-02"
     },
     {
@@ -113,7 +125,7 @@
       "repo": "unrealvillestudio-hub/BlueprintLab", "deploy": "Google AI Studio",
       "status": "active v1.2",
       "schemas": ["BP_PERSON_1.0", "BP_LOCATION_1.0", "BP_PRODUCT_1.0", "BP_COPY_1.0"],
-      "gaps": ["Persistencia en window.storage Google AI Studio — debe migrar a Supabase", "BP_COPY_1.0 no consumido por ningun lab"],
+      "gaps": ["Persistencia en window.storage — debe migrar a Supabase", "BP_COPY_1.0 no consumido por ningun lab"],
       "last_updated": "2026-04-02"
     },
     {
@@ -121,29 +133,30 @@
       "repo": "unrealvillestudio-hub/Orchestrator",
       "vercel_project": "prj_93AJfDiY1pcktG7b7fDStBqONYWy", "vercel_url": "orchestrator.vercel.app",
       "status": "scaffolding — interpretacion real con Gemini, ejecucion MOCK",
-      "engine_real": "Gemini 2.0 Flash — interpreta prompts y genera planes reales",
-      "engine_mock": "executeStage() = setTimeout + textos hardcoded — no llama a ningun lab",
-      "gaps": ["Labs no exponen APIs — el Orchestrator no puede llamarlos", "Opcion B recomendada: llamar Claude directamente con system prompts de Supabase"],
+      "gaps": ["Labs no exponen APIs", "executeStage() = mock"],
+      "model_pending": ["Gemini → Claude server-side — pendiente Orchestrator Launch sprint"],
       "last_updated": "2026-04-02"
     },
     {
       "id": "LAB-SL", "name": "SocialLab", "taxonomy": "lab",
-      "status": "building — Gemini generation real, publicacion MOCK",
-      "engine": "Gemini 2.0 Flash client-side (API key expuesta — pendiente proxy serverless)",
-      "gaps": ["Meta/TikTok OAuth no implementado", "API key Gemini expuesta client-side", "Publicacion = mock 92% simulado"],
-      "last_updated": "2026-04-02"
+      "status": "building — rediseno de rol pendiente",
+      "engine": "Gemini 2.0 Flash client-side (API key expuesta)",
+      "rol_correcto": "Recibir copy de CopyLab → adaptar al canal → agendar → publicar. NO generar copy propio.",
+      "gaps": ["Meta/TikTok OAuth no implementado", "API key Gemini expuesta", "Genera copy con Gemini — debe eliminar y recibir de CopyLab"],
+      "model_pending": ["Gemini → eliminar. Copy viene de CopyLab (Claude). SocialLab adapta formato por plataforma."],
+      "last_updated": "2026-04-03"
     },
     {
       "id": "LAB-VL", "name": "VideoLab", "taxonomy": "lab",
       "status": "building — storyboard operativo, generacion video NO implementada",
       "engine": "Sin motor real — HeyGen/Kling planificados pero no integrados",
-      "gaps": ["executeStage() = setTimeout — no genera video", "Marcas son 3 placeholders genericos — ninguna marca UNRLVL real"],
+      "gaps": ["No genera video real", "Marcas son placeholders — pendiente Supabase"],
       "last_updated": "2026-04-02"
     },
     {
       "id": "LAB-VOL", "name": "VoiceLab", "taxonomy": "lab",
       "status": "blocked",
-      "blocker": "Voice IDs todos TBD_* — VoiceLab no puede sintetizar audio hasta asignar IDs reales",
+      "blocker": "Voice IDs todos TBD_* — requiere decision de proveedor",
       "decision_pending": "ElevenLabs vs TenzorArt — confirmar proveedor",
       "last_updated": "2026-04-02"
     },
@@ -151,7 +164,6 @@
       "id": "LAB-OPS", "name": "UNRLVL-OPS", "taxonomy": "internal_tool",
       "repo": "unrealvillestudio-hub/OPS",
       "status": "PASSED — produccion",
-      "function": "Dashboard de costos operativos — ops_services + ops_costs + ops_thresholds en Supabase",
       "last_updated": "2026-04-02"
     },
     {
@@ -160,8 +172,7 @@
       "vercel_url": "unrlvl-onboarding-app.vercel.app",
       "status": "PASSED — ChatPanel operativo",
       "engine": "Claude Sonnet 4 server-side",
-      "tables_written": ["brands", "humanize_profiles", "compliance_rules", "brand_palette", "brand_typography"],
-      "gaps": ["geomix + brand_services + brand_goals + brand_personas no escritos desde el flujo"],
+      "gaps": ["brand_goals + brand_personas + geomix no escritos desde el flujo"],
       "last_updated": "2026-04-02"
     }
   ],
@@ -182,8 +193,7 @@
       "serves_brand": "ForumPHs", "key_person": "Ivette Flores",
       "status": "testing — v2 checkpoint",
       "engine": "Claude Sonnet 4 — API key en browser (PENDIENTE migracion a AgentLab serverless)",
-      "domain": "Ley 284 de 2022 — Propiedad Horizontal Panama",
-      "next_step": "Migrar a apps/forumphs-speaks/ en AgentLab → 2-3h (system prompt validado)",
+      "next_step": "Migrar a apps/forumphs-speaks/ en AgentLab → 2-3h",
       "last_updated": "2026-04-02"
     }
   ],
@@ -193,31 +203,31 @@
       "vercel_url": "https://unrlvl-context.vercel.app",
       "repo": "unrealvillestudio-hub/unrlvl-context",
       "status": "active",
-      "function": "Servidor estatico Vercel. Fuente de verdad del estado del ecosistema entre sesiones de Claude.",
-      "structure": {
-        "ecosystem_json": "/ecosystem.json — este archivo. Cargado en cada sesion.",
-        "brands": "/brands/[BrandId]/ — brand.json + session_log.md + BP_Brand_Context.md",
-        "agents": "/agents/[nombre]/session_log.md — log de sesiones de agentes",
-        "protocols": "/protocols/ — SESSION_PROTOCOL.md + ECOSYSTEM_AUDIT.md",
-        "deep_docs": "/ecosystem.md + /ecosystem_filemap.md — referencia profunda, carga opcional"
-      },
-      "last_updated": "2026-04-02"
+      "last_updated": "2026-04-03"
     },
     {
       "id": "INFRA-SB", "name": "Supabase DB",
       "project_id": "amlvyycfepwhiindxgzw",
       "status": "active", "mcp_connected": true,
-      "schema_version": "v1.5 — 29 tablas",
+      "schema_version": "v1.7 — 31 tablas",
+      "schema_changes_2026_04_03": [
+        "CREATE TABLE psycho_presets — 10 presets Psycho Layer",
+        "ALTER TABLE brands ADD COLUMN web_default_platform",
+        "UPDATE brands SET imagelab_* — 8 marcas configuradas",
+        "UPDATE brands SET web_default_platform — todas las marcas"
+      ],
       "security": "RLS habilitado. Advisor Center 0 errores. 3 WARNs OPS intencionales.",
       "brands_count": 12,
       "pending": [
-        "humanize_profiles: DiamondDetails/PatriciaOsorio×3/D7Herbal/VizosCosmetics/VivoseMask/ForumPHs/UnrealvilleStudio/UnrealvilleStores — via Onboarding App",
+        "humanize_profiles: DiamondDetails/PatriciaOsorio×3/D7Herbal/VizosCosmetics/VivoseMask/ForumPHs — via Onboarding App",
         "brand_palette + brand_typography: todas vacias — requieren hex codes reales de Sam",
-        "brand_goals + brand_personas: DiamondDetails/PatriciaOsorio×3/D7Herbal/VizosCosmetics/VivoseMask/ForumPHs — via Onboarding App",
-        "geomix: VizosCosmetics/PatriciaOsorio×3/VivoseMask pendientes",
-        "Imagenes NeuroneSCF → Storage bucket product-assets"
+        "brand_goals + brand_personas: marcas restantes — via Onboarding App",
+        "brand_assets: tabla vacia — poblar con URLs de BluePrints repo",
+        "brand_social_accounts: tabla faltante — crear en sprint SocialLab",
+        "lab_configs: tabla faltante — crear en sprint Orchestrator Launch",
+        "platform_configs: tabla existe vacia — poblar en sprint SocialLab"
       ],
-      "last_updated": "2026-04-02"
+      "last_updated": "2026-04-03"
     },
     {
       "id": "INFRA-DBV", "name": "DB_VARIABLES",
@@ -228,29 +238,35 @@
       "id": "INFRA-DASH", "name": "UNRLVL-PROJECT Dashboard",
       "url": "https://unrlvl-context.vercel.app/dashboard.html",
       "taxonomy": "internal_tool",
-      "function": "Dashboard HTML que lee ecosystem.json y session_logs en tiempo real. Vista de estado por marca y proyectos cross-brand.",
       "last_updated": "2026-04-02"
     }
   ],
+  "psycho_layer": {
+    "status": "FOUNDATION COMPLETE — integracion en labs pendiente",
+    "table": "psycho_presets",
+    "presets_count": 10,
+    "presets": ["PSY-URGENCY", "PSY-SCARCITY", "PSY-AUTHORITY", "PSY-BELONGING", "PSY-FOMO", "PSY-TRUST", "PSY-IDENTITY", "PSY-ASPIRATION", "PSY-CURIOSITY", "PSY-SOCIAL-PROOF"],
+    "integrated_in": [],
+    "pending_integration": ["ImageLab — selector en UI", "CopyLab — injection_copy en SMPC", "SocialLab — injection_copy", "VideoLab — injection_video", "VoiceLab — injection_voice"],
+    "note": "Entra en cada lab durante su siguiente sprint de conexion a Supabase. No es sprint separado.",
+    "last_updated": "2026-04-03"
+  },
   "asset_repos": [
     {
       "id": "REPO-BP", "name": "BluePrints",
       "repo": "unrealvillestudio-hub/BluePrints",
-      "function": "Custodia de BPs JSON + assets visuales (fotos, logos, productos)",
-      "highlights": "~100 fotos Patricia Osorio (JPEG + alpha), 39 productos Neurone (3 versiones), 36 fotos Vizos Salon, 50 fotos Miami",
+      "highlights": "~100 fotos PO (JPEG+alpha), 39 productos Neurone (3 versiones), 36 fotos Vizos Salon, 50 fotos Miami",
       "last_updated": "2026-04-02"
     },
     {
       "id": "REPO-SHP", "name": "Shopify",
       "repo": "unrealvillestudio-hub/Shopify",
-      "function": "Custodia de outputs web para tiendas Shopify/WordPress",
       "status": "4 emails B2B NeuroneSCF en produccion. Resto pendiente.",
       "last_updated": "2026-04-02"
     },
     {
       "id": "REPO-CP", "name": "CoreProject",
       "repo": "unrealvillestudio-hub/CoreProject",
-      "function": "Repo operativo: CI/CD pipelines, protocolos, activos cliente ForumPHs, docs historicos",
       "active": "deploy-vizos-wp.yml activo → vizoscosmetics.com via FTP automatico",
       "last_updated": "2026-04-02"
     }
@@ -270,18 +286,19 @@
     "_known_inconsistencies": {
       "AgentLab_Builder": "usa guiones (d7-herbal) vs camelCase canonico (D7Herbal)",
       "VideoLab": "marcas placeholder genericas — no tiene marcas UNRLVL reales",
-      "VoiceLab_ScriptModule": "usa underscore (diamond_details) vs camelCase (DiamondDetails)"
+      "VoiceLab_ScriptModule": "usa underscore (diamond_details) vs camelCase (DiamondDetails)",
+      "WebLab_internal": "usa camelCase (neuroneCosmetics) — webBrandLoader.ts traduce automaticamente a canonico"
     }
   },
   "next_session_agenda": [
-    "INMEDIATO — NeuroneSCF en ImageLab brands.ts (30 min, alto impacto)",
-    "INMEDIATO — Poblar brand_goals + brand_personas via Onboarding App (marcas restantes)",
-    "CORTO — Migrar ForumPHs Speaks a apps/forumphs-speaks/ en AgentLab (2-3h)",
-    "CORTO — Conectar BP_COPY_1.0 a CopyLab via Supabase brand_copy_profiles (1 dia)",
-    "CORTO — Meta OAuth en SocialLab para publicacion real (1-2 dias)",
-    "MEDIO — WebLab brandContexts/humanize → migracion completa Supabase (patron CopyLab)",
-    "MEDIO — brand_palette + brand_typography — Sam provee hex codes y tipografias reales",
-    "MEDIO — Orchestrator → Opcion B: llamar Claude con system prompts de Supabase",
-    "PENDIENTE DECISION — VoiceLab: ElevenLabs vs TenzorArt, asignar voice IDs reales"
+    "TESTING — Verificar ImageLab + CopyLab + WebLab con NeuroneSCF en produccion real",
+    "SPRINT SocialLab — rediseno de rol: eliminar Gemini, recibir copy de CopyLab, Meta+TikTok OAuth, tabla brand_social_accounts",
+    "SPRINT VideoLab → Supabase — leer videolab_params + person_blueprints + location_blueprints (marcas UNRLVL reales)",
+    "DECISION — VoiceLab: ElevenLabs vs TenzorArt, asignar voice IDs reales, conectar a Supabase",
+    "SPRINT Orchestrator Launch — tabla lab_configs + migrar Gemini a Claude server-side (Opcion B)",
+    "SPRINT BlueprintLab → Supabase — reemplazar window.storage por persistencia real",
+    "DATOS — Poblar brand_goals + brand_personas para marcas restantes via OnboardingApp",
+    "DATOS — brand_palette + brand_typography hex codes reales de Sam",
+    "PSYCHO LAYER — selector en ImageLab UI + injection_copy en CopyLab como siguiente integracion"
   ]
 }
