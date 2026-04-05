@@ -1,99 +1,108 @@
 # UNRLVL Ecosystem — Radiografía Narrativa
-*Versión: 2026-04-04a · Generado desde ecosystem.json · No editar directamente*
+*Versión: 2026-04-05a · Generado desde ecosystem.json · No editar directamente*
 
 ---
 
 ## ESTADO GLOBAL
 
 **Studio:** Unrealville Studio — Sam, owner. Florida USA + LATAM + España.
-**Supabase:** `amlvyycfepwhiindxgzw` — schema v1.8, 32 tablas, RLS habilitado.
+**Supabase:** `amlvyycfepwhiindxgzw` — schema v1.9, 33 tablas, RLS habilitado.
 **Vercel team:** `team_fEH94Irp6BAI9YGm4btGna5n`
+**Estado ecosistema:** 100% READY — todos los labs en Vercel + 100% conectados a Supabase.
 
 ---
 
 ## CAPA A — PRODUCCIÓN REAL
 
-Labs y herramientas generando valor para clientes hoy.
-
 ### CopyLab — `unrlvl-copy-lab.vercel.app`
-**PASSED v8.0.** Motor de copy del ecosistema. 24 queries paralelas a Supabase. SMPC de 13 capas: Brand → Goals → Personas → Idioma → Canal → Humanize F2.5 → GeoMix → Keywords → CTA → Compliance → **BP_COPY_1.0** → Extra → Template. Layer 13 (BP_COPY_1.0) integrado en sprint 4: lee `brand_copy_profiles` e inyecta voice_tone, writing_style, hooks, signature_phrases, avoid_phrases, prohibited_words. 7 perfiles activos (PO×3, D7Herbal, VivoseMask, DiamondDetails, VizosCosmetics). NeuroneSCF vacío — pendiente poblar.
-Engine: Claude Sonnet 4 server-side. Gap activo: poblar `brand_copy_profiles` para NeuroneSCF.
+**PASSED v8.0.** Motor de copy del ecosistema. 24 queries paralelas a Supabase. SMPC 13 capas: Brand → Goals → Personas → Idioma → Canal → Humanize F2.5 → GeoMix → Keywords → CTA → Compliance → BP_COPY_1.0 → Extra → Template. 7 perfiles activos en `brand_copy_profiles` (PO×3, D7H, VivoseMask, DiamondDetails, VizosCosmetics). NeuroneSCF, ForumPHs y UnrealvilleStudio sin perfil — poblar via BlueprintLab. `/api/execute` activo para Orchestrator.
 
 ### WebLab — `web-lab.vercel.app`
-**Producción activa.** Genera landing pages y copy web. Supabase integration completa via `webBrandLoader.ts`: humanize_profiles, compliance_rules, brand_palette_typography, product_blueprints. Fallback automático a hardcoded si Supabase falla. Gap menor: `brandContexts.tsx` aún hardcoded para algunas marcas — migración completa pendiente.
+**PASSED.** Genera landing pages y copy web (HTML/Liquid/WordPress). Supabase integration completa via `webBrandLoader.ts`. Fallback automático a hardcoded si Supabase falla. `/api/execute` activo.
 
 ### ImageLab — `image-lab-unrlvl.vercel.app`
-**ICR v1.0 activo.** Genera imágenes con Gemini 2.5 Flash + Google Imagen 3. Supabase: brands via BrandsProvider, imagelab_presets por canal. Psycho Layer: `psychoPresetLoader.ts` + `PsychoLayerSelector.tsx` generados en sprint 4 — pendiente integrar en UI de generación. brand_assets vacío — poblar con URLs BluePrints repo.
+**PASSED ICR v1.0.** Genera imágenes con Gemini 2.5 Flash + Google Imagen 3. **Psycho Layer completamente integrado:** `PsychoLayerSelector` en `PromptPackModule`, `buildPsychoVisualInjection()` inyecta el preset en `finalPrompt`. Supabase: brands, imagelab_presets, psycho_presets. `/api/execute` activo.
+
+### SocialLab — `social-lab-flame.vercel.app`
+**PASSED.** Gemini eliminado — engine Claude server-side via `/api/generate-post`. `CopyLabImportPanel` integrado en `PostBuilderModule` — import directo desde CopyLab. `brand_social_accounts` en Supabase lista esperando OAuth tokens. `/api/execute` activo: adapta copy por plataforma y escribe en `scheduled_posts`.
+
+### AgentLab — `agent-lab-unrlvl.vercel.app`
+**PASSED.** `blueprintStore.ts` Supabase-first: `loadAllBlueprints()` carga person_blueprints + location_blueprints + product_blueprints de Supabase. Fallback a IndexedDB para blueprints creados localmente. `blueprintCopyProfileLoader.ts` cierra flujo BlueprintLab → CopyLab Layer 11.
+
+### BlueprintLab — `unrlvl-blueprint-lab.vercel.app`
+**PASSED.** Migrado de Google AI Studio a Vercel. Supabase integration en JS compilado: guarda en `person_blueprints` y `brand_copy_profiles`. 4 schemas activos: BP_PERSON_1.0, BP_LOCATION_1.0, BP_PRODUCT_1.0, BP_COPY_1.0. Rol en el ecosistema: UI de administración — no expone `/api/execute`. El Orchestrator lee los blueprints directamente de Supabase.
 
 ### OnboardingApp — `unrlvl-onboarding-app.vercel.app`
-**ChatPanel operativo.** Onboarding de nuevas marcas al ecosistema. Claude Sonnet 4 server-side. Gap: brand_goals + brand_personas + geomix no se escriben desde el flujo todavía (Phase 4 pendiente).
+**PASSED — Phase 4 completa.** Onboarding de nuevas marcas al ecosistema. Escribe **8 tablas**: brands, humanize_profiles, compliance_rules, brand_palette, brand_typography, brand_goals, brand_personas, geomix. Claude Sonnet 4 genera datos estructurados desde brief narrativo libre.
+
+### Orchestrator — `orchestrator.vercel.app`
+**PASSED.** Claude Sonnet 4 server-side via `/api/interpret-intent`. Lee `lab_configs` de Supabase. **4 labs activos en el pipeline:** CopyLab → WebLab → ImageLab → SocialLab. VideoLab y VoiceLab en `lab_configs` pero `active: false` — pendiente cuentas externas. Checkpoint gates (ThumbsUp/ThumbsDown) en stages con `requiresApproval: true`.
 
 ### Social Media Agent — `unrlvl-social-media-agent.vercel.app`
-**Producción para NeuroneSCF** (operadora: Laura Rodriguez). Guía setup de infraestructura digital: Meta BM, WABA, TikTok. Claude Sonnet 4 + @vercel/kv historial 90 días. NO genera contenido social — ese rol es de CopyLab + SocialLab. Export endpoint: GET /api/export con header secret.
+**Producción para NeuroneSCF** (operadora: Laura Rodriguez). Guía setup de infraestructura digital: Meta BM, WABA, TikTok. Claude Sonnet 4 + @vercel/kv historial 90 días. NO genera contenido social.
 
 ### UNRLVL-OPS — interno
 **Operativo.** Dashboard interno de operaciones del studio.
 
 ---
 
-## CAPA B — EN CONSTRUCCIÓN / BLOQUEADOS
-
-### SocialLab — `social-lab-flame.vercel.app`
-Scaffolding. Motor actual: Gemini 2.0 Flash client-side (API key expuesta — error de arquitectura). Rol correcto redefinido: recibir copy de CopyLab → adaptar formato por plataforma → agendar → publicar. Sprint 4 añadió: `copyLabBridge.ts` (import CopyLab → ScheduledPost) + `CopyLabImportPanel.tsx` (UI). Pendiente integrar panel en PostBuilderModule.tsx. Pendiente eliminar Gemini. `brand_social_accounts` creada en Supabase (schema listo para OAuth).
-
-### AgentLab Builder — `agent-lab-unrlvl.vercel.app`
-Builder operativo, deployments en producción. Sprint 4: `geminiService.ts` eliminado (TestMode → Claude /api/test-chat.ts). `blueprintSupabaseLoader.ts` generado: reemplaza IndexedDB con `useBlueprintLibrary()` hook — pendiente integrar. `blueprintCopyProfileLoader.ts`: cierra flujo BlueprintLab → CopyLab Layer 13 — pendiente integrar.
-
-### BlueprintLab — Google AI Studio (artifact)
-Activo v1.2. Crea y edita blueprints (BP_PERSON_1.0, BP_LOCATION_1.0, BP_PRODUCT_1.0, BP_COPY_1.0). Persistencia actual: `window.storage` — debe migrar a Supabase (sprint pendiente). Sprint task: añadir `window.__SB_URL__` + `window.__SB_KEY__` en index.html → llamar `saveCopyProfile()` en save de BP_COPY_1.0 → upsert REST para BP_PERSON/LOCATION/PRODUCT.
+## CAPA B — BLOQUEADOS POR ASSETS EXTERNOS
 
 ### VideoLab — `unrlvl-video-lab.vercel.app`
-Scaffolding. Storyboard operativo. NO genera video real — HeyGen y Kling planificados pero cuentas/API keys pendientes. `videolab_params` en Supabase listo pero no conectado. Marcas son placeholders genéricos.
+Storyboard builder operativo. `videoLabLoader.ts` + `VideoLabContext` leen brands/persons/locations de Supabase con fallback. NO genera video real — HeyGen y Kling sin cuentas ni API keys. `videolab_params` en Supabase listo. **Próximo sprint:** implementar `/api/execute` + conectar HeyGen/Kling + activar en `lab_configs`.
 
 ### VoiceLab — `unrlvl-voice-lab.vercel.app`
-Bloqueado. **Decisión de proveedor resuelta: ElevenLabs.** `voicelab_params.engine = elevenlabs_turbo_v2` en Supabase. Bloqueante único: voice_ids todos TBD_* — requiere audio limpio de PO (3-10 min) para ElevenLabs voice clone. Pipeline: grabar → subir → copiar voice_id → pegar en voicelab_params → VoiceLab sintetiza.
-
-### Orchestrator — `orchestrator.vercel.app`
-Scaffolding. Interpretación de intent con Gemini (client-side). `executeStage()` = mock — labs no conectados. Sprint pendiente: CREATE TABLE lab_configs + migrar Gemini a Claude server-side + cada lab expone POST /api/execute + Orchestrator llama endpoints reales.
+Decisión resuelta: ElevenLabs. `voicelab_params.engine = elevenlabs_turbo_v2` en Supabase. Bloqueante único: audio limpio de PO (3-10 min) para voice clone. En cuanto llegue el audio + cuenta ElevenLabs: pipeline completo en ~2h.
 
 ### ForumPHs Speaks — testing
-v2 checkpoint. Claude Sonnet 4. API key en browser — pendiente migración a AgentLab serverless (apps/forumphs-speaks/).
+v2 checkpoint. Claude Sonnet 4. API key en browser — pendiente migración a AgentLab serverless (apps/forumphs-speaks/). ~2-3h de trabajo.
 
 ---
 
-## MARCAS — ESTADO DE DATOS
+## MARCAS — ESTADO DE DATOS EN SUPABASE
 
-| Marca | Idioma | copy_profile | goals/personas | humanize | geomix |
-|---|---|---|---|---|---|
-| NeuroneSCF | es-FL | ❌ vacío | ✅ completo | ✅ completo | ✅ completo |
-| PatriciaOsorioPersonal | es-FL | ✅ AUTHORITY_EDU | ✅ | ⚠️ pendiente | ✅ |
-| PatriciaOsorioComunidad | es-FL | ✅ COMMUNITY_MOTIVATOR | ✅ | ⚠️ pendiente | ✅ |
-| PatriciaOsorioVizosSalon | es-FL | ✅ LUXURY_EXPERT | ✅ | ⚠️ pendiente | ✅ |
-| DiamondDetails | es-ES | ✅ activo | ⚠️ pendiente | ⚠️ pendiente | ⚠️ pendiente |
-| VizosCosmetics | es-ES | ✅ activo | ⚠️ pendiente | ⚠️ pendiente | ⚠️ pendiente |
-| D7Herbal | es-ES | ✅ activo | ⚠️ pendiente | ⚠️ pendiente | ⚠️ pendiente |
-| VivoseMask | es-ES | ✅ activo | ⚠️ pendiente | ⚠️ pendiente | ⚠️ pendiente |
-| ForumPHs | es-PA | ❌ vacío | ⚠️ pendiente | ⚠️ pendiente | ⚠️ pendiente |
-| UnrealvilleStudio | EN | ❌ vacío | ✅ | ⚠️ pendiente | ✅ |
+| Marca | humanize | goals | personas | geomix | copy_profile | palette | typography |
+|---|---|---|---|---|---|---|---|
+| NeuroneSCF | ⚠️ parcial | ✅ | ✅ | ✅ | ❌ pendiente | ✅ | ✅ |
+| PatriciaOsorioPersonal | ❌ | ❌ | ❌ | ❌ | ✅ AUTHORITY_EDU | ❌ | ❌ |
+| PatriciaOsorioComunidad | ❌ | ❌ | ❌ | ❌ | ✅ COMMUNITY_MOTIVATOR | ❌ | ❌ |
+| PatriciaOsorioVizosSalon | ✅ | ❌ | ❌ | ❌ | ✅ LUXURY_EXPERT | ❌ | ❌ |
+| DiamondDetails | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| D7Herbal | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| VizosCosmetics | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| VivoseMask | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| ForumPHs | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| UnrealvilleStudio | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| UnrealvilleStores | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+
+**OnboardingApp puede poblar todas estas columnas excepto copy_profile (BlueprintLab) y hex codes reales (Sam).**
 
 ---
 
 ## PROYECTOS ESTRATÉGICOS EN COLA
 
-### LoRA Models — Identidad Visual Consistente
-No iniciado. Objetivo: entrenar un modelo LoRA por persona clave (Patricia Osorio primero) para generar imágenes con consistencia absoluta de identidad. Pipeline: fotos BluePrints repo (100 fotos PO disponibles, calidad a validar) → Replicate/Fal.ai FLUX LoRA → `person_blueprints.lora_model_id`. Campos Supabase a añadir: `lora_model_id`, `lora_trigger_word`, `lora_provider`. Bloqueante: cuenta Replicate/Fal.ai + validar calidad fotos. Costo estimado: $2-5 por modelo en Replicate. Impacto: desbloquea consistencia en ImageLab y VideoLab.
+### Sprint VideoLab → Orchestrator (PRÓXIMA ACTIVIDAD)
+Abrir cuentas HeyGen + Kling → implementar `/api/execute` en VideoLab → activar `lab_configs` → Orchestrator orquesta flujos de video completo.
 
 ### Voice Cloning — ElevenLabs
-Proveedor decidido. Bloqueante: coordinar grabación de audio con PO (3-10 min sin ruido) + abrir cuenta ElevenLabs + API key. Campos Supabase listos. Voice IDs de ElevenLabs son compatibles directamente con HeyGen — desbloquea también VideoLab talking head.
+Proveedor decidido. Bloqueante: audio PO + cuenta ElevenLabs. Voice IDs compatibles con HeyGen — desbloquea VideoLab talking head simultáneamente.
+
+### LoRA Models — Identidad Visual Consistente
+No iniciado. Pipeline: fotos BluePrints repo → Replicate/Fal.ai FLUX LoRA → `person_blueprints.lora_model_id`. Costo: ~$2-5/modelo.
+
+### OAuth Meta/TikTok
+`brand_social_accounts` y `scheduled_posts` en Supabase listas. Falta implementar OAuth flow por marca + publicación real en SocialLab.
 
 ---
 
 ## LOS 3 GAPS PRINCIPALES HOY
 
-1. **Orchestrator ejecuta mocks** — labs funcionan en silos. Sin pipeline real, cada lab es isla.
-2. **BlueprintLab sin persistencia Supabase** — los blueprints creados no llegan a los labs automáticamente. Flujo BP_COPY → CopyLab Layer 13 existe en código pero no en producción hasta que BlueprintLab guarde en Supabase.
-3. **VoiceLab + VideoLab bloqueados por assets externos** — voice_ids TBD_*, cuentas HeyGen/Kling/ElevenLabs pendientes. El código está listo, faltan las cuentas y el audio de PO.
+1. **Datos de marca incompletos** — humanize, goals, personas, geomix, copy_profile vacíos para la mayoría de marcas. OnboardingApp y BlueprintLab pueden resolverlo. Sin esto, CopyLab genera con voz genérica DEFAULT.
+
+2. **VideoLab sin motor real** — el lab más avanzado en producción visual está bloqueado por cuentas externas (HeyGen/Kling). El código y los datos en Supabase están listos.
+
+3. **SocialLab sin publicación real** — el pipeline genera y encola en `scheduled_posts` pero no publica. OAuth Meta/TikTok es el único bloqueante.
 
 ---
 
-*Regenerado desde ecosystem.json v2026-04-04a · Claude Sonnet 4.6*
+*Regenerado desde ecosystem.json v2026-04-05a · Claude Sonnet 4.6*
