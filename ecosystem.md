@@ -1,192 +1,120 @@
-# UNRLVL ECOSYSTEM — Radiografía Narrativa
-_version: 2026-04-06b · last_audit: 2026-04-06 · generado por Claude_
+# UNRLVL Ecosystem — Radiografía Narrativa
+*Versión: 2026-04-05b · Generado desde ecosystem.json · No editar directamente*
 
 ---
 
 ## ESTADO GLOBAL
 
-**11 marcas activas** — 8 green / 3 yellow  
-**11 labs** — 11 en producción / 2 bloqueados externos  
-**2 agentes desplegados**  
-**Supabase:** v1.9 — 33 tablas · MCP conectado  
+**Studio:** Unrealville Studio — Sam, owner. Florida USA + LATAM + España.
+**Supabase:** `amlvyycfepwhiindxgzw` — schema v1.9, 33 tablas, 14MB/500MB usados.
+**Vercel:** 12+ proyectos deployados. ⚠️ Upgrade a Pro requerido inmediatamente.
+**Estado ecosistema:** 100% READY — todos los labs en Vercel + 100% conectados a Supabase.
 
 ---
 
-## RESUELTO EN ESTA SESIÓN
+## COSTOS OPERATIVOS — CERRADOS 2026-04-05
 
-- UnrealvilleStudio — tagline/industry/positioning/language/brand_context actualizados en Supabase y ecosystem.json
-- brand_languages — UnrealvilleStudio (en-FL+es-FL) + PatriciaOsorio×3 (en-FL añadido) poblados
-- BP_BRAND UnrealvilleStudio v1.2 ES+EN — chevron blinking, ICR redesign, 7 Intelligence Layers, STUDIO estandarizado
-- Social Media Agent — chat.js: raw log automático por usuario + backfill histórico + token registry
-- Social Media Agent — export.js: export detallado por usuario (Laura/PO/Sam) con historial completo
-- Social Media Agent — migrate.js: endpoint de backfill proactivo (nuevo archivo)
-- Social Media Agent — session_log.md: actualizado con estado real de infraestructura Neurone SCF
-- Social Media Agent — migrate ejecutado: Laura 2 exchanges, Sam 3 exchanges, Paty 1 exchange recuperados
+### Total mensual: $457-507/mes
 
----
+| Plataforma | Tipo | Total/mes | Notas |
+|---|---|---|---|
+| **Claude.ai Pro Max ×5** | Fijo | ~$115 | Interfaz de trabajo Sam+Claude |
+| **Anthropic API** | Variable | $40-60 | Labs + Orchestrator |
+| **Google Gemini/Imagen 3** | Variable | $15-20 | ImageLab ~400 imgs/mes |
+| **ElevenLabs Creator** | Fijo | $22 | Voces reales PO×3 + Ivette |
+| **Chatterbox (Fal.ai)** | Variable | $5-10 | Voces sintéticas D7H, Vivosé, secundarios |
+| **HeyGen Creator + add-ons + API** | Mixto | ~$166 | $29 plan + $87 (3 avatar add-ons) + ~$50 API credits |
+| **Kling** | Variable | $20-25 | Video generativo, pay-per-use |
+| **Fal.ai** | Variable | $15-20 | LoRA inference + Chatterbox TTS |
+| **Vercel Pro** | Fijo | $20 | 1 seat — upgrade inmediato requerido |
+| **Supabase** | Fijo | $0 | Free plan — upgrade a $25 cuando llegue a ~400MB |
+| **Shopify Basic (NeuroneSCF)** | Fijo | $39 | Única tienda activa |
 
-## CAPA A — PRODUCCIÓN
+**Setup one-time:** LoRA training ~$20 total (PO×3 + Ivette). HeyGen avatar creation $29-199/avatar.
 
-### Labs en producción
+### Stack de avatares definido
 
-**CopyLab** (LAB-CPL)  
-  - Status: PASSED v8.0 — produccion
-  - Engine: Claude Sonnet 4 server-side — 100% Supabase-driven, 24 queries paralelas
-  - Orchestrator: /api/execute — ACTIVO
-  - GAPS: brand_copy_profiles vacio para NeuroneSCF, ForumPHs, UnrealvilleStudio — poblar via BlueprintLab
+| Necesidad | Herramienta |
+|---|---|
+| Voz persona real (PO, Ivette) | ElevenLabs Professional Clone |
+| Voz sintética diseñada | Chatterbox (MIT open source) via Fal.ai |
+| LoRA identidad visual persona real | Fal.ai FLUX LoRA |
+| Talking head video | HeyGen Instant Avatar + ElevenLabs voice |
+| Video generativo (producto, escena) | Kling |
 
-**WebLab** (LAB-WL)  
-  - Status: PASSED — Supabase integration DONE
-  - Engine: Claude Sonnet 4 server-side
-  - Orchestrator: /api/execute — ACTIVO
-  - GAPS: humanize_profiles: poblar para marcas restantes via OnboardingApp
+### Triggers de upgrade
 
-**ImageLab** (LAB-IL)  
-  - Status: PASSED ICR v1.0 — Supabase + PsychoLayer DONE
-  - Engine: Google Imagen 3 + Gemini 2.5 Flash multimodal
-  - Orchestrator: /api/execute — ACTIVO
-  - GAPS: brand_assets: tabla vacia — poblar con URLs de BluePrints repo
-
-**AgentLab** (LAB-AL)  
-  - Status: PASSED — Supabase-first blueprints DONE
-  - Engine: blueprintStore.ts Supabase-first: loadAllBlueprints() → person_blueprints + location_blueprints + product_blueprints. Fallback IndexedDB.
-  - GAPS: WebChat embed code apunta a dominio inexistente · WhatsApp webhook URL inexistente
-
-**BlueprintLab** (LAB-BPL)  
-  - Status: PASSED — Vercel + Supabase DONE
-  - Sin gaps.
-
-**Orchestrator** (LAB-ORCH)  
-  - Status: PASSED — Claude server-side + 4 labs activos
-  - Engine: Claude Sonnet 4 server-side via /api/interpret-intent
-  - Sin gaps.
-
-**SocialLab** (LAB-SL)  
-  - Status: PASSED — CopyLabBridge integrado, Gemini eliminado
-  - Engine: Claude Sonnet 4 server-side via /api/generate-post
-  - Orchestrator: /api/execute — ACTIVO (escribe en scheduled_posts Supabase)
-  - GAPS: Meta/TikTok OAuth pendiente — brand_social_accounts lista esperando tokens
-
-**VideoLab** (LAB-VL)  
-  - Status: PASSED UI — storyboard operativo, generacion video bloqueada
-  - Engine: Sin motor real — HeyGen/Kling planificados pero cuentas pendientes
-  - GAPS: No genera video real · videolab_params en Supabase listos pero HeyGen/Kling sin API keys
-
-**VoiceLab** (LAB-VOL)  
-  - Status: PASSED UI — sintetizador bloqueado por voice_ids
-  - GAPS: voice_ids = TBD_* para todas las marcas
-
-**UNRLVL-OPS** (LAB-OPS)  
-  - Status: PASSED — produccion
-  - Sin gaps.
-
-**Onboarding App** (LAB-OBD)  
-  - Status: PASSED — Phase 4 completa, 8 tablas
-  - Engine: Claude Sonnet 4 server-side
-  - Sin gaps.
-
-### Agentes desplegados
-
-**Social Media Agent** → NeuroneSCF
-  - Status: active — produccion
-  - Logging: raw_log por usuario activo. Registry: LAURA/SAMDEV/PATRICIA. Export detallado en /api/export.
-  - Session log: Actualizado 2026-04-06 — aliases completos, numero fisico pendiente, BM/IG/WABA/TikTok pendientes
-
-**ForumPHs Speaks** → ForumPHs
-  - Status: testing — v2 checkpoint
-  - Next: Migrar a apps/forumphs-speaks/ en AgentLab → 2-3h
+**Vercel → Pro ($20/mes):** YA. Hobby prohíbe uso comercial + timeout 10s insuficiente para CopyLab (24 queries + Claude = 15-25s).
+**Supabase → Pro ($25/mes):** Cuando DB llegue a ~400MB. Hoy: 14MB (2.8% del límite).
+**ElevenLabs → Pro ($99/mes):** Si voces sintéticas escalan a >100 min/mes.
+**HeyGen → Business ($149/mes):** Cuando necesites >4 avatares custom simultáneos.
 
 ---
 
-## CAPA B — ESTADO POR MARCA
+## CAPA A — PRODUCCIÓN REAL
 
-🟢 **Diamond Details** (DiamondDetails)  
-  - Market: Alicante, Espana · Lang: es-ES
-  - last_updated: 2026-03-27
+### CopyLab — `unrlvl-copy-lab.vercel.app`
+**PASSED v8.0.** 24 queries paralelas. SMPC 13 capas. 7 perfiles en `brand_copy_profiles`. `/api/execute` activo para Orchestrator. Gap: NeuroneSCF, ForumPHs, UnrealvilleStudio sin copy profile.
 
-🟢 **Vizos Cosmetics** (VizosCosmetics)  
-  - Market: Miami + Espana · Lang: es-ES
-  - last_updated: 2026-03-25
+### WebLab — `web-lab.vercel.app`
+**PASSED.** HTML/Liquid/WordPress. Supabase completo. `/api/execute` activo.
 
-🟢 **D7 Herbal** (D7Herbal)  
-  - Market: Alicante, Espana · Lang: es-ES
-  - last_updated: 2026-03-25
+### ImageLab — `image-lab-unrlvl.vercel.app`
+**PASSED ICR v1.0.** Gemini 2.5 Flash + Imagen 3. PsychoLayerSelector integrado en PromptPackModule. `/api/execute` activo.
 
-🟡 **Vivose Mask** (VivoseMask)  
-  - Market: Espana · Lang: es-ES
-  - last_updated: 2026-03-25
+### SocialLab — `social-lab-flame.vercel.app`
+**PASSED.** Gemini eliminado. Claude server-side. CopyLabImportPanel integrado. `scheduled_posts` en Supabase. `/api/execute` activo. Pendiente: OAuth Meta/TikTok.
 
-🟢 **Patricia Osorio · Personal** (PatriciaOsorioPersonal)  
-  - Market: Miami, FL · Lang: es-FL
-  - Copy Profile: DONE — voice_writing_style=AUTHORITY_EDU
-  - last_updated: 2026-04-04
+### AgentLab — `agent-lab-unrlvl.vercel.app`
+**PASSED.** blueprintStore Supabase-first. Fallback IndexedDB.
 
-🟢 **Patricia Osorio · Comunidad** (PatriciaOsorioComunidad)  
-  - Market: Miami, FL · Lang: es-FL
-  - Copy Profile: DONE — voice_writing_style=COMMUNITY_MOTIVATOR
-  - last_updated: 2026-04-04
+### BlueprintLab — `unrlvl-blueprint-lab.vercel.app`
+**PASSED.** En Vercel. Supabase integration compilada. 4 schemas: BP_PERSON/LOCATION/PRODUCT/COPY. UI de administración — no expone `/api/execute`.
 
-🟢 **Patricia Osorio · Vizos Salon** (PatriciaOsorioVizosSalon)  
-  - Market: Miami, FL · Lang: es-FL
-  - Copy Profile: DONE — voice_writing_style=LUXURY_EXPERT
-  - last_updated: 2026-04-04
+### OnboardingApp — `unrlvl-onboarding-app.vercel.app`
+**PASSED — Phase 4 completa.** Escribe 8 tablas: brands, humanize_profiles, compliance_rules, brand_palette, brand_typography, brand_goals, brand_personas, geomix.
 
-🟡 **Neurone South & Central Florida** (NeuroneSCF)  
-  - Market: South & Central Florida, USA · Lang: es-FL
-  - Data: humanize/goals/personas/geomix completos. copy_profile PENDIENTE. Shopify precios pendientes.
-  - last_updated: 2026-04-05
+### Orchestrator — `orchestrator.vercel.app`
+**PASSED.** Claude server-side. 4 labs activos: CopyLab → WebLab → ImageLab → SocialLab. Checkpoint gates ThumbsUp/ThumbsDown. VideoLab y VoiceLab en lab_configs pero `active: false`.
 
-🟡 **ForumPHs** (ForumPHs)  
-  - Market: Panama · Lang: es-PA
-  - Data: Datos en Supabase pendientes — onboarding via OnboardingApp.
-  - last_updated: 2026-04-05
-
-🟢 **Unrealville Studio** (UnrealvilleStudio)  
-  - Market: Florida USA + LATAM + Espana · Lang: en/FL
-  - Industry: Brand Intelligence Infrastructure
-  - Data: brand_context/tagline/industry/positioning/key_messages/goals/personas/geomix/brand_languages completos. humanize/palette/typography/copy_profile pendientes.
-  - last_updated: 2026-04-06
-
-🟢 **Unrealville Stores** (UnrealvilleStores)  
-  - Market: Florida USA — expansion USA · Lang: es-FL
-  - Data: brand_context/story/icp/goals/personas/geomix completos. humanize/palette/typography pendientes.
-  - last_updated: 2026-03-30
+### Social Media Agent — `unrlvl-social-media-agent.vercel.app`
+**Producción NeuroneSCF.** Claude Sonnet 4 + @vercel/kv 90 días. Export: `GET /api/export?secret=[URL-encoded]`.
 
 ---
 
-## PROYECTOS ESPECIALES
+## CAPA B — BLOQUEADOS POR ASSETS EXTERNOS
 
-**PsychoLayer** — PRODUCTION — integrado en ImageLab + CopyLab Layer 11  
-Presets activos: PSY-URGENCY, PSY-SCARCITY, PSY-AUTHORITY, PSY-BELONGING, PSY-FOMO, PSY-TRUST, PSY-IDENTITY, PSY-ASPIRATION, PSY-CURIOSITY, PSY-SOCIAL-PROOF  
-Integrado: ImageLab (buildPsychoVisualInjection) + CopyLab Layer 11.  
-Pendiente: injection_copy CopyLab SMPC · SocialLab · VideoLab · VoiceLab.
+### VideoLab — `unrlvl-video-lab.vercel.app`
+Storyboard operativo. Supabase via videoLabLoader. Sin motor real — HeyGen/Kling sin cuentas. **Próximo sprint:** `/api/execute` + cuentas + activar lab_configs.
 
-**LoRA Models** — PENDIENTE — no iniciado  
-Objetivo: identidad visual consistente PO via FLUX LoRA (Replicate/Fal.ai).  
-Bloqueado: cuentas + validación fotos PO.
-
-**Voice Cloning** — PENDIENTE — proveedor decidido, assets pendientes  
-Provider: ElevenLabs (FINAL). Bloqueado: audio PO + cuenta + API key.
+### VoiceLab — `unrlvl-voice-lab.vercel.app`
+ElevenLabs decidido. `voicelab_params.engine = elevenlabs_turbo_v2`. Bloqueante: audio PO (3-10 min) + cuenta ElevenLabs.
 
 ---
 
-## LOS 3 GAPS PRINCIPALES
+## MARCAS — DATOS EN SUPABASE
 
-1. **Datos incompletos por marca** — humanize_profiles, brand_palette, brand_typography, brand_copy_profiles para múltiples marcas. Sin estos datos los Labs generan outputs sin ADN real.
-2. **VideoLab + VoiceLab sin cuentas externas** — HeyGen/Kling/ElevenLabs bloquean producción AV completa.
-3. **OAuth Social pendiente** — SocialLab escribe en scheduled_posts pero no publica. Meta/TikTok OAuth por marca es el último paso.
+| Marca | humanize | goals | personas | geomix | copy_profile | palette | typography |
+|---|---|---|---|---|---|---|---|
+| NeuroneSCF | ⚠️ parcial | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
+| PatriciaOsorioPersonal | ❌ | ❌ | ❌ | ❌ | ✅ AUTHORITY_EDU | ❌ | ❌ |
+| PatriciaOsorioComunidad | ❌ | ❌ | ❌ | ❌ | ✅ COMMUNITY_MOTIVATOR | ❌ | ❌ |
+| PatriciaOsorioVizosSalon | ✅ | ❌ | ❌ | ❌ | ✅ LUXURY_EXPERT | ❌ | ❌ |
+| DiamondDetails | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| D7Herbal | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| VizosCosmetics | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| VivoseMask | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| ForumPHs | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| UnrealvilleStudio | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
 
 ---
 
-## AGENDA PRÓXIMA SESIÓN
+## LOS 3 GAPS PRINCIPALES HOY
 
-- PRIORIDAD 0 — AGENTE SMA: Neurone SCF — Laura adquiere numero fisico dedicado (SIM T-Mobile/AT&T prepago Miami). PO confirma acceso a 7 aliases email.
-- PRIORIDAD 1 — DATOS: Onboarding de todas las marcas pendientes via OnboardingApp (ForumPHs, VivoseMask, PO×3 humanize, DiamondDetails goals/personas, VizosCosmetics goals/personas)
-- PRIORIDAD 1 — DATOS: BP_COPY_1.0 para NeuroneSCF + ForumPHs + UnrealvilleStudio via BlueprintLab
-- PRIORIDAD 1 — DATOS: Hex codes reales de paleta y tipografia para todas las marcas (solo Sam los tiene)
-- PRIORIDAD 2 — SPRINT VideoLab: Abrir cuentas HeyGen + Kling → implementar /api/execute en VideoLab → activar en lab_configs → Orchestrator orquesta video completo
-- PRIORIDAD 2 — CUENTAS: ElevenLabs + audio PO → voice clone → VoiceLab activo
-- PRIORIDAD 3 — SPRINT OAuth: Meta/TikTok OAuth por marca → SocialLab publica real (scheduled_posts → publicado)
-- PRIORIDAD 3 — ForumPHs Speaks: Migrar API key browser → AgentLab serverless apps/forumphs-speaks/
-- PRIORIDAD 4 — LoRA Models: Cuenta Replicate/Fal.ai + validar fotos PO + entrenar modelo
-- PRIORIDAD 4 — TESTING: Verificar flujo completo Orchestrator con NeuroneSCF (CopyLab → ImageLab → WebLab → SocialLab)
+1. **Datos de marca incompletos** — humanize, goals, personas, geomix, copy_profile vacíos para la mayoría. OnboardingApp y BlueprintLab pueden resolverlo.
+2. **VideoLab sin motor real** — código y Supabase listos. Bloqueado por cuentas HeyGen/Kling.
+3. **SocialLab sin publicación real** — pipeline genera y encola en `scheduled_posts`. OAuth Meta/TikTok es el único bloqueante.
+
+---
+
+*Regenerado desde ecosystem.json v2026-04-05b · Claude Sonnet 4.6*

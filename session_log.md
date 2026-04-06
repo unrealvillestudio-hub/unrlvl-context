@@ -1,44 +1,71 @@
-# SESSION LOG — UNRLVL Ecosystem
+# Session Log — Ecosistema UNRLVL
+*Fuente única de verdad para el historial de sesiones del ecosistema.*
 
 ---
 
-## 2026-04-06 — Sesión doble: Brand Identity + Social Media Agent fixes
+## 2026-04-05 — Sprint Final + Costos Operativos Cerrados
 
-**Archivos modificados:** ecosystem.json · agents/social-media-agent/session_log.md
-**Archivos nuevos en AgentLab:** chat.js · export.js · migrate.js
+**Conducted by:** Claude Sonnet 4.6
 
-### UnrealvilleStudio — Supabase + ecosystem.json
-- `tagline` → `"Not for everyone."`
-- `industry` / `positioning` → `"Brand Intelligence Infrastructure"`
-- `language_primary` → `en/FL` · `language_secondary` → `es/FL`
-- `brand_context` reescrito en afirmativo con 7 Intelligence Layers
-- `diferenciador_base` reescrito (sin posicionamiento defensivo)
-- `key_messages` → 5 mensajes actualizados
-- `brand_languages` → UnrealvilleStudio (en-FL + es-FL) + PO×3 (en-FL añadido)
-- Columnas redundantes `language_secondary/tertiary/quaternary` en `brands` creadas y eliminadas
-- BP_BRAND v1.2 ES + EN entregados (chevron blinking, ICR, 7 capas, STUDIO estandarizado, portafolio completo)
+### Resuelto en esta sesión
 
-### Social Media Agent — Sistema de logging completo
-**Problema identificado:** export solo devolvía resumen manual (comando Actualiza). Laura/PO no tenían logging. session_log.md del agente desactualizado desde 2026-03-23.
+**Código — todos deployados en verde:**
+- Orchestrator: interpret-intent Claude server-side, executeStage real via lab_configs, brands canónicos
+- OnboardingApp Phase 4: 8 tablas (brand_goals, brand_personas, geomix añadidos)
+- SocialLab: CopyLabImportPanel integrado, Gemini eliminado
+- AgentLab: blueprintStore Supabase-first
+- ImageLab: PsychoLayerSelector wired, import path bug corregido
+- BlueprintLab: confirmado en Vercel, URL corregida en lab_configs
 
-**Solución implementada:**
-- `chat.js` — raw log automático por usuario en cada exchange. Backfill de historial existente en primera sesión post-deploy. Token registry para tracking de usuarios activos.
-- `export.js` — reescrito: lee registry → devuelve historial completo por usuario (Laura/Sam/Paty), agrupado por día, con timestamps y mensajes en detalle.
-- `migrate.js` — nuevo endpoint de backfill proactivo. Ejecutado exitosamente: Laura 2 exchanges, Sam 3 exchanges, Paty 1 exchange recuperados.
-- `agents/social-media-agent/session_log.md` — actualizado con estado real: aliases completados, número físico pendiente, BM/IG/WABA/TikTok pendientes, decisiones de dirección documentadas.
+**Supabase:**
+- CREATE TABLE scheduled_posts
+- lab_configs: 8 labs + lab_key canónico. 4 activos.
+- RLS security fixes en lab_configs y brand_social_accounts
+- DB usage: 14MB / 500MB (2.8%)
 
-**Actividad real descubierta en el agente:**
-- Laura: preguntó sobre TikTok Shop (necesita dirección comercial). Decisión: diferir TikTok Shop.
-- Sam: intentó retomar contexto, agente no cargaba session_log correctamente.
-- Paty: sesión sin continuidad por mismo problema.
+**Social Media Agent — fix protocolo Actualiza:**
+- Export endpoint funciona con query param: `GET /api/export?secret=[URL-encoded]`
+- Secret tiene caracteres especiales que requieren URL encoding: %40 %24 %5E %26
 
-### Social Media Agent — Rutas de commit
-- `AgentLab/apps/assistant/api/chat.js` → modificado
-- `AgentLab/apps/assistant/api/export.js` → modificado  
-- `AgentLab/apps/assistant/api/migrate.js` → nuevo
-- `unrlvl-context/agents/social-media-agent/session_log.md` → modificado
+**Costos operativos — definidos y cerrados:**
+- Total mensual: $457-507/mes
+- Stack avatares: ElevenLabs (voces reales) + Chatterbox/Fal.ai (sintéticas) + HeyGen + Kling + Fal.ai LoRA
+- Vercel: upgrade a Pro INMEDIATO requerido ($20/mes)
+- Supabase: free plan suficiente hasta ~400MB
+- Shopify: solo NeuroneSCF ($39/mes)
+- Claude.ai Pro Max ×5: ~$115/mes (interfaz de trabajo)
+- HeyGen: $29 plan + $87 add-ons (3 avatares) + ~$50 API credits = ~$166/mes
+
+### Próxima actividad prioritaria
+1. ⚠️ Upgrade Vercel Hobby → Pro — inmediato
+2. Onboarding marcas pendientes via OnboardingApp
+3. BP_COPY_1.0 NeuroneSCF via BlueprintLab
+4. Abrir cuentas ElevenLabs + HeyGen + Kling + Fal.ai
+5. Sprint VideoLab → Orchestrator
 
 ---
 
-## Sesiones anteriores — ver ecosystem.json `last_audit.resolved_since_last_session`
+## 2026-04-04 — Sprint 4: CopyLab Layer 13 + SocialLab Bridge + AgentLab
 
+CopyLab v8.0: SMPC Layer 13 BP_COPY_1.0. 7 perfiles activos.
+SocialLab: copyLabBridge + CopyLabImportPanel. brand_social_accounts creada.
+AgentLab: geminiService eliminado. blueprintSupabaseLoader + blueprintCopyProfileLoader generados.
+ImageLab: psychoPresetLoader + PsychoLayerSelector generados.
+VoiceLab: ElevenLabs decidido (no TenzorArt, no Fish Audio). elevenlabs_turbo_v2.
+Supabase v1.8: brand_social_accounts.
+
+---
+
+## 2026-04-03 — Sprint 3: ImageLab + WebLab + CopyLab Supabase
+
+ImageLab: Supabase DONE. NeuroneSCF configurada. psycho_presets creados.
+CopyLab: brand_goals + brand_personas en SMPC.
+WebLab: webBrandLoader.ts Supabase completo.
+Supabase v1.7: psycho_presets, web_default_platform, imagelab_*.
+
+---
+
+## 2026-04-02 — Audit completo del ecosistema
+
+17 componentes auditados. ecosystem.md + ecosystem_filemap.md generados.
+Producción real: CopyLab, WebLab, ImageLab, OnboardingApp, Social Media Agent, UNRLVL-OPS.

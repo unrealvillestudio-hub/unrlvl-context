@@ -1,107 +1,225 @@
-# UNRLVL ECOSYSTEM — Mapa de Dependencias y Flujos
-_version: 2026-04-06b · generado por Claude_
+# UNRLVL Ecosystem Filemap — Mapa de Dependencias
+*Versión: 2026-04-05b · Generado desde ecosystem.json · No editar directamente*
 
 ---
 
-## CONVENCIONES
+## SEPARACIÓN PRODUCCIÓN / INTERNO
 
-- ACTIVO — flujo funcional end-to-end  
-- BLOQUEADO — flujo roto, causa identificada  
-- PENDIENTE — no iniciado  
-- Brand IDs canónicos: camelCase (DiamondDetails, NeuroneSCF, etc.)
+### PRODUCCIÓN (sirven a marcas y clientes)
+```
+Labs activos:   CopyLab · WebLab · ImageLab · SocialLab · AgentLab · BlueprintLab · OnboardingApp · Orchestrator
+Agentes:        Social Media Agent · ForumPHs Speaks (testing)
+Labs bloqueados: VideoLab (HeyGen/Kling) · VoiceLab (ElevenLabs/audio PO)
+Asset repos:    BluePrints · Shopify
+```
 
----
-
-## FLUJOS ACTIVOS
-
-    Sam / Claude
-        |
-        |-- OnboardingApp ──────────────── Supabase (8 tablas)
-        |     brands/humanize/compliance/palette/typography/goals/personas/geomix
-        |
-        |-- BlueprintLab ────────────────── Supabase
-        |     person_blueprints / brand_copy_profiles
-        |
-        |-- Orchestrator ── /api/interpret-intent (Claude)
-        |     |
-        |     |-- CopyLab   /api/execute  ACTIVO
-        |     |-- WebLab    /api/execute  ACTIVO
-        |     |-- ImageLab  /api/execute  ACTIVO
-        |     |-- SocialLab /api/execute  ACTIVO → scheduled_posts
-        |     |-- VideoLab  /api/execute  BLOQUEADO sin HeyGen/Kling keys
-        |     +-- VoiceLab  /api/execute  BLOQUEADO sin ElevenLabs key
-        |
-        |-- SocialLab (standalone)
-        |     CopyLabImportPanel → parseCopyLabInput() → /api/generate-post
-        |     └── scheduled_posts (Supabase) → OAuth pendiente → publicacion real
-        |
-        +-- AgentLab
-              |-- Social Media Agent (NeuroneSCF)
-              |     chat.js: raw_log por usuario ACTIVO
-              |     export.js: detalle por usuario ACTIVO
-              |     migrate.js: backfill historico ACTIVO
-              |     KV registry: LAURA/SAMDEV/PATRICIA
-              +-- ForumPHs Speaks (testing, API key browser pendiente serverless)
+### INTERNO / OPERATIVO
+```
+Contexto:  Context System · Session Protocol · UNRLVL-PROJECT Dashboard
+Gestión:   UNRLVL-OPS
+```
 
 ---
 
-## FLUJOS ROTOS
+## FLUJOS ACTIVOS (producción real hoy)
 
-| Flujo | Causa | Accion |
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO A: COPY GENERATION                                       │
+│                                                                 │
+│  Sam → CopyLab UI                                               │
+│    → fetchBrandContext() [24 queries || Supabase]               │
+│       brands · goals · personas · idioma · canal                │
+│       humanize · geomix · keywords · cta · compliance           │
+│       brand_copy_profiles (Layer 11 BP_COPY_1.0)               │
+│    → buildCopyPrompt() [13 capas SMPC]                          │
+│    → /api/claude.ts [Claude Sonnet 4]                           │
+│    → Output copy                                                │
+│                                                                 │
+│  brand_copy_profiles ←── BlueprintLab (BP_COPY_1.0)            │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO B: IMAGE GENERATION + PSYCHO LAYER                       │
+│                                                                 │
+│  Sam → ImageLab UI                                              │
+│    → BrandsProvider [brands desde Supabase]                     │
+│    → brandLoader.ts [imagelab_presets por canal]                │
+│    → PsychoLayerSelector [psycho_presets desde Supabase]       │
+│    → PromptPackModule: finalPrompt += buildPsychoVisualInjection│
+│    → Gemini 2.5 Flash → Google Imagen 3                         │
+│    → Output imagen                                              │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO C: ORCHESTRATOR PIPELINE (4 labs activos)                │
+│                                                                 │
+│  Sam → Orchestrator UI → prompt libre                           │
+│    → /api/interpret-intent [Claude Sonnet 4]                    │
+│       lee brands desde Supabase → genera plan de stages         │
+│    → lab_configs [Supabase] → endpoints de cada lab             │
+│    → executeStage() → POST /api/execute por lab                 │
+│         CopyLab ✅ → copia en Supabase + output copy            │
+│         ImageLab ✅ → genera imagen via Gemini                  │
+│         WebLab ✅ → genera HTML/Liquid                          │
+│         SocialLab ✅ → adapta copy → scheduled_posts Supabase  │
+│    → Checkpoint gates (ThumbsUp/ThumbsDown) por stage           │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO D: ONBOARDING → SUPABASE (8 tablas)                      │
+│                                                                 │
+│  Sam → OnboardingApp → brief narrativo libre (Phase 1)          │
+│    → Claude genera StructuredBrandContext JSON (Phase 2)        │
+│    → Gap interview (Phase 3)                                    │
+│    → writeBrandToSupabase() (Phase 4):                         │
+│         brands ✅                                               │
+│         humanize_profiles ✅                                    │
+│         compliance_rules ✅                                     │
+│         brand_palette ✅ (sugerencias AI)                       │
+│         brand_typography ✅ (sugerencias AI)                    │
+│         brand_goals ✅ NEW                                      │
+│         brand_personas ✅ NEW                                   │
+│         geomix ✅ NEW                                           │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO E: BLUEPRINT → SUPABASE → LABS                           │
+│                                                                 │
+│  Sam → BlueprintLab (unrlvl-blueprint-lab.vercel.app)           │
+│    → BP_COPY_1.0 editor → saveCopyProfile()                     │
+│    → brand_copy_profiles [Supabase]                             │
+│    → CopyLab query #24 → SMPC Layer 11 injection ✅             │
+│                                                                 │
+│  BP_PERSON/LOCATION/PRODUCT → Supabase tablas                   │
+│    → AgentLab blueprintStore.ts loadAllBlueprints() ✅          │
+│    → VideoLab videoLabLoader.ts [persons/locations] ✅           │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## FLUJOS BLOQUEADOS POR ASSETS EXTERNOS
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO F: ORCHESTRATOR → VIDEOLAB (PRÓXIMO SPRINT)             │
+│                                                                 │
+│  Orchestrator interpreta prompt con video                       │
+│    → lab_configs: videolab active = false ← BLOQUEADO          │
+│    → VideoLab no tiene /api/execute ← PENDIENTE                │
+│                                                                 │
+│  PARA ACTIVAR:                                                  │
+│  1. Abrir cuenta HeyGen + API key                               │
+│  2. Implementar VideoLab/api/execute.ts                         │
+│       → recibe brandId + stage + previousOutputs.copylab        │
+│       → construye storyboard desde CopyLab script output        │
+│       → llama HeyGen API → genera video                         │
+│  3. UPDATE lab_configs SET active=true WHERE lab_key='videolab' │
+└─────────────────────────────────────────────────────────────────┘
+
+VoiceLab:  voicelab_params [Supabase, listo] · engine=elevenlabs_turbo_v2
+           NECESITA: audio PO 3-10min + cuenta ElevenLabs + API key
+
+SocialLab: scheduled_posts [Supabase, activo — se puebla via Orchestrator]
+           NECESITA: OAuth Meta/TikTok por marca para publicación real
+           STATUS: post encolado → pending_oauth → publicado (cuando OAuth listo)
+```
+
+---
+
+## SUPABASE v1.9 — MAPA DE TABLAS
+
+### Tablas activas con datos
+```
+brands (11)              ← todas las marcas del ecosistema
+humanize_profiles        ← 6 marcas + DEFAULT global
+brand_languages          ← todas
+brand_services           ← todas
+brand_goals              ← NeuroneSCF, PO×3, UNRLVL, Stores
+brand_personas           ← NeuroneSCF, PO×3, UNRLVL, Stores
+geomix                   ← NeuroneSCF, DiamondDetails, D7Herbal, UNRLVL, Stores
+keywords (458)           ← multi-marca
+ctas (55)                ← multi-marca
+compliance_rules (10)    ← DEFAULT + por marca
+output_templates (22)    ← todos los formatos CopyLab
+canal_blocks (17)        ← todos los canales
+channel_prompt_rules     ← reglas por canal
+imagelab_presets (7)     ← global + NeuroneSCF
+psycho_presets (10)      ← todos los objetivos psicográficos
+brand_copy_profiles (7)  ← PO×3, D7H, VivoseMask, DiamondD, VizosC
+voicelab_params (8)      ← todas las marcas, voice_id=TBD_*
+videolab_params (6)      ← todas las marcas
+person_blueprints (5)    ← PO×3 + NeuroneSCF personas
+location_blueprints (7)  ← locaciones PO + NeuroneSCF
+product_blueprints (41)  ← 39 NeuroneSCF + 2 otros
+blueprint_schemas (4)    ← BP_PERSON/LOCATION/PRODUCT/COPY v1.0
+lab_configs (8)          ← 8 labs, 4 activos, 4 inactivos
+scheduled_posts          ← SocialLab queue (se puebla via Orchestrator)
+brand_social_accounts    ← creada, pendiente OAuth tokens
+```
+
+### Tablas vacías / pendientes de poblar
+```
+brand_palette            ← hex codes pendientes de Sam
+brand_typography         ← tipografías pendientes de Sam
+brand_assets             ← URLs fotos BluePrints repo pendientes
+platform_configs         ← configuración por plataforma social
+agents                   ← Agent deployments config
+agent_flows              ← flujos de agentes
+```
+
+---
+
+## COMMITS PENDIENTES DE SAM (ninguno de código — solo datos)
+
+Todo el código está commiteado y deployado. Los únicos pendientes son:
+```
+Acción                              Herramienta        Impacto
+──────────────────────────────────────────────────────────────
+Onboarding ForumPHs                 OnboardingApp      CopyLab funciona para ForumPHs
+Onboarding PO×3 humanize            OnboardingApp      Voz específica en CopyLab/WebLab
+Onboarding VivoseMask completo      OnboardingApp      Voz + goals + personas
+Hex codes paleta todas las marcas   Supabase / Sam     WebLab genera con colores reales
+BP_COPY_1.0 NeuroneSCF              BlueprintLab       CopyLab Layer 11 para Neurone
+Audio limpio PO (3-10 min)          Sam coordina PO    Desbloquea VoiceLab + VideoLab
+Cuenta ElevenLabs                   Sam abre cuenta    API key → voicelab_params
+Cuenta HeyGen                       Sam abre cuenta    Sprint VideoLab → Orchestrator
+```
+
+---
+
+## ROADMAP PRIORIZADO
+
+| Prioridad | Sprint | Impacto |
 |---|---|---|
-| VideoLab generacion | Sin cuentas HeyGen + Kling | Abrir cuentas → API keys → /api/execute |
-| VoiceLab sintesis | Sin ElevenLabs + voice_ids TBD | Audio PO → ElevenLabs clone → voice_id |
-| SocialLab publicacion real | OAuth Meta/TikTok pendiente | Sprint OAuth por marca |
-| ForumPHs Speaks serverless | API key en browser | Migrar a AgentLab apps/forumphs-speaks/ |
-| ImageLab brand_assets | Tabla vacia | Poblar URLs desde BluePrints repo |
-| SMA session_log.md | Archivo desactualizado (2026-03-23) | Actualizar en repo unrlvl-context PENDIENTE |
+| 🔴 INMEDIATO | Datos via OnboardingApp | Desbloquea CopyLab/WebLab con voz real para todas las marcas |
+| 🔴 INMEDIATO | BP_COPY NeuroneSCF via BlueprintLab | Cliente principal con voz real en SMPC |
+| 🔴 INMEDIATO | Hex codes paleta (Sam) | WebLab genera con identidad visual real |
+| 🟡 CORTO | Sprint VideoLab → Orchestrator | Pipeline completo con video. Cuentas HeyGen/Kling. |
+| 🟡 CORTO | ElevenLabs + audio PO | VoiceLab activo + VideoLab talking head |
+| 🟡 MEDIO | OAuth Meta/TikTok | SocialLab publica real (scheduled_posts → live) |
+| 🟢 LARGO | ForumPHs Speaks → AgentLab serverless | Eliminar API key en browser |
+| 🟢 LARGO | LoRA Models PO | Consistencia visual en ImageLab/VideoLab |
 
 ---
 
-## SUPABASE — TABLAS ACTIVAS (v1.9 — 33 tablas)
+## IDs CANÓNICOS DE MARCA
 
-Tablas core: brands · brand_languages · brand_goals · brand_personas · humanize_profiles  
-Labs: product_blueprints · person_blueprints · location_blueprints · brand_copy_profiles  
-Social: scheduled_posts · brand_social_accounts · platform_configs  
-Config: lab_configs (8 labs) · psycho_presets (10 presets) · compliance_rules  
-Assets: brand_assets (vacia) · brand_palette · brand_typography  
-Geo/SEO: geomix · keywords · seo_meta · ctas
-
----
-
-## BRAND IDs CANONICOS
-
-| ID Canonico | Inconsistencias conocidas |
+| ID canónico | Nombre visible |
 |---|---|
-| DiamondDetails | VoiceLab usa diamond_details |
-| NeuroneSCF | WebLab interno usa neuroneCosmetics (auto-traducido) |
-| D7Herbal | AgentLab Builder usa d7-herbal |
-| UnrealvilleStudio | industry/positioning/tagline actualizados 2026-04-06 |
+| `NeuroneSCF` | Neurone South & Central Florida |
+| `PatriciaOsorioPersonal` | Patricia Osorio · Personal |
+| `PatriciaOsorioComunidad` | Patricia Osorio · Comunidad |
+| `PatriciaOsorioVizosSalon` | Patricia Osorio · Vizos Salón |
+| `DiamondDetails` | Diamond Details |
+| `D7Herbal` | D7 Herbal |
+| `VivoseMask` | Vivosé Mask |
+| `VizosCosmetics` | Vizos Cosmetics |
+| `ForumPHs` | ForumPHs |
+| `UnrealvilleStudio` | Unrealville Studio |
+| `UnrealvilleStores` | Unrealville Stores |
 
 ---
 
-## SOCIAL MEDIA AGENT — ESTADO LOGGING
-
-KV Keys activos:
-- raw_log:LAURA — 2 exchanges (backfilled)
-- raw_log:SAMDEV — 3 exchanges (backfilled)  
-- raw_log:PATRICIA — 1 exchange (backfilled)
-- log_registry:SOCIAL-MEDIA-AGENT — 3 usuarios registrados
-- agent_log:SOCIAL-MEDIA-AGENT — resumen 2026-03-23
-
-A partir de ahora: cada exchange se logea automaticamente en tiempo real.
-Export en: /api/export?secret=*** — detalle completo por usuario, agrupado por dia.
-
----
-
-## ROADMAP PRIORIZADO POR IMPACTO
-
-1. INMEDIATO: Neurone SCF — numero fisico Laura + acceso aliases PO
-2. INMEDIATO: Datos faltantes por marca → OnboardingApp + BlueprintLab
-3. INMEDIATO: BP_COPY_1.0 NeuroneSCF + ForumPHs + UnrealvilleStudio → BlueprintLab
-4. SPRINT: HeyGen + Kling cuentas → VideoLab motor real
-5. SPRINT: ElevenLabs + audio PO → VoiceLab activo
-6. SPRINT: OAuth Meta/TikTok → SocialLab publicacion autonoma
-7. PROYECTO: LoRA Models PO → ImageLab identidad consistente
-8. PENDIENTE: ForumPHs Speaks → AgentLab serverless
-
+*Regenerado desde ecosystem.json v2026-04-05a · Claude Sonnet 4.6*
