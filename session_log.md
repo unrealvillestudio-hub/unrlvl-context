@@ -1,96 +1,44 @@
-# Session Log — Ecosistema UNRLVL
-*Fuente única de verdad para el historial de sesiones de trabajo del ecosistema.*
+# SESSION LOG — UNRLVL Ecosystem
 
 ---
 
-## 2026-04-05 — Sprint Final: Ecosistema 100% Conectado
+## 2026-04-06 — Sesión doble: Brand Identity + Social Media Agent fixes
 
-**Duración:** Sesión completa
-**Conducted by:** Claude Sonnet 4.6
+**Archivos modificados:** ecosystem.json · agents/social-media-agent/session_log.md
+**Archivos nuevos en AgentLab:** chat.js · export.js · migrate.js
 
-### Resuelto en esta sesión
+### UnrealvilleStudio — Supabase + ecosystem.json
+- `tagline` → `"Not for everyone."`
+- `industry` / `positioning` → `"Brand Intelligence Infrastructure"`
+- `language_primary` → `en/FL` · `language_secondary` → `es/FL`
+- `brand_context` reescrito en afirmativo con 7 Intelligence Layers
+- `diferenciador_base` reescrito (sin posicionamiento defensivo)
+- `key_messages` → 5 mensajes actualizados
+- `brand_languages` → UnrealvilleStudio (en-FL + es-FL) + PO×3 (en-FL añadido)
+- Columnas redundantes `language_secondary/tertiary/quaternary` en `brands` creadas y eliminadas
+- BP_BRAND v1.2 ES + EN entregados (chevron blinking, ICR, 7 capas, STUDIO estandarizado, portafolio completo)
 
-**Orchestrator — Sprint completo:**
-- `api/interpret-intent.ts` — Gemini client-side reemplazado por Claude Sonnet 4 server-side
-- `src/services/orchestratorEngine.ts` — `executeStage()` real via `lab_configs` Supabase (no mock)
-- `src/services/brandsLoader.ts` — brands desde Supabase con fallback
-- `src/config/brands.ts` — IDs canónicos corregidos (UnrealIlleStudio → UnrealvilleStudio, NeuroneCosmetics → NeuroneSCF)
-- `api/execute.ts` — generado para CopyLab, WebLab, ImageLab, SocialLab
-- Supabase: `CREATE TABLE scheduled_posts` (SocialLab queue)
-- Supabase: `lab_configs` poblada con 8 labs + `lab_key` canónico. 4 activos: copylab, weblab, imagelab, sociallab
-- RLS security fix: eliminadas políticas `anon_write` permisivas en `lab_configs` y `brand_social_accounts`
-- BlueprintLab: URL corregida en `lab_configs` a `unrlvl-blueprint-lab.vercel.app` (estaba en Google AI Studio)
+### Social Media Agent — Sistema de logging completo
+**Problema identificado:** export solo devolvía resumen manual (comando Actualiza). Laura/PO no tenían logging. session_log.md del agente desactualizado desde 2026-03-23.
 
-**OnboardingApp — Phase 4 completa:**
-- `src/types/index.ts` — añadidas interfaces `BrandGoalDraft`, `BrandPersonaDraft`, `GeoMixDraft`; `StructuredBrandContext` extendida
-- `src/lib/brandWriter.ts` — secciones 6-8: escribe `brand_goals`, `brand_personas`, `geomix`
-- `src/modules/onboarding/prompts.ts` — PHASE2_SYSTEM_PROMPT genera los 3 schemas nuevos con campo `claude_reasoning`
-- `src/modules/onboarding/Phase4Summary.tsx` — checklist actualizado: 8 tablas mostradas
-- **OnboardingApp ahora escribe 8 tablas:** brands, humanize_profiles, compliance_rules, brand_palette, brand_typography, brand_goals, brand_personas, geomix
+**Solución implementada:**
+- `chat.js` — raw log automático por usuario en cada exchange. Backfill de historial existente en primera sesión post-deploy. Token registry para tracking de usuarios activos.
+- `export.js` — reescrito: lee registry → devuelve historial completo por usuario (Laura/Sam/Paty), agrupado por día, con timestamps y mensajes en detalle.
+- `migrate.js` — nuevo endpoint de backfill proactivo. Ejecutado exitosamente: Laura 2 exchanges, Sam 3 exchanges, Paty 1 exchange recuperados.
+- `agents/social-media-agent/session_log.md` — actualizado con estado real: aliases completados, número físico pendiente, BM/IG/WABA/TikTok pendientes, decisiones de dirección documentadas.
 
-**SocialLab — Integración CopyLabBridge:**
-- `PostBuilderModule.tsx` — import `CopyLabImportPanel` + handler `handleCopyLabImport` + `<CopyLabImportPanel>` en JSX
+**Actividad real descubierta en el agente:**
+- Laura: preguntó sobre TikTok Shop (necesita dirección comercial). Decisión: diferir TikTok Shop.
+- Sam: intentó retomar contexto, agente no cargaba session_log correctamente.
+- Paty: sesión sin continuidad por mismo problema.
 
-**AgentLab — Supabase-first:**
-- `blueprintStore.ts` — `hydrate()` ahora Supabase-first via `loadAllBlueprints()`, fallback IndexedDB
-
-**ImageLab — Psycho Layer wired:**
-- `PromptPackModule.tsx` — `PsychoLayerSelector` integrado, estado `psychoPreset`, pasado a `runPromptPack`
-- `promptpack.ts` — `psychoPreset` en params type + destructuring + `buildPsychoVisualInjection()` inyecta en `finalPrompt`
-- `PsychoLayerSelector.tsx` — bug de import path corregido (`../services/psychoPresetLoader` → `../psychoPresetLoader`)
-
-**BlueprintLab:**
-- Confirmado en Vercel READY (`unrlvl-blueprint-lab.vercel.app`). Supabase integration en JS compilado.
-- Aclaración arquitectural: BlueprintLab es UI de administración, no ejecutor. Orchestrator lee blueprints de Supabase directamente.
-
-### Estado final verificado
-
-| Lab | Vercel | Supabase | Orchestrator |
-|---|---|---|---|
-| CopyLab | ✅ READY | ✅ 100% | ✅ /api/execute activo |
-| WebLab | ✅ READY | ✅ 100% | ✅ /api/execute activo |
-| ImageLab | ✅ READY | ✅ 100% | ✅ /api/execute activo |
-| SocialLab | ✅ READY | ✅ 100% | ✅ /api/execute activo |
-| AgentLab | ✅ READY | ✅ 100% | — |
-| BlueprintLab | ✅ READY | ✅ 100% | — (UI admin) |
-| OnboardingApp | ✅ READY | ✅ 100% | — |
-| Orchestrator | ✅ READY | ✅ 100% | — |
-| VideoLab | ✅ READY | ✅ 100% | ❌ /api/execute pendiente |
-| VoiceLab | ✅ READY | ✅ 100% | ❌ bloqueado ElevenLabs |
-
-### Próxima actividad prioritaria
-**Sprint VideoLab → Orchestrator:**
-1. Abrir cuentas HeyGen + Kling → API keys en Vercel env vars VideoLab
-2. Implementar `VideoLab/api/execute.ts` (recibe CopyLab script → genera storyboard → HeyGen/Kling)
-3. `UPDATE lab_configs SET active=true WHERE lab_key='videolab'`
-4. Orchestrator orquesta flujos de video completo
+### Social Media Agent — Rutas de commit
+- `AgentLab/apps/assistant/api/chat.js` → modificado
+- `AgentLab/apps/assistant/api/export.js` → modificado  
+- `AgentLab/apps/assistant/api/migrate.js` → nuevo
+- `unrlvl-context/agents/social-media-agent/session_log.md` → modificado
 
 ---
 
-## 2026-04-04 — Sprint 4: CopyLab Layer 13 + SocialLab Bridge + AgentLab Gemini removal
+## Sesiones anteriores — ver ecosystem.json `last_audit.resolved_since_last_session`
 
-**Resuelto:**
-- CopyLab: SMPC Layer 13 BP_COPY_1.0 integrado — queries.ts query #24 + buildCopyPrompt.ts injection. 7 perfiles activos.
-- SocialLab: copyLabBridge.ts + CopyLabImportPanel.tsx generados. brand_social_accounts tabla creada en Supabase.
-- AgentLab: geminiService.ts ELIMINADO. TestMode migrado a /api/test-chat.ts (Claude server-side). blueprintSupabaseLoader.ts + blueprintCopyProfileLoader.ts generados.
-- ImageLab: psychoPresetLoader.ts + PsychoLayerSelector.tsx generados (integración en UI pendiente → resuelto 2026-04-05).
-- VoiceLab: DECISION proveedor: ElevenLabs (no Fish Audio, no TenzorArt). voicelab_params.engine = elevenlabs_turbo_v2.
-- Supabase v1.8: CREATE TABLE brand_social_accounts con RLS + índice unicidad.
-
----
-
-## 2026-04-03 — Sprint 3: ImageLab + WebLab + CopyLab Supabase integration
-
-**Resuelto:**
-- ImageLab: Supabase integration DONE — brands desde DB, NeuroneSCF configurada, psycho_presets creados (10 presets, tabla psycho_presets).
-- CopyLab: brand_goals + brand_personas conectados al SMPC (posiciones 2 y 3).
-- WebLab: webBrandLoader.ts — humanize/compliance/blueprint desde Supabase, fallback automático a hardcoded.
-- Supabase v1.7: CREATE TABLE psycho_presets (10 presets). ALTER TABLE brands ADD web_default_platform. UPDATE imagelab_* en 8 marcas.
-
----
-
-## 2026-04-02 — Audit completo del ecosistema
-
-**Audit:** 17 componentes auditados via lectura directa de código. Generados ecosystem.md y ecosystem_filemap.md.
-**Top gaps identificados:** SocialLab Gemini, Orchestrator mock, VideoLab/VoiceLab sin Supabase, brand_goals/personas vacíos, ForumPHs Speaks API key en browser.
-**Producción real confirmada:** CopyLab, WebLab, ImageLab, OnboardingApp, Social Media Agent, UNRLVL-OPS.
