@@ -5,6 +5,24 @@
 
 ---
 
+## 2026-04-06 — Sesiones Laura, Sam y Paty
+
+### LAURA (ops) — 2 intercambios
+- TikTok Shop: requiere dirección comercial (no residencial), Business License, EIN, warehouse address, tax documents.
+- Opciones: usar Vizos Salón si tiene licencia activa · virtual office (UPS Store/Regus) · diferir TikTok Shop.
+- Conflicto de direcciones: recomendación empezar con dirección de documentos oficiales para Meta BM + TikTok for Business + WABA. TikTok Shop diferir.
+
+### SAM (admin) — 3 intercambios
+- Diagnóstico: agente no tenía acceso al session_log de NeuroneSCF en Context System.
+- Path correcto: `unrlvl-context/brands/NeuroneSCF/session_log.md`
+- ⚠️ **GAP ACTIVO:** agente no puede leer el Context System directamente. Pendiente inyectar URL en system prompt.
+
+### PATY (po) — 1 intercambio
+- Primera sesión real. Agente presentó checklist de preparación (WiFi sin VPN, celular US, docs empresa, tarjeta US).
+- Patricia aún no ha retomado setup de infraestructura digital.
+
+---
+
 ## 2026-03-23 — Primera sesión Sam (SAMDEV)
 
 ### COMPLETADO
