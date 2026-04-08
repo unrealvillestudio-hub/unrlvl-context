@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-04-02-v6 | **Mantenido por:** Claude
+**Versión:** 2026-04-08-v7 | **Mantenido por:** Claude
 
 ---
 
@@ -105,6 +105,52 @@ Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez d
 
 ---
 
+## PUSH DIRECTO A GITHUB DESDE CLAUDE
+
+Claude puede hacer push directamente a cualquier repo de `unrealvillestudio-hub` sin GitHub Desktop.
+**Cuándo usarlo:** cambios en sesión activa sobre repos de código (CoreProject, WebLab, BluePrints, etc.)
+**Cuándo NO usarlo:** actualizaciones de contexto en `unrlvl-context` — esas siguen el flujo normal de outputs + GitHub Desktop para que Vercel redespliegue.
+
+### Cómo funciona
+
+Sam proporciona el PAT en el chat. Claude ejecuta en bash:
+
+```bash
+# 1. Clonar el repo
+git clone https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git /tmp/repo
+
+# 2. Editar archivos en /tmp/repo/
+
+# 3. Commit y push
+cd /tmp/repo
+git config user.email "sam@unrealvillestudio.com"
+git config user.name "Sam UNRLVL"
+git add [archivos]
+git commit -m "[mensaje]"
+git push https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git main
+```
+
+### Seguridad del PAT
+- El PAT actúa como credencial de escritura sobre los repos
+- Sam lo comparte en el chat cuando lo necesita — Claude lo usa para esa sesión
+- Se puede revocar en cualquier momento: GitHub → Settings → Developer Settings → Personal Access Tokens
+- PATs tienen fecha de expiración configurable — cuando expira Claude pide uno nuevo
+
+### Repos donde aplica este flujo
+| Repo | Cuándo hacer push directo |
+|---|---|
+| `CoreProject` | Actualizar CONTEXT.md, FILEMAP.md, workflows, assets |
+| `WebLab` | Fixes de código, config, componentes |
+| `BluePrints` | Añadir/organizar assets de marca |
+| `AgentLab` / otros labs | Fixes, componentes, configuración |
+
+### Repos que NO usan este flujo
+| Repo | Motivo |
+|---|---|
+| `unrlvl-context` | Requiere Vercel redeploy → usar outputs + GitHub Desktop |
+
+---
+
 ## ACTUALIZACIÓN DIARIA
 
 Claude pregunta una vez al día al detectar que Sam está por irse:
@@ -133,7 +179,7 @@ Claude pregunta una vez al día al detectar que Sam está por irse:
 | Agente | URL | Export endpoint | Marca |
 |---|---|---|---|
 | Social Media Agent | `unrlvl-social-media-agent.vercel.app` | `/api/export` | NeuroneSCF |
-| ForumPHs Speaks | `unrlvl-forumphs-speaks.vercel.app` (pendiente deploy) | `/api/export` | ForumPHs |
+| ForumPHs Speaks | `forumphs-speaks.vercel.app` | `/api/export` | ForumPHs |
 
 **Flujo del agente:**
 1. Laura/PO trabaja con el agente → escribe "Actualiza" → agente guarda log en KV
