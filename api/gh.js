@@ -18,19 +18,26 @@ export default async function handler(req, res) {
   };
 
   try {
-    // List all repos — no repo param needed
     if (action === 'repos') {
-      const url = `https://api.github.com/orgs/${ORG}/repos?per_page=100&sort=updated`;
+      // Fine-grained PATs don't support /orgs/ — use /user/repos filtered by org
+      const url = `https://api.github.com/user/repos?per_page=100&sort=updated&affiliation=owner,organization_member`;
       const r = await fetch(url, { headers });
       if (!r.ok) return res.status(r.status).json({ error: `GitHub ${r.status}` });
       const data = await r.json();
+      const filtered = data.filter(r => r.owner.login === ORG);
       return res.status(200).json({
         org: ORG,
-        repos: data.map(r => ({ name: r.name, private: r.private, updated: r.updated_at, default_branch: r.default_branch }))
+        count: filtered.length,
+        repos: filtered.map(r => ({
+          name: r.name,
+          private: r.private,
+          updated: r.updated_at,
+          default_branch: r.default_branch,
+          description: r.description
+        }))
       });
     }
 
-    // All other actions require repo
     if (!repo) return res.status(400).json({ error: 'repo param required' });
 
     if (action === 'file') {
