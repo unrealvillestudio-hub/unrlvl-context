@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-10a",
+    "version": "2026-04-10b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -18,15 +18,33 @@
     },
     "last_audit": {
       "date": "2026-04-10",
-      "status": "HQ address updated to North Miami FL 33181. Blink animation canonicalizada: prompt-blink 1.1s step-end. SVG assets corregidos. brand.json v1.2 creado. Footer golden rule documentada.",
+      "status": "unrealvillestudio.com LIVE. Vercel Pro upgrade. www dominio configurado. Brand system Unrealville completo v1.2. BluePrints estructura clarificada.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
-        "HQ address: Hollywood FL 33021 → 12951 Biscayne Blvd, North Miami FL 33181 (co-location Vizos Cosmetics).",
-        "Blink animation canonicalizada: chev-listen 0.9s ease-in-out → prompt-blink 1.1s step-end (terminal cursor rhythm). BP_BRAND ES + EN + SVGs actualizados.",
-        "SVG assets corregidos: UNRLVL_Logo_drk/lght.svg + UNRLVL_Favicon.svg — chevron #00e2ff → #00FFD1, bg transparent declarado, CSS blink embebido.",
-        "Footer golden rule añadida a BP_BRAND_v1.2 (ES + EN): en outputs para clientes Col1 = logo cliente siempre, nunca UNRLVL.",
-        "brand.json v1.2 creado desde cero para Unrealville Studio — source of truth estructurada para Claude.",
-        "ForumPHs Speaks signature: referencia chev-listen deprecada → prompt-blink es la animación canónica en v1.2."
+        "unrealvillestudio.com publicado — index.html deployado en CoreProject, dominio conectado via GoDaddy DNS A record 216.198.79.1.",
+        "Vercel Pro upgrade completado — uso comercial habilitado, dominios ilimitados.",
+        "www.unrealvillestudio.com añadido como dominio adicional en Vercel (redirige a raíz).",
+        "HQ address actualizado: Hollywood FL 33021 → 12951 Biscayne Blvd, North Miami FL 33181.",
+        "BP_BRAND_UNRLVL_v1.2 completo: JSON + HTML ES + HTML EN — logotype lt-* canonical, prompt-blink 1.1s step-end, footer golden rule.",
+        "SVG assets corregidos: chevron #00FFD1, transparent bg, blink embedded.",
+        "BluePrints repo estructura clarificada: brand-first pattern. Migración brands/assets/[Brand] → brands/[Brand]/assets/ pendiente de ejecución manual.",
+        "UNRLVL_Logo_drk1.svg (archivo vacío fantasma) identificado para borrar.",
+        "Vercel proyecto blue-prints confirmado accesible como unrlvl-blueprints.vercel.app.",
+        "Formulario de contacto unrealvillestudio.com pendiente — backend por conectar."
+      ],
+      "production_real": [
+        "CopyLab",
+        "WebLab",
+        "ImageLab",
+        "OnboardingApp",
+        "Social Media Agent",
+        "UNRLVL-OPS",
+        "SocialLab",
+        "AgentLab",
+        "BlueprintLab",
+        "Orchestrator",
+        "ForumPHs Speaks",
+        "unrealvillestudio.com"
       ]
     }
   },
@@ -38,7 +56,10 @@
     "vercel_org": "unrealvillestudio-projects",
     "github_org": "unrealvillestudio-hub",
     "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
-    "hq_note": "Co-located with Vizos Cosmetics"
+    "hq_note": "Co-located with Vizos Cosmetics",
+    "web": "unrealvillestudio.com",
+    "web_status": "LIVE — 2026-04-10",
+    "vercel_plan": "Pro"
   },
   "operational_costs": {
     "last_updated": "2026-04-05",
@@ -256,9 +277,11 @@
       "language_primary": "EN",
       "status": "active",
       "health": "green",
-      "bp_brand": "BP_BRAND_UNRLVL_v1.2 — brand.json v1.2 creado. Animacion canonica: prompt-blink 1.1s step-end. Footer golden rule: client outputs Col1=cliente siempre.",
+      "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO — JSON + HTML ES + EN. lt-* logotype canonical. prompt-blink 1.1s step-end. Footer golden rule documentada.",
       "last_updated": "2026-04-10",
-      "hq": "12951 Biscayne Blvd · North Miami, FL 33181"
+      "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
+      "web": "unrealvillestudio.com",
+      "web_status": "LIVE — 2026-04-10"
     },
     {
       "id": "UnrealvilleStores",
@@ -439,7 +462,7 @@
         "fphs-session": "v6 — session management, golden pass, lead capture",
         "fphs-chat": "v5 — Claude + QA layer (chev-listen) + 3 correcciones Ivette"
       },
-      "signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col. Col1=ForumPHs wm+desc · Col2=© rights · Col3=Designed & Developed by Unreal>ille Studio. border-top 2px #00FFD1. prompt-blink 1.1s step-end.",
+      "signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col. Col1=ForumPHs wm+desc · Col2=© rights · Col3=Designed & Developed by Unreal>ille Studio. border-top 2px #00FFD1. chev-listen 0.9s.",
       "knowledge_base": {
         "version": "v2 — 2026-04-07",
         "corrections": [
@@ -459,7 +482,7 @@
         "speaks.forumphs.com CNAME",
         "más correcciones Ivette si las hay"
       ],
-      "last_updated": "2026-04-10"
+      "last_updated": "2026-04-07"
     }
   ],
   "infrastructure": [
@@ -469,7 +492,7 @@
       "vercel_url": "https://unrlvl-context.vercel.app",
       "repo": "unrealvillestudio-hub/unrlvl-context",
       "status": "active",
-      "last_updated": "2026-04-07"
+      "last_updated": "2026-04-10"
     },
     {
       "id": "INFRA-SB",
@@ -480,6 +503,16 @@
       "schema_version": "v2.0 — 37 tablas",
       "speaks_tables": "speaks_sessions/messages/leads/golden_pass — RLS off, GRANTs OK",
       "last_updated": "2026-04-07"
+    },
+    {
+      "id": "INFRA-WEB",
+      "name": "unrealvillestudio.com",
+      "vercel_url": "https://unrealvillestudio.com",
+      "vercel_project": "unrlvl-core-project",
+      "repo": "unrealvillestudio-hub/CoreProject",
+      "status": "LIVE — 2026-04-10",
+      "pending": "Formulario de contacto — backend por conectar",
+      "last_updated": "2026-04-10"
     }
   ],
   "blueprints_repo": {
@@ -488,11 +521,12 @@
     "brands_committed": [
       "BP_BRAND_ForumPHs_v1.0.json",
       "BP_BRAND_NeuroneSCF_v1.0.json",
-      "BP_BRAND_UNRLVL_v1.0.json",
-      "BP_BRAND_UNRLVL_v1.2 (HTML ES+EN) + brand.json v1.2"
+      "BP_BRAND_UNRLVL_v1.2.json"
     ],
-    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 existe como HTML (ES + EN) y brand.json v1.2. Animacion canonica: prompt-blink 1.1s step-end. Footer golden rule documentada.",
-    "last_updated": "2026-04-10"
+    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 completo — HTML ES+EN + JSON v1.2. Animación canónica: prompt-blink 1.1s step-end.",
+    "last_updated": "2026-04-10",
+    "vercel_url": "unrlvl-blueprints.vercel.app",
+    "structure_migration_pending": "brands/assets/[Brand]/ → brands/[Brand]/assets/ — acordado, pendiente ejecución manual en GitHub Desktop"
   },
   "psycho_layer": {
     "status": "PRODUCTION — integrado en ImageLab",
@@ -519,6 +553,9 @@
     "unrealilleStudio": "UnrealvilleStudio"
   },
   "next_session_agenda": [
+    "ACCION INMEDIATA: Formulario contacto unrealvillestudio.com — conectar backend (Supabase Edge Function o serverless endpoint en CoreProject)",
+    "ACCION INMEDIATA: BluePrints repo — migrar brands/assets/[Brand]/ → brands/[Brand]/assets/ + borrar UNRLVL_Logo_drk1.svg",
+    "PRIORIDAD 1 — unrealvillestudio.com: Cloudflare configuración (DNS + caché + firewall) — diferido post-launch",
     "PRIORIDAD 1 — ForumPHs: speaks.forumphs.com CNAME en Cloudflare + Vercel Domains",
     "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales (web_institucional · blog · propuesta/pitch · email captación)",
     "PRIORIDAD 1 — ForumPHs: más correcciones Ivette si las hay → afinar knowledge base v3",

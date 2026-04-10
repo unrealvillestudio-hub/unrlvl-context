@@ -1,5 +1,5 @@
 # UNRLVL Ecosystem — Filemap & Dependencias
-_v2026-04-07b · Generado desde ecosystem.json_
+_v2026-04-10b · Generado desde ecosystem.json_
 
 ---
 
@@ -21,19 +21,24 @@ _v2026-04-07b · Generado desde ecosystem.json_
 | SocialMediaAgent | unrlvl-social-media-agent.vercel.app | agent | PROD |
 | forumphs-speaks | forumphs-speaks.vercel.app | agent | testing |
 | unrlvl-context | unrlvl-context.vercel.app | infra | PROD |
-| BluePrints | — | assets | PROD |
+| BluePrints | unrlvl-blueprints.vercel.app | assets | PROD |
+| CoreProject | unrealvillestudio.com | web | LIVE 🆕 |
 
 ---
 
 ## FLUJOS ACTIVOS
 
 ```
+UNREALVILLESTUDIO.COM (LIVE — 2026-04-10)
+  Browser → unrealvillestudio.com (index.html static — CoreProject)
+  www.unrealvillestudio.com → redirect → unrealvillestudio.com
+  PENDIENTE: formulario contacto → backend endpoint
+
 FORUMPHS SPEAKS FLOW (v1.2)
-  Browser → forumphs-speaks.vercel.app (HTML static)
-    → Supabase fphs-session v6 (session/register/golden-pass)
-    → Supabase fphs-chat v5 (Claude QA-layer → speaks_messages)
-         ↳ chev-listen animation · knowledge_base v2 · 3 correcciones Ivette
-    → UNRLVL Footer BP_BRAND_v1.2: 3col · 2px #00FFD1 · chev-listen
+  Browser → forumphs-speaks.vercel.app
+    → Supabase fphs-session v6
+    → Supabase fphs-chat v5 (Claude + QA layer + 3 correcciones Ivette)
+    BLOQUEADO: ANTHROPIC_API_KEY pendiente en Supabase Secrets
 
 ORCHESTRATOR PIPELINE
   Orchestrator → CopyLab / WebLab / ImageLab / SocialLab (4 activos)
@@ -43,7 +48,6 @@ ONBOARDING FLOW
 
 BLUEPRINT FLOW
   BluePrints repo (JSON assets) → BlueprintLab app → Supabase brand_copy_profiles
-  BluePrints ≠ BlueprintLab (repo assets vs app de gestión)
 ```
 
 ---
@@ -53,6 +57,7 @@ BLUEPRINT FLOW
 | Flujo | Causa | Acción |
 |---|---|---|
 | ForumPHs Speaks chat | ANTHROPIC_API_KEY faltante | Supabase → Secrets → agregar key |
+| unrealvillestudio.com contacto | Backend no conectado | Edge Function o serverless endpoint |
 | VideoLab generación | HeyGen + Kling sin API keys | Abrir cuentas |
 | VoiceLab síntesis | voice_ids TBD_* | Audio PO + ElevenLabs |
 | SocialLab publicación | OAuth Meta/TikTok pendiente | Sprint OAuth |
@@ -69,41 +74,70 @@ BLUEPRINT FLOW
 
 ---
 
-## BRAND_IDs CANÓNICOS
+## BLUEPRINTS REPO — ESTRUCTURA
 
-| Alias | ID canónico |
-|---|---|
-| neuroneCosmetics | NeuroneSCF |
-| forumPhs | ForumPHs |
-| unrealilleStudio | UnrealvilleStudio |
-| patriciaOsorio* | PatriciaOsorio[Personal/Comunidad/VizosSalon] |
-| d7Herbal / vivoseMask / vizosCosmetics / diamondDetails | D7Herbal / VivoseMask / VizosCosmetics / DiamondDetails |
+```
+BluePrints/                          unrlvl-blueprints.vercel.app
+├── assets/                          ← global (manifest obsoleto — borrar)
+├── brands/
+│   ├── Unrealville/                 ✅ brand-first — COMPLETO
+│   │   ├── BP_BRAND_UNRLVL_v1.2.json
+│   │   ├── brand.json
+│   │   ├── BP_BRAND_UnrealvilleStudio_v1.2.html
+│   │   ├── BP_BRAND_UnrealvilleStudio_v1.2_EN.html
+│   │   └── assets/
+│   │       ├── UNRLVL_Logo_drk.svg
+│   │       ├── UNRLVL_Logo_lght.svg
+│   │       ├── UNRLVL_Favicon.svg
+│   │       └── UNRLVL_Logo_drk1.svg  ⚠️ BORRAR (vacío)
+│   ├── NeuroneSCF/                  ⏳ migración pendiente
+│   │   ├── brand.json
+│   │   ├── session_log.md
+│   │   └── [BP_BRAND_NeuroneSCF_v1.0.json — mover desde brands/]
+│   ├── ForumPHs/                    ⏳ migración pendiente
+│   │   └── [BP_BRAND_ForumPHs_v1.0.json — mover desde brands/]
+│   ├── VizosCosmetics/              ⏳ migración pendiente
+│   ├── D7Herbal/                    ⏳ migración pendiente
+│   └── brands/assets/[Brand]/       ⚠️ OLD PATTERN — migrar y eliminar
+├── persons/
+├── locations/
+├── products/
+├── docs/reports/
+├── agents/
+│   └── social-media-agent/
+│       └── session_log.md
+└── protocols/
+```
+
+**Migración pendiente (ejecutar en GitHub Desktop — 1 commit):**
+```
+MOVER: brands/assets/NeuroneSCF/  → brands/NeuroneSCF/assets/
+MOVER: brands/assets/VizosCosmetics/ → brands/VizosCosmetics/assets/
+MOVER: brands/assets/ForumPHs/    → brands/ForumPHs/assets/
+MOVER: brands/BP_BRAND_ForumPHs_v1.0.json → brands/ForumPHs/
+MOVER: brands/BP_BRAND_NeuroneSCF_v1.0.json → brands/NeuroneSCF/
+BORRAR: brands/assets/ (vacía tras moves)
+BORRAR: assets/manifest.json
+BORRAR: brands/Unrealville/assets/UNRLVL_Logo_drk1.svg
+```
 
 ---
 
-## BLUEPRINTS REPO — NOTA IMPORTANTE
-
-`BluePrints` = repo de assets JSON por marca. Diferente de `BlueprintLab` (la app Vercel).
-- `BP_BRAND_ForumPHs_v1.0.json` ✅
-- `BP_BRAND_NeuroneSCF_v1.0.json` ✅
-- `BP_BRAND_UNRLVL_v1.0.json` ✅ (v1.0 JSON · v1.2 existe como HTML)
-- **UNRLVL v1.2 vs v1.0:** animación `chev-listen` (v1.2) vs `chevron-blink` (v1.0). Canónica = `chev-listen`.
-
----
-
-## ROADMAP (2026-04-07)
+## ROADMAP (2026-04-10)
 
 | # | Acción | Impacto |
 |---|---|---|
-| 1 🔴 | ANTHROPIC_API_KEY Supabase Secrets | ForumPHs Speaks operativo |
-| 2 🔴 | Vercel Pro upgrade | Compliance comercial + CopyLab timeout |
-| 3 🟠 | speaks.forumphs.com CNAME | Domain propio Speaks |
-| 4 🟠 | BP_COPY_1.0 NeuroneSCF + ForumPHs | CopyLab con voz real |
-| 5 🟠 | Onboarding ForumPHs + VivoseMask + PO×3 | Datos completos |
-| 6 🟡 | ElevenLabs + audio PO | VoiceLab activo |
-| 7 🟡 | HeyGen + Kling API keys | VideoLab activo |
-| 8 🟡 | OAuth Meta/TikTok | SocialLab publica real |
-| 9 🟢 | LoRA Fal.ai + fotos PO | Consistencia visual |
+| 1 🔴 | Formulario contacto unrealvillestudio.com | Site operativo |
+| 2 🔴 | ANTHROPIC_API_KEY Supabase Secrets | ForumPHs Speaks operativo |
+| 3 🔴 | BluePrints migración brand-first | Repo limpio |
+| 4 🟠 | speaks.forumphs.com CNAME | Domain propio Speaks |
+| 5 🟠 | BP_COPY_1.0 NeuroneSCF + ForumPHs | CopyLab con voz real |
+| 6 🟠 | Onboarding ForumPHs + VivoseMask + PO×3 | Datos completos |
+| 7 🟡 | Cloudflare unrealvillestudio.com | CDN + seguridad |
+| 8 🟡 | ElevenLabs + audio PO | VoiceLab activo |
+| 9 🟡 | HeyGen + Kling API keys | VideoLab activo |
+| 10 🟡 | OAuth Meta/TikTok | SocialLab publica real |
+| 11 🟢 | LoRA Fal.ai + fotos PO | Consistencia visual |
 
 ---
-_Generado 2026-04-07 · ecosystem.json v2026-04-07b_
+_Generado 2026-04-10 · ecosystem.json v2026-04-10b_
