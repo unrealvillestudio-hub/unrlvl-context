@@ -3,72 +3,69 @@
 
 ---
 
-## 2026-04-08 — DDMV-Assistant security + fixes (segunda parte sesión)
+## 2026-04-09 — Pricing v15 + SKU Mapping + Kits Strategy v4
 
 ### CERRADO EN ESTA SESIÓN
 
-#### Supabase XMMs — seguridad
-- RLS habilitado en 5 tablas: `medications`, `appointments`, `conversations`, `reminder_log`, `notification_settings`
-- Whitelist aplicado: solo `+50767146920` (mamá) y `+34654246333` (Sam) pueden acceder via anon/authenticated key
-- Bot Twilio usa service_role → bypassa RLS automáticamente
-- Zero alertas de seguridad ✅
+#### Pricing Calculator v15 — actualizaciones completas
 
-#### DDMV-Assistant — whitelist webhook
-- `api/webhook.js`: whitelist de números añadido antes de cualquier procesamiento
-- Números autorizados: `whatsapp:+50767146920` y `whatsapp:+34654246333`
-- Números no autorizados → respuesta TwiML vacía, silenciosa
-- Deploy: `dpl_9i6ts5RrUY5FTxtDm3aD4kNEuv2s` ✅
+**Productos B2C — archivo PO integrado:**
+- 12 productos 50ml deshabilitados (fondo gris, texto tachado, ⛔ INACTIVO)
+- 18 productos reclasificados B2B → B2C (fondo verde) con fórmula de costo B2C completa (incluye Logística + Marketing)
+- 3 kits derivados nuevos añadidos a pestaña KITS: KT-101T, KT-102T, KT-103VT
 
-#### DDMV-Assistant — correcciones sistema
-- `lib/claude.js`: system prompt corregido — sección CAPACIDADES con recordatorios automáticos reales, sección IMPORTANTE que previene respuestas incorrectas sobre recordatorios
-- `api/webhook.js`: WELCOME_MSG actualizado fiel al texto original de Sam · mensaje de audio cariñoso ("aún no soy tan inteligente 😜")
-- `api/cron.js`: bug corregido (cron de ejercicio a las 10am nunca se ejecutaba) + 7 variantes de mensajes Gimnasio Mental incluyendo solicitud de puntaje
-- `vercel.json`: añadido tercer cron a las 15:00 UTC (10am Panamá) para cubrir el recordatorio de ejercicio
-- Deploy final: `dpl_A5BGESkteD5cfJiGCFBE1ejrQo9u` ✅ — zero errores
+**Fix doble arancel (hallazgo crítico):**
+- Columna renombrada a "Precio Compra LATAM ($)" — precio de factura puro
+- La columna c/Arancel aplica el 20% una sola vez
+- 73 productos corregidos — precios MIN/DES/OPT bajaron ~0.50–0.86$ en productos afectados
 
-#### Twilio — número UNRLVL
-- `+1 954 504 9384` encontrado disponible (área 954 Hollywood/Broward)
-- Bloqueado por cuenta Trial (solo 1 número permitido)
-- Pendiente: upgrade cuenta Twilio → comprar `+1 954 504 9384`
-- A2P 10DLC: no necesario para recibir SMS (solo para enviar)
+**Productos con warning (pendientes PO):**
+- MELANIN ANTI G (NSCF-CL-010) — insertado en rojo, sin precio, pendiente decisión PO
+- CONTROLLER, GEOMETRY GEL, GEOMETRY CREAM — inventario = 0, marcados en rojo
 
-#### Proyecto duplicado detectado
-- `xmms-ddmv-assistant` creado por error — mismo repo, sin env vars
-- Pendiente borrar: Vercel → xmms-ddmv-assistant → Settings → Advanced → Delete Project
+**SKU_MAPPING actualizado (solo esa pestaña):**
+- 3 nuevos productos individuales Tier 3: RESPLANDER SHINE, THERMO DUAL, LYCRA WEB
+- 3 nuevos kits derivados: KT-101T, KT-102T, KT-103VT
+- QA: bug detectado y corregido — 8 fórmulas PO desincronizadas por insert_rows, todas corregidas
+- 14 otras pestañas: intactas ✅
 
-#### Estado DDMV-Assistant verificado (prueba real)
-- Agente respondió correctamente en español a Damaris ✅
-- Logs: 200 OK en POST /api/webhook ✅
-- Número sandbox activo: `+14155238886` (join cada 72h requerido)
+**Archivos generados:** `Neurone_Pricing_v15.xlsx`
 
-### PENDIENTE DDMV-Assistant
-- Borrar proyecto `xmms-ddmv-assistant` en Vercel
-- Renovar sandbox Twilio cada 72h (enviar `join <palabra>` al +14155238886)
-- Upgrade cuenta Twilio → comprar `+1 954 504 9384` para UNRLVL
-- Node.js Version → configurar 20.x en Project Settings de ddmv-assistant en Vercel
+#### Kit Architecture Strategy — v4
 
----
+- `neurone_kits_strategy_v4.html` generado con correcciones de precios
+- Cambios en kits derivados por fix doble arancel:
 
-## 2026-04-08 — Pricing Calculator QA + Kit Architecture + Strategy Doc
+| Kit | Antes (v3) | Ahora (v4) |
+|-----|-----------|-----------|
+| KT-101T | cost $49.84 · 54.7% · contrib $60.15 | cost $48.95 · 55.5% · contrib $61.04 |
+| KT-102T | cost $52.49 · 52.3% · contrib $57.50 | cost $51.53 · 53.1% · contrib $58.46 |
+| KT-103VT | cost $49.33 · 48.1% · contrib $45.66 | cost $48.47 · 49.0% · contrib $46.52 |
 
-### CERRADO — ver sesión anterior completa en log previo
+- 9 kits originales: sin cambios
+- QA 12/12 ✅
 
 ### PENDIENTE NeuroneSCF (vigente)
 - Precios reales por SKU + inventario real → PO debe confirmar
+- MELANIN ANTI G → decisión PO (precio de compra pendiente)
+- CONTROLLER, GEOMETRY GEL, GEOMETRY CREAM → inventario 0, espera decisión PO
 - Cargar 87 SKUs + 12 kits en Shopify
-- Imágenes de kits desde BP_Product
-- Landings de cada kit
-- Configurar Shopify Payments (número de cuenta listo con Sam)
-- Configurar POS Vizos Salón (Tap to Pay)
-- Instalar UpPromote + crear links embajadoras
+- Configurar Shopify Payments + POS Vizos
+- Instalar UpPromote + embajadoras
 - Activar Shop Pay Installments + Afterpay
-- copy_profile NeuroneSCF en Supabase (CopyLab Layer 13 vacío)
+- copy_profile NeuroneSCF Supabase (CopyLab Layer 13 vacío)
 - Autorización marca Neurone US → bloquea lanzamiento
-- Video PO Kit SOS → asset más urgente para TikTok
+- Video PO Kit SOS → asset urgente TikTok
 - BP_Brand_Context.md NeuroneSCF → crear
-- Dominio Unreal>ille en Cloudflare + aliases email
+- Dominio Unreal>ille Cloudflare + aliases email
 
 ---
 
-## 2026-03-31 — DDMV-Assistant v1
-### CERRADO — agente deployado, env vars configuradas, crons activos
+## 2026-04-08 — DDMV-Assistant security + Pricing QA + Kit Architecture
+
+### CERRADO — ver entradas anteriores
+
+---
+
+## 2026-03-31 — DDMV-Assistant v1 deploy
+### CERRADO
