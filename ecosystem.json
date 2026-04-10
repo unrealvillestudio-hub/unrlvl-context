@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-07c",
+    "version": "2026-04-10a",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -17,37 +17,16 @@
       "source_of_truth": "Todo contenido de .md se deriva de este JSON. Nunca editar .md directamente."
     },
     "last_audit": {
-      "date": "2026-04-07",
-      "status": "ForumPHs Speaks UI completa. UNRLVL Signature BP_BRAND_v1.2 implementada. 3 correcciones knowledge base validadas por Ivette.",
+      "date": "2026-04-10",
+      "status": "HQ address updated to North Miami FL 33181. Blink animation canonicalizada: prompt-blink 1.1s step-end. SVG assets corregidos. brand.json v1.2 creado. Footer golden rule documentada.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
-        "ForumPHs Speaks splash screen rediseñado — initSession en background, splash permanente hasta CTA.",
-        "Speaks logotipo de producto: gradiente terra→amatista, regla decorativa, clamp(3rem,6.5vw,4.8rem).",
-        "Favicon FPHS_favicon_deep.png con alpha channel — embebido base64 inline.",
-        "Chat input flotante: input-float border-radius:16px, borde terra, glow terra al focus, botón terra.",
-        "UNRLVL Signature BP_BRAND_UNRLVL_v1.2 — footer-only (output cliente), 3 columnas, border-top 2px #00FFD1, chev-listen, Studio #1A1A1A.",
-        "fphs-chat v5: 3 correcciones knowledge base (renuncia JD→RP, Art. fondo imprevistos sin número, Art.111 = 3 meses).",
-        "QA layer activo: checklist UNRLVL output_standards verificado antes de cada entrega.",
-        "Mobile fixed layout: footer fijo bottom:0, input-area sobre footer.",
-        "Bug BP_BRAND_UNRLVL v1.0 detectado y corregido: animación era chevron-blink, la correcta es chev-listen (v1.2).",
-        "WebLab — sprint definido: Objectives Window + plantillas especializadas por tipo de output. SiteLab absorbido como modo institucional de WebLab. Tipos target: web_institucional, blog, propuesta_pitch, email_captacion."
-      ],
-      "production_real": [
-        "CopyLab",
-        "WebLab",
-        "ImageLab",
-        "OnboardingApp",
-        "Social Media Agent",
-        "UNRLVL-OPS",
-        "SocialLab",
-        "AgentLab",
-        "BlueprintLab",
-        "Orchestrator",
-        "ForumPHs Speaks"
-      ],
-      "blocked_external": [
-        "VideoLab",
-        "VoiceLab"
+        "HQ address: Hollywood FL 33021 → 12951 Biscayne Blvd, North Miami FL 33181 (co-location Vizos Cosmetics).",
+        "Blink animation canonicalizada: chev-listen 0.9s ease-in-out → prompt-blink 1.1s step-end (terminal cursor rhythm). BP_BRAND ES + EN + SVGs actualizados.",
+        "SVG assets corregidos: UNRLVL_Logo_drk/lght.svg + UNRLVL_Favicon.svg — chevron #00e2ff → #00FFD1, bg transparent declarado, CSS blink embebido.",
+        "Footer golden rule añadida a BP_BRAND_v1.2 (ES + EN): en outputs para clientes Col1 = logo cliente siempre, nunca UNRLVL.",
+        "brand.json v1.2 creado desde cero para Unrealville Studio — source of truth estructurada para Claude.",
+        "ForumPHs Speaks signature: referencia chev-listen deprecada → prompt-blink es la animación canónica en v1.2."
       ]
     }
   },
@@ -57,7 +36,9 @@
     "tagline": "Not for everyone.",
     "team_id": "team_fEH94Irp6BAI9YGm4btGna5n",
     "vercel_org": "unrealvillestudio-projects",
-    "github_org": "unrealvillestudio-hub"
+    "github_org": "unrealvillestudio-hub",
+    "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
+    "hq_note": "Co-located with Vizos Cosmetics"
   },
   "operational_costs": {
     "last_updated": "2026-04-05",
@@ -275,8 +256,9 @@
       "language_primary": "EN",
       "status": "active",
       "health": "green",
-      "bp_brand": "BP_BRAND_UNRLVL_v1.2 — en BluePrints repo. Signature v1.2 implementada en ForumPHs Speaks. Animación canónica: chev-listen 0.9s ease-in-out.",
-      "last_updated": "2026-04-07"
+      "bp_brand": "BP_BRAND_UNRLVL_v1.2 — brand.json v1.2 creado. Animacion canonica: prompt-blink 1.1s step-end. Footer golden rule: client outputs Col1=cliente siempre.",
+      "last_updated": "2026-04-10",
+      "hq": "12951 Biscayne Blvd · North Miami, FL 33181"
     },
     {
       "id": "UnrealvilleStores",
@@ -457,7 +439,7 @@
         "fphs-session": "v6 — session management, golden pass, lead capture",
         "fphs-chat": "v5 — Claude + QA layer (chev-listen) + 3 correcciones Ivette"
       },
-      "signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col. Col1=ForumPHs wm+desc · Col2=© rights · Col3=Designed & Developed by Unreal>ille Studio. border-top 2px #00FFD1. chev-listen 0.9s.",
+      "signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col. Col1=ForumPHs wm+desc · Col2=© rights · Col3=Designed & Developed by Unreal>ille Studio. border-top 2px #00FFD1. prompt-blink 1.1s step-end.",
       "knowledge_base": {
         "version": "v2 — 2026-04-07",
         "corrections": [
@@ -477,7 +459,7 @@
         "speaks.forumphs.com CNAME",
         "más correcciones Ivette si las hay"
       ],
-      "last_updated": "2026-04-07"
+      "last_updated": "2026-04-10"
     }
   ],
   "infrastructure": [
@@ -506,10 +488,11 @@
     "brands_committed": [
       "BP_BRAND_ForumPHs_v1.0.json",
       "BP_BRAND_NeuroneSCF_v1.0.json",
-      "BP_BRAND_UNRLVL_v1.0.json"
+      "BP_BRAND_UNRLVL_v1.0.json",
+      "BP_BRAND_UNRLVL_v1.2 (HTML ES+EN) + brand.json v1.2"
     ],
-    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 existe como HTML (BP_BRAND_UnrealilleStudio_v1_2_EN.html) — versión JSON v1.0 en repo. Animación canónica en v1.2: chev-listen (no chevron-blink).",
-    "last_updated": "2026-04-07"
+    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 existe como HTML (ES + EN) y brand.json v1.2. Animacion canonica: prompt-blink 1.1s step-end. Footer golden rule documentada.",
+    "last_updated": "2026-04-10"
   },
   "psycho_layer": {
     "status": "PRODUCTION — integrado en ImageLab",
@@ -536,8 +519,6 @@
     "unrealilleStudio": "UnrealvilleStudio"
   },
   "next_session_agenda": [
-    "ACCION INMEDIATA: ANTHROPIC_API_KEY en Supabase → Edge Functions → Secrets",
-    "ACCION INMEDIATA: Upgrade Vercel Hobby → Pro ($20/mes)",
     "PRIORIDAD 1 — ForumPHs: speaks.forumphs.com CNAME en Cloudflare + Vercel Domains",
     "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales (web_institucional · blog · propuesta/pitch · email captación)",
     "PRIORIDAD 1 — ForumPHs: más correcciones Ivette si las hay → afinar knowledge base v3",
