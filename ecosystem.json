@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-10b",
+    "version": "2026-04-10c",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -18,19 +18,23 @@
     },
     "last_audit": {
       "date": "2026-04-10",
-      "status": "unrealvillestudio.com LIVE. Vercel Pro upgrade. www dominio configurado. Brand system Unrealville completo v1.2. BluePrints estructura clarificada.",
+      "status": "GitHub Auditor tool operativo. GH_PAT configurado en Vercel. 20 repos accesibles. Social Media Agent: progreso confirmado — BM en curso, T-Mobile activo.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
-        "unrealvillestudio.com publicado — index.html deployado en CoreProject, dominio conectado via GoDaddy DNS A record 216.198.79.1.",
-        "Vercel Pro upgrade completado — uso comercial habilitado, dominios ilimitados.",
-        "www.unrealvillestudio.com añadido como dominio adicional en Vercel (redirige a raíz).",
-        "HQ address actualizado: Hollywood FL 33021 → 12951 Biscayne Blvd, North Miami FL 33181.",
-        "BP_BRAND_UNRLVL_v1.2 completo: JSON + HTML ES + HTML EN — logotype lt-* canonical, prompt-blink 1.1s step-end, footer golden rule.",
-        "SVG assets corregidos: chevron #00FFD1, transparent bg, blink embedded.",
-        "BluePrints repo estructura clarificada: brand-first pattern. Migración brands/assets/[Brand] → brands/[Brand]/assets/ pendiente de ejecución manual.",
-        "UNRLVL_Logo_drk1.svg (archivo vacío fantasma) identificado para borrar.",
-        "Vercel proyecto blue-prints confirmado accesible como unrlvl-blueprints.vercel.app.",
-        "Formulario de contacto unrealvillestudio.com pendiente — backend por conectar."
+        "ForumPHs Speaks splash screen rediseñado — initSession en background, splash permanente hasta CTA.",
+        "Speaks logotipo de producto: gradiente terra→amatista, regla decorativa, clamp(3rem,6.5vw,4.8rem).",
+        "Favicon FPHS_favicon_deep.png con alpha channel — embebido base64 inline.",
+        "Chat input flotante: input-float border-radius:16px, borde terra, glow terra al focus, botón terra.",
+        "UNRLVL Signature BP_BRAND_UNRLVL_v1.2 — footer-only (output cliente), 3 columnas, border-top 2px #00FFD1, chev-listen, Studio #1A1A1A.",
+        "fphs-chat v5: 3 correcciones knowledge base (renuncia JD→RP, Art. fondo imprevistos sin número, Art.111 = 3 meses).",
+        "QA layer activo: checklist UNRLVL output_standards verificado antes de cada entrega.",
+        "Mobile fixed layout: footer fijo bottom:0, input-area sobre footer.",
+        "Bug BP_BRAND_UNRLVL v1.0 detectado y corregido: animación era chevron-blink, la correcta es chev-listen (v1.2).",
+        "WebLab — sprint definido: Objectives Window + plantillas especializadas por tipo de output. SiteLab absorbido como modo institucional de WebLab. Tipos target: web_institucional, blog, propuesta_pitch, email_captacion.",
+        "GitHub Auditor tool creado — api/gh.js en unrlvl-context + SKILL.md en Tools repo. Endpoint /api/gh operativo: tree, file, repos.",
+        "GH_PAT configurado en Vercel Secrets — acceso read a todos los repos de unrealvillestudio-hub.",
+        "Social Media Agent export leído: Laura retomó apertura cuentas 2026-04-10. BM parcialmente configurado. T-Mobile activo. Gap confirmado: agente no accede a session_log.",
+        "20 repos de unrealvillestudio-hub mapeados y accesibles via GitHub Auditor."
       ],
       "production_real": [
         "CopyLab",
@@ -43,8 +47,11 @@
         "AgentLab",
         "BlueprintLab",
         "Orchestrator",
-        "ForumPHs Speaks",
-        "unrealvillestudio.com"
+        "ForumPHs Speaks"
+      ],
+      "blocked_external": [
+        "VideoLab",
+        "VoiceLab"
       ]
     }
   },
@@ -54,12 +61,7 @@
     "tagline": "Not for everyone.",
     "team_id": "team_fEH94Irp6BAI9YGm4btGna5n",
     "vercel_org": "unrealvillestudio-projects",
-    "github_org": "unrealvillestudio-hub",
-    "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
-    "hq_note": "Co-located with Vizos Cosmetics",
-    "web": "unrealvillestudio.com",
-    "web_status": "LIVE — 2026-04-10",
-    "vercel_plan": "Pro"
+    "github_org": "unrealvillestudio-hub"
   },
   "operational_costs": {
     "last_updated": "2026-04-05",
@@ -120,7 +122,7 @@
             "name": "Vercel Pro",
             "type": "fixed",
             "amount": "$20",
-            "notes": "PENDIENTE UPGRADE — Hobby prohibe uso comercial"
+            "notes": "ACTIVO desde 2026-04-10 — uso comercial habilitado"
           },
           {
             "name": "Supabase",
@@ -277,11 +279,8 @@
       "language_primary": "EN",
       "status": "active",
       "health": "green",
-      "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO — JSON + HTML ES + EN. lt-* logotype canonical. prompt-blink 1.1s step-end. Footer golden rule documentada.",
-      "last_updated": "2026-04-10",
-      "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
-      "web": "unrealvillestudio.com",
-      "web_status": "LIVE — 2026-04-10"
+      "bp_brand": "BP_BRAND_UNRLVL_v1.2 — en BluePrints repo. Signature v1.2 implementada en ForumPHs Speaks. Animación canónica: chev-listen 0.9s ease-in-out.",
+      "last_updated": "2026-04-07"
     },
     {
       "id": "UnrealvilleStores",
@@ -446,8 +445,17 @@
       "operator": "Laura Rodriguez",
       "status": "active — produccion",
       "engine": "Claude Sonnet 4 + @vercel/kv 90 dias",
-      "gap": "No accede a session_log marca en Context System — pendiente inyectar URL en system prompt",
-      "last_updated": "2026-04-07"
+      "gap": "No accede a session_log marca en Context System — CONFIRMADO 2026-04-10. Pendiente inyectar URL en system prompt.",
+      "last_updated": "2026-04-10",
+      "neurone_progress": {
+        "facebook_personal": "✅ activa con admin@neuronescflorida.com",
+        "meta_bm": "⏳ parcialmente configurado — completar info empresa",
+        "numero_tmobile": "✅ activo",
+        "facebook_page": "❌ pendiente",
+        "instagram_business": "❌ pendiente",
+        "whatsapp_api": "❌ pendiente",
+        "tiktok": "❌ diferido"
+      }
     },
     {
       "id": "AGENT-FPH-SPEAKS",
@@ -492,7 +500,7 @@
       "vercel_url": "https://unrlvl-context.vercel.app",
       "repo": "unrealvillestudio-hub/unrlvl-context",
       "status": "active",
-      "last_updated": "2026-04-10"
+      "last_updated": "2026-04-07"
     },
     {
       "id": "INFRA-SB",
@@ -505,13 +513,12 @@
       "last_updated": "2026-04-07"
     },
     {
-      "id": "INFRA-WEB",
-      "name": "unrealvillestudio.com",
-      "vercel_url": "https://unrealvillestudio.com",
-      "vercel_project": "unrlvl-core-project",
-      "repo": "unrealvillestudio-hub/CoreProject",
-      "status": "LIVE — 2026-04-10",
-      "pending": "Formulario de contacto — backend por conectar",
+      "id": "INFRA-TOOLS",
+      "name": "Tools repo",
+      "repo": "unrealvillestudio-hub/Tools",
+      "vercel_url": null,
+      "status": "active — private repo",
+      "contents": "github-auditor/SKILL.md — Claude reads all org repos via /api/gh endpoint",
       "last_updated": "2026-04-10"
     }
   ],
@@ -521,12 +528,10 @@
     "brands_committed": [
       "BP_BRAND_ForumPHs_v1.0.json",
       "BP_BRAND_NeuroneSCF_v1.0.json",
-      "BP_BRAND_UNRLVL_v1.2.json"
+      "BP_BRAND_UNRLVL_v1.0.json"
     ],
-    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 completo — HTML ES+EN + JSON v1.2. Animación canónica: prompt-blink 1.1s step-end.",
-    "last_updated": "2026-04-10",
-    "vercel_url": "unrlvl-blueprints.vercel.app",
-    "structure_migration_pending": "brands/assets/[Brand]/ → brands/[Brand]/assets/ — acordado, pendiente ejecución manual en GitHub Desktop"
+    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 existe como HTML (BP_BRAND_UnrealilleStudio_v1_2_EN.html) — versión JSON v1.0 en repo. Animación canónica en v1.2: chev-listen (no chevron-blink).",
+    "last_updated": "2026-04-07"
   },
   "psycho_layer": {
     "status": "PRODUCTION — integrado en ImageLab",
@@ -553,9 +558,9 @@
     "unrealilleStudio": "UnrealvilleStudio"
   },
   "next_session_agenda": [
-    "ACCION INMEDIATA: Formulario contacto unrealvillestudio.com — conectar backend (Supabase Edge Function o serverless endpoint en CoreProject)",
-    "ACCION INMEDIATA: BluePrints repo — migrar brands/assets/[Brand]/ → brands/[Brand]/assets/ + borrar UNRLVL_Logo_drk1.svg",
-    "PRIORIDAD 1 — unrealvillestudio.com: Cloudflare configuración (DNS + caché + firewall) — diferido post-launch",
+    "ACCION INMEDIATA: ANTHROPIC_API_KEY en Supabase → Edge Functions → Secrets",
+    "ACCION INMEDIATA: Upgrade Vercel Hobby → Pro ($20/mes)",
+    "PRIORIDAD 1 — Social Media Agent: inyectar URL Context System en system prompt (gap confirmado 2026-04-10)",
     "PRIORIDAD 1 — ForumPHs: speaks.forumphs.com CNAME en Cloudflare + Vercel Domains",
     "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales (web_institucional · blog · propuesta/pitch · email captación)",
     "PRIORIDAD 1 — ForumPHs: más correcciones Ivette si las hay → afinar knowledge base v3",
