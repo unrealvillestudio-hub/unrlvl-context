@@ -9,3 +9,4 @@ Responde desde estado de inicialización. Fix pendiente.
 - Laura: TikTok Shop — dirección comercial bloqueante
 - Sam: gap detectado
 - Paty: gap detectado
+

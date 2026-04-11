@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-11a",
+    "version": "2026-04-11b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
