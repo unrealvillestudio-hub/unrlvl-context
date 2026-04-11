@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-03-25",
+    "version": "2026-04-11",
     "maintained_by": "Claude",
     "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
   },
@@ -110,9 +110,11 @@
     },
     {
       "id": "FPH-003",
-      "name": "Document Factory — Actas",
-      "status": "85% completado",
-      "next_action": "Completar al 100% en los próximos 30 días",
+      "name": "Document Factory — Actas + Contratos",
+      "status": "100% completado — 2026-04-11",
+      "output": "document_factory_skill.md en unrlvl-context/brands/ForumPHs/",
+      "tipos_documentales": ["ACTA_ORDINARIA", "ACTA_EXTRAORDINARIA", "CONTRATO_SERVICIOS"],
+      "next_action": "Commit en GitHub Desktop → unrlvl-context/brands/ForumPHs/document_factory_skill.md",
       "blocking": false
     },
     {
@@ -134,9 +136,9 @@
     {
       "id": "FPH-006",
       "name": "ForumPHs Speaks — Lead Capture Activo",
-      "status": "funcional en testing con IF · lead capture pendiente UNRLVL-CRM",
-      "stack": "Claude Sonnet · proxy Vercel · ~$1.20/100 consultas · 5 gratis → email → 5 bonus",
-      "next_action": "IF completa testing + reporte feedback — deadline a fijar 25 Mar",
+      "status": "PRODUCCIÓN — operativo. ANTHROPIC_API_KEY pendiente en Supabase Secrets",
+      "stack": "Claude Sonnet 4 · Supabase Edge Functions · QA layer activo · RLS aplicado 2026-04-11",
+      "next_action": "ANTHROPIC_API_KEY en Supabase Secrets + speaks.forumphs.com CNAME",
       "blocking": false
     },
     {
@@ -210,15 +212,17 @@
     "Decisión de proceso Arraiján ($600) y Plaza España ($1,000) — reunión 25 Mar",
     "Inicio reservas laborales corrientes $1,014.89/mes — deadline 1 Mayo 2026",
     "Foto IF para FPHs Web Institucional — dentro del plan de lanzamiento",
-    "Deadline testing ForumPHs Speaks por IF — fijar en reunión 25 Mar"
+    "Umbral de monto del Reglamento PH para firma autónoma del presidente — pendiente confirmación IF",
+    "Document Factory: ¿genera contratos desde cero o solo revisa contratos subidos? — decisión Sam"
   ],
   "alerts": [
     { "level": "critical", "msg": "Plan Estratégico v3.0 pendiente aprobación IF — bisagra de todo el plan 2026" },
     { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — reunión CPA deadline 15 Abr" },
     { "level": "critical", "msg": "Reservas laborales corrientes en $0 — inicio comprometido 1 Mayo 2026 ($1,014.89/mes)" },
+    { "level": "warning", "msg": "ForumPHs Speaks: ANTHROPIC_API_KEY pendiente en Supabase Secrets — chat no responde en prod" },
     { "level": "warning", "msg": "Lefevre 75: fee pendiente confirmar — deadline 31 Mar — puede impactar hasta $892/mes" },
     { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo para bajar" },
-    { "level": "warning", "msg": "Arraiján + Plaza España: rentabilidad cuestionada — decisión de proceso pendiente 25 Mar" }
+    { "level": "warning", "msg": "Contrato Pittí/Venezia Tower: 4 hallazgos críticos — addenda urgente en 5 días hábiles" }
   ],
   "identity": {
     "palette": {
