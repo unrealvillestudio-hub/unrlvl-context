@@ -309,3 +309,135 @@ El score final lo pone Ivette, no Claude.
 | v1.2 | 2026-04-11 | Principio ICR. Auto-validación pre-output. |
 | v1.1 | 2026-04-11 | 5 GAPs del BP_BRAND. |
 | v1.0 | 2026-04-11 | Skill inaugural. |
+
+---
+
+## MODELO CANÓNICO "_df" — IDENTIFICACIÓN DE DOCUMENTOS GENERADOS
+
+### Nomenclatura de archivos
+Todo documento generado por el Document Factory lleva el sufijo `_df`:
+```
+ACTA_[N]-[AAAA]_[PH_SLUG]_df.docx
+Ejemplo: ACTA_1-2026_TORRES_CASTILLA_df.docx
+```
+
+### Versión en el nombre del archivo
+Mientras el documento está en ciclo de revisión:
+```
+ACTA_1-2026_TORRES_CASTILLA_df_v1.docx  ← primera generación
+ACTA_1-2026_TORRES_CASTILLA_df_v2.docx  ← tras correcciones
+ACTA_1-2026_TORRES_CASTILLA_df.docx     ← versión final aprobada (sin versión = aprobada)
+```
+
+### Footer del documento (futuro)
+Cuando el sistema tenga footer automatizado:
+```
+Generado por Document Factory · ForumPHs · v[X] · [fecha]
+```
+
+### Registro en session_log
+Cada acta generada registra:
+```json
+{
+  "id": "ACTA_1-2026_TORRES_CASTILLA",
+  "type": "ACTA_ORDINARIA",
+  "ph": "P.H. Torres de Castilla",
+  "generated_by": "document_factory_v1.4",
+  "score_vs_reference": null,  // lo llena Ivette
+  "status": "pending_review",
+  "word_count": 17485,
+  "pages": 36,
+  "qa_errors_found": 244,
+  "qa_errors_fixed": 0
+}
+```
+
+---
+
+## PASO 0.5 — FORMALIZATION LAYER (Claude API) — REQUERIDO para ICR
+
+### El problema que resuelve
+El transformer (regex) puede limpiar preambles y convertir pronombres.
+**NO puede** reconstruir fragmentos de habla oral rotos en narrativa legal formal.
+
+El Paso 0.5 pasa cada bloque por el Claude API antes de entrar al builder:
+
+```python
+def formalize_block(speaker, role, unit, raw_text):
+    """
+    Llama al Claude API para convertir un bloque de habla oral
+    en un párrafo formal de tercera persona para el acta.
+    """
+    system_prompt = """Eres un redactor especializado en Actas de Asamblea 
+    de Propiedad Horizontal en Panamá. Tu función es convertir fragmentos 
+    de habla oral en párrafos formales de tercera persona para el acta legal.
+    
+    REGLAS:
+    - Si el fragmento no tiene contenido sustantivo, responde exactamente: NULL
+    - Escribe en tercera persona formal siempre
+    - Usa el nombre y unidad del hablante proporcionados
+    - Elimina muletillas, repeticiones, fragmentos incompletos
+    - Preserva la esencia del argumento o consulta
+    - Máximo 150 palabras de output
+    - Usar B/.1.85 para cuotas, $ para otros montos
+    """
+    
+    user_prompt = f"""
+    Hablante: {speaker}
+    Cargo/rol: {role}
+    Unidad: {unit}
+    
+    Fragmento de habla oral:
+    "{raw_text}"
+    
+    Escribe el párrafo formal para el acta, o responde NULL.
+    """
+    
+    # API call via fphs-acta endpoint
+    response = call_claude_api(system_prompt, user_prompt)
+    if response.strip() == 'NULL':
+        return None
+    return response
+```
+
+### Costo-beneficio
+- ~800 bloques por asamblea × ~200 tokens por bloque = ~160K tokens
+- A claude-sonnet-4: ~$0.48 por acta
+- Resultado: acta lista para firma sin revisión de Ivette → ICR real
+
+### Cuándo activar el Paso 0.5
+- Producción (app): siempre activo
+- Sesiones de desarrollo (Claude.ai): usar transformer regex como aproximación,
+  identificar errores con el QA scan, corregir manualmente los críticos
+
+---
+
+## PASO 7 — QA SCAN COMPLETO (OBLIGATORIO ANTES DE ENTREGAR)
+
+### ¿Qué es?
+Una lectura programática de CADA oración del documento generado antes de entregarlo.
+No es opcional. Es el último paso antes del present_files.
+
+### Errores que detecta y reporta
+```python
+ERROR_TYPES = {
+    'REPEATED_WORD': r'\b(\w{3,})\s+\1\b',  # todo todo, en en
+    'ORAL_ARTIFACT': ['pues', 'digamos', 'este,', 'o sea', 'fondear'],
+    'SPOKEN_WORD': ['acá,', 'porfa', 'ajá', 'mhm'],
+    'NUMBER_FORMAT': r'\b\d{1,2}\s+\d{3}\b',  # 30 000 → $30,000
+    'FIRST_PERSON': r'\b(yo|tenemos|estamos|vamos a|podemos)\b',
+    'DANGLING_CONJ': r'\b(porque|pero|y|o)\.\s*$',
+    'INCOMPLETE': r'manifestó que\s+\w{1,5}\.',  # fragmento de 1-2 palabras
+    'DANGLING_QUE': r'manifestó que\s+[A-Z]',  # mayúscula después de "que"
+}
+```
+
+### Umbral de aceptación
+| Errores encontrados | Acción |
+|---|---|
+| 0-10 | Entregar con nota de errores menores corregidos |
+| 11-50 | Revisar y corregir sección por sección antes de entregar |
+| 51-100 | Regenerar las secciones con más errores |
+| 101+ | **STOP** — el Paso 0.5 (Claude API) es obligatorio para este documento |
+
+**La V3 de Torres de Castilla tenía 244 errores → debió haberse detenido y activado el Paso 0.5 antes de entregar.**
