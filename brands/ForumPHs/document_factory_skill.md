@@ -1,5 +1,5 @@
 # Document Factory Skill — ForumPHs
-**Versión:** 2026-04-11b | **Mantenido por:** Claude | **Repo:** unrlvl-context/brands/ForumPHs/
+**Versión:** 2026-04-11c | **Mantenido por:** Claude | **Repo:** unrlvl-context/brands/ForumPHs/
 
 ---
 
@@ -238,9 +238,40 @@ Cuando hay lista de unidades presentes usar formato:
 
 ---
 
-### PASO 7 — VALIDACIÓN FINAL (checklist)
+### PASO 7 — VALIDACIÓN ICR ANTES DE GENERAR EL OUTPUT
 
-Antes de entregar verificar OBLIGATORIAMENTE:
+**ICR = Industrial Consistency Ready**
+
+Antes de escribir una sola línea del acta final, Claude debe ejecutar internamente una auto-revisión del plan de trabajo contra todos los estándares del skill. El output solo se genera si el plan pasa este filtro. El acta nunca se entrega sin la marca ICR.
+
+**Protocolo ICR:**
+1. Con la transcripción ya analizada y los datos extraídos, Claude revisa mentalmente el plan de redacción contra cada punto del checklist siguiente.
+2. Si detecta algún ítem que NO puede cumplir (datos faltantes, ambigüedad, información contradictoria), lo documenta ANTES de generar y se lo comunica a Sam para resolverlo.
+3. Solo cuando todos los ítems están en verde, Claude genera el .docx y lo declara **ICR ✅**.
+4. **El score lo pone Ivette, no Claude.** ICR no significa "perfecto" — significa "cumple todos los estándares conocidos del skill en este momento". El feedback de Ivette es el que actualiza el skill para la siguiente iteración.
+
+**Nunca declarar ICR sin haber ejecutado el checklist completo.**
+
+#### Checklist ICR — verificar ANTES de generar:
+- [ ] Todas las intervenciones del mismo hablante consolidadas
+- [ ] TODO el texto en tercera persona
+- [ ] Todos los números en letras + (dígitos)
+- [ ] Todas las votaciones con resultados exactos
+- [ ] Formato de encabezados correcto (negritas + subrayado)
+- [ ] Nombres completos de TODOS los intervinientes
+- [ ] Identificación de unidad para propietarios
+- [ ] Hora de inicio y cierre en letras + (dígitos)
+- [ ] Firmas al final con formato correcto
+- [ ] NO hay resúmenes ni paráfrasis de intervenciones
+- [ ] NO hay diálogos en primera persona
+- [ ] **GAP 1** — Bloque administración usa formato ForumPHs con Ivette Flores si aplica
+- [ ] **GAP 2** — Todos los porcentajes verbalizados con "coma" como separador decimal
+- [ ] **GAP 3** — Si hubo segundo llamado, ambos momentos documentados en el quórum
+- [ ] **GAP 4** — Estructura respeta los 8 pasos en orden legal exacto
+- [ ] **GAP 5** — Quórum cita Art. 67 Ley 284 de 2022 en el cuerpo del acta
+
+Si todos los ítems están en verde → generar .docx → declarar **ICR ✅**
+Si algún ítem está en rojo → comunicar el bloqueo antes de generar → resolver → volver al inicio del checklist
 - [ ] Todas las intervenciones del mismo hablante consolidadas
 - [ ] TODO el texto en tercera persona
 - [ ] Todos los números en letras + (dígitos)
@@ -377,5 +408,6 @@ El output es un `.docx` profesional con las siguientes secciones:
 
 | Versión | Fecha | Cambios |
 |---|---|---|
+| v1.2 | 2026-04-11c | Principio ICR incorporado — auto-validación pre-output, score externo por Ivette |
 | v1.1 | 2026-04-11b | 5 GAPs del BP_BRAND incorporados — formato admin ForumPHs, "coma" decimal, segundo llamado, estructura 8 pasos, Art.67 en quórum |
 | v1.0 | 2026-04-11 | Skill inaugural — ACTA_ORDINARIA + ACTA_EXTRAORDINARIA + CONTRATO_SERVICIOS |
