@@ -156,3 +156,4 @@ El cierre fiscal en el acta de Ivette es una **narrativa concisa** de ~500 palab
 |---|---|---|
 | v1.1 | 2026-04-11 | Word count targets por bloque. Enrichment layer rules. Regla especial Cierre Fiscal. Tabla fuentes actualizada. |
 | v1.0 | 2026-04-11 | Estructura inicial basada en 3 actas procesadas. |
+
