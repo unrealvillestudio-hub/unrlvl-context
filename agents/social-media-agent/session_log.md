@@ -1,70 +1,67 @@
-# Session Log — Social Media Agent (Neurone SCF)
-**Formato:** entradas cronológicas · las más recientes arriba · generado por el agente
-**Agente:** `unrlvl-social-media-agent.vercel.app`
-**Usuarios:** Patricia Osorio (PATY) · Laura Rodriguez (LAURA) · Sam (SAM)
+# SESSION LOG — Social Media Agent · NeuroneSCF
+_Última actualización: 2026-04-14 · Protocolo Actualiza · Claude Sonnet 4.6_
 
 ---
 
-## 2026-04-11 — Infraestructura confirmada operativa
+## ESTADO ACTUAL DE INFRAESTRUCTURA DIGITAL
 
-### SISTEMA
-- ✅ RLS aplicado en tablas speaks_* — ForumPHs Speaks seguro para producción
-- ✅ Social Media Agent: `fetchAgentContext()` ya implementado — carga session_log en cada sesión
-- ✅ BluePrints repo migrado a estructura brand-first
-- ✅ unrlvl-context raíz limpia — archivos huérfanos eliminados
-
----
-
-## 2026-04-10 — Sesiones Laura + Sam
-
-### LAURA — 2026-04-10
-- Retomó trabajo de apertura de cuentas sociales
-- Estado confirmado: cuenta personal Facebook de PO ✅ · Meta BM parcialmente configurado ⏳ · T-Mobile activo ✅
-- **Próximo paso:** Completar info empresa en Meta BM (nombre legal, dirección, EIN, industry, website)
-
-### SAM — 2026-04-10
-- Preguntó sobre correos por red social → 7 aliases confirmados
-- **Gap detectado:** agente no cargaba session_log — YA RESUELTO (fetchAgentContext activo)
+| Elemento | Estado | Notas |
+|---|---|---|
+| Meta Business Manager | ⏳ PARCIAL | Existe, info empresa incompleta. Laura/PO deben completar desde Miami sin VPN. |
+| Facebook Page | ❌ PENDIENTE | No creada |
+| Instagram Business | ❌ PENDIENTE | No creada |
+| WhatsApp Business API | ❌ PENDIENTE | Número dedicado sin adquirir |
+| TikTok for Business | ❌ PENDIENTE | Diferido hasta tener dirección comercial |
+| TikTok Shop | ❌ DIFERIDO | Requiere dirección comercial (no residencial) |
+| Correos corporativos (7) | ⏳ PENDIENTE | Estructura definida, no creados |
+| Número comercial dedicado | ❌ PENDIENTE | OpenPhone/NumberBarn — compliance Meta |
 
 ---
 
-## 2026-04-06 — Sesiones Laura + Paty + Sam
+## DECISIONES CONFIRMADAS
 
-### INFRAESTRUCTURA DIGITAL — ESTADO ACTUAL
-
-**Completado:**
-- ✅ 7 aliases email bajo neuronescflorida.com (admin@, ig@, waba@, tiktok@, ads@, support@, hello@)
-- ✅ Número T-Mobile físico dedicado — activo
-- ✅ Cuenta personal Facebook de PO con admin@neuronescflorida.com
-- ✅ Estrategia seguridad: Passkeys + Bitwarden
-
-**En curso:**
-- ⏳ Meta Business Manager — completar información de empresa
-
-**Pendiente:**
-- ❌ Facebook Page: Neurone South & Central Florida
-- ❌ Instagram Business: @neuronescflorida
-- ❌ WhatsApp Business API
-- ❌ TikTok for Business (diferir TikTok Shop hasta dirección comercial)
-
-**Orden de creación APROBADO:**
-1. ✅ Correos con dominio
-2. ✅ Número T-Mobile físico
-3. ✅ Cuenta personal Facebook de PO
-4. ⏳ Completar Meta Business Manager — EN CURSO
-5. ❌ Facebook Page
-6. ❌ Instagram Business
-7. ❌ WhatsApp Business API
-8. ❌ TikTok for Business
-
-**Decisiones:**
-- Número personal de PO: intocable para cuentas de negocio
-- Un BM por marca — nunca compartir
-- Passkeys estándar en todas las plataformas
-- TikTok Shop: diferir hasta resolver dirección comercial
+- **7 aliases de email** bajo neuronescflorida.com: `admin@`, `hello@`, `support@`, `ig@`, `tiktok@`, `waba@`, `ads@`
+- **Número comercial separado** obligatorio — un BM por marca para evitar suspensiones
+- **Número personal de Patricia intocable**
+- **TikTok Shop diferido** — usar primero TikTok for Business (ads/marketing) hasta tener dirección comercial oficial
+- **Dirección en documentos oficiales** para Meta BM
+- **Patricia debe operar sin VPN desde Miami** para verificaciones
 
 ---
 
-## 2026-03-23 — Inicialización
+## GAP CRÍTICO DEL AGENTE
 
-- Agente deployado · KV activo · protocolo Actualiza activo
+> ⚠️ El agente no accede automáticamente a este `session_log.md` desde el Context System.
+> Pendiente: inyectar URL `https://unrlvl-context.vercel.app/brands/NeuroneSCF/session_log.md` en system prompt del agente.
+
+---
+
+## HISTORIAL DE SESIONES
+
+### 2026-04-10 — Sam + Laura
+- Sam preguntó sobre correos necesarios → se definieron los 7 aliases.
+- Laura indicó intención de usar TikTok Shop → alerta de requerimientos levantada.
+- Laura consultó conflicto de direcciones → estrategia híbrida recomendada.
+- **Próxima acción Laura/PO:** completar Meta BM desde Miami sin VPN.
+
+### 2026-04-06 — Sam + Laura + Paty (inicialización)
+- Sam verificó estado inicial. Laura planteó TikTok Shop. Paty primer check-in.
+
+### 2026-03-23 — Sam
+- Estructura de aliases definida. Estrategia telefónica establecida. Compliance Meta verificado.
+
+---
+
+## PRÓXIMOS PASOS PRIORIZADOS
+
+1. **INMEDIATO** — Laura/PO completan Info Empresa en Meta BM desde Miami, sin VPN
+2. Crear los 7 aliases en servidor de email (neuronescflorida.com)
+3. Adquirir número comercial dedicado (OpenPhone o NumberBarn)
+4. Crear Facebook Page → luego Instagram Business
+5. Configurar WhatsApp Business API con número dedicado
+6. TikTok for Business (ads) — una vez tenga correo `tiktok@` y número
+7. TikTok Shop — diferido hasta dirección comercial confirmada
+
+---
+
+_Social Media Agent · NeuroneSCF · agents/social-media-agent/session_log.md_

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-13",
+    "version": "2026-04-14",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -17,21 +17,24 @@
       "source_of_truth": "Todo contenido de .md se deriva de este JSON. Nunca editar .md directamente."
     },
     "last_audit": {
-      "date": "2026-04-13",
-      "status": "Document Factory pipeline completo: 328/328 blocks, 38p, 7/7. ICR semantic layer operativo. Supabase Edge Function v6 adaptive tolerance deployada. ICR Final Process definido como próximo sprint.",
+      "date": "2026-04-14",
+      "status": "FPH-012 ICR Final Process CERRADO. Document Factory v1.4 pipeline completo y en producción. ForumPHs Speaks LIVE. Todos los sistemas ForumPHs operativos.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
-        "Document Factory FPH-003: pipeline completo ZIP→Paso0.5→Generate→QA→ICR→Descarga.",
-        "17 agentes Supabase Edge Function en grupos secuenciales de 6 — sin 503.",
-        "Edge Function fphs-formalize v6: SYS0/SYS1/SYS2 tolerancia adaptativa + template fallback attempt 3.",
-        "Bold rule: nombre + identificación completa (**María García, del apartamento C100**) en los 3 prompts.",
-        "ICR operativo: 14 hallazgos en primer run real — 2 CRITICAL, 4 HIGH, 6 MEDIUM, 2 LOW.",
-        "QA threshold: auto-retry solo si bloques<60% Y páginas<22. Banner decisión usuario a 60-70%.",
-        "ICR tokens dinámicos: cubre 60% del documento, max 8000 tokens output.",
-        "Firmas: parseResumen extrae Presidenta/Secretaria automáticamente.",
-        "Daniel Puentes (Hypal) detectado como administración, no propietario.",
-        "ProcessingPipeline retry re-corre ProcessingPipeline completo (no solo generateDocx).",
-        "Resultado final: 328/328 (100%), ~38 páginas, COMPLETENESS 100%, 7/7 OK, SCORE PASS."
+        "FPH-012: ICR Final Process completo — ICRResolution.tsx + fphs-icr-apply edge function deployada.",
+        "ICR inline annotations en DOCX: banners coloreados por sección + página Anexo ICR al final.",
+        "Botón 'Con anotaciones ICR' en step done — genera DOCX con hallazgos embebidos para Ivette.",
+        "Fix: total_units mapeado desde preflight answers al skeleton — quórum % ya no es 0%.",
+        "Fix: ICR maxDuration 55→120s — resuelve 504 timeout en actas largas.",
+        "Fix: ICRFinding.location vs section — banners inline ahora matchean correctamente.",
+        "Fix: footer background #0F0F0F per BP_BRAND_v1.2 (era rgba dark blue).",
+        "Fix: FPHS_logo-wt.png path correcto en top bar y footer.",
+        "Fix: @import removido del style tag — resuelve hydration mismatch #418/#423.",
+        "UNRLVL animated chevron (chev-listen 0.9s) + Bebas Neue via layout.tsx.",
+        "Sweep logic simplificada: user-driven 2º/3er barrido +10% tolerancia, sin auto-retry.",
+        "Download bar solo en step done — fix descarga prematura antes de ICR.",
+        "ForumPHs Speaks: ANTHROPIC_API_KEY en Supabase Secrets — LIVE en producción.",
+        "QA 328/328 bloques (100%), ~36 páginas, PASS confirmado en producción real."
       ],
       "production_real": [
         "CopyLab",
@@ -140,7 +143,7 @@
         "qa_layer": "ACTIVO — prompt-blink 1.1s step-end, doble razonamiento",
         "knowledge_base_version": "v2 — 3 correcciones Ivette validadas",
         "unrlvl_signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col, border-top 2px cyan",
-        "pending": ["ANTHROPIC_API_KEY en Supabase Secrets", "speaks.forumphs.com CNAME", "más correcciones Ivette si las hay"],
+        "pending": ["speaks.forumphs.com CNAME", "foto Ivette", "más correcciones Ivette si las hay"],
         "rls": "APLICADO 2026-04-11 — speaks_* service_role only",
         "status": "PRODUCCIÓN — operativo"
       },
@@ -148,15 +151,26 @@
         "version": "v1.4",
         "vercel_url": "forumphs-document-factory.vercel.app",
         "repo": "unrealvillestudio-hub/forumphs-document-factory",
-        "supabase_edge_function": "fphs-formalize v6 — grupos secuenciales 6 agentes, tolerancia adaptativa",
-        "pipeline": "ZIP Extractor (local) → JSON → Pre-flight → Paso 0.5 (17 agentes) → Generar → QA → ICR → Descarga",
+        "supabase_edge_functions": {
+          "fphs-formalize": "v7 — grupos secuenciales 6 agentes, tolerancia adaptativa",
+          "fphs-icr-apply": "v1 — ICR corrections engine, ACTIVE"
+        },
+        "pipeline": "ZIP Extractor (local) → JSON → Pre-flight → Paso 0.5 (17 agentes) → Generar → QA → ICR → Revisión ICR → Descarga",
         "qa_layer": "QA mecánico (8 tipos error) + ICR semántico (Claude auditor legal)",
-        "last_test_result": "328/328 bloques (100%), ~38 páginas, 7/7 completeness, PASS",
-        "icr_last_run": "14 hallazgos: 2 CRITICAL, 4 HIGH, 6 MEDIUM, 2 LOW — REQUIRES CORRECTION",
-        "next_sprint": "ICR Final Process — Ivette revisa hallazgos 1x1, Claude implementa correcciones → DOCX final",
-        "status": "PRODUCCIÓN — pipeline completo operativo"
+        "icr_annotations": "Inline banners coloreados por sección + Anexo ICR página final en DOCX",
+        "sweep_logic": "User-driven: 1º barrido 40% tol → oferta 2º +10% → oferta 3er +10%",
+        "last_test_result": "328/328 bloques (100%), ~36 páginas, 7/7 completeness, PASS",
+        "fixes_v1_4": [
+          "total_units mapeado desde preflight al skeleton — fix quórum 0%",
+          "ICR maxDuration 120s — fix 504 timeout",
+          "ICRFinding.location field — fix banners inline",
+          "Footer #0F0F0F + FPHS_logo-wt.png + UNRLVL chev-listen animated",
+          "Download bar solo en step done",
+          "Sweep simplificado user-driven sin auto-retry"
+        ],
+        "status": "PRODUCCIÓN — pipeline completo CERRADO v1.4"
       },
-      "last_updated": "2026-04-13"
+      "last_updated": "2026-04-14"
     },
     {
       "id": "UnrealvilleStudio",
@@ -168,7 +182,7 @@
       "status": "active",
       "health": "green",
       "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO — JSON + HTML ES + EN. lt-* logotype. prompt-blink 1.1s step-end. Footer golden rule.",
-      "last_updated": "2026-04-11",
+      "last_updated": "2026-04-14",
       "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
       "web": "unrealvillestudio.com",
       "web_status": "LIVE — 2026-04-10"
@@ -198,7 +212,7 @@
       "status": "active — produccion",
       "engine": "Claude Sonnet 4 + @vercel/kv 90 dias",
       "gap": "No accede a session_log marca en Context System — pendiente inyectar URL en system prompt",
-      "last_updated": "2026-04-07"
+      "last_updated": "2026-04-14"
     },
     {
       "id": "AGENT-FPH-SPEAKS",
@@ -207,7 +221,7 @@
       "vercel_url": "forumphs-speaks.vercel.app",
       "custom_domain_pending": "speaks.forumphs.com",
       "serves_brand": "ForumPHs",
-      "status": "testing — UI completa. ANTHROPIC_API_KEY pendiente en Supabase Secrets.",
+      "status": "PRODUCCIÓN — LIVE",
       "engine": "Claude Sonnet 4 via Supabase Edge Functions",
       "functions": {
         "fphs-session": "v6 — session management, golden pass, lead capture",
@@ -223,8 +237,8 @@
         ]
       },
       "golden_pass": ["forumphs@forumphs.com", "ivetteflores@forumphs.com", "forumphs507@gmail.com", "blackoutbusinessgroup@gmail.com"],
-      "pending": ["ANTHROPIC_API_KEY Supabase Secrets", "speaks.forumphs.com CNAME", "más correcciones Ivette si las hay"],
-      "last_updated": "2026-04-07"
+      "pending": ["speaks.forumphs.com CNAME", "foto Ivette", "más correcciones Ivette si las hay"],
+      "last_updated": "2026-04-14"
     },
     {
       "id": "AGENT-FPH-DOCFACTORY",
@@ -233,38 +247,32 @@
       "vercel_url": "forumphs-document-factory.vercel.app",
       "serves_brand": "ForumPHs",
       "operator": "Ivette Flores",
-      "status": "PRODUCCIÓN — pipeline completo operativo",
+      "status": "PRODUCCIÓN — v1.4 CERRADO",
       "version": "v1.4",
       "engine": "Claude Sonnet 4.6 via Supabase Edge Functions (17 agentes) + Vercel Next.js 14",
       "supabase_functions": {
-        "fphs-formalize": "v6 — SYS0/SYS1/SYS2 tolerancia adaptativa, grupos secuenciales 6, template fallback attempt 3, bold nombre+ubicación"
+        "fphs-formalize": "v7 — SYS0/SYS1/SYS2 tolerancia adaptativa, grupos secuenciales 6, template fallback attempt 3, bold nombre+ubicación",
+        "fphs-icr-apply": "v1 — ICR corrections engine, aplica findings al DOCX"
       },
-      "pipeline_steps": ["ZIP (local extractor)", "Pre-flight (gaps)", "Paso 0.5 (agentes Edge Function)", "Generar DOCX", "QA mecánico", "ICR semántico", "Descarga"],
+      "pipeline_steps": ["ZIP (local extractor)", "Pre-flight (gaps)", "Paso 0.5 (agentes Edge Function)", "Generar DOCX", "QA mecánico", "ICR semántico", "Revisión ICR (ICRResolution.tsx)", "Descarga limpia + Descarga con anotaciones ICR"],
       "qa_layer": "Mecánico: 8 tipos de error. ICR: Claude auditor legal — hallazgos CRITICAL/HIGH/MEDIUM/LOW con sugerencias.",
+      "icr_annotations": "DOCX anotado: banners sombreados por sección + Anexo ICR página final con tarjetas coloreadas.",
       "last_test": {
-        "date": "2026-04-13",
+        "date": "2026-04-14",
         "ph": "PH Los Álamos",
         "blocks": "328/328 (100%)",
-        "pages": "~38",
+        "pages": "~36",
         "completeness": "100% 7/7 OK",
-        "score": "PASS",
-        "icr_findings": 14
+        "score": "PASS"
       },
-      "next_sprint": {
-        "name": "ICR Final Process",
-        "description": "Ivette revisa hallazgos ICR uno por uno con botones Aplicar/Ignorar/Editar. Claude implementa decisiones en /api/icr-apply y genera DOCX final corregido.",
-        "new_route": "/api/icr-apply",
-        "new_component": "ICRResolution.tsx",
-        "new_step": "ICR Resolution — entre ICR y Descarga en el navbar",
-        "status": "pendiente — próximo sprint"
-      },
-      "last_updated": "2026-04-13"
+      "next_sprint": null,
+      "last_updated": "2026-04-14"
     }
   ],
   "infrastructure": [
-    { "id": "INFRA-CTX", "name": "Context System", "vercel_url": "https://unrlvl-context.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-context", "status": "active", "last_updated": "2026-04-07" },
-    { "id": "INFRA-SB", "name": "Supabase DB", "project_id": "amlvyycfepwhiindxgzw", "status": "active", "mcp_connected": true, "schema_version": "v2.0 — 37 tablas", "speaks_tables": "speaks_sessions/messages/leads/golden_pass — RLS off, GRANTs OK", "last_updated": "2026-04-07" },
-    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "vercel_url": "https://unrealvillestudio.com", "vercel_project": "unrlvl-core-project", "repo": "unrealvillestudio-hub/CoreProject", "status": "LIVE — 2026-04-10", "pending": "Formulario de contacto + Cloudflare", "last_updated": "2026-04-11" },
+    { "id": "INFRA-CTX", "name": "Context System", "vercel_url": "https://unrlvl-context.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-context", "status": "active", "last_updated": "2026-04-14" },
+    { "id": "INFRA-SB", "name": "Supabase DB", "project_id": "amlvyycfepwhiindxgzw", "status": "active", "mcp_connected": true, "schema_version": "v2.0 — 37 tablas", "speaks_tables": "speaks_sessions/messages/leads/golden_pass — RLS off, GRANTs OK", "last_updated": "2026-04-14" },
+    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "vercel_url": "https://unrealvillestudio.com", "vercel_project": "unrlvl-core-project", "repo": "unrealvillestudio-hub/CoreProject", "status": "LIVE — 2026-04-10", "pending": "Formulario de contacto + Cloudflare + redirect rules", "last_updated": "2026-04-14" },
     { "id": "INFRA-TOOLS", "name": "Tools repo", "repo": "unrealvillestudio-hub/Tools", "vercel_url": null, "status": "active — private repo", "contents": "github-auditor/SKILL.md — /api/gh endpoint", "last_updated": "2026-04-10" }
   ],
   "blueprints_repo": {
@@ -296,15 +304,13 @@
     "unrealilleStudio": "UnrealvilleStudio"
   },
   "next_session_agenda": [
-    "PRIORIDAD 1 — ForumPHs Doc Factory: ICR Final Process sprint — /api/icr-apply + ICRResolution.tsx + nuevo step navbar",
     "PRIORIDAD 1 — ForumPHs: speaks.forumphs.com CNAME en Cloudflare",
-    "PRIORIDAD 1 — ForumPHs: ANTHROPIC_API_KEY en Supabase Secrets para Speaks",
     "PRIORIDAD 1 — ForumPHs: foto Ivette para ForumPHs Speaks",
     "PRIORIDAD 1 — NeuroneSCF: completar Meta BM info empresa (Laura/PO desde Miami)",
+    "PRIORIDAD 1 — unrealvillestudio.com: redirect rules + formulario contacto backend",
     "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales",
     "PRIORIDAD 1 — DATOS: BP_COPY_1.0 para NeuroneSCF + ForumPHs + UnrealvilleStudio",
     "PRIORIDAD 1 — DATOS: Onboarding ForumPHs, VivoseMask, PO x3 via OnboardingApp",
-    "ACCION INMEDIATA: Formulario contacto unrealvillestudio.com — conectar backend",
     "PRIORIDAD 2 — CUENTAS: ElevenLabs Creator + audio PO + voice clone",
     "PRIORIDAD 2 — CUENTAS: HeyGen + Kling + Fal.ai",
     "PRIORIDAD 3 — SPRINT VideoLab: API keys → /api/execute → activar lab_configs",
