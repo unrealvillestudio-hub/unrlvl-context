@@ -1,70 +1,106 @@
-# UNRLVL ECOSYSTEM — Radiografía Narrativa
-_Generado desde ecosystem.json · 2026-04-14 · Claude Sonnet 4.6_
+# UNRLVL ECOSYSTEM — Radiografía
+_Generado desde ecosystem.json · 2026-04-14c · Claude Sonnet 4.6_
 
 ---
 
 ## ESTADO GENERAL
 
-**Unrealville Studio** es una Brand Intelligence Infrastructure operando en Florida USA + LATAM + España. Todos los sistemas críticos están en producción. La sesión 2026-04-14 cierra **FPH-012** — el último sprint del Document Factory v1.4 — con pipeline 100% completo y ForumPHs Speaks en vivo.
+Ecosistema en producción activa. 13 sistemas en Capa A (producción real). Pricing architecture cerrada: Signal / Pulse / Orbit con E-Com add-on. Profiler Agent + Psycho Layer section diseñados — pendiente implementar en web. GitHub Proxy skill activo y verificado.
 
 ---
 
 ## CAPA A — PRODUCCIÓN REAL
 
-### ForumPHs — 🟢 AMBOS PRODUCTOS LIVE
-
-**ForumPHs Speaks** (`forumphs-speaks.vercel.app`)
-Motor: Claude Sonnet 4 via Supabase Edge Functions (fphs-session v6 + fphs-chat v5). QA layer activo (chev-listen 1.1s). Knowledge base v2 con 3 correcciones validadas por Ivette. RLS aplicado. ANTHROPIC_API_KEY en Supabase Secrets — LIVE desde 2026-04-14.
-Pendiente: CNAME `speaks.forumphs.com`, foto Ivette.
-
-**ForumPHs Document Factory v1.4** (`forumphs-document-factory.vercel.app`) — **CERRADO**
-Pipeline: ZIP → Pre-flight → Paso 0.5 (17 agentes Supabase) → Generar → QA → ICR → Revisión ICR → Descarga.
-Último test: 328/328 bloques (100%), ~36 páginas, PASS.
-Features v1.4: ICR inline annotations (banners coloreados + Anexo ICR en DOCX), sweep user-driven 2º/3er barrido +10%, footer BP_BRAND_v1.2 compliant, FPHS logo PNG, UNRLVL chev-listen animated.
-Edge functions: fphs-formalize v7 + fphs-icr-apply v1.
-**No hay next sprint** — producto entregado.
-
-### Labs en producción
-
-| Lab | URL | Estado |
+| Sistema | Estado | Engine |
 |---|---|---|
-| CopyLab | unrlvl-copy-lab.vercel.app | PASSED v8.0 — 24 queries paralelas |
-| WebLab | web-lab.vercel.app | PASSED — Supabase DONE |
-| ImageLab | image-lab-unrlvl.vercel.app | PASSED — PsychoLayer DONE |
-| SocialLab | social-lab-flame.vercel.app | PASSED — CopyLabBridge DONE |
-| AgentLab | agent-lab-unrlvl.vercel.app | PASSED — blueprints Supabase-first |
-| BlueprintLab | unrlvl-blueprint-lab.vercel.app | PASSED — 4 schemas |
-| Orchestrator | orchestrator.vercel.app | PASSED — 4 labs activos |
-| OnboardingApp | unrlvl-onboarding-app.vercel.app | PASSED — Phase 4, 8 tablas |
-| UNRLVL-OPS | — | PASSED — producción |
-
-Labs bloqueados: **VideoLab** (HeyGen/Kling API keys pendientes), **VoiceLab** (voice_ids ElevenLabs pendientes).
-
-### Social Media Agent — NeuroneSCF
-`unrlvl-social-media-agent.vercel.app` · Operador: Laura Rodriguez.
-Sin novedades desde 2026-04-10. Meta BM parcialmente configurado — Laura/PO deben completar info empresa desde Miami sin VPN.
-Gap crítico: el agente no lee el session_log automáticamente — pendiente inyectar URL en system prompt.
-
-### unrealvillestudio.com
-LIVE desde 2026-04-10. Pendiente: formulario de contacto backend + Cloudflare redirect rules.
+| CopyLab | PASSED v8.0 | Claude Sonnet 4 · 24 queries paralelas |
+| WebLab | PASSED — Supabase DONE | Sprint Objectives Window pendiente |
+| ImageLab | PASSED ICR v1.0 | Imagen 3 + Gemini 2.5 Flash |
+| OnboardingApp | PASSED Phase 4 | 8 tablas Supabase |
+| Social Media Agent | ACTIVE — producción | Claude Sonnet 4 + @vercel/kv |
+| UNRLVL-OPS | PASSED | Internal tool |
+| SocialLab | PASSED — CopyLabBridge DONE | Meta/TikTok OAuth pendiente |
+| AgentLab | PASSED — Supabase-first | — |
+| BlueprintLab | PASSED — Vercel + Supabase | 4 schemas activos |
+| Orchestrator | PASSED — 4 labs activos | CopyLab · WebLab · ImageLab · SocialLab |
+| ForumPHs Speaks | PRODUCCIÓN — LIVE | Claude Sonnet 4 · Supabase Edge Functions |
+| ForumPHs Document Factory | PRODUCCIÓN v1.4 CERRADO | Pipeline completo |
+| unrealvillestudio.com | LIVE — 2026-04-10 | CoreProject · Vercel |
 
 ---
 
-## CAPA B — INFRAESTRUCTURA
+## CAPA B — INTERNO / EN DESARROLLO
 
-**Supabase** (`amlvyycfepwhiindxgzw`): schema v2.0, 37 tablas. 14MB/500MB (2.8%). Free suficiente.
-**Vercel Pro**: $20/mes. Todos los proyectos en `unrealvillestudio-projects`.
-**Context System**: `unrlvl-context.vercel.app` — source of truth del ecosistema.
-**BluePrints repo**: brand-first structure. BP_BRAND_UNRLVL_v1.2 canónico.
+**VideoLab** — UI PASSED. Generación bloqueada por API keys pendientes (HeyGen + Kling).
+
+**VoiceLab** — UI PASSED. Bloqueado por voice_ids ElevenLabs.
+
+**Profiler Agent** — DISEÑADO. Pendiente implementar. Reemplaza formulario #select en unrealvillestudio.com. Patrón: Claude + Supabase Edge Function. Conversación EN/ES, 5 etapas, scoring de fit, cotización en tiempo real Signal/Pulse/Orbit, brief automático para Sam.
+
+**Psycho Layer (extensión web)** — DISEÑADA. Pendiente implementar sección en unrealvillestudio.com. Demo interactivo: mismo producto × 7 estímulos psicológicos transformándose en tiempo real. Ya en producción en ImageLab con 10 presets.
 
 ---
 
-## GAPS PRIORITARIOS
+## MARCAS ACTIVAS
 
-1. `speaks.forumphs.com` CNAME en Cloudflare
-2. Foto Ivette en ForumPHs Speaks
-3. Meta BM info empresa — Laura/PO desde Miami
-4. `unrealvillestudio.com` redirect rules + contacto
-5. BP_COPY_1.0 para NeuroneSCF + ForumPHs + UnrealvilleStudio
-6. Onboarding: ForumPHs, VivoseMask, PO x3
-7. WebLab sprint: Objectives Window + plantillas institucionales
+| Marca | Mercado | Salud | Notas |
+|---|---|---|---|
+| Unrealville Studio | Florida + LATAM | 🟢 | Web LIVE. Profiler + Psycho Layer pendientes. Brand context en context system. |
+| ForumPHs | Panamá | 🟢 | Speaks + Document Factory en producción |
+| NeuroneSCF | South & Central Florida | 🟡 | Meta BM incompleto. Precios + SKUs pendientes |
+| Patricia Osorio ×3 | Miami FL | 🟢 | 3 personas: Personal, Comunidad, Vizos Salon |
+| Diamond Details | Alicante ES | 🟢 | — |
+| Vizos Cosmetics | Miami + España | 🟢 | — |
+| D7 Herbal | Alicante ES | 🟢 | — |
+| Vivose Mask | España | 🟡 | — |
+| Unrealville Stores | Florida USA | 🟢 | Pendiente activación |
+
+---
+
+## INFRASTRUCTURE
+
+**Context System** — `unrlvl-context.vercel.app` · Fuente de verdad del ecosistema.
+
+**GitHub Proxy** — `unrlvl-context.vercel.app/api/gh` · Proxy autenticado para lectura de repos privados desde Claude. PAT en Vercel env vars. Skill documentado en `skills/github-auditor/SKILL.md`.
+
+**Supabase** — Project `amlvyycfepwhiindxgzw` · 37 tablas · Free tier (2.8% utilización) · MCP conectado.
+
+**Vercel Pro** — `unrealvillestudio-projects` · Activo.
+
+---
+
+## PSYCHO LAYER
+
+En producción en ImageLab con 10 presets. Pending integration: CopyLab, SocialLab, VideoLab, VoiceLab. Sección web diseñada — pendiente implementar.
+
+**10 objetivos psicológicos activos:** Autoridad · Urgencia · Aspiración · Confianza · Pertenencia · Curiosidad · Identidad · FOMO · Prueba Social · Escasez
+
+---
+
+## PRICING ARCHITECTURE (cerrada v1.2)
+
+| Tier | M&B/mo | E-Com add-on/mo | Setup M&B | Setup E-Com |
+|---|---|---|---|---|
+| SIGNAL | $3,500 | +$2,000 | $3,500 | $2,000 |
+| PULSE | $6,500 | +$3,500 | $6,500 | $3,500 |
+| ORBIT | $12,000 | +$4,500/marca | $12,000 | $4,500/marca |
+
+Revenue sharing: 10% ventas atribuibles desde mes 13 · todos los tiers.
+Ad spend: cuenta del cliente, gestión de UNRLVL.
+
+---
+
+## GAPS CRÍTICOS
+
+| Gap | Sistema | Prioridad |
+|---|---|---|
+| session_log URL no inyectada en SMA | Social Media Agent | ALTA |
+| Meta BM info empresa incompleta | NeuroneSCF | ALTA |
+| 87 SKUs + precios pendientes | NeuroneSCF | ALTA |
+| Profiler Agent no implementado | unrealvillestudio.com | ALTA |
+| Psycho Layer section no implementada | unrealvillestudio.com | ALTA |
+| Cloudflare + email aliases | unrealvillestudio.com | MEDIA |
+| BP_COPY_1.0 vacío para 3 marcas | CopyLab | MEDIA |
+| Meta/TikTok OAuth | SocialLab | MEDIA |
+| HeyGen + Kling API keys | VideoLab | BAJA |
+| ElevenLabs voice_ids | VoiceLab | BAJA |

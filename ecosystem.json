@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-14b",
+    "version": "2026-04-14c",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -18,31 +18,28 @@
     },
     "last_audit": {
       "date": "2026-04-14",
-      "status": "speaks.forumphs.com CNAME activo. Autorización marca Neurone US confirmada. Profiler Agent + Psycho Layer web añadidos como ideas en desarrollo.",
+      "status": "UnrealvilleStudio brand context creado. GitHub proxy skill documentado. SESSION_PROTOCOL v8. Pricing architecture completa: Signal/Pulse/Orbit con E-Com add-on. Profiler Agent + Psycho Layer diseñados — pendiente implementar en web.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
         "speaks.forumphs.com CNAME — activo en Cloudflare + Vercel.",
-        "Autorización marca Neurone US — confirmada. Ya no bloquea lanzamiento.",
+        "Autorización marca Neurone US — confirmada.",
         "ForumPHs Document Factory v1.4 CERRADO — pipeline completo en producción.",
         "ForumPHs Speaks LIVE — ANTHROPIC_API_KEY en Supabase Secrets.",
         "ICR Final Process completo — 328/328 bloques PASS.",
         "unrealvillestudio.com LIVE — 2026-04-10.",
-        "Vercel Pro upgrade completado."
+        "Vercel Pro upgrade completado.",
+        "UnrealvilleStudio brand context — brand.json + BP_Brand_Context.md creados en context system.",
+        "GitHub proxy skill — SKILL.md documentado en skills/github-auditor/.",
+        "SESSION_PROTOCOL.md v8 — GitHub skill + UnrealvilleStudio añadidos.",
+        "Pricing architecture cerrada — Signal/Pulse/Orbit + E-Com add-on + Setup fees + Revenue share mes 13.",
+        "UNRLVL_PriceList_v1.2.html + UNRLVL_Pricing_Costs_v1.0.html generados.",
+        "Amber color (#FFB020) propuesto para BP_BRAND_UNRLVL como secondary accent."
       ],
       "production_real": [
-        "CopyLab",
-        "WebLab",
-        "ImageLab",
-        "OnboardingApp",
-        "Social Media Agent",
-        "UNRLVL-OPS",
-        "SocialLab",
-        "AgentLab",
-        "BlueprintLab",
-        "Orchestrator",
-        "ForumPHs Speaks",
-        "ForumPHs Document Factory",
-        "unrealvillestudio.com"
+        "CopyLab", "WebLab", "ImageLab", "OnboardingApp",
+        "Social Media Agent", "UNRLVL-OPS", "SocialLab", "AgentLab",
+        "BlueprintLab", "Orchestrator", "ForumPHs Speaks",
+        "ForumPHs Document Factory", "unrealvillestudio.com"
       ]
     }
   },
@@ -69,7 +66,7 @@
         "total_range": "$398-452",
         "items": [
           { "name": "Claude.ai Pro Max x5", "type": "fixed", "amount": "~$115" },
-          { "name": "Anthropic API", "type": "variable", "amount": "$40-60", "notes": "incluye ForumPHs Speaks QA layer (~2x tokens/consulta)" },
+          { "name": "Anthropic API", "type": "variable", "amount": "$40-60" },
           { "name": "Google Gemini / Imagen 3", "type": "variable", "amount": "$15-20" },
           { "name": "ElevenLabs Creator", "type": "fixed", "amount": "$22" },
           { "name": "Chatterbox via Fal.ai", "type": "variable", "amount": "$5-10" },
@@ -81,7 +78,7 @@
       "infrastructure": {
         "total": "$20",
         "items": [
-          { "name": "Vercel Pro", "type": "fixed", "amount": "$20", "notes": "Activo" },
+          { "name": "Vercel Pro", "type": "fixed", "amount": "$20" },
           { "name": "Supabase", "type": "fixed", "amount": "$0", "notes": "Free. 14MB/500MB (2.8%)" }
         ]
       },
@@ -153,20 +150,30 @@
       "name": "Unrealville Studio",
       "type": "studio",
       "sam_role": "owner",
-      "market": "Florida USA + LATAM + Espana",
+      "market": "Florida USA + LATAM",
       "language_primary": "EN",
       "status": "active",
       "health": "green",
       "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO — JSON + HTML ES + EN.",
+      "brand_context_available": true,
+      "brand_context_path": "brands/UnrealvilleStudio/",
       "web": "unrealvillestudio.com",
       "web_status": "LIVE — 2026-04-10",
       "web_pending": [
         "Cloudflare setup",
         "Redirect rules",
         "Aliases email (desde Cloudflare)",
-        "Formulario contacto → Profiler Agent",
-        "Sección Psycho Layer como diferenciador"
+        "Profiler Agent (diseñado — pendiente implementar en #select)",
+        "Sección Psycho Layer (diseñada — pendiente implementar)"
       ],
+      "pricing_architecture": {
+        "status": "CERRADA — v1.2",
+        "tiers": ["SIGNAL $3,500/mo", "PULSE $6,500/mo", "ORBIT $12,000/mo"],
+        "ecom_addon": ["Signal +$2,000", "Pulse +$3,500", "Orbit +$4,500/marca"],
+        "setup_fee": "1 mes de retainer por modulo activo",
+        "revenue_share": "10% ventas atribuibles desde mes 13",
+        "docs": ["UNRLVL_PriceList_v1.2.html", "UNRLVL_Pricing_Costs_v1.0.html"]
+      },
       "last_updated": "2026-04-14",
       "hq": "12951 Biscayne Blvd · North Miami, FL 33181"
     },
@@ -218,44 +225,71 @@
       "operator": "Ivette Flores",
       "status": "PRODUCCIÓN — v1.4 CERRADO",
       "last_updated": "2026-04-14"
+    },
+    {
+      "id": "AGENT-PROFILER",
+      "name": "Profiler Agent",
+      "serves_brand": "UnrealvilleStudio",
+      "status": "DISEÑADO — pendiente implementar",
+      "target": "unrealvillestudio.com — reemplaza formulario #select",
+      "engine": "Claude Sonnet 4 via Supabase Edge Function (patron ForumPHs Speaks)",
+      "languages": ["en", "es"],
+      "flow": "5 etapas: apertura → dolor → escala → historial → vision. Scoring interno. Bifurcacion por fit. Brief para Sam. Datos a Supabase.",
+      "last_updated": "2026-04-14"
     }
   ],
   "infrastructure": [
     { "id": "INFRA-CTX", "name": "Context System", "vercel_url": "https://unrlvl-context.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-context", "status": "active", "last_updated": "2026-04-14" },
     { "id": "INFRA-SB", "name": "Supabase DB", "project_id": "amlvyycfepwhiindxgzw", "status": "active", "mcp_connected": true, "schema_version": "v2.0 — 37 tablas", "last_updated": "2026-04-14" },
-    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "vercel_url": "https://unrealvillestudio.com", "repo": "unrealvillestudio-hub/CoreProject", "status": "LIVE — 2026-04-10", "pending": ["Cloudflare setup", "Redirect rules", "Aliases email", "Formulario contacto → Profiler Agent", "Sección Psycho Layer"], "last_updated": "2026-04-14" },
-    { "id": "INFRA-TOOLS", "name": "Tools repo", "repo": "unrealvillestudio-hub/Tools", "status": "active — private repo", "last_updated": "2026-04-10" }
+    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "vercel_url": "https://unrealvillestudio.com", "repo": "unrealvillestudio-hub/CoreProject", "status": "LIVE — 2026-04-10", "pending": ["Cloudflare setup", "Redirect rules", "Aliases email", "Profiler Agent — DISEÑADO pendiente implementar", "Sección Psycho Layer — DISEÑADA pendiente implementar"], "last_updated": "2026-04-14" },
+    { "id": "INFRA-TOOLS", "name": "Tools repo", "repo": "unrealvillestudio-hub/Tools", "status": "active — private repo", "last_updated": "2026-04-10" },
+    { "id": "INFRA-GH-PROXY", "name": "GitHub Proxy", "endpoint": "https://unrlvl-context.vercel.app/api/gh", "file": "api/gh.js en repo unrlvl-context", "skill_doc": "https://unrlvl-context.vercel.app/skills/github-auditor/SKILL.md", "status": "ACTIVO — verificado 2026-04-14", "pat_storage": "GH_PAT en Vercel env vars (nunca en chat)", "last_updated": "2026-04-14" }
+  ],
+  "skills": [
+    {
+      "id": "SKILL-GH",
+      "name": "GitHub Auditor / Proxy",
+      "path": "skills/github-auditor/SKILL.md",
+      "url": "https://unrlvl-context.vercel.app/skills/github-auditor/SKILL.md",
+      "endpoint": "https://unrlvl-context.vercel.app/api/gh",
+      "status": "ACTIVO — documentado 2026-04-14",
+      "purpose": "Lectura de repos privados de unrealvillestudio-hub desde Claude via proxy Vercel autenticado"
+    }
   ],
   "blueprints_repo": {
     "repo": "unrealvillestudio-hub/BluePrints",
     "brands_committed": ["BP_BRAND_ForumPHs_v1.0.json", "BP_BRAND_NeuroneSCF_v1.0.json", "BP_BRAND_UNRLVL_v1.2.json"],
     "last_updated": "2026-04-11",
     "vercel_url": "unrlvl-blueprints.vercel.app",
-    "structure": "brand-first COMPLETO — brands/[Brand]/assets/"
+    "structure": "brand-first COMPLETO — brands/[Brand]/assets/",
+    "note": "Carpeta de UnrealvilleStudio en BluePrints es 'Unrealville' — no 'UnrealvilleStudio'"
   },
   "psycho_layer": {
     "status": "PRODUCTION — integrado en ImageLab",
     "table": "psycho_presets",
     "presets_count": 10,
     "pending_integration": ["CopyLab", "SocialLab", "VideoLab", "VoiceLab"],
-    "web_section": "PENDIENTE — añadir sección en unrealvillestudio.com como diferenciador de venta",
+    "web_section": "DISEÑADA — pendiente implementar en unrealvillestudio.com. Demo interactivo: mismo producto × 7 estimulos psicologicos en tiempo real.",
     "last_updated": "2026-04-14"
   },
   "ideas_en_desarrollo": [
     {
       "id": "IDEA-001",
       "name": "Profiler Agent",
-      "description": "Agente conversacional en formulario de contacto de unrealvillestudio.com. Califica al visitante antes de que llegue a Sam — tipo de negocio, presupuesto estimado, necesidad, urgencia. Sam recibe un brief pre-armado en lugar de un 'me interesa, llámame'. Patrón: Claude + Supabase Edge Function (igual que ForumPHs Speaks).",
-      "status": "idea — pendiente implementar",
+      "description": "Agente conversacional en formulario de contacto de unrealvillestudio.com. Reemplaza formulario estatico #select. 5 etapas de conversacion en EN/ES, scoring interno de fit, bifurcacion por tier (Signal/Pulse/Orbit), brief automatico para Sam, datos a Supabase. Patron: Claude + Supabase Edge Function (igual que ForumPHs Speaks).",
+      "status": "DISEÑADO — pendiente implementar",
       "target": "unrealvillestudio.com",
+      "languages": ["en", "es"],
+      "pricing_reference": "Signal/Pulse/Orbit v1.2 — el agente cotiza en tiempo real segun perfil detectado",
       "added": "2026-04-14"
     },
     {
       "id": "IDEA-002",
       "name": "Psycho Layer — extensión multi-lab",
-      "description": "Capa transversal que inyecta el objetivo psicológico del output (urgencia, autoridad, pertenencia, confianza, FOMO, identidad, reciprocidad, contraste) al prompt de cualquier lab antes de generar. Ya en PROD en ImageLab con 10 presets. Pendiente extender a CopyLab, SocialLab, VideoLab, VoiceLab.",
+      "description": "Capa transversal que inyecta el objetivo psicologico del output al prompt de cualquier lab antes de generar. Ya en PROD en ImageLab con 10 presets. Pendiente extender a CopyLab, SocialLab, VideoLab, VoiceLab.",
       "status": "parcialmente en producción — extensión pendiente",
       "in_production": "ImageLab",
+      "web_section": "DISEÑADA — demo interactivo pendiente implementar en unrealvillestudio.com",
       "pending": ["CopyLab", "SocialLab", "VideoLab", "VoiceLab"],
       "added": "2026-04-14"
     }
@@ -273,23 +307,23 @@
     "unrealilleStudio": "UnrealvilleStudio"
   },
   "next_session_agenda": [
+    "PRIORIDAD 1 — unrealvillestudio.com: Profiler Agent — implementar (diseño completo listo)",
+    "PRIORIDAD 1 — unrealvillestudio.com: Sección Psycho Layer — implementar (diseño completo listo)",
     "PRIORIDAD 1 — unrealvillestudio.com: Cloudflare setup + redirect rules + aliases email",
-    "PRIORIDAD 1 — unrealvillestudio.com: Profiler Agent en formulario de contacto",
-    "PRIORIDAD 1 — unrealvillestudio.com: Sección Psycho Layer como diferenciador",
     "PRIORIDAD 1 — ForumPHs: foto Ivette para Speaks",
     "PRIORIDAD 1 — NeuroneSCF: Laura/PO completar Meta BM info empresa (Miami, sin VPN)",
-    "PRIORIDAD 1 — NeuroneSCF: precios reales + inventario real → PO confirma",
+    "PRIORIDAD 1 — NeuroneSCF: precios reales + inventario real — PO confirma",
     "PRIORIDAD 1 — NeuroneSCF: cargar 87 SKUs + 12 kits en Shopify",
     "PRIORIDAD 1 — DATOS: BP_COPY_1.0 NeuroneSCF + ForumPHs + UnrealvilleStudio",
-    "PRIORIDAD 1 — DATOS: Onboarding ForumPHs + VivoseMask + PO×3 via OnboardingApp",
+    "PRIORIDAD 1 — SMA: inyectar URL session_log en system prompt del agente",
+    "PRIORIDAD 2 — BP_BRAND_UNRLVL: añadir amber (#FFB020) al palette en BluePrints",
     "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales",
-    "PRIORIDAD 2 — Social Media Agent: inyectar URL session_log en system prompt",
     "PRIORIDAD 2 — Shopify desde Claude: probar client credentials flow con Neurone",
     "PRIORIDAD 2 — NeuroneSCF: número comercial + Facebook Page + Instagram + WABA + TikTok",
     "PRIORIDAD 2 — NeuroneSCF: Video PO Kit SOS (TikTok)",
     "PRIORIDAD 2 — Cuentas: ElevenLabs + audio PO + HeyGen + Kling + Fal.ai",
     "PRIORIDAD 3 — VideoLab sprint (API keys)",
-    "PRIORIDAD 3 — OAuth Meta/TikTok → SocialLab publica real",
+    "PRIORIDAD 3 — OAuth Meta/TikTok — SocialLab publica real",
     "PRIORIDAD 3 — Psycho Layer extensión: CopyLab + SocialLab + VideoLab + VoiceLab",
     "PRIORIDAD 4 — LoRA Fal.ai + fotos PO"
   ]
