@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-04-08-v7 | **Mantenido por:** Claude
+**Versión:** 2026-04-14-v8 | **Mantenido por:** Claude
 
 ---
 
@@ -20,11 +20,31 @@ Los `.md` son **renders derivados** del JSON — nunca se editan directamente.
 | `brands/[Marca]/BP_Brand_Context.md` | ADN permanente de la marca | Solo si cambia algo estructural |
 | `brands/[Marca]/session_log.md` | Hilo vivo entre sesiones | Siempre — se añade al tope |
 | `agents/[nombre]/session_log.md` | Log de sesiones de agentes | El agente genera y Sam commitea |
+| `skills/github-auditor/SKILL.md` | Skill GitHub proxy | Solo si cambia el proxy o la estructura de repos |
 
 ### Regla crítica de los `.md`
 Los archivos `ecosystem.md` y `ecosystem_filemap.md` **nunca se editan manualmente**.
 Son generados por Claude a partir de `ecosystem.json` cada vez que ese archivo cambia.
-Cuando Sam los carga, siempre tienen la verdad actual porque son el último render del JSON.
+
+---
+
+## SKILL — GitHub Proxy (SIEMPRE DISPONIBLE)
+
+Claude puede leer cualquier archivo de cualquier repo privado de `unrealvillestudio-hub` vía:
+
+```
+Vercel:web_fetch_vercel_url → https://unrlvl-context.vercel.app/api/gh?action=[tree|file|repos]&repo=[REPO]&path=[PATH]
+```
+
+El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
+
+**Referencia completa:** `https://unrlvl-context.vercel.app/skills/github-auditor/SKILL.md`
+
+**Claude carga este skill cuando:**
+- Sam pide auditar un repo
+- Necesita leer un BP de marca que no está en el context system
+- Necesita inspeccionar código de un lab
+- Cualquier acceso a GitHub que no sea push directo
 
 ---
 
@@ -73,10 +93,9 @@ Fetch GET `https://unrlvl-social-media-agent.vercel.app/api/export` con header `
 - `ecosystem_filemap.md` — **siempre que ecosystem.json cambie** (regenerar desde JSON actualizado)
 
 **Regla de regeneración de `.md`:**
-Claude lee el `ecosystem.json` actualizado y genera los `.md` completos desde cero usando la estructura establecida en el audit de 2026-04-02:
+Claude lee el `ecosystem.json` actualizado y genera los `.md` completos desde cero usando la estructura establecida:
 - `ecosystem.md`: radiografía narrativa Capa A/B, estado por lab, gaps principales
 - `ecosystem_filemap.md`: flujos activos/rotos, gaps vs Neurone SCF, roadmap, naming conventions
-El contenido nuevo del JSON se refleja. Lo que no cambió sale igual. Los `.md` nunca se editan directamente.
 
 **3. REGLA CRÍTICA DE NOMENCLATURA**
 Los outputs se generan con el nombre **EXACTO** del archivo en el repo, sin prefijos de marca:
@@ -87,6 +106,7 @@ Los outputs se generan con el nombre **EXACTO** del archivo en el repo, sin pref
 - `ecosystem_filemap.md`
 - `BP_Brand_Context.md`
 - `SESSION_PROTOCOL.md`
+- `SKILL.md`
 - `social_media_agent_session_log.md`
 
 Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez de reemplazar — esto es un error.
@@ -96,6 +116,7 @@ Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez d
 **5. Recuerda a Sam:**
 - Arrastrar archivos de **marca** a `brands/[Marca]/` (no a la raíz)
 - Arrastrar `ecosystem.json`, `ecosystem.md`, `ecosystem_filemap.md` a la **raíz** del repo
+- Arrastrar skills a `skills/[nombre]/`
 - Verificar que GitHub Desktop muestre **modificaciones**, no archivos nuevos
 
 **6. Verifica** con `Vercel:web_fetch_vercel_url` post-deploy y confirma:
@@ -134,7 +155,6 @@ git push https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git main
 - El PAT actúa como credencial de escritura sobre los repos
 - Sam lo comparte en el chat cuando lo necesita — Claude lo usa para esa sesión
 - Se puede revocar en cualquier momento: GitHub → Settings → Developer Settings → Personal Access Tokens
-- PATs tienen fecha de expiración configurable — cuando expira Claude pide uno nuevo
 
 ### Repos donde aplica este flujo
 | Repo | Cuándo hacer push directo |
@@ -166,6 +186,7 @@ Claude pregunta una vez al día al detectar que Sam está por irse:
    - Ecosistema: raíz del repo (`ecosystem.json`, `ecosystem.md`, `ecosystem_filemap.md`)
    - Agentes: `agents/[nombre]/`
    - Protocolos: `protocols/`
+   - Skills: `skills/[nombre]/`
 3. GitHub Desktop muestra los cambios automáticamente
 4. Pegar el mensaje que Claude provee en "Summary"
 5. "Commit to main" → "Push origin"
@@ -214,10 +235,14 @@ Claude interrumpe activamente si:
 | Ecosistema (JSON) | `https://unrlvl-context.vercel.app/ecosystem.json` |
 | Ecosistema narrativo | `https://unrlvl-context.vercel.app/ecosystem.md` |
 | Mapa dependencias | `https://unrlvl-context.vercel.app/ecosystem_filemap.md` |
+| **Unrealville Studio brand** | `https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/brand.json` |
+| **Unrealville Studio BP** | `https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/BP_Brand_Context.md` |
 | ForumPHs brand | `https://unrlvl-context.vercel.app/brands/ForumPHs/brand.json` |
 | ForumPHs log | `https://unrlvl-context.vercel.app/brands/ForumPHs/session_log.md` |
 | NeuroneSCF brand | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/brand.json` |
 | NeuroneSCF log | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/session_log.md` |
 | VizosCosmetics brand | `https://unrlvl-context.vercel.app/brands/VizosCosmetics/brand.json` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
+| **GitHub Skill** | `https://unrlvl-context.vercel.app/skills/github-auditor/SKILL.md` |
+| **GitHub Proxy** | `https://unrlvl-context.vercel.app/api/gh` |
 | SMA export | `https://unrlvl-social-media-agent.vercel.app/api/export` |
