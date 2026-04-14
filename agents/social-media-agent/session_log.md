@@ -1,68 +1,68 @@
-# Session Log — Unrealville Studio
-_Marca interna · Sam (owner) · Actualizado: 2026-04-14_
+# Social Media Agent — Session Log
+_Exportado: 2026-04-14 · Generado por Claude durante Actualiza_
 
 ---
 
-## 2026-04-14 — Sesión de arquitectura de negocio y web
+## ESTADO INFRAESTRUCTURA NEURONE SCF
 
-### Resuelto esta sesión
+**GAP CRÍTICO:** El agente no tiene acceso al session_log del context system.
+Sam y Laura han pedido varias veces que el agente "retome" conversaciones anteriores — el agente no puede porque no tiene la URL del log en su system prompt. **Pendiente inyectar URL en system prompt.**
 
-**Brand context creado:**
-- `brand.json` — identidad completa, colores, tipografía, logotipo, footer, assets, output standards
-- `BP_Brand_Context.md` — ADN narrativo completo con checklist HTML, reglas absolutas del chevron, LoRA assets
-- Fuente: `BluePrints/brands/Unrealville/` — BP_BRAND_UNRLVL_v1.2.json + brand.json
-- Nota de nomenclatura: carpeta en BluePrints = `Unrealville` / carpeta en context system = `UnrealvilleStudio`
+---
 
-**GitHub proxy skill documentado:**
-- `skills/github-auditor/SKILL.md` — documenta el proxy `/api/gh` en unrlvl-context
-- Proxy activo y verificado: 21 repos accesibles, BluePrints árbol completo leído
-- PAT vive en Vercel env var `GH_PAT` — nunca en el chat
+## ACTIVIDAD POR USUARIO
 
-**SESSION_PROTOCOL.md actualizado a v8:**
-- Skill GitHub añadido al protocolo de carga
-- UnrealvilleStudio brand context añadido a tabla de referencias
-- `/api/gh` documentado como endpoint de lectura de repos
+### LAURA (ops)
 
-**Pricing architecture completada:**
-- Tiers: SIGNAL ($3,500/mo) / PULSE ($6,500/mo) / ORBIT ($12,000/mo)
-- E-Commerce add-on: Signal +$2,000 / Pulse +$3,500 / Orbit +$4,500 por marca
-- Setup fee = 1 mes de retainer por módulo activo
-- Revenue sharing 10% sobre ventas atribuibles desde mes 13
-- Documentos generados: `UNRLVL_PriceList_v1.2.html` + `UNRLVL_Pricing_Costs_v1.0.html`
-- Amber (`#FFB020`) añadido al brand palette para distinciones de pricing
+**2026-04-06:**
+- Pregunta sobre TikTok Shop — necesita dirección comercial, business license, EIN, warehouse
+- Conflicto de direcciones (residencial vs. comercial en documentos)
+- Decisión: usar dirección de documentos oficiales para Meta/TikTok Ads, diferir TikTok Shop
 
-**Color amber propuesto para BP_BRAND_UNRLVL:**
-```json
-"amber": {
-  "hex": "#FFB020",
-  "role": "Secondary accent — setup fees, pricing distinctions. Never primary. Max 10% visual weight.",
-  "variants": { "amber_20": "rgba(255,176,32,0.20)", "amber_08": "rgba(255,176,32,0.08)" }
-}
-```
+**2026-04-10:**
+- Retoma apertura de cuentas de redes sociales
+- Agente confirma: Meta BM parcialmente configurado, número T-Mobile activo
+- Pendiente: Patricia completa info empresa en BM desde Miami sin VPN
 
-### Pendiente de esta sesión (continuación inmediata)
+### SAM (admin)
 
-- **Psycho Layer section** — sección web `unrealvillestudio.com` con demo interactivo (7 estímulos, mismo producto transformándose en tiempo real)
-- **Profiler Agent** — reemplaza formulario estático `#select` en `index.html`. Conversación en inglés/español, 5 etapas, scoring interno, brief para Sam, datos a Supabase
-- **Push a CoreProject** — una vez construidos ambos, push directo vía bash
+**2026-04-06:**
+- Pregunta estado del proyecto — agente respondió incorrectamente (sin session_log)
+- Sam corrigió indicando path del session_log
+- Agente no pudo acceder — GAP confirmado
 
-### Web pendientes (unrealvillestudio.com)
+**2026-04-10:**
+- Consulta correos necesarios por red social
+- Agente genera: admin, hello, support, ig, tiktok, waba, ads @neuronescflorida.com (7 aliases)
+- Sam pregunta lo último hecho — agente no pudo responder (mismo GAP)
 
-- [x] Site LIVE — 2026-04-10
-- [ ] Cloudflare setup
-- [ ] Redirect rules
-- [ ] Aliases email (desde Cloudflare)
-- [ ] Formulario contacto → **Profiler Agent** (en construcción)
-- [ ] Sección **Psycho Layer** (en construcción)
+### PATY (po)
 
-### Decisiones de negocio tomadas hoy
+**2026-04-06:**
+- Primera sesión · checklist inicial entregado
+- Pendiente: configurar desde Miami sin VPN
 
-- Mercado: USA + LATAM únicamente. España/Europa fuera del mapa por ahora.
-- Tiers nombrados Signal / Pulse / Orbit — no categorías jerárquicas
-- Blueprint (no Brand DNA) como término oficial
-- Revenue share desde mes 13 — los 12 primeros meses son de prueba y construcción de dependencia
-- E-Commerce no se vende sin Media & Brand
-- Ad spend siempre en cuentas del cliente — UNRLVL gestiona, nunca financia
-- Sin proyectos puntuales sin retainer
-- Aprobaciones vía sistema estructurado — cambios fuera de proceso: $150/hr
-- "Account Manager" en materiales externos — no mencionar a Sam por nombre
+---
+
+## PENDIENTES BLOQUEANTES
+
+| Item | Responsable | Estado |
+|---|---|---|
+| Meta BM — info empresa completa | Laura/PO desde Miami sin VPN | ❌ Pendiente |
+| Número comercial dedicado | Sam/Laura | ❌ Pendiente |
+| 7 aliases email @neuronescflorida.com | Sam | ❌ Pendiente |
+| Facebook Page | PO | ❌ Pendiente |
+| Instagram Business | PO | ❌ Pendiente |
+| TikTok for Business | Laura | ❌ Pendiente |
+| Inyectar URL session_log en system prompt | Sam | ❌ GAP técnico |
+
+---
+
+## PRÓXIMO PASO
+
+Patricia desde Miami (sin VPN):
+`business.facebook.com → Configuración → Información de la empresa`
+Campos: nombre legal, dirección oficial, EIN, industry, website neuronescflorida.com
+
+---
+_Social Media Agent · NeuroneSCF · Export 2026-04-14_
