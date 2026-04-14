@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-14",
+    "version": "2026-04-14b",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -18,23 +18,16 @@
     },
     "last_audit": {
       "date": "2026-04-14",
-      "status": "FPH-012 ICR Final Process CERRADO. Document Factory v1.4 pipeline completo y en producción. ForumPHs Speaks LIVE. Todos los sistemas ForumPHs operativos.",
+      "status": "speaks.forumphs.com CNAME activo. Autorización marca Neurone US confirmada. Profiler Agent + Psycho Layer web añadidos como ideas en desarrollo.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
-        "FPH-012: ICR Final Process completo — ICRResolution.tsx + fphs-icr-apply edge function deployada.",
-        "ICR inline annotations en DOCX: banners coloreados por sección + página Anexo ICR al final.",
-        "Botón 'Con anotaciones ICR' en step done — genera DOCX con hallazgos embebidos para Ivette.",
-        "Fix: total_units mapeado desde preflight answers al skeleton — quórum % ya no es 0%.",
-        "Fix: ICR maxDuration 55→120s — resuelve 504 timeout en actas largas.",
-        "Fix: ICRFinding.location vs section — banners inline ahora matchean correctamente.",
-        "Fix: footer background #0F0F0F per BP_BRAND_v1.2 (era rgba dark blue).",
-        "Fix: FPHS_logo-wt.png path correcto en top bar y footer.",
-        "Fix: @import removido del style tag — resuelve hydration mismatch #418/#423.",
-        "UNRLVL animated chevron (chev-listen 0.9s) + Bebas Neue via layout.tsx.",
-        "Sweep logic simplificada: user-driven 2º/3er barrido +10% tolerancia, sin auto-retry.",
-        "Download bar solo en step done — fix descarga prematura antes de ICR.",
-        "ForumPHs Speaks: ANTHROPIC_API_KEY en Supabase Secrets — LIVE en producción.",
-        "QA 328/328 bloques (100%), ~36 páginas, PASS confirmado en producción real."
+        "speaks.forumphs.com CNAME — activo en Cloudflare + Vercel.",
+        "Autorización marca Neurone US — confirmada. Ya no bloquea lanzamiento.",
+        "ForumPHs Document Factory v1.4 CERRADO — pipeline completo en producción.",
+        "ForumPHs Speaks LIVE — ANTHROPIC_API_KEY en Supabase Secrets.",
+        "ICR Final Process completo — 328/328 bloques PASS.",
+        "unrealvillestudio.com LIVE — 2026-04-10.",
+        "Vercel Pro upgrade completado."
       ],
       "production_real": [
         "CopyLab",
@@ -70,7 +63,7 @@
     "last_updated": "2026-04-05",
     "currency": "USD (Claude.ai en EUR — aprox. $115)",
     "total_monthly_range": "$457-507",
-    "notes": "Vercel Pro upgrade pendiente. Supabase free suficiente.",
+    "notes": "Vercel Pro activo. Supabase free suficiente.",
     "breakdown": {
       "ai_production": {
         "total_range": "$398-452",
@@ -88,7 +81,7 @@
       "infrastructure": {
         "total": "$20",
         "items": [
-          { "name": "Vercel Pro", "type": "fixed", "amount": "$20", "notes": "PENDIENTE UPGRADE — Hobby prohibe uso comercial" },
+          { "name": "Vercel Pro", "type": "fixed", "amount": "$20", "notes": "Activo" },
           { "name": "Supabase", "type": "fixed", "amount": "$0", "notes": "Free. 14MB/500MB (2.8%)" }
         ]
       },
@@ -125,7 +118,8 @@
       "status": "active",
       "health": "yellow",
       "data_completeness": "humanize/goals/personas/geomix OK. copy_profile PENDIENTE. Shopify precios pendientes.",
-      "last_updated": "2026-04-05"
+      "marca_authorization": "CONFIRMADA — ya no bloquea lanzamiento",
+      "last_updated": "2026-04-14"
     },
     {
       "id": "ForumPHs",
@@ -139,35 +133,17 @@
       "health": "green",
       "speaks_status": {
         "frontend": "forumphs-speaks.vercel.app — PROD",
+        "custom_domain": "speaks.forumphs.com — ACTIVO",
         "backend": "Supabase Edge Functions fphs-session v6 + fphs-chat v5",
         "qa_layer": "ACTIVO — prompt-blink 1.1s step-end, doble razonamiento",
         "knowledge_base_version": "v2 — 3 correcciones Ivette validadas",
         "unrlvl_signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col, border-top 2px cyan",
-        "pending": ["speaks.forumphs.com CNAME", "foto Ivette", "más correcciones Ivette si las hay"],
-        "rls": "APLICADO 2026-04-11 — speaks_* service_role only",
+        "pending": ["foto Ivette", "más correcciones Ivette si las hay"],
         "status": "PRODUCCIÓN — operativo"
       },
       "document_factory_status": {
         "version": "v1.4",
         "vercel_url": "forumphs-document-factory.vercel.app",
-        "repo": "unrealvillestudio-hub/forumphs-document-factory",
-        "supabase_edge_functions": {
-          "fphs-formalize": "v7 — grupos secuenciales 6 agentes, tolerancia adaptativa",
-          "fphs-icr-apply": "v1 — ICR corrections engine, ACTIVE"
-        },
-        "pipeline": "ZIP Extractor (local) → JSON → Pre-flight → Paso 0.5 (17 agentes) → Generar → QA → ICR → Revisión ICR → Descarga",
-        "qa_layer": "QA mecánico (8 tipos error) + ICR semántico (Claude auditor legal)",
-        "icr_annotations": "Inline banners coloreados por sección + Anexo ICR página final en DOCX",
-        "sweep_logic": "User-driven: 1º barrido 40% tol → oferta 2º +10% → oferta 3er +10%",
-        "last_test_result": "328/328 bloques (100%), ~36 páginas, 7/7 completeness, PASS",
-        "fixes_v1_4": [
-          "total_units mapeado desde preflight al skeleton — fix quórum 0%",
-          "ICR maxDuration 120s — fix 504 timeout",
-          "ICRFinding.location field — fix banners inline",
-          "Footer #0F0F0F + FPHS_logo-wt.png + UNRLVL chev-listen animated",
-          "Download bar solo en step done",
-          "Sweep simplificado user-driven sin auto-retry"
-        ],
         "status": "PRODUCCIÓN — pipeline completo CERRADO v1.4"
       },
       "last_updated": "2026-04-14"
@@ -181,11 +157,18 @@
       "language_primary": "EN",
       "status": "active",
       "health": "green",
-      "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO — JSON + HTML ES + EN. lt-* logotype. prompt-blink 1.1s step-end. Footer golden rule.",
-      "last_updated": "2026-04-14",
-      "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
+      "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO — JSON + HTML ES + EN.",
       "web": "unrealvillestudio.com",
-      "web_status": "LIVE — 2026-04-10"
+      "web_status": "LIVE — 2026-04-10",
+      "web_pending": [
+        "Cloudflare setup",
+        "Redirect rules",
+        "Aliases email (desde Cloudflare)",
+        "Formulario contacto → Profiler Agent",
+        "Sección Psycho Layer como diferenciador"
+      ],
+      "last_updated": "2026-04-14",
+      "hq": "12951 Biscayne Blvd · North Miami, FL 33181"
     },
     { "id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "sam_role": "owner", "market": "Florida USA", "language_primary": "es-FL", "status": "active", "health": "green", "last_updated": "2026-03-30" }
   ],
@@ -219,25 +202,11 @@
       "name": "ForumPHs Speaks",
       "repo": "unrealvillestudio-hub/forumphs-speaks",
       "vercel_url": "forumphs-speaks.vercel.app",
-      "custom_domain_pending": "speaks.forumphs.com",
+      "custom_domain": "speaks.forumphs.com",
       "serves_brand": "ForumPHs",
       "status": "PRODUCCIÓN — LIVE",
       "engine": "Claude Sonnet 4 via Supabase Edge Functions",
-      "functions": {
-        "fphs-session": "v6 — session management, golden pass, lead capture",
-        "fphs-chat": "v5 — Claude + QA layer (chev-listen) + 3 correcciones Ivette"
-      },
-      "signature": "BP_BRAND_UNRLVL_v1.2 — footer 3col. Col1=ForumPHs wm+desc · Col2=© rights · Col3=Designed & Developed by Unreal>ille Studio. border-top 2px #00FFD1. chev-listen 0.9s.",
-      "knowledge_base": {
-        "version": "v2 — 2026-04-07",
-        "corrections": [
-          "Renuncia JD → SÍ requiere inscripción Registro Público",
-          "Fondo Imprevistos → NO citar Art.100 (número en revisión); afirmar Cap.VII, 1% anual, obligatorio",
-          "Art.111 → 3 MESES para impugnar asamblea (no 30 días). Perentorio."
-        ]
-      },
-      "golden_pass": ["forumphs@forumphs.com", "ivetteflores@forumphs.com", "forumphs507@gmail.com", "blackoutbusinessgroup@gmail.com"],
-      "pending": ["speaks.forumphs.com CNAME", "foto Ivette", "más correcciones Ivette si las hay"],
+      "pending": ["foto Ivette", "más correcciones Ivette si las hay"],
       "last_updated": "2026-04-14"
     },
     {
@@ -248,38 +217,18 @@
       "serves_brand": "ForumPHs",
       "operator": "Ivette Flores",
       "status": "PRODUCCIÓN — v1.4 CERRADO",
-      "version": "v1.4",
-      "engine": "Claude Sonnet 4.6 via Supabase Edge Functions (17 agentes) + Vercel Next.js 14",
-      "supabase_functions": {
-        "fphs-formalize": "v7 — SYS0/SYS1/SYS2 tolerancia adaptativa, grupos secuenciales 6, template fallback attempt 3, bold nombre+ubicación",
-        "fphs-icr-apply": "v1 — ICR corrections engine, aplica findings al DOCX"
-      },
-      "pipeline_steps": ["ZIP (local extractor)", "Pre-flight (gaps)", "Paso 0.5 (agentes Edge Function)", "Generar DOCX", "QA mecánico", "ICR semántico", "Revisión ICR (ICRResolution.tsx)", "Descarga limpia + Descarga con anotaciones ICR"],
-      "qa_layer": "Mecánico: 8 tipos de error. ICR: Claude auditor legal — hallazgos CRITICAL/HIGH/MEDIUM/LOW con sugerencias.",
-      "icr_annotations": "DOCX anotado: banners sombreados por sección + Anexo ICR página final con tarjetas coloreadas.",
-      "last_test": {
-        "date": "2026-04-14",
-        "ph": "PH Los Álamos",
-        "blocks": "328/328 (100%)",
-        "pages": "~36",
-        "completeness": "100% 7/7 OK",
-        "score": "PASS"
-      },
-      "next_sprint": null,
       "last_updated": "2026-04-14"
     }
   ],
   "infrastructure": [
     { "id": "INFRA-CTX", "name": "Context System", "vercel_url": "https://unrlvl-context.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-context", "status": "active", "last_updated": "2026-04-14" },
-    { "id": "INFRA-SB", "name": "Supabase DB", "project_id": "amlvyycfepwhiindxgzw", "status": "active", "mcp_connected": true, "schema_version": "v2.0 — 37 tablas", "speaks_tables": "speaks_sessions/messages/leads/golden_pass — RLS off, GRANTs OK", "last_updated": "2026-04-14" },
-    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "vercel_url": "https://unrealvillestudio.com", "vercel_project": "unrlvl-core-project", "repo": "unrealvillestudio-hub/CoreProject", "status": "LIVE — 2026-04-10", "pending": "Formulario de contacto + Cloudflare + redirect rules", "last_updated": "2026-04-14" },
-    { "id": "INFRA-TOOLS", "name": "Tools repo", "repo": "unrealvillestudio-hub/Tools", "vercel_url": null, "status": "active — private repo", "contents": "github-auditor/SKILL.md — /api/gh endpoint", "last_updated": "2026-04-10" }
+    { "id": "INFRA-SB", "name": "Supabase DB", "project_id": "amlvyycfepwhiindxgzw", "status": "active", "mcp_connected": true, "schema_version": "v2.0 — 37 tablas", "last_updated": "2026-04-14" },
+    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "vercel_url": "https://unrealvillestudio.com", "repo": "unrealvillestudio-hub/CoreProject", "status": "LIVE — 2026-04-10", "pending": ["Cloudflare setup", "Redirect rules", "Aliases email", "Formulario contacto → Profiler Agent", "Sección Psycho Layer"], "last_updated": "2026-04-14" },
+    { "id": "INFRA-TOOLS", "name": "Tools repo", "repo": "unrealvillestudio-hub/Tools", "status": "active — private repo", "last_updated": "2026-04-10" }
   ],
   "blueprints_repo": {
     "repo": "unrealvillestudio-hub/BluePrints",
-    "note": "Repo de assets BP_BRAND por cliente. NO es BlueprintLab (la app). Contiene JSON blueprints de marca.",
-    "brands_committed": ["BP_BRAND_ForumPHs_v1.0.json", "BP_BRAND_NeuroneSCF_v1.0.json", "BP_BRAND_UNRLVL_v1.2.json", "BP_BRAND_UNRLVL_v1.0.json (legacy)"],
-    "note_unrlvl": "BP_BRAND_UNRLVL_v1.2 existe como HTML (BP_BRAND_UnrealilleStudio_v1_2_EN.html) — versión JSON v1.0 en repo. Animación canónica en v1.2: chev-listen (no chevron-blink).",
+    "brands_committed": ["BP_BRAND_ForumPHs_v1.0.json", "BP_BRAND_NeuroneSCF_v1.0.json", "BP_BRAND_UNRLVL_v1.2.json"],
     "last_updated": "2026-04-11",
     "vercel_url": "unrlvl-blueprints.vercel.app",
     "structure": "brand-first COMPLETO — brands/[Brand]/assets/"
@@ -289,8 +238,28 @@
     "table": "psycho_presets",
     "presets_count": 10,
     "pending_integration": ["CopyLab", "SocialLab", "VideoLab", "VoiceLab"],
-    "last_updated": "2026-04-05"
+    "web_section": "PENDIENTE — añadir sección en unrealvillestudio.com como diferenciador de venta",
+    "last_updated": "2026-04-14"
   },
+  "ideas_en_desarrollo": [
+    {
+      "id": "IDEA-001",
+      "name": "Profiler Agent",
+      "description": "Agente conversacional en formulario de contacto de unrealvillestudio.com. Califica al visitante antes de que llegue a Sam — tipo de negocio, presupuesto estimado, necesidad, urgencia. Sam recibe un brief pre-armado en lugar de un 'me interesa, llámame'. Patrón: Claude + Supabase Edge Function (igual que ForumPHs Speaks).",
+      "status": "idea — pendiente implementar",
+      "target": "unrealvillestudio.com",
+      "added": "2026-04-14"
+    },
+    {
+      "id": "IDEA-002",
+      "name": "Psycho Layer — extensión multi-lab",
+      "description": "Capa transversal que inyecta el objetivo psicológico del output (urgencia, autoridad, pertenencia, confianza, FOMO, identidad, reciprocidad, contraste) al prompt de cualquier lab antes de generar. Ya en PROD en ImageLab con 10 presets. Pendiente extender a CopyLab, SocialLab, VideoLab, VoiceLab.",
+      "status": "parcialmente en producción — extensión pendiente",
+      "in_production": "ImageLab",
+      "pending": ["CopyLab", "SocialLab", "VideoLab", "VoiceLab"],
+      "added": "2026-04-14"
+    }
+  ],
   "brand_id_canonical_map": {
     "neuroneCosmetics": "NeuroneSCF",
     "patriciaOsorioVizosSalon": "PatriciaOsorioVizosSalon",
@@ -304,17 +273,24 @@
     "unrealilleStudio": "UnrealvilleStudio"
   },
   "next_session_agenda": [
-    "PRIORIDAD 1 — ForumPHs: speaks.forumphs.com CNAME en Cloudflare",
-    "PRIORIDAD 1 — ForumPHs: foto Ivette para ForumPHs Speaks",
-    "PRIORIDAD 1 — NeuroneSCF: completar Meta BM info empresa (Laura/PO desde Miami)",
-    "PRIORIDAD 1 — unrealvillestudio.com: redirect rules + formulario contacto backend",
+    "PRIORIDAD 1 — unrealvillestudio.com: Cloudflare setup + redirect rules + aliases email",
+    "PRIORIDAD 1 — unrealvillestudio.com: Profiler Agent en formulario de contacto",
+    "PRIORIDAD 1 — unrealvillestudio.com: Sección Psycho Layer como diferenciador",
+    "PRIORIDAD 1 — ForumPHs: foto Ivette para Speaks",
+    "PRIORIDAD 1 — NeuroneSCF: Laura/PO completar Meta BM info empresa (Miami, sin VPN)",
+    "PRIORIDAD 1 — NeuroneSCF: precios reales + inventario real → PO confirma",
+    "PRIORIDAD 1 — NeuroneSCF: cargar 87 SKUs + 12 kits en Shopify",
+    "PRIORIDAD 1 — DATOS: BP_COPY_1.0 NeuroneSCF + ForumPHs + UnrealvilleStudio",
+    "PRIORIDAD 1 — DATOS: Onboarding ForumPHs + VivoseMask + PO×3 via OnboardingApp",
     "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales",
-    "PRIORIDAD 1 — DATOS: BP_COPY_1.0 para NeuroneSCF + ForumPHs + UnrealvilleStudio",
-    "PRIORIDAD 1 — DATOS: Onboarding ForumPHs, VivoseMask, PO x3 via OnboardingApp",
-    "PRIORIDAD 2 — CUENTAS: ElevenLabs Creator + audio PO + voice clone",
-    "PRIORIDAD 2 — CUENTAS: HeyGen + Kling + Fal.ai",
-    "PRIORIDAD 3 — SPRINT VideoLab: API keys → /api/execute → activar lab_configs",
-    "PRIORIDAD 3 — SPRINT OAuth: Meta/TikTok → SocialLab publica real",
-    "PRIORIDAD 4 — LoRA: Fal.ai + fotos PO (~$20 one-time)"
+    "PRIORIDAD 2 — Social Media Agent: inyectar URL session_log en system prompt",
+    "PRIORIDAD 2 — Shopify desde Claude: probar client credentials flow con Neurone",
+    "PRIORIDAD 2 — NeuroneSCF: número comercial + Facebook Page + Instagram + WABA + TikTok",
+    "PRIORIDAD 2 — NeuroneSCF: Video PO Kit SOS (TikTok)",
+    "PRIORIDAD 2 — Cuentas: ElevenLabs + audio PO + HeyGen + Kling + Fal.ai",
+    "PRIORIDAD 3 — VideoLab sprint (API keys)",
+    "PRIORIDAD 3 — OAuth Meta/TikTok → SocialLab publica real",
+    "PRIORIDAD 3 — Psycho Layer extensión: CopyLab + SocialLab + VideoLab + VoiceLab",
+    "PRIORIDAD 4 — LoRA Fal.ai + fotos PO"
   ]
 }
