@@ -1,92 +1,74 @@
 # Session Log — Unrealville Studio
-_Marca interna · Sam (owner) · Actualizado: 2026-04-14_
+_Marca interna · Sam (owner) · Actualizado: 2026-04-15_
 
 ---
 
-## 2026-04-14 — Sesión maratón · Web + Profiler Agent + CRM
+## 2026-04-15 — Sesión de infraestructura completa
 
 ### Resuelto hoy
 
-**Brand context creado en context system:**
-- `brand.json` + `BP_Brand_Context.md` — identidad completa, colores, tipografía, logotipo, footer, assets, output standards
-- Fuente: `BluePrints/brands/Unrealville/BP_BRAND_UNRLVL_v1.2.json`
-- Nota: carpeta en BluePrints = `Unrealville` / carpeta en context system = `UnrealvilleStudio`
+**Cloudflare setup completo via proxy `/api/cf`:**
+- Always HTTPS: ON · www→apex redirect (301) activos
+- Proxy CF creado en unrlvl-context, opera los 6 dominios via API
 
-**GitHub proxy skill:**
-- `skills/github-auditor/SKILL.md` — proxy `/api/gh` documentado y verificado (21 repos accesibles)
-- PAT vive en Vercel env var `GH_PAT` — nunca en el chat
+**CoreProject limpieza (51→37 archivos):**
+- PDFs financieros ForumPHs eliminados (eran públicamente accesibles — riesgo seguridad)
+- DB_VARIABLES_v6.xlsx, ContextoTemp.md, brand book v1.1, sites/ completa eliminados
+- GitHub proxy `/api/gh` v2 con soporte de escritura
 
-**SESSION_PROTOCOL.md v8** — GitHub skill + UnrealvilleStudio añadidos
+**Web unrealvillestudio.com — LIVE completo:**
+- EN: index.html con Psycho Layer + Profiler Agent + amber LIVE
+- ES: es/index.html traducción completa LIVE
+- Language switcher EN↔ES + hreflang SEO
+- Vizos WF corregido — no falla cuando no hay archivos Vizos
 
-**Pricing architecture cerrada v1.2:**
-- Tiers: SIGNAL $3,500 / PULSE $6,500 / ORBIT $12,000/mo
-- E-Commerce add-on: Signal +$2,000 / Pulse +$3,500 / Orbit +$4,500 por marca
-- Setup fee = 1 mes de retainer por módulo activo
-- Revenue sharing 10% sobre ventas atribuibles desde mes 13
-- Tiers: Signal / Pulse / Orbit (no jerárquicos)
-- Blueprint como término oficial (no Brand DNA)
-- Ad spend en cuenta del cliente — UNRLVL gestiona, nunca financia
-- Sin proyectos puntuales sin retainer
-- Aprobaciones vía sistema estructurado — cambios fuera de proceso: $150/hr
-- "Account Manager" en materiales externos
-- Documentos: `UNRLVL_PriceList_v1.2.html` + `UNRLVL_Pricing_Costs_v1.0.html`
-- Color amber `#FFB020` añadido al brand palette (secondary accent, pricing distinctions)
+**Profiler Agent v5 LIVE:**
+- Senior strategist, bar conversation energy
+- Conocimiento marketing/publicidad/consumer behavior embebido
+- NO revela: nombres de labs, % AI, precios de tiers
+- Brief enriquecido con tone_read + flags
 
-**Web unrealvillestudio.com — index.html completo (pendiente push):**
-- Bugs corregidos: GSAP scripts limpios, chevron parpadeando (BP_BRAND), dirección correcta
-- Psycho Layer section: demo interactivo 7 estímulos (Authority/Urgency/Aspiration/Belonging/FOMO/Identity/Trust)
-- Profiler Agent: reemplaza formulario estático #select
-- Amber: CTA "Let's talk" con pulse + ventana del agente con ring animation
-- Nav CTA: "Apply →" → "Let's talk →"
-- Footer: border-top 2px cyan + background carbon (BP_BRAND v1.2 compliant)
+**Auditoría completa de labs:**
+- CopyLab: motor 13 capas, BP_COPY_1.0 pendiente 3 marcas
+- WebLab: módulo Shopify completo (nc-* Liquid, ThemeDeployModule, ShopifyPushModule)
+- ImageLab: gaps — background removal básico, sin LoRA Prep
+- AgentLab: 6 módulos + apps/assistant (proyecto personal madre de Sam)
+- Orchestrator: Claude intent interpreter → plan JSON → ejecuta labs
+- BlueprintLab: 4 schemas activos
 
-**Profiler Agent — Edge Function v3 LIVE:**
-- Endpoint: `https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler`
-- Conversación natural 5 etapas EN/ES · scoring fit high/medium/low
-- Detección email + nombre · brief generado por Claude
-- Email a `leads@unrealvillestudio.com` via Resend (brief + conversación completa)
-- `reply_to` → email del prospecto · no duplica notificaciones
+**Plan Maestro creado:**
+Archivo `PLAN_MAESTRO_LABS_SKILLS.md` en context system — roadmap detallado de labs, skills permanentes, LoRA pipeline, roadmap priorizado por trimestre
 
-**Email infrastructure:**
-- `leads@unrealvillestudio.com` — Cloudflare Email Routing activo
-- `profiler@unrealvillestudio.com` — Resend (transaccional), dominio verificado
-- `RESEND_API_KEY` en Supabase Secrets
+**Skills permanentes — estrategia definitiva (6 skills, ninguno duplica labs):**
+1. `ui-ux-layer` — Prioridad 1
+2. `image-processing` — Prioridad 2 (incluye pipeline LoRA Prep)
+3. `agent-builder` — Prioridad 3
+4. `copylab-reference` — Prioridad 4
+5. `weblab-shopify-reference` — Prioridad 5
+6. `security` — Prioridad 6
 
-**UNRLVL CRM v1.0 — Schema activo en Supabase:**
-- `crm_contacts` — pipeline: lead → qualified → onboarding → active → paused → churned → lost
-- `crm_activities` — interacciones, notas, emails
-- `crm_stage_history` — historial de cambios de etapa
-- Trigger `sync_profiler_to_crm` — auto-popula crm_contacts cuando Profiler captura email
-- Dashboard: pendiente construir próxima sesión
+**LoRA Prep pipeline diseñado:**
+Face detection → Smart crop 1024×1024 → Fal.ai birefnet → Quality filter → Claude Vision captions → ZIP para FLUX Dreambooth
+BlueprintLab llama a ImageLab para procesamiento de fotos de personas reales (piloto: Patricia Osorio)
 
-### Decisiones tomadas hoy
-
-- Mercado: USA + LATAM únicamente. España/Europa fuera del mapa por ahora.
-- Sin email ni teléfono visible en web — solo el Profiler Agent como punto de contacto
-- El agente captura email del prospecto · Sam recibe brief por email
-- Leads calificados entran a flujo de email (pendiente implementar)
-- Onboarding: prospecto calificado recibe datos de contacto Sam + Account Executive
-- Número Twilio (cuando se tenga): canal de salida solo para leads calificados, no visible en web
+**UNRLVL CRM v1.0 schema activo en Supabase:**
+Tablas: crm_contacts, crm_activities, crm_stage_history
+Trigger: sync_profiler_to_crm activo
+Dashboard: PENDIENTE CONSTRUIR (próxima actividad)
 
 ### Pendiente próxima sesión
 
-1. Push index.html a CoreProject (PAT requerido)
-2. Versión /es del sitio + link EN↔ES
-3. UNRLVL CRM dashboard (gestión pipeline Sam)
-4. Cloudflare redirect rules (www→apex, http→https)
-5. SMA: inyectar URL session_log en system prompt
-6. Flujo email al prospecto calificado
-7. Amber en BP_BRAND_UNRLVL_v1.2.json en BluePrints
+1. **UNRLVL CRM dashboard** — gestión pipeline leads para Sam
+2. Push index.html a CoreProject (PAT)
+3. Skill `ui-ux-layer` (primera sesión dedicada)
+4. NeuroneSCF: Meta BM + 87 SKUs + precios
+5. SMA: URL session_log en system prompt
 
-### Web sections status
+### Decisiones importantes
 
-| Sección | Estado |
-|---|---|
-| Hero | LIVE |
-| Ecosystem (What We Build) | LIVE |
-| Criterion (30+) | LIVE |
-| Proof (What It Can Do) | LIVE |
-| Analytics (Ecosystem in Motion) | LIVE |
-| Psycho Layer | BUILT — pendiente push |
-| Profiler Agent (#select) | BUILT — pendiente push |
-| Footer | LIVE |
+- apps/assistant = proyecto personal madre de Sam. Patrón técnico reutilizable.
+- BlueprintLab es punto de entrada LoRA workflow → llama a ImageLab
+- Fal.ai birefnet para background removal real (reemplazar color-matching básico)
+- CoreProject = repo del sitio web UNRLVL, no almacenamiento general
+- PDFs financieros de clientes → Supabase Storage privado, NUNCA repos públicos
+- Orchestrator system prompt necesita actualización cuando LoRA Prep esté listo

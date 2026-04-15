@@ -1,77 +1,95 @@
 # UNRLVL ECOSYSTEM — Radiografía
-_Generado desde ecosystem.json · 2026-04-14d · Claude Sonnet 4.6_
+_Generado desde ecosystem.json · 2026-04-15a · Claude Sonnet 4.6_
 
 ---
 
 ## ESTADO GENERAL
 
-Sesión maratón. Ecosistema en producción activa con 14 sistemas en Capa A. Web `unrealvillestudio.com` completada con Psycho Layer + Profiler Agent + amber — pendiente push. Profiler Agent v3 LIVE con notificación email via Resend. UNRLVL CRM v1.0 schema activo en Supabase con trigger de auto-sync. Cloudflare + email infrastructure activos.
+Sesión maratón día 2. Auditoría completa de todos los labs ejecutada. Web LIVE en EN+ES. Profiler Agent v5 con carácter de negocio real. Cloudflare configurado via proxy. CRM schema activo, dashboard pendiente. Plan Maestro de labs y skills creado como referencia permanente.
 
 ---
 
-## CAPA A — PRODUCCIÓN REAL
+## LABS — ESTADO REAL POST-AUDITORÍA
 
-| Sistema | Estado | Notas |
+| Lab | Estado | Gap principal |
 |---|---|---|
-| CopyLab | PASSED v8.0 | 24 queries paralelas |
-| WebLab | PASSED — Supabase DONE | Sprint Objectives Window pendiente |
-| ImageLab | PASSED ICR v1.0 | Imagen 3 + Gemini 2.5 Flash · PsychoLayer DONE |
-| OnboardingApp | PASSED Phase 4 | 8 tablas Supabase |
-| Social Media Agent | ACTIVE | Claude Sonnet 4 + @vercel/kv · GAP: no lee session_log |
-| UNRLVL-OPS | PASSED | Internal tool |
-| SocialLab | PASSED | Meta/TikTok OAuth pendiente |
-| AgentLab | PASSED | Supabase-first |
-| BlueprintLab | PASSED | 4 schemas activos |
-| Orchestrator | PASSED | 4 labs activos |
-| ForumPHs Speaks | PRODUCCIÓN LIVE | speaks.forumphs.com · Supabase Edge Functions |
-| ForumPHs Document Factory | PRODUCCIÓN v1.4 CERRADO | Pipeline completo |
-| unrealvillestudio.com | LIVE — 2026-04-10 | Cloudflare activo · index.html actualizado pendiente push |
-| Profiler Agent | ACTIVO — Edge Function v3 | Resend email · auto-sync CRM · EN/ES |
+| CopyLab | ✅ PROD v8.0 · 13 capas | BP_COPY_1.0 vacío para 3 marcas |
+| WebLab | ✅ PROD · Shopify module completo | Sprint Objectives Window pendiente |
+| ImageLab | ✅ PROD ICR v1.0 | Background removal básico · sin LoRA Prep |
+| AgentLab | ✅ PROD | Twilio pendiente · voice sin integrar |
+| BlueprintLab | ✅ PROD | BP_COPY_1.0 datos pendientes |
+| Orchestrator | ✅ PROD | Actualizar cuando LoRA Prep esté listo |
+| SocialLab | ✅ PROD | Meta/TikTok OAuth pendiente |
+| VideoLab | 🔴 BLOQUEADO | HeyGen + Kling API keys |
+| VoiceLab | 🔴 BLOQUEADO | voice_ids ElevenLabs |
+| UNRLVL-OPS | ✅ PROD | — |
+| OnboardingApp | ✅ PROD Phase 4 | — |
 
 ---
 
-## CAPA B — EN DESARROLLO
+## INFRASTRUCTURE ACTIVA
 
-**Psycho Layer web** — Demo interactivo 7 estímulos implementado en index.html. Pendiente push a CoreProject.
+**Context System** `unrlvl-context.vercel.app`
+- `/api/gh` v2 — GitHub proxy read+write (21 repos)
+- `/api/cf` — Cloudflare proxy (6 dominios, Always HTTPS + redirects)
 
-**UNRLVL CRM** — Schema v1.0 activo en Supabase. Tablas: `crm_contacts`, `crm_activities`, `crm_stage_history`. Trigger `sync_profiler_to_crm` auto-popula contactos desde Profiler Agent. Dashboard de gestión pendiente construir.
+**Supabase** `amlvyycfepwhiindxgzw` · 40 tablas · Free tier
+- CRM: crm_contacts + crm_activities + crm_stage_history + trigger auto-sync
+- Profiler sessions: sync automático a CRM cuando se captura email
 
-**VideoLab** — UI PASSED. Bloqueado por API keys HeyGen + Kling.
-
-**VoiceLab** — UI PASSED. Bloqueado por voice_ids ElevenLabs.
-
----
-
-## INFRAESTRUCTURA
-
-**Email:** Cloudflare Email Routing → `leads@unrealvillestudio.com`. Resend → `profiler@unrealvillestudio.com` (transaccional). Ambos activos.
-
-**GitHub Proxy** — `unrlvl-context.vercel.app/api/gh` · GH_PAT en Vercel env. 21 repos accesibles.
-
-**Supabase** — `amlvyycfepwhiindxgzw` · 40 tablas · Free tier · MCP conectado.
-
-**Cloudflare** — Activo en unrealvillestudio.com. Redirect rules pendientes.
+**Web** `unrealvillestudio.com`
+- EN (/) + ES (/es) LIVE · Psycho Layer + Profiler Agent v5 + amber
+- Cloudflare: Always HTTPS ON · www→apex 301 activo
 
 ---
 
-## FLUJO PROFILER AGENT → CRM
+## FLUJO LEAD — COMPLETO
 
 ```
 Visitante web
-  ↓ chat en #select
-Profiler Agent (5 etapas EN/ES)
-  ↓ captura email
-Claude genera brief (fit, tier, pain, escala, visión)
-  ↓
-Email a leads@unrealvillestudio.com via Resend
-  + trigger Supabase → crm_contacts (auto-sync)
-  ↓
-Sam revisa lead en CRM dashboard (pendiente)
-  ↓
-Calificado → flujo email al prospecto (pendiente)
-  ↓
-Onboarding → cliente activo
+  ↓ Profiler Agent v5 (5 etapas, conocimiento marketing/negocio)
+  ↓ Captura email
+  ↓ Claude genera brief (fit, tier, pain, scale, tone_read, flags)
+  ↓ Email a leads@unrealvillestudio.com via Resend
+  ↓ Trigger Supabase → crm_contacts (auto-sync)
+  ↓ Sam revisa en CRM dashboard (PENDIENTE CONSTRUIR)
+  ↓ Calificado → flujo email (PENDIENTE)
+  ↓ Onboarding → cliente activo
 ```
+
+---
+
+## LORA PREP PIPELINE (diseñado)
+
+```
+Cliente sube fotos → ImageLab LoRA Prep module
+  ↓ Face detection (Fal.ai)
+  ↓ Smart crop 1024×1024, cara centrada
+  ↓ Background removal (Fal.ai birefnet — AI real)
+  ↓ Quality filter
+  ↓ Claude Vision → captions por imagen
+  ↓ Export ZIP
+→ Fal.ai FLUX Dreambooth training
+→ LoRA en BluePrints/brands/[Marca]/assets/lora/
+```
+
+Punto de entrada: BlueprintLab wizard BP_PERSON → llama a ImageLab
+Piloto: Patricia Osorio (fotos de Vizos Salon evaluadas)
+
+---
+
+## SKILLS PERMANENTES — ESTRATEGIA
+
+6 skills identificados, ninguno duplica los labs (todos los complementan):
+
+| # | Skill | Qué hace | Prioridad |
+|---|---|---|---|
+| 1 | `ui-ux-layer` | BP_BRAND rules para outputs visuales Claude | ALTA |
+| 2 | `image-processing` | ImageLab gaps + LoRA Prep pipeline | ALTA |
+| 3 | `agent-builder` | Patrones deployment por canal | MEDIA |
+| 4 | `copylab-reference` | Mapa templates + BP_COPY_1.0 | MEDIA |
+| 5 | `weblab-shopify-reference` | Módulo Shopify WebLab | MEDIA |
+| 6 | `security` | RLS, secrets, WAF | MEDIA |
 
 ---
 
@@ -79,42 +97,24 @@ Onboarding → cliente activo
 
 | Marca | Mercado | Salud | Estado |
 |---|---|---|---|
-| Unrealville Studio | Florida + LATAM | 🟢 | Web LIVE. Psycho Layer + Profiler pendientes push. |
-| ForumPHs | Panamá | 🟢 | Speaks + DocFactory en producción |
-| NeuroneSCF | South & Central Florida | 🟡 | Meta BM incompleto. SKUs pendientes. |
-| Patricia Osorio ×3 | Miami FL | 🟢 | Personal, Comunidad, Vizos Salon |
-| Diamond Details | Alicante ES | 🟢 | — |
-| Vizos Cosmetics | Miami + España | 🟢 | — |
-| D7 Herbal | Alicante ES | 🟢 | — |
-| Vivose Mask | España | 🟡 | — |
+| Unrealville Studio | Florida + LATAM | 🟢 | Web LIVE EN+ES · CRM pendiente dashboard |
+| ForumPHs | Panamá | 🟢 | Speaks + DocFactory PROD · foto Ivette pendiente |
+| NeuroneSCF | S&C Florida | 🟡 | Meta BM incompleto · SKUs pendientes |
+| Patricia Osorio ×3 | Miami FL | 🟢 | 3 personas activas |
 
 ---
 
-## PRICING ARCHITECTURE (cerrada v1.2)
-
-| Tier | M&B | E-Com add-on | Setup M&B | Setup E-Com |
-|---|---|---|---|---|
-| SIGNAL | $3,500/mo | +$2,000 | $3,500 | $2,000 |
-| PULSE | $6,500/mo | +$3,500 | $6,500 | $3,500 |
-| ORBIT | $12,000/mo | +$4,500/marca | $12,000 | $4,500/marca |
-
-Revenue sharing: 10% sobre ventas atribuibles desde mes 13.
-
----
-
-## GAPS CRÍTICOS
+## GAPS CRÍTICOS PRIORIZADOS
 
 | Gap | Sistema | Prioridad |
 |---|---|---|
-| Push index.html a CoreProject | unrealvillestudio.com | ALTA — PAT requerido |
-| Versión /es del sitio | unrealvillestudio.com | ALTA |
-| CRM dashboard de pipeline | UNRLVL CRM | ALTA |
-| Cloudflare redirect rules | unrealvillestudio.com | ALTA |
-| session_log URL en SMA | Social Media Agent | ALTA |
+| CRM dashboard | UNRLVL CRM | INMEDIATA |
+| Push index.html | CoreProject | INMEDIATA |
 | Meta BM info empresa | NeuroneSCF | ALTA |
-| 87 SKUs + precios Shopify | NeuroneSCF | ALTA |
-| Flujo email prospecto calificado | CRM | MEDIA |
-| BP_COPY_1.0 para 3 marcas | CopyLab | MEDIA |
-| Amber en BP_BRAND_UNRLVL | BluePrints | MEDIA |
+| 87 SKUs + precios | NeuroneSCF | ALTA |
+| SMA session_log URL | Social Media Agent | ALTA |
+| Foto Ivette | ForumPHs Speaks | ALTA |
+| BP_COPY_1.0 x3 marcas | CopyLab | MEDIA |
+| Fal.ai birefnet | ImageLab | MEDIA |
 | Meta/TikTok OAuth | SocialLab | MEDIA |
-| HeyGen + Kling API keys | VideoLab | BAJA |
+| HeyGen + Kling keys | VideoLab | BAJA |
