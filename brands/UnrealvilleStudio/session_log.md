@@ -3,72 +3,61 @@ _Marca interna · Sam (owner) · Actualizado: 2026-04-15_
 
 ---
 
-## 2026-04-15 — Sesión de infraestructura completa
+## 2026-04-15 — Sesión maratón día 2 (continuación)
 
-### Resuelto hoy
+### UNRLVL CRM v1.0 — COMPLETO Y OPERATIVO
 
-**Cloudflare setup completo via proxy `/api/cf`:**
-- Always HTTPS: ON · www→apex redirect (301) activos
-- Proxy CF creado en unrlvl-context, opera los 6 dominios via API
+**Schema `crm.*` en Supabase (14 tablas, aislado del ecosistema):**
+`orgs` · `contacts` · `contact_orgs` · `pipelines` · `deals` · `interactions`
+`email_sequences` · `sequence_enrollments` · `segments` · `segment_contacts`
+`tags` · `contact_tags` · `hygiene_rules`
 
-**CoreProject limpieza (51→37 archivos):**
-- PDFs financieros ForumPHs eliminados (eran públicamente accesibles — riesgo seguridad)
-- DB_VARIABLES_v6.xlsx, ContextoTemp.md, brand book v1.1, sites/ completa eliminados
-- GitHub proxy `/api/gh` v2 con soporte de escritura
+**7 orgs creadas con pipelines propios:**
+- UnrealvilleStudio: Sales Pipeline (7 stages)
+- ForumPHs: Pipeline Speaks (5 stages)
+- NeuroneSCF: B2B Salones + B2C (2 pipelines)
+- Patricia Osorio Personal: Pipeline Comunidad
+- Vizos Salon: Pipeline Salón
+- Vizos Cosmetics: Pipeline Retail
+- Unrealville Stores: Pipeline E-Commerce
 
-**Web unrealvillestudio.com — LIVE completo:**
-- EN: index.html con Psycho Layer + Profiler Agent + amber LIVE
-- ES: es/index.html traducción completa LIVE
-- Language switcher EN↔ES + hreflang SEO
-- Vizos WF corregido — no falla cuando no hay archivos Vizos
+**Arquitectura decidida:**
+CRM centralizado (UNRLVL controla todo) + Client Ops Template opcional para casos como ForumPHs que tienen DB operativa propia ajena al marketing
 
-**Profiler Agent v5 LIVE:**
-- Senior strategist, bar conversation energy
-- Conocimiento marketing/publicidad/consumer behavior embebido
-- NO revela: nombres de labs, % AI, precios de tiers
-- Brief enriquecido con tone_read + flags
+**4 hygiene rules activas:** mark_cold_540d · archive_720d · unsubscribe_bounced · tag_no_email
 
-**Auditoría completa de labs:**
-- CopyLab: motor 13 capas, BP_COPY_1.0 pendiente 3 marcas
-- WebLab: módulo Shopify completo (nc-* Liquid, ThemeDeployModule, ShopifyPushModule)
-- ImageLab: gaps — background removal básico, sin LoRA Prep
-- AgentLab: 6 módulos + apps/assistant (proyecto personal madre de Sam)
-- Orchestrator: Claude intent interpreter → plan JSON → ejecuta labs
-- BlueprintLab: 4 schemas activos
+**Trigger Profiler Agent → CRM activo:** cada lead capturado por el Profiler se sincroniza automáticamente a `crm.contacts` + `crm.contact_orgs` (org_id = UnrealvilleStudio)
 
-**Plan Maestro creado:**
-Archivo `PLAN_MAESTRO_LABS_SKILLS.md` en context system — roadmap detallado de labs, skills permanentes, LoRA pipeline, roadmap priorizado por trimestre
+**Dashboard HTML:** `UNRLVL_CRM_Dashboard.html` — operativo localmente (Sam). Corregido para usar crm.* schema API. Multi-org con sidebar, pipeline/list views, filtros, panel de detalle, notas, stage management, tier assignment, hygiene runner.
 
-**Skills permanentes — estrategia definitiva (6 skills, ninguno duplica labs):**
-1. `ui-ux-layer` — Prioridad 1
-2. `image-processing` — Prioridad 2 (incluye pipeline LoRA Prep)
-3. `agent-builder` — Prioridad 3
-4. `copylab-reference` — Prioridad 4
-5. `weblab-shopify-reference` — Prioridad 5
-6. `security` — Prioridad 6
+**CRM_INTEGRATIONS.md creado:** documentación completa de fuentes de datos por org, destinos, flujos, compliance, plan de implementación por fases. Guardado en context system.
 
-**LoRA Prep pipeline diseñado:**
-Face detection → Smart crop 1024×1024 → Fal.ai birefnet → Quality filter → Claude Vision captions → ZIP para FLUX Dreambooth
-BlueprintLab llama a ImageLab para procesamiento de fotos de personas reales (piloto: Patricia Osorio)
-
-**UNRLVL CRM v1.0 schema activo en Supabase:**
-Tablas: crm_contacts, crm_activities, crm_stage_history
-Trigger: sync_profiler_to_crm activo
-Dashboard: PENDIENTE CONSTRUIR (próxima actividad)
+**Correcciones previas (misma sesión):**
+- Web unrealvillestudio.com EN + ES LIVE
+- Profiler Agent v5 LIVE (senior strategist, marketing expertise)
+- CoreProject limpiado 51→37 archivos
+- GitHub proxy /api/gh v2 (read+write)
+- Cloudflare proxy /api/cf activo
+- Vizos WF corregido
+- Auditoría completa todos los labs
+- Plan Maestro PLAN_MAESTRO_LABS_SKILLS.md creado
+- 6 skills permanentes estrategia definitiva
 
 ### Pendiente próxima sesión
 
-1. **UNRLVL CRM dashboard** — gestión pipeline leads para Sam
-2. Push index.html a CoreProject (PAT)
-3. Skill `ui-ux-layer` (primera sesión dedicada)
-4. NeuroneSCF: Meta BM + 87 SKUs + precios
-5. SMA: URL session_log en system prompt
+1. ForumPHs Speaks → CRM (integración Edge Function — alta prioridad)
+2. NeuroneSCF: Meta BM + SKUs + precios
+3. SMA: URL session_log en system prompt
+4. ForumPHs: foto Ivette para Speaks
+5. Skill ui-ux-layer
+6. Fal.ai birefnet → ImageLab LoRA Prep básico
+7. BP_COPY_1.0 x3 marcas
+8. CRM email sequences engine (Resend)
 
-### Decisiones importantes
+### Decisiones clave
 
-- apps/assistant = proyecto personal madre de Sam. Patrón técnico reutilizable.
-- BlueprintLab es punto de entrada LoRA workflow → llama a ImageLab
-- Fal.ai birefnet para background removal real (reemplazar color-matching básico)
-- CoreProject = repo del sitio web UNRLVL, no almacenamiento general
-- PDFs financieros de clientes → Supabase Storage privado, NUNCA repos públicos
-- Orchestrator system prompt necesita actualización cuando LoRA Prep esté listo
+- CRM centralizado: UNRLVL controla todos los datos de todos los clientes
+- Client Ops Template: para casos como ForumPHs (DB operativa propia, no CRM de marketing)
+- Schema crm.* aislado: migrable a Supabase propio cuando supere 50K contactos
+- El modelo Contact × Org permite que una persona sea lead de UNRLVL Y cliente de NeuroneSCF simultáneamente
+- Compliance: CAN-SPAM para USA · GDPR para España (VizosCosmetics, D7Herbal)
