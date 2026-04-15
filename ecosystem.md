@@ -1,75 +1,77 @@
 # UNRLVL ECOSYSTEM — Radiografía
-_Generado desde ecosystem.json · 2026-04-15b · Claude Sonnet 4.6_
+_Generado desde ecosystem.json · 2026-04-15c · Claude Sonnet 4.6_
 
 ---
 
 ## ESTADO GENERAL
 
-CRM v1.0 OPERATIVO. Web EN+ES LIVE. Profiler v5 activo. Auditoría completa de labs. Plan Maestro + CRM_INTEGRATIONS documentados en context system.
+Sesión completa día 2. CRM v1.0 operativo. Document Factory plan documentado. Web EN+ES LIVE. Tres documentos de referencia permanente en el context system.
 
 ---
 
-## UNRLVL CRM v1.0 — ACTIVO
+## DOCUMENTOS DE REFERENCIA PERMANENTE
 
-Schema dedicado `crm.*` en Supabase. 14 tablas. Aislado del ecosistema de labs.
+| Documento | Ubicación |
+|---|---|
+| Plan Maestro Labs + Skills | `brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md` |
+| CRM Integraciones | `brands/UnrealvilleStudio/CRM_INTEGRATIONS.md` |
+| Document Factory Plan | `brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md` |
+
+---
+
+## UNRLVL CRM v1.0 — OPERATIVO
 
 | Componente | Estado |
 |---|---|
-| Schema crm.* | ✅ ACTIVO — 14 tablas |
+| Schema crm.* 14 tablas | ✅ ACTIVO |
 | API Edge Function v2 | ✅ LIVE |
 | Dashboard HTML | ✅ Local (Sam) |
-| Orgs configuradas | ✅ 7 orgs · 9 pipelines |
-| Hygiene rules | ✅ 4 reglas activas |
+| 7 orgs · 9 pipelines | ✅ Configurados |
 | Profiler → CRM trigger | ✅ ACTIVO |
-| Speaks → CRM | ⏳ Pendiente |
-| Shopify → CRM | ⏳ Pendiente (post SKUs) |
+| Speaks → CRM | ⏳ Esta semana |
+| Shopify → CRM | ⏳ Post-SKUs |
 | Email sequences | ⏳ Pendiente |
-| Ads audiences | ⏳ Pendiente (post OAuth) |
 
-**Documento de integraciones:** `brands/UnrealvilleStudio/CRM_INTEGRATIONS.md`
+---
+
+## DOCUMENT FACTORY — PLAN DE EVOLUCIÓN
+
+Motor único / dos contextos:
+- **ForumPHs:** servicio BI financiero a clientes PH (add-on premium)
+- **UNRLVL:** filtro de calificación de prospectos (uso interno)
+
+Arquitectura: `modules/eeff` (activo) · `modules/contratos` · `modules/actas` · `tools/normalizer.html`
+
+**Esta semana:** schema JSON EEFF v1.0 · normalizer a `tools/` · template XLSX estándar
 
 ---
 
 ## LABS
 
-| Lab | Estado | Gap principal |
+| Lab | Estado | Próximo |
 |---|---|---|
-| CopyLab | ✅ PROD v8.0 | BP_COPY_1.0 vacío para 3 marcas |
-| WebLab | ✅ PROD | Sprint Objectives Window |
-| ImageLab | ✅ PROD ICR v1.0 | Sin LoRA Prep · background removal básico |
-| AgentLab | ✅ PROD | Twilio pendiente |
-| BlueprintLab | ✅ PROD | BP_COPY_1.0 pendiente |
-| Orchestrator | ✅ PROD | Actualizar cuando LoRA Prep listo |
-| SocialLab | ✅ PROD | Meta/TikTok OAuth pendiente |
-| VideoLab | 🔴 BLOQUEADO | HeyGen + Kling keys |
-| VoiceLab | 🔴 BLOQUEADO | ElevenLabs voice IDs |
+| CopyLab | ✅ PROD v8.0 | BP_COPY_1.0 x3 marcas |
+| WebLab | ✅ PROD | Objectives Window |
+| ImageLab | ✅ PROD ICR v1.0 | Fal.ai birefnet + LoRA Prep |
+| AgentLab | ✅ PROD | Twilio |
+| BlueprintLab | ✅ PROD | LoRA wizard |
+| Orchestrator | ✅ PROD | Update post-LoRA |
+| SocialLab | ✅ PROD | OAuth Meta/TikTok |
+| VideoLab | 🔴 | HeyGen + Kling keys |
+| VoiceLab | 🔴 | ElevenLabs IDs |
 
 ---
 
-## SKILLS PERMANENTES (6 — ninguno duplica labs)
+## GAPS PRIORITARIOS
 
-| # | Skill | Estado |
-|---|---|---|
-| 1 | ui-ux-layer | PENDIENTE — Prioridad 1 |
-| 2 | image-processing (+ LoRA Prep) | PENDIENTE — Prioridad 2 |
-| 3 | agent-builder | PENDIENTE — Prioridad 3 |
-| 4 | copylab-reference | PENDIENTE — Prioridad 4 |
-| 5 | weblab-shopify-reference | PENDIENTE — Prioridad 5 |
-| 6 | security | PENDIENTE — Prioridad 6 |
-
----
-
-## GAPS CRÍTICOS
-
-| Gap | Sistema | Prioridad |
-|---|---|---|
-| Speaks → CRM integración | ForumPHs / CRM | ALTA |
-| Meta BM info empresa | NeuroneSCF | ALTA |
-| 87 SKUs + precios | NeuroneSCF | ALTA |
-| SMA session_log URL | Social Media Agent | ALTA |
-| Foto Ivette | ForumPHs Speaks | ALTA |
-| BP_COPY_1.0 x3 | CopyLab | MEDIA |
-| Fal.ai birefnet | ImageLab | MEDIA |
-| Meta/TikTok OAuth | SocialLab | MEDIA |
-| Email sequences engine | CRM | MEDIA |
-| VideoLab + VoiceLab | Labs | BAJA |
+| Gap | Prioridad |
+|---|---|
+| Document Factory: schema JSON + normalizer | ALTA (esta semana) |
+| Speaks → CRM integración | ALTA |
+| NeuroneSCF Meta BM + SKUs | ALTA |
+| Foto Ivette Speaks | ALTA |
+| SMA session_log URL | ALTA |
+| BP_COPY_1.0 x3 | MEDIA |
+| Fal.ai birefnet | MEDIA |
+| Skill ui-ux-layer | MEDIA |
+| CRM email sequences | MEDIA |

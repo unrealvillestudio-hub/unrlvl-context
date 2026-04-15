@@ -1,18 +1,18 @@
 {
   "_meta": {
-    "version": "2026-04-15b",
+    "version": "2026-04-15c",
     "maintained_by": "Claude — do not edit manually",
-    "purpose": "Single source of truth for UNRLVL ecosystem.",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
       "ecosystem_filemap": "https://unrlvl-context.vercel.app/ecosystem_filemap.md",
       "session_protocol": "https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md",
       "plan_maestro": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md",
-      "crm_integrations": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/CRM_INTEGRATIONS.md"
+      "crm_integrations": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/CRM_INTEGRATIONS.md",
+      "document_factory_plan": "https://unrlvl-context.vercel.app/brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md"
     },
     "last_audit": {
       "date": "2026-04-15",
-      "status": "UNRLVL CRM v1.0 OPERATIVO. Schema crm.* 14 tablas. 7 orgs + 9 pipelines. API v2. Dashboard HTML listo (local). Trigger Profiler→CRM activo. Integraciones documentadas. Web EN+ES LIVE. Plan Maestro + CRM_INTEGRATIONS.md en context.",
+      "status": "Sesión completa. CRM v1.0 operativo. Document Factory plan documentado. Web EN+ES LIVE. Profiler v5. Auditoría completa labs. Plan Maestro + CRM_INTEGRATIONS + DOCUMENT_FACTORY_PLAN en context.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -30,65 +30,83 @@
     {"id":"PatriciaOsorioPersonal","name":"Patricia Osorio · Personal","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
     {"id":"PatriciaOsorioComunidad","name":"Patricia Osorio · Comunidad","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
     {"id":"PatriciaOsorioVizosSalon","name":"Patricia Osorio · Vizos Salon","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
-    {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","language_primary":"es-FL","status":"active","health":"yellow","gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios pendientes · Meta BM incompleto"},
-    {"id":"ForumPHs","name":"ForumPHs","type":"brand","key_person":"Ivette Flores","market":"Panama","status":"active","health":"green","speaks":"speaks.forumphs.com LIVE","crm":"Org activa — Speaks→CRM pendiente integrar"},
-    {"id":"UnrealvilleStudio","name":"Unrealville Studio","type":"studio","market":"Florida USA + LATAM","status":"active","health":"green","web":"LIVE EN+ES","tiers":["SIGNAL $3,500/mo","PULSE $6,500/mo","ORBIT $12,000/mo"]},
+    {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","language_primary":"es-FL","status":"active","health":"yellow","gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Meta BM incompleto"},
+    {"id":"ForumPHs","name":"ForumPHs","type":"brand","key_person":"Ivette Flores","market":"Panama","status":"active","health":"green",
+      "speaks":"speaks.forumphs.com LIVE · foto Ivette pendiente",
+      "document_factory":"PROD v1.4 CERRADO · Plan de evolución documentado",
+      "crm":"Org activa · Speaks→CRM pendiente · PHs pendientes importar",
+      "document_factory_plan":"brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md"},
+    {"id":"UnrealvilleStudio","name":"Unrealville Studio","type":"studio","market":"Florida USA + LATAM","status":"active","health":"green",
+      "web":"LIVE EN+ES","tiers":["SIGNAL $3,500/mo","PULSE $6,500/mo","ORBIT $12,000/mo"],
+      "financial_intelligence_filter":"pendiente definir umbrales de calificación con Sam"},
     {"id":"UnrealvilleStores","name":"Unrealville Stores","type":"ecommerce","market":"Florida USA","status":"active","health":"green"}
   ],
   "labs": [
     {"id":"LAB-CPL","name":"CopyLab","status":"PASSED v8.0","gaps":["BP_COPY_1.0 vacío para 3 marcas"]},
     {"id":"LAB-WL","name":"WebLab","status":"PASSED — Shopify module completo","pending":"Objectives Window"},
-    {"id":"LAB-IL","name":"ImageLab","status":"PASSED ICR v1.0","gaps":["sin LoRA Prep","background removal básico"],"next":"Fal.ai birefnet + LoRA Prep module"},
-    {"id":"LAB-AL","name":"AgentLab","status":"PASSED","pending":"Twilio · apps/assistant = proyecto personal madre Sam"},
-    {"id":"LAB-BPL","name":"BlueprintLab","status":"PASSED","lora":"BlueprintLab → llama a ImageLab LoRA Prep"},
-    {"id":"LAB-ORCH","name":"Orchestrator","status":"PASSED","pending":"Actualizar system prompt cuando LoRA Prep esté listo"},
+    {"id":"LAB-IL","name":"ImageLab","status":"PASSED ICR v1.0","gaps":["sin LoRA Prep","background removal básico"]},
+    {"id":"LAB-AL","name":"AgentLab","status":"PASSED","pending":"Twilio"},
+    {"id":"LAB-BPL","name":"BlueprintLab","status":"PASSED","lora":"BlueprintLab → ImageLab LoRA Prep"},
+    {"id":"LAB-ORCH","name":"Orchestrator","status":"PASSED","pending":"Actualizar system prompt post-LoRA Prep"},
     {"id":"LAB-SL","name":"SocialLab","status":"PASSED","gaps":["Meta/TikTok OAuth pendiente"]},
-    {"id":"LAB-VL","name":"VideoLab","status":"BLOQUEADO — HeyGen + Kling keys pendientes"},
-    {"id":"LAB-VOL","name":"VoiceLab","status":"BLOQUEADO — voice_ids ElevenLabs pendientes"},
+    {"id":"LAB-VL","name":"VideoLab","status":"BLOQUEADO — HeyGen + Kling keys"},
+    {"id":"LAB-VOL","name":"VoiceLab","status":"BLOQUEADO — ElevenLabs voice IDs"},
     {"id":"LAB-OPS","name":"UNRLVL-OPS","status":"PASSED"},
     {"id":"LAB-OBD","name":"Onboarding App","status":"PASSED Phase 4"}
   ],
   "agent_deployments": [
-    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active","gap":"session_log URL pendiente inyectar"},
-    {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","url":"speaks.forumphs.com","brand":"ForumPHs","status":"LIVE","pending":["foto Ivette","Speaks→CRM integración"]},
-    {"id":"AGENT-FPH-DOCFACTORY","name":"ForumPHs Document Factory","brand":"ForumPHs","status":"PROD v1.4 CERRADO"},
+    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active","gap":"session_log URL pendiente"},
+    {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","url":"speaks.forumphs.com","brand":"ForumPHs","status":"LIVE","pending":["foto Ivette","Speaks→CRM"]},
+    {"id":"AGENT-FPH-DOCFACTORY","name":"Document Factory","url":"forumphs-document-factory.vercel.app","brand":"ForumPHs","status":"PROD v1.4","plan":"DOCUMENT_FACTORY_PLAN.md"},
     {"id":"AGENT-PROFILER","name":"Profiler Agent v5","endpoint":"https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler","brand":"UnrealvilleStudio","status":"LIVE","crm":"trigger activo → crm.contacts"}
   ],
   "infrastructure": [
-    {"id":"INFRA-CTX","name":"Context System","url":"https://unrlvl-context.vercel.app","apis":{"/api/gh":"GitHub proxy v2 read+write","/api/cf":"Cloudflare proxy 6 dominios"}},
-    {"id":"INFRA-SB","name":"Supabase","project_id":"amlvyycfepwhiindxgzw","schemas":"public.* (40 tablas) + crm.* (14 tablas)"},
-    {"id":"INFRA-CRM","name":"UNRLVL CRM v1.0","status":"OPERATIVO","schema":"crm.* Supabase","api":"unrlvl-crm-api v2 LIVE","dashboard":"UNRLVL_CRM_Dashboard.html (local Sam)","orgs":7,"pipelines":9,"active_integrations":["Profiler Agent → CRM trigger"],"pending":["Speaks→CRM","Shopify→CRM","email sequences","ads audiences"],"doc":"brands/UnrealvilleStudio/CRM_INTEGRATIONS.md"},
-    {"id":"INFRA-WEB","name":"unrealvillestudio.com","repo":"CoreProject","status":"LIVE EN+ES","files":37},
+    {"id":"INFRA-CTX","name":"Context System","url":"https://unrlvl-context.vercel.app","apis":{"/api/gh":"GitHub proxy v2","/api/cf":"Cloudflare proxy 6 dominios"}},
+    {"id":"INFRA-SB","name":"Supabase","project_id":"amlvyycfepwhiindxgzw","schemas":"public.* 40 tablas + crm.* 14 tablas"},
+    {"id":"INFRA-CRM","name":"UNRLVL CRM v1.0","status":"OPERATIVO","orgs":7,"pipelines":9,"active_integrations":["Profiler→CRM trigger"],"pending":["Speaks→CRM","Shopify→CRM","email sequences","ads audiences"]},
+    {"id":"INFRA-WEB","name":"unrealvillestudio.com","status":"LIVE EN+ES","files":37},
     {"id":"INFRA-EMAIL","name":"Email","leads":"leads@unrealvillestudio.com","transactional":"profiler@unrealvillestudio.com (Resend)"}
   ],
   "skills": [
-    {"id":"SKILL-GH","name":"GitHub Auditor","path":"skills/github-auditor/SKILL.md","status":"ACTIVO"},
-    {"id":"SKILL-UI","name":"UI/UX Layer","status":"PENDIENTE P1","path":"skills/ui-ux-layer/SKILL.md"},
-    {"id":"SKILL-IMG","name":"Image Processing + LoRA Prep","status":"PENDIENTE P2","path":"skills/image-processing/SKILL.md"},
-    {"id":"SKILL-AGENT","name":"Agent Builder","status":"PENDIENTE P3","path":"skills/agent-builder/SKILL.md"},
-    {"id":"SKILL-COPY","name":"CopyLab Reference","status":"PENDIENTE P4","path":"skills/copylab-reference/SKILL.md"},
-    {"id":"SKILL-SHOP","name":"WebLab Shopify Reference","status":"PENDIENTE P5","path":"skills/weblab-shopify-reference/SKILL.md"},
-    {"id":"SKILL-SEC","name":"Security","status":"PENDIENTE P6","path":"skills/security/SKILL.md"}
+    {"id":"SKILL-GH","name":"GitHub Auditor","status":"ACTIVO"},
+    {"id":"SKILL-UI","name":"UI/UX Layer","status":"PENDIENTE P1"},
+    {"id":"SKILL-IMG","name":"Image Processing + LoRA Prep","status":"PENDIENTE P2"},
+    {"id":"SKILL-AGENT","name":"Agent Builder","status":"PENDIENTE P3"},
+    {"id":"SKILL-COPY","name":"CopyLab Reference","status":"PENDIENTE P4"},
+    {"id":"SKILL-SHOP","name":"WebLab Shopify Reference","status":"PENDIENTE P5"},
+    {"id":"SKILL-SEC","name":"Security","status":"PENDIENTE P6"}
   ],
+  "document_factory": {
+    "status": "PROD v1.4 — Plan de evolución documentado",
+    "repo": "forumphs-document-factory",
+    "url": "forumphs-document-factory.vercel.app",
+    "modules": {
+      "eeff": "ACTIVO — BI financiero ForumPHs · Nivel 1 producción",
+      "contratos": "FUTURO",
+      "actas": "FUTURO",
+      "informes": "FUTURO"
+    },
+    "normalizer": "Zip Extractor local → mover a tools/normalizer.html esta semana",
+    "json_schema": "EEFF schema v1.0 pendiente formalizar",
+    "plan": "brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md",
+    "next_session": ["Formalizar schema JSON EEFF v1.0","Mover normalizer a tools/","Template XLSX estándar"]
+  },
   "lora_pipeline": {
     "status": "DESIGNED — pendiente ImageLab",
-    "steps": ["Face detection Fal.ai","Smart crop 1024×1024","Background removal Fal.ai birefnet","Quality filter","Claude Vision captions","Export ZIP"],
-    "integration": "BlueprintLab wizard BP_PERSON → ImageLab LoRA Prep",
-    "pilot": "Patricia Osorio — fotos Vizos Salon evaluadas"
+    "integration": "BlueprintLab → ImageLab LoRA Prep",
+    "pilot": "Patricia Osorio — fotos Vizos Salon"
   },
   "next_session_agenda": [
-    "NeuroneSCF: Meta BM info empresa (Laura/PO Miami)",
-    "NeuroneSCF: 87 SKUs + precios Shopify",
-    "SMA: inyectar URL session_log en system prompt",
-    "ForumPHs: foto Ivette para Speaks",
-    "ForumPHs Speaks → CRM integración Edge Function",
-    "Skill ui-ux-layer (sesión dedicada)",
-    "Fal.ai birefnet → ImageLab LoRA Prep módulo básico",
-    "BP_COPY_1.0 NeuroneSCF + ForumPHs + UnrealvilleStudio",
-    "WebLab sprint: Objectives Window",
-    "CRM email sequences engine (Resend)",
-    "NeuroneSCF WhatsApp agent (Twilio)",
-    "Meta/TikTok OAuth → SocialLab real",
-    "VideoLab + VoiceLab (API keys pendientes)"
+    "Document Factory: schema JSON EEFF v1.0",
+    "Document Factory: normalizer a tools/ en repo",
+    "Document Factory: template XLSX estándar ingesta",
+    "ForumPHs Speaks → CRM integración",
+    "NeuroneSCF: Meta BM + SKUs + precios",
+    "SMA: session_log URL en system prompt",
+    "ForumPHs: foto Ivette Speaks",
+    "Skill ui-ux-layer",
+    "Fal.ai birefnet → ImageLab LoRA Prep",
+    "BP_COPY_1.0 x3 marcas",
+    "CRM email sequences engine (Resend)"
   ]
 }

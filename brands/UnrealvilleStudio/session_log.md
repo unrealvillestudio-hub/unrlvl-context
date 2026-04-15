@@ -3,61 +3,56 @@ _Marca interna · Sam (owner) · Actualizado: 2026-04-15_
 
 ---
 
-## 2026-04-15 — Sesión maratón día 2 (continuación)
+## 2026-04-15 — Sesión maratón día 2 (cierre)
 
-### UNRLVL CRM v1.0 — COMPLETO Y OPERATIVO
+### Document Factory — Plan documentado
 
-**Schema `crm.*` en Supabase (14 tablas, aislado del ecosistema):**
-`orgs` · `contacts` · `contact_orgs` · `pipelines` · `deals` · `interactions`
-`email_sequences` · `sequence_enrollments` · `segments` · `segment_contacts`
-`tags` · `contact_tags` · `hygiene_rules`
+**DOCUMENT_FACTORY_PLAN.md creado** — referencia permanente para sesiones de desarrollo.
 
-**7 orgs creadas con pipelines propios:**
-- UnrealvilleStudio: Sales Pipeline (7 stages)
-- ForumPHs: Pipeline Speaks (5 stages)
-- NeuroneSCF: B2B Salones + B2C (2 pipelines)
-- Patricia Osorio Personal: Pipeline Comunidad
-- Vizos Salon: Pipeline Salón
-- Vizos Cosmetics: Pipeline Retail
-- Unrealville Stores: Pipeline E-Commerce
+Decisiones clave tomadas:
+- Claude consume JSON, nunca archivos crudos directamente
+- Normalizer (evolución del Zip Extractor) acepta .xlsx/.pdf/.docx → produce JSON schema fijo por módulo
+- Motor único / dos contextos: ForumPHs (servicio a clientes PH) + UNRLVL (filtro de onboarding)
+- Document Factory es el hogar de todo — no repos separados por tipo de documento
+- Financial Intelligence como filtro de calificación UNRLVL: convierte "no somos para todo el mundo" en proceso objetivo y documentado
 
-**Arquitectura decidida:**
-CRM centralizado (UNRLVL controla todo) + Client Ops Template opcional para casos como ForumPHs que tienen DB operativa propia ajena al marketing
+**Esta semana (sesión dedicada):**
+- Formalizar schema JSON EEFF v1.0
+- Mover Zip Extractor a `tools/normalizer.html` en repo Document Factory
+- Definir template XLSX estándar de ingesta
 
-**4 hygiene rules activas:** mark_cold_540d · archive_720d · unsubscribe_bounced · tag_no_email
+### UNRLVL CRM v1.0 — COMPLETO (sesión anterior)
+Schema crm.* Supabase · 14 tablas · 7 orgs · 9 pipelines · API v2 LIVE
+Dashboard HTML operativo localmente · Trigger Profiler→CRM activo
+CRM_INTEGRATIONS.md documentado en context
 
-**Trigger Profiler Agent → CRM activo:** cada lead capturado por el Profiler se sincroniza automáticamente a `crm.contacts` + `crm.contact_orgs` (org_id = UnrealvilleStudio)
-
-**Dashboard HTML:** `UNRLVL_CRM_Dashboard.html` — operativo localmente (Sam). Corregido para usar crm.* schema API. Multi-org con sidebar, pipeline/list views, filtros, panel de detalle, notas, stage management, tier assignment, hygiene runner.
-
-**CRM_INTEGRATIONS.md creado:** documentación completa de fuentes de datos por org, destinos, flujos, compliance, plan de implementación por fases. Guardado en context system.
-
-**Correcciones previas (misma sesión):**
-- Web unrealvillestudio.com EN + ES LIVE
-- Profiler Agent v5 LIVE (senior strategist, marketing expertise)
-- CoreProject limpiado 51→37 archivos
-- GitHub proxy /api/gh v2 (read+write)
-- Cloudflare proxy /api/cf activo
-- Vizos WF corregido
-- Auditoría completa todos los labs
-- Plan Maestro PLAN_MAESTRO_LABS_SKILLS.md creado
-- 6 skills permanentes estrategia definitiva
+### Web + Profiler + Infraestructura (sesión anterior)
+Web unrealvillestudio.com EN+ES LIVE · Profiler Agent v5 · CoreProject limpio
+GitHub proxy v2 · Cloudflare activo · Auditoría completa todos los labs
+Plan Maestro de labs y skills · 6 skills permanentes estrategia definitiva
 
 ### Pendiente próxima sesión
 
-1. ForumPHs Speaks → CRM (integración Edge Function — alta prioridad)
-2. NeuroneSCF: Meta BM + SKUs + precios
-3. SMA: URL session_log en system prompt
-4. ForumPHs: foto Ivette para Speaks
-5. Skill ui-ux-layer
-6. Fal.ai birefnet → ImageLab LoRA Prep básico
-7. BP_COPY_1.0 x3 marcas
-8. CRM email sequences engine (Resend)
+**Document Factory (esta semana):**
+1. Schema JSON EEFF v1.0 — definir estructura fija
+2. Normalizer en `tools/` del repo Document Factory
+3. Template XLSX estándar ingesta
 
-### Decisiones clave
+**Operaciones:**
+4. ForumPHs Speaks → CRM integración Edge Function
+5. NeuroneSCF: Meta BM + 87 SKUs + precios
+6. SMA: URL session_log en system prompt
+7. ForumPHs: foto Ivette para Speaks
 
-- CRM centralizado: UNRLVL controla todos los datos de todos los clientes
-- Client Ops Template: para casos como ForumPHs (DB operativa propia, no CRM de marketing)
-- Schema crm.* aislado: migrable a Supabase propio cuando supere 50K contactos
-- El modelo Contact × Org permite que una persona sea lead de UNRLVL Y cliente de NeuroneSCF simultáneamente
-- Compliance: CAN-SPAM para USA · GDPR para España (VizosCosmetics, D7Herbal)
+**Labs:**
+8. Skill ui-ux-layer
+9. Fal.ai birefnet → ImageLab LoRA Prep
+10. BP_COPY_1.0 x3 marcas
+
+### Decisiones importantes tomadas hoy
+
+- Document Factory crecerá a contratos, actas, informes — estructura modular ya definida
+- Financial Intelligence tiene dos roles: valor para clientes FPHs + filtro de onboarding UNRLVL
+- Umbrales de calificación UNRLVL pendientes de definir con Sam en sesión estratégica
+- CRM centralizado (UNRLVL controla) + Client Ops Template para casos como ForumPHs
+- Schema crm.* migrable a Supabase propio cuando supere 50K contactos
