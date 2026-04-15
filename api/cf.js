@@ -105,7 +105,7 @@ export default async function handler(req, res) {
             id: 'forwarding_url',
             value: {
               url: params.target,
-              status_code: params.status_code || 301,
+              status_code: parseInt(params.status_code) || 301,
             },
           }],
           status: 'active',
