@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-16b",
+    "version": "2026-04-16c",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -14,8 +14,8 @@
     },
     "last_audit": {
       "date": "2026-04-16",
-      "status": "BP Patricia Osorio Conectando DEFINITIVO (Pinyon Script aprobado PO). JSON + HTML en BluePrints. BP_Brand_Context en context system. SMA session_log URL: ya estaba en código — pendiente eliminar de gaps. FPHs-OPS schema activo. CRM v1.0 operativo.",
-      "conducted_by": "Claude Sonnet 4.6"
+      "status": "Profiler Agent v6 deployed — fix opening regression + business intelligence layer + sales closer mode + asymmetric disclosure guardrail. SMA session_log regenerado con progreso Laura Meta BM Neurone SCF. BP Patricia Osorio Conectando DEFINITIVO. FPHs-OPS schema activo. CRM v1.0 operativo.",
+      "conducted_by": "Claude Opus 4.7"
     }
   },
   "studio": {
@@ -43,7 +43,7 @@
       "typography":"Pinyon Script (wordmark) + Montserrat ExtraLight (Conectando)",
       "palette_primary":["#0A0A0A","#1C1A16","#C49A3C","#F5EAD0"]
     },
-    {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","status":"active","health":"yellow","gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Meta BM incompleto"},
+    {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","status":"active","health":"yellow","gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Meta BM verification + Facebook Page pendientes · 6 aliases email pendientes · Assets de marca Neurone pendientes"},
     {"id":"ForumPHs","name":"ForumPHs","type":"brand","key_person":"Ivette Flores","market":"Panama","status":"active","health":"green",
       "speaks":"speaks.forumphs.com LIVE · foto Ivette pendiente",
       "fphsops":{"status":"Schema fph.* activo (22 tablas) · Spec funcional documentada","primer_modulo":"COBROS","munily":"DESPLAZAR — FPHs-OPS es el sistema único","datos_pendientes":"Ivette debe entregar: 8 edificios, propietarios, cuotas, mora","spec":"brands/ForumPHs/FPHSOPS_SPEC.md"},
@@ -68,11 +68,19 @@
   ],
   "agent_deployments": [
     {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active",
-      "session_log_injection":"ACTIVO en código chat.js — fetchAgentContext() lee session_log.md en cada sesión. GAP anterior resuelto en deploy anterior a 2026-04-15."},
+      "session_log_injection":"ACTIVO en código chat.js — fetchAgentContext() lee session_log.md en cada sesión.",
+      "last_session_log_update":"2026-04-16 — progreso Laura Meta BM completado pasos 1-2, dominio verification bloqueada, FB Page pendiente por assets"},
     {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","url":"speaks.forumphs.com","brand":"ForumPHs","status":"LIVE","pending":["foto Ivette","Speaks→CRM"]},
     {"id":"AGENT-FPH-DOCFACTORY","name":"Document Factory","url":"forumphs-document-factory.vercel.app","brand":"ForumPHs","status":"PROD v1.4"},
     {"id":"AGENT-FPH-OPS-WA","name":"FPHs-OPS WhatsApp Agent","brand":"ForumPHs","status":"DISEÑADO — pendiente construir"},
-    {"id":"AGENT-PROFILER","name":"Profiler Agent v5","endpoint":"https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler","brand":"UnrealvilleStudio","status":"LIVE","crm":"trigger activo → crm.contacts"}
+    {"id":"AGENT-PROFILER","name":"Profiler Agent v6","version":"6","endpoint":"https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler","brand":"UnrealvilleStudio","status":"LIVE",
+      "deployed":"2026-04-16",
+      "architecture":"EXPLORER → ANALYST → CLOSER modes · signal-activated not turn-based",
+      "guardrails":["opening-regression fix (triple defense)","asymmetric-disclosure detection (reciprocity-based, not token-based)"],
+      "doctrine":"analysis is bait — show work, return ball, let prospect reveal cards through response",
+      "brief_fields":["fit_score","mode_reached","closer_activated","reciprocity","financial_read","readiness_signals","tone_read","recommendation"],
+      "crm":"trigger activo → crm.contacts",
+      "email":"profiler@unrealvillestudio.com → leads@unrealvillestudio.com (Resend)"}
   ],
   "infrastructure": [
     {"id":"INFRA-CTX","name":"Context System","url":"https://unrlvl-context.vercel.app","apis":{"/api/gh":"GitHub proxy v2","/api/cf":"Cloudflare proxy 6 dominios"}},
@@ -92,11 +100,13 @@
     {"id":"SKILL-SEC","name":"Security","status":"PENDIENTE P6"}
   ],
   "next_session_agenda": [
+    "Profiler v6: validar con prueba reproducible del caso geles/gominolas en widget web",
     "Document Factory: schema JSON EEFF v1.0 + normalizer en tools/",
     "ForumPHs: recibir datos Ivette (8 edificios, propietarios, cuotas, mora) → poblar fph.*",
     "FPHs-OPS: construir módulo COBROS",
     "ForumPHs Speaks → CRM integración",
-    "NeuroneSCF: Meta BM + SKUs + precios",
+    "NeuroneSCF: Meta BM domain verification + 6 aliases email + assets marca + 87 SKUs + precios",
+    "NeuroneSCF: Facebook Page (decisión assets placeholder vs oficiales)",
     "Skill ui-ux-layer",
     "Fal.ai birefnet → ImageLab LoRA Prep",
     "BP_COPY_1.0 x3 marcas",
