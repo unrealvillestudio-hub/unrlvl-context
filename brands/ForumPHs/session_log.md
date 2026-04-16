@@ -3,6 +3,18 @@ _Ivette Flores · Sam (socio) · Actualizado: 2026-04-16_
 
 ---
 
+## 2026-04-16 — Decisiones estratégicas FPHs-OPS cerradas
+
+### Decisiones tomadas hoy
+
+**Financiamiento del desarrollo:** Inversión societaria (Sam). No es un costo de ForumPHs.
+
+**Replicabilidad:** FPHs-OPS es exclusivo para ForumPHs. No se replica a otras administradoras en Panamá ni en LATAM. El foco es hacer crecer el portafolio de ForumPHs, no vender el sistema.
+
+**Datos en camino:** Sam buscará datos de los 8 edificios y propietarios para poblar `fph.*` y arrancar el módulo COBROS.
+
+---
+
 ## 2026-04-16 — FPHs-OPS: Schema + Spec funcional completa
 
 ### Decisiones clave
