@@ -1,48 +1,47 @@
 # UNRLVL ECOSYSTEM — Radiografía
-_Generado desde ecosystem.json · 2026-04-15c · Claude Sonnet 4.6_
+_Generado desde ecosystem.json · 2026-04-16a · Claude Sonnet 4.6_
 
 ---
 
 ## ESTADO GENERAL
 
-Sesión completa día 2. CRM v1.0 operativo. Document Factory plan documentado. Web EN+ES LIVE. Tres documentos de referencia permanente en el context system.
+FPHs-OPS schema activo (fph.* 22 tablas). Spec funcional completa. CRM v1.0 operativo. BP Patricia Osorio Conectando v1 pendiente veredicto tipografía. Document Factory plan activo.
 
 ---
 
-## DOCUMENTOS DE REFERENCIA PERMANENTE
+## NUEVOS DOCUMENTOS DE REFERENCIA
 
 | Documento | Ubicación |
 |---|---|
-| Plan Maestro Labs + Skills | `brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md` |
-| CRM Integraciones | `brands/UnrealvilleStudio/CRM_INTEGRATIONS.md` |
+| FPHs-OPS Spec funcional v1.0 | `brands/ForumPHs/FPHSOPS_SPEC.md` |
 | Document Factory Plan | `brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md` |
+| CRM Integraciones | `brands/UnrealvilleStudio/CRM_INTEGRATIONS.md` |
+| Plan Maestro Labs + Skills | `brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md` |
+
+---
+
+## FPHs-OPS — ESTADO
+
+| Componente | Estado |
+|---|---|
+| Schema fph.* (22 tablas) | ✅ ACTIVO en Supabase |
+| Categorías incidencias (3 niveles) | ✅ Urgente/Prioritario/Común |
+| Objetivos legales (Ley 284, DGI) | ✅ Sembrados |
+| 6 edificios semilla | ✅ (faltan 2 por confirmar con Ivette) |
+| Spec funcional completa | ✅ FPHSOPS_SPEC.md |
+| App (módulo cobros) | ⏳ PENDIENTE CONSTRUIR |
+| Datos de Ivette | ⏳ Pendiente recibir |
+| WhatsApp agent propietarios | ⏳ Diseñado, pendiente construir |
+
+**MUNILY desplazado:** FPHs-OPS es el sistema único. Confirmado 2026-04-16.
+**Primer módulo:** COBROS — mayor impacto en objetivo 12 PHs 2026.
 
 ---
 
 ## UNRLVL CRM v1.0 — OPERATIVO
 
-| Componente | Estado |
-|---|---|
-| Schema crm.* 14 tablas | ✅ ACTIVO |
-| API Edge Function v2 | ✅ LIVE |
-| Dashboard HTML | ✅ Local (Sam) |
-| 7 orgs · 9 pipelines | ✅ Configurados |
-| Profiler → CRM trigger | ✅ ACTIVO |
-| Speaks → CRM | ⏳ Esta semana |
-| Shopify → CRM | ⏳ Post-SKUs |
-| Email sequences | ⏳ Pendiente |
-
----
-
-## DOCUMENT FACTORY — PLAN DE EVOLUCIÓN
-
-Motor único / dos contextos:
-- **ForumPHs:** servicio BI financiero a clientes PH (add-on premium)
-- **UNRLVL:** filtro de calificación de prospectos (uso interno)
-
-Arquitectura: `modules/eeff` (activo) · `modules/contratos` · `modules/actas` · `tools/normalizer.html`
-
-**Esta semana:** schema JSON EEFF v1.0 · normalizer a `tools/` · template XLSX estándar
+7 orgs · 9 pipelines · Trigger Profiler→CRM activo · Dashboard local Sam
+Pendiente: Speaks→CRM · Shopify→CRM · email sequences
 
 ---
 
@@ -53,9 +52,9 @@ Arquitectura: `modules/eeff` (activo) · `modules/contratos` · `modules/actas` 
 | CopyLab | ✅ PROD v8.0 | BP_COPY_1.0 x3 marcas |
 | WebLab | ✅ PROD | Objectives Window |
 | ImageLab | ✅ PROD ICR v1.0 | Fal.ai birefnet + LoRA Prep |
-| AgentLab | ✅ PROD | Twilio |
-| BlueprintLab | ✅ PROD | LoRA wizard |
-| Orchestrator | ✅ PROD | Update post-LoRA |
+| AgentLab | ✅ PROD | WA agent FPHs-OPS + NeuroneSCF |
+| BlueprintLab | ✅ PROD | — |
+| Orchestrator | ✅ PROD | — |
 | SocialLab | ✅ PROD | OAuth Meta/TikTok |
 | VideoLab | 🔴 | HeyGen + Kling keys |
 | VoiceLab | 🔴 | ElevenLabs IDs |
@@ -66,12 +65,11 @@ Arquitectura: `modules/eeff` (activo) · `modules/contratos` · `modules/actas` 
 
 | Gap | Prioridad |
 |---|---|
-| Document Factory: schema JSON + normalizer | ALTA (esta semana) |
-| Speaks → CRM integración | ALTA |
+| PO Conectando: veredicto tipografía | INMEDIATA |
+| FPHs-OPS módulo cobros | ALTA |
+| Datos Ivette (edificios, propietarios) | ALTA — desbloquea FPHs-OPS |
+| Document Factory: schema EEFF + normalizer | ALTA (esta semana) |
+| Speaks→CRM integración | ALTA |
 | NeuroneSCF Meta BM + SKUs | ALTA |
-| Foto Ivette Speaks | ALTA |
-| SMA session_log URL | ALTA |
-| BP_COPY_1.0 x3 | MEDIA |
-| Fal.ai birefnet | MEDIA |
-| Skill ui-ux-layer | MEDIA |
-| CRM email sequences | MEDIA |
+| Skill ui-ux-layer | ALTA — necesario para FPHs-OPS app |
+| Foto Ivette + SMA log URL | MEDIA |

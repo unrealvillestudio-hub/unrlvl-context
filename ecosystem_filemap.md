@@ -1,5 +1,5 @@
 # UNRLVL ECOSYSTEM — Filemap
-_Generado desde ecosystem.json · 2026-04-15c · Claude Sonnet 4.6_
+_Generado desde ecosystem.json · 2026-04-16a · Claude Sonnet 4.6_
 
 ---
 
@@ -9,35 +9,22 @@ _Generado desde ecosystem.json · 2026-04-15c · Claude Sonnet 4.6_
 unrealvillestudio.com → Profiler Agent v5 → profiler_sessions
   → trigger → crm.contacts (UnrealvilleStudio org)
 
-speaks.forumphs.com → ForumPHs Speaks
+speaks.forumphs.com → ForumPHs Speaks (19 sesiones · 4 golden pass)
   [PENDIENTE → crm.contacts ForumPHs org]
 
 forumphs-document-factory.vercel.app
   → Zip Extractor (local) → JSON → Claude → BI HTML
-  [ESTA SEMANA: Zip Extractor → tools/normalizer.html en repo]
+  [ESTA SEMANA: → tools/normalizer.html en repo]
 
 CRM Dashboard (local) → unrlvl-crm-api v2 → crm.* Supabase
-Claude (chat) → /api/gh → GitHub repos
-Claude (chat) → /api/cf → Cloudflare
-```
 
----
-
-## REPOS
-
-```
-unrealvillestudio-hub/
-  unrlvl-context/
-    brands/UnrealvilleStudio/
-      session_log.md
-      PLAN_MAESTRO_LABS_SKILLS.md
-      CRM_INTEGRATIONS.md
-    brands/ForumPHs/
-      DOCUMENT_FACTORY_PLAN.md   ← nuevo
-  CoreProject/                   ← unrealvillestudio.com (37 archivos)
-  forumphs-document-factory/     ← PROD v1.4
-    [tools/normalizer.html]      ← pendiente añadir esta semana
-  Labs: CopyLab WebLab ImageLab SocialLab AgentLab BlueprintLab Orchestrator
+[DISEÑADO, PENDIENTE CONSTRUIR]
+Propietario WA → FPHs-OPS WhatsApp Agent
+  → lookup fph.owners.whatsapp
+  → califica incidencia
+  → crea fph.incidents con SLA automático
+  → notifica admin en app
+  → informa propietario de avances
 ```
 
 ---
@@ -49,26 +36,51 @@ public.* (40 tablas) — Ecosistema UNRLVL
   profiler_sessions → trigger → crm.contacts
 
 crm.* (14 tablas) — CRM Multi-cliente
-  orgs(7) · contacts · contact_orgs · pipelines(9) · deals
-  interactions · email_sequences · enrollments
-  segments · tags · hygiene_rules(4)
+  orgs(7) · pipelines(9) · contacts · interactions
+  email_sequences · segments · hygiene_rules(4)
+
+fph.* (22 tablas) — FPHs-OPS Operativo
+  buildings(6) · units · owners · owner_units · juntas
+  payments · arrears · legal_obligations
+  incidents · incident_categories(16) · incident_updates
+  providers · provider_invoices
+  bank_reconciliations · bank_transactions
+  communication_templates · communications_log
+  task_templates · tasks · monthly_reports
+```
+
+---
+
+## REPOS
+
+```
+unrealvillestudio-hub/
+  unrlvl-context/
+    brands/UnrealvilleStudio/
+      session_log.md · PLAN_MAESTRO_LABS_SKILLS.md · CRM_INTEGRATIONS.md
+    brands/ForumPHs/
+      session_log.md · DOCUMENT_FACTORY_PLAN.md · FPHSOPS_SPEC.md (nuevo)
+  CoreProject/                   ← unrealvillestudio.com (37 archivos)
+  forumphs-document-factory/     ← PROD v1.4
+    [tools/normalizer.html]      ← pendiente esta semana
+  Labs: CopyLab WebLab ImageLab SocialLab AgentLab BlueprintLab Orchestrator
 ```
 
 ---
 
 ## AGENDA PRÓXIMA SESIÓN
 
-| Tarea | Sprint |
+| Tarea | Prioridad |
 |---|---|
-| DF: schema JSON EEFF v1.0 | ESTA SEMANA |
-| DF: normalizer a tools/ | ESTA SEMANA |
-| DF: template XLSX estándar | ESTA SEMANA |
-| Speaks → CRM integración | ESTA SEMANA |
-| NeuroneSCF Meta BM + SKUs | ESTA SEMANA |
-| Foto Ivette + SMA log URL | ESTA SEMANA |
-| Skill ui-ux-layer | CORTO |
-| ImageLab Fal.ai birefnet | CORTO |
-| BP_COPY_1.0 x3 | CORTO |
-| CRM email sequences | CORTO |
-| Meta/TikTok OAuth | MEDIO |
-| LoRA Prep completo | LARGO |
+| PO Conectando: veredicto Pinyon vs Allura | INMEDIATA |
+| FPHs-OPS módulo cobros | ALTA |
+| Datos Ivette → poblar fph.* | ALTA |
+| DF: schema JSON EEFF + normalizer | ALTA |
+| Speaks → CRM | ALTA |
+| NeuroneSCF Meta BM + SKUs | ALTA |
+| Skill ui-ux-layer | ALTA |
+| Fal.ai birefnet | MEDIA |
+| BP_COPY_1.0 x3 | MEDIA |
+| CRM email sequences | MEDIA |
+| FPHs-OPS WA agent | MEDIA |
+| Decisión: quién paga FPHs-OPS + replicabilidad | ESTRATÉGICA |
