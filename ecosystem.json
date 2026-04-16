@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-16a",
+    "version": "2026-04-16b",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -9,11 +9,12 @@
       "plan_maestro": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md",
       "crm_integrations": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/CRM_INTEGRATIONS.md",
       "document_factory_plan": "https://unrlvl-context.vercel.app/brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md",
-      "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md"
+      "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md",
+      "poc_bp_context": "https://unrlvl-context.vercel.app/brands/PatriciaOsorioConectando/BP_Brand_Context.md"
     },
     "last_audit": {
       "date": "2026-04-16",
-      "status": "FPHs-OPS schema activo (fph.* 22 tablas). Spec funcional completa documentada. CRM v1.0 operativo. Document Factory plan activo. Web EN+ES LIVE. Profiler v5. BP Patricia Osorio Conectando v1 (Pinyon vs Allura pendiente veredicto PO).",
+      "status": "BP Patricia Osorio Conectando DEFINITIVO (Pinyon Script aprobado PO). JSON + HTML en BluePrints. BP_Brand_Context en context system. SMA session_log URL: ya estaba en código — pendiente eliminar de gaps. FPHs-OPS schema activo. CRM v1.0 operativo.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -32,8 +33,16 @@
     {"id":"PatriciaOsorioComunidad","name":"Patricia Osorio · Comunidad","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
     {"id":"PatriciaOsorioVizosSalon","name":"Patricia Osorio · Vizos Salon","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
     {"id":"PatriciaOsorioConectando","name":"Patricia Osorio · Conectando","type":"personal_brand","market":"Miami + LATAM","status":"active","health":"green",
-      "bp_status":"BP_BRAND v1.0 HTML creado — tipografía pendiente veredicto PO (Pinyon Script vs Allura)",
-      "bp_file":"BP_BRAND_PatriciaOsorio_Conectando_v1.html"},
+      "bp_status":"BP_BRAND v1.0 DEFINITIVO — aprobado PO · Pinyon Script",
+      "bp_assets":{
+        "html":"BluePrints/brands/PatriciaOsorioConectando/BP_BRAND_PatriciaOsorio_Conectando_v1.html",
+        "json":"BluePrints/brands/PatriciaOsorioConectando/BP_BRAND_PatriciaOsorioConectando_v1.0.json",
+        "context":"brands/PatriciaOsorioConectando/BP_Brand_Context.md"
+      },
+      "supabase":"brands.PatriciaOsorioConectando ACTIVO",
+      "typography":"Pinyon Script (wordmark) + Montserrat ExtraLight (Conectando)",
+      "palette_primary":["#0A0A0A","#1C1A16","#C49A3C","#F5EAD0"]
+    },
     {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","status":"active","health":"yellow","gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Meta BM incompleto"},
     {"id":"ForumPHs","name":"ForumPHs","type":"brand","key_person":"Ivette Flores","market":"Panama","status":"active","health":"green",
       "speaks":"speaks.forumphs.com LIVE · foto Ivette pendiente",
@@ -48,7 +57,7 @@
     {"id":"LAB-CPL","name":"CopyLab","status":"PASSED v8.0","gaps":["BP_COPY_1.0 vacío para 3 marcas"]},
     {"id":"LAB-WL","name":"WebLab","status":"PASSED — Shopify module completo","pending":"Objectives Window"},
     {"id":"LAB-IL","name":"ImageLab","status":"PASSED ICR v1.0","gaps":["sin LoRA Prep","background removal básico"]},
-    {"id":"LAB-AL","name":"AgentLab","status":"PASSED","pending":"Twilio · WhatsApp agent NeuroneSCF · WhatsApp agent FPHs-OPS propietarios"},
+    {"id":"LAB-AL","name":"AgentLab","status":"PASSED","pending":"Twilio · WA agent NeuroneSCF · WA agent FPHs-OPS propietarios"},
     {"id":"LAB-BPL","name":"BlueprintLab","status":"PASSED"},
     {"id":"LAB-ORCH","name":"Orchestrator","status":"PASSED"},
     {"id":"LAB-SL","name":"SocialLab","status":"PASSED","gaps":["Meta/TikTok OAuth pendiente"]},
@@ -58,10 +67,11 @@
     {"id":"LAB-OBD","name":"Onboarding App","status":"PASSED Phase 4"}
   ],
   "agent_deployments": [
-    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active","gap":"session_log URL pendiente"},
+    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active",
+      "session_log_injection":"ACTIVO en código chat.js — fetchAgentContext() lee session_log.md en cada sesión. GAP anterior resuelto en deploy anterior a 2026-04-15."},
     {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","url":"speaks.forumphs.com","brand":"ForumPHs","status":"LIVE","pending":["foto Ivette","Speaks→CRM"]},
     {"id":"AGENT-FPH-DOCFACTORY","name":"Document Factory","url":"forumphs-document-factory.vercel.app","brand":"ForumPHs","status":"PROD v1.4"},
-    {"id":"AGENT-FPH-OPS-WA","name":"FPHs-OPS WhatsApp Agent","brand":"ForumPHs","status":"DISEÑADO — pendiente construir","description":"AgentLab · identifica propietario por WA number · califica incidencia · crea ticket en fph.incidents · informa avances"},
+    {"id":"AGENT-FPH-OPS-WA","name":"FPHs-OPS WhatsApp Agent","brand":"ForumPHs","status":"DISEÑADO — pendiente construir"},
     {"id":"AGENT-PROFILER","name":"Profiler Agent v5","endpoint":"https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler","brand":"UnrealvilleStudio","status":"LIVE","crm":"trigger activo → crm.contacts"}
   ],
   "infrastructure": [
@@ -82,17 +92,15 @@
     {"id":"SKILL-SEC","name":"Security","status":"PENDIENTE P6"}
   ],
   "next_session_agenda": [
-    "Patricia Osorio Conectando: veredicto tipografía (Pinyon vs Allura) → formalizar BP en Supabase",
     "Document Factory: schema JSON EEFF v1.0 + normalizer en tools/",
     "ForumPHs: recibir datos Ivette (8 edificios, propietarios, cuotas, mora) → poblar fph.*",
-    "FPHs-OPS: construir módulo COBROS (primer módulo, mayor impacto)",
+    "FPHs-OPS: construir módulo COBROS",
     "ForumPHs Speaks → CRM integración",
     "NeuroneSCF: Meta BM + SKUs + precios",
-    "Skill ui-ux-layer (P1 — necesario para FPHs-OPS app)",
+    "Skill ui-ux-layer",
     "Fal.ai birefnet → ImageLab LoRA Prep",
     "BP_COPY_1.0 x3 marcas",
-    "SMA session_log URL en system prompt",
     "Foto Ivette Speaks",
-    "Decisión estratégica FPHs-OPS: quién paga desarrollo + replicabilidad LATAM"
+    "Decisión estratégica FPHs-OPS: quién paga + replicabilidad LATAM"
   ]
 }

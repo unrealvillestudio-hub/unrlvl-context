@@ -1,63 +1,52 @@
 # UNRLVL ECOSYSTEM — Radiografía
-_Generado desde ecosystem.json · 2026-04-16a · Claude Sonnet 4.6_
+_Generado desde ecosystem.json · 2026-04-16b · Claude Sonnet 4.6_
 
 ---
 
 ## ESTADO GENERAL
 
-FPHs-OPS schema activo (fph.* 22 tablas). Spec funcional completa. CRM v1.0 operativo. BP Patricia Osorio Conectando v1 pendiente veredicto tipografía. Document Factory plan activo.
+BP Patricia Osorio Conectando DEFINITIVO. SMA session_log gap cerrado (ya estaba en código). FPHs-OPS schema activo + spec completa. CRM v1.0 operativo.
 
 ---
 
-## NUEVOS DOCUMENTOS DE REFERENCIA
+## MARCAS — ESTADO BP
 
-| Documento | Ubicación |
+| Marca | BP Status |
 |---|---|
-| FPHs-OPS Spec funcional v1.0 | `brands/ForumPHs/FPHSOPS_SPEC.md` |
-| Document Factory Plan | `brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md` |
-| CRM Integraciones | `brands/UnrealvilleStudio/CRM_INTEGRATIONS.md` |
-| Plan Maestro Labs + Skills | `brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md` |
+| PatriciaOsorioConectando | ✅ DEFINITIVO · Pinyon Script · HTML + JSON + Supabase |
+| PatriciaOsorioPersonal | ✅ DONE |
+| PatriciaOsorioComunidad | ✅ DONE |
+| PatriciaOsorioVizosSalon | ✅ DONE |
+| NeuroneSCF | ⏳ BP_COPY_1.0 pendiente · SKUs · Meta BM |
+| ForumPHs | ✅ Speaks LIVE · FPHs-OPS spec documentada |
+| UnrealvilleStudio | ✅ LIVE EN+ES |
 
 ---
 
-## FPHs-OPS — ESTADO
+## FPHs-OPS — SCHEMA ACTIVO
 
-| Componente | Estado |
-|---|---|
-| Schema fph.* (22 tablas) | ✅ ACTIVO en Supabase |
-| Categorías incidencias (3 niveles) | ✅ Urgente/Prioritario/Común |
-| Objetivos legales (Ley 284, DGI) | ✅ Sembrados |
-| 6 edificios semilla | ✅ (faltan 2 por confirmar con Ivette) |
-| Spec funcional completa | ✅ FPHSOPS_SPEC.md |
-| App (módulo cobros) | ⏳ PENDIENTE CONSTRUIR |
-| Datos de Ivette | ⏳ Pendiente recibir |
-| WhatsApp agent propietarios | ⏳ Diseñado, pendiente construir |
-
-**MUNILY desplazado:** FPHs-OPS es el sistema único. Confirmado 2026-04-16.
-**Primer módulo:** COBROS — mayor impacto en objetivo 12 PHs 2026.
+22 tablas `fph.*` en Supabase. Spec funcional completa en `FPHSOPS_SPEC.md`.
+MUNILY desplazado. Primer módulo: **COBROS**. Datos de Ivette pendientes.
 
 ---
 
-## UNRLVL CRM v1.0 — OPERATIVO
+## AGENTES — CORRECCIÓN
 
-7 orgs · 9 pipelines · Trigger Profiler→CRM activo · Dashboard local Sam
-Pendiente: Speaks→CRM · Shopify→CRM · email sequences
+**SMA session_log injection:** El `fetchAgentContext()` ya estaba en `chat.js` antes del 15-abril. Gap cerrado en código — no era pendiente de implementación sino de documentación.
 
 ---
 
 ## LABS
 
-| Lab | Estado | Próximo |
-|---|---|---|
-| CopyLab | ✅ PROD v8.0 | BP_COPY_1.0 x3 marcas |
-| WebLab | ✅ PROD | Objectives Window |
-| ImageLab | ✅ PROD ICR v1.0 | Fal.ai birefnet + LoRA Prep |
-| AgentLab | ✅ PROD | WA agent FPHs-OPS + NeuroneSCF |
-| BlueprintLab | ✅ PROD | — |
-| Orchestrator | ✅ PROD | — |
-| SocialLab | ✅ PROD | OAuth Meta/TikTok |
-| VideoLab | 🔴 | HeyGen + Kling keys |
-| VoiceLab | 🔴 | ElevenLabs IDs |
+| Lab | Estado |
+|---|---|
+| CopyLab | ✅ PROD v8.0 |
+| WebLab | ✅ PROD |
+| ImageLab | ✅ PROD ICR v1.0 |
+| AgentLab | ✅ PROD |
+| SocialLab | ✅ PROD |
+| VideoLab | 🔴 BLOQUEADO |
+| VoiceLab | 🔴 BLOQUEADO |
 
 ---
 
@@ -65,11 +54,11 @@ Pendiente: Speaks→CRM · Shopify→CRM · email sequences
 
 | Gap | Prioridad |
 |---|---|
-| PO Conectando: veredicto tipografía | INMEDIATA |
-| FPHs-OPS módulo cobros | ALTA |
-| Datos Ivette (edificios, propietarios) | ALTA — desbloquea FPHs-OPS |
-| Document Factory: schema EEFF + normalizer | ALTA (esta semana) |
-| Speaks→CRM integración | ALTA |
+| DF: schema EEFF + normalizer | ALTA (esta semana) |
+| FPHs-OPS módulo COBROS | ALTA |
+| Datos Ivette → poblar fph.* | ALTA |
+| Speaks → CRM | ALTA |
 | NeuroneSCF Meta BM + SKUs | ALTA |
-| Skill ui-ux-layer | ALTA — necesario para FPHs-OPS app |
-| Foto Ivette + SMA log URL | MEDIA |
+| Skill ui-ux-layer | ALTA |
+| Foto Ivette Speaks | MEDIA |
+| BP_COPY_1.0 x3 | MEDIA |
