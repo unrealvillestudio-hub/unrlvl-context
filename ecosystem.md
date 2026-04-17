@@ -1,140 +1,119 @@
-# Ecosystem — Unreal>ille Studio
-_Narrativa de contexto · Regenerado: 2026-04-16 · Claude Opus 4.7_
-_Fuente canónica: ecosystem.json v2026-04-16c_
+# UNRLVL Ecosystem
+_Generado desde ecosystem.json · 2026-04-17b · No editar directamente_
 
 ---
 
-## VISIÓN GENERAL
+## Studio
 
-**Unreal>ille Studio** es la agencia inhouse de Sam (owner), operando desde North Miami, FL con extensión a LATAM y España. No es una agencia pública — es el cerebro operativo, creativo y tecnológico detrás de un ecosistema de negocios. Construye marca, marketing, publicidad, estrategia y tecnología para sus propios proyectos y los de su familia.
-
-- **HQ:** 12951 Biscayne Blvd · North Miami, FL 33181 (co-located con Vizos Cosmetics)
-- **Web:** unrealvillestudio.com — LIVE EN+ES desde 2026-04-10
-- **GitHub:** unrealvillestudio-hub
-- **Vercel:** unrealvillestudio-projects (Pro)
-- **Supabase:** amlvyycfepwhiindxgzw
+**Unrealville Studio** · Owner: Sam · "Not for everyone."
+- Vercel org: `unrealvillestudio-projects` · GitHub: `unrealvillestudio-hub`
+- HQ: 12951 Biscayne Blvd · North Miami, FL 33181
+- Web: unrealvillestudio.com — **LIVE 2026-04-10** · Plan: Pro
 
 ---
 
-## MARCAS EN EL ECOSISTEMA
+## Costos Operativos · $457–507/mes
 
-### Estudio principal
-- **Unrealville Studio** (`UnrealvilleStudio`) — studio · Florida USA + LATAM · Web LIVE · Tiers SIGNAL / PULSE / ORBIT
+| Categoría | Total |
+|---|---|
+| AI Production | $398–452 |
+| Infraestructura | $20 |
+| E-commerce | $39 |
 
-### Marcas comerciales activas
-- **Diamond Details** — Alicante, España
-- **Vizos Cosmetics** — Miami + España
-- **D7 Herbal** — Alicante, España
-- **Vivose Mask** — España · health yellow
-- **Neurone South & Central Florida** — South & Central Florida · health yellow
-  - Dominio: neuronescflorida.com
-  - Gaps activos: BP_COPY_1.0 pendiente · 87 SKUs + precios · Meta BM verification + Facebook Page pendientes · 6 aliases email pendientes · assets de marca Neurone pendientes
-- **ForumPHs** — Panamá · Ivette Flores · speaks.forumphs.com LIVE · FPHs-OPS schema activo (22 tablas) · Document Factory PROD v1.4
-- **Unrealville Stores** — Florida USA · e-commerce
-
-### Marcas personales Patricia Osorio
-- **Personal**, **Comunidad**, **Vizos Salon** — todas con copy_profile DONE
-- **Conectando** — BP_BRAND v1.0 DEFINITIVO aprobado por PO · Pinyon Script + Montserrat ExtraLight · paleta #0A0A0A / #1C1A16 / #C49A3C / #F5EAD0
+**AI:** Claude Pro Max x5 (~$115) · Anthropic API ($40-60) · HeyGen (~$166) · Kling ($20-25) · Fal.ai ($15-20) · ElevenLabs ($22) · Gemini ($15-20) · Chatterbox ($5-10)
 
 ---
 
-## LABS — Estado del pipeline creativo/tecnológico
+## Marcas Activas
 
-| Lab | Status | Gaps / Pending |
-|---|---|---|
-| CopyLab (v8.0) | PASSED | BP_COPY_1.0 vacío para 3 marcas |
-| WebLab | PASSED — Shopify module completo | Objectives Window |
-| ImageLab (ICR v1.0) | PASSED | Sin LoRA Prep · background removal básico |
-| AgentLab | PASSED | Twilio · WA agent NeuroneSCF · WA agent FPHs-OPS |
-| BlueprintLab | PASSED | — |
-| Orchestrator | PASSED | — |
-| SocialLab | PASSED | Meta/TikTok OAuth pendiente |
-| VideoLab | BLOQUEADO | HeyGen + Kling keys |
-| VoiceLab | BLOQUEADO | ElevenLabs voice IDs |
-| UNRLVL-OPS | PASSED | — |
-| Onboarding App | PASSED Phase 4 | — |
+| Marca | Mercado | Salud | Notas |
+|---|---|---|---|
+| Diamond Details | Alicante, ES | 🟢 | |
+| Vizos Cosmetics | Miami + ES | 🟢 | |
+| D7 Herbal | Alicante, ES | 🟢 | |
+| Vivose Mask | España | 🟡 | |
+| Patricia Osorio · Personal | Miami, FL | 🟢 | Copy DONE |
+| Patricia Osorio · Comunidad | Miami, FL | 🟢 | Copy DONE |
+| Patricia Osorio · Vizos Salon | Miami, FL | 🟢 | Copy DONE |
+| Neurone SCF | South & Central FL | 🟡 | Meta BM ✅ · FB Page ✅ · Instagram pendiente |
+| ForumPHs | Panamá | 🟢 | Document Factory v1.5 READY |
+| Unrealville Studio | FL + LATAM + ES | 🟢 | BP_BRAND v1.2 COMPLETO |
+| Unrealville Stores | Florida USA | 🟢 | |
 
 ---
 
-## AGENTES DESPLEGADOS
+## Labs
 
-### Profiler Agent v6 — LIVE (deployed 2026-04-16)
-- **Endpoint:** `https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler`
-- **Marca:** UnrealvilleStudio
-- **Arquitectura:** EXPLORER → ANALYST → CLOSER modes · activados por señal, no por turno
-- **Guardrails:**
-  - Opening-regression fix (triple defensa: hard rule en prompt + injected guard per turn + regex catch en código con retry)
-  - Asymmetric-disclosure detection (basada en reciprocidad, no en conteo de tokens/turnos)
-- **Doctrina:** analysis is bait — muestra el trabajo, devuelve la pregunta, el prospect revela cartas en su respuesta al análisis
-- **Brief fields:** `fit_score`, `mode_reached`, `closer_activated`, `reciprocity`, `financial_read`, `readiness_signals`, `tone_read`, `recommendation`
-- **CRM:** trigger activo → `crm.contacts`
-- **Email:** profiler@unrealvillestudio.com → leads@unrealvillestudio.com (Resend)
+| ID | Nombre | URL | Estado |
+|---|---|---|---|
+| LAB-CPL | CopyLab | unrlvl-copy-lab.vercel.app | ✅ PASSED v8.0 |
+| LAB-WL | WebLab | web-lab.vercel.app | ✅ PASSED |
+| LAB-IL | ImageLab | image-lab-unrlvl.vercel.app | ✅ PASSED ICR v1.0 |
+| LAB-AL | AgentLab | agent-lab-unrlvl.vercel.app | ✅ PASSED |
+| LAB-BPL | BlueprintLab | unrlvl-blueprint-lab.vercel.app | ✅ PASSED |
+| LAB-ORCH | Orchestrator | orchestrator.vercel.app | ✅ 4 labs activos |
+| LAB-SL | SocialLab | social-lab-flame.vercel.app | ✅ CopyLabBridge DONE |
+| LAB-VL | VideoLab | unrlvl-video-lab.vercel.app | ⚠ UI PASSED · generación bloqueada |
+| LAB-VOL | VoiceLab | unrlvl-voice-lab.vercel.app | ⚠ UI PASSED · bloqueado voice_ids |
+| LAB-OPS | UNRLVL-OPS | — | ✅ producción |
+| LAB-OBD | Onboarding App | unrlvl-onboarding-app.vercel.app | ✅ Phase 4 · 8 tablas |
+
+---
+
+## Agent Deployments
 
 ### Social Media Agent
-- **URL:** unrlvl-social-media-agent.vercel.app
-- **Marca:** NeuroneSCF
-- **Session log injection:** ACTIVO en chat.js
-- **Último update session_log:** 2026-04-16 — Laura progreso Meta BM pasos 1-2 completados, dominio verification bloqueada, Facebook Page pendiente por assets
+- URL: `unrlvl-social-media-agent.vercel.app`
+- Marca: NeuroneSCF · Operador: Laura Rodriguez
+- Engine: Claude Sonnet 4 + @vercel/kv 90 días
+- Estado: **ACTIVO** · FB Page ✅ · Instagram pendiente · TikTok pendiente
+- ⚠ Gap: no accede a session_log del context system
 
 ### ForumPHs Speaks
-- **URL:** speaks.forumphs.com (LIVE)
-- **Pendientes:** foto Ivette · integración Speaks→CRM
+- URL: `forumphs-speaks.vercel.app` · Custom domain: `speaks.forumphs.com`
+- Engine: Claude Sonnet 4 via Supabase Edge Functions
+- Estado: **PRODUCCIÓN LIVE**
+- Pendiente: foto Ivette
 
-### Document Factory
-- **URL:** forumphs-document-factory.vercel.app
-- **Status:** PROD v1.4 · Plan de evolución documentado
-
-### FPHs-OPS WhatsApp Agent
-- Diseñado · pendiente construir
-
----
-
-## INFRAESTRUCTURA
-
-| Infra | Detalle |
-|---|---|
-| Context System | https://unrlvl-context.vercel.app · `/api/gh` (GitHub proxy v2) · `/api/cf` (Cloudflare proxy 6 dominios) |
-| Supabase | project `amlvyycfepwhiindxgzw` · `public.*` 40 tablas + `crm.*` 14 + `fph.*` 22 |
-| UNRLVL CRM v1.0 | OPERATIVO · 7 orgs · 9 pipelines · integración activa Profiler→CRM · pendientes Speaks→CRM, Shopify→CRM, email sequences |
-| FPHs-OPS | Schema activo · app pendiente construir · primer módulo COBROS · pendiente datos Ivette (8 edificios + propietarios) |
-| Web unrealvillestudio.com | LIVE EN+ES · 37 files |
-| Email | leads@unrealvillestudio.com · profiler@unrealvillestudio.com (Resend) |
+### ForumPHs Document Factory
+- URL: `forumphs-document-factory.vercel.app`
+- Repo: `unrealvillestudio-hub/forumphs-document-factory`
+- Engine: Claude Sonnet 4.6 via Supabase Edge Functions + Next.js 14
+- Estado: **PRODUCCIÓN — v1.5 READY FOR BUSINESS**
+- Pipeline: ZIP (extracción local) → Confirmación stats → Pre-flight → Paso 0.5 → Generar → QA → ICR (Anexo) → Descarga
+- Edge Functions: `fphs-formalize` v9 · `fphs-icr-apply` v1
+- Sprints cerrados: FPH-013 · FPH-014 · FPH-015 · FPH-016
+- Pendiente: ImageRun type fix (1 línea)
 
 ---
 
-## SKILLS — Status
+## Infraestructura
 
-| Skill | Status |
-|---|---|
-| GitHub Auditor | ACTIVO |
-| UI/UX Layer | PENDIENTE P1 — crítico para FPHs-OPS app |
-| Image Processing + LoRA Prep | PENDIENTE P2 |
-| Agent Builder | PENDIENTE P3 — crítico para WA agent FPHs-OPS |
-| CopyLab Reference | PENDIENTE P4 |
-| WebLab Shopify Reference | PENDIENTE P5 |
-| Security | PENDIENTE P6 |
+| ID | Nombre | URL / ID | Estado |
+|---|---|---|---|
+| INFRA-CTX | Context System | unrlvl-context.vercel.app | ✅ active |
+| INFRA-SB | Supabase DB | amlvyycfepwhiindxgzw | ✅ MCP connected · 37 tablas |
+| INFRA-WEB | unrealvillestudio.com | unrealvillestudio.com | ✅ LIVE |
+| INFRA-TOOLS | Tools + GitHub Auditor | unrlvl-tools.vercel.app | ✅ /api/gh operativo |
 
----
-
-## AGENDA PRÓXIMA SESIÓN
-
-1. Profiler v6: validar con prueba reproducible del caso geles/gominolas en widget web
-2. Document Factory: schema JSON EEFF v1.0 + normalizer en `tools/`
-3. ForumPHs: recibir datos Ivette (8 edificios, propietarios, cuotas, mora) → poblar `fph.*`
-4. FPHs-OPS: construir módulo COBROS
-5. ForumPHs Speaks → CRM integración
-6. NeuroneSCF: Meta BM domain verification + 6 aliases email + assets marca + 87 SKUs + precios
-7. NeuroneSCF: Facebook Page (decisión assets placeholder vs oficiales)
-8. Skill ui-ux-layer
-9. Fal.ai birefnet → ImageLab LoRA Prep
-10. BP_COPY_1.0 x3 marcas
-11. Foto Ivette Speaks
-12. Decisión estratégica FPHs-OPS: quién paga + replicabilidad LATAM
+**GitHub Auditor Proxy:**
+- Endpoint: `https://unrlvl-tools.vercel.app/api/gh`
+- Tool: `Vercel:web_fetch_vercel_url` — NUNCA `web_fetch`
+- Tree: `?repo=REPO&action=tree&branch=main`
+- File: `?path=/repos/unrealvillestudio-hub/REPO/git/blobs/SHA`
+- Env: `GH_PAT` en Vercel proyecto tools
 
 ---
 
-## ÚLTIMA AUDITORÍA
+## Próxima Sesión
 
-**2026-04-16 · Claude Opus 4.7**
-
-Profiler Agent v6 deployed — fix opening regression + business intelligence layer + sales closer mode + asymmetric disclosure guardrail. SMA session_log regenerado con progreso Laura Meta BM Neurone SCF. BP Patricia Osorio Conectando DEFINITIVO. FPHs-OPS schema activo. CRM v1.0 operativo.
+1. ForumPHs: ImageRun type fix (1 línea) — `type:'png'/'jpg'` en generate/route.ts ~488
+2. ForumPHs: foto Ivette para Speaks
+3. NeuroneSCF: Instagram Business — celular Patricia Miami
+4. NeuroneSCF: TikTok for Business
+5. NeuroneSCF: WhatsApp Business API
+6. NeuroneSCF: verificación dominio (hosting)
+7. SMA: URL session_log en system prompt
+8. unrealvillestudio.com: redirect rules + formulario backend
+9. WebLab: Objectives Window + plantillas institucionales
+10. DATOS: BP_COPY_1.0 NeuroneSCF + ForumPHs + UnrealvilleStudio

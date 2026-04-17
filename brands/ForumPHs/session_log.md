@@ -1,68 +1,62 @@
-# Session Log — ForumPHs
-_Ivette Flores · Sam (socio) · Actualizado: 2026-04-16_
+# ForumPHs — Session Log
 
 ---
 
-## 2026-04-16 — Decisiones estratégicas FPHs-OPS cerradas
+## 2026-04-17 — Document Factory v1.5 · MARATÓN COMPLETO
 
-### Decisiones tomadas hoy
+**Resultado:** Document Factory **READY FOR BUSINESS**. Todos los sprints del backlog cerrados.
 
-**Financiamiento del desarrollo:** Inversión societaria (Sam). No es un costo de ForumPHs.
+### Sprints completados
 
-**Replicabilidad:** FPHs-OPS es exclusivo para ForumPHs. No se replica a otras administradoras en Panamá ni en LATAM. El foco es hacer crecer el portafolio de ForumPHs, no vender el sistema.
+**FPH-014 — Secciones per agenda real**
+- `parseAgendaText()` exportada desde `preflightDetector.ts`
+- `handlePreflightSubmit` en `page.tsx` parsea `confirmed_agenda_items` → `skeleton.agenda_items`
+- Gap "Orden del Día" siempre visible en pre-flight, pre-poblado con items detectados
+- `lib/types.ts`: campo `confirmed_agenda_items` añadido a `PreflightData`
 
-**Datos en camino:** Sam buscará datos de los 8 edificios y propietarios para poblar `fph.*` y arrancar el módulo COBROS.
+**FPH-015 — PH Los Alamos speaker fix**
+- `parseTranscripcion.ts`: `detectRole()` — regex `/^p\.?h\.?\s+\w/i` → role `logistica`
+- Fix aplicado: "PH Los Alamos" ya no se clasifica como propietario
 
----
+**FPH-016 — ZIP Extractor integrado + imágenes en DOCX**
+- `lib/zipExtractor.ts` (NUEVO): extracción client-side con jszip + mammoth + xlsx
+- `components/UploadZone.tsx`: acepta .zip directamente, extracción local en browser
+- `lib/types.ts`: `ExtractedImage` + `images: ExtractedImage[]` en `ParsedHypalZip`
+- `app/api/parse/route.ts` v3: cast `body.images` type string → union, pass-through
+- `app/api/generate/route.ts`: appendix "DOCUMENTOS DE RESPALDO — IMÁGENES" con ImageRun
+- **PENDIENTE**: agregar `type:'png'/'jpg'` en ImageRun constructor (1 línea, línea ~488)
 
-## 2026-04-16 — FPHs-OPS: Schema + Spec funcional completa
+### UX Fixes v1.5
+- **Blank screen guard**: cuando `blocksToFormalize.length === 0` → mensaje ⚠ + botones de acción
+- **ICR Revision step ELIMINADO**: paso `icr-resolution` removido del pipeline y del tipo `Step`. El Anexo ICR en DOCX cubre esa necesidad.
+- **Pipeline v1.5**: ZIP → Confirmación → Pre-flight → Paso 0.5 → Generar → QA → ICR → Descarga
+- **Auto-scroll ICR**: `window.scrollTo` con 80ms delay al click "Continuar → ICR"
+- **Título producto**: "Document Factory" — gradiente terra→amatista, `clamp(40px, 8vw, 68px)`, glow radial
+- **UploadZone confirmación**: extrae ZIP → muestra stats tabla (✓/✗ por campo) → botón "Continuar al Pre-flight →". Ivette ve qué se detectó antes de avanzar.
+- **Footer**: `v1.4` → `v1.5`
 
-### Decisiones clave
-
-**MUNILY desplazado:** FPHs-OPS será el sistema único de campo. Objetivo declarado explícitamente en sesión.
-
-**Primer módulo a construir: COBROS** (por encima de OPS Diarias e Incidencias). Mayor impacto en objetivo 12 PHs 2026. Cobro automatizado + análisis FPHs mejora liquidez de edificios actuales y es argumento de venta en asambleas.
-
-**Arquitectura confirmada:**
-- Supabase UNRLVL → labs + crm.* marketing
-- fph.* → sistema operativo ForumPHs (hoy en Supabase UNRLVL, migrable)
-- 3 instancias lógicamente separadas
-
-**App:** web app responsive mobile-first con guardarrailes estrictos de captura. No tablet obligatoria. El admin ejecuta protocolos — la app controla el qué/cómo/cuándo.
-
-**Canal propietarios:** WhatsApp agent (AgentLab) — identifica al propietario por número, califica incidencia, crea ticket, informa avances.
-
-### Schema fph.* en Supabase — ACTIVO
-22 tablas en schema `fph.*` del Supabase principal.
-- 6 edificios sembrados (faltan 2 por confirmar con Ivette — documento menciona 8 PHs activos)
-- Categorías de incidencias corregidas a 3 niveles (Urgente/Prioritario/Común) según sesión Marzo 2026
-- 16 categorías con SLA automático por trigger
-- 8 tipos de obligaciones legales (Ley 284, DGI, Bomberos, Municipal)
-- 4 templates de comunicación con campo `fph_analysis`
-- Triggers activos: mora automática, SLA incidencias, updated_at
-
-### FPHSOPS_SPEC.md creado
-Documento de especificación funcional completa: 4 módulos + 2 capas transversales.
-Módulos: OPS Diarias · Cobros · Comunicaciones · Incidencias
-Capas: Informe Mensual 360° · Motor Claude (análisis FPHs en cada entregable)
-
-### Pendiente de Ivette
-- Datos 8 edificios: dirección, unidades, cuota mensual
-- Lista propietarios por edificio: nombre, email, WhatsApp, unidad, estado mora
-- Obligaciones legales recurrentes específicas por edificio
-
-### Pendiente decisión estratégica (Sam + Ivette)
-- ¿Quién paga el desarrollo? (inversión sociedad vs costo ForumPHs)
-- ¿Es replicable a otras administradoras LATAM? (cambia alcance y valor)
+### Deploy confirmado
+- Build green ✅
+- Test real: ZIP Los Álamos (274 asistentes, 163 votaciones, 0 imágenes — normal)
+- ICR auditó correctamente, acta descargada OK
 
 ---
 
-## 2026-04-15 — Document Factory plan documentado
-DOCUMENT_FACTORY_PLAN.md creado. Zip Extractor → normalizer en tools/.
-Schema JSON EEFF v1.0 pendiente esta semana.
+## 2026-04-17 — FPH-013 + GitHub Auditor Proxy
+
+**FPH-013 CERRADO:**
+- `fphs-formalize` v9: LOGISTICA_NAMES regex — Daniel Puentes / Hypal / Hipal → skip
+- BOLD_RULE v2: admin sin artículo, propietario La señora/El señor, JD solo cargo
+- `generate/route.ts` v3: `sectionTitle()` sin número prefix (formato canónico Ivette)
+- Test real PH Los Álamos exitoso
+
+**GitHub Auditor Proxy ACTIVO:**
+- `Tools/api/gh.js` deployado en Vercel
+- `GH_PAT` configurado en env del proyecto tools
+- SKILL.md documentado en `Tools/github-auditor/SKILL.md`
 
 ---
 
-## 2026-03-25 — Sesión estratégica con Ivette
-Plan estratégico v3.0 · Roadmap tecnológico · ForumPHs Speaks testing
-8 PHs activos · Meta: 12 PHs 2026 · 20 PHs 18 meses
+## Pendiente próxima sesión
+- ImageRun type fix: `type: img.type === 'image/png' ? 'png' : 'jpg'` en generate/route.ts ~488
+- Foto Ivette para ForumPHs Speaks
