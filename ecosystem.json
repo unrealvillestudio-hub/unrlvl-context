@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-17b",
+    "version": "2026-04-14c",
     "maintained_by": "Claude — do not edit manually",
     "purpose": "Single source of truth for UNRLVL ecosystem.",
     "update_protocol": "Claude updates at end of each session via 'Actualiza' command",
@@ -12,89 +12,59 @@
     },
     "render_instructions": {
       "trigger": "Regenerar ecosystem.md y ecosystem_filemap.md siempre que ecosystem.json cambie",
+      "ecosystem_md": "Radiografia narrativa. Capa A produccion / Capa B interno. Por lab: estado, engine, gaps. Tono denso tecnico.",
+      "ecosystem_filemap_md": "Mapa dependencias. Flujos activos ASCII. Flujos rotos con causa. Roadmap priorizado.",
       "source_of_truth": "Todo contenido de .md se deriva de este JSON. Nunca editar .md directamente."
     },
     "last_audit": {
-      "date": "2026-04-17",
-      "status": "Document Factory v1.5 COMPLETO. FPH-014/015/016 cerrados. ZIP Extractor integrado. UX paso a paso. ICR Revision eliminado. Auto-scroll ICR. Título producto. UploadZone con confirmación. ImageRun type fix pendiente (1 línea).",
+      "date": "2026-04-14",
+      "status": "unrealvillestudio.com fully operational. Profiler Agent PROD. Psycho Layer en web y ImageLab.",
       "conducted_by": "Claude Sonnet 4.6",
       "resolved_since_last_session": [
-        "FPH-014: secciones per agenda confirmada — parseAgendaText + preflightDetector gaps + skeleton updatedParsed.",
-        "FPH-015: PH Los Alamos speaker fix — detectRole() regex /^p\\.?h\\.?\\s+\\w/i → logistica.",
-        "FPH-016: ZIP Extractor integrado en UploadZone — jszip + mammoth + xlsx client-side. Imágenes base64 al DOCX.",
-        "parse/route.ts v3: ExtractedImage type cast (string → union). images pass-through.",
-        "generate/route.ts: IMAGES APPENDIX — DOCUMENTOS DE RESPALDO. ImageRun via docx.",
-        "types.ts v2: ExtractedImage + images en ParsedHypalZip.",
-        "UploadZone v2: acepta ZIP, extracción local con barra progreso, stats con confirmación antes de pre-flight.",
-        "page.tsx v1.5: blank screen guard transcripción vacía. ICR Revision step eliminado. Auto-scroll al click ICR.",
-        "Document Factory título como producto — gradiente terra→amatista clamp 68px.",
-        "Pipeline v1.5: ZIP → Pre-flight → Paso 0.5 → Generar → QA → ICR → Descarga (Revision eliminado).",
-        "GitHub Auditor Proxy: operativo en unrlvl-tools.vercel.app/api/gh.",
-        "ImageRun type fix PENDIENTE: agregar type:'png'/'jpg' en generate/route.ts línea ~488."
+        "speaks.forumphs.com CNAME activo.",
+        "Autorización marca Neurone US confirmada.",
+        "unrealvillestudio.com Cloudflare + redirect rules + aliases email completados.",
+        "Profiler Agent en formulario de contacto unrealvillestudio.com — PROD.",
+        "Sección Psycho Layer en unrealvillestudio.com completada.",
+        "ForumPHs Document Factory v1.4 CERRADO.",
+        "ForumPHs Speaks LIVE.",
+        "Vercel Pro activo."
       ],
       "production_real": [
-        "CopyLab",
-        "WebLab",
-        "ImageLab",
-        "OnboardingApp",
-        "Social Media Agent",
-        "UNRLVL-OPS",
-        "SocialLab",
-        "AgentLab",
-        "BlueprintLab",
-        "Orchestrator",
-        "ForumPHs Speaks",
-        "ForumPHs Document Factory v1.5",
-        "unrealvillestudio.com",
-        "Profiler Agent (Edge Function v3)",
-        "GitHub Auditor Proxy"
+        "CopyLab","WebLab","ImageLab","OnboardingApp","Social Media Agent",
+        "UNRLVL-OPS","SocialLab","AgentLab","BlueprintLab","Orchestrator",
+        "ForumPHs Speaks","ForumPHs Document Factory","unrealvillestudio.com",
+        "Profiler Agent"
       ]
     }
   },
   "studio": {
-    "name": "Unrealville Studio",
-    "owner": "Sam",
-    "tagline": "Not for everyone.",
+    "name": "Unrealville Studio","owner": "Sam","tagline": "Not for everyone.",
     "team_id": "team_fEH94Irp6BAI9YGm4btGna5n",
-    "vercel_org": "unrealvillestudio-projects",
-    "github_org": "unrealvillestudio-hub",
+    "vercel_org": "unrealvillestudio-projects","github_org": "unrealvillestudio-hub",
     "hq": "12951 Biscayne Blvd · North Miami, FL 33181",
-    "web": "unrealvillestudio.com",
-    "web_status": "LIVE — 2026-04-10",
-    "vercel_plan": "Pro"
+    "web": "unrealvillestudio.com","web_status": "LIVE — fully operational","vercel_plan": "Pro"
   },
   "operational_costs": {
-    "last_updated": "2026-04-05",
-    "currency": "USD",
-    "total_monthly_range": "$457-507",
+    "last_updated": "2026-04-05","currency": "USD","total_monthly_range": "$457-507",
     "breakdown": {
-      "ai_production": {
-        "total_range": "$398-452",
-        "items": [
-          { "name": "Claude.ai Pro Max x5", "type": "fixed", "amount": "~$115" },
-          { "name": "Anthropic API", "type": "variable", "amount": "$40-60" },
-          { "name": "Google Gemini / Imagen 3", "type": "variable", "amount": "$15-20" },
-          { "name": "ElevenLabs Creator", "type": "fixed", "amount": "$22" },
-          { "name": "Chatterbox via Fal.ai", "type": "variable", "amount": "$5-10" },
-          { "name": "HeyGen Creator + add-ons + API", "type": "mixed", "amount": "~$166" },
-          { "name": "Kling", "type": "variable", "amount": "$20-25" },
-          { "name": "Fal.ai", "type": "variable", "amount": "$15-20" }
-        ]
-      },
-      "infrastructure": {
-        "total": "$20",
-        "items": [
-          { "name": "Vercel Pro", "type": "fixed", "amount": "$20" },
-          { "name": "Supabase", "type": "fixed", "amount": "$0" },
-          { "name": "Resend", "type": "fixed", "amount": "$0" }
-        ]
-      },
-      "ecommerce": {
-        "total": "$39",
-        "items": [
-          { "name": "Shopify Basic — NeuroneSCF", "type": "fixed", "amount": "$39" }
-        ]
-      }
+      "ai_production": { "total_range": "$398-452", "items": [
+        {"name":"Claude.ai Pro Max x5","type":"fixed","amount":"~$115"},
+        {"name":"Anthropic API","type":"variable","amount":"$40-60"},
+        {"name":"Google Gemini / Imagen 3","type":"variable","amount":"$15-20"},
+        {"name":"ElevenLabs Creator","type":"fixed","amount":"$22"},
+        {"name":"Chatterbox via Fal.ai","type":"variable","amount":"$5-10"},
+        {"name":"HeyGen Creator + add-ons + API","type":"mixed","amount":"~$166"},
+        {"name":"Kling","type":"variable","amount":"$20-25"},
+        {"name":"Fal.ai","type":"variable","amount":"$15-20"}
+      ]},
+      "infrastructure": { "total": "$20", "items": [
+        {"name":"Vercel Pro","type":"fixed","amount":"$20"},
+        {"name":"Supabase","type":"fixed","amount":"$0","notes":"Free. 14MB/500MB"}
+      ]},
+      "ecommerce": { "total": "$39", "items": [
+        {"name":"Shopify Basic — NeuroneSCF","type":"fixed","amount":"$39"}
+      ]}
     }
   },
   "taxonomy": {
@@ -106,386 +76,112 @@
     "internal_tool": "Herramienta operativa para Sam y Claude."
   },
   "brands": [
+    {"id":"DiamondDetails","name":"Diamond Details","type":"brand","sam_role":"studio","market":"Alicante, Espana","language_primary":"es-ES","status":"active","health":"green","last_updated":"2026-03-27"},
+    {"id":"VizosCosmetics","name":"Vizos Cosmetics","type":"brand","sam_role":"studio","market":"Miami + Espana","language_primary":"es-ES","status":"active","health":"green","last_updated":"2026-03-25"},
+    {"id":"D7Herbal","name":"D7 Herbal","type":"brand","sam_role":"studio","market":"Alicante, Espana","language_primary":"es-ES","status":"active","health":"green","last_updated":"2026-03-25"},
+    {"id":"VivoseMask","name":"Vivose Mask","type":"brand","sam_role":"studio","market":"Espana","language_primary":"es-ES","status":"active","health":"yellow","last_updated":"2026-03-25"},
+    {"id":"PatriciaOsorioPersonal","name":"Patricia Osorio · Personal","type":"personal_brand","sam_role":"studio","market":"Miami, FL","language_primary":"es-FL","status":"active","health":"green","copy_profile":"DONE","last_updated":"2026-04-04"},
+    {"id":"PatriciaOsorioComunidad","name":"Patricia Osorio · Comunidad","type":"personal_brand","sam_role":"studio","market":"Miami, FL","language_primary":"es-FL","status":"active","health":"green","copy_profile":"DONE","last_updated":"2026-04-04"},
+    {"id":"PatriciaOsorioVizosSalon","name":"Patricia Osorio · Vizos Salon","type":"personal_brand","sam_role":"studio","market":"Miami, FL","language_primary":"es-FL","status":"active","health":"green","copy_profile":"DONE","last_updated":"2026-04-04"},
     {
-      "id": "DiamondDetails",
-      "name": "Diamond Details",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Alicante, Espana",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "green",
-      "last_updated": "2026-03-27"
+      "id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","sam_role":"studio",
+      "market":"South & Central Florida, USA","domain":"neuronescflorida.com",
+      "language_primary":"es-FL","status":"active","health":"yellow",
+      "data_completeness":"humanize/goals/personas/geomix OK. copy_profile PENDIENTE. Shopify precios pendientes.",
+      "marca_authorization":"CONFIRMADA","last_updated":"2026-04-14"
     },
     {
-      "id": "VizosCosmetics",
-      "name": "Vizos Cosmetics",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Miami + Espana",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "green",
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "D7Herbal",
-      "name": "D7 Herbal",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Alicante, Espana",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "green",
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "VivoseMask",
-      "name": "Vivose Mask",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "Espana",
-      "language_primary": "es-ES",
-      "status": "active",
-      "health": "yellow",
-      "last_updated": "2026-03-25"
-    },
-    {
-      "id": "PatriciaOsorioPersonal",
-      "name": "Patricia Osorio · Personal",
-      "type": "personal_brand",
-      "sam_role": "studio",
-      "market": "Miami, FL",
-      "language_primary": "es-FL",
-      "status": "active",
-      "health": "green",
-      "copy_profile": "DONE",
-      "last_updated": "2026-04-04"
-    },
-    {
-      "id": "PatriciaOsorioComunidad",
-      "name": "Patricia Osorio · Comunidad",
-      "type": "personal_brand",
-      "sam_role": "studio",
-      "market": "Miami, FL",
-      "language_primary": "es-FL",
-      "status": "active",
-      "health": "green",
-      "copy_profile": "DONE",
-      "last_updated": "2026-04-04"
-    },
-    {
-      "id": "PatriciaOsorioVizosSalon",
-      "name": "Patricia Osorio · Vizos Salon",
-      "type": "personal_brand",
-      "sam_role": "studio",
-      "market": "Miami, FL",
-      "language_primary": "es-FL",
-      "status": "active",
-      "health": "green",
-      "copy_profile": "DONE",
-      "last_updated": "2026-04-04"
-    },
-    {
-      "id": "NeuroneSCF",
-      "name": "Neurone South & Central Florida",
-      "type": "brand",
-      "sam_role": "studio",
-      "market": "South & Central Florida, USA",
-      "domain": "neuronescflorida.com",
-      "language_primary": "es-FL",
-      "status": "active",
-      "health": "yellow",
-      "data_completeness": "humanize/goals/personas/geomix OK. copy_profile PENDIENTE. Shopify precios pendientes.",
-      "last_updated": "2026-04-17"
-    },
-    {
-      "id": "ForumPHs",
-      "name": "ForumPHs",
-      "type": "brand",
-      "sam_role": "socio",
-      "key_person": "Ivette Flores (Abogada, Gerente General)",
-      "market": "Panama",
-      "language_primary": "es-PA",
-      "status": "active",
-      "health": "green",
-      "speaks_status": {
-        "frontend": "forumphs-speaks.vercel.app — PROD",
-        "custom_domain": "speaks.forumphs.com — ACTIVO",
-        "backend": "Supabase Edge Functions fphs-session v6 + fphs-chat v5",
-        "status": "PRODUCCION — operativo",
-        "pending": ["foto Ivette"]
+      "id":"ForumPHs","name":"ForumPHs","type":"brand","sam_role":"socio",
+      "key_person":"Ivette Flores (Abogada, Gerente General)","market":"Panama",
+      "language_primary":"es-PA","status":"active","health":"green",
+      "speaks_status":{
+        "frontend":"forumphs-speaks.vercel.app — PROD",
+        "custom_domain":"speaks.forumphs.com — ACTIVO",
+        "status":"PRODUCCIÓN — operativo",
+        "pending":["foto Ivette","más correcciones Ivette si las hay"]
       },
-      "document_factory_status": {
-        "version": "v1.5",
-        "vercel_url": "forumphs-document-factory.vercel.app",
-        "repo": "unrealvillestudio-hub/forumphs-document-factory",
-        "supabase_edge_functions": {
-          "fphs-formalize": "v9 — LOGISTICA_NAMES Daniel/Hypal skip + BOLD_RULE v2 Ivette canonical",
-          "fphs-icr-apply": "v1 — ICR corrections engine"
-        },
-        "pipeline": "ZIP (extracción local) → Confirmación stats → Pre-flight → Paso 0.5 → Generar → QA → ICR (Anexo) → Descarga",
-        "completed_sprints": [
-          "FPH-013: LOGISTICA_NAMES + BOLD_RULE v2 + sectionTitle sin número",
-          "FPH-014: secciones per agenda + parseAgendaText + skeleton update",
-          "FPH-015: PH Los Alamos speaker fix detectRole()",
-          "FPH-016: ZIP Extractor integrado + imágenes en DOCX"
-        ],
-        "pending": [
-          "ImageRun type fix: agregar type:'png'/'jpg' en generate/route.ts línea ~488",
-          "foto Ivette para Speaks"
-        ],
-        "status": "PRODUCCION — v1.5 READY FOR BUSINESS"
-      },
-      "last_updated": "2026-04-17"
+      "document_factory_status":{"version":"v1.4","vercel_url":"forumphs-document-factory.vercel.app","status":"PRODUCCIÓN — CERRADO v1.4"},
+      "last_updated":"2026-04-14"
     },
     {
-      "id": "UnrealvilleStudio",
-      "name": "Unrealville Studio",
-      "type": "studio",
-      "sam_role": "owner",
-      "market": "Florida USA + LATAM + Espana",
-      "language_primary": "EN",
-      "status": "active",
-      "health": "green",
-      "bp_brand": "BP_BRAND_UNRLVL_v1.2 COMPLETO",
-      "web": "unrealvillestudio.com",
-      "web_status": "LIVE — 2026-04-10",
-      "last_updated": "2026-04-17"
+      "id":"UnrealvilleStudio","name":"Unrealville Studio","type":"studio","sam_role":"owner",
+      "market":"Florida USA + LATAM + Espana","language_primary":"EN","status":"active","health":"green",
+      "web":"unrealvillestudio.com","web_status":"LIVE — fully operational",
+      "web_completed":["Cloudflare","Redirect rules","Aliases email","Profiler Agent","Sección Psycho Layer"],
+      "hq":"12951 Biscayne Blvd · North Miami, FL 33181","last_updated":"2026-04-14"
     },
-    {
-      "id": "UnrealvilleStores",
-      "name": "Unrealville Stores",
-      "type": "ecommerce",
-      "sam_role": "owner",
-      "market": "Florida USA",
-      "language_primary": "es-FL",
-      "status": "active",
-      "health": "green",
-      "last_updated": "2026-03-30"
-    }
+    {"id":"UnrealvilleStores","name":"Unrealville Stores","type":"ecommerce","sam_role":"owner","market":"Florida USA","language_primary":"es-FL","status":"active","health":"green","last_updated":"2026-03-30"}
   ],
   "labs": [
-    {
-      "id": "LAB-CPL",
-      "name": "CopyLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/CopyLab",
-      "vercel_url": "unrlvl-copy-lab.vercel.app",
-      "status": "PASSED v8.0 — produccion",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-WL",
-      "name": "WebLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/WebLab",
-      "vercel_url": "web-lab.vercel.app",
-      "status": "PASSED — Supabase DONE",
-      "last_updated": "2026-04-07"
-    },
-    {
-      "id": "LAB-IL",
-      "name": "ImageLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/ImageLab",
-      "vercel_url": "image-lab-unrlvl.vercel.app",
-      "status": "PASSED ICR v1.0 — PsychoLayer DONE",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-AL",
-      "name": "AgentLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/AgentLab",
-      "vercel_url": "agent-lab-unrlvl.vercel.app",
-      "status": "PASSED",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-BPL",
-      "name": "BlueprintLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/BlueprintLab",
-      "vercel_url": "unrlvl-blueprint-lab.vercel.app",
-      "status": "PASSED",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-ORCH",
-      "name": "Orchestrator",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/Orchestrator",
-      "vercel_url": "orchestrator.vercel.app",
-      "status": "PASSED — 4 labs activos",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-SL",
-      "name": "SocialLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/SocialLab",
-      "vercel_url": "social-lab-flame.vercel.app",
-      "status": "PASSED — CopyLabBridge DONE",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-VL",
-      "name": "VideoLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/VideoLab",
-      "vercel_url": "unrlvl-video-lab.vercel.app",
-      "status": "PASSED UI — generacion bloqueada",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-VOL",
-      "name": "VoiceLab",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/VoiceLab",
-      "vercel_url": "unrlvl-voice-lab.vercel.app",
-      "status": "PASSED UI — bloqueado por voice_ids",
-      "last_updated": "2026-04-05"
-    },
-    {
-      "id": "LAB-OPS",
-      "name": "UNRLVL-OPS",
-      "taxonomy": "internal_tool",
-      "status": "PASSED — produccion",
-      "last_updated": "2026-04-02"
-    },
-    {
-      "id": "LAB-OBD",
-      "name": "Onboarding App",
-      "taxonomy": "lab",
-      "repo": "unrealvillestudio-hub/OnboardingApp",
-      "vercel_url": "unrlvl-onboarding-app.vercel.app",
-      "status": "PASSED — Phase 4 completa, 8 tablas",
-      "last_updated": "2026-04-05"
-    }
+    {"id":"LAB-CPL","name":"CopyLab","taxonomy":"lab","repo":"unrealvillestudio-hub/CopyLab","vercel_url":"unrlvl-copy-lab.vercel.app","status":"PASSED v8.0 — produccion","engine":"Claude Sonnet 4 server-side — 24 queries paralelas","orchestrator_endpoint":"/api/execute — ACTIVO","gaps":["brand_copy_profiles vacio para NeuroneSCF, ForumPHs, UnrealvilleStudio"],"last_updated":"2026-04-05"},
+    {"id":"LAB-WL","name":"WebLab","taxonomy":"lab","repo":"unrealvillestudio-hub/WebLab","vercel_url":"web-lab.vercel.app","status":"PASSED — Supabase DONE","orchestrator_endpoint":"/api/execute — ACTIVO","pending_sprint":{"name":"Objectives Window + Institutional Templates","status":"pendiente"},"last_updated":"2026-04-07"},
+    {"id":"LAB-IL","name":"ImageLab","taxonomy":"lab","repo":"unrealvillestudio-hub/ImageLab","vercel_url":"image-lab-unrlvl.vercel.app","status":"PASSED ICR v1.0 — PsychoLayer DONE","engine":"Google Imagen 3 + Gemini 2.5 Flash","orchestrator_endpoint":"/api/execute — ACTIVO","last_updated":"2026-04-05"},
+    {"id":"LAB-AL","name":"AgentLab","taxonomy":"lab","repo":"unrealvillestudio-hub/AgentLab","vercel_url":"agent-lab-unrlvl.vercel.app","status":"PASSED — Supabase-first blueprints DONE","last_updated":"2026-04-05"},
+    {"id":"LAB-BPL","name":"BlueprintLab","taxonomy":"lab","repo":"unrealvillestudio-hub/BlueprintLab","vercel_url":"unrlvl-blueprint-lab.vercel.app","status":"PASSED — Vercel + Supabase DONE","schemas":["BP_PERSON_1.0","BP_LOCATION_1.0","BP_PRODUCT_1.0","BP_COPY_1.0"],"last_updated":"2026-04-05"},
+    {"id":"LAB-ORCH","name":"Orchestrator","taxonomy":"lab","repo":"unrealvillestudio-hub/Orchestrator","vercel_url":"orchestrator.vercel.app","status":"PASSED — 4 labs activos","active_labs":["copylab","weblab","imagelab","sociallab"],"last_updated":"2026-04-05"},
+    {"id":"LAB-SL","name":"SocialLab","taxonomy":"lab","repo":"unrealvillestudio-hub/SocialLab","vercel_url":"social-lab-flame.vercel.app","status":"PASSED — CopyLabBridge DONE","orchestrator_endpoint":"/api/execute — ACTIVO","gaps":["Meta/TikTok OAuth pendiente"],"last_updated":"2026-04-05"},
+    {"id":"LAB-VL","name":"VideoLab","taxonomy":"lab","repo":"unrealvillestudio-hub/VideoLab","vercel_url":"unrlvl-video-lab.vercel.app","status":"PASSED UI — generacion bloqueada","pending_accounts":["HeyGen API key","Kling API key"],"last_updated":"2026-04-05"},
+    {"id":"LAB-VOL","name":"VoiceLab","taxonomy":"lab","repo":"unrealvillestudio-hub/VoiceLab","vercel_url":"unrlvl-voice-lab.vercel.app","status":"PASSED UI — bloqueado por voice_ids","provider":"ElevenLabs","last_updated":"2026-04-05"},
+    {"id":"LAB-OPS","name":"UNRLVL-OPS","taxonomy":"internal_tool","status":"PASSED — produccion","last_updated":"2026-04-02"},
+    {"id":"LAB-OBD","name":"Onboarding App","taxonomy":"lab","repo":"unrealvillestudio-hub/OnboardingApp","vercel_url":"unrlvl-onboarding-app.vercel.app","status":"PASSED — Phase 4 completa, 8 tablas","last_updated":"2026-04-05"}
   ],
   "agent_deployments": [
-    {
-      "id": "AGENT-SMA",
-      "name": "Social Media Agent",
-      "vercel_url": "unrlvl-social-media-agent.vercel.app",
-      "serves_brand": "NeuroneSCF",
-      "operator": "Laura Rodriguez",
-      "status": "active — produccion",
-      "engine": "Claude Sonnet 4 + @vercel/kv 90 dias",
-      "social_progress": {
-        "meta_bm": "CONFIGURADO — info empresa completada, verificación dominio pendiente",
-        "facebook_page": "CREADA",
-        "instagram_business": "PENDIENTE — necesita celular Patricia Miami",
-        "tiktok_for_business": "PENDIENTE",
-        "whatsapp_business_api": "PENDIENTE"
-      },
-      "gap": "No accede a session_log marca — pendiente inyectar URL en system prompt",
-      "last_updated": "2026-04-17"
-    },
-    {
-      "id": "AGENT-FPH-SPEAKS",
-      "name": "ForumPHs Speaks",
-      "repo": "unrealvillestudio-hub/forumphs-speaks",
-      "vercel_url": "forumphs-speaks.vercel.app",
-      "custom_domain": "speaks.forumphs.com",
-      "serves_brand": "ForumPHs",
-      "status": "PRODUCCION — LIVE",
-      "engine": "Claude Sonnet 4 via Supabase Edge Functions",
-      "pending": ["foto Ivette"],
-      "last_updated": "2026-04-14"
-    },
-    {
-      "id": "AGENT-FPH-DOCFACTORY",
-      "name": "ForumPHs Document Factory",
-      "repo": "unrealvillestudio-hub/forumphs-document-factory",
-      "vercel_url": "forumphs-document-factory.vercel.app",
-      "serves_brand": "ForumPHs",
-      "operator": "Ivette Flores",
-      "status": "PRODUCCION — v1.5 READY FOR BUSINESS",
-      "engine": "Claude Sonnet 4.6 via Supabase Edge Functions + Vercel Next.js 14",
-      "last_updated": "2026-04-17"
-    }
+    {"id":"AGENT-SMA","name":"Social Media Agent","vercel_url":"unrlvl-social-media-agent.vercel.app","serves_brand":"NeuroneSCF","operator":"Laura Rodriguez","status":"active — produccion","engine":"Claude Sonnet 4 + @vercel/kv 90 dias","gap":"No accede a session_log marca — pendiente inyectar URL en system prompt","last_updated":"2026-04-14"},
+    {"id":"AGENT-PROFILER","name":"Profiler Agent","vercel_url":"unrealvillestudio.com","serves_brand":"UnrealvilleStudio","status":"PRODUCCIÓN — activo en formulario de contacto","description":"Califica visitantes antes de llegar a Sam. Output: brief pre-armado.","last_updated":"2026-04-14"},
+    {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","repo":"unrealvillestudio-hub/forumphs-speaks","vercel_url":"forumphs-speaks.vercel.app","custom_domain":"speaks.forumphs.com","serves_brand":"ForumPHs","status":"PRODUCCIÓN — LIVE","pending":["foto Ivette","más correcciones Ivette si las hay"],"last_updated":"2026-04-14"},
+    {"id":"AGENT-FPH-DOCFACTORY","name":"ForumPHs Document Factory","repo":"unrealvillestudio-hub/forumphs-document-factory","vercel_url":"forumphs-document-factory.vercel.app","serves_brand":"ForumPHs","operator":"Ivette Flores","status":"PRODUCCIÓN — v1.4 CERRADO","last_updated":"2026-04-14"}
   ],
   "infrastructure": [
-    {
-      "id": "INFRA-CTX",
-      "name": "Context System",
-      "vercel_url": "https://unrlvl-context.vercel.app",
-      "repo": "unrealvillestudio-hub/unrlvl-context",
-      "status": "active",
-      "last_updated": "2026-04-17"
-    },
-    {
-      "id": "INFRA-SB",
-      "name": "Supabase DB",
-      "project_id": "amlvyycfepwhiindxgzw",
-      "status": "active",
-      "mcp_connected": true,
-      "schema_version": "v2.0 — 37 tablas",
-      "last_updated": "2026-04-17"
-    },
-    {
-      "id": "INFRA-WEB",
-      "name": "unrealvillestudio.com",
-      "vercel_url": "https://unrealvillestudio.com",
-      "repo": "unrealvillestudio-hub/CoreProject",
-      "status": "LIVE — 2026-04-10",
-      "last_updated": "2026-04-17"
-    },
-    {
-      "id": "INFRA-TOOLS",
-      "name": "Tools repo + GitHub Auditor Proxy",
-      "repo": "unrealvillestudio-hub/Tools",
-      "vercel_url": "https://unrlvl-tools.vercel.app",
-      "vercel_project_id": "prj_orYcSynBX5LC3vuZvLY74Wy8zcRK",
-      "status": "ACTIVE — proxy /api/gh operativo",
-      "github_auditor": {
-        "endpoint": "https://unrlvl-tools.vercel.app/api/gh",
-        "skill_doc": "Tools/github-auditor/SKILL.md",
-        "claude_tool": "Vercel:web_fetch_vercel_url",
-        "usage_tree": "Vercel:web_fetch_vercel_url(url='https://unrlvl-tools.vercel.app/api/gh?repo=REPO&action=tree&branch=main')",
-        "usage_file": "Vercel:web_fetch_vercel_url(url='https://unrlvl-tools.vercel.app/api/gh?path=/repos/unrealvillestudio-hub/REPO/git/blobs/SHA')",
-        "env_var": "GH_PAT en Vercel env del proyecto tools",
-        "note_expired_pat": "Si devuelve 401/403 — PAT expirado, Sam debe renovar en GitHub Settings"
-      },
-      "last_updated": "2026-04-17"
-    }
+    {"id":"INFRA-CTX","name":"Context System","vercel_url":"https://unrlvl-context.vercel.app","repo":"unrealvillestudio-hub/unrlvl-context","status":"active","last_updated":"2026-04-14"},
+    {"id":"INFRA-SB","name":"Supabase DB","project_id":"amlvyycfepwhiindxgzw","status":"active","mcp_connected":true,"schema_version":"v2.0 — 37 tablas","last_updated":"2026-04-14"},
+    {"id":"INFRA-WEB","name":"unrealvillestudio.com","vercel_url":"https://unrealvillestudio.com","repo":"unrealvillestudio-hub/CoreProject","status":"LIVE — fully operational","cloudflare":"activo","email_aliases":"activos","last_updated":"2026-04-14"},
+    {"id":"INFRA-TOOLS","name":"Tools repo","repo":"unrealvillestudio-hub/Tools","status":"active — private repo","last_updated":"2026-04-10"}
   ],
   "blueprints_repo": {
-    "repo": "unrealvillestudio-hub/BluePrints",
-    "vercel_url": "unrlvl-blueprints.vercel.app",
-    "structure": "brand-first COMPLETO — brands/[Brand]/assets/",
-    "last_updated": "2026-04-11"
+    "repo":"unrealvillestudio-hub/BluePrints",
+    "brands_committed":["BP_BRAND_ForumPHs_v1.0.json","BP_BRAND_NeuroneSCF_v1.0.json","BP_BRAND_UNRLVL_v1.2.json"],
+    "last_updated":"2026-04-11","vercel_url":"unrlvl-blueprints.vercel.app",
+    "structure":"brand-first COMPLETO — brands/[Brand]/assets/"
   },
   "psycho_layer": {
-    "status": "PRODUCTION — integrado en ImageLab",
-    "table": "psycho_presets",
-    "presets_count": 10,
-    "last_updated": "2026-04-05"
+    "status":"PRODUCTION — ImageLab + unrealvillestudio.com",
+    "table":"psycho_presets","presets_count":10,
+    "pending_integration":["CopyLab","SocialLab","VideoLab","VoiceLab"],
+    "last_updated":"2026-04-14"
   },
+  "ideas_en_desarrollo": [
+    {
+      "id":"IDEA-002","name":"Psycho Layer — extensión multi-lab",
+      "description":"Capa transversal de objetivo psicológico. Ya en PROD en ImageLab + web UNRLVL. Pendiente extender a CopyLab, SocialLab, VideoLab, VoiceLab.",
+      "status":"parcialmente en producción — extensión pendiente",
+      "in_production":["ImageLab","unrealvillestudio.com"],
+      "pending":["CopyLab","SocialLab","VideoLab","VoiceLab"],
+      "added":"2026-04-14"
+    }
+  ],
   "brand_id_canonical_map": {
-    "neuroneCosmetics": "NeuroneSCF",
-    "patriciaOsorioVizosSalon": "PatriciaOsorioVizosSalon",
-    "patriciaOsorioPersonal": "PatriciaOsorioPersonal",
-    "patriciaOsorioComunidad": "PatriciaOsorioComunidad",
-    "diamondDetails": "DiamondDetails",
-    "d7Herbal": "D7Herbal",
-    "vivoseMask": "VivoseMask",
-    "vizosCosmetics": "VizosCosmetics",
-    "forumPhs": "ForumPHs",
-    "unrealilleStudio": "UnrealvilleStudio"
+    "neuroneCosmetics":"NeuroneSCF","patriciaOsorioVizosSalon":"PatriciaOsorioVizosSalon",
+    "patriciaOsorioPersonal":"PatriciaOsorioPersonal","patriciaOsorioComunidad":"PatriciaOsorioComunidad",
+    "diamondDetails":"DiamondDetails","d7Herbal":"D7Herbal","vivoseMask":"VivoseMask",
+    "vizosCosmetics":"VizosCosmetics","forumPhs":"ForumPHs","unrealilleStudio":"UnrealvilleStudio"
   },
   "next_session_agenda": [
-    "ForumPHs: ImageRun type fix (1 línea) en generate/route.ts — type:'png'/'jpg'",
-    "ForumPHs: foto Ivette para Speaks",
-    "NeuroneSCF: Instagram Business — celular Patricia Miami",
-    "NeuroneSCF: TikTok for Business",
-    "NeuroneSCF: WhatsApp Business API",
-    "NeuroneSCF: verificación dominio neuronescflorida.com (acceso hosting pendiente)",
-    "SMA: URL session_log en system prompt del agente",
-    "unrealvillestudio.com: redirect rules + formulario contacto backend",
-    "WebLab sprint: Objectives Window + plantillas institucionales",
-    "DATOS: BP_COPY_1.0 para NeuroneSCF + ForumPHs + UnrealvilleStudio"
+    "PRIORIDAD 1 — ForumPHs: foto Ivette para Speaks",
+    "PRIORIDAD 1 — NeuroneSCF: Laura/PO completar Meta BM info empresa (Miami, sin VPN)",
+    "PRIORIDAD 1 — NeuroneSCF: precios reales + inventario real → PO confirma",
+    "PRIORIDAD 1 — NeuroneSCF: cargar 87 SKUs + 12 kits en Shopify",
+    "PRIORIDAD 1 — NeuroneSCF: Shopify Payments + POS Vizos + UpPromote + Shop Pay",
+    "PRIORIDAD 1 — DATOS: BP_COPY_1.0 NeuroneSCF + ForumPHs + UnrealvilleStudio",
+    "PRIORIDAD 1 — DATOS: Onboarding ForumPHs + VivoseMask + PO×3 via OnboardingApp",
+    "PRIORIDAD 2 — WebLab sprint: Objectives Window + plantillas institucionales",
+    "PRIORIDAD 2 — Social Media Agent: inyectar URL session_log en system prompt",
+    "PRIORIDAD 2 — Shopify desde Claude: probar client credentials flow con Neurone",
+    "PRIORIDAD 2 — NeuroneSCF: número comercial + Facebook Page + Instagram + WABA + TikTok",
+    "PRIORIDAD 2 — NeuroneSCF: Video PO Kit SOS (TikTok)",
+    "PRIORIDAD 2 — Cuentas: ElevenLabs + audio PO + HeyGen + Kling + Fal.ai",
+    "PRIORIDAD 3 — VideoLab sprint (API keys)",
+    "PRIORIDAD 3 — OAuth Meta/TikTok → SocialLab publica real",
+    "PRIORIDAD 3 — Psycho Layer extensión: CopyLab + SocialLab + VideoLab + VoiceLab",
+    "PRIORIDAD 4 — LoRA Fal.ai + fotos PO"
   ]
 }
