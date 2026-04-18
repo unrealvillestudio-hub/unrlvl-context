@@ -1,74 +1,73 @@
 # Social Media Agent — Session Log
-# NeuroneSCF · Infraestructura Digital
-
-_Última actualización: 2026-04-17_
+_Actualizado: 2026-04-18 · Export procesado_
 
 ---
 
-## ESTADO ACTUAL — Infraestructura Digital NeuroneSCF
+## PROGRESO INFRAESTRUCTURA DIGITAL — NeuroneSCF
 
-### ✅ COMPLETADO
+### Estado actual (2026-04-18)
 
-| Item | Detalle |
-|---|---|
-| Meta Business Manager | Configurado — info empresa completada (nombre, dirección, EIN, sector, web) |
-| Cuenta personal Facebook | Patricia activa con admin@neuronescflorida.com |
-| Facebook Page | CREADA — "Neurone South & Central Florida" |
-| Correos corporativos | 7 aliases definidos (admin, ig, waba, tiktok, ads, support, hello) |
+| Plataforma | Estado | Cuenta/Handle |
+|---|---|---|
+| Meta Business Manager | ✅ Configurado | Patricia — parcialmente completado |
+| Facebook Page | ✅ Creada | Neurone South & Central Florida |
+| Instagram Business | ✅ Creado | @neuronescflorida |
+| TikTok for Business | ✅ Creado | @neuronescflorida |
+| WhatsApp Business API | ⏳ En progreso | Último punto: Step 1-4 setup en Meta BM |
+| Verificación dominio | ❌ Pendiente | neuronescflorida.com — Sam tiene acceso |
+| Vinculación IG→FB Page | ❌ Pendiente | Laura reportó que no logó vincular |
+| Logos/Assets | ❌ Pendiente | No tiene assets oficiales de Neurone |
 
-### ⏳ PENDIENTE
+### Sesiones por usuario
 
-| Item | Bloqueador |
-|---|---|
-| Instagram Business | Necesita celular de Patricia desde Miami (sin VPN) |
-| Verificación dominio neuronescflorida.com | Sin acceso al hosting — pendiente coordinar con quien lo administra |
-| TikTok for Business | Pendiente — espera Instagram |
-| WhatsApp Business API | Pendiente — espera configuración base |
-| Logos / brand assets | Pendiente solicitar a Neurone Cosmética oficialmente |
+#### LAURA (ops)
+
+**2026-04-10:**
+- Continuó proceso de apertura de cuentas
+- Meta BM: pasos 1 y 2 completados
+
+**2026-04-15:**
+- Meta BM configuración verificada: Pasos 1 y 2 OK
+- Verificación de dominio: pendiente (Laura sin acceso al website)
+- Recomendación agente: diferir verificación, no bloquea el proceso
+
+**2026-04-17:**
+- ✅ Facebook Page ya estaba creada
+- ✅ Instagram Business creado y convertido a cuenta profesional
+  - Categoría: Belleza
+  - Email: ig@neuronescflorida.com
+- ✅ TikTok for Business creado (vía web, no app)
+  - Email: tiktok@neuronescflorida.com
+  - Cuenta Pro / Empresa / Belleza y cuidado personal
+- ❌ Vinculación Instagram → Facebook Page: pendiente (opción visible pero no ejecutada)
+
+**2026-04-18:**
+- Inició setup WhatsApp Business API
+- Explicación de diferencia WABA vs WhatsApp Business App
+- Último punto: Patricia en Meta BM buscando "Todos los recursos" para agregar WhatsApp
+- ⚠️ **WABA pendiente de completar** — Patricia debe verificar número T-Mobile
+
+**Gap activo confirmado:** El agente sigue sin acceso al session_log.md — responde desde inicialización cuando Sam pregunta por historial. Sam consultó el 2026-04-10 y el agente no pudo responder correctamente.
+
+#### SAM (admin)
+
+**2026-04-10:**
+- Confirmó estructura de 7 aliases de email por función
+- Preguntó qué se hizo último — agente no pudo responder (gap session_log)
+
+#### PO (Patricia)
+- Sin sesiones nuevas desde 2026-04-06
+- Está ejecutando las acciones guiadas por Laura
 
 ---
 
-## ACTIVIDAD POR USUARIO
+## PENDIENTES CRÍTICOS (en orden de urgencia)
 
-### LAURA — Ops
-- **2026-04-06**: Setup TikTok Shop vs TikTok for Business — estrategia direcciones definida
-- **2026-04-10**: Meta BM info empresa completada (pasos 1-2 OK, verificación dominio pendiente)
-- **2026-04-15**: Verificación dominio bloqueada — sin acceso hosting. Decisión: diferir, continuar con Facebook Page
-- **2026-04-17**: Facebook Page ✅ creada. Instagram → necesita celular Patricia Miami
-
-### SAM — Admin
-- **2026-04-06**: Definición 7 aliases email por función
-- **2026-04-10**: Review estado infraestructura
-- **GAP ACTIVO**: Agente no accede a `session_log.md` del context system — URL no inyectada en system prompt. Pendiente configurar.
-
-### PATY (Patricia Osorio) — PO
-- **2026-04-06**: Onboarding inicial — checklist dispositivos/documentos
-- Dispositivo activo: celular T-Mobile Miami ✅
+1. **WhatsApp Business API** — Patricia debe completar setup en Meta BM (estaba en Step 1)
+2. **Vinculación Instagram → Facebook Page** — Patricia desde app Instagram
+3. **Verificación dominio** neuronescflorida.com — Sam tiene acceso al Cloudflare
+4. **Logos/Assets** — Solicitar a Neurone Cosmética (Patricia como distribuidora autorizada)
+5. **Fix Social Media Agent** — Inyectar URL session_log en system prompt
 
 ---
-
-## PRÓXIMOS PASOS CONCRETOS
-
-1. **Instagram Business** — Patricia con celular desde Miami, sin VPN:
-   - App Instagram → crear con ig@neuronescflorida.com
-   - Username: @neuronescflorida
-   - Convertir a Business → vincular Facebook Page
-
-2. **Verificación dominio** — coordinar acceso hosting neuronescflorida.com (Meta Pixel o DNS TXT)
-
-3. **TikTok for Business** — después de Instagram: tiktok@neuronescflorida.com
-
-4. **Logos** — solicitar brand assets a Neurone Cosmética (distribuidora autorizada)
-
-5. **SMA gap** — Sam inyectar URL session_log en system prompt del agente
-
----
-
-## DECISIONES TOMADAS
-
-- 7 aliases separados por función (seguridad + compliance)
-- Un Business Manager por marca (evitar suspensiones Meta)
-- Número T-Mobile de Patricia como número comercial
-- Dirección documentos oficiales para Meta/TikTok Ads
-- TikTok Shop diferido hasta tener dirección comercial
-- Verificación dominio diferida — no bloquea creación de cuentas
+*Social Media Agent · Export 2026-04-18T14:19:48Z*

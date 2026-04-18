@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-04-09", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-04-18", "maintained_by": "Claude" },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -8,16 +8,26 @@
     "status": "active",
     "health": "yellow"
   },
+  "social_media_infrastructure": {
+    "meta_business_manager": "✅ configurado",
+    "facebook_page": "✅ creada — Neurone South & Central Florida",
+    "instagram_business": "✅ @neuronescflorida — cuenta profesional/empresa",
+    "tiktok_for_business": "✅ @neuronescflorida",
+    "whatsapp_business_api": "⏳ en progreso — Patricia en Step 1 Meta BM",
+    "instagram_fb_link": "❌ pendiente",
+    "domain_verification_meta": "❌ pendiente — Sam puede hacerlo vía Cloudflare",
+    "logos_assets": "❌ pendiente — solicitar a Neurone Cosmética"
+  },
   "pricing_calculator": {
     "version": "v15",
     "file": "Neurone_Pricing_v15.xlsx",
-    "fix_doble_arancel": "resuelto — columna LATAM separada, c/Arancel aplica 20% una sola vez",
+    "fix_doble_arancel": "resuelto",
     "total_skus": 87,
     "skus_50ml_disabled": 12,
     "skus_b2b_to_b2c": 18,
     "pending_decisions": [
-      "MELANIN ANTI G (NSCF-CL-010) — precio de compra pendiente PO",
-      "CONTROLLER/GEOMETRY GEL/GEOMETRY CREAM — inventario 0, pendiente decisión PO"
+      "MELANIN ANTI G — precio de compra pendiente PO",
+      "CONTROLLER/GEOMETRY GEL/GEOMETRY CREAM — inventario 0"
     ]
   },
   "kit_architecture": {
@@ -25,44 +35,30 @@
     "strategy_doc": "neurone_kits_strategy_v4.html",
     "pricing_decision": "Todos los kits 1-3.3 a precio ÓPTIMO. Kit SOS a precio DESEADO — uso controlado Mes 3+.",
     "kits_base": [
-      {"sku":"NSCF-KT-101",  "price_po":99.99,  "margin_real":0.555, "contrib":55.48, "cost_total":44.51},
-      {"sku":"NSCF-KT-101P", "price_po":99.99,  "margin_real":0.519, "contrib":51.88, "cost_total":48.11},
-      {"sku":"NSCF-KT-102",  "price_po":99.99,  "margin_real":0.533, "contrib":53.26, "cost_total":46.73},
-      {"sku":"NSCF-KT-102P", "price_po":109.99, "margin_real":0.542, "contrib":59.66, "cost_total":50.33},
-      {"sku":"NSCF-KT-103",  "price_po":99.99,  "margin_real":0.533, "contrib":53.26, "cost_total":46.73},
-      {"sku":"NSCF-KT-103P", "price_po":109.99, "margin_real":0.542, "contrib":59.66, "cost_total":50.33},
-      {"sku":"NSCF-KT-103V", "price_po":84.99,  "margin_real":0.480, "contrib":40.84, "cost_total":44.15},
-      {"sku":"NSCF-KT-103VP","price_po":99.99,  "margin_real":0.522, "contrib":52.24, "cost_total":47.75},
-      {"sku":"NSCF-KT-104",  "price_po":179.99, "margin_real":0.470, "contrib":84.66, "cost_total":95.33, "status":"APROBADO uso controlado Mes 3+"}
+      {"sku":"NSCF-KT-101",  "price_po":99.99,  "margin_real":0.555},
+      {"sku":"NSCF-KT-101P", "price_po":99.99,  "margin_real":0.519},
+      {"sku":"NSCF-KT-102",  "price_po":99.99,  "margin_real":0.533},
+      {"sku":"NSCF-KT-102P", "price_po":109.99, "margin_real":0.542},
+      {"sku":"NSCF-KT-103",  "price_po":99.99,  "margin_real":0.533},
+      {"sku":"NSCF-KT-103P", "price_po":109.99, "margin_real":0.542},
+      {"sku":"NSCF-KT-103V", "price_po":84.99,  "margin_real":0.480},
+      {"sku":"NSCF-KT-103VP","price_po":99.99,  "margin_real":0.522},
+      {"sku":"NSCF-KT-104",  "price_po":179.99, "margin_real":0.470, "status":"APROBADO uso controlado Mes 3+"}
     ],
     "kits_derivados": [
-      {"sku":"NSCF-KT-101T",  "base":"KT-101",  "added":"Resplander Shine 100ml", "price_po":109.99, "margin_real":0.555, "contrib":61.04, "cost_total":48.95},
-      {"sku":"NSCF-KT-102T",  "base":"KT-102",  "added":"Thermo Dual 200ml",      "price_po":109.99, "margin_real":0.531, "contrib":58.46, "cost_total":51.53},
-      {"sku":"NSCF-KT-103VT", "base":"KT-103V", "added":"Lycra Web 70g",          "price_po":94.99,  "margin_real":0.490, "contrib":46.52, "cost_total":48.47}
+      {"sku":"NSCF-KT-101T",  "price_po":109.99, "margin_real":0.555},
+      {"sku":"NSCF-KT-102T",  "price_po":109.99, "margin_real":0.531},
+      {"sku":"NSCF-KT-103VT", "price_po":94.99,  "margin_real":0.490}
     ]
-  },
-  "shopify_config": {
-    "pos": "Vizos Salón — Shopify POS Lite · Tap to Pay iPhone",
-    "embajadoras": "UpPromote — links únicos por promotora",
-    "bnpl": ["Shop Pay Installments (Affirm)", "Afterpay"],
-    "shipping_kits": "GRATIS",
-    "shipping_individual": "pendiente confirmar con PO"
-  },
-  "promotoras_system": {
-    "nivel_1_spark": "10% productos individuales sin mínimo",
-    "nivel_2_fire": "5-10 kits=$10/kit · 11+=$15/kit retroactivo",
-    "nivel_3_ignite": ">15 kits salón=$150 pool proporcional",
-    "nivel_4_partner": "≥15 kits×3 meses=15% dto+badge",
-    "tracking": "UpPromote",
-    "pago": "Mensual · Zelle/Venmo · día 5"
   },
   "alerts": [
     {"level":"blocking","msg":"Autorización marca Neurone US pendiente — bloquea lanzamiento"},
+    {"level":"warning", "msg":"WABA pendiente de completar — Patricia en Step 1"},
+    {"level":"warning", "msg":"Vinculación Instagram → Facebook Page pendiente"},
+    {"level":"action",  "msg":"Sam: verificar dominio neuronescflorida.com en Meta vía Cloudflare TXT record"},
+    {"level":"warning", "msg":"Logos/Assets sin confirmar de Neurone Cosmética"},
     {"level":"warning", "msg":"Shopify: precios $0.00 placeholder — no activar sin resolver"},
     {"level":"warning", "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
-    {"level":"warning", "msg":"MELANIN ANTI G — precio de compra pendiente PO, no incluir en Shopify"},
-    {"level":"warning", "msg":"CONTROLLER/GEOMETRY GEL/GEOMETRY CREAM — inventario 0, pendiente decisión PO"},
-    {"level":"warning", "msg":"copy_profile NeuroneSCF Supabase → CopyLab Layer 13 vacío"},
     {"level":"info",    "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
   ]
 }
