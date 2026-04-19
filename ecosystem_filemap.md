@@ -1,5 +1,5 @@
 # Ecosystem Filemap — unrlvl-context
-_Regenerado: 2026-04-19 · Fuente: ecosystem.json v2026-04-19a_
+_Regenerado: 2026-04-19b_
 
 ---
 
@@ -7,86 +7,64 @@ _Regenerado: 2026-04-19 · Fuente: ecosystem.json v2026-04-19a_
 
 | Archivo | Propósito |
 |---|---|
-| `ecosystem.json` | Fuente canónica máquina-readable |
-| `ecosystem.md` | Narrativa human-readable (regenerada desde JSON) |
+| `ecosystem.json` | Fuente canónica — v2026-04-19b |
+| `ecosystem.md` | Narrativa human-readable |
 | `ecosystem_filemap.md` | Este archivo |
-| `TIERS.md` | **NUEVO 2026-04-19** — Pricing canónico Signal/Pulse/Orbit con contenido completo, condiciones de salida, notas operativas. Referencia permanente para Claude. |
+| `TIERS.md` | Pricing canónico Signal/Pulse/Orbit — USD únicamente |
 
 ---
 
 ## PROTOCOLS
 
-`protocols/SESSION_PROTOCOL.md` — Protocolo de actualización, comandos Actualiza / protocolo actualización, reglas de nomenclatura.
+`protocols/SESSION_PROTOCOL.md` — Protocolo de actualización, comandos Actualiza / protocolo actualización
 
 ---
 
 ## AGENTS
 
-`agents/social-media-agent/session_log.md` — Log SMA · consumido por chat.js · última regeneración 2026-04-16
+`agents/social-media-agent/session_log.md` — Log SMA · NeuroneSCF
 
 ---
 
 ## BRANDS
 
 ### brands/UnrealvilleStudio/
-- `brand.json` — BP_BRAND UNRLVL v1.2
-- `BP_Brand_Context.md` — Contexto visual y operativo
-- `session_log.md` — Log de sesiones · **actualizado 2026-04-19** con Lucian Sael + TIERS + Why UNRLVL
-- `PLAN_MAESTRO_LABS_SKILLS.md`
-- `CRM_INTEGRATIONS.md`
-
-### brands/PatriciaOsorioConectando/
-- `BP_Brand_Context.md` — BP v1.0 DEFINITIVO
-- `brand.json`
-
-### brands/NeuroneSCF/
-- `brand.json` · `BP_Brand_Context.md` · `session_log.md`
+- `session_log.md` — **actualizado 2026-04-19b** — Profiler v7.4 + Lucien Sael Brand Identity v1.0 + luciensael.com + Why UNRLVL v4
+- `PLAN_MAESTRO_LABS_SKILLS.md` · `CRM_INTEGRATIONS.md`
 
 ### brands/ForumPHs/
-- `brand.json` · `BP_Brand_Context.md` · `session_log.md`
-- `FPHSOPS_SPEC.md` · `DOCUMENT_FACTORY_PLAN.md`
+- `session_log.md` · `FPHSOPS_SPEC.md` · `DOCUMENT_FACTORY_PLAN.md`
 
-### brands/PatriciaOsorioPersonal/ · PatriciaOsorioComunidad/ · PatriciaOsorioVizosSalon/
-- Archivos de marca personal PO
-
-### brands/DiamondDetails/ · VizosCosmetics/ · D7Herbal/ · VivoseMask/ · UnrealvilleStores/
-- Archivos de marca
+### brands/NeuroneSCF/ · PatriciaOsorioConectando/ · otros
+- Archivos de marca individuales
 
 ---
 
-## CANONICAL URL PREFIX
+## LUCIEN SAEL — ASSETS (no en context system, en outputs locales)
 
-```
-https://unrlvl-context.vercel.app/{path}
-```
+| Asset | Descripción |
+|---|---|
+| `lucien-sael-brand-identity-v1.html` | Documento canónico completo — paleta, tipografía, logotipo, firma, reglas |
+| `lucien-sael-palette-v1.html` | Swatches y token reference |
+| `luciensael-v2.html` | Site v2.1 — pending deploy |
 
 ---
 
-## REGLAS DE NOMENCLATURA CRÍTICAS
+## REGLAS DE NOMENCLATURA
 
-Los outputs deben generarse con el nombre EXACTO del archivo en el repo:
-- `session_log.md` — no `unrealville_session_log.md`
-- `brand.json` · `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md`
+Los outputs se generan con el nombre EXACTO del archivo en el repo:
+- `session_log.md` · `brand.json` · `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md`
 - `BP_Brand_Context.md` · `SESSION_PROTOCOL.md` · `TIERS.md`
 
-Si el nombre difiere del canónico → GitHub Desktop crea archivos nuevos en vez de reemplazar.
-
 **Rutas en el repo:**
-- Archivos de ecosistema → raíz
+- Ecosistema → raíz
 - `TIERS.md` → raíz
-- Archivos de marca → `brands/[Marca]/`
+- Marca → `brands/[Marca]/`
 - Agente → `agents/social-media-agent/`
 - Protocolos → `protocols/`
 
 ---
 
-## ASSETS EN BLUEPRINTS (no en context)
-
-`BluePrints/brands/Unrealville/` — BP_BRAND_UNRLVL_v1.2.json · HTML EN+ES · assets SVG
-`BluePrints/brands/Unrealville/UNRLVL_PriceList_v1_2.html` — **pendiente mover aquí** desde donde Sam lo tenga
-
----
-
 ## ÚLTIMA REGENERACIÓN
 
-**2026-04-19** — Añadido `TIERS.md` en raíz. Profiler v7.2 con Lucian Sael. Sección Why UNRLVL pendiente en CoreProject.
+**2026-04-19b** — Lucien Sael Brand Identity v1.0 documentado. Profiler v7.4 USD. luciensael.com v2.1 pending. Why UNRLVL v4 pending commit CoreProject.
