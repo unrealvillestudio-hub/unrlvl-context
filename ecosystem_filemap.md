@@ -1,87 +1,92 @@
-# UNRLVL Ecosystem — File Map
-_Generado desde ecosystem.json · 2026-04-17b · No editar directamente_
+# Ecosystem Filemap — unrlvl-context
+_Regenerado: 2026-04-19 · Fuente: ecosystem.json v2026-04-19a_
 
 ---
 
-## Context System (raíz)
+## RAÍZ DEL REPO
 
-```
-/
-├── ecosystem.json              ← Source of truth — cargar siempre
-├── ecosystem.md                ← Narrativa generada desde JSON
-├── ecosystem_filemap.md        ← Este archivo
-└── protocols/
-    └── SESSION_PROTOCOL.md
-```
+| Archivo | Propósito |
+|---|---|
+| `ecosystem.json` | Fuente canónica máquina-readable |
+| `ecosystem.md` | Narrativa human-readable (regenerada desde JSON) |
+| `ecosystem_filemap.md` | Este archivo |
+| `TIERS.md` | **NUEVO 2026-04-19** — Pricing canónico Signal/Pulse/Orbit con contenido completo, condiciones de salida, notas operativas. Referencia permanente para Claude. |
 
 ---
 
-## Brands
+## PROTOCOLS
 
-```
-brands/
-├── DiamondDetails/
-│   ├── brand.json
-│   ├── BP_Brand_Context.md
-│   └── session_log.md
-├── VizosCosmetics/
-│   ├── brand.json
-│   ├── BP_Brand_Context.md
-│   └── session_log.md
-├── D7Herbal/
-│   ├── brand.json
-│   ├── BP_Brand_Context.md
-│   └── session_log.md
-├── VivoseMask/
-│   ├── brand.json
-│   └── session_log.md
-├── PatriciaOsorio/
-│   ├── brand.json              ← Personal + Comunidad + Vizos Salon
-│   ├── BP_Brand_Context.md
-│   └── session_log.md
-├── NeuroneSCF/
-│   ├── brand.json
-│   ├── BP_Brand_Context.md     ← humanize/goals/personas/geomix OK
-│   └── session_log.md          ← Meta BM ✅ · FB Page ✅ · Instagram pendiente
-├── ForumPHs/
-│   ├── brand.json
-│   ├── BP_Brand_Context.md
-│   └── session_log.md          ← Document Factory v1.5 · FPH-013/014/015/016 CERRADOS
-└── UnrealvilleStudio/
-    ├── brand.json
-    ├── BP_Brand_Context.md     ← BP_BRAND_UNRLVL_v1.2 COMPLETO
-    └── session_log.md
-```
+`protocols/SESSION_PROTOCOL.md` — Protocolo de actualización, comandos Actualiza / protocolo actualización, reglas de nomenclatura.
 
 ---
 
-## Agents
+## AGENTS
+
+`agents/social-media-agent/session_log.md` — Log SMA · consumido por chat.js · última regeneración 2026-04-16
+
+---
+
+## BRANDS
+
+### brands/UnrealvilleStudio/
+- `brand.json` — BP_BRAND UNRLVL v1.2
+- `BP_Brand_Context.md` — Contexto visual y operativo
+- `session_log.md` — Log de sesiones · **actualizado 2026-04-19** con Lucian Sael + TIERS + Why UNRLVL
+- `PLAN_MAESTRO_LABS_SKILLS.md`
+- `CRM_INTEGRATIONS.md`
+
+### brands/PatriciaOsorioConectando/
+- `BP_Brand_Context.md` — BP v1.0 DEFINITIVO
+- `brand.json`
+
+### brands/NeuroneSCF/
+- `brand.json` · `BP_Brand_Context.md` · `session_log.md`
+
+### brands/ForumPHs/
+- `brand.json` · `BP_Brand_Context.md` · `session_log.md`
+- `FPHSOPS_SPEC.md` · `DOCUMENT_FACTORY_PLAN.md`
+
+### brands/PatriciaOsorioPersonal/ · PatriciaOsorioComunidad/ · PatriciaOsorioVizosSalon/
+- Archivos de marca personal PO
+
+### brands/DiamondDetails/ · VizosCosmetics/ · D7Herbal/ · VivoseMask/ · UnrealvilleStores/
+- Archivos de marca
+
+---
+
+## CANONICAL URL PREFIX
 
 ```
-agents/
-└── social-media-agent/
-    └── session_log.md          ← NeuroneSCF · FB Page ✅ · Instagram pendiente
+https://unrlvl-context.vercel.app/{path}
 ```
 
 ---
 
-## Protocols
+## REGLAS DE NOMENCLATURA CRÍTICAS
 
-```
-protocols/
-└── SESSION_PROTOCOL.md         ← Protocolo Actualiza + comandos
-```
+Los outputs deben generarse con el nombre EXACTO del archivo en el repo:
+- `session_log.md` — no `unrealville_session_log.md`
+- `brand.json` · `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md`
+- `BP_Brand_Context.md` · `SESSION_PROTOCOL.md` · `TIERS.md`
+
+Si el nombre difiere del canónico → GitHub Desktop crea archivos nuevos en vez de reemplazar.
+
+**Rutas en el repo:**
+- Archivos de ecosistema → raíz
+- `TIERS.md` → raíz
+- Archivos de marca → `brands/[Marca]/`
+- Agente → `agents/social-media-agent/`
+- Protocolos → `protocols/`
 
 ---
 
-## Repos de Referencia
+## ASSETS EN BLUEPRINTS (no en context)
 
-| Proyecto | Repo | URL |
-|---|---|---|
-| Context System | unrealvillestudio-hub/unrlvl-context | unrlvl-context.vercel.app |
-| Tools + GH Auditor | unrealvillestudio-hub/Tools | unrlvl-tools.vercel.app |
-| Document Factory | unrealvillestudio-hub/forumphs-document-factory | forumphs-document-factory.vercel.app |
-| ForumPHs Speaks | unrealvillestudio-hub/forumphs-speaks | forumphs-speaks.vercel.app |
-| Social Media Agent | — | unrlvl-social-media-agent.vercel.app |
-| unrealvillestudio.com | unrealvillestudio-hub/CoreProject | unrealvillestudio.com |
-| BluePrints | unrealvillestudio-hub/BluePrints | unrlvl-blueprints.vercel.app |
+`BluePrints/brands/Unrealville/` — BP_BRAND_UNRLVL_v1.2.json · HTML EN+ES · assets SVG
+`BluePrints/brands/Unrealville/UNRLVL_PriceList_v1_2.html` — **pendiente mover aquí** desde donde Sam lo tenga
+
+---
+
+## ÚLTIMA REGENERACIÓN
+
+**2026-04-19** — Añadido `TIERS.md` en raíz. Profiler v7.2 con Lucian Sael. Sección Why UNRLVL pendiente en CoreProject.
