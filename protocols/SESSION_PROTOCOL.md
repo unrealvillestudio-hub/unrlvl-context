@@ -91,7 +91,10 @@ Fetch GET `https://unrlvl-social-media-agent.vercel.app/api/export` con header `
 - `AGENDA.md` — **siempre**, agenda visual lista para leer
 
 **Formato de AGENDA.md:**
-Agenda visual en Markdown con secciones: Producción Activa · Prioridad 1 · Prioridad 2 · Prioridad 3 · Prioridad 4 · Ideas en Desarrollo. Checkbox `- [ ]` por cada pendiente. Derivada del campo `next_session_agenda` de `ecosystem.json` más el estado de marcas y agentes. No editar directamente.
+Agenda visual en Markdown con secciones: Producción Activa · Prioridad 1 · Prioridad 2 · Prioridad 3 · Prioridad 4 · Ideas en Desarrollo. Checkbox `- [ ]` por cada pendiente. Derivada del campo `next_session_agenda` de `ecosystem.json` más el estado de marcas y agentes.
+
+**Flujo de edición manual de AGENDA.md:**
+Sam puede editar `AGENDA.md` directamente en VS Code (marcar completados, reordenar, añadir notas). Para que esos cambios persistan en el siguiente Actualiza, Sam pega o sube el archivo editado en el chat. Claude lee las correcciones, las integra en `ecosystem.json` (actualizando `next_session_agenda` y estado de marcas/labs), y genera `AGENDA.md` + `ecosystem.json` actualizados como outputs para commitear. Sin este paso, las ediciones manuales se pierden en el próximo Actualiza porque el JSON manda.
 
 **3. REGLA CRÍTICA DE NOMENCLATURA**
 Los outputs se generan con el nombre **EXACTO** del archivo en el repo, sin prefijos de marca:
