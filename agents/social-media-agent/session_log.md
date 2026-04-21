@@ -1,86 +1,84 @@
 # Social Media Agent — Session Log
-_NeuroneSCF · Actualizado: 2026-04-19 · Fuente: export agente_
+_Última actualización: 2026-04-21 · Claude Sonnet 4.6_
 
 ---
 
-## ESTADO INFRAESTRUCTURA DIGITAL — NeuroneSCF
+## ESTADO ACTUAL — INFRAESTRUCTURA NEURONE SCF
 
-### ✅ COMPLETADO
-
-| Item | Estado | Quién |
+| Plataforma | Estado | Notas |
 |---|---|---|
-| Meta Business Manager | Configurado (verificación dominio pendiente) | Patricia/Laura |
-| Facebook Page | Creada — Neurone South & Central Florida | Patricia/Laura |
-| Instagram Business | Creado — @neuronescflorida · Business account | Patricia/Laura |
-| TikTok for Business | Creado — @neuronescflorida | Patricia/Laura |
-| Emails aliases (7) | Definidos: admin@, ig@, waba@, tiktok@, ads@, support@, hello@ | Sam |
-
-### ⏳ EN PROCESO
-
-| Item | Estado |
-|---|---|
-| WhatsApp Business API | Iniciado — Laura llegó al paso de Meta BM → "Todos los recursos" el 2026-04-18 |
-| Instagram → Facebook Page vinculación | Pendiente — Laura lo dejó para después el 2026-04-18 |
-| Verificación dominio neuronescflorida.com | Pendiente — sin acceso al hosting |
-
-### ❌ PENDIENTE
-
-| Item | Notas |
-|---|---|
-| Logos / brand assets oficiales | Sin imágenes de Neurone Cosmética — perfiles con placeholders |
-| Facebook Page — foto de perfil y portada | Bloqueado por falta de assets |
-| Instagram — foto de perfil y bio | Bloqueado por falta de assets |
-| TikTok — foto de perfil y bio | Bloqueado por falta de assets |
-| Número comercial dedicado | T-Mobile de Patricia siendo usado — riesgo compliance |
+| Meta Business Manager | ✅ Configurado | Verificación de dominio pendiente |
+| Facebook Page | ✅ Creada | Sin logo oficial aún |
+| Instagram Business | ✅ Creado | Vinculación Facebook Page pendiente |
+| TikTok for Business | ✅ Creado | |
+| WhatsApp Business API | ⏳ En proceso | Setup iniciado, pendiente confirmar |
+| Verificación dominio neuronescflorida.com | ❌ Pendiente | Sin acceso al hosting |
+| Logos / Brand Assets | ❌ Pendiente | Solicitar a Neurone Cosmética MX |
 
 ---
 
-## ÚLTIMA SESIÓN ACTIVA — 2026-04-18
+## PENDIENTES CRÍTICOS
 
-**Operadora: Laura** — sesión nocturna (3am–4:30am ET)
-
-**Progreso:**
-- Instagram Business: creado + configuración básica completada
-- TikTok for Business: creado y convertido a cuenta Pro
-- WhatsApp Business API: iniciada la configuración en Meta BM — se llegó al paso de verificación del número T-Mobile de Patricia
-- Vinculación Instagram → Facebook Page: quedó pendiente
-
-**Último mensaje de Laura:** "listo" — tras completar los pasos de WABA hasta configuración inicial
-
-**Nota crítica:** Laura trabajó a las 3-4am — posible fatiga. Verificar en próxima sesión que todos los pasos de WABA quedaron guardados correctamente en Meta BM.
+- [ ] Laura completa vinculación Instagram → Facebook Page
+- [ ] Confirmar estado final de WhatsApp Business API
+- [ ] Solicitar brand assets oficiales a Neurone Cosmética MX
+- [ ] Verificación de dominio neuronescflorida.com (requiere acceso hosting — Sam tiene acceso)
+- [ ] Optimizar perfiles con logos y bio consistente en todas las plataformas
+- [ ] TikTok Shop — diferido hasta tener dirección comercial oficial
 
 ---
 
-## PRÓXIMOS PASOS CONCRETOS (orden)
+## DECISIONES TOMADAS
 
-1. **Verificar WABA:** confirmar que WhatsApp Business API quedó correctamente configurado en Meta BM
-2. **Vincular Instagram → Facebook Page** desde la app de Patricia en Miami
-3. **Verificar que Instagram aparece en Meta BM** como asset
-4. **Solicitar brand assets a Neurone Cosmética** (logos, imágenes aprobadas)
-5. **Actualizar perfiles** (foto + bio + links) en FB Page, Instagram, TikTok
-6. **Verificar dominio** neuronescflorida.com — coordinar acceso con Sam
-7. **Número comercial** — evaluar si mantener T-Mobile o adquirir dedicado
-
----
-
-## NOTAS OPERATIVAS
-
-- **Patricia** opera desde Miami — siempre sin VPN, mismo dispositivo/WiFi
-- **Laura** opera remotamente — puede hacer configuraciones web pero NO las que requieren presencia en Miami
-- **Meta BM** tiene documentos con dirección residencial — TikTok Shop diferido hasta tener dirección comercial
-- **Un Business Manager por marca** — regla de compliance Meta
+- 7 aliases de email definidos: admin · hello · support · ig · tiktok · waba · ads @neuronescflorida.com
+- Número T-Mobile de Patricia = número comercial dedicado para WABA
+- Un Business Manager por marca (compliance Meta)
+- TikTok Shop diferido — requiere dirección comercial (no residencial)
 
 ---
 
 ## HISTORIAL DE SESIONES
 
-| Fecha | Operadora | Actividad |
-|---|---|---|
-| 2026-04-06 | Laura | TikTok Shop requirements + direcciones comerciales |
-| 2026-04-06 | Sam | Inicialización — verificó estado del agente |
-| 2026-04-06 | Paty | Primera sesión — checklist infraestructura |
-| 2026-04-10 | Sam | Definición 7 aliases email + estrategia números |
-| 2026-04-10 | Laura | Meta BM completar info empresa — pasos 1-2 |
-| 2026-04-15 | Laura | Checklist Meta BM + inicio verificación dominio |
-| 2026-04-17 | Laura | Confirmó Facebook Page creada + inicio Instagram |
-| 2026-04-18 | Laura | Instagram Business ✅ + TikTok ✅ + WABA iniciado |
+### 2026-04-18 — Laura (ops)
+- Instagram Business creado con ig@neuronescflorida.com
+- TikTok for Business creado con tiktok@neuronescflorida.com
+- WhatsApp Business API: setup iniciado en Meta BM paso a paso
+- Vinculación Instagram → Facebook Page: pendiente completar
+
+### 2026-04-17 — Laura (ops)
+- Facebook Page confirmada como creada
+- Instagram Business: inicio de proceso de creación
+- Confirmado estado Meta BM (verificación dominio pendiente)
+
+### 2026-04-15 — Laura (ops)
+- Meta BM: pasos 1 y 2 completados
+- Verificación dominio: sin acceso al hosting → diferido
+- Facebook Page: pendiente logos/assets → continuar con placeholder
+
+### 2026-04-10 — Laura (ops)
+- Continuación apertura de cuentas de redes sociales
+- Meta BM completado — dominio pendiente
+- Número T-Mobile activo y verificado
+
+### 2026-04-06 — Sam (admin)
+- Estructura de 7 aliases de email definida
+- Estrategia de números telefónicos establecida
+- Compliance Meta verificado
+
+### 2026-04-06 — Paty (po)
+- Primera sesión — checklist de preparación revisado
+- Prioridades establecidas: BM → Facebook Page → Instagram → WABA → TikTok
+
+---
+
+## PRÓXIMA SESIÓN — AGENDA
+
+1. Confirmar estado WhatsApp Business API con Laura/Patricia
+2. Completar vinculación Instagram → Facebook Page
+3. Conseguir brand assets de Neurone Cosmética MX
+4. Acceso hosting para verificación de dominio
+5. Optimización de perfiles una vez con assets
+
+---
+
+_Agente: Social Media Agent · NeuroneSCF · unrealvillestudio@gmail.com_
