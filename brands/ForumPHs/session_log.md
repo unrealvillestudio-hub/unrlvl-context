@@ -1,62 +1,87 @@
-# ForumPHs — Session Log
+# ForumPHs · Document Factory — Session Log
+
+_Última actualización: 2026-04-22_
 
 ---
 
-## 2026-04-17 — Document Factory v1.5 · MARATÓN COMPLETO
+## ESTADO ACTUAL
 
-**Resultado:** Document Factory **READY FOR BUSINESS**. Todos los sprints del backlog cerrados.
+**Document Factory v1.5 — READY FOR BUSINESS** ✅
 
-### Sprints completados
-
-**FPH-014 — Secciones per agenda real**
-- `parseAgendaText()` exportada desde `preflightDetector.ts`
-- `handlePreflightSubmit` en `page.tsx` parsea `confirmed_agenda_items` → `skeleton.agenda_items`
-- Gap "Orden del Día" siempre visible en pre-flight, pre-poblado con items detectados
-- `lib/types.ts`: campo `confirmed_agenda_items` añadido a `PreflightData`
-
-**FPH-015 — PH Los Alamos speaker fix**
-- `parseTranscripcion.ts`: `detectRole()` — regex `/^p\.?h\.?\s+\w/i` → role `logistica`
-- Fix aplicado: "PH Los Alamos" ya no se clasifica como propietario
-
-**FPH-016 — ZIP Extractor integrado + imágenes en DOCX**
-- `lib/zipExtractor.ts` (NUEVO): extracción client-side con jszip + mammoth + xlsx
-- `components/UploadZone.tsx`: acepta .zip directamente, extracción local en browser
-- `lib/types.ts`: `ExtractedImage` + `images: ExtractedImage[]` en `ParsedHypalZip`
-- `app/api/parse/route.ts` v3: cast `body.images` type string → union, pass-through
-- `app/api/generate/route.ts`: appendix "DOCUMENTOS DE RESPALDO — IMÁGENES" con ImageRun
-- **PENDIENTE**: agregar `type:'png'/'jpg'` en ImageRun constructor (1 línea, línea ~488)
-
-### UX Fixes v1.5
-- **Blank screen guard**: cuando `blocksToFormalize.length === 0` → mensaje ⚠ + botones de acción
-- **ICR Revision step ELIMINADO**: paso `icr-resolution` removido del pipeline y del tipo `Step`. El Anexo ICR en DOCX cubre esa necesidad.
-- **Pipeline v1.5**: ZIP → Confirmación → Pre-flight → Paso 0.5 → Generar → QA → ICR → Descarga
-- **Auto-scroll ICR**: `window.scrollTo` con 80ms delay al click "Continuar → ICR"
-- **Título producto**: "Document Factory" — gradiente terra→amatista, `clamp(40px, 8vw, 68px)`, glow radial
-- **UploadZone confirmación**: extrae ZIP → muestra stats tabla (✓/✗ por campo) → botón "Continuar al Pre-flight →". Ivette ve qué se detectó antes de avanzar.
-- **Footer**: `v1.4` → `v1.5`
-
-### Deploy confirmado
-- Build green ✅
-- Test real: ZIP Los Álamos (274 asistentes, 163 votaciones, 0 imágenes — normal)
-- ICR auditó correctamente, acta descargada OK
+URL producción: `forumphs-document-factory.vercel.app`
+Operador: Ivette Flores (Abogada, Gerente General)
+Stack: Next.js 14 · Supabase `amlvyycfepwhiindxgzw` · Edge Function `fphs-formalize` v10
 
 ---
 
-## 2026-04-17 — FPH-013 + GitHub Auditor Proxy
+## SPRINT 2026-04-22 — Fixes v1.5 (esta sesión)
 
-**FPH-013 CERRADO:**
-- `fphs-formalize` v9: LOGISTICA_NAMES regex — Daniel Puentes / Hypal / Hipal → skip
-- BOLD_RULE v2: admin sin artículo, propietario La señora/El señor, JD solo cargo
-- `generate/route.ts` v3: `sectionTitle()` sin número prefix (formato canónico Ivette)
-- Test real PH Los Álamos exitoso
+### FPH-018 — Agenda cross-reference
+- `lib/parsers/parseResumen.ts`: exporta `extractAgendaItems()` para reusar
+- `app/api/parse/route.ts` v4: si agenda vacía en Resumen → busca en Transcripción → Chat → ICR warning si sigue vacía
 
-**GitHub Auditor Proxy ACTIVO:**
-- `Tools/api/gh.js` deployado en Vercel
-- `GH_PAT` configurado en env del proyecto tools
-- SKILL.md documentado en `Tools/github-auditor/SKILL.md`
+### FPH-018b — Bug 206/206 total_units
+- `lib/processors/preflightDetector.ts`: `total_units` default = `0` (no `attendance.length`)
+- Label actualizado: `← REQUERIDO` para que Ivette no confunda asistentes con total PH
+- **Solución definitiva futura**: lookup automático desde tabla PHs en Supabase cuando tengamos los datos de los 8+ edificios cargados
+
+### FPH-016 — ImageRun fix (pendiente sesión anterior, cerrado)
+- `app/api/generate/route.ts`: añadida línea `type: img.type === 'image/png' ? 'png' : 'jpg'`
+- docx v8.5.0 requería este campo — imágenes se rechazaban silenciosamente sin él
+
+### FPH-019 — ZIP Extractor: imágenes embebidas en DOCX
+- `lib/zipExtractor.ts` v3: abre cada DOCX como ZIP y extrae `word/media/` (quorum charts, screenshots de votaciones)
+- Filtro: solo imágenes >5KB para excluir íconos y bullets
+- Fuente etiquetada: `resumen_image1.png`, `transcripcion_image2.jpeg`, etc.
+- Deduplicación por filename+size
+
+### FPH-020 — 413 Request Entity Too Large (imágenes en payload)
+- `app/page.tsx`: imágenes separadas del payload `/api/parse` → guardadas en estado `extractedImages`
+- `compressImage()`: Canvas API, max 900px, JPEG q=0.75 → ~30-50KB por imagen
+- `/api/generate`: recibe imágenes comprimidas separadas del parsed
+- `/api/icr`: strip de imágenes de `parsed` antes de enviar (`parsedForICR`)
+- Regla permanente: solo `/api/generate` recibe imágenes; todas las demás APIs reciben `parsed` sin imágenes
+
+### PENDIENTE (anotado para cuando se carguen datos de PHs a Supabase)
+- `total_units` automático por nombre de PH → lookup en tabla `phs` → elimina gap manual
+- Filtro inteligente de imágenes decorativas Hypal (portadas, footers) vs. capturas de asamblea
+  → Decisión: Ivette borra manualmente del Anexo (30 seg en Word) — no justifica complejidad ahora
 
 ---
 
-## Pendiente próxima sesión
-- ImageRun type fix: `type: img.type === 'image/png' ? 'png' : 'jpg'` en generate/route.ts ~488
-- Foto Ivette para ForumPHs Speaks
+## HISTORIAL DE SPRINTS
+
+| Sprint | Fecha | Status |
+|---|---|---|
+| FPH-013 ZIP Extractor initial | 2026-04-14 | ✅ |
+| FPH-014 UX Pipeline v1.0 | 2026-04-14 | ✅ |
+| FPH-015 BOLD_RULE v2 Ivette canonical | 2026-04-14 | ✅ |
+| FPH-016 ZIP images + ImageRun | 2026-04-17 | ✅ (cerrado 2026-04-22) |
+| FPH-017 Agenda cross-ref + 206/206 fix | 2026-04-22 | ✅ |
+| FPH-018 DOCX embedded images extractor | 2026-04-22 | ✅ |
+| FPH-019 413 fix — image separation + compression | 2026-04-22 | ✅ |
+
+---
+
+## ARQUITECTURA PIPELINE v1.5
+
+```
+ZIP (extracción local browser)
+  → Confirmación stats (UploadZone)
+  → /api/parse (texto only — SIN imágenes)
+  → Pre-flight (gaps, agenda cross-ref, total_units REQUERIDO)
+  → Paso 0.5 (17 agentes paralelos, fphs-formalize v10)
+  → /api/generate (parsed + imágenes comprimidas Canvas)
+  → QA → ICR (parsed SIN imágenes) → Descarga DOCX
+```
+
+**Regla imágenes**: solo `/api/generate` las recibe. Toda otra API recibe `parsed` sin campo `images`.
+
+---
+
+## PRÓXIMOS PASOS
+
+1. Recolectar datos 8+ edificios → tabla `phs` en Supabase → `total_units` automático
+2. Foto Ivette → ForumPHs Speaks
+3. Speaks → CRM integration
+4. FPHs-OPS módulo COBROS

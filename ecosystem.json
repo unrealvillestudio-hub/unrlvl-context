@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-19b",
+    "version": "2026-04-22a",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -13,8 +13,8 @@
       "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md"
     },
     "last_audit": {
-      "date": "2026-04-19",
-      "status": "Profiler v7.4 LIVE (Supabase v11) — USD only, differentiator pitch before tiers, dedicated differentiation handler. Lucien Sael Brand Identity System v1.0 COMPLETE. luciensael.com v2.1 generated pending deploy. Why UNRLVL v4 generated for CoreProject pending commit.",
+      "date": "2026-04-22",
+      "status": "Document Factory v1.5 READY FOR BUSINESS — FPH-017/018/019/020 cerrados. Agenda cross-ref, 206/206 bug, DOCX embedded images, 413 fix. SMA session_log al día. Vercel builds strategy confirmada.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -76,12 +76,16 @@
       "palette_primary":["#0A0A0A","#1C1A16","#C49A3C","#F5EAD0"]
     },
     {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","status":"active","health":"yellow",
-      "gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Meta BM verification + Facebook Page · 6 aliases email · Assets marca"
+      "gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Instagram Business (celular Patricia Miami) · TikTok for Business · WhatsApp Business API · Verificación dominio · Assets marca",
+      "completed":"Meta BM configurado · Facebook Page CREADA · 7 aliases email · SMA session_log al día",
+      "email_ops":"Gmail Send As via SMTP relay (Resend) para Patricia — no requiere Google Workspace"
     },
     {"id":"ForumPHs","name":"ForumPHs","type":"brand","key_person":"Ivette Flores","market":"Panama","status":"active","health":"green",
       "speaks":"speaks.forumphs.com LIVE · foto Ivette pendiente",
-      "fphsops":{"status":"Schema fph.* 22 tablas · primer módulo COBROS","datos_pendientes":"Ivette: 8 edificios, propietarios, cuotas, mora"},
-      "document_factory":"PROD v1.4 CERRADO","crm":"Org activa · Speaks→CRM pendiente"
+      "fphsops":{"status":"Schema fph.* 22 tablas · primer módulo COBROS","datos_pendientes":"Ivette: 8+ edificios, propietarios, cuotas, mora — total_units automático cuando se carguen"},
+      "document_factory":"PROD v1.5 READY FOR BUSINESS",
+      "document_factory_notes":"ZIP→DOCX pipeline completo · imágenes embebidas en DOCX extraídas · 413 resuelto · agenda cross-ref · total_units gap (solución definitiva: Supabase lookup pendiente datos)",
+      "crm":"Org activa · Speaks→CRM pendiente"
     },
     {"id":"UnrealvilleStudio","name":"Unrealville Studio","type":"studio","market":"Florida USA + LATAM","status":"active","health":"green",
       "web":"LIVE EN+ES",
@@ -107,9 +111,13 @@
     {"id":"LAB-OBD","name":"Onboarding App","status":"PASSED Phase 4"}
   ],
   "agent_deployments": [
-    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active"},
+    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active","session_log":"AL DÍA 2026-04-17 — fetchAgentContext() cargando session_log.md correctamente"},
     {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","url":"speaks.forumphs.com","brand":"ForumPHs","status":"LIVE","pending":["foto Ivette","Speaks→CRM"]},
-    {"id":"AGENT-FPH-DOCFACTORY","name":"Document Factory","url":"forumphs-document-factory.vercel.app","brand":"ForumPHs","status":"PROD v1.4"},
+    {"id":"AGENT-FPH-DOCFACTORY","name":"Document Factory","url":"forumphs-document-factory.vercel.app","brand":"ForumPHs","status":"PROD v1.5 READY FOR BUSINESS",
+      "version":"1.5",
+      "pipeline":"ZIP→parse→preflight→formalize(17 agentes)→generate→QA→ICR→DOCX",
+      "fixes_v15":["Agenda cross-ref Resumen→Transcripción→Chat","206/206 bug (total_units=0 default)","ImageRun type field","DOCX embedded images (word/media/)","413 fix — imágenes separadas del parse payload","Canvas compression 900px JPEG 0.75"]
+    },
     {"id":"AGENT-FPH-OPS-WA","name":"FPHs-OPS WhatsApp Agent","brand":"ForumPHs","status":"DISEÑADO — pendiente construir"},
     {
       "id":"AGENT-PROFILER",
@@ -120,12 +128,6 @@
       "brand":"UnrealvilleStudio",
       "status":"LIVE",
       "deployed":"2026-04-19",
-      "changes_v74":[
-        "USD as only currency — rule in FAILURE MODES",
-        "WHEN ASKED FOR PRICES: differentiator pitch before tiers",
-        "WHEN ASKED HOW WE'RE DIFFERENT: dedicated handler",
-        "Conversation guard: never repeat same closing pattern"
-      ],
       "founder_identity":"Lucien Sael",
       "topics":["T1 Business/Product","T2 Stage/Scale","T3 Investment","T4 Pain","T5 Vision"],
       "tiers_in_prompt":"SIGNAL $3,500 · PULSE $6,500 · ORBIT $12,000 USD",
@@ -138,20 +140,20 @@
     {"id":"INFRA-CRM","name":"UNRLVL CRM v1.0","status":"OPERATIVO","active_integrations":["Profiler→CRM"],"pending":["Speaks→CRM","Shopify→CRM"]},
     {"id":"INFRA-FPHSOPS","name":"FPHs-OPS","status":"SCHEMA ACTIVO — App pendiente","primer_modulo":"COBROS"},
     {"id":"INFRA-WEB","name":"unrealvillestudio.com","status":"LIVE EN+ES · Why UNRLVL v4 pending commit"},
-    {"id":"INFRA-LUCIEN","name":"luciensael.com","status":"GENERATED v2.1 — pending deploy + domain register"}
+    {"id":"INFRA-LUCIEN","name":"luciensael.com","status":"GENERATED v2.1 — pending deploy + domain register"},
+    {"id":"INFRA-VERCEL","name":"Vercel builds","note":"Builds strategy: Immediate solo en proyectos con desarrollo activo. unrlvl-context = Immediate (actualizaciones diarias). forumphs-document-factory = Immediate (sprints activos). Resto según actividad."}
   ],
   "next_session_agenda": [
+    "NeuroneSCF: revisar precios con Sam",
+    "NeuroneSCF: inventario → Shopify (bloqueado Shopify Payments docs)",
+    "NeuroneSCF: cargar 12 kits con SKUs y precios a Shopify",
+    "Labs: cuentas externas Video + Voice + Image (avatars luego)",
+    "ForumPHs: datos 8+ edificios → tabla phs Supabase → total_units automático",
+    "ForumPHs: foto Ivette → Speaks",
     "COMMIT: Why UNRLVL v4 → CoreProject index.html + es/index.html",
-    "DEPLOY: luciensael.com v2.1 → registrar dominio + Vercel",
-    "CREATE: LinkedIn Lucien Sael",
-    "CREATE: Instagram @luciensael",
-    "CREATE: Meta page Lucien Sael",
-    "ForumPHs: datos Ivette (8 edificios) → poblar fph.*",
-    "FPHs-OPS: construir módulo COBROS",
-    "ForumPHs Speaks → CRM",
-    "NeuroneSCF: Meta BM + 87 SKUs + Facebook Page",
+    "DEPLOY: luciensael.com v2.1",
+    "FPHs-OPS: módulo COBROS",
     "BP_COPY_1.0 x3 marcas",
-    "Foto Ivette Speaks",
-    "Skill ui-ux-layer · ImageLab LoRA Prep"
+    "Gmail Send As SMTP → Patricia admin@neuronescflorida.com"
   ]
 }
