@@ -1,113 +1,143 @@
-# Ecosystem — Unreal>ille Studio
-_Regenerado: 2026-04-19b · Claude Sonnet 4.6_
+# UNRLVL Ecosystem — Narrative Reference
+_Versión: 2026-04-24d · Generado desde ecosystem.json_
 
 ---
 
-## VISIÓN GENERAL
+## Studio
 
-**Unreal>ille Studio** — firma de **Brand Intelligence Infrastructure** · North Miami, FL · Sam (owner interno) · **Lucien Sael** (founder público)
+**Unrealville Studio** — Brand Intelligence Infrastructure. North Miami, FL. Fundador público: **Lucien Sael** (seudónimo profesional de Sam).
 
-- **Web:** unrealvillestudio.com — LIVE EN+ES
-- **Tagline:** Not for everyone.
-- **HQ:** 12951 Biscayne Blvd · North Miami, FL 33181
+Web: unrealvillestudio.com (LIVE EN+ES). Tagline: "Not for everyone."
 
 ---
 
-## LUCIEN SAEL — IDENTIDAD PÚBLICA
+## IID Network — Estado: OPERATIONAL
 
-Seudónimo profesional de Sam adoptado 2026-04-19. Constructor de mundos — UNRLVL es uno de ellos.
+El sistema de inteligencia que investiga, puntúa y convierte hallazgos en contenido público y mejoras internas. **Primer run exitoso: 2026-04-24.**
 
-**Frase permanente:** "I build worlds. Some of them survive."
-**Email:** iam@luciensael.com
-**Web:** luciensael.com (v2.1 generado — pending deploy)
-**Pendiente:** LinkedIn · Instagram @luciensael · Meta page · dominio
+### Arquitectura two-step (diseño permanente)
 
-**Brand Identity System v1.0 COMPLETO:**
-- Palette: Obsidian `#0D0D0B` · Carbon `#1C1C1A` · Smoke `#2E2E2B` · Ash `#4A4A45` · Bone `#EDE8DF` · Parchment `#C4BDB0` · **Ember `#D4622A`** · **Gold `#B8922A`**
-- Typography: Cormorant Garamond (display) + Crimson Pro (body) + JetBrains Mono (system)
-- Logotype D stacked: "Lucien" bone upright / "Sael" ember italic
-- NUNCA cyan, blanco puro, azul, Bebas Neue ni Space Mono
+El sistema separa investigación de estructuración. Cada una tiene su propia función, su propio timeout, su propio propósito.
 
----
+```
+pg_cron → iid-research (Claude + web_search → texto crudo en iid_research_raw)
+        → iid-process  (Claude sin tools → JSON → iid-core → dos streams)
+```
 
-## PRICING — TIERS (USD)
+### Dos streams desde un mismo hallazgo
 
-Referencia canónica: `TIERS.md` (raíz del repo context)
+**Stream Ecosystem (Plan Maestro):** findings con ecosystem_score ≥70 van a `intel.iid_findings` con status `pending_review`. Biweekly email vía Resend a Sam. Sin AIFE — es contenido interno.
 
-| Tier | USD/mo | Marcas | Compromiso | Garantía |
-|---|---|---|---|---|
-| SIGNAL | $3,500 | 1 | 6 meses | ROAS positivo mes 3 |
-| PULSE | $6,500 | 1–2 | 6 meses | 2.5× ROAS mes 4 |
-| ORBIT | $12,000 | hasta 3 | 12 meses | KPIs negociados |
+**Stream Content Engine:** findings con content_score ≥70 van a `intel.iid_content_queue` con voice routing, Psycho Layer y AIFE aplicados. Fluyen hacia Orchestrator → Labs → SocialLab.
 
-E-commerce add-on: +$2K / +$3.5K / +$4.5K. Revenue share 10% desde mes 13. **Moneda: USD únicamente.**
+### Scoring
 
----
+| Framework | Criterios | Threshold |
+|---|---|---|
+| Ecosystem R1-R6 | Capability · Quality · Cost · Implementation · Time-to-value · Client | ≥70 top · 50-69 watchlist · <50 discard |
+| Content C1-C5 | Novelty · Audience relevance · Contrarian · Timeliness · Expertise signal | ≥70 eligible · ≥85+breaking = autopublish |
 
-## PROFILER AGENT v7.4 — LIVE (Supabase v11)
+### Voces y ángulos
 
-- **Endpoint:** `https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler`
-- **Founder:** Lucien Sael
-- **Cambios v7.4:** USD como única moneda · pitch diferenciador ANTES de tiers · handler dedicado para "how are you different" · guardrail anti-repetición de patrones de cierre
+- **Compartidos** (UNRLVL + Lucien): expertise, opinion, case_study, tool_review, trend_signal, contrarian
+- **Exclusivos Lucien**: psychological, mathematical
+- **Psycho Layer**: 10 presets asignados automáticamente por angle + voice antes de AIFE
 
----
+### Red de agentes
 
-## WEB UNRLVL — PENDING
+| Tier | Agentes | Día | Status |
+|---|---|---|---|
+| Core | IID-CORE | — | Edge Function ACTIVE |
+| Tier 1 | IMAGE · VIDEO · VOICE · LLM | Jue-Mar-Vie-Mar | DB + crons activos |
+| Tier 2 | META · TIKTOK · GOOGLE · LINKEDIN · X | Mié-Vie-Sáb-Dom-Dom | DB + crons activos |
+| Tier 3 | ECOMMERCE · FLORIDA · WHOLESALE · PERSONAL-BRAND | Lun-1/15-8/22-Mar | ECOMMERCE: run exitoso |
 
-**Why UNRLVL v4** generado para CoreProject (2026-04-19):
-- 4 tarjetas `s-card why-card` con sphere animation (whyTrack registrado)
-- Header centrado: `UNREAL` cyan / `>ILLE` chalk
-- Favicon: `>` solo, transparente, 550ms blink
-- QA 10/10 EN y ES
-- **Pendiente commit:** `index.html` (raíz) + `es/index.html`
+### Brief biweekly
+
+Email HTML dark-theme a sam@unrealvillestudio.com los días 1 y 15. Estructura: TOP (≥70) · WATCHLIST (50-69) · DESCARTADOS. IID source tag visible solo para Sam — nunca público. Primer brief enviado 2026-04-24.
 
 ---
 
-## MARCAS
+## Content Engine — Estado: DISEÑADO
 
-**Green:** Diamond Details · Vizos Cosmetics · D7 Herbal · PO Personal/Comunidad/VizosSalon · PO Conectando · ForumPHs · Unrealville Studio · Unrealville Stores
+### Flujo completo
 
-**Yellow:**
-- **Vivose Mask** — España
-- **Neurone SCF** — gaps: BP_COPY_1.0 · 87 SKUs · Meta BM · Facebook Page · aliases email
+```
+iid_content_queue (aprobado)
+        ↓ orchestrator_status: pending → dispatched
+content.orchestrator_jobs (job + approval_token único)
+        ↓ Orchestrator lee brand_voices de DB → dispatcha a Labs
+CopyLab + ImageLab + VideoLab + VoiceLab
+(cada uno con ICR/AIFE/Humanize propios)
+        ↓ outputs → content_pieces.assets JSONB
+Email Sam: preview + [PUBLICAR] + [RECHAZAR] (1 click, token en URL)
+        ↓ aprobado → SocialLab publica
+```
 
----
+### Voces
 
-## LABS
+**UNRLVL Studio** — Autoridad institucional. Templates: Signal · Contrarian · Case Signal. Plataformas: LinkedIn · IG · FB. AIFE max intensity.
 
-| Lab | Status |
-|---|---|
-| CopyLab v8.0 | PASSED · BP_COPY_1.0 vacío x3 |
-| WebLab | PASSED |
-| ImageLab | PASSED · sin LoRA Prep |
-| AgentLab | PASSED |
-| BlueprintLab · Orchestrator · SocialLab | PASSED |
-| VideoLab · VoiceLab | BLOQUEADOS |
-| UNRLVL-OPS · Onboarding App | PASSED |
+**Lucien Sael** — Voz personal directa. Templates: Lo que vi · La pregunta incómoda · Los números no mienten. Plataformas: LinkedIn · X · IG. Ángulos psychological y mathematical exclusivos. AIFE max intensity.
 
----
+### Formatos dinámicos
 
-## INFRAESTRUCTURA
+Post · Carousel · Thread · Article · Reel script · Short video script · Quote card. Selección basada en angle + platform + historial últimas 5 piezas de esa voz (evita repetición consecutiva).
 
-- **Supabase** `amlvyycfepwhiindxgzw`: public.* 40 + crm.* 14 + fph.* 22 tablas
-- **CRM v1.0:** Operativo · Profiler→CRM activo · Speaks→CRM pendiente
-- **FPHs-OPS:** Schema activo · módulo COBROS pendiente · datos Ivette pendientes
-- **luciensael.com:** v2.1 generado · pending deploy + dominio
+### Arquitectura de datos
 
----
+- `content.brand_voices` — templates, ICR rules, image style, psycho affinities por voz. UNRLVL + Lucien seeded. Añadir nueva marca = INSERT.
+- `content.orchestrator_jobs` — tracking de jobs, approval_token, labs_status JSONB.
+- `content.content_pieces` — repositorio de resultados. `assets JSONB` consolida copy + image + video + voice + carousel slides. `brand_id` + `iid_source_tag` (interno).
 
-## AGENDA PRÓXIMA SESIÓN
+### Pendiente construir
 
-1. COMMIT Why UNRLVL v4 → CoreProject
-2. DEPLOY luciensael.com v2.1 + registrar dominio
-3. LinkedIn / Instagram / Meta page — Lucien Sael
-4. ForumPHs: datos Ivette → fph.* · módulo COBROS
-5. ForumPHs Speaks → CRM
-6. NeuroneSCF: Meta BM + SKUs + Facebook Page
-7. BP_COPY_1.0 x3 · Foto Ivette · Skill ui-ux-layer
+Edge Functions: `content-package` · `content-approve` · `content-publish`. Labs audits previo para confirmar endpoints programáticos.
 
 ---
 
-## ÚLTIMA AUDITORÍA
+## Labs
 
-**2026-04-19b · Claude Sonnet 4.6** — Profiler v7.4 LIVE USD. Lucien Sael Brand Identity v1.0 COMPLETE. luciensael.com v2.1 generado. Why UNRLVL v4 pending commit.
+| Lab | Status | Notas |
+|---|---|---|
+| CopyLab | PASSED v8.0 | Audit pendiente: endpoint programático para Orchestrator |
+| WebLab | PASSED | SKILL_weblab-shopify sesión propia pendiente |
+| ImageLab | PASSED ICR v1.0 | Audit pendiente: endpoint programático |
+| AgentLab | PASSED | — |
+| BlueprintLab | PASSED | — |
+| Orchestrator | PASSED | Pending: Content Queue routing |
+| SocialLab | PASSED | Meta/TikTok OAuth pendiente · Audit: consume iid_content_queue |
+| VideoLab | BLOQUEADO | HeyGen + Kling keys pendientes |
+| VoiceLab | BLOQUEADO | ElevenLabs voice IDs pendientes |
+| UNRLVL-OPS | LIVE | Cost Layer tab LIVE. Tab Ecosystem Intel pendiente. |
+| Onboarding App | PASSED Phase 4 | — |
+
+---
+
+## Skills (P1-P8 completos)
+
+ui-ux-layer v2.1 · shopify-auditor v1.1 · image-processing v1.0 · agent-builder v1.0 · aife v1.1 · copylab-reference v1.0 · security v1.0 · cost-layer v1.0
+
+Pendiente: weblab-shopify (sesión propia).
+
+---
+
+## Infraestructura
+
+**Supabase** `amlvyycfepwhiindxgzw` — Schemas: public · crm · fph · ops · **intel** · **content**. Extensions: pg_cron 1.6.4 · pg_net 0.20.0. 27 cron jobs activos. 0 security advisors.
+
+**Vercel** — 21 proyectos. Team: team_fEH94Irp6BAI9YGm4btGna5n.
+
+**Cost Layer** — OPERATIONAL. logTokens activo en 8 Edge Functions. Dashboard: unrlvl-ops.vercel.app/cost-layer.
+
+---
+
+## Agenda próxima sesión
+
+1. **Lab audits** — CopyLab, ImageLab, VideoLab, VoiceLab, SocialLab → confirmar endpoint programático para Orchestrator
+2. **ContentLab** — construir content-package + content-approve + content-publish
+3. **Orchestrator** — Content Queue routing
+4. **UNRLVL-OPS** — Tab Ecosystem Intel
+5. Lucien Books — Brief Libro 1
+6. NeuroneSCF B2B — acento navy + brand_ids
+7. ForumPHs — datos edificios + foto Ivette

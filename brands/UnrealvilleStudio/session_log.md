@@ -1,72 +1,57 @@
-# Session Log — Unreal>ille Studio
-_Actualizado: 2026-04-24_
+# Session Log — Unrealville Studio
+_Última actualización: 2026-04-24_
 
 ---
 
-## SESIÓN 2026-04-24 — SPRINT SKILLS + COST LAYER
+## 2026-04-24 — IID Network completa + Content Engine diseñado
 
-### SKILLS P1–P8 DEPLOYADOS ✅
+### Lo construido esta sesión
 
-Todos los skills del sistema UNRLVL creados, revisados y deployados en `brands/UnrealvilleStudio/`:
+**IID Network — de diseño a producción:**
 
-| Skill | Versión | Estado |
-|---|---|---|
-| SKILL_ui-ux-layer.md | v2.1 | ✅ LIVE — herencia B2C/B2B, Supabase-powered |
-| SKILL_shopify-auditor.md | v1.1 | ✅ LIVE — Modo Fix con theme modification |
-| SKILL_image-processing.md | v1.0 | ✅ LIVE — LoRA Prep pipeline 7 pasos |
-| SKILL_agent-builder.md | v1.0 | ✅ LIVE — 5 tipos deployment, Edge Function pattern |
-| SKILL_aife.md | v1.1 | ✅ LIVE — CopyLab activador primario |
-| SKILL_copylab-reference.md | v1.0 | ✅ LIVE — 22 templates, 17 canal blocks, BP_COPY |
-| SKILL_security.md | v1.0 | ✅ LIVE — standards + issues activos documentados |
-| SKILL_cost-layer.md | v1.0 | ✅ LIVE — token tracking, margen, eficiencia |
+- Schema `intel.*` completo (7 tablas): iid_agents, iid_findings, iid_content_queue, iid_research_raw, iid_briefs, iid_cron_runs, iid_scheduler_config
+- Schema `content.*` completo (5 tablas): content_pieces, content_calendar, content_performance, brand_voices, orchestrator_jobs
+- 14 agentes seedeados en DB con search_config completo (search areas week A/B)
+- 5 Edge Functions deployadas: iid-core v1.1, iid-research, iid-process, iid-ecommerce-research, iid-ecommerce-process, iid-brief-generator
+- Arquitectura two-step definitiva: research (web_search→texto crudo) + process (estructura→iid-core)
+- 27 pg_cron jobs activos — cobertura completa de los 13 agentes IID
+- pg_cron + pg_net instalados (v1.6.4 + v0.20.0)
+- Schemas intel y content expuestos a PostgREST
 
-### DECISIONES Y REFINAMIENTOS
+**Primer run exitoso:**
+- IID-ECOMMERCE: 4 findings reales con web_search (Shopify Winter '26 · AI CRO · BNPL · AI 3PL)
+- 8 piezas en content_queue (UNRLVL + Lucien, ángulo mathematical todos)
+- 2 autopublicadas (Shopify score 94 + urgency breaking)
+- Brief biweekly enviado a sam@unrealvillestudio.com — status: sent
 
-- **AGGRO**: antiguo AGGRO = estándar base. Super AGGRO renombrado a AGGRO. Humanize = universal. No compiten.
-- **B2C/B2B model**: herencia en 3 capas (variante → base → UNRLVL). NeuroneSCF_B2C + NeuroneSCF_B2B como brand_ids separados, heredan de NeuroneSCF.
-- **SKILL_image-processing**: queda como referencia técnica de ImageLab. LoRA Prep workflow también se documentará en BlueprintLab skill cuando se construya.
-- **SKILL_shopify-auditor Modo Fix**: audita + modifica custom themes via Admin API. Protocolo diff → Sam aprueba → apply → verify → log. Snapshot en Supabase antes de cualquier cambio.
-- **weblab-shopify**: skill separado para sesión propia.
+**Schema reestructurado para multibrand:**
+- intel.iid_findings + iid_content_queue: brand_id añadido
+- content_pieces: reconstruido con assets JSONB, brand_id, iid_source_tag, icr_passed, lab_sources
+- content.brand_voices: nueva tabla — UNRLVL + Lucien seeded con templates A/B/C, ICR rules, image_style
+- content.orchestrator_jobs: nueva tabla — approval_token para 1-click email approval
 
-### COST LAYER — INFRAESTRUCTURA COMPLETA ✅
+**ContentLab — diseñado (no construido):**
+- Arquitectura: Orchestrator como conductor, Labs como ejecutores (no ContentLab separado)
+- Flujo: iid_content_queue → orchestrator_jobs → CopyLab+ImageLab → content_pieces.assets → email 1 click → SocialLab
+- Formatos dinámicos con historial de últimas 5 piezas por voz
+- Dos voces con templates distintos: UNRLVL (Signal/Contrarian/Case Signal) + Lucien (Lo que vi/La pregunta incómoda/Los números)
 
-**Supabase (deployado):**
-- Tablas: `ops_model_pricing`, `ops_token_sessions`, `ops_client_monthly`, `ops_model_alerts`
-- Vistas: `v_cost_by_brand_lab`, `v_model_efficiency`, `v_client_margin`
-- Función: `calc_token_cost()` + trigger `trg_auto_calc_session_cost`
-- Precios: Sonnet 4.6 ($3/$15), Opus 4.6 ($15/$75), Haiku 4.5 ($0.80/$4)
+### Decisiones tomadas
 
-**Edge Functions con logTokens (fire-and-forget):**
-- `unrlvl-profiler` → v12 (conversation + brief)
-- `fphs-chat` → v8 (main call + QA correction)
-- `fphs-formalize` → v11 (acumulador batch por request)
+- Two-step architecture es la arquitectura permanente (no monolítica)
+- Orchestrator es el hub de contenido, no UNRLVL-OPS
+- AIFE aplica al stream Content — NO al stream Plan Maestro (interno)
+- Ángulos psychological y mathematical son exclusivos de Lucien
+- Autopublish: score ≥85 + urgency breaking
+- IID source tag: metadata interna en email de Sam, nunca público
 
-**UNRLVL-OPS:**
-- `src/pages/CostLayer.tsx` deployado
-- Nav: Dashboard · + Registrar costo · **Cost Layer** ✅
-- URL: `https://unrlvl-ops.vercel.app/cost-layer` LIVE 200
+### Próximo: Lab audits
 
-### SECURITY SUPABASE ✅
-- 0 security advisors (eran 13 al inicio de sesión)
-- 4 RLS permissivos corregidos: ops_costs, ops_insights, scheduled_posts
-- 9 funciones search_path mutable corregidas: public.*, crm.*, fph.*
-
----
-
-## AGENDA PRÓXIMA SESIÓN
-
-**PRIORIDAD 1:** IID Agents — lanzar arquitectura y primer agente (IID-ECOMMERCE como piloto)
-
-1. **IID Agents** — arquitectura intel.* schema + primer agente IID-ECOMMERCE
-2. **LUCIEN-BOOKS Brief Libro 1** — Sam trae pensamiento libre sobre personaje central
-3. **NeuroneSCF B2B** — confirmar acento + paleta para completar brand_ids en Supabase
-4. **Shopify-auditor Fase 1** — tokens Admin API B2C + B2B NeuroneSCF
-5. **NeuroneSCF precios** + cargar 12 kits a Shopify
-6. **Labs** — cuentas externas Video + Voice + Image
-7. **ForumPHs** — datos 8+ edificios → Supabase · foto Ivette → Speaks
-8. COMMIT: Why UNRLVL v4 → CoreProject
-9. DEPLOY: luciensael.com v2.1
-10. FPHs-OPS: módulo COBROS · BP_COPY_1.0 × 3 marcas · Gmail Send As Patricia
+Sesión dedicada a auditar cada Lab (CopyLab, ImageLab, VideoLab, VoiceLab, SocialLab) para confirmar o añadir endpoint programático que el Orchestrator necesita:
+`{brand_id, queue_id, brief, voice, platform}` → output a `content_pieces.assets`
 
 ---
-_UNRLVL Studio · Sam/Lucien Sael · 2026-04-24_
+
+## Sesiones anteriores
+
+_Ver historial anterior en commits previos del repositorio._
