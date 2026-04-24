@@ -1,112 +1,72 @@
-# Session Log — Unrealville Studio
-_Última actualización: 2026-04-21 · Claude Sonnet 4.6_
+# Session Log — Unreal>ille Studio
+_Actualizado: 2026-04-24_
 
 ---
 
-## SESIÓN 2026-04-21 — PARTNERSHIP SAM & PO · VERSIÓN FINAL + INFRAESTRUCTURA COMMS
+## SESIÓN 2026-04-24 — SPRINT SKILLS + COST LAYER
 
-### PARTNERSHIP — DECISIONES DEFINITIVAS (v3.0 CERRADA)
+### SKILLS P1–P8 DEPLOYADOS ✅
 
-**Estructura 35/35 — DEFINITIVA:**
+Todos los skills del sistema UNRLVL creados, revisados y deployados en `brands/UnrealvilleStudio/`:
 
-| | Sam | PO |
+| Skill | Versión | Estado |
 |---|---|---|
-| Equity recibido | 35% Prestige (~$70K) | 35% Studio (~$210K) |
-| Valor aportado 24 meses | $216K en servicios ($9K/mes × 24) | $600K en revenue (10 clientes) |
-| Ratio aportado/recibido | 3.1× | 2.9× |
+| SKILL_ui-ux-layer.md | v2.1 | ✅ LIVE — herencia B2C/B2B, Supabase-powered |
+| SKILL_shopify-auditor.md | v1.1 | ✅ LIVE — Modo Fix con theme modification |
+| SKILL_image-processing.md | v1.0 | ✅ LIVE — LoRA Prep pipeline 7 pasos |
+| SKILL_agent-builder.md | v1.0 | ✅ LIVE — 5 tipos deployment, Edge Function pattern |
+| SKILL_aife.md | v1.1 | ✅ LIVE — CopyLab activador primario |
+| SKILL_copylab-reference.md | v1.0 | ✅ LIVE — 22 templates, 17 canal blocks, BP_COPY |
+| SKILL_security.md | v1.0 | ✅ LIVE — standards + issues activos documentados |
+| SKILL_cost-layer.md | v1.0 | ✅ LIVE — token tracking, margen, eficiencia |
 
-**Progresión de equity:**
-- Día 1: 15% ambos (firma OA + constitución LLC)
-- Año 1: 20% ambos (condiciones cumplidas)
-- Año 2: 35% ambos (10 clientes + $108K en servicios)
-- Año 3+: estabilizado con tracción continua PO (3 clientes/año o $40K)
+### DECISIONES Y REFINAMIENTOS
 
-**Flujo financiero años 1–2:**
-- $9,000/mes total: $3,000 cash + $6,000 a equity (contribution en libros Prestige)
-- Acumulado mes 24: $72K cash + $144K equity Sam en Prestige
+- **AGGRO**: antiguo AGGRO = estándar base. Super AGGRO renombrado a AGGRO. Humanize = universal. No compiten.
+- **B2C/B2B model**: herencia en 3 capas (variante → base → UNRLVL). NeuroneSCF_B2C + NeuroneSCF_B2B como brand_ids separados, heredan de NeuroneSCF.
+- **SKILL_image-processing**: queda como referencia técnica de ImageLab. LoRA Prep workflow también se documentará en BlueprintLab skill cuando se construya.
+- **SKILL_shopify-auditor Modo Fix**: audita + modifica custom themes via Admin API. Protocolo diff → Sam aprueba → apply → verify → log. Snapshot en Supabase antes de cualquier cambio.
+- **weblab-shopify**: skill separado para sesión propia.
 
-**Portafolio Prestige cubierto (7 marcas):**
-- Neurone SCF: ~$4,500/mes
-- Vizos Cosmetics + Vizos Salón + D7 Herbal + Vivose Mask + PO Conectando + PO Marca Personal: ~$4,500/mes combinado
-- Total: $9,000/mes
+### COST LAYER — INFRAESTRUCTURA COMPLETA ✅
 
-**Contrato LP año 3+:**
-- $9,000/mes base con cláusula CPI (tope 3–5% anual)
-- El 20% de descuento se aplica cuando UNRLVL tenga tarifas de mercado consolidadas (año 3–4), NO antes
-- Contrato 3 años renovable. Incumplimiento pago +60 días → precio preferencial revocado
+**Supabase (deployado):**
+- Tablas: `ops_model_pricing`, `ops_token_sessions`, `ops_client_monthly`, `ops_model_alerts`
+- Vistas: `v_cost_by_brand_lab`, `v_model_efficiency`, `v_client_margin`
+- Función: `calc_token_cost()` + trigger `trg_auto_calc_session_cost`
+- Precios: Sonnet 4.6 ($3/$15), Opus 4.6 ($15/$75), Haiku 4.5 ($0.80/$4)
 
-**IP License Fee — DEFINIDO:**
-- Años 1–2: $18,000/año ($1,500/mes) fee fijo
-- Años 3–5: $24,000/año ($2,000/mes) fee fijo
-- Total 5 años: $108,000 directo a Sam persona
-- Valorización: 6–8% revenue bruto anual del Studio — dentro del rango de mercado
-- Contrato licencia 5 años con revisión anual indexada al CPI
+**Edge Functions con logTokens (fire-and-forget):**
+- `unrlvl-profiler` → v12 (conversation + brief)
+- `fphs-chat` → v8 (main call + QA correction)
+- `fphs-formalize` → v11 (acumulador batch por request)
 
-**Principio reencuadrado — CRÍTICO:**
-- Valor de Prestige = CONTRATO con UNRLVL (ventaja competitiva contractual), NO presencia del 35% de Sam
-- Valor de UNRLVL = TRACCIÓN de PO (clientes continuos), NO su presencia como socia
-- El equity es resultado del valor entregado, no el valor en sí mismo
+**UNRLVL-OPS:**
+- `src/pages/CostLayer.tsx` deployado
+- Nav: Dashboard · + Registrar costo · **Cost Layer** ✅
+- URL: `https://unrlvl-ops.vercel.app/cost-layer` LIVE 200
 
-**Outputs entregados:**
-- `partnership_po_presentation.html` — v3.0 CERRADA (13 secciones)
-- `PARTNERSHIP_STRUCTURE_SAM_PO.md` — documento técnico completo
-
----
-
-### INFRAESTRUCTURA COMUNICACIONES — DEFINITIVO
-
-| Número | Tipo | Para qué |
-|---|---|---|
-| +1 786 627 5800 | Twilio VoIP (unrealvillestudio@gmail.com) | Stack tech · 2FA SaaS · Stripe · Mercury · Vercel |
-| SIM #1 (305/786) vía PO | Física USA | Google Voice · WhatsApp Business · Meta · LinkedIn Lucien + UNRLVL |
-| SIM #2 | Reserva | Prestige/Neurone — NO activar aún |
-
-- Twilio: TwiML Bin voz → +34654246333 · SMS → log en console ✅
-- Google Voice: pendiente (VPN Windows + Proton/NordVPN + SIM física)
-- Lucien Sael = UNRLVL: mismo número, mismo BM, unrealvillestudio@gmail.com
+### SECURITY SUPABASE ✅
+- 0 security advisors (eran 13 al inicio de sesión)
+- 4 RLS permissivos corregidos: ops_costs, ops_insights, scheduled_posts
+- 9 funciones search_path mutable corregidas: public.*, crm.*, fph.*
 
 ---
 
-### PENDIENTES
+## AGENDA PRÓXIMA SESIÓN
 
-- [ ] Google Voice — activar con VPN + SIM
-- [ ] Presentar partnership a PO con HTML v3.0
-- [ ] Attorney para Operating Agreement
-- [ ] Stripe Atlas ($500) — ejecutar post-acuerdo PO
-- [ ] Facebook UNRLVL page
-- [ ] LinkedIn + Instagram Lucien Sael
-- [ ] P&L real — siguiente etapa post-partnership
+**PRIORIDAD 1:** IID Agents — lanzar arquitectura y primer agente (IID-ECOMMERCE como piloto)
 
----
-
-## SESIÓN 2026-04-19 — PROFILER v7.4 + LUCIEN SAEL + WHY UNRLVL v4
-
-- Profiler v7.4 LIVE (USD only, diferenciador pitch antes de tiers)
-- Lucien Sael Brand Identity v1.0 COMPLETO
-- luciensael.com v2.1 generado — pending deploy + dominio
-- Why UNRLVL v4 generado — pending commit CoreProject
-
-**Pendientes arrastrados:**
-- COMMIT: Why UNRLVL v4 → CoreProject (index.html + es/index.html)
-- DEPLOY: luciensael.com v2.1 + dominio
-- CREATE: LinkedIn · Instagram @luciensael · Meta page
+1. **IID Agents** — arquitectura intel.* schema + primer agente IID-ECOMMERCE
+2. **LUCIEN-BOOKS Brief Libro 1** — Sam trae pensamiento libre sobre personaje central
+3. **NeuroneSCF B2B** — confirmar acento + paleta para completar brand_ids en Supabase
+4. **Shopify-auditor Fase 1** — tokens Admin API B2C + B2B NeuroneSCF
+5. **NeuroneSCF precios** + cargar 12 kits a Shopify
+6. **Labs** — cuentas externas Video + Voice + Image
+7. **ForumPHs** — datos 8+ edificios → Supabase · foto Ivette → Speaks
+8. COMMIT: Why UNRLVL v4 → CoreProject
+9. DEPLOY: luciensael.com v2.1
+10. FPHs-OPS: módulo COBROS · BP_COPY_1.0 × 3 marcas · Gmail Send As Patricia
 
 ---
-
-## ESTADO GENERAL
-
-| Área | Estado |
-|---|---|
-| Profiler Agent | v7.4 LIVE |
-| CRM | Operativo · Profiler→CRM activo |
-| Context System | LIVE |
-| Web unrealvillestudio.com | LIVE EN+ES · Why UNRLVL v4 pending commit |
-| luciensael.com | v2.1 generado · pending deploy |
-| Labs | Todos PASSED excepto VideoLab + VoiceLab (bloqueados) |
-| Partnership PO | v3.0 CERRADA · pendiente presentar y formalizar |
-| Infraestructura comms | Twilio ✅ · Google Voice pendiente |
-| P&L | Próximo paso — post-partnership |
-
----
-
-_Mantenido por Claude Sonnet 4.6 · Unrealville Studio_
+_UNRLVL Studio · Sam/Lucien Sael · 2026-04-24_
