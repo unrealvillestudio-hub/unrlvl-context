@@ -1,5 +1,5 @@
 # UNRLVL Ecosystem — Narrative Reference
-_Versión: 2026-04-24d · Generado desde ecosystem.json_
+_Versión: 2026-04-25a · Generado desde ecosystem.json_
 
 ---
 
@@ -96,6 +96,38 @@ Edge Functions: `content-package` · `content-approve` · `content-publish`. Lab
 
 ---
 
+## WhatsApp Agent Platform — Estado: LIVE v1.0
+
+**Primer producto replicable de UNRLVL** construido sobre SKILL-AB agent-builder. Stack canónico: Vercel serverless + Supabase + Twilio WhatsApp Business API + Claude API.
+
+### AGENT-DDMV — Mi Asistente (LIVE 2026-04-24)
+
+Asistente personal de salud para Damaris Mendoza (Panamá). Uso personal de Sam — primer deployment real de la plataforma.
+
+**Número:** +1 (260) 270-1806 · **Dashboard:** ddmv-assistant.vercel.app/api/dashboard · **Supabase:** proyecto XMMs (separado del principal UNRLVL)
+
+**Funcionalidades activas:**
+- Análisis fotos recetas → guarda medicamentos + citas automáticamente
+- Recordatorios medicamentos a hora exacta (Edge Function horaria)
+- Recordatorios citas: 2 días / 1 día / mismo día (7am Panamá)
+- Flujos conversacionales proactivos con estado: verifica medicamentos, confirma citas, pregunta por bienestar — ciclo auto-programado cada 2-3 días
+- Sam como cuidador: crea recordatorios para Damaris desde su WhatsApp
+- Saludos mañana (9am) + tarde (6pm) — 9 variantes random
+- Recordatorio ejercicios mentales (10am)
+
+**Regla de honestidad:** el bot solo promete lo que puede cumplir. Si la fecha no está clara, pregunta antes de confirmar.
+
+### AGENT-PO-WA — Patricia Osorio WhatsApp Assistant (PENDIENTE)
+
+Réplica del patrón DDMV para atención de clientas de Patricia Osorio. Pendiente sesión dedicada.
+
+### Replicaciones previstas
+
+- ForumPHs OPS WA — incidencias propietarios apartamentos (AGENT-FPH-OPS-WA)
+- Clientes UNRLVL — producto ofertable en tiers
+
+---
+
 ## Labs
 
 | Lab | Status | Notas |
@@ -116,7 +148,7 @@ Edge Functions: `content-package` · `content-approve` · `content-publish`. Lab
 
 ## Skills (P1-P8 completos)
 
-ui-ux-layer v2.1 · shopify-auditor v1.1 · image-processing v1.0 · agent-builder v1.0 · aife v1.1 · copylab-reference v1.0 · security v1.0 · cost-layer v1.0
+ui-ux-layer v2.1 · shopify-auditor v1.1 · image-processing v1.0 · **agent-builder v1.0** (referencia real: DDMV-Assistant) · aife v1.1 · copylab-reference v1.0 · security v1.0 · cost-layer v1.0
 
 Pendiente: weblab-shopify (sesión propia).
 
@@ -124,9 +156,11 @@ Pendiente: weblab-shopify (sesión propia).
 
 ## Infraestructura
 
-**Supabase** `amlvyycfepwhiindxgzw` — Schemas: public · crm · fph · ops · **intel** · **content**. Extensions: pg_cron 1.6.4 · pg_net 0.20.0. 27 cron jobs activos. 0 security advisors.
+**Supabase principal** `amlvyycfepwhiindxgzw` — Schemas: public · crm · fph · ops · intel · content. Extensions: pg_cron 1.6.4 · pg_net 0.20.0. 27 cron jobs activos. 0 security advisors.
 
-**Vercel** — 21 proyectos. Team: team_fEH94Irp6BAI9YGm4btGna5n.
+**Supabase XMMs** `puoybldykxqvhvtnwrld` — Proyecto separado. Uso personal/agentes WA. Tablas: conversations · medications · appointments · reminder_log · notification_settings · reminders · conversation_flows · proactive_checks.
+
+**Vercel** — 21 proyectos. Team: team_fEH94Irp6BAI9YGm4btGna5n. **Todos en Elastic build machine** (cambiado 2026-04-25, ahorro 37x vs Turbo).
 
 **Cost Layer** — OPERATIONAL. logTokens activo en 8 Edge Functions. Dashboard: unrlvl-ops.vercel.app/cost-layer.
 
@@ -138,6 +172,7 @@ Pendiente: weblab-shopify (sesión propia).
 2. **ContentLab** — construir content-package + content-approve + content-publish
 3. **Orchestrator** — Content Queue routing
 4. **UNRLVL-OPS** — Tab Ecosystem Intel
-5. Lucien Books — Brief Libro 1
-6. NeuroneSCF B2B — acento navy + brand_ids
-7. ForumPHs — datos edificios + foto Ivette
+5. **AGENT-PO-WA** — Patricia Osorio WhatsApp Assistant (réplica DDMV)
+6. Lucien Books — Brief Libro 1
+7. NeuroneSCF B2B — acento navy + brand_ids
+8. ForumPHs — datos edificios + foto Ivette

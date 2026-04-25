@@ -1,29 +1,48 @@
 # session_log.md — AGENT-DDMV · Mi Asistente
-_Última actualización: 2026-04-24_
+_Última actualización: 2026-04-25_
 
 ---
 
-## Novedades — 2026-04-24
+## Novedades — 2026-04-25
 
-### ✅ LIVE EN PRODUCCIÓN — WhatsApp Business propio activo
+### Flujos conversacionales proactivos (Versión B) — IMPLEMENTADO
 
-**Número WhatsApp Business:** `+1 (260) 270-1806`
-**Business Portfolio:** Samuel Moreno Mendoza (Meta)
-**WhatsApp Account:** Mi Asistente
-**Webhook:** `https://ddmv-assistant.vercel.app/api/webhook` — CONECTADO
+**Nuevas tablas en Supabase XMMs:**
+- `reminders` — recordatorios personales con fecha/hora exacta
+- `conversation_flows` — estado de conversaciones con flujo activo
+- `proactive_checks` — verificaciones proactivas programadas
 
-**Damaris registrada en Supabase:**
-- Phone: `+50767146920`
-- Name: Damaris
-- Bot name: Mi Asistente
-- welcomed: false (recibirá bienvenida en primer mensaje)
+**Lógica de auto-programación:**
+El bot envía verificación → Damaris responde → bot resuelve → programa siguiente en 2-3 días aleatorios entre 9-11am Panamá → ciclo autónomo sin intervención externa.
 
-**Incidencias resueltas hoy:**
-- Meta baneó 2 cuentas WA Business (UNREALville/Non-profit) — resuelto con portfolio personal Samuel Moreno Mendoza
-- Body parser form-urlencoded corregido en webhook (Twilio envía form, no JSON)
-- Vercel Hobby cron 1x/día reemplazado por Supabase Edge Function horaria
-- Claude decía "no puedo hacer recordatorios" — corregido en system prompt con capacidades explícitas
-- TWILIO_WHATSAPP_NUMBER corregido de sandbox a +12602701806
+**Tres tipos de verificación:**
+- `medication` — "¿ya tomaste el X?" → si no, ofrece recordatorio en 30min
+- `appointment` — "tienes cita el X, ¿es correcto?" → si no, elimina y pregunta por más
+- `wellbeing` — "¿cómo estás hoy?" → conversación libre
+
+**Sam como cuidador:**
+- +34654246333 registrado con `role: caregiver`, `linked_phone: +50767146920`
+- Puede crear recordatorios para Damaris desde su WhatsApp
+- Puede disparar verificaciones inmediatas ("verifica las citas de Damaris")
+
+**Primera verificación enviada:**
+- Tipo wellbeing → programada y enviada 2026-04-25
+- Ciclo proactivo activo desde hoy
+
+### Fix de honestidad — IMPLEMENTADO
+- System prompt incluye fecha/hora actual en Panamá
+- Claude nunca promete recordatorios sin poder calcular la fecha exacta
+- Regla explícita: si la fecha no está clara, preguntar antes de confirmar
+- Origen: bot prometió un recordatorio que no pudo cumplir → corregido
+
+### Vercel — Build Machine
+- Todos los 37 proyectos cambiados de Turbo a Elastic por Sam
+- Ahorro estimado: 37x en coste de build (~$0.0035 vs $0.128 por minuto)
+
+### Edge Function send-reminders — v8 ACTIVA
+- Procesa recordatorios personales cada hora (tabla reminders)
+- Procesa verificaciones proactivas programadas (tabla proactive_checks)
+- Crea conversation_flows al enviar cada verificación
 
 ---
 
@@ -32,68 +51,36 @@ _Última actualización: 2026-04-24_
 ### Infraestructura
 | Componente | Estado | Detalle |
 |---|---|---|
-| Vercel | ✅ PRODUCTION | ddmv-assistant.vercel.app |
-| Supabase XMMs | ✅ ACTIVO | puoybldykxqvhvtnwrld |
-| Edge Function | ✅ v3 ACTIVA | send-reminders — corre cada hora |
+| Vercel ddmv-assistant | ✅ PRODUCTION | deploy 2026-04-25 |
+| Supabase XMMs | ✅ ACTIVO | 8 tablas activas |
+| Edge Function send-reminders | ✅ v8 ACTIVA | corre cada hora |
 | Twilio WA Business | ✅ CONECTADO | +12602701806 |
 | Dashboard | ✅ ACTIVO | /api/dashboard |
-| Webhook | ✅ ACTIVO | /api/webhook |
 
-### Secrets configurados
-**Vercel:** SUPABASE_URL · SUPABASE_SERVICE_KEY · ANTHROPIC_API_KEY · TWILIO_ACCOUNT_SID · TWILIO_AUTH_TOKEN · TWILIO_WHATSAPP_NUMBER · ADMIN_SECRET · CRON_SECRET
-
-**Supabase Edge Function:** TWILIO_ACCOUNT_SID · TWILIO_AUTH_TOKEN · TWILIO_WHATSAPP_NUMBER · SUPABASE_SERVICE_ROLE_KEY · SUPABASE_URL
-
-### Supabase XMMs — Tablas
-- `conversations` — historial + perfil usuario (name, bot_name, welcomed)
+### Tablas Supabase XMMs
+- `conversations` — perfiles + historial (role, linked_phone)
 - `medications` — medicamentos activos con horarios
-- `appointments` — citas médicas con flags reminded_2days/1day/same
+- `appointments` — citas (reminded_2days/1day/same)
 - `reminder_log` — log de recordatorios enviados
 - `notification_settings` — config por usuario
+- `reminders` — recordatorios personales ← NUEVA 2026-04-25
+- `conversation_flows` — flujos con estado ← NUEVA 2026-04-25
+- `proactive_checks` — verificaciones programadas ← NUEVA 2026-04-25
 
----
-
-## Funcionalidades activas
-
-| Funcionalidad | Estado |
-|---|---|
-| Bienvenida personalizada por nombre | ✅ |
-| Análisis fotos recetas (Claude Vision) | ✅ |
-| Guardado medicamentos desde conversación | ✅ SAVE_MED tag |
-| Guardado citas desde conversación | ✅ SAVE_APPT tag |
-| Recordatorios medicamentos horarios exactos | ✅ Edge Function hourly |
-| Recordatorios citas 2 días / 1 día / mismo día | ✅ 7am Panamá |
-| Saludo mañana 9am Panamá | ✅ 5 variantes random |
-| Recordatorio ejercicios mentales 10am Panamá | ✅ |
-| Saludo tarde 6pm Panamá | ✅ 4 variantes random |
-| Renombrar bot desde conversación | ✅ |
-| Respuestas siempre en español | ✅ |
-| Dashboard gestión completa para Sam | ✅ |
-| Envío mensajes manuales desde dashboard | ✅ |
-| Audio (notas de voz) | ⚠️ Responde pidiendo texto — Claude API no soporta audio |
+### Usuarios registrados
+| Phone | Nombre | Rol | Linked |
+|---|---|---|---|
+| +50767146920 | Damaris | user | — |
+| +34654246333 | Sam | caregiver | +50767146920 |
 
 ---
 
 ## Pendiente
 
-- Verificación negocio Meta (requiere UNRLVL constituido legalmente)
-- Personalizar foto y descripción perfil WhatsApp Business en WhatsApp Manager
-- Gimnasio Mental: añadir URL en mensaje de bienvenida/recordatorio ejercicios
-
----
-
-## Contexto del proyecto
-
-**Tipo:** WhatsApp Personal Care Agent
-**Cliente:** Sam — uso personal/familiar
-**Usuario final:** Damaris Mendoza (+50767146920) — Panamá
-**Repositorio:** unrealvillestudio-hub/DDMV-Assistant
-**Clasificación UNRLVL:** Producto replicable — primer deployment de SKILL-AB agent-builder
-
-**Replicaciones previstas:**
-- ForumPHs OPS WA — incidencias propietarios apartamentos (AGENT-FPH-OPS-WA)
-- Patricia Osorio WA — atención clientas (AGENT-PO-WA)
-- Clientes UNRLVL como producto ofertable
+- Verificación negocio Meta (requiere UNRLVL legal)
+- Foto y descripción perfil WhatsApp Business
+- package.json `engines: >=18` (Node warning cosmético — no urgente)
+- Sección recordatorios en dashboard para Sam
 
 ---
 
@@ -101,6 +88,8 @@ _Última actualización: 2026-04-24_
 
 | Fecha | Versión | Hito |
 |---|---|---|
+| 2026-04-25 | v1.2 | Flujos proactivos B + fix honestidad + Elastic |
+| 2026-04-24 | v1.1 | Fix webhook form-urlencoded + recordatorios personales |
 | 2026-04-24 | v1.0 | LIVE — WhatsApp Business propio activo |
-| 2026-04-01 | v0.9 | Sandbox funcional — webhook, dashboard, Edge Function |
-| 2026-03-31 | v0.1 | Proyecto iniciado — stack definido |
+| 2026-04-01 | v0.9 | Sandbox funcional |
+| 2026-03-31 | v0.1 | Proyecto iniciado |
