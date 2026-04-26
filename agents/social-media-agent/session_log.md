@@ -1,22 +1,13 @@
-# SOCIAL MEDIA AGENT — Session Log
-_Exportado: 2026-04-25_
+# Social Media Agent — Session Log
+_Last sync: 2026-04-26T14:27:50Z_
 
-## ESTADO INFRAESTRUCTURA NEURONE SCF
+## Estado infraestructura Neurone SCF
+Sin novedades desde la última sesión. El export contiene actividad de Laura/PO sobre configuración de Meta BM, Instagram Business y TikTok. No hay entradas nuevas post-último Actualiza.
 
-### Completado ✅
-- Meta Business Manager configurado
-- Facebook Page creada
-- Instagram Business creado (vinculación Facebook pendiente)
-- TikTok for Business creado
-- 7 aliases email definidos (admin, ig, waba, tiktok, ads, support, hello)
-- Estrategia números telefónicos establecida
-
-### Pendiente ❌
-- Vincular Instagram → Facebook Page (desde app Patricia)
-- WhatsApp Business API setup (número T-Mobile)
-- Verificación dominio neuronescflorida.com en Meta
-- Logos/assets oficiales de Neurone Cosmética
-- Optimización perfiles con contenido y bio final
-
-### Próximo paso
-Continuar con WhatsApp Business API desde Meta Business Manager (paso interrumpido en sesión 2026-04-18)
+## Último resumen activo (2026-03-23)
+- Meta Business Manager: configurado (verificación dominio pendiente)
+- Facebook Page: creada
+- Instagram Business: creado, vinculación FB pendiente
+- TikTok for Business: creado
+- WhatsApp Business API: setup en progreso
+- Pendiente: logos/assets, domain verification, número comercial dedicado

@@ -1,185 +1,162 @@
-# Session Log — Unrealville Studio
-_Última actualización: 2026-04-25_
+# Session Log — UnrealvilleStudio / IID Content Engine
+_Last updated: 2026-04-26_
 
 ---
 
-## 2026-04-25 — Orchestrator Upgrade + Content Engine Pipeline + IID Intel Tab
+## SESIÓN 2026-04-26 — IID CONTENT ENGINE: PIPELINE COMPLETO ✅
 
-### Sesión extensa (~10 horas). Todo lo construido:
+### Logro principal
+**Primera ejecución end-to-end exitosa del IID Content Engine.** El pipeline genera copy real, lo filtra con AIFE, encola posts sociales, crea el content piece y envía el email de aprobación. Email confirmado recibido.
 
----
-
-### 1. GitHub Auditor — Bug Fix
-
-**Bug:** `api/gh.js` en repo `Tools`. La condición `if (path)` atrapaba todas las llamadas con `?path=` antes de que llegara a `if (repo && path)`, resultando en `ghPath = "src/file.ts"` (URL inválida → HTTP error → proxy devolvía 500).
-
-**Fix:** Reordenar condiciones: `repo + (action=tree | sin path)` → tree primero; `repo + path` → file contents segundo; `path solo` → direct API legacy tercero.
-
-**Estado:** DEPLOYED y verificado — tree + file contents funcionan.
-
----
-
-### 2. Orchestrator Upgrade — Nuevos endpoints (repo: Orchestrator)
-
-**`api/approve-job.ts`** — Edge runtime (no @vercel/node):
-- Recibe `?token=xxx&action=approve|reject`
-- Busca job por `approval_token` en `content.orchestrator_jobs`
-- Approve → llama SocialLab `/api/execute` con `previousOutputs.copylab = aife_filtered_text`
-- Devuelve HTML dark-theme con resultado
-- Env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SOCIALLAB_URL
-
-**`api/trigger-job.ts`** — Edge runtime:
-- Recibe POST `{queue_id, job_id}`
-- Delega a Supabase `content-dispatcher` EF
-
-**Nota importante:** Edge runtime — NO usar `@vercel/node` ni `@supabase/supabase-js`. Usar `fetch()` raw con REST API Supabase y `declare const process`. Mismo patrón que `interpret-intent.ts` existente.
-
----
-
-### 3. IID Intel Tab — Orchestrator OR_1.1
-
-**`src/modules/intel/EcosystemIntelModule.tsx`** — Nuevo:
-- 3 bandas: TOP (≥70) · WATCHLIST (50-69) · DESCARTADOS (<50) con conteos
-- Cards expandibles: título, agente IID, fecha, score ECO + CNT
-- Breakdown R1-R6 con barras visuales
-- Links a fuentes
-- Fetch directo a Supabase `intel.iid_findings` con `Accept-Profile: intel`
-- Sin dependencias nuevas
-
-**`src/App.tsx`** — Modificado:
-- `View` type añade "intel"
-- `NAV_ITEMS` añade `{ id: "intel", label: "IID Intel", icon: Telescope }`
-- BUILD_TAG → OR_1.1
-
----
-
-### 4. FlowExecutorModule — Layer Indicators
-
-**`src/modules/executor/FlowExecutorModule.tsx`** — Modificado:
-
-`STAGE_LAYERS` mapea lab → capas AI:
-- `copylab` → Humanize (índigo #6366f1)
-- `aife` → AIFE Filter (ámbar #f59e0b)
-- `imagelab` → Psycho Layer (violeta #8b5cf6)
-
-`LayerPill` — 3 estados:
-- **idle**: punto gris, texto zinc-700
-- **running**: pulsa con color del layer + reloj en segundos
-- **done**: checkmark verde + tiempo total transcurrido
-
-El reloj del stage aparece en el header de la card (siempre visible).
-Los pills aparecen en sección "AI Layers" al expandir el stage.
-
----
-
-### 5. Supabase — Migraciones aplicadas
-
-```sql
--- lab_configs: supports_iid + iid_stage_order
-ALTER TABLE lab_configs
-  ADD COLUMN IF NOT EXISTS supports_iid boolean NOT NULL DEFAULT false,
-  ADD COLUMN IF NOT EXISTS iid_stage_order integer;
-
--- content.orchestrator_jobs: assets + platforms + approved_by + finding_id
-ALTER TABLE content.orchestrator_jobs
-  ADD COLUMN IF NOT EXISTS assets jsonb DEFAULT '{}'::jsonb,
-  ADD COLUMN IF NOT EXISTS platforms text[] DEFAULT '{}',
-  ADD COLUMN IF NOT EXISTS approved_by text,
-  ADD COLUMN IF NOT EXISTS finding_id uuid REFERENCES intel.iid_findings(id);
-
--- intel.iid_content_queue: iid_source_tag
-ALTER TABLE intel.iid_content_queue
-  ADD COLUMN IF NOT EXISTS iid_source_tag text;
--- Backfill desde agent_id vía iid_findings JOIN iid_agents
-
--- RLS intel.* y content.*: políticas SELECT para authenticated
--- Escritura solo vía service_role (Edge Functions)
-
--- GRANTs: SELECT/INSERT/UPDATE/DELETE en lab_configs para service_role
--- fire_stage() función SQL (usa pg_net — DNS timeout conocido, no usar para supabase.co)
+### Arquitectura final del pipeline (content-run-stage v1.9)
+```
+iid_content_queue (pending)
+→ content-dispatcher (pg_net trigger)
+→ content-run-stage v1.9 (Supabase EF)
+  → copylab:   Claude directo desde EF (~9s)   ✅
+  → aife:      Vercel AIFE (~4s)               ✅
+  → imagelab:  Vercel Imagen 3 (50s timeout)   ⚠️ non-critical skip
+  → sociallab: Claude directo desde EF (~8s)   ✅
+→ content_pieces (awaiting_approval) → email Resend → approve-job
 ```
 
----
+**Tiempo total pipeline:** ~71 segundos para un post completo.
 
-### 6. Supabase Edge Functions deployadas
+### Causa raíz resuelta
+Vercel→Anthropic API latency >60s consistente desde iad1. Fix definitivo: Anthropic se llama directamente desde el Supabase EF (igual que iid-core, que completa en ~16s). Se aplicó a copylab y sociallab.
 
-| Función | Versión | Estado |
+### Fixes desplegados hoy
+| Componente | Fix | Estado |
 |---|---|---|
-| `aife-filter` | v1.1 | ACTIVE — lee `previousOutputs.copylab` correctamente |
-| `content-dispatcher` | v2.3 | ACTIVE — EdgeRuntime.waitUntil(stageFires) |
-| `content-run-stage` | v1.2 | ACTIVE — auth: x-cron-secret, VERCEL_BYPASS_SECRET |
+| content-run-stage v1.9 | copylab: direct Anthropic call desde EF | ✅ deployed |
+| content-run-stage v1.9 | sociallab: direct Anthropic call + direct Supabase write | ✅ deployed |
+| content-run-stage v1.9 | BUG FIX: labs_status persisted en failure path (faltaba en v1.8) | ✅ deployed |
+| content-run-stage v1.9 | imagelab: AbortSignal 50s, pipeline continúa si falla | ✅ deployed |
+| content-run-stage v1.9 | Last-stage fallback: crea piece aunque último lab falle | ✅ deployed |
+| CopyLab/vercel.json | maxDuration=60 | ✅ committed |
+| ImageLab/vercel.json | maxDuration=60 (warnings en build) | ✅ deployed con warnings |
+| SocialLab/vercel.json | maxDuration=60 | ✅ deployed |
 
-**Contratos clave:**
-- CopyLab devuelve `{output: string, status: 'ok'}` — dispatcher guarda como `previousOutputs.copylab`
-- AIFE lee `previousOutputs.copylab`, devuelve `{output, aife_filtered}` — dispatcher sobreescribe `copylab` con filtrado
-- ImageLab devuelve `{output, image_data_url: base64}` — lee `previousOutputs.copylab` automáticamente
-- SocialLab lee `previousOutputs.copylab` prioridad 1 — posts van a `scheduled_posts` con `pending_oauth`
+### Primer content piece producido
+- **Job:** `055c4ee6-fceb-490d-ad1f-6c5c5e5b7ec9`
+- **Piece ID:** `e75bdb73-bba8-4ba9-8341-2c971bd785f8`
+- **Status:** awaiting_approval → email recibido ✅
+- **Labs:** copylab:ok · aife:ok · imagelab:failed(skip) · sociallab:ok
+- **Copy:** Post sobre X algorithm pay-to-play, voz lucien, LinkedIn
 
----
-
-### 7. Vercel Protection — Desactivada en Labs
-
-CopyLab, ImageLab, SocialLab: **Vercel Authentication OFF** (team level + project level).
-
-El "Host not in allowlist" que aparecía era del proxy de red del sandbox de Claude (x-deny-reason: host_not_allowed), no de Vercel. Los Labs son accesibles desde Supabase Edge Functions (confirmado: `labs_status: {copylab: "running"}` aparece en DB).
-
-**Vercel Bypass Secret configurado:** `3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU`  
-Header: `x-vercel-protection-bypass` (guardado también en `intel.iid_scheduler_config`)  
-**Nota:** El secret existe pero no es necesario con la protection OFF.
-
----
-
-### 8. BUG ACTIVO — content-run-stage no se dispara desde dispatcher
-
-**Síntoma:** dispatcher v2.3 responde 200 + "kicked: 5" pero `content-run-stage` no aparece en logs de Supabase. Jobs quedan stuck en `labs_status: {copylab: "running"}`.
-
-**Lo que sí funciona (confirmado):**
-- Dispatcher crea jobs OK
-- Cuando el stage runner SÍ se llama (test directo), pasa auth y llega a CopyLab
-- CopyLab responde (labs_status cambia a `copylab: running`)
-- La arquitectura stage-by-stage es correcta
-
-**Hipótesis del bug:**
-`EdgeRuntime.waitUntil()` en Supabase Deno runtime no mantiene vivas las fetches fire-and-forget de la misma forma que en Cloudflare Workers. El dispatcher termina y Deno cancela los fetches pendientes antes de que lleguen.
-
-**Fix candidato para próxima sesión:**
-```typescript
-// En lugar de fire-and-forget, await el fetch ANTES de retornar Response
-// Esto alarga el dispatcher ~20-30s pero garantiza que el stage se dispara
-await fetch(stageUrl, { ... body: {job_id, stage_order: 1} });
-return new Response(JSON.stringify({success: true, kicked}), ...);
-```
-
-**Alternativa:** Usar `pg_net.http_post()` desde una función SQL intermedia que persiste aunque la EF termine. Pero pg_net tiene DNS timeout para `supabase.co` desde Postgres — verificar si aplica al URL de funciones o solo al URL público.
+### Infraestructura context cache
+- Tabla `content.brand_context_cache` activa con 11 triggers
+- context-cache EF v4: ~500ms cache HIT
+- Brand context UnrealvilleStudio: 7,969 bytes · voice_count=0 (voices no populados aún)
 
 ---
 
-### 9. Decisiones de arquitectura tomadas esta sesión
+## PENDIENTE — PRÓXIMA SESIÓN (prioridades ordenadas)
 
-- **AIFE** como Lab en `lab_configs` (iid_stage_order: 2) — callable igual que CopyLab/ImageLab/SocialLab
-- **Orchestrator** (no UNRLVL-OPS) es el hub de Content Engine y Ecosystem Intel
-- **Ecosystem Intel Tab** → Orchestrator (no OPS como se había discutido antes)
-- **brandId para contenido IID** → `"UnrealvilleStudio"` para voces unrlvl y lucien (ambas viven bajo esa marca en Supabase)
-- **Pipeline es síncrono por stage** (no paralelo) — cada EF ejecuta un Lab y encadena el siguiente
-- **SocialLab OAuth** es sprint futuro — posts van a `scheduled_posts` con `pending_oauth`
-- **pg_net** no puede llamar a Edge Functions desde Postgres (DNS timeout para supabase.co) — debe usarse `fetch()` desde Edge Function context
+### P1 — OAuth Social Media (bloqueante para publicación real)
+Conectar cuentas de marca de Unrealville Studio y Lucien Sael para que `scheduled_posts` pueda auto-publicar. Actualmente todos los posts quedan en `status: 'pending_oauth'`.
+
+**Plataformas a conectar por marca:**
+| Marca | Instagram | LinkedIn | TikTok | X/Twitter | Threads |
+|---|---|---|---|---|---|
+| Unrealville Studio | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Lucien Sael | ❌ | ❌ | ❌ | ❌ | ❌ |
+
+**Stack técnico requerido:**
+- Meta Business OAuth (Instagram + Threads) — Long-lived access tokens
+- LinkedIn API OAuth 2.0
+- TikTok for Developers — Content Posting API
+- X/Twitter API v2 — Write access
+- Tabla `brand_oauth_tokens` en Supabase (brand_id, platform, access_token, refresh_token, expires_at)
+- Edge Function `social-publisher` que lea `scheduled_posts` y publique vía tokens
+
+### P2 — ImageLab Fix (call Imagen 3 directo desde EF)
+Misma solución que copylab: eliminar el hop Vercel→Google y llamar Imagen 3 directamente desde el stage EF.
+
+**Implementación:**
+- Añadir `GEMINI_API_KEY` a los secrets del EF `content-run-stage` en Supabase
+- Añadir función `callImagenDirect()` en v1.10 del stage (copiar patrón de `callClaudeDirect`)
+- Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${GEMINI_KEY}`
+- También requiere llamar Gemini 2.5 Flash primero para construir el visual prompt
+- Tiempo esperado: ~25s (mismo orden que copylab desde EF)
+
+**Nota:** ImageLab Vercel sigue útil para la UI manual — solo el pipeline IID lo bypasea.
+
+### P3 — VideoLab: Crear y Conectar
+- Proyecto Vercel `prj_R0t1QvEnagCNn71Qq4iBLwgxy1MJ` existe en el team pero sin implementación
+- Auditar repo `unrlvl-video-lab` (o equivalente) con GitHub Auditor
+- Definir API de video: RunwayML Gen-3, Kling AI, o Google Veo 2
+- Crear `api/execute.ts` con misma interfaz que ImageLab
+- Añadir entrada en `lab_configs` con `iid_stage_order=5`
+- Necesita vercel.json con `maxDuration: 300` (video generation ~120-180s)
+- CRÍTICO: VideoLab también deberá llamar la API de video directamente desde EF (misma razón que copylab)
+
+### P4 — Cuentas UNRLVL para Modelos de Generación
+**Image Generation:**
+- Verificar que `GEMINI_API_KEY` esté en Supabase EF secrets para el stage
+- Confirmar billing activo en Google AI Studio para Imagen 3
+- Verificar quotas: Imagen 3 tiene límite de requests/día en tier gratuito
+
+**Video Generation** (seleccionar API antes de implementar VideoLab):
+- RunwayML: runway.ml/api — Gen-3 Alpha ~$0.05/sec
+- Kling AI: klingai.com — alternativa más económica
+- Google Veo 2: via Vertex AI — requiere Google Cloud billing
+- Recomendación: RunwayML por madurez de API y calidad
+
+### P5 — Labs Tests: Ecosystem Ready for Business
+Suite de tests a ejecutar antes de onboarding de primer cliente:
+
+**Test 1: Pipeline IID completo con imagen**
+- Requiere P2 (ImageLab fix) completado
+- Correr 5 jobs end-to-end, todos deben producir: copy + imagen + social posts + email
+
+**Test 2: Pipeline IID completo con publicación real**
+- Requiere P1 (OAuth) completado
+- Correr job con cuenta OAuth conectada, verificar post en plataforma
+
+**Test 3: Brand Context Cache stress test**
+- Modificar brand data y verificar que dirty=true invalida cache correctamente
+- Verificar que TTL 60min funciona
+
+**Test 4: Multi-brand isolation**
+- Crear segundo brand (Lucien Sael como marca separada si no existe)
+- Correr job para cada marca, verificar que contexts no se mezclan
+
+**Test 5: Content approval flow**
+- Recibir email → click PUBLICAR → verificar que piece cambia a status=published
+- Recibir email → click RECHAZAR → verificar que piece cambia a status=rejected
+
+**Test 6: SocialLab scheduled_posts → publisher**
+- Requiere P1 + P3 (social-publisher EF)
+- Verificar que posts en scheduled_posts se publican a las scheduled_at
+
+**Test 7: VideoLab integration**
+- Requiere P3 (VideoLab) completado
+- Correr job completo con stage videolab activo
+
+**Test 8: Queue health (autopublish)**
+- Crear finding con content_score ≥ 85 y urgency="breaking"
+- Verificar que piece se crea con status=published sin pasar por approval
 
 ---
 
-### Pendientes inmediatos (próxima sesión)
+## HISTORIAL DE SESIONES ANTERIORES
 
-1. **FIX BUG dispatcher → stage runner** — probar await síncrono antes de retornar Response
-2. **Test pipeline completo** con 1 job (no 5) para aislar
-3. **Primer email de aprobación → Sam → PUBLICAR** → verificar en SocialLab
-4. Una vez validado: **Actualiza** + cierre sprint Orchestrator
-5. LUCIEN-BOOKS: Brief Libro 1
-6. NeuroneSCF B2B: brand_ids + acento navy
-7. ForumPHs: datos edificios + foto Ivette
+### SESIÓN 2026-04-25 — Stage Runner debugging + first copylab:ok
+- Identificado: waitUntil blocks external HTTP (EF-to-Vercel)
+- Fix: arquitectura synchronous (no waitUntil)
+- content-run-stage v1.8 deployed con copylab direct Claude call
+- Primer copylab:ok real (11s)
+- imagelab y sociallab: timeout Vercel pendientes
 
----
+### SESIÓN 2026-04-24 — IID Core + Context Cache
+- iid-core v1.1 deployed: ecosystem_status watchlist band (50-69)
+- context-cache EF v4 deployed con brand_context_cache table
+- 11 triggers para dirty flag
+- compile_brand_context() SQL function
 
-## 2026-04-24 — IID Network OPERATIONAL + Content Engine diseñado
-
-_Ver session_log anterior o ecosystem.md para detalles del 24 de abril._
-
-**Resumen:** IID Network full build (schemas intel.* + content.*, 14 agentes, 5 EFs, 27 crons). Primer run IID-ECOMMERCE exitoso (4 findings reales, 8 piezas en content_queue). Brief biweekly enviado.
+### SESIÓN ANTERIOR — Ecosystem & Pipeline Setup
+- Dispatcher → stage pipeline arquitectura definida
+- lab_configs table: copylab/aife/imagelab/sociallab configurados
+- content-run-stage v1.0→v1.7: múltiples iteraciones
+- CopyLab v8.1: brandContext cache integration
