@@ -1,178 +1,134 @@
 # UNRLVL Ecosystem — Narrative Reference
-_Versión: 2026-04-25a · Generado desde ecosystem.json_
+_Versión: 2026-04-25 · Generado desde ecosystem.json_
 
 ---
 
 ## Studio
 
-**Unrealville Studio** — Brand Intelligence Infrastructure. North Miami, FL. Fundador público: **Lucien Sael** (seudónimo profesional de Sam).
-
-Web: unrealvillestudio.com (LIVE EN+ES). Tagline: "Not for everyone."
+**Unrealville Studio** — Brand Intelligence Infrastructure. North Miami, FL. Fundador público: **Lucien Sael** (seudónimo de Sam). Web: unrealvillestudio.com (LIVE EN+ES).
 
 ---
 
-## IID Network — Estado: OPERATIONAL
+## IID Network — OPERATIONAL
 
-El sistema de inteligencia que investiga, puntúa y convierte hallazgos en contenido público y mejoras internas. **Primer run exitoso: 2026-04-24.**
+Sistema de inteligencia que investiga, puntúa y convierte hallazgos en contenido público y mejoras internas.
 
-### Arquitectura two-step (diseño permanente)
-
-El sistema separa investigación de estructuración. Cada una tiene su propia función, su propio timeout, su propio propósito.
+### Arquitectura two-step (permanente)
 
 ```
-pg_cron → iid-research (Claude + web_search → texto crudo en iid_research_raw)
-        → iid-process  (Claude sin tools → JSON → iid-core → dos streams)
+pg_cron → iid-research (Claude + web_search → iid_research_raw)
+        → iid-process  (estructura JSON → iid-core → dos streams)
 ```
 
-### Dos streams desde un mismo hallazgo
+**Stream Ecosystem:** findings ≥70 → `intel.iid_findings` → brief biweekly email Sam.  
+**Stream Content:** findings ≥70 (content_score) → `intel.iid_content_queue` → Content Engine → SocialLab.
 
-**Stream Ecosystem (Plan Maestro):** findings con ecosystem_score ≥70 van a `intel.iid_findings` con status `pending_review`. Biweekly email vía Resend a Sam. Sin AIFE — es contenido interno.
+### 14 agentes, 27 crons
 
-**Stream Content Engine:** findings con content_score ≥70 van a `intel.iid_content_queue` con voice routing, Psycho Layer y AIFE aplicados. Fluyen hacia Orchestrator → Labs → SocialLab.
+IID-CORE · IMAGE · VIDEO · VOICE · LLM · META · TIKTOK · GOOGLE · LINKEDIN · X · ECOMMERCE · FLORIDA · WHOLESALE · PERSONAL-BRAND
 
-### Scoring
+Primer run IID-ECOMMERCE: 2026-04-24. 4 findings reales.
 
-| Framework | Criterios | Threshold |
+---
+
+## Content Engine — CONSTRUIDO (pipeline pendiente validación completa)
+
+### Flujo diseñado y construido
+
+```
+iid_content_queue (pending)
+  ↓ content-dispatcher (Supabase EF, cron cada 30 min)
+  ↓ crea content.orchestrator_jobs + dispara content-run-stage(job, stage=1)
+content-run-stage: CopyLab → AIFE → ImageLab → SocialLab
+  (cada Lab es una invocación Edge Function independiente, ~60s cada una)
+  ↓ pipeline completo → content_pieces.assets
+Email Sam: preview AIFE-filtered + [PUBLICAR AHORA] + [RECHAZAR]
+  ↓ click → Orchestrator /api/approve-job → SocialLab publica
+```
+
+### BUG ACTIVO (2026-04-25)
+
+El dispatcher crea los jobs correctamente pero el stage runner no se dispara. Hipótesis: `EdgeRuntime.waitUntil()` en Supabase Deno no mantiene vivas las fetches fire-and-forget. Fix candidato: hacer el fetch síncrono antes de retornar la Response. Próxima sesión.
+
+### Lab contracts (verificados con código real)
+
+| Lab | Envía | Recibe |
 |---|---|---|
-| Ecosystem R1-R6 | Capability · Quality · Cost · Implementation · Time-to-value · Client | ≥70 top · 50-69 watchlist · <50 discard |
-| Content C1-C5 | Novelty · Audience relevance · Contrarian · Timeliness · Expertise signal | ≥70 eligible · ≥85+breaking = autopublish |
+| CopyLab | `{brandId, stage, params{pack, canal, extra_instructions}, previousOutputs}` | `{output: string, status: 'ok'}` |
+| AIFE | `{brandId, stage, params{voice}, previousOutputs.copylab}` | `{output: filtered, aife_filtered: filtered}` |
+| ImageLab | `{brandId, stage, params{canal, psycho_preset}, previousOutputs.copylab}` | `{output, image_data_url: base64}` |
+| SocialLab | `{brandId, stage, params{platforms}, previousOutputs.copylab}` | `{output, results[{platform, post_id, status}]}` |
 
-### Voces y ángulos
-
-- **Compartidos** (UNRLVL + Lucien): expertise, opinion, case_study, tool_review, trend_signal, contrarian
-- **Exclusivos Lucien**: psychological, mathematical
-- **Psycho Layer**: 10 presets asignados automáticamente por angle + voice antes de AIFE
-
-### Red de agentes
-
-| Tier | Agentes | Día | Status |
-|---|---|---|---|
-| Core | IID-CORE | — | Edge Function ACTIVE |
-| Tier 1 | IMAGE · VIDEO · VOICE · LLM | Jue-Mar-Vie-Mar | DB + crons activos |
-| Tier 2 | META · TIKTOK · GOOGLE · LINKEDIN · X | Mié-Vie-Sáb-Dom-Dom | DB + crons activos |
-| Tier 3 | ECOMMERCE · FLORIDA · WHOLESALE · PERSONAL-BRAND | Lun-1/15-8/22-Mar | ECOMMERCE: run exitoso |
-
-### Brief biweekly
-
-Email HTML dark-theme a sam@unrealvillestudio.com los días 1 y 15. Estructura: TOP (≥70) · WATCHLIST (50-69) · DESCARTADOS. IID source tag visible solo para Sam — nunca público. Primer brief enviado 2026-04-24.
+**brandId para IID:** `"UnrealvilleStudio"` (voces unrlvl y lucien).  
+**Psycho Layer:** nativo en ImageLab vía `psycho_presets` tabla, no construir aparte.  
+**SocialLab OAuth:** sprint futuro, posts van a `scheduled_posts` con `pending_oauth`.
 
 ---
 
-## Content Engine — Estado: DISEÑADO
+## Orchestrator — OR_1.1
 
-### Flujo completo
+**URL:** orchestrator-unrlvl.vercel.app  
+**Tabs:** Orchestrator · Launchpad · Monitor · **IID Intel** (nuevo)
 
-```
-iid_content_queue (aprobado)
-        ↓ orchestrator_status: pending → dispatched
-content.orchestrator_jobs (job + approval_token único)
-        ↓ Orchestrator lee brand_voices de DB → dispatcha a Labs
-CopyLab + ImageLab + VideoLab + VoiceLab
-(cada uno con ICR/AIFE/Humanize propios)
-        ↓ outputs → content_pieces.assets JSONB
-Email Sam: preview + [PUBLICAR] + [RECHAZAR] (1 click, token en URL)
-        ↓ aprobado → SocialLab publica
-```
+### Endpoints nuevos (en repo)
+- `api/approve-job.ts` — 1-click email approval (Edge runtime)
+- `api/trigger-job.ts` — trigger programático IID
 
-### Voces
-
-**UNRLVL Studio** — Autoridad institucional. Templates: Signal · Contrarian · Case Signal. Plataformas: LinkedIn · IG · FB. AIFE max intensity.
-
-**Lucien Sael** — Voz personal directa. Templates: Lo que vi · La pregunta incómoda · Los números no mienten. Plataformas: LinkedIn · X · IG. Ángulos psychological y mathematical exclusivos. AIFE max intensity.
-
-### Formatos dinámicos
-
-Post · Carousel · Thread · Article · Reel script · Short video script · Quote card. Selección basada en angle + platform + historial últimas 5 piezas de esa voz (evita repetición consecutiva).
-
-### Arquitectura de datos
-
-- `content.brand_voices` — templates, ICR rules, image style, psycho affinities por voz. UNRLVL + Lucien seeded. Añadir nueva marca = INSERT.
-- `content.orchestrator_jobs` — tracking de jobs, approval_token, labs_status JSONB.
-- `content.content_pieces` — repositorio de resultados. `assets JSONB` consolida copy + image + video + voice + carousel slides. `brand_id` + `iid_source_tag` (interno).
-
-### Pendiente construir
-
-Edge Functions: `content-package` · `content-approve` · `content-publish`. Labs audits previo para confirmar endpoints programáticos.
-
----
-
-## WhatsApp Agent Platform — Estado: LIVE v1.0
-
-**Primer producto replicable de UNRLVL** construido sobre SKILL-AB agent-builder. Stack canónico: Vercel serverless + Supabase + Twilio WhatsApp Business API + Claude API.
-
-### AGENT-DDMV — Mi Asistente (LIVE 2026-04-24)
-
-Asistente personal de salud para Damaris Mendoza (Panamá). Uso personal de Sam — primer deployment real de la plataforma.
-
-**Número:** +1 (260) 270-1806 · **Dashboard:** ddmv-assistant.vercel.app/api/dashboard · **Supabase:** proyecto XMMs (separado del principal UNRLVL)
-
-**Funcionalidades activas:**
-- Análisis fotos recetas → guarda medicamentos + citas automáticamente
-- Recordatorios medicamentos a hora exacta (Edge Function horaria)
-- Recordatorios citas: 2 días / 1 día / mismo día (7am Panamá)
-- Flujos conversacionales proactivos con estado: verifica medicamentos, confirma citas, pregunta por bienestar — ciclo auto-programado cada 2-3 días
-- Sam como cuidador: crea recordatorios para Damaris desde su WhatsApp
-- Saludos mañana (9am) + tarde (6pm) — 9 variantes random
-- Recordatorio ejercicios mentales (10am)
-
-**Regla de honestidad:** el bot solo promete lo que puede cumplir. Si la fecha no está clara, pregunta antes de confirmar.
-
-### AGENT-PO-WA — Patricia Osorio WhatsApp Assistant (PENDIENTE)
-
-Réplica del patrón DDMV para atención de clientas de Patricia Osorio. Pendiente sesión dedicada.
-
-### Replicaciones previstas
-
-- ForumPHs OPS WA — incidencias propietarios apartamentos (AGENT-FPH-OPS-WA)
-- Clientes UNRLVL — producto ofertable en tiers
+### UI upgrades
+- **EcosystemIntelModule** — Bands TOP/WATCHLIST/DISCARDED, cards con R1-R6
+- **FlowExecutorModule** — Layer indicators: Humanize (CopyLab, índigo), AIFE Filter (AIFE, ámbar), Psycho Layer (ImageLab, violeta). Estados: idle → running (pulsa + reloj) → done (verde + tiempo)
 
 ---
 
 ## Labs
 
-| Lab | Status | Notas |
+| Lab | Estado | Notas |
 |---|---|---|
-| CopyLab | PASSED v8.0 | Audit pendiente: endpoint programático para Orchestrator |
-| WebLab | PASSED | SKILL_weblab-shopify sesión propia pendiente |
-| ImageLab | PASSED ICR v1.0 | Audit pendiente: endpoint programático |
-| AgentLab | PASSED | — |
-| BlueprintLab | PASSED | — |
-| Orchestrator | PASSED | Pending: Content Queue routing |
-| SocialLab | PASSED | Meta/TikTok OAuth pendiente · Audit: consume iid_content_queue |
-| VideoLab | BLOQUEADO | HeyGen + Kling keys pendientes |
-| VoiceLab | BLOQUEADO | ElevenLabs voice IDs pendientes |
-| UNRLVL-OPS | LIVE | Cost Layer tab LIVE. Tab Ecosystem Intel pendiente. |
-| Onboarding App | PASSED Phase 4 | — |
+| CopyLab | PASSED v8.0 | Vercel protection OFF · brandId requerido · puede tardar >90s |
+| ImageLab | PASSED ICR v1.0 | Vercel protection OFF · Psycho Layer nativo |
+| SocialLab | PASSED | Vercel protection OFF · OAuth futuro |
+| Orchestrator | OR_1.1 LIVE | 4 tabs + approve-job + trigger-job |
+| UNRLVL-OPS | LIVE | Cost Layer. Ecosystem Intel → movido al Orchestrator |
+| VideoLab | BLOQUEADO | HeyGen + Kling keys |
+| VoiceLab | BLOQUEADO | ElevenLabs voice IDs |
 
 ---
 
-## Skills (P1-P8 completos)
+## GitHub Auditor
 
-ui-ux-layer v2.1 · shopify-auditor v1.1 · image-processing v1.0 · **agent-builder v1.0** (referencia real: DDMV-Assistant) · aife v1.1 · copylab-reference v1.0 · security v1.0 · cost-layer v1.0
+**URL:** unrlvl-tools.vercel.app/api/gh  
+**Bug fix 2026-04-25:** reordenamiento de condiciones en `api/gh.js`. Tree y file contents funcionan.
 
-Pendiente: weblab-shopify (sesión propia).
-
----
-
-## Infraestructura
-
-**Supabase principal** `amlvyycfepwhiindxgzw` — Schemas: public · crm · fph · ops · intel · content. Extensions: pg_cron 1.6.4 · pg_net 0.20.0. 27 cron jobs activos. 0 security advisors.
-
-**Supabase XMMs** `puoybldykxqvhvtnwrld` — Proyecto separado. Uso personal/agentes WA. Tablas: conversations · medications · appointments · reminder_log · notification_settings · reminders · conversation_flows · proactive_checks.
-
-**Vercel** — 21 proyectos. Team: team_fEH94Irp6BAI9YGm4btGna5n. **Todos en Elastic build machine** (cambiado 2026-04-25, ahorro 37x vs Turbo).
-
-**Cost Layer** — OPERATIONAL. logTokens activo en 8 Edge Functions. Dashboard: unrlvl-ops.vercel.app/cost-layer.
+```
+Tree:  ?repo=NAME&action=tree
+File:  ?repo=NAME&path=src/file.ts
+```
 
 ---
 
-## Agenda próxima sesión
+## Supabase
 
-1. **Lab audits** — CopyLab, ImageLab, VideoLab, VoiceLab, SocialLab → confirmar endpoint programático para Orchestrator
-2. **ContentLab** — construir content-package + content-approve + content-publish
-3. **Orchestrator** — Content Queue routing
-4. **UNRLVL-OPS** — Tab Ecosystem Intel
-5. **AGENT-PO-WA** — Patricia Osorio WhatsApp Assistant (réplica DDMV)
-6. Lucien Books — Brief Libro 1
-7. NeuroneSCF B2B — acento navy + brand_ids
-8. ForumPHs — datos edificios + foto Ivette
+**Project:** amlvyycfepwhiindxgzw  
+**Schemas activos:** public · crm · fph · ops · **intel** (IID) · **content** (Content Engine)  
+**Exposed a PostgREST:** public, intel, content  
+**RLS:** intel.* y content.* → SELECT para authenticated, escritura solo service_role  
+**pg_net nota:** DNS timeout para supabase.co desde Postgres. No usar para llamar Edge Functions — usar fetch() desde EF context.
+
+### Edge Functions activas (content pipeline)
+
+```
+aife-filter v1.1         — ACTIVE
+content-dispatcher v2.3  — ACTIVE (bug: stage no se dispara)
+content-run-stage v1.2   — ACTIVE (auth: x-cron-secret)
+```
+
+---
+
+## Próxima sesión — Prioridades
+
+1. **FIX BUG dispatcher → stage runner** (awaiting fetch síncrono)
+2. **Test pipeline completo con 1 job**
+3. **Primer email de aprobación → Sam → PUBLICAR**
+4. Lucien Books — Brief Libro 1
+5. NeuroneSCF B2B — brand_ids + acento navy
+6. ForumPHs — datos edificios + foto Ivette

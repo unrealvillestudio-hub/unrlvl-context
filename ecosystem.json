@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-24a",
+    "version": "2026-04-25",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -8,13 +8,14 @@
       "session_protocol": "https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md",
       "tiers_pricing": "https://unrlvl-context.vercel.app/TIERS.md",
       "plan_maestro": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md",
+      "lucien_books": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/LUCIEN_BOOKS_MASTER.md",
       "crm_integrations": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/CRM_INTEGRATIONS.md",
       "document_factory_plan": "https://unrlvl-context.vercel.app/brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md",
       "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md"
     },
     "last_audit": {
-      "date": "2026-04-24",
-      "status": "DDMV-Assistant completado y activo. Primer deployment real de SKILL-AB agent-builder. WhatsApp Business propio +12602701806. Registrado como producto UNRLVL replicable.",
+      "date": "2026-04-25",
+      "status": "Orchestrator Upgrade completo (approve-job + trigger-job deployados). IID Network OPERATIONAL. Content Engine pipeline construido: aife-filter v1.1, content-dispatcher v2.3, content-run-stage v1.2. Ecosystem Intel tab en Orchestrator. Layer indicators (Humanize/AIFE/PsychoLayer) en FlowExecutorModule. GitHub Auditor gh.js bug fix. Vercel Authentication desactivada en CopyLab/ImageLab/SocialLab. Pipeline end-to-end: dispatcher → stage runner → CopyLab. BUG ACTIVO: content-run-stage no se dispara desde dispatcher (EdgeRuntime.waitUntil no funciona como esperado en Supabase Deno runtime). Próxima sesión: debug dispatcher→stage con logs Deno en tiempo real.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -32,16 +33,12 @@
   "lucien_sael": {
     "identity": "Seudónimo profesional público de Sam para UNRLVL y proyectos propios",
     "tagline": "I build worlds. Some of them survive.",
-    "positioning": "Constructor de mundos. UNRLVL es uno de ellos.",
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
     "web_status": "GENERATED v2.1 — pending deploy",
-    "linkedin": "PENDING CREATE",
-    "instagram": "PENDING CREATE — @luciensael",
-    "meta_page": "PENDING CREATE",
     "brand_identity": {
       "version": "v1.0",
-      "status": "COMPLETE — canonical reference lucien-sael-brand-identity-v1.html",
+      "status": "COMPLETE",
       "palette": {
         "obsidian": "#0D0D0B",
         "carbon": "#1C1C1A",
@@ -57,163 +54,243 @@
         "body": "Crimson Pro 300/300i/400/400i/600i",
         "system": "JetBrains Mono 300/400/700"
       },
-      "logotype": "D stacked — Lucien bone upright / Sael ember italic",
-      "signature_phrase": "I build worlds. Some of them survive.",
       "rule_never": "cyan, pure white, blue, Bebas Neue, Space Mono — those are UNRLVL"
+    },
+    "books": {
+      "project_id": "LUCIEN-BOOKS",
+      "status": "ARQUITECTURA FUNDACIONAL COMPLETA — Brief Libro 1 pendiente",
+      "master_doc": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/LUCIEN_BOOKS_MASTER.md",
+      "concept": "5 libros como sistema. No saga. Arquitectura invisible.",
+      "next_step": "Sam trae pensamiento libre sobre el personaje del Libro 1. Construimos el final primero."
     }
   },
   "brands": [
-    {"id":"DiamondDetails","name":"Diamond Details","type":"brand","market":"Alicante, Espana","status":"active","health":"green"},
-    {"id":"VizosCosmetics","name":"Vizos Cosmetics","type":"brand","market":"Miami + Espana","status":"active","health":"green"},
-    {"id":"D7Herbal","name":"D7 Herbal","type":"brand","market":"Alicante, Espana","status":"active","health":"green"},
-    {"id":"VivoseMask","name":"Vivose Mask","type":"brand","market":"Espana","status":"active","health":"yellow"},
-    {"id":"PatriciaOsorioPersonal","name":"Patricia Osorio · Personal","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
-    {"id":"PatriciaOsorioComunidad","name":"Patricia Osorio · Comunidad","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
-    {"id":"PatriciaOsorioVizosSalon","name":"Patricia Osorio · Vizos Salon","type":"personal_brand","market":"Miami, FL","status":"active","health":"green","copy_profile":"DONE"},
-    {"id":"PatriciaOsorioConectando","name":"Patricia Osorio · Conectando","type":"personal_brand","market":"Miami + LATAM","status":"active","health":"green",
-      "bp_status":"BP_BRAND v1.0 DEFINITIVO",
-      "typography":"Pinyon Script + Montserrat ExtraLight",
-      "palette_primary":["#0A0A0A","#1C1A16","#C49A3C","#F5EAD0"]
+    {"id": "DiamondDetails", "name": "Diamond Details", "type": "brand", "market": "Alicante, Espana", "status": "active", "health": "green"},
+    {"id": "VizosCosmetics", "name": "Vizos Cosmetics", "type": "brand", "market": "Miami + Espana", "status": "active", "health": "green"},
+    {"id": "D7Herbal", "name": "D7 Herbal", "type": "brand", "market": "Alicante, Espana", "status": "active", "health": "green"},
+    {"id": "VivoseMask", "name": "Vivose Mask", "type": "brand", "market": "Espana", "status": "active", "health": "yellow"},
+    {"id": "PatriciaOsorioPersonal", "name": "Patricia Osorio · Personal", "type": "personal_brand", "market": "Miami, FL", "status": "active", "health": "green"},
+    {"id": "PatriciaOsorioComunidad", "name": "Patricia Osorio · Comunidad", "type": "personal_brand", "market": "Miami, FL", "status": "active", "health": "green"},
+    {"id": "PatriciaOsorioVizosSalon", "name": "Patricia Osorio · Vizos Salon", "type": "personal_brand", "market": "Miami, FL", "status": "active", "health": "green"},
+    {"id": "PatriciaOsorioConectando", "name": "Patricia Osorio · Conectando", "type": "personal_brand", "market": "Miami + LATAM", "status": "active", "health": "green"},
+    {
+      "id": "NeuroneSCF",
+      "name": "Neurone South & Central Florida",
+      "type": "brand",
+      "market": "South & Central Florida, USA",
+      "domain": "neuronescflorida.com",
+      "status": "active",
+      "health": "yellow",
+      "gaps": "BP_COPY_1.0 · 87 SKUs · Instagram vinculación · WhatsApp API · assets",
+      "completed": "Meta BM · Facebook Page · TikTok · 7 aliases · SMA · Shopify B2C+B2B LIVE Payments"
     },
-    {"id":"NeuroneSCF","name":"Neurone South & Central Florida","type":"brand","market":"South & Central Florida, USA","domain":"neuronescflorida.com","status":"active","health":"yellow",
-      "gaps":"BP_COPY_1.0 PENDIENTE · 87 SKUs + precios · Instagram Business (celular Patricia Miami) · TikTok for Business · WhatsApp Business API · Verificación dominio · Assets marca",
-      "completed":"Meta BM configurado · Facebook Page CREADA · 7 aliases email · SMA session_log al día · Shopify B2C + B2B LIVE con Payments habilitados",
-      "email_ops":"Gmail Send As via SMTP relay (Resend) para Patricia — no requiere Google Workspace"
+    {
+      "id": "ForumPHs",
+      "name": "ForumPHs",
+      "type": "brand",
+      "key_person": "Ivette Flores",
+      "market": "Panama",
+      "status": "active",
+      "health": "green",
+      "document_factory": "PROD v1.5 READY",
+      "speaks": "speaks.forumphs.com LIVE · foto Ivette pendiente"
     },
-    {"id":"ForumPHs","name":"ForumPHs","type":"brand","key_person":"Ivette Flores","market":"Panama","status":"active","health":"green",
-      "speaks":"speaks.forumphs.com LIVE · foto Ivette pendiente",
-      "fphsops":{"status":"Schema fph.* 22 tablas · primer módulo COBROS","datos_pendientes":"Ivette: 8+ edificios, propietarios, cuotas, mora — total_units automático cuando se carguen"},
-      "document_factory":"PROD v1.5 READY FOR BUSINESS",
-      "document_factory_notes":"ZIP→DOCX pipeline completo · imágenes embebidas en DOCX extraídas · 413 resuelto · agenda cross-ref · total_units gap (solución definitiva: Supabase lookup pendiente datos)",
-      "crm":"Org activa · Speaks→CRM pendiente"
+    {
+      "id": "UnrealvilleStudio",
+      "name": "Unrealville Studio",
+      "type": "studio",
+      "market": "Florida USA + LATAM",
+      "status": "active",
+      "health": "green",
+      "web": "LIVE EN+ES",
+      "skills": "P1-P8 COMPLETOS — skills/P1 ui-ux · P2 shopify-auditor · P3 image-processing · P4 agent-builder · P5 aife · P6 copylab-reference · P7 security · P8 cost-layer"
     },
-    {"id":"UnrealvilleStudio","name":"Unrealville Studio","type":"studio","market":"Florida USA + LATAM","status":"active","health":"green",
-      "web":"LIVE EN+ES",
-      "founder_public":"Lucien Sael",
-      "tiers":["SIGNAL $3,500/mo","PULSE $6,500/mo","ORBIT $12,000/mo"],
-      "tiers_doc":"TIERS.md",
-      "currency":"USD only",
-      "web_pending":["COMMIT: Why UNRLVL v4 section EN+ES to CoreProject (index.html + es/index.html)"]
-    },
-    {"id":"UnrealvilleStores","name":"Unrealville Stores","type":"ecommerce","market":"Florida USA","status":"active","health":"green"}
+    {"id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green"}
   ],
   "labs": [
-    {"id":"LAB-CPL","name":"CopyLab","status":"PASSED v8.0","gaps":["BP_COPY_1.0 vacío para 3 marcas"]},
-    {"id":"LAB-WL","name":"WebLab","status":"PASSED — Shopify module completo","pending":"Objectives Window"},
-    {"id":"LAB-IL","name":"ImageLab","status":"PASSED ICR v1.0","gaps":["sin LoRA Prep"]},
-    {"id":"LAB-AL","name":"AgentLab","status":"PASSED"},
-    {"id":"LAB-BPL","name":"BlueprintLab","status":"PASSED"},
-    {"id":"LAB-ORCH","name":"Orchestrator","status":"PASSED"},
-    {"id":"LAB-SL","name":"SocialLab","status":"PASSED","gaps":["Meta/TikTok OAuth pendiente"]},
-    {"id":"LAB-VL","name":"VideoLab","status":"BLOQUEADO — HeyGen + Kling keys"},
-    {"id":"LAB-VOL","name":"VoiceLab","status":"BLOQUEADO — ElevenLabs voice IDs"},
-    {"id":"LAB-OPS","name":"UNRLVL-OPS","status":"PASSED"},
-    {"id":"LAB-OBD","name":"Onboarding App","status":"PASSED Phase 4"}
+    {
+      "id": "LAB-CPL",
+      "name": "CopyLab",
+      "status": "PASSED v8.0",
+      "url": "https://unrlvl-copy-lab.vercel.app",
+      "vercel_protection": "OFF — Vercel Authentication desactivada (team + project level) para permitir llamadas server-to-server",
+      "execute_endpoint": "POST /api/execute",
+      "contract": "{brandId, stage, params{pack, canal, extra_instructions}, previousOutputs} → {output: string, status: 'ok'}",
+      "notes": "brandId OBLIGATORIO. VITE_SUPABASE_URL/ANON_KEY en env vars Vercel. 8 queries paralelas Supabase + Claude. Puede tardar >90s con UnrealvilleStudio (brand context pesado)."
+    },
+    {
+      "id": "LAB-WL",
+      "name": "WebLab",
+      "status": "PASSED — Shopify module completo",
+      "pending": "SKILL_weblab-shopify sesión propia"
+    },
+    {
+      "id": "LAB-IL",
+      "name": "ImageLab",
+      "status": "PASSED ICR v1.0",
+      "url": "https://image-lab-unrlvl.vercel.app",
+      "vercel_protection": "OFF",
+      "execute_endpoint": "POST /api/execute",
+      "contract": "{brandId, stage, params{canal, psycho_preset, aspect_ratio}, previousOutputs.copylab} → {output: string, image_data_url: base64, status: 'ok'}",
+      "notes": "Psycho Layer nativo — params.psycho_preset → tabla psycho_presets → visual_injection. Lee previousOutputs.copylab automáticamente."
+    },
+    {
+      "id": "LAB-AL",
+      "name": "AgentLab",
+      "status": "PASSED"
+    },
+    {
+      "id": "LAB-BPL",
+      "name": "BlueprintLab",
+      "status": "PASSED"
+    },
+    {
+      "id": "LAB-ORCH",
+      "name": "Orchestrator",
+      "status": "UPGRADED OR_1.1",
+      "url": "https://orchestrator-unrlvl.vercel.app",
+      "build_tag": "OR_1.1",
+      "tabs": ["Orchestrator (hub)", "Launchpad", "Monitor", "IID Intel (nuevo)"],
+      "new_endpoints": [
+        "api/approve-job.ts — 1-click email approval (Edge runtime, no @vercel/node)",
+        "api/trigger-job.ts — programmatic IID trigger (Edge runtime)"
+      ],
+      "ui_upgrades": [
+        "EcosystemIntelModule.tsx — tab IID Intel con bands TOP/WATCHLIST/DISCARDED",
+        "FlowExecutorModule.tsx — Layer indicators: Humanize (CopyLab), AIFE Filter (AIFE), Psycho Layer (ImageLab) con reloj + estado idle/running/done"
+      ],
+      "env_vars_needed": "SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY · IID_CRON_SECRET · SOCIALLAB_URL · RESEND_API_KEY"
+    },
+    {
+      "id": "LAB-SL",
+      "name": "SocialLab",
+      "status": "PASSED",
+      "url": "https://social-lab-flame.vercel.app",
+      "vercel_protection": "OFF",
+      "execute_endpoint": "POST /api/execute",
+      "contract": "{brandId, stage, params{platforms, schedule_at}, previousOutputs.copylab} → {output, results[{platform, post_id, status}]}",
+      "notes": "Posts van a scheduled_posts con status: pending_oauth. OAuth real (Meta/TikTok) es sprint futuro. Lee previousOutputs.copylab prioridad 1."
+    },
+    {"id": "LAB-VL", "name": "VideoLab", "status": "BLOQUEADO — HeyGen + Kling keys"},
+    {"id": "LAB-VOL", "name": "VoiceLab", "status": "BLOQUEADO — ElevenLabs voice IDs"},
+    {
+      "id": "LAB-OPS",
+      "name": "UNRLVL-OPS",
+      "status": "LIVE — Cost Layer LIVE. Tab Ecosystem Intel movido al Orchestrator (no a OPS).",
+      "url": "https://unrlvl-ops.vercel.app/cost-layer"
+    },
+    {"id": "LAB-OBD", "name": "Onboarding App", "status": "PASSED Phase 4"}
   ],
   "skills_roadmap": [
-    {
-      "id":"SKILL-UIUX","name":"ui-ux-layer","priority":1,"status":"PENDIENTE",
-      "scope":"CSS vars UNRLVL, logotipo chevron blink, paleta cyan/amber/chalk/void, footer estándar 2px cyan, tipografía Bebas Neue + Space Mono + Libre Baskerville, patrones de componentes, checklist ICR visual HTML",
-      "impact":"Consistencia BP_BRAND en cada sesión visual sin redescubrir. Aplica a todos los labs y outputs de cliente.",
-      "effort":"1 sesión"
-    },
-    {
-      "id":"SKILL-SA","name":"shopify-auditor","priority":2,"status":"DISEÑADO — pendiente construir",
-      "scope":"Conexión Admin GraphQL API multi-tienda (token por tienda en Supabase), protocolo audit ICR estructurado (catálogo SKUs/variantes/precios, payments config, ops órdenes/inventory, B2C vs B2B diff), resultados en schema shopify.* Supabase, cierra Shopify→CRM pendiente, output exportable por cliente",
-      "pilot":"NeuroneSCF B2C + B2B (ambas LIVE con Shopify Payments habilitados)",
-      "phases":["Fase 1: conexión Admin API + primer audit report NeuroneSCF","Fase 2: schema shopify.* Supabase + historial + CRM","Fase 3: skill ICR completo multi-tienda + output cliente"],
-      "effort":"3 fases ~3 sesiones",
-      "business_case":"Asset UNRLVL reutilizable — incluible en tier e-commerce add-on como audit Shopify ICR mensual",
-      "note":"Shopify AI Toolkit (April 9 2026) requiere Claude Code CLI — no compatible con claude.ai. Esta skill opera via Admin GraphQL API directa, sin CLI, desde el stack UNRLVL."
-    },
-    {
-      "id":"SKILL-IP","name":"image-processing","priority":3,"status":"PENDIENTE",
-      "scope":"ImageLab capabilities, pipeline LoRA Prep, Fal.ai birefnet vs color-matching, Python PIL en container para gaps (palette, color swap, batch export), formato captions LoRA training",
-      "effort":"1 sesión + implementación Fal.ai birefnet"
-    },
-    {
-      "id":"SKILL-AB","name":"agent-builder","priority":4,"status":"REFERENCIA REAL — DDMV-Assistant v1.0",
-      "scope":"Patrones deployment por canal (WA, inline, standalone, cuenta cliente), Edge Function pattern canónico, templates system prompt por tipo de agente, Twilio WhatsApp Business API",
-      "reference_implementation":"AGENT-DDMV — WhatsApp Personal Care Assistant. Stack: Vercel serverless + Supabase Edge Functions + Twilio WA Business + Claude API. Ver agents/ddmv-assistant/session_log.md",
-      "replication_targets":["AGENT-FPH-OPS-WA (ForumPHs incidencias propietarios)","AGENT-PO-WA (Patricia Osorio — atención clientas)","Clientes UNRLVL (producto ofertable)"],
-      "effort":"1 sesión para skill formal — base real ya construida"
-    }
+    {"id": "SKILL-UIUX", "name": "ui-ux-layer", "priority": 1, "status": "COMPLETE v2.1"},
+    {"id": "SKILL-SA", "name": "shopify-auditor", "priority": 2, "status": "COMPLETE v1.1"},
+    {"id": "SKILL-IP", "name": "image-processing", "priority": 3, "status": "COMPLETE v1.0"},
+    {"id": "SKILL-AB", "name": "agent-builder", "priority": 4, "status": "COMPLETE v1.0"},
+    {"id": "SKILL-AIFE", "name": "aife", "priority": 5, "status": "COMPLETE v1.1"},
+    {"id": "SKILL-CPL", "name": "copylab-reference", "priority": 6, "status": "COMPLETE v1.0"},
+    {"id": "SKILL-SEC", "name": "security", "priority": 7, "status": "COMPLETE v1.0"},
+    {"id": "SKILL-COST", "name": "cost-layer", "priority": 8, "status": "COMPLETE v1.0"},
+    {"id": "SKILL-WL", "name": "weblab-shopify", "priority": 9, "status": "PENDIENTE"}
   ],
-  "agent_deployments": [
-    {"id":"AGENT-SMA","name":"Social Media Agent","url":"unrlvl-social-media-agent.vercel.app","brand":"NeuroneSCF","status":"active","session_log":"AL DÍA 2026-04-17 — fetchAgentContext() cargando session_log.md correctamente"},
-    {"id":"AGENT-FPH-SPEAKS","name":"ForumPHs Speaks","url":"speaks.forumphs.com","brand":"ForumPHs","status":"LIVE","pending":["foto Ivette","Speaks→CRM"]},
-    {"id":"AGENT-FPH-DOCFACTORY","name":"Document Factory","url":"forumphs-document-factory.vercel.app","brand":"ForumPHs","status":"PROD v1.5 READY FOR BUSINESS",
-      "version":"1.5",
-      "pipeline":"ZIP→parse→preflight→formalize(17 agentes)→generate→QA→ICR→DOCX",
-      "fixes_v15":["Agenda cross-ref Resumen→Transcripción→Chat","206/206 bug (total_units=0 default)","ImageRun type field","DOCX embedded images (word/media/)","413 fix — imágenes separadas del parse payload","Canvas compression 900px JPEG 0.75"]
+  "iid_network": {
+    "status": "OPERATIONAL — Primer run exitoso 2026-04-24",
+    "architecture": "Two-step genérico: iid-research → iid-research_raw → iid-process → iid-core → dos streams",
+    "agents_count": 14,
+    "crons_count": 27,
+    "schemas": "intel.* (7 tablas) + content.* (5 tablas)",
+    "edge_functions": {
+      "iid-core": "v1.1 ACTIVE",
+      "iid-research": "v1 ACTIVE",
+      "iid-process": "v1 ACTIVE",
+      "iid-brief-generator": "v1 ACTIVE",
+      "aife-filter": "v1.1 ACTIVE — lee previousOutputs.copylab correctamente",
+      "content-dispatcher": "v2.3 ACTIVE — EdgeRuntime.waitUntil(stageFires) — BUG: stage runner no se dispara aún",
+      "content-run-stage": "v1.2 ACTIVE — auth: x-cron-secret header, bypass Vercel con VERCEL_BYPASS_SECRET"
     },
-    {"id":"AGENT-FPH-OPS-WA","name":"FPHs-OPS WhatsApp Agent","brand":"ForumPHs","status":"DISEÑADO — pendiente construir","note":"Replica AGENT-DDMV pattern"},
-    {
-      "id":"AGENT-PROFILER",
-      "name":"Profiler Agent v7.4",
-      "version":"7.4",
-      "supabase_version":11,
-      "endpoint":"https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/unrlvl-profiler",
-      "brand":"UnrealvilleStudio",
-      "status":"LIVE",
-      "deployed":"2026-04-19",
-      "founder_identity":"Lucien Sael",
-      "topics":["T1 Business/Product","T2 Stage/Scale","T3 Investment","T4 Pain","T5 Vision"],
-      "tiers_in_prompt":"SIGNAL $3,500 · PULSE $6,500 · ORBIT $12,000 USD",
-      "email":"profiler@unrealvillestudio.com → leads@unrealvillestudio.com (Resend)"
+    "pipeline_status": {
+      "dispatcher_to_jobs": "OK — crea orchestrator_jobs correctamente",
+      "auth_stage_runner": "OK — x-cron-secret pasa el 401",
+      "copylab_reachable": "OK — Vercel protection OFF, CopyLab responde (labs_status: copylab: running confirmado)",
+      "bug_active": "content-run-stage no aparece en logs — EdgeRuntime.waitUntil no mantiene viva la fetch en Supabase Deno runtime v2.3. Jobs quedan stuck en copylab: running.",
+      "next_debug": "Verificar con logs Deno en tiempo real si waitUntil funciona. Alternativa: hacer el fire ANTES de retornar la Response (await el fetch, no fire-and-forget)"
     },
-    {
-      "id":"AGENT-DDMV",
-      "name":"Mi Asistente (DDMV Personal Care)",
-      "type":"WhatsApp Personal Care Agent",
-      "brand":"UnrealvilleStudio",
-      "client":"Sam — uso personal/familiar (Damaris Mendoza)",
-      "status":"LIVE — PRODUCCIÓN",
-      "deployed":"2026-04-24",
-      "version":"1.0",
-      "repo":"unrealvillestudio-hub/DDMV-Assistant",
-      "url":"ddmv-assistant.vercel.app",
-      "dashboard":"ddmv-assistant.vercel.app/api/dashboard",
-      "whatsapp_number":"+12602701806",
-      "stack":"Vercel (Node.js serverless) + Supabase XMMs + Twilio WhatsApp Business + Claude API",
-      "supabase_project":"XMMs (puoybldykxqvhvtnwrld) — SEPARADO del Supabase principal UNRLVL",
-      "features":["Bienvenida personalizada por nombre","Análisis fotos recetas (Claude Vision)","Guardado medicamentos + citas desde conversación","Recordatorios medicamentos horarios exactos (Edge Function horaria)","Recordatorios citas: 2 días, 1 día, mismo día (7am Panamá)","Saludos mañana 9am + tarde 6pm — random","Recordatorio ejercicios mentales 10am","Renombrar bot desde conversación","Dashboard control total para cuidador","Envío mensajes manuales desde dashboard"],
-      "replicable_for":["ForumPHs OPS — incidencias propietarios","Patricia Osorio — atención clientas","Cualquier cliente UNRLVL como producto ofertable"],
-      "session_log":"agents/ddmv-assistant/session_log.md",
-      "pending":["Verificación negocio Meta (requiere UNRLVL legal)","Foto y descripción perfil WhatsApp Business"]
+    "scoring": {
+      "ecosystem_R1_R6": "R1 capability 25 · R2 quality 20 · R3 cost 25 · R4 implementation 15 · R5 time_to_value 10 · R6 client 5",
+      "content_C1_C5": "C1 novelty 25 · C2 audience_relevance 25 · C3 contrarian 20 · C4 timeliness 15 · C5 expertise_signal 15",
+      "thresholds": {"top": ">=70", "watchlist": "50-69", "discard": "<50"},
+      "autopublish": "content_score >=85 AND urgency=breaking"
     },
-    {
-      "id":"AGENT-PO-WA",
-      "name":"Patricia Osorio WhatsApp Assistant",
-      "brand":"PatriciaOsorioConectando",
-      "status":"PENDIENTE — PO lo quiere para atención clientas",
-      "note":"Replica AGENT-DDMV pattern. Pendiente sesión dedicada."
+    "lab_configs_iid_pipeline": {
+      "copylab": {"iid_stage_order": 1, "supports_iid": true, "execute_path": "/api/execute"},
+      "aife": {"iid_stage_order": 2, "supports_iid": true, "execute_path": "/functions/v1/aife-filter"},
+      "imagelab": {"iid_stage_order": 3, "supports_iid": true, "execute_path": "/api/execute"},
+      "sociallab": {"iid_stage_order": 4, "supports_iid": true, "execute_path": "/api/execute"}
+    },
+    "vercel_bypass_secret": "3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU — aplica a CopyLab, ImageLab, SocialLab. Header: x-vercel-protection-bypass. Guardado en intel.iid_scheduler_config.",
+    "brand_id_for_iid": "UnrealvilleStudio — usado como brandId cuando voice=unrlvl o lucien (ambos viven bajo esta marca en Supabase)"
+  },
+  "content_engine": {
+    "status": "CONSTRUIDO — pipeline end-to-end pendiente validación completa",
+    "flow": "iid_content_queue (pending) → content-dispatcher → orchestrator_jobs → content-run-stage → [CopyLab → AIFE → ImageLab → SocialLab] → content_pieces → email aprobación Sam → approve-job → SocialLab publica",
+    "approval": "Email con preview + PUBLICAR AHORA + RECHAZAR (1 click, token en URL). Endpoint: Orchestrator /api/approve-job",
+    "autopublish": "content_score >=85 + urgency breaking → SocialLab directo",
+    "brand_voices": "content.brand_voices — UNRLVL + Lucien seeded con templates, ICR rules, image_style, psycho_affinities",
+    "supabase_schema_additions": {
+      "content.orchestrator_jobs": "assets JSONB + platforms text[] + approved_by + finding_id añadidos 2026-04-25",
+      "intel.iid_content_queue": "iid_source_tag añadido 2026-04-25 (backfill desde agent_id)",
+      "lab_configs": "supports_iid boolean + iid_stage_order integer añadidos 2026-04-25"
     }
-  ],
+  },
+  "github_auditor": {
+    "status": "FIXED — gh.js bug resuelto 2026-04-25",
+    "url": "https://unrlvl-tools.vercel.app/api/gh",
+    "bug_fixed": "if (path) capturaba todo antes que if (repo && path). Fix: reordenar condiciones — repo+tree primero, repo+path segundo, bare path tercero",
+    "usage": {
+      "tree": "?repo=NAME&action=tree",
+      "file": "?repo=NAME&path=src/file.ts",
+      "legacy": "?path=/repos/ORG/REPO/..."
+    },
+    "skill_url": "https://unrlvl-tools.vercel.app/github-auditor/SKILL.md"
+  },
   "infrastructure": [
-    {"id":"INFRA-CTX","name":"Context System","url":"https://unrlvl-context.vercel.app"},
-    {"id":"INFRA-SB","name":"Supabase","project_id":"amlvyycfepwhiindxgzw","schemas":"public.* 40 + crm.* 14 + fph.* 22 tablas"},
-    {"id":"INFRA-SB-XMMS","name":"Supabase XMMs","project_id":"puoybldykxqvhvtnwrld","note":"Proyecto separado — uso personal/agentes WA. Tablas: conversations, medications, appointments, reminder_log, notification_settings"},
-    {"id":"INFRA-CRM","name":"UNRLVL CRM v1.0","status":"OPERATIVO","active_integrations":["Profiler→CRM"],"pending":["Speaks→CRM","Shopify→CRM — resuelto por SKILL shopify-auditor Fase 2"]},
-    {"id":"INFRA-FPHSOPS","name":"FPHs-OPS","status":"SCHEMA ACTIVO — App pendiente","primer_modulo":"COBROS"},
-    {"id":"INFRA-WEB","name":"unrealvillestudio.com","status":"LIVE EN+ES · Why UNRLVL v4 pending commit"},
-    {"id":"INFRA-LUCIEN","name":"luciensael.com","status":"GENERATED v2.1 — pending deploy + domain register"},
-    {"id":"INFRA-VERCEL","name":"Vercel builds","note":"Builds strategy: Immediate solo en proyectos con desarrollo activo. unrlvl-context = Immediate (actualizaciones diarias). forumphs-document-factory = Immediate (sprints activos). Resto según actividad."}
+    {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app"},
+    {
+      "id": "INFRA-SB",
+      "name": "Supabase",
+      "project_id": "amlvyycfepwhiindxgzw",
+      "schemas": "public.* 44+ tablas + crm.* + fph.* + ops.* + intel.* (7 tablas IID) + content.* (5 tablas Content Engine)",
+      "extensions": ["pg_cron 1.6.4", "pg_net 0.20.0"],
+      "exposed_schemas": "public, intel, content",
+      "rls_note": "intel.* y content.* — políticas SELECT para authenticated, escritura solo via service_role (Edge Functions). 0 security advisors funcionales (pg_net en public es Supabase infra, no modificable).",
+      "functions": ["fire_stage(p_url, p_job_id, p_stage, p_secret) — llama content-run-stage via pg_net (DNS timeout conocido — usar fetch desde EF en su lugar)"]
+    },
+    {
+      "id": "INFRA-OPS",
+      "name": "UNRLVL-OPS",
+      "url": "https://unrlvl-ops.vercel.app",
+      "status": "LIVE — Cost Layer LIVE. Ecosystem Intel tab → movido al Orchestrator."
+    },
+    {
+      "id": "INFRA-ORCH",
+      "name": "Orchestrator",
+      "url": "https://orchestrator-unrlvl.vercel.app",
+      "status": "OR_1.1 LIVE — 4 tabs + Layer indicators + approve-job + trigger-job"
+    },
+    {"id": "INFRA-CRM", "name": "UNRLVL CRM v1.0", "status": "OPERATIVO", "pending": ["Speaks→CRM", "Shopify→CRM"]},
+    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
+    {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED v2.1 — pending deploy + domain"},
+    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor proxy FIXED v2026-04-25"}
   ],
   "next_session_agenda": [
-    "SKILL P1: ui-ux-layer — CSS vars, paleta, tipografía, logotipo, patrones ICR visual (1 sesión) → ver PLAN_MAESTRO_LABS_SKILLS.md",
-    "SKILL P2: shopify-auditor Fase 1 — conexión Admin GraphQL API NeuroneSCF B2C+B2B + primer audit report (necesita: Admin API tokens de ambas tiendas)",
-    "AGENT-PO-WA: Patricia Osorio WhatsApp Assistant — replica DDMV pattern para atención clientas",
-    "AGENT-FPH-OPS-WA: ForumPHs OPS WhatsApp — incidencias propietarios apartamentos",
-    "NeuroneSCF: revisar precios con Sam",
-    "NeuroneSCF: cargar 12 kits con SKUs y precios a Shopify",
-    "Labs: cuentas externas Video + Voice + Image (avatars luego)",
-    "ForumPHs: datos 8+ edificios → tabla phs Supabase → total_units automático",
-    "ForumPHs: foto Ivette → Speaks",
-    "COMMIT: Why UNRLVL v4 → CoreProject index.html + es/index.html",
-    "DEPLOY: luciensael.com v2.1",
-    "FPHs-OPS: módulo COBROS",
-    "BP_COPY_1.0 x3 marcas",
-    "Gmail Send As SMTP → Patricia admin@neuronescflorida.com"
+    "PRIORIDAD #1 — BUG content-run-stage: el dispatcher no dispara el stage runner correctamente. Hipótesis: EdgeRuntime.waitUntil en Supabase Deno no mantiene vivas las fetches como en Cloudflare Workers. Fix candidato: hacer await del fetch ANTES de retornar la Response (síncrono, no fire-and-forget). Esto alarga el dispatcher ~20-30s pero garantiza que el stage se dispara. Alternativa: usar pg_net desde una función SQL intermedia que sí persiste.",
+    "Verificar con UN solo job (no 5) para aislar el bug sin ruido.",
+    "Una vez que pipeline completo funcione → primer email de aprobación a Sam → PUBLICAR → verificar en SocialLab.",
+    "DESPUÉS del pipeline validado: Actualiza completo + cierre sprint Orchestrator.",
+    "LUCIEN-BOOKS: Brief Libro 1 — Sam trae pensamiento libre sobre el personaje.",
+    "NeuroneSCF B2B: confirmar acento navy + brand_ids NeuroneSCF_B2C + NeuroneSCF_B2B.",
+    "Shopify-auditor Fase 1: tokens Admin API NeuroneSCF.",
+    "ForumPHs: datos 8+ edificios → Supabase · foto Ivette → Speaks.",
+    "COMMIT: Why UNRLVL v4 → CoreProject · DEPLOY: luciensael.com v2.1.",
+    "SKILL weblab-shopify — sesión propia."
   ]
 }

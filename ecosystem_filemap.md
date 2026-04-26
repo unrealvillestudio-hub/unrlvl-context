@@ -1,157 +1,202 @@
 # UNRLVL Ecosystem — File Map
-_Versión: 2026-04-25a · Generado desde ecosystem.json_
+_Versión: 2026-04-25 · Generado desde ecosystem.json_
 
 ---
 
-## Raíz
+## Estructura del repositorio unrlvl-context
 
-| Archivo | Descripción |
-|---|---|
-| `ecosystem.json` | Fuente de verdad del ecosystem — DO NOT EDIT MANUALLY |
-| `ecosystem.md` | Narrativa del ecosystem generada desde el JSON |
-| `ecosystem_filemap.md` | Este archivo |
-
-## protocols/
-
-| Archivo | Descripción |
-|---|---|
-| `SESSION_PROTOCOL.md` | Protocolo completo de sesiones, comando Actualiza |
-
-## brands/UnrealvilleStudio/
-
-| Archivo | Descripción |
-|---|---|
-| `PLAN_MAESTRO_LABS_SKILLS.md` | Plan maestro de desarrollo del ecosystem |
-| `LUCIEN_BOOKS_MASTER.md` | Arquitectura de los 5 libros de Lucien Sael |
-| `CRM_INTEGRATIONS.md` | Integraciones CRM del ecosystem |
-| `SKILL_ui-ux-layer.md` | P1 — UI/UX design tokens y componentes |
-| `SKILL_shopify-auditor.md` | P2 — Auditor Shopify con modo Fix |
-| `SKILL_image-processing.md` | P3 — ImageLab processing pipeline |
-| `SKILL_agent-builder.md` | P4 — Patrones de construcción de agentes (ref: DDMV-Assistant) |
-| `SKILL_aife.md` | P5 — AI Footprint Eraser v1.1 |
-| `SKILL_copylab-reference.md` | P6 — CopyLab reference completo |
-| `SKILL_security.md` | P7 — Security standards |
-| `SKILL_cost-layer.md` | P8 — Cost Layer: schemas, queries, logTokens |
-| `session_log.md` | Log de sesiones UnrealvilleStudio |
-
-## brands/NeuroneSCF/
-
-| Archivo | Descripción |
-|---|---|
-| `brand.json` | Brand config NeuroneSCF |
-| `BP_Brand_Context.md` | Brand Profile completo |
-| `session_log.md` | Log de sesiones NeuroneSCF |
-
-## brands/ForumPHs/
-
-| Archivo | Descripción |
-|---|---|
-| `brand.json` | Brand config ForumPHs |
-| `DOCUMENT_FACTORY_PLAN.md` | Plan del Document Factory |
-| `FPHSOPS_SPEC.md` | Spec del sistema OPS de ForumPHs |
-| `session_log.md` | Log de sesiones ForumPHs |
-
-## agents/social-media-agent/
-
-| Archivo | Descripción |
-|---|---|
-| `session_log.md` | Log del Social Media Agent (Laura/PO/Sam) |
-
-## agents/ddmv-assistant/
-
-| Archivo | Descripción |
-|---|---|
-| `session_log.md` | Log de Mi Asistente — WhatsApp Personal Care Agent v1.2 |
-
----
-
-## Supabase — Schemas activos
-
-### public.* (Supabase principal amlvyycfepwhiindxgzw)
-44 tablas incluyendo CRM, perfiles, configuración general.
-
-### crm.*
-Pipeline CRM UNRLVL.
-
-### fph.*
-ForumPHs data — edificios, unidades, propietarios.
-
-### ops.*
-Cost Layer — ops_model_pricing · ops_token_sessions · ops_client_monthly · ops_model_alerts · vistas de eficiencia y margen.
-
-### intel.*
-IID Network:
-- `iid_agents` — 14 agentes registrados con search_config
-- `iid_findings` — hallazgos scored (brand_id · ecosystem_score · content_score)
-- `iid_content_queue` — cola de contenido (orchestrator_status · brand_id)
-- `iid_research_raw` — texto crudo de investigación web_search
-- `iid_briefs` — registro de briefs biweekly enviados
-- `iid_cron_runs` — audit trail de ejecuciones pg_cron
-- `iid_scheduler_config` — supabase_url · iid_cron_secret
-
-### content.*
-Content Engine:
-- `content_pieces` — piezas finales (assets JSONB · brand_id · iid_source_tag · icr_passed)
-- `content_calendar` — scheduling
-- `content_performance` — métricas post-publicación
-- `brand_voices` — templates narrativos + ICR + image style por voz (UNRLVL + Lucien seeded)
-- `orchestrator_jobs` — tracking Orchestrator → Labs (approval_token · labs_status)
-
-### Supabase XMMs (puoybldykxqvhvtnwrld) — SEPARADO
-Proyecto dedicado a uso personal y agentes WhatsApp:
-- `conversations` — perfiles usuarios + historial (role, linked_phone)
-- `medications` — medicamentos activos con horarios
-- `appointments` — citas médicas (reminded_2days/1day/same)
-- `reminder_log` — log de recordatorios enviados
-- `notification_settings` — config por usuario
-- `reminders` — recordatorios personales con fecha/hora
-- `conversation_flows` — flujos conversacionales con estado
-- `proactive_checks` — verificaciones proactivas programadas
+```
+unrlvl-context/
+├── ecosystem.json                    ← Master. SIEMPRE cargar al inicio.
+├── ecosystem.md                      ← Narrativa. Carga junto al JSON.
+├── ecosystem_filemap.md              ← Este archivo.
+├── TIERS.md                         ← Precios y tiers UNRLVL
+│
+├── protocols/
+│   └── SESSION_PROTOCOL.md          ← Protocolo completo de sesión
+│
+├── brands/
+│   ├── UnrealvilleStudio/
+│   │   ├── brand.json
+│   │   ├── BP_Brand_Context.md
+│   │   ├── session_log.md           ← ← ← ACTUALIZADO 2026-04-25
+│   │   ├── PLAN_MAESTRO_LABS_SKILLS.md
+│   │   ├── CRM_INTEGRATIONS.md
+│   │   └── LUCIEN_BOOKS_MASTER.md
+│   │
+│   ├── NeuroneSCF/
+│   │   ├── brand.json
+│   │   ├── BP_Brand_Context.md
+│   │   └── session_log.md
+│   │
+│   ├── ForumPHs/
+│   │   ├── brand.json
+│   │   ├── BP_Brand_Context.md
+│   │   ├── session_log.md
+│   │   ├── DOCUMENT_FACTORY_PLAN.md
+│   │   └── FPHSOPS_SPEC.md
+│   │
+│   ├── DiamondDetails/
+│   │   ├── brand.json
+│   │   └── BP_Brand_Context.md
+│   │
+│   ├── VizosCosmetics/
+│   │   ├── brand.json
+│   │   └── BP_Brand_Context.md
+│   │
+│   ├── D7Herbal/
+│   │   ├── brand.json
+│   │   └── BP_Brand_Context.md
+│   │
+│   ├── VivoseMask/
+│   │   ├── brand.json
+│   │   └── BP_Brand_Context.md
+│   │
+│   └── PatriciaOsorioConectando/
+│       ├── brand.json
+│       └── BP_Brand_Context.md
+│
+└── agents/
+    ├── social-media-agent/
+    │   └── session_log.md
+    └── ddmv-assistant/
+        └── session_log.md
+```
 
 ---
 
-## Edge Functions activas (Supabase principal)
+## Repos GitHub activos (org: unrealvillestudio-hub)
+
+| Repo | Estado | Notas |
+|---|---|---|
+| **Orchestrator** | OR_1.1 LIVE | 4 tabs + approve-job + trigger-job + IID Intel + Layer indicators |
+| **CopyLab** | v8.0 LIVE | Vercel protection OFF. /api/execute |
+| **ImageLab** | ICR v1.0 LIVE | Vercel protection OFF. Psycho Layer nativo |
+| **SocialLab** | LIVE | Vercel protection OFF. OAuth futuro |
+| **CoreProject** | LIVE | unrealvillestudio.com EN+ES. Pending: Why UNRLVL v4 commit |
+| **DDMV-Assistant** | v1.0 LIVE | WA Personal Care Agent +12602701806 |
+| **Tools** | LIVE | GitHub Auditor proxy. Bug fix 2026-04-25 |
+| **WebLab** | LIVE | Shopify module completo |
+| **BlueprintLab** | LIVE | |
+| **AgentLab** | LIVE | |
+| **forumphs-document-factory** | v1.5 LIVE | ZIP→DOCX pipeline completo |
+| **forumphs-speaks** | LIVE | speaks.forumphs.com. Foto Ivette pendiente |
+| **LUCIEN-SAEL** | GENERATED | luciensael.com v2.1 pendiente deploy |
+| **unrlvl-context** | LIVE | Este repositorio |
+| **unrlvl-social-agent** | LIVE | SMA NeuroneSCF |
+| **onboarding-app** | LIVE | Phase 4 |
+| **UNRLVL-OPS** | LIVE | Cost Layer activo |
+
+---
+
+## Supabase Schemas
+
+### public.* (principal)
+- `brands` — contexto completo de cada marca
+- `lab_configs` — registro de labs + iid_stage_order + supports_iid
+- `brand_voices` — ICR rules, tone, image_style
+- `humanize_profiles` — perfiles de humanización por marca
+- `psycho_presets` — presets Psycho Layer para ImageLab
+- `scheduled_posts` — cola de publicación (pending_oauth)
+- `content_calendar` — (crm.*)
+
+### intel.* (IID Network)
+- `iid_agents` — 14 agentes con tier y config
+- `iid_findings` — hallazgos puntuados (ecosystem_score, content_score)
+- `iid_research_raw` — datos crudos de investigación
+- `iid_content_queue` — piezas listas para Content Engine
+- `iid_briefs` — briefs biweekly generados
+- `iid_cron_runs` — log de ejecuciones
+- `iid_scheduler_config` — config global (vercel_bypass_secret, etc.)
+
+### content.* (Content Engine)
+- `orchestrator_jobs` — jobs por item de queue (assets JSONB + labs_status)
+- `content_pieces` — piezas finales con assets completos
+- `brand_voices` — (ver public)
+- `content_calendar` — programación
+- `content_performance` — métricas
+
+---
+
+## Supabase Edge Functions (content pipeline)
 
 | Función | Versión | Propósito |
 |---|---|---|
-| `iid-core` | v1.1 | Scoring engine + generador + AIFE. Central del IID Network. |
-| `iid-research` | v1 | Genérica — web_search → iid_research_raw. Todos los agentes. |
-| `iid-process` | v1 | Genérica — estructura JSON → iid-core. Todos los agentes. |
-| `iid-ecommerce-research` | v1 | Específica ECOMMERCE — research step 1 |
-| `iid-ecommerce-process` | v1 | Específica ECOMMERCE — process step 2 |
-| `iid-brief-generator` | v1 | Email biweekly a Sam con TOP/WATCHLIST/DISCARDED |
-| `unrlvl-profiler` | v12 | Lead qualification agent. logTokens activo. |
-| `unrlvl-crm-api` | v2 | CRM API |
-| `fphs-formalize` | v11 | Document Factory. logTokens activo. |
-| `fphs-chat` | v8 | ForumPHs Speaks chat. logTokens activo. |
-| `fphs-session` | v8 | ForumPHs session management |
-| `fphs-debug` | v4 | Debug util |
-| `fphs-icr-apply` | v2 | ICR application |
+| `content-dispatcher` | v2.3 | Kick-starter ligero: crea jobs + dispara stage 1 |
+| `content-run-stage` | v1.2 | Ejecuta un Lab + encadena siguiente stage |
+| `aife-filter` | v1.1 | Elimina huella AI del copy |
+| `iid-core` | v3 | Orquesta IID per-agent |
+| `iid-research` | v1 | Research raw |
+| `iid-process` | v1 | Procesamiento JSON → findings |
+| `iid-brief-generator` | v2 | Genera brief biweekly |
+| `iid-ecommerce` | v4 | Agente especializado e-commerce |
+| `iid-ecommerce-research` | v1 | Research e-commerce |
+| `unrlvl-profiler` | v11 | Lead profiler |
+| `fphs-chat` | v9 | ForumPHs chat |
+| `fphs-session` | v9 | ForumPHs session |
 
-## Edge Functions activas (Supabase XMMs)
+---
 
-| Función | Versión | Propósito |
-|---|---|---|
-| `send-reminders` | v8 | Recordatorios medicamentos · citas · personales · proactivos · saludos |
+## Variables de entorno críticas
 
-## pg_cron jobs (27 activos — Supabase principal)
+### Supabase (todas las EFs del content pipeline)
+```
+SUPABASE_URL=https://amlvyycfepwhiindxgzw.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=[desde dashboard]
+IID_CRON_SECRET=c09bb631891449b83f5cee73476cf5d997c6a5c439b28eb5
+RESEND_API_KEY=[desde Resend]
+VERCEL_BYPASS_SECRET=3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU
+ORCHESTRATOR_URL=https://orchestrator-unrlvl.vercel.app
+```
 
-Research + Process por agente. Horario:
-- **Lunes 8:00/8:30** — IID-ECOMMERCE
-- **Martes 8:00/8:30** — IID-LLM
-- **Martes 9:00/9:30** — IID-PERSONAL-BRAND
-- **Miércoles 8:00/8:30** — IID-META
-- **Jueves 8:00/8:30** — IID-IMAGE
-- **Jueves 9:00/9:30** — IID-VIDEO
-- **Viernes 8:00/8:30** — IID-VOICE
-- **Viernes 9:00/9:30** — IID-TIKTOK
-- **Sábado 8:00/8:30** — IID-GOOGLE
-- **Domingo 8:00/8:30** — IID-LINKEDIN
-- **Domingo 9:00/9:30** — IID-X
-- **Día 1+15 7:00** — Brief biweekly email
-- **Día 1+15 9:00/9:30** — IID-FLORIDA
-- **Día 8+22 9:00/9:30** — IID-WHOLESALE
+### Orchestrator (proyecto Vercel)
+```
+SUPABASE_URL=https://amlvyycfepwhiindxgzw.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=[desde dashboard]
+IID_CRON_SECRET=c09bb631891449b83f5cee73476cf5d997c6a5c439b28eb5
+SOCIALLAB_URL=https://social-lab-flame.vercel.app
+RESEND_API_KEY=[desde Resend]
+```
 
-## pg_cron jobs (Supabase XMMs)
+---
 
-- **Cada hora** — send-reminders Edge Function (medicamentos · recordatorios · proactivos)
+## Flujos de datos clave
+
+### IID Network (semanal, automático)
+```
+pg_cron (27 jobs) → iid-research → iid_research_raw
+                 → iid-process → iid-core → iid_findings
+                                           → iid_content_queue
+                                           → iid_briefs → email Sam
+```
+
+### Content Engine (cada 30 min, cuando hay pendientes)
+```
+iid_content_queue [pending]
+→ content-dispatcher [Supabase EF]
+→ orchestrator_jobs [created]
+→ content-run-stage stage=1 [CopyLab]
+→ content-run-stage stage=2 [AIFE]
+→ content-run-stage stage=3 [ImageLab]
+→ content-run-stage stage=4 [SocialLab]
+→ content_pieces [assets completos]
+→ email Sam [PUBLICAR / RECHAZAR]
+→ approve-job → SocialLab publica
+```
+
+**BUG ACTIVO (2026-04-25):** El dispatcher v2.3 crea los jobs pero el stage runner no se dispara. `EdgeRuntime.waitUntil()` no mantiene vivas las fetches en Supabase Deno. Fix pendiente próxima sesión.
+
+---
+
+## Próxima sesión — Checklist
+
+- [ ] **FIX #1 BLOQUEANTE:** Dispatcher → Stage runner. Hacer fetch síncrono (await) antes de retornar Response
+- [ ] Test 1 solo job para validar
+- [ ] Pipeline completo → email aprobación → Sam → PUBLICAR
+- [ ] Cerrar sprint Orchestrator + Actualiza final
+- [ ] Lucien Books — Brief Libro 1 (Sam trae pensamiento libre)
+- [ ] NeuroneSCF B2B — brand_ids + acento navy
+- [ ] Shopify-auditor Fase 1 — Admin API tokens
+- [ ] ForumPHs — datos 8+ edificios + foto Ivette
+- [ ] COMMIT Why UNRLVL v4 → CoreProject
+- [ ] DEPLOY luciensael.com v2.1
