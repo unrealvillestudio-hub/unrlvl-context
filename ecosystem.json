@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-25",
+    "version": "2026-04-26",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -11,11 +11,12 @@
       "lucien_books": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/LUCIEN_BOOKS_MASTER.md",
       "crm_integrations": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/CRM_INTEGRATIONS.md",
       "document_factory_plan": "https://unrlvl-context.vercel.app/brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md",
-      "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md"
+      "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md",
+      "ai_labs_strategy": "https://unrlvl-context.vercel.app/docs/UNRLVL_Labs_Strategy.html"
     },
     "last_audit": {
-      "date": "2026-04-25",
-      "status": "Orchestrator Upgrade completo (approve-job + trigger-job deployados). IID Network OPERATIONAL. Content Engine pipeline construido: aife-filter v1.1, content-dispatcher v2.3, content-run-stage v1.2. Ecosystem Intel tab en Orchestrator. Layer indicators (Humanize/AIFE/PsychoLayer) en FlowExecutorModule. GitHub Auditor gh.js bug fix. Vercel Authentication desactivada en CopyLab/ImageLab/SocialLab. Pipeline end-to-end: dispatcher → stage runner → CopyLab. BUG ACTIVO: content-run-stage no se dispara desde dispatcher (EdgeRuntime.waitUntil no funciona como esperado en Supabase Deno runtime). Próxima sesión: debug dispatcher→stage con logs Deno en tiempo real.",
+      "date": "2026-04-26",
+      "status": "IID Content Engine OPERACIONAL end-to-end. Pipeline completo: copylab:ok + aife:ok + imagelab:failed(skip) + sociallab:ok → content_piece creado → email aprobación Sam confirmado. Bug resuelto: EdgeRuntime.waitUntil reemplazado por arquitectura síncrona. content-run-stage v1.10 auto-loguea costos en ops_generation_ledger. AI Labs Strategy definida: 8 labs, 5 fases, fal.ai como media bus. OPS cost tracking: ops_generation_ledger + ops_lab_rates + 8 KPI views. PENDIENTE PRÓXIMA SESIÓN: test approval flow, imagelab directo EF, OAuth social, fal.ai account.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -103,7 +104,10 @@
       "status": "active",
       "health": "green",
       "web": "LIVE EN+ES",
-      "skills": "P1-P8 COMPLETOS — skills/P1 ui-ux · P2 shopify-auditor · P3 image-processing · P4 agent-builder · P5 aife · P6 copylab-reference · P7 security · P8 cost-layer"
+      "skills": "P1-P8 COMPLETOS — skills/P1 ui-ux · P2 shopify-auditor · P3 image-processing · P4 agent-builder · P5 aife · P6 copylab-reference · P7 security · P8 cost-layer",
+      "iid_pipeline": "OPERATIONAL — primer email de aprobación confirmado 2026-04-26",
+      "content_pieces_created": 1,
+      "oauth_social": "PENDIENTE — brand_oauth_tokens tabla lista, OAuth flows por implementar"
     },
     {"id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green"}
   ],
@@ -111,12 +115,13 @@
     {
       "id": "LAB-CPL",
       "name": "CopyLab",
-      "status": "PASSED v8.0",
+      "status": "LIVE v8.1 — direct EF call",
       "url": "https://unrlvl-copy-lab.vercel.app",
-      "vercel_protection": "OFF — Vercel Authentication desactivada (team + project level) para permitir llamadas server-to-server",
+      "vercel_protection": "OFF",
       "execute_endpoint": "POST /api/execute",
+      "pipeline_mode": "DIRECT — content-run-stage v1.10 llama Anthropic directamente desde EF (no via Vercel). ~9s.",
       "contract": "{brandId, stage, params{pack, canal, extra_instructions}, previousOutputs} → {output: string, status: 'ok'}",
-      "notes": "brandId OBLIGATORIO. VITE_SUPABASE_URL/ANON_KEY en env vars Vercel. 8 queries paralelas Supabase + Claude. Puede tardar >90s con UnrealvilleStudio (brand context pesado)."
+      "notes": "maxDuration=60 en vercel.json. Vercel UI sigue disponible para uso manual."
     },
     {
       "id": "LAB-WL",
@@ -127,12 +132,13 @@
     {
       "id": "LAB-IL",
       "name": "ImageLab",
-      "status": "PASSED ICR v1.0",
+      "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout",
       "url": "https://image-lab-unrlvl.vercel.app",
       "vercel_protection": "OFF",
       "execute_endpoint": "POST /api/execute",
+      "pipeline_mode": "CURRENT: Vercel call con 50s AbortSignal (non-critical skip). TARGET: direct EF call via Gemini 2.5 Flash + Imagen 3 (~25s). Requiere GEMINI_API_KEY en EF secrets.",
       "contract": "{brandId, stage, params{canal, psycho_preset, aspect_ratio}, previousOutputs.copylab} → {output: string, image_data_url: base64, status: 'ok'}",
-      "notes": "Psycho Layer nativo — params.psycho_preset → tabla psycho_presets → visual_injection. Lee previousOutputs.copylab automáticamente."
+      "fix_next_session": "content-run-stage v1.11: callImagenDirect() — Gemini 2.5 Flash prompt + Imagen 3 predict. Loguear: {lab: imagelab, unitType: per_image, outputUnits: 1, costUsd: 0.05}"
     },
     {
       "id": "LAB-AL",
@@ -147,40 +153,124 @@
     {
       "id": "LAB-ORCH",
       "name": "Orchestrator",
-      "status": "UPGRADED OR_1.1",
+      "status": "OR_1.1 LIVE",
       "url": "https://orchestrator-unrlvl.vercel.app",
       "build_tag": "OR_1.1",
-      "tabs": ["Orchestrator (hub)", "Launchpad", "Monitor", "IID Intel (nuevo)"],
-      "new_endpoints": [
-        "api/approve-job.ts — 1-click email approval (Edge runtime, no @vercel/node)",
+      "tabs": ["Orchestrator (hub)", "Launchpad", "Monitor", "IID Intel"],
+      "endpoints": [
+        "api/approve-job.ts — 1-click email approval (Edge runtime)",
         "api/trigger-job.ts — programmatic IID trigger (Edge runtime)"
       ],
-      "ui_upgrades": [
-        "EcosystemIntelModule.tsx — tab IID Intel con bands TOP/WATCHLIST/DISCARDED",
-        "FlowExecutorModule.tsx — Layer indicators: Humanize (CopyLab), AIFE Filter (AIFE), Psycho Layer (ImageLab) con reloj + estado idle/running/done"
-      ],
-      "env_vars_needed": "SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY · IID_CRON_SECRET · SOCIALLAB_URL · RESEND_API_KEY"
+      "env_vars_needed": "SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY · IID_CRON_SECRET · SOCIALLAB_URL · RESEND_API_KEY",
+      "oauth_ui_pending": "/oauth page — conectar cuentas sociales de Unrealville + Lucien (Fase 1)"
     },
     {
       "id": "LAB-SL",
       "name": "SocialLab",
-      "status": "PASSED",
+      "status": "LIVE — bypassed en pipeline IID",
       "url": "https://social-lab-flame.vercel.app",
       "vercel_protection": "OFF",
       "execute_endpoint": "POST /api/execute",
+      "pipeline_mode": "BYPASSED — content-run-stage v1.10 llama Anthropic directamente + escribe en scheduled_posts. SocialLab Vercel disponible para UI manual.",
       "contract": "{brandId, stage, params{platforms, schedule_at}, previousOutputs.copylab} → {output, results[{platform, post_id, status}]}",
-      "notes": "Posts van a scheduled_posts con status: pending_oauth. OAuth real (Meta/TikTok) es sprint futuro. Lee previousOutputs.copylab prioridad 1."
+      "notes": "Posts en scheduled_posts con status: pending_oauth. OAuth real (Meta/TikTok/LinkedIn/X) es Fase 1 próxima sesión."
     },
-    {"id": "LAB-VL", "name": "VideoLab", "status": "BLOQUEADO — HeyGen + Kling keys"},
-    {"id": "LAB-VOL", "name": "VoiceLab", "status": "BLOQUEADO — ElevenLabs voice IDs"},
+    {
+      "id": "LAB-VDL",
+      "name": "VideoLab",
+      "status": "PLANNED — Fase 2",
+      "vercel_project_id": "prj_R0t1QvEnagCNn71Qq4iBLwgxy1MJ",
+      "provider": "fal.ai / Kling 2.5 Turbo Pro ($0.07/seg)",
+      "fallback": "fal.ai / Veo 3.1 Lite ($0.05/seg) para contenido sin personas",
+      "architecture": "ASYNC OBLIGATORIO — stage runner fires POST fal.ai → {request_id} en 2s → fal-poller EF (cron 30s) consulta status → actualiza piece",
+      "activation": "content_score >= 85 AND platforms IN [TIKTOK, INSTAGRAM_REELS, YOUTUBE_SHORTS]",
+      "requires": "FAL_API_KEY en Supabase EF secrets · Supabase Pro upgrade ($25/mes)"
+    },
+    {
+      "id": "LAB-VOL",
+      "name": "VoiceLab",
+      "status": "PLANNED — Fase 3",
+      "provider": "ElevenLabs API — eleven_multilingual_v2 ($0.15/1K chars)",
+      "requires": "ELEVENLABS_API_KEY · 30s audio de Sam para clonar voz Lucien Sael · Plan Creator $22/mes"
+    },
+    {
+      "id": "LAB-AVL",
+      "name": "AvatarLab",
+      "status": "PLANNED — Fase 4",
+      "provider": "HeyGen API — avatar-v2 ($0.08/seg)",
+      "requires": "HEYGEN_API_KEY · 2 min video de Sam para crear avatar Lucien · Plan Business $89/mes"
+    },
+    {
+      "id": "LAB-PCL",
+      "name": "PodcastLab",
+      "status": "PLANNED — Fase 5",
+      "description": "Orchestración multi-lab: CopyLab (script) → VoiceLab (audio) → AvatarLab (talking head) → VideoLab (B-roll) → Creatomate (composición)",
+      "cost_per_episode": "$4.00 (5 min) vs $200-2000 producción tradicional",
+      "requires": "CREATOMATE_API_KEY · Plan Starter $49/mes · Todos los labs anteriores activos"
+    },
     {
       "id": "LAB-OPS",
       "name": "UNRLVL-OPS",
-      "status": "LIVE — Cost Layer LIVE. Tab Ecosystem Intel movido al Orchestrator (no a OPS).",
-      "url": "https://unrlvl-ops.vercel.app/cost-layer"
+      "status": "LIVE — Cost Layer + OPS Tracking completo",
+      "url": "https://unrlvl-ops.vercel.app/cost-layer",
+      "ops_schema": {
+        "ops_generation_ledger": "Una fila por lab run. Auto-logueado desde content-run-stage v1.10.",
+        "ops_lab_rates": "Rate card para providers media (Imagen3, Kling, ElevenLabs, HeyGen, Creatomate)",
+        "ops_compute_cost": "FUNCTION SQL — calcula costo dado lab, model, unit_type, units",
+        "ops_log_generation": "FUNCTION SQL — loguea desde cualquier cliente",
+        "kpi_views": [
+          "v_ops_cost_by_client_month",
+          "v_ops_cost_by_lab_month",
+          "v_ops_cost_by_output_type",
+          "v_ops_cost_per_piece",
+          "v_ops_pipeline_kpis",
+          "v_ops_content_velocity",
+          "v_ops_lab_health",
+          "v_ops_monthly_dashboard"
+        ],
+        "dashboard_ui": "Sprint futuro — data en Supabase lista para conectar"
+      }
     },
     {"id": "LAB-OBD", "name": "Onboarding App", "status": "PASSED Phase 4"}
   ],
+  "ai_labs_strategy": {
+    "version": "1.0",
+    "date": "2026-04-26",
+    "doc_html": "https://unrlvl-context.vercel.app/docs/UNRLVL_Labs_Strategy.html",
+    "media_bus": "fal.ai — una sola API key, 50+ modelos. Cambiar modelo = cambiar string en lab_configs.default_params",
+    "decision_tree": {
+      "texto_copy": "Claude Sonnet 4 — Anthropic directo desde EF",
+      "imagen_estatica": "fal.ai — Imagen 3 (default) o FLUX 1.1 Ultra",
+      "video_social_30s": "fal.ai — Kling 2.5 Turbo Pro (default) o Veo 3.1 Lite",
+      "talking_head_presenter": "HeyGen API",
+      "voz_marca": "ElevenLabs API",
+      "composicion_larga": "PodcastLab + Creatomate"
+    },
+    "model_change_rule": "Solo cuando: ≥20% mejor calidad, ≥30% más económico, incidente crítico del provider, o A/B pipeline muestra preferencia estadística. No por hype.",
+    "phases": [
+      {"phase": 1, "name": "Production Ready Core", "status": "IN PROGRESS", "kpi": "10 piezas publicadas en cuentas reales"},
+      {"phase": 2, "name": "Video Social", "status": "PLANNED", "kpi": "Primer TikTok via pipeline IID"},
+      {"phase": 3, "name": "Identidad Sonora", "status": "PLANNED", "kpi": "Pieza con voz Lucien publicada"},
+      {"phase": 4, "name": "Identidad Visual", "status": "PLANNED", "kpi": "Talking head video Lucien publicado"},
+      {"phase": 5, "name": "Flagship Product", "status": "PLANNED", "kpi": "Primer episodio The Unrealville Intel Brief"}
+    ],
+    "subscriptions": [
+      {"service": "Anthropic API", "plan": "pay-per-use", "cost_month": "~$50-100", "phase": 0, "status": "active"},
+      {"service": "fal.ai", "plan": "pay-per-use", "cost_month": "~$15-50", "phase": 1, "status": "pending_account"},
+      {"service": "Google AI Studio", "plan": "pay-per-use", "cost_month": "~$5-15", "phase": 1, "status": "verify_key"},
+      {"service": "Supabase", "plan": "Pro", "cost_month": "$25", "phase": 2, "status": "upgrade_when_video"},
+      {"service": "Resend", "plan": "pay-per-use", "cost_month": "~$5", "phase": 0, "status": "active"},
+      {"service": "ElevenLabs", "plan": "Creator", "cost_month": "$22", "phase": 3, "status": "pending"},
+      {"service": "HeyGen", "plan": "Business", "cost_month": "$89", "phase": 4, "status": "pending"},
+      {"service": "Creatomate", "plan": "Starter", "cost_month": "$49", "phase": 5, "status": "pending"}
+    ],
+    "client_tiers": [
+      {"tier": "Basico", "name": "Social Content Engine", "labs": ["copylab","aife","imagelab","sociallab"], "cost_per_piece": "$0.08"},
+      {"tier": "Estandar", "name": "Video Social Engine", "labs": ["copylab","aife","imagelab","sociallab","videolab"], "cost_per_piece": "$0.77"},
+      {"tier": "Premium", "name": "Brand Presence Engine", "labs": ["copylab","aife","imagelab","sociallab","videolab","voicelab","avatarlab"], "cost_per_piece": "$3.17"},
+      {"tier": "Flagship", "name": "Authority Content Engine", "labs": "all", "cost_per_episode": "$4.00"}
+    ]
+  },
   "skills_roadmap": [
     {"id": "SKILL-UIUX", "name": "ui-ux-layer", "priority": 1, "status": "COMPLETE v2.1"},
     {"id": "SKILL-SA", "name": "shopify-auditor", "priority": 2, "status": "COMPLETE v1.1"},
@@ -193,8 +283,8 @@
     {"id": "SKILL-WL", "name": "weblab-shopify", "priority": 9, "status": "PENDIENTE"}
   ],
   "iid_network": {
-    "status": "OPERATIONAL — Primer run exitoso 2026-04-24",
-    "architecture": "Two-step genérico: iid-research → iid-research_raw → iid-process → iid-core → dos streams",
+    "status": "OPERATIONAL — Pipeline end-to-end CONFIRMADO 2026-04-26",
+    "architecture": "Two-step genérico: iid-research → iid_research_raw → iid-process → iid-core → dos streams",
     "agents_count": 14,
     "crons_count": 27,
     "schemas": "intel.* (7 tablas) + content.* (5 tablas)",
@@ -203,16 +293,20 @@
       "iid-research": "v1 ACTIVE",
       "iid-process": "v1 ACTIVE",
       "iid-brief-generator": "v1 ACTIVE",
-      "aife-filter": "v1.1 ACTIVE — lee previousOutputs.copylab correctamente",
-      "content-dispatcher": "v2.3 ACTIVE — EdgeRuntime.waitUntil(stageFires) — BUG: stage runner no se dispara aún",
-      "content-run-stage": "v1.2 ACTIVE — auth: x-cron-secret header, bypass Vercel con VERCEL_BYPASS_SECRET"
+      "aife-filter": "v1.1 ACTIVE",
+      "content-dispatcher": "v2.3 ACTIVE — síncrono, no waitUntil",
+      "content-run-stage": "v1.10 ACTIVE — direct Claude EF calls + auto cost logging",
+      "context-cache": "v4 ACTIVE — brand_context_cache table, 11 triggers, ~500ms HIT"
     },
     "pipeline_status": {
-      "dispatcher_to_jobs": "OK — crea orchestrator_jobs correctamente",
-      "auth_stage_runner": "OK — x-cron-secret pasa el 401",
-      "copylab_reachable": "OK — Vercel protection OFF, CopyLab responde (labs_status: copylab: running confirmado)",
-      "bug_active": "content-run-stage no aparece en logs — EdgeRuntime.waitUntil no mantiene viva la fetch en Supabase Deno runtime v2.3. Jobs quedan stuck en copylab: running.",
-      "next_debug": "Verificar con logs Deno en tiempo real si waitUntil funciona. Alternativa: hacer el fire ANTES de retornar la Response (await el fetch, no fire-and-forget)"
+      "copylab": "OK — Claude directo desde EF (~9s)",
+      "aife": "OK — Vercel AIFE EF (~4s)",
+      "imagelab": "SKIP — Vercel 50s AbortSignal timeout, non-critical. Fix pendiente: callImagenDirect() en v1.11",
+      "sociallab": "OK — Claude directo desde EF + write scheduled_posts (~8s)",
+      "total_time": "~71s",
+      "pieces_created": 1,
+      "email_confirmed": true,
+      "approval_flow": "PENDIENTE TEST — piece e75bdb73 awaiting_approval"
     },
     "scoring": {
       "ecosystem_R1_R6": "R1 capability 25 · R2 quality 20 · R3 cost 25 · R4 implementation 15 · R5 time_to_value 10 · R6 client 5",
@@ -221,30 +315,36 @@
       "autopublish": "content_score >=85 AND urgency=breaking"
     },
     "lab_configs_iid_pipeline": {
-      "copylab": {"iid_stage_order": 1, "supports_iid": true, "execute_path": "/api/execute"},
-      "aife": {"iid_stage_order": 2, "supports_iid": true, "execute_path": "/functions/v1/aife-filter"},
+      "copylab":  {"iid_stage_order": 1, "supports_iid": true, "execute_path": "/api/execute"},
+      "aife":     {"iid_stage_order": 2, "supports_iid": true, "execute_path": "/functions/v1/aife-filter"},
       "imagelab": {"iid_stage_order": 3, "supports_iid": true, "execute_path": "/api/execute"},
-      "sociallab": {"iid_stage_order": 4, "supports_iid": true, "execute_path": "/api/execute"}
+      "sociallab":{"iid_stage_order": 4, "supports_iid": true, "execute_path": "/api/execute"},
+      "videolab": {"iid_stage_order": 5, "supports_iid": false, "execute_path": "/api/execute", "note": "Fase 2 — async fal-poller pattern"}
     },
-    "vercel_bypass_secret": "3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU — aplica a CopyLab, ImageLab, SocialLab. Header: x-vercel-protection-bypass. Guardado en intel.iid_scheduler_config.",
-    "brand_id_for_iid": "UnrealvilleStudio — usado como brandId cuando voice=unrlvl o lucien (ambos viven bajo esta marca en Supabase)"
+    "vercel_bypass_secret": "3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU — aplica a CopyLab, ImageLab, SocialLab. Header: x-vercel-protection-bypass.",
+    "brand_id_for_iid": "UnrealvilleStudio — voces unrlvl y lucien viven bajo esta marca en Supabase"
   },
   "content_engine": {
-    "status": "CONSTRUIDO — pipeline end-to-end pendiente validación completa",
-    "flow": "iid_content_queue (pending) → content-dispatcher → orchestrator_jobs → content-run-stage → [CopyLab → AIFE → ImageLab → SocialLab] → content_pieces → email aprobación Sam → approve-job → SocialLab publica",
-    "approval": "Email con preview + PUBLICAR AHORA + RECHAZAR (1 click, token en URL). Endpoint: Orchestrator /api/approve-job",
-    "autopublish": "content_score >=85 + urgency breaking → SocialLab directo",
-    "brand_voices": "content.brand_voices — UNRLVL + Lucien seeded con templates, ICR rules, image_style, psycho_affinities",
-    "supabase_schema_additions": {
-      "content.orchestrator_jobs": "assets JSONB + platforms text[] + approved_by + finding_id añadidos 2026-04-25",
-      "intel.iid_content_queue": "iid_source_tag añadido 2026-04-25 (backfill desde agent_id)",
-      "lab_configs": "supports_iid boolean + iid_stage_order integer añadidos 2026-04-25"
+    "status": "OPERATIONAL — primer email aprobación confirmado 2026-04-26",
+    "flow": "iid_content_queue (pending) → content-dispatcher → orchestrator_jobs → content-run-stage v1.10 → [CopyLab direct → AIFE → ImageLab(skip) → SocialLab direct] → content_pieces → email Sam → approve-job → published",
+    "approval": "Email con preview AIFE-filtered + PUBLICAR AHORA + RECHAZAR. Endpoint: Orchestrator /api/approve-job",
+    "autopublish": "content_score >=85 + urgency breaking → SocialLab directo, sin email",
+    "brand_voices": "content.brand_voices — UNRLVL + Lucien con templates, ICR rules, image_style, psycho_affinities",
+    "cost_tracking": "Automático desde v1.10 — cada lab run loguea en ops_generation_ledger",
+    "oauth_status": "PENDIENTE — scheduled_posts en status pending_oauth. OAuth Meta/LinkedIn/TikTok/X = Fase 1 próxima sesión",
+    "supabase_schema": {
+      "content.orchestrator_jobs": "assets JSONB + platforms text[] + approved_by + finding_id",
+      "intel.iid_content_queue": "iid_source_tag añadido 2026-04-25",
+      "lab_configs": "supports_iid boolean + iid_stage_order integer",
+      "public.ops_generation_ledger": "NUEVO 2026-04-26 — ledger de costos por generación",
+      "public.ops_lab_rates": "NUEVO 2026-04-26 — rate card para providers media",
+      "public.brand_oauth_tokens": "PENDING — schema listo, crear en próxima sesión",
+      "public.brand_context_cache": "ACTIVO — 11 triggers dirty flag, TTL 60min"
     }
   },
   "github_auditor": {
-    "status": "FIXED — gh.js bug resuelto 2026-04-25",
+    "status": "LIVE — bug fix 2026-04-25",
     "url": "https://unrlvl-tools.vercel.app/api/gh",
-    "bug_fixed": "if (path) capturaba todo antes que if (repo && path). Fix: reordenar condiciones — repo+tree primero, repo+path segundo, bare path tercero",
     "usage": {
       "tree": "?repo=NAME&action=tree",
       "file": "?repo=NAME&path=src/file.ts",
@@ -258,39 +358,39 @@
       "id": "INFRA-SB",
       "name": "Supabase",
       "project_id": "amlvyycfepwhiindxgzw",
-      "schemas": "public.* 44+ tablas + crm.* + fph.* + ops.* + intel.* (7 tablas IID) + content.* (5 tablas Content Engine)",
+      "plan": "Free (150s EF wall clock) — upgrade a Pro al activar VideoLab",
+      "schemas": "public.* 50+ tablas + intel.* (7 tablas IID) + content.* (5 tablas Content Engine)",
       "extensions": ["pg_cron 1.6.4", "pg_net 0.20.0"],
       "exposed_schemas": "public, intel, content",
-      "rls_note": "intel.* y content.* — políticas SELECT para authenticated, escritura solo via service_role (Edge Functions). 0 security advisors funcionales (pg_net en public es Supabase infra, no modificable).",
-      "functions": ["fire_stage(p_url, p_job_id, p_stage, p_secret) — llama content-run-stage via pg_net (DNS timeout conocido — usar fetch desde EF en su lugar)"]
+      "ef_secrets_active": ["ANTHROPIC_API_KEY", "RESEND_API_KEY", "IID_CRON_SECRET", "SUPABASE_SERVICE_ROLE_KEY", "ORCHESTRATOR_URL", "VERCEL_BYPASS_SECRET"],
+      "ef_secrets_pending": ["GEMINI_API_KEY", "FAL_API_KEY", "ELEVENLABS_API_KEY", "HEYGEN_API_KEY", "CREATOMATE_API_KEY"]
     },
     {
       "id": "INFRA-OPS",
       "name": "UNRLVL-OPS",
       "url": "https://unrlvl-ops.vercel.app",
-      "status": "LIVE — Cost Layer LIVE. Ecosystem Intel tab → movido al Orchestrator."
+      "status": "LIVE — Cost Layer + 8 KPI views activas en Supabase"
     },
     {
       "id": "INFRA-ORCH",
       "name": "Orchestrator",
       "url": "https://orchestrator-unrlvl.vercel.app",
-      "status": "OR_1.1 LIVE — 4 tabs + Layer indicators + approve-job + trigger-job"
+      "status": "OR_1.1 LIVE — 4 tabs + approve-job + trigger-job"
     },
     {"id": "INFRA-CRM", "name": "UNRLVL CRM v1.0", "status": "OPERATIVO", "pending": ["Speaks→CRM", "Shopify→CRM"]},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
     {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED v2.1 — pending deploy + domain"},
-    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor proxy FIXED v2026-04-25"}
+    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor proxy FIXED 2026-04-25"}
   ],
   "next_session_agenda": [
-    "PRIORIDAD #1 — BUG content-run-stage: el dispatcher no dispara el stage runner correctamente. Hipótesis: EdgeRuntime.waitUntil en Supabase Deno no mantiene vivas las fetches como en Cloudflare Workers. Fix candidato: hacer await del fetch ANTES de retornar la Response (síncrono, no fire-and-forget). Esto alarga el dispatcher ~20-30s pero garantiza que el stage se dispara. Alternativa: usar pg_net desde una función SQL intermedia que sí persiste.",
-    "Verificar con UN solo job (no 5) para aislar el bug sin ruido.",
-    "Una vez que pipeline completo funcione → primer email de aprobación a Sam → PUBLICAR → verificar en SocialLab.",
-    "DESPUÉS del pipeline validado: Actualiza completo + cierre sprint Orchestrator.",
-    "LUCIEN-BOOKS: Brief Libro 1 — Sam trae pensamiento libre sobre el personaje.",
-    "NeuroneSCF B2B: confirmar acento navy + brand_ids NeuroneSCF_B2C + NeuroneSCF_B2B.",
-    "Shopify-auditor Fase 1: tokens Admin API NeuroneSCF.",
-    "ForumPHs: datos 8+ edificios → Supabase · foto Ivette → Speaks.",
-    "COMMIT: Why UNRLVL v4 → CoreProject · DEPLOY: luciensael.com v2.1.",
-    "SKILL weblab-shopify — sesión propia."
+    "PASO 1 BLOQUEANTE — Test approval flow: GET orchestrator-unrlvl.vercel.app/api/approve-job?token={TOKEN}&action=approve con piece e75bdb73. Verificar piece.status = published.",
+    "PASO 2 — ImageLab directo desde EF: verificar GEMINI_API_KEY en Supabase EF secrets, deploy content-run-stage v1.11 con callImagenDirect() (Gemini 2.5 Flash + Imagen 3, ~25s).",
+    "PASO 3 — Crear cuenta fal.ai y añadir FAL_API_KEY a Supabase EF secrets. Desbloquea VideoLab.",
+    "PASO 4 — OAuth social media: crear tabla brand_oauth_tokens, conectar Instagram/LinkedIn/TikTok/X para Unrealville y Lucien, crear EF social-publisher (cron 15min).",
+    "PASO 5 — Labs Tests T1-T7: approval flow, imagen, publicación real, cache invalidation, autopublish, social-publisher, videolab.",
+    "PENDIENTE PARALELO — Lucien Books: Brief Libro 1 — Sam trae pensamiento libre sobre el personaje.",
+    "PENDIENTE PARALELO — NeuroneSCF B2B: brand_ids + acento navy.",
+    "PENDIENTE PARALELO — ForumPHs: datos 8+ edificios + foto Ivette.",
+    "COMMIT pendiente: Why UNRLVL v4 → CoreProject. DEPLOY: luciensael.com v2.1."
   ]
 }

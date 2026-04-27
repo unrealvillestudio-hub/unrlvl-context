@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNRLVL AI Labs — Estrategia de Modelos 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06080A;
+    --bg2: #0B0E14;
+    --bg3: #111620;
+    --cyan: #00FFD1;
+    --cyan-dim: rgba(0,255,209,0.12);
+    --cyan-border: rgba(0,255,209,0.25);
+    --gold: #F5C842;
+    --red: #FF4444;
+    --green: #2ECC71;
+    --text: #CDD5E0;
+    --text-dim: #6B7A8D;
+    --text-bright: #F2F0EC;
+    --mono: 'Space Mono', monospace;
+    --serif: 'Fraunces', Georgia, serif;
+    --sidebar: 240px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  nav {
+    width: var(--sidebar);
+    min-width: var(--sidebar);
+    background: var(--bg2);
+    border-right: 1px solid var(--cyan-border);
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 28px 0;
+    z-index: 100;
+  }
+
+  .nav-brand {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--cyan-border);
+    margin-bottom: 20px;
+  }
+
+  .nav-brand .logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .nav-brand .version {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  nav a {
+    display: block;
+    padding: 7px 20px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    transition: color 0.15s, background 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  nav a:hover {
+    color: var(--cyan);
+    background: var(--cyan-dim);
+    border-left-color: var(--cyan);
+  }
+
+  .nav-section-label {
+    padding: 18px 20px 6px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    opacity: 0.6;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    margin-left: var(--sidebar);
+    flex: 1;
+    padding: 60px 64px 120px;
+    max-width: 960px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 80px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--cyan-border);
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--cyan);
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    max-width: 540px;
+    margin-bottom: 28px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .meta-pill {
+    background: var(--bg3);
+    border: 1px solid var(--cyan-border);
+    padding: 6px 14px;
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    margin-bottom: 72px;
+    scroll-margin-top: 40px;
+  }
+
+  .section-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--text-bright);
+    margin-bottom: 28px;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    margin-top: 36px;
+  }
+
+  h3:first-child { margin-top: 0; }
+
+  p {
+    color: var(--text);
+    margin-bottom: 14px;
+    max-width: 680px;
+  }
+
+  /* ── PRINCIPE BOX ── */
+  .principe-box {
+    background: var(--cyan-dim);
+    border-left: 3px solid var(--cyan);
+    padding: 20px 24px;
+    margin-bottom: 36px;
+    max-width: 680px;
+  }
+
+  .principe-box p {
+    color: var(--text-bright);
+    font-style: italic;
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* ── PIPELINE ── */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 48px;
+  }
+
+  .pipe-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .pipe-stage {
+    background: var(--bg3);
+    border: 1px solid var(--cyan-border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    transition: border-color 0.2s;
+    cursor: default;
+  }
+
+  .pipe-stage:hover {
+    border-color: var(--cyan);
+  }
+
+  .stage-num {
+    font-size: 10px;
+    color: var(--text-dim);
+    min-width: 20px;
+  }
+
+  .stage-name {
+    font-weight: 700;
+    color: var(--text-bright);
+    min-width: 100px;
+  }
+
+  .stage-desc {
+    color: var(--text-dim);
+    font-size: 11px;
+    flex: 1;
+  }
+
+  .stage-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .badge-done   { background: rgba(46,204,113,0.15); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+  .badge-fix    { background: rgba(245,200,66,0.12); color: var(--gold); border: 1px solid rgba(245,200,66,0.3); }
+  .badge-next   { background: rgba(0,255,209,0.1);   color: var(--cyan); border: 1px solid var(--cyan-border); }
+  .badge-future { background: rgba(107,122,141,0.15); color: var(--text-dim); border: 1px solid rgba(107,122,141,0.3); }
+
+  /* ── LAB CARDS ── */
+  .lab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .lab-card {
+    background: var(--bg2);
+    border: 1px solid var(--bg3);
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .lab-card:hover { border-color: var(--cyan-border); }
+
+  .lab-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .lab-title {
+    font-weight: 700;
+    color: var(--text-bright);
+    font-size: 13px;
+  }
+
+  .lab-provider {
+    font-size: 10px;
+    color: var(--cyan);
+    background: var(--cyan-dim);
+    padding: 2px 8px;
+    border: 1px solid var(--cyan-border);
+  }
+
+  .lab-detail {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .lab-cost {
+    font-size: 11px;
+    color: var(--gold);
+    border-top: 1px solid var(--bg3);
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+
+  .lab-uses {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  .lab-uses span {
+    display: inline-block;
+    background: var(--bg3);
+    padding: 2px 7px;
+    margin: 2px 2px 2px 0;
+  }
+
+  /* ── PHASE ROADMAP ── */
+  .phase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .phase-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--bg3);
+  }
+
+  .phase-item:last-child { border-bottom: none; }
+
+  .phase-label {
+    padding: 24px 20px 24px 0;
+    border-right: 1px solid var(--bg3);
+  }
+
+  .phase-num {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .phase-name {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--text-bright);
+    font-style: italic;
+  }
+
+  .phase-body {
+    padding: 24px 0 24px 28px;
+  }
+
+  .phase-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  .checklist li::before {
+    content: '○';
+    color: var(--cyan-border);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .checklist li.done::before { content: '●'; color: var(--green); }
+  .checklist li.active::before { content: '◉'; color: var(--cyan); }
+
+  .phase-kpi {
+    font-size: 10px;
+    color: var(--gold);
+    background: rgba(245,200,66,0.08);
+    border-left: 2px solid var(--gold);
+    padding: 6px 10px;
+    margin-top: 10px;
+  }
+
+  .phase-kpi::before { content: 'KPI → '; }
+
+  /* ── SUBSCRIPTIONS TABLE ── */
+  .subs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+  }
+
+  .subs-table th {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--cyan-border);
+    padding: 10px 16px;
+    text-align: left;
+    background: var(--bg2);
+  }
+
+  .subs-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--bg3);
+    font-size: 12px;
+    vertical-align: top;
+  }
+
+  .subs-table tr:last-child td { border-bottom: none; }
+
+  .subs-table tr:hover td { background: var(--bg2); }
+
+  .subs-service { font-weight: 700; color: var(--text-bright); }
+  .subs-plan    { color: var(--cyan); font-size: 11px; }
+  .subs-cost    { color: var(--gold); font-weight: 700; }
+  .subs-phase   { font-size: 10px; color: var(--text-dim); }
+  .subs-url a   { color: var(--cyan); font-size: 10px; text-decoration: none; opacity: 0.7; }
+  .subs-url a:hover { opacity: 1; }
+
+  .subs-total-row td {
+    border-top: 2px solid var(--cyan-border);
+    background: var(--bg2);
+    font-weight: 700;
+  }
+
+  /* ── DECISION TREE ── */
+  .decision-tree {
+    background: var(--bg2);
+    border: 1px solid var(--cyan-border);
+    padding: 28px;
+    margin-bottom: 40px;
+    font-size: 12px;
+    line-height: 2;
+  }
+
+  .dt-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--bg3);
+  }
+
+  .dt-row:last-child { border-bottom: none; }
+
+  .dt-q {
+    color: var(--text-dim);
+    min-width: 260px;
+  }
+
+  .dt-arrow { color: var(--cyan-border); }
+
+  .dt-a {
+    color: var(--text-bright);
+    font-weight: 700;
+  }
+
+  /* ── COST MATRIX ── */
+  .cost-matrix {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--bg3);
+    border: 1px solid var(--bg3);
+    margin-bottom: 40px;
+  }
+
+  .cm-cell {
+    background: var(--bg2);
+    padding: 16px 20px;
+  }
+
+  .cm-cell.header {
+    background: var(--bg3);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .cm-tier { font-size: 11px; color: var(--text-dim); margin-bottom: 6px; font-weight: 700; letter-spacing: 0.05em; }
+  .cm-price { font-family: var(--serif); font-size: 28px; color: var(--cyan); font-weight: 300; }
+  .cm-unit  { font-size: 10px; color: var(--text-dim); }
+  .cm-desc  { font-size: 11px; color: var(--text); margin-top: 6px; }
+
+  /* ── RULE BOX ── */
+  .rule-box {
+    background: var(--bg2);
+    border: 1px solid var(--gold);
+    padding: 24px;
+    margin-bottom: 32px;
+    max-width: 680px;
+  }
+
+  .rule-box-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .rule-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rule-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  .rule-list li::before {
+    content: '→';
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid var(--bg3);
+    font-size: 10px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .footer-logo { color: var(--cyan); font-weight: 700; letter-spacing: 0.1em; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--bg3);
+    margin: 48px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { display: none; }
+    main { margin-left: 0; padding: 32px 24px 80px; }
+    .lab-grid { grid-template-columns: 1fr; }
+    .cost-matrix { grid-template-columns: 1fr; }
+    h2 { font-size: 24px; }
+    .hero h1 { font-size: 36px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  section { animation: fadeIn 0.4s ease both; }
+  section:nth-child(2) { animation-delay: 0.05s; }
+  section:nth-child(3) { animation-delay: 0.1s; }
+  section:nth-child(4) { animation-delay: 0.15s; }
+  section:nth-child(5) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="logo">UNRLVL</div>
+    <div class="version">AI Labs · v1.0 · Apr 2026</div>
+  </div>
+
+  <div class="nav-section-label">Overview</div>
+  <a href="#ecosystem">Ecosystem completo</a>
+  <a href="#architecture">Decisión de arquitectura</a>
+
+  <div class="nav-section-label">Los Labs</div>
+  <a href="#copylab">CopyLab · AIFE · Social</a>
+  <a href="#imagelab">ImageLab</a>
+  <a href="#videolab">VideoLab</a>
+  <a href="#voicelab">VoiceLab</a>
+  <a href="#avatarlab">AvatarLab</a>
+  <a href="#podcastlab">PodcastLab</a>
+
+  <div class="nav-section-label">Ejecución</div>
+  <a href="#roadmap">Roadmap por fases</a>
+  <a href="#subscriptions">Suscripciones necesarias</a>
+  <a href="#costs">Modelo de costos</a>
+  <a href="#clients">Tiers para clientes</a>
+
+  <div class="nav-section-label">Reglas</div>
+  <a href="#decisions">Árbol de decisión</a>
+  <a href="#model-change">Regla: cambio de modelo</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">UNRLVL Studio · Unrealville · 2026–2028</div>
+    <h1>AI Labs<br><em>Estrategia de modelos</em></h1>
+    <p class="hero-sub">La planta de producción de contenido de UNRLVL para los próximos 3 años. Este documento es la referencia canónica para decisiones de adopción de modelos.</p>
+    <div class="hero-meta">
+      <div class="meta-pill">8 Labs definidos</div>
+      <div class="meta-pill">5 Fases de ejecución</div>
+      <div class="meta-pill">~$255–340/mes infraestructura</div>
+      <div class="meta-pill">$0.08–$4.00 por pieza</div>
+    </div>
+  </div>
+
+  <!-- PRINCIPIO RECTOR -->
+  <section id="ecosystem">
+    <div class="section-eyebrow">Premisa estratégica</div>
+    <h2>No elegimos APIs.<br>Diseñamos la planta de producción.</h2>
+
+    <div class="principe-box">
+      <p>Cada modalidad usa el mejor modelo de su categoría. Los modelos son intercambiables. La arquitectura no.</p>
+    </div>
+
+    <p>El IID Content Engine es el sistema nervioso central. Los Labs son los órganos especializados. La estrategia de modelos determina qué tan potentes, económicos y mantenibles son esos órganos.</p>
+
+    <!-- PIPELINE VISUAL -->
+    <h3>Pipeline completo — 8 stages</h3>
+    <div class="pipeline">
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">01</span>
+          <span class="stage-name">CopyLab</span>
+          <span class="stage-desc">Generación de copy y hooks · Claude Sonnet 4</span>
+          <span class="stage-badge badge-done">✓ Live</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">02</span>
+          <span class="stage-name">AIFE</span>
+          <span class="stage-desc">AI Footprint Eraser · Claude Sonnet 4</span>
+          <span class="stage-badge badge-done">✓ Live</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">03</span>
+          <span class="stage-name">ImageLab</span>
+          <span class="stage-desc">Imagen estática · Google Imagen 3 → fal.ai</span>
+          <span class="stage-badge badge-fix">⚠ Fix pendiente</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">04</span>
+          <span class="stage-name">SocialLab</span>
+          <span class="stage-desc">Adaptación por plataforma · Claude Sonnet 4</span>
+          <span class="stage-badge badge-done">✓ Live</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">05</span>
+          <span class="stage-name">VideoLab</span>
+          <span class="stage-desc">Video corto social · Kling 2.5 Pro vía fal.ai</span>
+          <span class="stage-badge badge-next">→ Fase 2</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">06</span>
+          <span class="stage-name">VoiceLab</span>
+          <span class="stage-desc">Síntesis y clonación de voz · ElevenLabs API</span>
+          <span class="stage-badge badge-future">Fase 3</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">07</span>
+          <span class="stage-name">AvatarLab</span>
+          <span class="stage-desc">Talking heads y presentadores · HeyGen API</span>
+          <span class="stage-badge badge-future">Fase 4</span>
+        </div>
+      </div>
+      <div class="pipe-row">
+        <div class="pipe-stage">
+          <span class="stage-num">08</span>
+          <span class="stage-name">PodcastLab</span>
+          <span class="stage-desc">Video podcasts y longform · Composición multi-lab</span>
+          <span class="stage-badge badge-future">Fase 5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DECISIÓN ARQUITECTURA -->
+  <section id="architecture">
+    <div class="section-eyebrow">La decisión central</div>
+    <h2>fal.ai como<br><em>Media Bus</em></h2>
+
+    <p>fal.ai no es un proveedor de video. Es el aggregator de modelos de medios generativos más completo del mercado: una sola API key, un mismo patrón de código, 50+ modelos de imagen/video/audio/avatar.</p>
+
+    <p><strong style="color: var(--text-bright);">Cambiar de modelo es reemplazar un string en la base de datos.</strong> Nada más. Cuando Kling 3.0 supere a Kling 2.5 en calidad, cambias una línea en <code style="background:var(--bg3); padding:2px 6px; color:var(--cyan);">lab_configs.default_params</code>. No hay deployment, no hay código nuevo.</p>
+
+    <div class="decision-tree">
+      <div class="dt-row">
+        <span class="dt-q">¿Genera texto / copy?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">Claude (Anthropic directo)</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-q">¿Genera imagen estática?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">fal.ai (Imagen 3 o FLUX)</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-q">¿Genera video &lt;30s social?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">fal.ai / Kling Turbo Pro</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-q">¿Talking head / presenter?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">HeyGen API</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-q">¿Audio / voz de marca?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">ElevenLabs API</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-q">¿Composición multi-modal larga?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">PodcastLab + Creatomate</span>
+      </div>
+      <div class="dt-row">
+        <span class="dt-q">¿Modelo completamente nuevo?</span>
+        <span class="dt-arrow">→</span>
+        <span class="dt-a">Verificar en fal.ai primero</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- LABS CARDS -->
+  <section id="copylab">
+    <div class="section-eyebrow">Labs 01 · 02 · 04</div>
+    <h2>CopyLab · AIFE · SocialLab</h2>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">CopyLab</div>
+          <div class="lab-provider">Claude Sonnet 4</div>
+        </div>
+        <div class="lab-detail">Genera copy de marketing con hooks, cuerpo y CTA. El mejor modelo del mundo para copy de calidad humana. Se llama directamente desde el EF de Supabase en ~9s.</div>
+        <div class="lab-cost">~$0.015 / pieza (800 tokens output)</div>
+        <div class="lab-uses"><span>posts</span><span>ads</span><span>emails</span><span>scripts</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">AIFE</div>
+          <div class="lab-provider">Claude Sonnet 4</div>
+        </div>
+        <div class="lab-detail">AI Footprint Eraser: elimina vocabulario de AI, inyecta burstiness, destruye paralelismos mecánicos. Transforma output genérico en texto de calidad humana.</div>
+        <div class="lab-cost">~$0.008 / pieza</div>
+        <div class="lab-uses"><span>filter</span><span>rewrite</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">SocialLab</div>
+          <div class="lab-provider">Claude Sonnet 4</div>
+        </div>
+        <div class="lab-detail">Adapta el copy por plataforma (Instagram, LinkedIn, TikTok, X, Threads) respetando límites de caracteres, hashtags y tono de cada red. Escribe directamente en scheduled_posts.</div>
+        <div class="lab-cost">~$0.008 / plataforma</div>
+        <div class="lab-uses"><span>instagram</span><span>linkedin</span><span>tiktok</span><span>x</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="imagelab">
+    <div class="section-eyebrow">Lab 03</div>
+    <h2>ImageLab</h2>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">ImageLab</div>
+          <div class="lab-provider">fal.ai / Imagen 3</div>
+        </div>
+        <div class="lab-detail">Genera imagen de marca en 1:1 o 9:16 según plataforma. Proceso: Gemini 2.5 Flash construye el prompt visual (~3s) → Imagen 3 genera la imagen (~22s). Llamada directa desde EF, bypasea Vercel.</div>
+        <div class="lab-cost">~$0.05 / imagen · via fal.ai</div>
+        <div class="lab-uses"><span>instagram</span><span>facebook</span><span>linkedin</span><span>ads</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Fallback ImageLab</div>
+          <div class="lab-provider">fal.ai / FLUX 1.1 Ultra</div>
+        </div>
+        <div class="lab-detail">Para contenido que requiere estilo artístico, ilustración o look no-fotográfico. FLUX produce resultados más creativos y estilizados que Imagen para ciertos tipos de marca.</div>
+        <div class="lab-cost">~$0.06 / imagen · via fal.ai</div>
+        <div class="lab-uses"><span>artístico</span><span>editorial</span><span>ilustración</span></div>
+      </div>
+    </div>
+    <p style="color:var(--gold); font-size:11px;">⚠ Fix pendiente: migrar llamada de Google directo → fal.ai. Requiere FAL_API_KEY en Supabase EF secrets. Estimado: 30 min.</p>
+  </section>
+
+  <section id="videolab">
+    <div class="section-eyebrow">Lab 05</div>
+    <h2>VideoLab</h2>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">VideoLab · Default</div>
+          <div class="lab-provider">fal.ai / Kling 2.5 Turbo Pro</div>
+        </div>
+        <div class="lab-detail">El mejor precio-calidad del mercado para video social. Especialidad: sujetos humanos, caras, lip-sync. Clips hasta 3 min. Audio nativo en Kling 2.6. 40% más barato que Runway Gen-4 por segundo.</div>
+        <div class="lab-cost">$0.07/seg · clip 5s = $0.35 · clip 10s = $0.70</div>
+        <div class="lab-uses"><span>tiktok</span><span>reels</span><span>shorts</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">VideoLab · Sin personas</div>
+          <div class="lab-provider">fal.ai / Veo 3.1 Lite</div>
+        </div>
+        <div class="lab-detail">Para clips de producto, ambiente, B-roll sin sujetos humanos. Veo 3.1 Lite incluye audio nativo a un precio muy competitivo. Lanzado en marzo 2026.</div>
+        <div class="lab-cost">$0.05/seg · clip 5s = $0.25 · audio incluido</div>
+        <div class="lab-uses"><span>productos</span><span>b-roll</span><span>ambiente</span></div>
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <div class="rule-box-title">⚡ Arquitectura async obligatoria para VideoLab</div>
+      <ul class="rule-list">
+        <li>Stage runner envía POST a fal.ai → recibe <code style="color:var(--cyan);">{ request_id }</code> en 2 segundos</li>
+        <li>Guarda request_id en assets, retorna inmediatamente (no espera el video)</li>
+        <li>EF <code style="color:var(--cyan);">fal-poller</code> (cron cada 30s) consulta el status de la generación</li>
+        <li>Cuando el video está listo, fal-poller actualiza el content_piece con la URL</li>
+        <li>Este patrón resuelve el problema del wall clock de Supabase Free (150s)</li>
+      </ul>
+    </div>
+
+    <p style="color:var(--text-dim); font-size:11px;">Activación: content_score ≥ 85 AND plataforma ∈ {TIKTOK, INSTAGRAM_REELS, YOUTUBE_SHORTS}</p>
+  </section>
+
+  <section id="voicelab">
+    <div class="section-eyebrow">Lab 06</div>
+    <h2>VoiceLab</h2>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">VoiceLab</div>
+          <div class="lab-provider">ElevenLabs API</div>
+        </div>
+        <div class="lab-detail">Síntesis de voz y clonación. Con 30 segundos de audio de referencia, ElevenLabs clona una voz con fidelidad profesional. Modelo multilingual v2 para contenido es/en.</div>
+        <div class="lab-cost">$22/mes Creator (100K chars) · ~$0.15 por narración de 60s</div>
+        <div class="lab-uses"><span>voz lucien</span><span>voz unrlvl</span><span>podcast</span><span>ads</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Voces a crear</div>
+          <div class="lab-provider">Requiere grabación</div>
+        </div>
+        <div class="lab-detail">
+          <strong style="color:var(--text-bright);">Lucien Sael:</strong> 30s audio de Sam → voz clonada para todo contenido del persona.<br><br>
+          <strong style="color:var(--text-bright);">UNRLVL Presenter:</strong> Sam decide si usar su voz o una voice stock de ElevenLabs.<br><br>
+          Ambas voces se almacenan en ElevenLabs y se referencian por ID en lab_configs.
+        </div>
+        <div class="lab-cost">Clonación incluida en plan Creator</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="avatarlab">
+    <div class="section-eyebrow">Lab 07</div>
+    <h2>AvatarLab</h2>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">AvatarLab · Talking Head</div>
+          <div class="lab-provider">HeyGen API</div>
+        </div>
+        <div class="lab-detail">La única plataforma con pipeline completo para avatares: avatar consistente + lip-sync + expresiones faciales. Con 2 minutos de video de referencia, genera el avatar de Lucien Sael que habla cualquier texto.</div>
+        <div class="lab-cost">$89/mes Business · ~$0.08/seg de video</div>
+        <div class="lab-uses"><span>linkedin video</span><span>youtube</span><span>ads</span><span>podcast host</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Avatares a crear</div>
+          <div class="lab-provider">Requiere video</div>
+        </div>
+        <div class="lab-detail">
+          <strong style="color:var(--text-bright);">Lucien Sael:</strong> 2 min video grabado (expresión neutral, buena luz, sin fondo complejo).<br><br>
+          <strong style="color:var(--text-bright);">UNRLVL Presenter:</strong> mismo proceso o usar avatares stock premium de HeyGen.<br><br>
+          Una vez creados, los avatares son reutilizables sin límite en el plan.
+        </div>
+        <div class="lab-cost">Creación de avatar incluida en plan Business</div>
+      </div>
+    </div>
+    <p style="color:var(--text-dim); font-size:11px; margin-top:8px;">Nota: fal.ai tiene modelos de face animation para casos donde se necesita animar una imagen (producto, ilustración). Complementario a HeyGen, no alternativo.</p>
+  </section>
+
+  <section id="podcastlab">
+    <div class="section-eyebrow">Lab 08</div>
+    <h2>PodcastLab</h2>
+
+    <p>No es un provider. Es un tipo de job que orquesta todos los labs anteriores en formato largo.</p>
+
+    <h3>Flujo de un VideoPodcast de 5 minutos</h3>
+    <div class="pipeline" style="margin-bottom:24px;">
+      <div class="pipe-row"><div class="pipe-stage"><span class="stage-num">01</span><span class="stage-name">CopyLab</span><span class="stage-desc">Script completo (500–1500 palabras)</span><span class="stage-badge badge-done">Claude</span></div></div>
+      <div class="pipe-row"><div class="pipe-stage"><span class="stage-num">02</span><span class="stage-name">VoiceLab</span><span class="stage-desc">Audio narrado con voz de Lucien</span><span class="stage-badge badge-future">ElevenLabs</span></div></div>
+      <div class="pipe-row"><div class="pipe-stage"><span class="stage-num">03</span><span class="stage-name">AvatarLab</span><span class="stage-desc">Avatar leyendo el script completo</span><span class="stage-badge badge-future">HeyGen</span></div></div>
+      <div class="pipe-row"><div class="pipe-stage"><span class="stage-num">04</span><span class="stage-name">VideoLab</span><span class="stage-desc">3 clips de B-roll para ilustrar puntos clave</span><span class="stage-badge badge-future">fal.ai/Kling</span></div></div>
+      <div class="pipe-row"><div class="pipe-stage"><span class="stage-num">05</span><span class="stage-name">Composición</span><span class="stage-desc">Ensamble: avatar + B-roll + intro/outro</span><span class="stage-badge badge-future">Creatomate</span></div></div>
+    </div>
+
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Costo por episodio (5 min)</div>
+          <div class="lab-provider">Multi-lab</div>
+        </div>
+        <div class="lab-detail">
+          CopyLab: $0.15 · VoiceLab: $0.15 · AvatarLab: $2.40 · VideoLab B-roll (3 clips 5s): $1.05 · Creatomate: $0.10
+        </div>
+        <div class="lab-cost">Total: ~$4.00 / episodio</div>
+        <div class="lab-uses"><span>vs $200–2000 producción tradicional</span></div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Activación</div>
+          <div class="lab-provider">Criterio IID</div>
+        </div>
+        <div class="lab-detail">Solo se activa cuando content_score ≥ 90 AND format ∈ {podcast, long_form} AND voice ∈ {lucien, unrlvl}. No todos los findings merecen un episodio de podcast.</div>
+        <div class="lab-cost">Estimado: 5–15 episodios/mes en vol inicial</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <div class="section-eyebrow">Ejecución</div>
+    <h2>Roadmap por fases</h2>
+
+    <div class="phase-list">
+
+      <div class="phase-item">
+        <div class="phase-label">
+          <div class="phase-num">Fase 0</div>
+          <div class="phase-name">Completado</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Core Pipeline Funcionando</div>
+          <ul class="checklist">
+            <li class="done">CopyLab live (Claude directo EF)</li>
+            <li class="done">AIFE live (Vercel EF)</li>
+            <li class="done">SocialLab live (Claude directo EF)</li>
+            <li class="done">Email de aprobación recibido</li>
+            <li class="done">content-run-stage v1.9 deployed</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-label">
+          <div class="phase-num">Fase 1</div>
+          <div class="phase-name">Production Ready Core</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">Pipeline confiable y publicable — próxima sesión</div>
+          <ul class="checklist">
+            <li class="active">Test approval flow (pieza e75bdb73 → PUBLICAR)</li>
+            <li>ImageLab: GEMINI_API_KEY en EF secrets + migrar a fal.ai</li>
+            <li>Crear cuenta fal.ai → añadir FAL_API_KEY a EF secrets</li>
+            <li>OAuth social: Instagram, LinkedIn, TikTok, X para Unrealville + Lucien</li>
+            <li>Migración DB: tabla brand_oauth_tokens</li>
+            <li>EF social-publisher (cron 15 min)</li>
+            <li>Labs Tests T1–T5</li>
+          </ul>
+          <div class="phase-kpi">10 content pieces publicados en cuentas reales de Unrealville y Lucien</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-label">
+          <div class="phase-num">Fase 2</div>
+          <div class="phase-name">Video Social</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">VideoLab + arquitectura async</div>
+          <ul class="checklist">
+            <li>Upgrade Supabase Pro ($25/mes)</li>
+            <li>VideoLab con fal.ai/Kling 2.5 Turbo Pro</li>
+            <li>EF fal-poller (cron 30s para callbacks de video)</li>
+            <li>lab_configs: añadir videolab stage_order=5</li>
+            <li>Test T7: VideoLab end-to-end</li>
+          </ul>
+          <div class="phase-kpi">Primer TikTok publicado vía pipeline IID en &lt;5 min desde finding</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-label">
+          <div class="phase-num">Fase 3</div>
+          <div class="phase-name">Identidad Sonora</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">VoiceLab — activar voz de marca</div>
+          <ul class="checklist">
+            <li>Crear cuenta ElevenLabs Creator ($22/mes)</li>
+            <li>Grabar 30s audio de Sam → clonar voz Lucien Sael</li>
+            <li>Decidir voz UNRLVL Presenter (propia o stock)</li>
+            <li>VoiceLab stage integrado en pipeline (EF directo)</li>
+            <li>ELEVENLABS_API_KEY en Supabase EF secrets</li>
+            <li>Audio assets en Supabase Storage</li>
+          </ul>
+          <div class="phase-kpi">Primera pieza con voz de Lucien distribuida en LinkedIn</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-label">
+          <div class="phase-num">Fase 4</div>
+          <div class="phase-name">Identidad Visual</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">AvatarLab — Lucien y UNRLVL hablan</div>
+          <ul class="checklist">
+            <li>Crear cuenta HeyGen Business ($89/mes)</li>
+            <li>Grabar 2 min video Sam (expresión neutral, buena luz)</li>
+            <li>Crear avatar Lucien Sael en HeyGen</li>
+            <li>Crear avatar UNRLVL Presenter</li>
+            <li>AvatarLab stage integrado en pipeline (async HeyGen)</li>
+            <li>HEYGEN_API_KEY en Supabase EF secrets</li>
+          </ul>
+          <div class="phase-kpi">Primer talking head video de Lucien publicado con IID finding</div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-label">
+          <div class="phase-num">Fase 5</div>
+          <div class="phase-name">Flagship Product</div>
+        </div>
+        <div class="phase-body">
+          <div class="phase-title">PodcastLab — el diferenciador premium</div>
+          <ul class="checklist">
+            <li>Crear cuenta Creatomate Starter ($49/mes)</li>
+            <li>Script generation (CopyLab extended, format=podcast)</li>
+            <li>Composición: avatar + B-roll + intro/outro</li>
+            <li>RSS feed: distribución Spotify + Apple Podcasts</li>
+            <li>Nombre del podcast: The Unrealville Intel Brief</li>
+          </ul>
+          <div class="phase-kpi">Primer episodio de The Unrealville Intel Brief publicado y distribuido</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SUBSCRIPTIONS -->
+  <section id="subscriptions">
+    <div class="section-eyebrow">Suscripciones necesarias</div>
+    <h2>Stack completo de servicios</h2>
+
+    <table class="subs-table">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Plan recomendado</th>
+          <th>Costo/mes</th>
+          <th>Fase</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="subs-service">Anthropic API</div><div style="font-size:10px;color:var(--text-dim)">CopyLab · AIFE · SocialLab</div></td>
+          <td><div class="subs-plan">Pay-per-use</div></td>
+          <td><div class="subs-cost">~$50–100</div></td>
+          <td><div class="subs-phase">✓ Activo</div></td>
+          <td><div class="subs-url"><a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">fal.ai</div><div style="font-size:10px;color:var(--text-dim)">ImageLab · VideoLab · media bus</div></td>
+          <td><div class="subs-plan">Pay-per-use</div></td>
+          <td><div class="subs-cost">~$15–50</div></td>
+          <td><div class="subs-phase">→ Fase 1</div></td>
+          <td><div class="subs-url"><a href="https://fal.ai" target="_blank">fal.ai</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">Google AI Studio</div><div style="font-size:10px;color:var(--text-dim)">Gemini · Imagen 3 (hasta migrar a fal.ai)</div></td>
+          <td><div class="subs-plan">Pay-per-use</div></td>
+          <td><div class="subs-cost">~$5–15</div></td>
+          <td><div class="subs-phase">→ Fase 1</div></td>
+          <td><div class="subs-url"><a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">Supabase</div><div style="font-size:10px;color:var(--text-dim)">DB · Edge Functions · Storage</div></td>
+          <td><div class="subs-plan">Pro (actualmente Free)</div></td>
+          <td><div class="subs-cost">$25</div></td>
+          <td><div class="subs-phase">→ Fase 2</div></td>
+          <td><div class="subs-url"><a href="https://supabase.com/dashboard" target="_blank">supabase.com</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">Resend</div><div style="font-size:10px;color:var(--text-dim)">Email de aprobación</div></td>
+          <td><div class="subs-plan">Pay-per-use</div></td>
+          <td><div class="subs-cost">~$5</div></td>
+          <td><div class="subs-phase">✓ Activo</div></td>
+          <td><div class="subs-url"><a href="https://resend.com" target="_blank">resend.com</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">ElevenLabs</div><div style="font-size:10px;color:var(--text-dim)">VoiceLab · clonación de voz</div></td>
+          <td><div class="subs-plan">Creator</div></td>
+          <td><div class="subs-cost">$22</div></td>
+          <td><div class="subs-phase">→ Fase 3</div></td>
+          <td><div class="subs-url"><a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">HeyGen</div><div style="font-size:10px;color:var(--text-dim)">AvatarLab · talking heads</div></td>
+          <td><div class="subs-plan">Business</div></td>
+          <td><div class="subs-cost">$89</div></td>
+          <td><div class="subs-phase">→ Fase 4</div></td>
+          <td><div class="subs-url"><a href="https://heygen.com" target="_blank">heygen.com</a></div></td>
+        </tr>
+        <tr>
+          <td><div class="subs-service">Creatomate</div><div style="font-size:10px;color:var(--text-dim)">PodcastLab · composición de video</div></td>
+          <td><div class="subs-plan">Starter</div></td>
+          <td><div class="subs-cost">$49</div></td>
+          <td><div class="subs-phase">→ Fase 5</div></td>
+          <td><div class="subs-url"><a href="https://creatomate.com" target="_blank">creatomate.com</a></div></td>
+        </tr>
+        <tr class="subs-total-row">
+          <td colspan="2"><strong>Total infraestructura (Fase 5 completa)</strong></td>
+          <td class="subs-cost">$255–340/mes</td>
+          <td colspan="2" style="font-size:10px;color:var(--text-dim)">Para un estudio que factura $10K+/mes: &lt;3% de ingresos</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Variables a añadir a Supabase EF Secrets</h3>
+    <div class="decision-tree">
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">ANTHROPIC_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--green);">✓ Activa</span></div>
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">RESEND_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--green);">✓ Activa</span></div>
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">FAL_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--gold);">→ Fase 1 — crear en fal.ai</span></div>
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">GEMINI_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--gold);">→ Fase 1 — verificar en aistudio.google.com</span></div>
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">ELEVENLABS_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--text-dim);">→ Fase 3</span></div>
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">HEYGEN_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--text-dim);">→ Fase 4</span></div>
+      <div class="dt-row"><span class="dt-q" style="font-family:var(--mono);color:var(--cyan)">CREATOMATE_API_KEY</span><span class="dt-arrow">·</span><span class="dt-a" style="color:var(--text-dim);">→ Fase 5</span></div>
+    </div>
+  </section>
+
+  <!-- COSTS -->
+  <section id="costs">
+    <div class="section-eyebrow">Modelo de costos</div>
+    <h2>Por pieza de contenido</h2>
+
+    <div class="cost-matrix">
+      <div class="cm-cell header">Tier de contenido</div>
+      <div class="cm-cell header">Costo por pieza</div>
+      <div class="cm-cell header">100 piezas/mes</div>
+
+      <div class="cm-cell"><div class="cm-tier">Solo texto + imagen</div><div class="cm-desc">Copy + AIFE + ImageLab + Social</div></div>
+      <div class="cm-cell"><div class="cm-price">$0.08</div></div>
+      <div class="cm-cell"><div class="cm-price" style="font-size:20px">$8</div><div class="cm-unit">/mes</div></div>
+
+      <div class="cm-cell"><div class="cm-tier">Texto + imagen + video</div><div class="cm-desc">+ VideoLab (clip 10s)</div></div>
+      <div class="cm-cell"><div class="cm-price">$0.77</div></div>
+      <div class="cm-cell"><div class="cm-price" style="font-size:20px">$77</div><div class="cm-unit">/mes</div></div>
+
+      <div class="cm-cell"><div class="cm-tier">Full con avatar</div><div class="cm-desc">+ VoiceLab + AvatarLab</div></div>
+      <div class="cm-cell"><div class="cm-price">$3.17</div></div>
+      <div class="cm-cell"><div class="cm-price" style="font-size:20px">$317</div><div class="cm-unit">/mes</div></div>
+
+      <div class="cm-cell"><div class="cm-tier">Podcast (5 min)</div><div class="cm-desc">Full pipeline completo</div></div>
+      <div class="cm-cell"><div class="cm-price">$4.00</div></div>
+      <div class="cm-cell"><div class="cm-price" style="font-size:20px">$40–80</div><div class="cm-unit">10–20 episodios/mes</div></div>
+    </div>
+  </section>
+
+  <!-- CLIENTS TIERS -->
+  <section id="clients">
+    <div class="section-eyebrow">Producto para clientes</div>
+    <h2>Tiers de servicio</h2>
+
+    <div class="lab-grid">
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Básico · Social Content Engine</div>
+          <div class="lab-provider">$X/mes</div>
+        </div>
+        <div class="lab-detail">Posts diarios con imagen, publicados automáticamente. Labs: CopyLab + AIFE + ImageLab + SocialLab.</div>
+        <div class="lab-cost">Costo UNRLVL: ~$0.08/pieza · margen muy alto</div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Estándar · Video Social Engine</div>
+          <div class="lab-provider">$XX/mes</div>
+        </div>
+        <div class="lab-detail">Todo Básico + VideoLab. Posts + video clips para TikTok y Reels. La diferencia visual entre un cliente y otro se hace evidente.</div>
+        <div class="lab-cost">Costo UNRLVL: ~$0.77/pieza</div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Premium · Brand Presence Engine</div>
+          <div class="lab-provider">$XXX/mes</div>
+        </div>
+        <div class="lab-detail">Todo Estándar + VoiceLab + AvatarLab. Identidad sonora y visual consistente. El cliente tiene su propia "cara y voz" en todo el contenido.</div>
+        <div class="lab-cost">Costo UNRLVL: ~$3.17/pieza</div>
+      </div>
+      <div class="lab-card">
+        <div class="lab-card-header">
+          <div class="lab-title">Flagship · Authority Content Engine</div>
+          <div class="lab-provider">$XXXX/mes</div>
+        </div>
+        <div class="lab-detail">Todo Premium + PodcastLab. Podcast semanal con avatar del cliente hablando análisis de inteligencia. El tier que ningún competidor puede replicar en precio ni velocidad.</div>
+        <div class="lab-cost">Costo UNRLVL: ~$4–8/episodio + $3/pieza</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MODEL CHANGE RULE -->
+  <section id="model-change">
+    <div class="section-eyebrow">Regla de oro</div>
+    <h2>Cuándo cambiar un modelo</h2>
+
+    <div class="rule-box">
+      <div class="rule-box-title">Un modelo se reemplaza SOLO cuando:</div>
+      <ul class="rule-list">
+        <li>El nuevo modelo es ≥20% mejor en calidad para el caso de uso específico del lab</li>
+        <li>El nuevo modelo es ≥30% más económico a igual calidad</li>
+        <li>El provider actual tiene un incidente de servicio crítico (downtime, pricing shock, API break)</li>
+        <li>El pipeline de evaluación A/B muestra preferencia estadística por el nuevo modelo</li>
+      </ul>
+    </div>
+
+    <p style="color:var(--text-dim)">No se cambia por hype, por novedad, ni por "salió una versión nueva". El <code style="background:var(--bg3); padding:2px 6px; color:var(--cyan);">default_model</code> vive en <code style="background:var(--bg3); padding:2px 6px; color:var(--cyan);">lab_configs.default_params</code> — cambiar un modelo es una query SQL, no un deployment.</p>
+
+    <h3>¿Por qué no un modelo multimodal único?</h3>
+
+    <p>La pregunta natural es si no sería más simple usar un solo modelo que haga todo. La respuesta es no:</p>
+
+    <p><strong style="color:var(--text-bright);">1. Ningún modelo unificado es el mejor en cada modalidad.</strong> Claude escribe mejor copy que Gemini. Kling genera mejor video social que cualquier modelo de texto. ElevenLabs produce mejor voz que cualquier modelo multimodal. Los modelos especializados siempre ganan a los generalistas en sus dominios.</p>
+
+    <p><strong style="color:var(--text-bright);">2. Control de costos imposible con modelos unificados.</strong> Un modelo multimodal cobra por la pieza completa. El enfoque modular cobra solo por lo que se usa.</p>
+
+    <p><strong style="color:var(--text-bright);">3. Sustitución trivial en el modelo modular.</strong> Si mañana Anthropic lanza algo mejor para copy, cambias CopyLab. El resto del pipeline no se toca.</p>
+
+    <p style="color:var(--text-dim); font-size:11px;">Excepción: evaluación y scoring de contenido ya generado (ej: Gemini Vision evaluando si una imagen cumple criterios de marca). Eso es un caso válido para una capa de QA futura.</p>
+  </section>
+
+  <footer>
+    <div><span class="footer-logo">UNRLVL</span> · AI Labs Strategy v1.0</div>
+    <div>Abril 2026 · Confidencial</div>
+  </footer>
+
+</main>
+
+</body>
+</html>
