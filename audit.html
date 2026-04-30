@@ -1,440 +1,337 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UNRLVL ShopifyAuditor v2</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UNRLVL ShopifyAuditor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0A0A0A;--surface:#141414;--surface2:#1E1E1E;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);--text:#F2F0EC;--muted:rgba(242,240,236,.45);--dim:rgba(242,240,236,.22);--cyan:#00FFD1;--red:#FF4444;--amber:#FFB020;--blue:#4499FF;--green:#00FFD1;--font:'Courier New',monospace}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
-.app{display:grid;grid-template-rows:56px 1fr;height:100vh}
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
-.logo{color:var(--cyan);font-size:14px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
-.store-badge{background:var(--surface2);border:1px solid var(--border2);padding:4px 12px;font-size:11px;color:var(--muted);letter-spacing:.1em}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
-.score-badge{font-size:20px;font-weight:700;padding:2px 12px;border:1px solid;border-radius:2px}
-.score-green{color:var(--cyan);border-color:rgba(0,255,209,.3);background:rgba(0,255,209,.06)}
-.score-amber{color:var(--amber);border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.06)}
-.score-red{color:var(--red);border-color:rgba(255,68,68,.3);background:rgba(255,68,68,.06)}
-btn,button{font-family:var(--font);cursor:pointer;border:none;padding:8px 18px;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;transition:opacity .15s}
-.btn-primary{background:var(--cyan);color:#080808}
-.btn-primary:hover{opacity:.85}
-.btn-primary:disabled{background:var(--surface2);color:var(--dim);cursor:not-allowed}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border2)}
-.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
-.btn-fix{background:rgba(0,255,209,.12);color:var(--cyan);border:1px solid rgba(0,255,209,.3);padding:5px 12px;font-size:10px}
+:root{--bg:#0A0A0A;--sf:#141414;--sf2:#1E1E1E;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.12);--tx:#F2F0EC;--mu:rgba(242,240,236,.45);--di:rgba(242,240,236,.22);--cy:#00FFD1;--re:#FF4444;--am:#FFB020;--bl:#4499FF;--fn:'Courier New',monospace}
+body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh;font-size:13px}
+.app{display:grid;grid-template-rows:auto 1fr;height:100vh}
+.topbar{background:var(--sf);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;flex-direction:column;gap:8px}
+.topbar-row1{display:flex;align-items:center;gap:12px}
+.logo{color:var(--cy);font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap}
+.store-status{font-size:10px;color:var(--mu);padding:3px 10px;background:var(--sf2);border:1px solid var(--bd);letter-spacing:.08em}
+.topbar-row2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.domain-label{font-size:10px;color:var(--mu);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.domain-input{background:var(--sf2);border:1px solid var(--bd2);color:var(--tx);padding:6px 12px;font-family:var(--fn);font-size:12px;outline:none;flex:1;min-width:200px;max-width:380px}
+.domain-input:focus{border-color:var(--cy)}
+.domain-input::placeholder{color:var(--di)}
+.btn{font-family:var(--fn);cursor:pointer;border:none;padding:6px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.btn-p{background:var(--cy);color:#080808}.btn-p:hover{opacity:.85}.btn-p:disabled{background:var(--sf2);color:var(--di);cursor:not-allowed}
+.btn-g{background:transparent;color:var(--mu);border:1px solid var(--bd2)}.btn-g:hover{color:var(--tx)}
+.btn-fix{background:rgba(0,255,209,.1);color:var(--cy);border:1px solid rgba(0,255,209,.3);padding:4px 10px;font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .btn-fix:hover{background:rgba(0,255,209,.2)}
-.btn-howto{background:transparent;color:var(--muted);border:1px solid var(--border);padding:5px 12px;font-size:10px}
-.btn-howto:hover{color:var(--text);border-color:var(--border2)}
-.main{display:grid;grid-template-columns:220px 1fr;overflow:hidden;height:calc(100vh - 56px)}
-.sidebar{border-right:1px solid var(--border);overflow-y:auto;padding:16px 0}
-.sidebar-section{padding:8px 16px 4px;font-size:9px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
-.mod-item{display:flex;align-items:center;gap:8px;padding:6px 16px;cursor:pointer;border-left:2px solid transparent;transition:background .1s}
-.mod-item:hover{background:var(--surface)}
-.mod-item.active{background:var(--surface);border-left-color:var(--cyan)}
-.mod-name{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);flex:1}
-.mod-item.active .mod-name{color:var(--text)}
-.mod-score{font-size:11px;font-weight:700}
-.mod-badge{font-size:9px;padding:1px 5px;border-radius:2px;font-weight:700}
-.badge-critical{background:rgba(255,68,68,.15);color:var(--red)}
-.badge-important{background:rgba(255,176,32,.1);color:var(--amber)}
-.badge-opportunity{background:rgba(68,153,255,.1);color:var(--blue)}
-.badge-ok{background:rgba(0,255,209,.08);color:var(--cyan)}
-.badge-fixable{background:rgba(0,255,209,.15);color:var(--cyan);border:1px solid rgba(0,255,209,.3)}
-.content{overflow-y:auto;padding:24px}
-.overview{display:grid;grid-template-columns:auto 1fr;gap:20px;margin-bottom:28px;align-items:start}
-.score-main{background:var(--surface);border:1px solid rgba(0,255,209,.25);padding:20px 28px;text-align:center}
-.score-num{font-size:64px;font-weight:900;line-height:1}
-.score-label{font-size:9px;letter-spacing:.25em;color:var(--muted);margin-top:4px;text-transform:uppercase}
-.counts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.count-card{background:var(--surface);border:1px solid var(--border);padding:12px 16px;text-align:center}
-.count-card.critical{border-color:rgba(255,68,68,.2);background:rgba(255,68,68,.04)}
-.count-card.important{border-color:rgba(255,176,32,.15);background:rgba(255,176,32,.03)}
-.count-card.opportunity{border-color:rgba(68,153,255,.15);background:rgba(68,153,255,.03)}
-.count-card.fixable{border-color:rgba(0,255,209,.2);background:rgba(0,255,209,.04)}
-.count-num{font-size:28px;font-weight:700;line-height:1;margin-bottom:3px}
-.count-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase}
-.count-card.critical .count-num,.count-card.critical .count-label{color:var(--red)}
-.count-card.important .count-num,.count-card.important .count-label{color:var(--amber)}
-.count-card.opportunity .count-num,.count-card.opportunity .count-label{color:var(--blue)}
-.count-card.fixable .count-num,.count-card.fixable .count-label{color:var(--cyan)}
-.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;margin-bottom:24px}
-.mod-tile{background:var(--surface);border:1px solid var(--border);padding:8px 10px;cursor:pointer;transition:border-color .15s;display:flex;justify-content:space-between;align-items:center}
-.mod-tile:hover{border-color:var(--border2)}
-.mod-tile-name{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.mod-tile-score{font-size:12px;font-weight:700}
-.section-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.section-title{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.finding-card{background:var(--surface);border:1px solid var(--border);margin-bottom:8px;overflow:hidden;transition:border-color .15s}
-.finding-card:hover{border-color:var(--border2)}
-.finding-card.critical{border-left:3px solid var(--red)}
-.finding-card.important{border-left:3px solid var(--amber)}
-.finding-card.opportunity{border-left:3px solid var(--blue)}
-.finding-card.ok{border-left:3px solid rgba(0,255,209,.3);opacity:.65}
-.finding-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
-.finding-header:hover .finding-toggle{color:var(--text)}
-.sev-pill{font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0}
-.sev-pill.critical{background:rgba(255,68,68,.15);color:var(--red)}
-.sev-pill.important{background:rgba(255,176,32,.1);color:var(--amber)}
-.sev-pill.opportunity{background:rgba(68,153,255,.1);color:var(--blue)}
-.sev-pill.ok{background:rgba(0,255,209,.06);color:rgba(0,255,209,.6)}
-.finding-code{font-size:10px;color:var(--dim);white-space:nowrap;flex-shrink:0}
-.finding-title{font-size:12px;font-weight:700;flex:1}
-.finding-count{font-size:10px;color:var(--dim);white-space:nowrap}
-.finding-toggle{color:var(--dim);font-size:14px;flex-shrink:0;transition:transform .2s}
-.finding-toggle.open{transform:rotate(90deg)}
-.finding-body{border-top:1px solid var(--border);padding:14px 16px;display:none}
-.finding-body.open{display:block}
-.finding-detail{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.resources-title{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
-.resources-list{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;max-height:120px;overflow-y:auto}
-.resource-chip{background:var(--surface2);border:1px solid var(--border);padding:2px 8px;font-size:10px;color:var(--muted)}
-.resource-chip .chip-val{color:var(--dim);font-size:9px;margin-left:4px}
-.finding-actions{display:flex;gap:8px;align-items:center}
-.fix-status{font-size:10px;padding:4px 10px;border-radius:2px}
-.fix-status.applying{background:rgba(255,176,32,.1);color:var(--amber)}
-.fix-status.done{background:rgba(0,255,209,.1);color:var(--cyan)}
-.fix-status.error{background:rgba(255,68,68,.1);color:var(--red)}
-.howto-box{background:var(--surface2);border:1px solid var(--border);padding:12px 14px;margin-top:10px;display:none}
-.howto-box.open{display:block}
-.howto-title{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
-.howto-text{font-size:11px;color:var(--muted);line-height:1.7;white-space:pre-wrap}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border2);padding:28px;max-width:580px;width:90%;max-height:80vh;overflow-y:auto}
-.modal-title{font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:8px;letter-spacing:.1em;text-transform:uppercase}
-.modal-subtitle{font-size:11px;color:var(--muted);margin-bottom:20px;line-height:1.6}
-.preview-item{background:var(--surface2);border:1px solid var(--border);padding:8px 12px;margin-bottom:4px;font-size:11px}
-.preview-item .item-action{color:var(--cyan);font-size:10px;margin-top:2px}
-.modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
-.empty-state{text-align:center;padding:48px 24px;color:var(--dim)}
-.empty-title{font-size:13px;margin-bottom:8px}
-.empty-sub{font-size:11px}
-.run-section{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:16px;background:var(--surface);border:1px solid var(--border)}
-.run-info{flex:1}
-.run-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
-.run-value{font-size:11px;color:var(--muted)}
-.loader{display:inline-block;width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+.btn-ht{background:transparent;color:var(--mu);border:1px solid var(--bd);padding:4px 10px;font-family:var(--fn);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.btn-ht:hover{color:var(--tx);border-color:var(--bd2)}
+.score-badge{font-size:18px;font-weight:700;padding:2px 10px;border:1px solid}
+.sc-g{color:var(--cy);border-color:rgba(0,255,209,.3);background:rgba(0,255,209,.06)}
+.sc-a{color:var(--am);border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.06)}
+.sc-r{color:var(--re);border-color:rgba(255,68,68,.3);background:rgba(255,68,68,.06)}
+.conn-error{font-size:10px;color:var(--re);padding:2px 8px;background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.2)}
+.conn-ok{font-size:10px;color:var(--cy);padding:2px 8px;background:rgba(0,255,209,.06);border:1px solid rgba(0,255,209,.2)}
+.main{display:grid;grid-template-columns:200px 1fr;overflow:hidden}
+.sidebar{border-right:1px solid var(--bd);overflow-y:auto;padding:8px 0}
+.sid-hd{padding:8px 14px 4px;font-size:9px;letter-spacing:.2em;color:var(--di);text-transform:uppercase}
+.mod-row{display:flex;align-items:center;gap:6px;padding:6px 14px;cursor:pointer;border-left:2px solid transparent}
+.mod-row:hover{background:var(--sf)}.mod-row.act{background:var(--sf);border-left-color:var(--cy)}
+.mod-nm{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);flex:1}
+.mod-row.act .mod-nm{color:var(--tx)}
+.mod-sc{font-size:11px;font-weight:700}
+.badge{font-size:8px;padding:1px 5px;border-radius:2px;font-weight:700}
+.bd-c{background:rgba(255,68,68,.15);color:var(--re)}
+.bd-i{background:rgba(255,176,32,.1);color:var(--am)}
+.bd-f{background:rgba(0,255,209,.12);color:var(--cy);border:1px solid rgba(0,255,209,.25)}
+.content{overflow-y:auto;padding:20px}
+.ov-grid{display:grid;grid-template-columns:auto 1fr;gap:16px;margin-bottom:20px}
+.score-box{background:var(--sf);border:1px solid rgba(0,255,209,.25);padding:16px 24px;text-align:center}
+.score-num{font-size:56px;font-weight:900;line-height:1}
+.score-lbl{font-size:9px;letter-spacing:.2em;color:var(--mu);margin-top:4px;text-transform:uppercase}
+.cnt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.cnt{background:var(--sf);border:1px solid var(--bd);padding:10px 14px;text-align:center}
+.cnt-n{font-size:26px;font-weight:700;line-height:1;margin-bottom:2px}
+.cnt-l{font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.cnt.cr{border-color:rgba(255,68,68,.2);background:rgba(255,68,68,.04)}.cnt.cr .cnt-n,.cnt.cr .cnt-l{color:var(--re)}
+.cnt.im{border-color:rgba(255,176,32,.15);background:rgba(255,176,32,.03)}.cnt.im .cnt-n,.cnt.im .cnt-l{color:var(--am)}
+.cnt.op{border-color:rgba(68,153,255,.15);background:rgba(68,153,255,.03)}.cnt.op .cnt-n,.cnt.op .cnt-l{color:var(--bl)}
+.cnt.fx{border-color:rgba(0,255,209,.18);background:rgba(0,255,209,.03)}.cnt.fx .cnt-n,.cnt.fx .cnt-l{color:var(--cy)}
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:4px;margin-bottom:20px}
+.mod-tile{background:var(--sf);border:1px solid var(--bd);padding:6px 9px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.mod-tile:hover{border-color:var(--bd2)}
+.tile-nm{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--mu)}
+.tile-sc{font-size:11px;font-weight:700}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--bd);margin-top:16px}
+.sec-hd:first-child{margin-top:0}
+.sec-ttl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
+.fc{background:var(--sf);border:1px solid var(--bd);margin-bottom:6px;overflow:hidden}
+.fc.cr{border-left:3px solid var(--re)}.fc.im{border-left:3px solid var(--am)}.fc.op{border-left:3px solid var(--bl)}.fc.ok{border-left:3px solid rgba(0,255,209,.25);opacity:.6}
+.fh{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;user-select:none}
+.sev{font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.sev.cr{background:rgba(255,68,68,.15);color:var(--re)}.sev.im{background:rgba(255,176,32,.1);color:var(--am)}.sev.op{background:rgba(68,153,255,.1);color:var(--bl)}.sev.ok{background:rgba(0,255,209,.06);color:rgba(0,255,209,.55)}
+.fcode{font-size:10px;color:var(--di);white-space:nowrap;flex-shrink:0}
+.ftitle{font-size:12px;font-weight:700;flex:1;min-width:0}
+.fcnt{font-size:10px;color:var(--di);white-space:nowrap}
+.ftog{color:var(--di);font-size:13px;flex-shrink:0;transition:transform .18s}.ftog.open{transform:rotate(90deg)}
+.fb{border-top:1px solid var(--bd);padding:12px 14px;display:none}.fb.open{display:block}
+.fdetail{font-size:11px;color:var(--mu);line-height:1.65;margin-bottom:10px}
+.res-hd{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--di);margin-bottom:5px}
+.res-list{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px;max-height:100px;overflow-y:auto}
+.chip{background:var(--sf2);border:1px solid var(--bd);padding:2px 7px;font-size:10px;color:var(--mu)}
+.chip .cv{color:var(--di);font-size:9px;margin-left:3px}
+.factions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.fstatus{font-size:10px;padding:3px 9px;border-radius:2px}
+.fstatus.applying{background:rgba(255,176,32,.1);color:var(--am)}.fstatus.done{background:rgba(0,255,209,.1);color:var(--cy)}.fstatus.error{background:rgba(255,68,68,.1);color:var(--re)}
+.ht-box{background:var(--sf2);border:1px solid var(--bd);padding:10px 12px;margin-top:8px;display:none}.ht-box.open{display:block}
+.ht-ttl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--cy);margin-bottom:6px}
+.ht-txt{font-size:11px;color:var(--mu);line-height:1.7;white-space:pre-wrap}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:var(--sf);border:1px solid var(--bd2);padding:24px;max-width:520px;width:92%;max-height:80vh;overflow-y:auto}
+.modal-ttl{font-size:13px;font-weight:700;color:var(--cy);margin-bottom:6px;letter-spacing:.1em;text-transform:uppercase}
+.modal-sub{font-size:11px;color:var(--mu);margin-bottom:16px;line-height:1.6}
+.prev-item{background:var(--sf2);border:1px solid var(--bd);padding:7px 10px;margin-bottom:3px;font-size:11px}
+.prev-item .pa{color:var(--cy);font-size:10px;margin-top:2px}
+.modal-acts{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.empty{text-align:center;padding:40px 20px;color:var(--di)}
+.loader{display:inline-block;width:12px;height:12px;border:2px solid var(--bd2);border-top-color:var(--cy);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.filter-btn{background:var(--surface);border:1px solid var(--border);padding:4px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .15s;font-family:var(--font)}
-.filter-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--text)}
-.filter-btn:hover{border-color:var(--border2);color:var(--text)}
-.progress-bar{height:3px;background:var(--surface2);margin-bottom:20px;overflow:hidden;border-radius:0}
-.progress-fill{height:100%;background:var(--cyan);width:0%;transition:width .3s}
-#status-text{font-size:11px;color:var(--cyan);margin-bottom:8px;min-height:16px}
+.prog{height:2px;background:var(--sf2);margin-bottom:16px;overflow:hidden}
+.prog-f{height:100%;background:var(--cy);width:0%;transition:width .3s}
+#st{font-size:11px;color:var(--cy);margin-bottom:6px;min-height:15px}
+.mod-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.mod-hd-name{font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.info-bar{margin-top:16px;padding:10px 12px;background:var(--sf);border:1px solid var(--bd);font-size:10px;color:var(--di)}
+.connected-stores{margin-top:4px}
+.cs-item{display:inline-flex;align-items:center;gap:6px;background:var(--sf2);border:1px solid var(--bd);padding:3px 10px;margin:2px;cursor:pointer;font-size:10px;color:var(--mu)}
+.cs-item:hover{border-color:var(--cy);color:var(--tx)}
+.cs-item .cs-dot{width:6px;height:6px;background:var(--cy);border-radius:50%;flex-shrink:0}
 </style></head>
 <body>
 <div class="app">
   <div class="topbar">
-    <div class="logo">UNRLVL ShopifyAuditor</div>
-    <div class="store-badge" id="store-label">No store loaded</div>
-    <div class="topbar-right">
-      <div id="score-display" style="display:none" class="score-badge">—</div>
-      <button class="btn-primary" id="run-btn" onclick="runAudit()">▶ Run Audit</button>
+    <div class="topbar-row1">
+      <div class="logo">UNRLVL ShopifyAuditor</div>
+      <div class="store-status" id="store-status">No store loaded</div>
+      <span id="score-disp" style="display:none" class="score-badge">—</span>
+      <button class="btn btn-p" id="run-btn" onclick="runAudit()" disabled style="margin-left:auto">▶ Run Audit</button>
+    </div>
+    <div class="topbar-row2">
+      <span class="domain-label">Store:</span>
+      <input class="domain-input" id="domain-input" type="text" placeholder="yourstore.myshopify.com" autocomplete="off" spellcheck="false" oninput="onDomainInput()" onkeydown="if(event.key==='Enter')lookupStore()">
+      <button class="btn btn-g" id="lookup-btn" onclick="lookupStore()">Connect</button>
+      <span id="conn-status"></span>
+    </div>
+    <div class="connected-stores" id="connected-list" style="display:none">
+      <span style="font-size:9px;color:var(--di);letter-spacing:.15em;text-transform:uppercase;margin-right:6px">Connected:</span>
     </div>
   </div>
   <div class="main">
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-section">Modules</div>
-      <div id="module-list"></div>
-    </div>
+    <div class="sidebar"><div class="sid-hd">Modules</div><div id="mod-list"></div></div>
     <div class="content" id="content">
-      <div id="main-panel"><div class="empty-state"><div class="empty-title">ShopifyAuditor v2.0</div><div class="empty-sub">Deep audit · 13 modules · Theme analysis · SEO quality · Fix engine</div><br><button class="btn-primary" onclick="runAudit()">▶ Run First Audit</button></div></div>
+      <div class="empty">
+        <div style="font-size:13px;margin-bottom:8px;color:var(--mu)">ShopifyAuditor v2.1</div>
+        <div style="font-size:11px;color:var(--di);margin-bottom:12px">Enter any connected Shopify store domain above</div>
+        <div style="font-size:10px;color:var(--di)">13 modules · Theme analysis · SEO scoring · Fix engine · Multibrand</div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="fix-modal">
+<div class="modal-ov" id="fix-modal">
   <div class="modal">
-    <div class="modal-title" id="modal-title">Apply Fix</div>
-    <div class="modal-subtitle" id="modal-subtitle"></div>
-    <div id="modal-preview"></div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn-primary" id="modal-confirm" onclick="confirmFix()">Apply Fix</button>
+    <div class="modal-ttl" id="m-ttl">Apply Fix</div>
+    <div class="modal-sub" id="m-sub"></div>
+    <div id="m-prev"></div>
+    <div class="modal-acts">
+      <button class="btn btn-g" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-p" id="m-confirm" onclick="confirmFix()">Apply Fix</button>
     </div>
   </div>
 </div>
 
 <script>
-const AUDIT_EF = 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-audit';
-const FIX_EF   = 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-fix';
-const BRAND = 'NeuroneSCF', TYPE = 'b2b';
+var AUDIT_EF  = 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-audit';
+var FIX_EF    = 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-fix';
+var LOOKUP_EF = 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-store-lookup';
+var MM = {catalog:20,collections:10,seo:10,theme:15,payments:10,orders:10,shipping:5,discounts:5,navigation:10,apps:10,performance:5,b2c_vs_b2b:5};
+var auditData=null, activeModule='overview', pendingFix=null, fixStatuses={};
+var currentDomain='', currentBrand='', currentType='';
+var lookupTimer=null;
 
-const MM = {catalog:20,collections:10,seo:10,theme:15,payments:10,orders:10,shipping:5,discounts:5,navigation:10,apps:10,performance:5,b2c_vs_b2b:5};
-let auditData = null, activeModule = 'overview', pendingFix = null, fixStatuses = {};
+// Load connected stores on startup
+window.addEventListener('load', function() { loadConnectedStores(); });
 
-const steps = ['Connecting to store...','Loading 250+ products...','Analyzing descriptions & SEO quality...','Auditing theme files (layout, footer, assets)...','Checking payments & orders...','Reviewing shipping zones...','Scanning discounts...','Auditing navigation & pages...','Compiling 13 modules...'];
+async function loadConnectedStores() {
+  try {
+    var r = await fetch(LOOKUP_EF+'?domain=list');
+    var d = await r.json();
+    var list = document.getElementById('connected-list');
+    if(d.stores && d.stores.length) {
+      list.style.display = 'block';
+      d.stores.forEach(function(s) {
+        var btn = document.createElement('span');
+        btn.className = 'cs-item';
+        btn.innerHTML = '<span class="cs-dot"></span>' + (s.display_name||s.shop_domain) + ' <span style="color:var(--di);font-size:9px">' + (s.store_type||'').toUpperCase() + '</span>';
+        btn.onclick = function() { loadStore(s.shop_domain, s.brand_id, s.store_type, s.display_name||s.shop_domain); };
+        list.appendChild(btn);
+      });
+    }
+  } catch(e) { /* silent */ }
+}
+
+function onDomainInput() {
+  clearTimeout(lookupTimer);
+  var val = document.getElementById('domain-input').value.trim();
+  document.getElementById('conn-status').innerHTML = '';
+  document.getElementById('run-btn').disabled = true;
+  if(val.length > 5) { lookupTimer = setTimeout(lookupStore, 800); }
+}
+
+async function lookupStore() {
+  var raw = document.getElementById('domain-input').value.trim();
+  if(!raw) return;
+  var domain = raw.toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*/,'');
+  // If doesn't have .myshopify.com, try adding it
+  if(!domain.includes('.')) domain = domain + '.myshopify.com';
+  var statusEl = document.getElementById('conn-status');
+  statusEl.innerHTML = '<span style="font-size:10px;color:var(--mu)"><span class="loader"></span>Checking...</span>';
+  try {
+    var r = await fetch(LOOKUP_EF + '?domain=' + encodeURIComponent(domain));
+    var d = await r.json();
+    if(d.found) {
+      loadStore(d.domain, d.brand_id, d.store_type, d.display_name||d.domain);
+    } else {
+      statusEl.innerHTML = '<span class="conn-error">Not connected \u2014 OAuth required first</span>';
+      document.getElementById('run-btn').disabled = true;
+    }
+  } catch(e) {
+    statusEl.innerHTML = '<span class="conn-error">Lookup error: ' + e.message + '</span>';
+  }
+}
+
+function loadStore(domain, brand, type, displayName) {
+  currentDomain = domain; currentBrand = brand; currentType = type;
+  document.getElementById('domain-input').value = domain;
+  document.getElementById('store-status').textContent = displayName + ' \u00b7 ' + type.toUpperCase();
+  document.getElementById('conn-status').innerHTML = '<span class="conn-ok">\u2713 Connected</span>';
+  document.getElementById('run-btn').disabled = false;
+  auditData=null; fixStatuses={};
+  document.getElementById('content').innerHTML = '<div class="empty"><div style="font-size:11px;color:var(--di)">' + displayName + ' ready \u2014 click Run Audit</div></div>';
+  document.getElementById('mod-list').innerHTML = '';
+  document.getElementById('score-disp').style.display = 'none';
+}
+
+function scCol(v, max) { var p=Math.round(v/max*100); return p>=80?'#00FFD1':p>=50?'#FFB020':'#FF4444'; }
+
+var STEPS=['Connecting to store...','Loading products (up to 250)...','Analyzing descriptions & SEO quality...','Auditing theme files (layout, footer, assets)...','Checking payments & orders...','Reviewing shipping & discounts...','Scanning navigation & pages...','Compiling 13 modules...'];
 
 async function runAudit() {
-  const btn = document.getElementById('run-btn');
-  const content = document.getElementById('content');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loader"></span>Running...';
-
-  content.innerHTML = '<div style="padding:24px"><div id="status-text">Initializing...</div><div class="progress-bar"><div class="progress-fill" id="progress"></div></div></div>';
-
-  let si = 0;
-  const iv = setInterval(() => {
-    if (si < steps.length) {
-      document.getElementById('status-text').textContent = steps[si++];
-      document.getElementById('progress').style.width = (si/steps.length*100)+'%';
-    }
-  }, 3200);
-
+  if(!currentBrand) return;
+  var btn=document.getElementById('run-btn'); btn.disabled=true; btn.innerHTML='<span class="loader"></span>Running...';
+  document.getElementById('content').innerHTML='<div style="padding:20px"><div id="st">Initializing...</div><div class="prog"><div class="prog-f" id="pf"></div></div></div>';
+  var si=0; var iv=setInterval(function(){if(si<STEPS.length){var e=document.getElementById('st');if(e)e.textContent=STEPS[si++];var p=document.getElementById('pf');if(p)p.style.width=(si/STEPS.length*100)+'%';}},3500);
   try {
-    const r = await fetch(AUDIT_EF, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({brand_id:BRAND, store_type:TYPE})});
+    var r=await fetch(AUDIT_EF,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({brand_id:currentBrand,store_type:currentType,shop_domain:currentDomain})});
     clearInterval(iv);
-    if (!r.ok) {
-      const t = await r.text();
-      content.innerHTML = `<div style="padding:24px;color:var(--red)">Error ${r.status}: ${t.slice(0,200)}</div>`;
-      btn.disabled=false; btn.textContent='▶ Retry';
-      return;
-    }
-    auditData = await r.json();
-    if (auditData.error) {
-      content.innerHTML = `<div style="padding:24px;color:var(--red)">Error: ${auditData.error} — ${auditData.detail||''}</div>`;
-      btn.disabled=false; btn.textContent='▶ Retry';
-      return;
-    }
-    fixStatuses = {};
-    renderAudit();
-    btn.disabled=false;
-    btn.textContent='↺ Re-run';
-  } catch(e) {
-    clearInterval(iv);
-    content.innerHTML = `<div style="padding:24px;color:var(--red)">Network error: ${e.message}</div>`;
-    btn.disabled=false; btn.textContent='▶ Retry';
-  }
+    if(!r.ok){var t=await r.text();document.getElementById('content').innerHTML='<div style="padding:20px;color:#FF4444">Error '+r.status+': '+t.slice(0,300)+'</div>';btn.disabled=false;btn.textContent='\u25b6 Retry';return;}
+    auditData=await r.json();
+    if(auditData.error){document.getElementById('content').innerHTML='<div style="padding:20px;color:#FF4444">Error: '+auditData.error+(auditData.detail?' \u2014 '+auditData.detail:'')+'</div>';btn.disabled=false;btn.textContent='\u25b6 Retry';return;}
+    fixStatuses={}; activeModule='overview'; renderAudit();
+  } catch(e){clearInterval(iv);document.getElementById('content').innerHTML='<div style="padding:20px;color:#FF4444">Network error: '+e.message+'</div>';}
+  btn.disabled=false; btn.textContent='\u21ba Re-run';
 }
 
-function renderAudit() {
-  if (!auditData) return;
-  const d = auditData;
-  const s = d.score || 0;
-  const sc = s >= 80 ? 'score-green' : s >= 55 ? 'score-amber' : 'score-red';
-  const el = document.getElementById('score-display');
-  el.textContent = s + '/100';
-  el.className = 'score-badge ' + sc;
-  el.style.display = '';
-  document.getElementById('store-label').textContent = (d.shop||d.domain||'') + ' · ' + (d.store_type||'').toUpperCase();
-
-  renderSidebar();
-  if (activeModule === 'overview') renderOverview();
-  else renderModule(activeModule);
+function renderAudit(){
+  if(!auditData)return; var d=auditData; var s=d.score||0;
+  var cl=s>=80?'sc-g':s>=55?'sc-a':'sc-r';
+  var el=document.getElementById('score-disp'); el.textContent=s+'/100'; el.className='score-badge '+cl; el.style.display='';
+  renderSidebar(); renderOverview();
 }
 
-function scColor(v, max) {
-  const p = Math.round(v/max*100);
-  return p>=80?'var(--cyan)':p>=50?'var(--amber)':'var(--red)';
-}
-
-function renderSidebar() {
-  const d = auditData; const sc = d.score_breakdown||{};
-  const byMod = {};
-  (d.findings||[]).forEach(f => { if(!byMod[f.module]) byMod[f.module]=[]; byMod[f.module].push(f); });
-
-  let html = `<div class="mod-item ${activeModule==='overview'?'active':''}" onclick="showModule('overview')">
-    <span class="mod-name">Overview</span><span class="score-badge ${d.score>=80?'score-green':d.score>=55?'score-amber':'score-red'}" style="font-size:12px;padding:1px 8px">${d.score}</span>
-  </div>`;
-  Object.entries(sc).forEach(([m, s]) => {
-    const max = MM[m]||10;
-    const mFindings = byMod[m]||[];
-    const crits = mFindings.filter(f=>f.severity==='critical').length;
-    const imps  = mFindings.filter(f=>f.severity==='important').length;
-    const fixes = mFindings.filter(f=>f.claude_can_fix).length;
-    let badge = '';
-    if(crits) badge = `<span class="mod-badge badge-critical">${crits}C</span>`;
-    else if(imps) badge = `<span class="mod-badge badge-important">${imps}I</span>`;
-    else if(fixes) badge = `<span class="mod-badge badge-fixable">FIX</span>`;
-    html += `<div class="mod-item ${activeModule===m?'active':''}" onclick="showModule('${m}')">
-      <span class="mod-name">${m.replace(/_/g,' ')}</span>
-      ${badge}
-      <span class="mod-tile-score" style="color:${scColor(s,max)}">${s}/${max}</span>
-    </div>`;
+function renderSidebar(){
+  var d=auditData; var sc=d.score_breakdown||{}; var byMod={};
+  (d.findings||[]).forEach(function(f){if(!byMod[f.module])byMod[f.module]=[];byMod[f.module].push(f);});
+  var html='<div class="mod-row '+(activeModule==='overview'?'act':'')+'" onclick="showMod(\'overview\')"><span class="mod-nm">Overview</span><span class="score-badge '+(d.score>=80?'sc-g':d.score>=55?'sc-a':'sc-r')+'" style="font-size:11px;padding:1px 7px">'+d.score+'</span></div>';
+  Object.keys(sc).forEach(function(m){
+    var s=sc[m],max=MM[m]||10,mf=byMod[m]||[];
+    var crits=mf.filter(function(f){return f.severity==='critical';}).length;
+    var imps=mf.filter(function(f){return f.severity==='important';}).length;
+    var fixes=mf.filter(function(f){return f.claude_can_fix;}).length;
+    var badge=crits?'<span class="badge bd-c">'+crits+'C</span>':imps?'<span class="badge bd-i">'+imps+'I</span>':fixes?'<span class="badge bd-f">FIX</span>':'';
+    html+='<div class="mod-row '+(activeModule===m?'act':'')+'" onclick="showMod(\''+m+'\')"><span class="mod-nm">'+m.replace(/_/g,' ')+'</span>'+badge+'<span class="mod-sc" style="color:'+scCol(s,max)+'">'+s+'/'+max+'</span></div>';
   });
-  document.getElementById('module-list').innerHTML = html;
+  document.getElementById('mod-list').innerHTML=html;
 }
 
-function showModule(mod) {
-  activeModule = mod;
-  renderSidebar();
-  if (mod === 'overview') renderOverview();
-  else renderModule(mod);
+function showMod(mod){activeModule=mod;renderSidebar();if(mod==='overview')renderOverview();else renderModule(mod);}
+
+function renderOverview(){
+  var d=auditData,fc=d.findings_count||{},sc=d.score_breakdown||{};
+  var sCol=d.score>=80?'#00FFD1':d.score>=55?'#FFB020':'#FF4444';
+  var html='<div class="ov-grid"><div class="score-box"><div class="score-num" style="color:'+sCol+'">'+d.score+'</div><div class="score-lbl">/100 \u00b7 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+'</div></div><div class="cnt-grid"><div class="cnt cr"><div class="cnt-n">'+(fc.critical||0)+'</div><div class="cnt-l">\ud83d\udd34 Critical</div></div><div class="cnt im"><div class="cnt-n">'+(fc.important||0)+'</div><div class="cnt-l">\ud83d\udfe1 Important</div></div><div class="cnt op"><div class="cnt-n">'+(fc.opportunity||0)+'</div><div class="cnt-l">\ud83d\udd35 Opportunity</div></div><div class="cnt fx"><div class="cnt-n">'+(fc.fixable||0)+'</div><div class="cnt-l">\u26a1 Fixable</div></div></div></div>';
+  html+='<div class="mod-grid">';
+  Object.keys(sc).forEach(function(m){var s=sc[m],max=MM[m]||10;html+='<div class="mod-tile" onclick="showMod(\''+m+'\')"><span class="tile-nm">'+m.replace(/_/g,' ')+'</span><span class="tile-sc" style="color:'+scCol(s,max)+'">'+s+'/'+max+'</span></div>';});
+  html+='</div>';
+  var crit=(d.findings||[]).filter(function(f){return f.severity==='critical';}),imps=(d.findings||[]).filter(function(f){return f.severity==='important';});
+  if(crit.length){html+='<div class="sec-hd"><span class="sec-ttl">\ud83d\udd34 Critical \u2014 '+crit.length+' blocking issues</span></div>';crit.forEach(function(f){html+=renderFinding(f);});}
+  if(imps.length){html+='<div class="sec-hd" style="margin-top:16px"><span class="sec-ttl">\ud83d\udfe1 Important \u2014 '+imps.length+' conversion issues</span></div>';imps.forEach(function(f){html+=renderFinding(f);});}
+  html+='<div class="info-bar">Audit v2.1 \u00b7 '+d.products_analyzed+' products \u00b7 Theme: '+(d.theme?d.theme.name||'\u2014':'\u2014')+' \u00b7 '+d.domain+(d.has_more_products?' \u00b7 <span style="color:#FFB020">\u26a0 >250 products: partial audit</span>':'')+'</div>';
+  document.getElementById('content').innerHTML=html;
 }
 
-function renderOverview() {
-  const d = auditData; const fc = d.findings_count||{}; const sc = d.score_breakdown||{};
-  let html = `<div class="overview">
-    <div class="score-main"><div class="score-num" style="color:${d.score>=80?'var(--cyan)':d.score>=55?'var(--amber)':'var(--red)'}">${d.score}</div><div class="score-label">/100 · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div>
-    <div class="counts-grid">
-      <div class="count-card critical"><div class="count-num">${fc.critical||0}</div><div class="count-label">🔴 Critical</div></div>
-      <div class="count-card important"><div class="count-num">${fc.important||0}</div><div class="count-label">🟡 Important</div></div>
-      <div class="count-card opportunity"><div class="count-num">${fc.opportunity||0}</div><div class="count-label">🔵 Opportunity</div></div>
-      <div class="count-card fixable"><div class="count-num">${fc.fixable||0}</div><div class="count-label">⚡ Fixable by Claude</div></div>
-    </div>
-  </div>`;
-
-  html += '<div class="module-grid">';
-  Object.entries(sc).forEach(([m,s]) => {
-    const max = MM[m]||10;
-    html += `<div class="mod-tile" onclick="showModule('${m}')"><span class="mod-tile-name">${m.replace(/_/g,' ')}</span><span class="mod-tile-score" style="color:${scColor(s,max)}">${s}/${max}</span></div>`;
-  });
-  html += '</div>';
-
-  html += '<div class="section-header"><span class="section-title">All Critical & Important Findings</span></div>';
-  const crit = (d.findings||[]).filter(f=>f.severity==='critical');
-  const imps = (d.findings||[]).filter(f=>f.severity==='important');
-  crit.forEach(f => { html += renderFinding(f); });
-  imps.forEach(f => { html += renderFinding(f); });
-
-  html += `<div style="margin-top:20px;padding:12px;background:var(--surface);border:1px solid var(--border);font-size:10px;color:var(--dim)">
-    Audit v2.0 · ${d.products_analyzed||0} products analyzed · Theme: ${d.theme?.name||'—'} · Saved to Supabase
-    ${d.has_more_products?'<span style="color:var(--amber);margin-left:8px">⚠ >250 products: audit is partial (first page only)</span>':''}
-  </div>`;
-
-  document.getElementById('content').innerHTML = html;
+function renderModule(mod){
+  var d=auditData,findings=(d.findings||[]).filter(function(f){return f.module===mod;}),sc=(d.score_breakdown||{})[mod]||0,max=MM[mod]||10;
+  var html='<div class="mod-hd"><span class="mod-hd-name">'+mod.replace(/_/g,' ')+'</span><span style="font-size:18px;font-weight:700;color:'+scCol(sc,max)+'">'+sc+'/'+max+'</span></div>';
+  if(!findings.length){html+='<div class="empty"><div style="font-size:11px">No findings</div></div>';}
+  else{['critical','important','opportunity','ok'].forEach(function(sev){var items=findings.filter(function(f){return f.severity===sev;});if(!items.length)return;var icons={critical:'\ud83d\udd34',important:'\ud83d\udfe1',opportunity:'\ud83d\udd35',ok:'\u2705'};html+='<div class="sec-hd"><span class="sec-ttl">'+icons[sev]+' '+sev.charAt(0).toUpperCase()+sev.slice(1)+' ('+items.length+')</span></div>';items.forEach(function(f){html+=renderFinding(f);});});}
+  document.getElementById('content').innerHTML=html;
 }
 
-function renderModule(mod) {
-  const d = auditData;
-  const findings = (d.findings||[]).filter(f=>f.module===mod);
-  const sc = (d.score_breakdown||{})[mod]||0;
-  const max = MM[mod]||10;
-
-  let html = `<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-    <span style="font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">${mod.replace(/_/g,' ')}</span>
-    <span style="font-size:20px;font-weight:700;color:${scColor(sc,max)}">${sc}/${max}</span>
-  </div>`;
-
-  if(!findings.length) { html += '<div class="empty-state"><div class="empty-title">No findings for this module</div></div>'; }
-  else {
-    ['critical','important','opportunity','ok'].forEach(sev => {
-      const items = findings.filter(f=>f.severity===sev);
-      if(!items.length) return;
-      const colors = {critical:var(--red),important:var(--amber),opportunity:var(--blue),ok:'rgba(0,255,209,.5)'};
-      const labels = {critical:'🔴 Critical',important:'🟡 Important',opportunity:'🔵 Opportunities',ok:'✅ Passing'};
-      html += `<div class="section-header" style="margin-top:${sev!=='critical'?'20px':'0'}"><span class="section-title">${labels[sev]} (${items.length})</span></div>`;
-      items.forEach(f => { html += renderFinding(f); });
-    });
-  }
-  document.getElementById('content').innerHTML = html;
+function renderFinding(f){
+  var st=fixStatuses[f.id];
+  var statusHtml=st?'<span class="fstatus '+st.type+'">'+st.msg+'</span>':'';
+  var fixBtn=(f.claude_can_fix&&(!st||st.type!=='done'))?'<button class="btn-fix" onclick="openFixModal(\''+f.id+'\')">&#9889; Apply Fix</button>':'';
+  var htBtn=f.how_to_fix?'<button class="btn-ht" onclick="toggleHT(\'ht-'+f.id+'\')">&#128203; How to Fix</button>':'';
+  var resHtml='';
+  if(f.affected_resources&&f.affected_resources.length){resHtml='<div class="res-hd">Affected ('+f.affected_count+' total, showing '+Math.min(f.affected_resources.length,20)+'):</div><div class="res-list">';f.affected_resources.slice(0,20).forEach(function(r){resHtml+='<div class="chip">'+escH(String(r.title||r.name||r.handle||'').slice(0,45))+(r.current?'<span class="cv">'+escH(String(r.current).slice(0,30))+'</span>':'')+'</div>';});resHtml+='</div>';}
+  var htHtml=f.how_to_fix?'<div class="ht-box" id="ht-'+f.id+'"><div class="ht-ttl">How to fix manually</div><div class="ht-txt">'+escH(f.how_to_fix)+'</div></div>':'';
+  var fixableBadge=f.claude_can_fix?'<span class="badge bd-f" style="flex-shrink:0">&#9889; fixable</span>':'';
+  var sc2=f.severity==='critical'?'cr':f.severity==='important'?'im':f.severity==='opportunity'?'op':'ok';
+  return '<div class="fc '+sc2+'" id="fc-'+f.id+'"><div class="fh" onclick="toggleF(\'fb-'+f.id+'\',\'ft-'+f.id+'\')"><span class="sev '+sc2+'">'+f.severity+'</span><span class="fcode">['+escH(f.code||'')+']</span><span class="ftitle">'+escH(f.finding)+'</span>'+(f.affected_count>0?'<span class="fcnt">'+f.affected_count+'</span>':'')+fixableBadge+'<span class="ftog" id="ft-'+f.id+'">&#9658;</span></div><div class="fb" id="fb-'+f.id+'"><div class="fdetail">'+escH(f.detail||'')+'</div>'+resHtml+'<div class="factions">'+fixBtn+htBtn+statusHtml+'</div>'+htHtml+'</div></div>';
 }
 
-function renderFinding(f) {
-  const st = fixStatuses[f.id];
-  const statusHtml = st ? `<span class="fix-status ${st.type}">${st.msg}</span>` : '';
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toggleF(bid,tid){var b=document.getElementById(bid),t=document.getElementById(tid);if(!b)return;var o=b.classList.toggle('open');if(t)t.classList.toggle('open',o);}
+function toggleHT(id){var el=document.getElementById(id);if(el)el.classList.toggle('open');}
 
-  let actionsHtml = '';
-  if (f.claude_can_fix && !st?.type?.includes('done')) {
-    actionsHtml += `<button class="btn-fix" onclick="openFixModal('${f.id}')">⚡ Apply Fix</button>`;
-  }
-  if (f.how_to_fix) {
-    actionsHtml += `<button class="btn-howto" onclick="toggleHowTo('howto-${f.id}')">📋 How to Fix</button>`;
-  }
-
-  const resourcesHtml = f.affected_resources?.length ? `
-    <div class="resources-title">Affected (${f.affected_count} total, showing ${Math.min(f.affected_resources.length,20)}):</div>
-    <div class="resources-list">${f.affected_resources.slice(0,20).map(r=>`<div class="resource-chip">${(r.title||r.name||r.handle||'').slice(0,40)}${r.current?`<span class="chip-val">${String(r.current).slice(0,30)}</span>`:''}</div>`).join('')}</div>
-  ` : '';
-
-  const howtoHtml = f.how_to_fix ? `
-    <div class="howto-box" id="howto-${f.id}">
-      <div class="howto-title">How to fix manually</div>
-      <div class="howto-text">${f.how_to_fix}</div>
-    </div>` : '';
-
-  return `<div class="finding-card ${f.severity}" id="fc-${f.id}">
-    <div class="finding-header" onclick="toggleFinding('fb-${f.id}','tog-${f.id}')">
-      <span class="sev-pill ${f.severity}">${f.severity}</span>
-      <span class="finding-code">[${f.code}]</span>
-      <span class="finding-title">${f.finding}</span>
-      ${f.affected_count>0?`<span class="finding-count">${f.affected_count} affected</span>`:''}
-      ${f.claude_can_fix?'<span class="mod-badge badge-fixable" style="flex-shrink:0">⚡ fixable</span>':''}
-      <span class="finding-toggle" id="tog-${f.id}">▶</span>
-    </div>
-    <div class="finding-body" id="fb-${f.id}">
-      <div class="finding-detail">${f.detail||''}</div>
-      ${resourcesHtml}
-      <div class="finding-actions">${actionsHtml}${statusHtml}</div>
-      ${howtoHtml}
-    </div>
-  </div>`;
-}
-
-function toggleFinding(bodyId, togId) {
-  const body = document.getElementById(bodyId);
-  const tog  = document.getElementById(togId);
-  if (!body) return;
-  const open = body.classList.toggle('open');
-  if (tog) tog.classList.toggle('open', open);
-}
-
-function toggleHowTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
-}
-
-function openFixModal(findingId) {
-  const f = (auditData.findings||[]).find(x=>x.id===findingId);
-  if (!f) return;
-  pendingFix = f;
-  document.getElementById('modal-title').textContent = 'Apply Fix: [' + f.code + ']';
-  document.getElementById('modal-subtitle').textContent = f.finding;
-
-  // Get preview
-  const items = f.fix_payload?.items || f.fix_payload?.products || [];
-  let preview = `<div class="resources-title">What Claude will fix (${items.length} items):</div>`;
-  preview += items.slice(0,8).map(i=>`<div class="preview-item">${i.productTitle||i.title||i.name}<div class="item-action">→ ${f.fix_type==='inventory_tracking_on'?'Enable inventory tracking':'Set SEO title from product title'}</div></div>`).join('');
-  if (items.length>8) preview += `<div style="font-size:10px;color:var(--dim);padding:6px 0">...and ${items.length-8} more</div>`;
-
-  document.getElementById('modal-preview').innerHTML = preview;
+function openFixModal(fid){
+  var f=(auditData.findings||[]).find(function(x){return x.id===fid;});if(!f)return;pendingFix=f;
+  document.getElementById('m-ttl').textContent='Apply Fix: ['+f.code+']';
+  document.getElementById('m-sub').textContent=f.finding;
+  var items=(f.fix_payload&&f.fix_payload.items)?f.fix_payload.items:((f.fix_payload&&f.fix_payload.products)?f.fix_payload.products:[]);
+  var prev='<div class="res-hd">What will be changed ('+items.length+' items):</div>';
+  items.slice(0,8).forEach(function(i){prev+='<div class="prev-item">'+escH(i.productTitle||i.title||i.name||'')+'<div class="pa">\u2192 '+(f.fix_type==='inventory_tracking_on'?'Enable inventory tracking':f.fix_type==='seo_title_from_product'?'Set SEO title from product title':f.fix_type)+'</div></div>';});
+  if(items.length>8)prev+='<div style="font-size:10px;color:var(--di);padding:5px 0">...and '+(items.length-8)+' more</div>';
+  document.getElementById('m-prev').innerHTML=prev;
   document.getElementById('fix-modal').classList.add('open');
 }
+function closeModal(){document.getElementById('fix-modal').classList.remove('open');pendingFix=null;}
 
-function closeModal() {
-  document.getElementById('fix-modal').classList.remove('open');
-  pendingFix = null;
+async function confirmFix(){
+  if(!pendingFix)return; var f=pendingFix;
+  var btn=document.getElementById('m-confirm'); btn.disabled=true; btn.innerHTML='<span class="loader"></span>Applying...';
+  closeModal(); fixStatuses[f.id]={type:'applying',msg:'\u23f3 Applying...'}; refreshCard(f.id);
+  try{
+    var r=await fetch(FIX_EF,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({brand_id:currentBrand,store_type:currentType,shop_domain:currentDomain,fix_type:f.fix_type,fix_payload:f.fix_payload,preview:false})});
+    var result=await r.json();
+    if(result.error)fixStatuses[f.id]={type:'error',msg:'\u274c '+result.error};
+    else fixStatuses[f.id]={type:'done',msg:'\u2705 Done: '+(result.applied||0)+' fixed'+(result.errors?', '+result.errors+' errors':'')};
+  }catch(e){fixStatuses[f.id]={type:'error',msg:'\u274c '+e.message};}
+  btn.disabled=false; btn.textContent='Apply Fix'; refreshCard(f.id);
 }
 
-async function confirmFix() {
-  if (!pendingFix) return;
-  const f = pendingFix;
-  const btn = document.getElementById('modal-confirm');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loader"></span>Applying...';
-  closeModal();
-
-  fixStatuses[f.id] = {type:'applying', msg:'⏳ Applying fix...'};
-  refreshFindingCard(f.id);
-
-  try {
-    const r = await fetch(FIX_EF, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({brand_id:BRAND, store_type:TYPE, fix_type:f.fix_type, fix_payload:f.fix_payload, preview:false})});
-    const result = await r.json();
-    if (result.error) {
-      fixStatuses[f.id] = {type:'error', msg:'❌ Error: ' + result.error};
-    } else {
-      fixStatuses[f.id] = {type:'done', msg:`✅ Applied: ${result.applied} fixed, ${result.errors||0} errors`};
-    }
-  } catch(e) {
-    fixStatuses[f.id] = {type:'error', msg:'❌ Network error: ' + e.message};
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'Apply Fix';
-  refreshFindingCard(f.id);
-}
-
-function refreshFindingCard(id) {
-  const f = (auditData.findings||[]).find(x=>x.id===id);
-  if (!f) return;
-  const card = document.getElementById('fc-'+id);
-  if (!card) return;
-  const wasOpen = document.getElementById('fb-'+id)?.classList.contains('open');
-  card.outerHTML = renderFinding(f);
-  if (wasOpen) {
-    const newBody = document.getElementById('fb-'+id);
-    const newTog  = document.getElementById('tog-'+id);
-    if (newBody) newBody.classList.add('open');
-    if (newTog)  newTog.classList.add('open');
-  }
+function refreshCard(id){
+  var f=(auditData.findings||[]).find(function(x){return x.id===id;});if(!f)return;
+  var card=document.getElementById('fc-'+id);if(!card)return;
+  var wasOpen=(document.getElementById('fb-'+id)||{}).classList&&document.getElementById('fb-'+id).classList.contains('open');
+  card.outerHTML=renderFinding(f);
+  if(wasOpen){var nb=document.getElementById('fb-'+id),nt=document.getElementById('ft-'+id);if(nb)nb.classList.add('open');if(nt)nt.classList.add('open');}
 }
 </script>
 </body></html>
