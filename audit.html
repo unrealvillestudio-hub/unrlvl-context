@@ -1,0 +1,104 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>UNRLVL ShopifyAuditor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:monospace;background:#0F0F0F;color:#F2F0EC;padding:40px;max-width:900px;margin:0 auto}
+h1{color:#00FFD1;font-size:22px;margin-bottom:4px}
+.sub{color:rgba(242,240,236,.42);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px}
+button{background:#00FFD1;color:#080808;border:none;padding:12px 28px;font-family:monospace;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;margin-bottom:16px}
+button:hover{background:#F2F0EC}
+button:disabled{background:#2E2E2B;color:rgba(242,240,236,.42);cursor:not-allowed}
+#st{color:#00FFD1;font-size:11px;min-height:16px;margin-bottom:16px}
+.score-wrap{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.score-box{background:#1A1A1A;border:1px solid rgba(0,255,209,.3);padding:16px 20px;text-align:center;flex-shrink:0}
+.snum{font-size:48px;font-weight:900;line-height:1}
+.slabel{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,240,236,.42);margin-top:4px}
+.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;flex:1;min-width:240px}
+.cnt{background:#1A1A1A;border:1px solid rgba(242,240,236,.08);padding:10px;text-align:center}
+.cnum{font-size:24px;font-weight:700;line-height:1;margin-bottom:3px}
+.clabel{font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.critical .cnum,.critical .clabel{color:#FF4444}
+.important .cnum,.important .clabel{color:#FFB020}
+.opportunity .cnum,.opportunity .clabel{color:#4499FF}
+.ok-c .cnum,.ok-c .clabel{color:#00FFD1}
+.modules{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px;margin-bottom:20px}
+.mod{background:#1A1A1A;border:1px solid rgba(242,240,236,.06);padding:6px 10px;display:flex;justify-content:space-between;align-items:center}
+.mn{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:rgba(242,240,236,.5)}
+.ms{font-size:12px;font-weight:700}
+table{width:100%;border-collapse:collapse}
+td{padding:9px 10px;font-size:11px;border-bottom:1px solid rgba(242,240,236,.04);vertical-align:top}
+.sev{display:inline-block;padding:2px 7px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;white-space:nowrap}
+.sev-critical{background:rgba(255,68,68,.15);color:#FF4444}
+.sev-important{background:rgba(255,176,32,.12);color:#FFB020}
+.sev-opportunity{background:rgba(68,153,255,.12);color:#4499FF}
+.fix-badge{display:inline-block;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#00FFD1;border:1px solid rgba(0,255,209,.3);padding:1px 5px;border-radius:2px;margin-left:6px}
+.mod-tag{font-size:9px;color:rgba(242,240,236,.28);white-space:nowrap}
+.finding-text{font-size:11px;color:#F2F0EC;font-weight:500}
+.finding-detail{font-size:10px;color:rgba(242,240,236,.4);margin-top:2px}
+</style></head>
+<body>
+<h1>UNRLVL ShopifyAuditor</h1>
+<div class="sub">PRO-Neurone SCFlorida &middot; B2B &middot; Full 12-module audit</div>
+<button id="btn" onclick="go()">&#9654; Run Audit</button>
+<div id="st"></div>
+<div id="out"></div>
+<script>
+var EF='https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-audit';
+var MSGS=['Connecting to store...','Loading catalog (up to 250 products)...','Checking collections...','Verifying payments & checkout...','Reviewing open orders...','Checking shipping zones...','Analyzing discounts...','SEO & navigation audit...','Settings & policies review...','Compiling final report...'];
+var MM={catalog:20,collections:10,payments:15,orders:10,apps:10,navigation:10,seo:10,performance:5,shipping:5,discounts:5,settings:20,b2c_vs_b2b:5};
+function col(p){return p>=80?'#00FFD1':p>=50?'#FFB020':'#FF4444';}
+async function go(){
+  var btn=document.getElementById('btn');
+  var st=document.getElementById('st');
+  var out=document.getElementById('out');
+  btn.disabled=true;btn.textContent='Running...';out.innerHTML='';
+  var i=0;var iv=setInterval(function(){if(i<MSGS.length)st.textContent=MSGS[i++];},3600);
+  try{
+    var r=await fetch(EF,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({brand_id:'NeuroneSCF',store_type:'b2b'})});
+    clearInterval(iv);
+    var d=await r.json();
+    if(!r.ok||d.error){
+      st.textContent='Error: '+(d.error||'HTTP '+r.status)+(d.detail?' — '+d.detail:'');
+      btn.disabled=false;btn.textContent='Retry';return;
+    }
+    st.textContent='Audit complete — '+new Date().toLocaleTimeString()+' — saved to Supabase';
+    render(d);
+  }catch(e){
+    clearInterval(iv);
+    st.textContent='Network error: '+e.message;
+  }
+  btn.disabled=false;btn.textContent='Run Again';
+}
+function render(d){
+  var out=document.getElementById('out');
+  var fc=d.findings_count||{};
+  var sc=d.score_breakdown||{};
+  var p=Math.round(d.score);
+  var c=col(p);
+  var h='<div class="score-wrap">';
+  h+='<div class="score-box"><div class="snum" style="color:'+c+'">'+p+'</div><div class="slabel">/100</div></div>';
+  h+='<div class="counts">';
+  h+='<div class="cnt critical"><div class="cnum">'+(fc.critical||0)+'</div><div class="clabel">Critical</div></div>';
+  h+='<div class="cnt important"><div class="cnum">'+(fc.important||0)+'</div><div class="clabel">Important</div></div>';
+  h+='<div class="cnt opportunity"><div class="cnum">'+(fc.opportunity||0)+'</div><div class="clabel">Opport.</div></div>';
+  h+='<div class="cnt ok-c"><div class="cnum">'+(fc.ok||0)+'</div><div class="clabel">OK</div></div>';
+  h+='</div></div>';
+  h+='<div class="modules">';
+  for(var m in sc){var s=sc[m];var max=MM[m]||10;var pct=Math.round(s/max*100);h+='<div class="mod"><span class="mn">'+m.replace(/_/g,' ')+'</span><span class="ms" style="color:'+col(pct)+'">'+s+'/'+max+'</span></div>';}
+  h+='</div>';
+  var findings=(d.findings||[]).filter(function(f){return f.severity!=='ok';});
+  findings.sort(function(a,b){var o={critical:0,important:1,opportunity:2};return (o[a.severity]||3)-(o[b.severity]||3);});
+  if(findings.length){
+    h+='<table>';
+    for(var i=0;i<findings.length;i++){
+      var f=findings[i];
+      h+='<tr><td style="width:90px"><span class="sev sev-'+f.severity+'">'+f.severity+'</span></td>';
+      h+='<td><div class="finding-text">['+f.code+'] '+f.finding+(f.fix_available?'<span class="fix-badge">fix</span>':'')+'</div>';
+      if(f.detail)h+='<div class="finding-detail">'+f.detail+'</div>';
+      h+='</td><td class="mod-tag">'+f.module+'</td></tr>';
+    }
+    h+='</table>';
+  }
+  out.innerHTML=h;
+}
+</script>
+</body></html>
