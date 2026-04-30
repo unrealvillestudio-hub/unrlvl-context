@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-26",
+    "version": "2026-04-30",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -15,8 +15,9 @@
       "ai_labs_strategy": "https://unrlvl-context.vercel.app/docs/UNRLVL_Labs_Strategy.html"
     },
     "last_audit": {
-      "date": "2026-04-26",
-      "status": "IID Content Engine OPERACIONAL end-to-end. Pipeline completo: copylab:ok + aife:ok + imagelab:failed(skip) + sociallab:ok → content_piece creado → email aprobación Sam confirmado. Bug resuelto: EdgeRuntime.waitUntil reemplazado por arquitectura síncrona. content-run-stage v1.10 auto-loguea costos en ops_generation_ledger. AI Labs Strategy definida: 8 labs, 5 fases, fal.ai como media bus. OPS cost tracking: ops_generation_ledger + ops_lab_rates + 8 KPI views. PENDIENTE PRÓXIMA SESIÓN: test approval flow, imagelab directo EF, OAuth social, fal.ai account.",
+      "date": "2026-04-30",
+      "status": "content-run-stage v1.11 LIVE — ImageLab pipeline completo fal.ai directo. approve-piece EF. approve-job v2.0. brand_oauth_tokens creada. Social accounts UNRLVL+Lucien en progreso (Meta App + Instagram + TikTok). unrealvillestudio.com index v3 generado. luciensael.com index v3 + legal pages propias. BP_Brand_Person_id.md Lucien COMPLETE v1.0. LucienSael brand en Supabase. PENDIENTE: deploy CoreProject+Lucien, DNS www Cloudflare, OAuth social, MJ master shot Lucien.",
+       Pipeline completo: copylab:ok + aife:ok + imagelab:failed(skip) + sociallab:ok → content_piece creado → email aprobación Sam confirmado. Bug resuelto: EdgeRuntime.waitUntil reemplazado por arquitectura síncrona. content-run-stage v1.10 auto-loguea costos en ops_generation_ledger. AI Labs Strategy definida: 8 labs, 5 fases, fal.ai como media bus. OPS cost tracking: ops_generation_ledger + ops_lab_rates + 8 KPI views. PENDIENTE PRÓXIMA SESIÓN: test approval flow, imagelab directo EF, OAuth social, fal.ai account.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -36,7 +37,7 @@
     "tagline": "I build worlds. Some of them survive.",
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
-    "web_status": "GENERATED v2.1 — pending deploy",
+   "web_status": "GENERATED v3 — PENDING DEPLOY + domain DNS",
     "brand_identity": {
       "version": "v1.0",
       "status": "COMPLETE",
