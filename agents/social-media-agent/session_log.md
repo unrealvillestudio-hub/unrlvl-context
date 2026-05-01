@@ -1,27 +1,25 @@
-# SOCIAL MEDIA AGENT — Session Log
-_Exportado: 2026-04-30_
+# SOCIAL MEDIA AGENT — Session Log Export
+_Generado: 2026-05-01 · Protocolo Actualiza_
 
-## ESTADO INFRAESTRUCTURA NEURONE SCF
+## ESTADO INFRAESTRUCTURA DIGITAL NEURONE SCF
 
 | Plataforma | Estado |
 |---|---|
-| Meta Business Manager | ✅ Configurado |
-| Facebook Page | ✅ Creada |
-| Instagram Business | ✅ Creado — vinculación FB pendiente |
-| TikTok for Business | ✅ Creado |
-| WhatsApp Business API | ⏳ Pendiente |
-| Logos / Assets | ❌ Pendiente |
-| Verificación dominio | ❌ Pendiente |
+| Meta Business Manager | ✅ CONFIGURADO |
+| Facebook Page | ✅ CREADA |
+| Instagram Business | ✅ CREADO (vinculación FB pendiente) |
+| TikTok for Business | ✅ CREADO |
+| WhatsApp Business API | ⏳ EN CONFIGURACIÓN |
+| Verificación dominio Meta | ❌ PENDIENTE |
 
-## DECISIONES
-- 7 aliases: admin@, ig@, waba@, tiktok@, ads@, support@, hello@
-- Número comercial separado — número personal Patricia intocable
-- Un BM por marca
-- TikTok Shop diferido hasta dirección comercial oficial
-- WhatsApp Business API desde Meta BM (no app)
+## ÚLTIMAS SESIONES
+
+**Laura (2026-04-18):** Completó TikTok for Business setup vía web. Meta BM + FB Page + Instagram + TikTok todos activos. WABA en proceso. Vinculación Instagram↔FB pendiente en app de Patricia.
+
+**Sam (2026-04-10):** Estrategia aliases email definida. 7 aliases: admin, hello, support, ig, tiktok, waba, ads @ neuronescflorida.com.
 
 ## PRÓXIMOS PASOS
-1. Vincular Instagram → Facebook Page (Patricia desde app)
-2. WhatsApp Business API en Meta BM
-3. Logos/assets de Neurone Cosmética
-4. Verificar dominio neuronescflorida.com
+1. Patricia: vincular Instagram → Facebook Page
+2. Patricia: finalizar WABA número T-Mobile
+3. Sam: crear aliases en hosting neuronescflorida.com
+4. Conseguir brand assets oficiales de Neurone Cosmética

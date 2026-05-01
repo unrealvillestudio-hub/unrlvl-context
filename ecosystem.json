@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-05-01-v2",
+    "version": "2026-05-01-v3",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -9,7 +9,7 @@
     },
     "last_audit": {
       "date": "2026-05-01",
-      "status": "ShopifyAuditor v3 READY FOR BUSINESS. NeuroneSCF B2B score 96/135. Fix engine operativo (OG tags applied). B2B+B2C OAuth connected. audit EF v8, fix EF v2, oauth EF v4. brand.json marketing_context PENDIENTE COMMIT — esperando definición B2C context de Sam.",
+      "status": "ShopifyAuditor R4B COMPLETE. NeuroneSCF B2C score 100/145 (fixable:0). B2B score 96/135. audit EF v9.4/v13, fix-all EF v3 (race condition fixed). GraphQL SEO read-back + content_language module active.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -85,13 +85,15 @@
           "internal_domain": "egdk1n-gt.myshopify.com",
           "display": "Neurone SCFlorida B2C",
           "oauth_status": "CONNECTED — read_apps included",
-          "last_audit_score": null,
-          "last_audit_date": null,
-          "audit_status": "PENDING first audit"
+          "last_audit_score": 100,
+          "last_audit_score_max": 145,
+          "last_audit_date": "2026-05-01",
+          "audit_status": "✅ AUTOMATED FIXES COMPLETE — fixable:0 — 100/145",
+          "seo_status": "62/62 products with enriched SEO title + meta description (GraphQL verified · 98% keyword coverage)"
         }
       },
-      "gaps": "Privacy/Refund/ToS policies · Shipping rates · Payment gateway (B2B invoice model TBD Patricia) · brand.json marketing_context pending B2C definition",
-      "completed": "Meta BM · Facebook Page · TikTok · Shopify B2B+B2C OAuth ✅ · ShopifyAuditor v3 · OG tags fix applied · read_apps scope active"
+      "gaps": "MANUAL ONLY: Refund/ToS/Privacy/Shipping policies · 12 kits sin imagen · 20 variantes $0.00 · 20 variantes stock-1 · Cookie consent app · Footer legal links · Payment gateway · Shipping rates florida zone · 1 producto descripción en español (Dyfensor Sulfate Free Shampoo)",
+      "completed": "Meta BM · Facebook Page · TikTok · Shopify B2B+B2C OAuth ✅ · ShopifyAuditor v9.4 · fix-all v3 (race condition fixed) · GraphQL SEO read-back · content_language module · B2C SEO 100% enriched (title+desc combined mutation)"
     },
     {
       "id": "ForumPHs",
@@ -120,7 +122,7 @@
     {"id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green"}
   ],
   "shopify_auditor": {
-    "version": "3.2",
+    "version": "3.3",
     "status": "READY FOR BUSINESS ✅",
     "objective": "Auditoría Shopify técnica + estratégica. Uso interno UNRLVL + lead gen externo.",
     "repo": "GitHub/unrealvillestudio-hub/Tools",
@@ -135,29 +137,51 @@
       "important": "Para marcas del ecosistema NO mostrar formulario de 7 preguntas — leer brand.json marketing_context directamente"
     },
     "edge_functions": {
-      "shopify-audit": {"version": "v8", "status": "ACTIVE", "notes": "13 módulos + strategic_seo. read_apps. maxScore fix (settings:20). Split product queries. Explicit error handling."},
-      "shopify-fix": {"version": "v2", "status": "ACTIVE", "notes": "4 fix types. Snapshot via RPC save_theme_snapshot (fix schema bug v1)."},
-      "shopify-store-lookup": {"version": "v1", "status": "ACTIVE"},
-      "shopify-audit-brief": {"version": "v1", "status": "ACTIVE"},
-      "shopify-oauth": {"version": "v4", "status": "ACTIVE", "notes": "STORE_REGISTRY: NeuroneSCF:b2b + NeuroneSCF:b2c"}
+      "shopify-audit": {
+        "supabase_version": 13,
+        "semantic_version": "v9.4",
+        "status": "ACTIVE",
+        "notes": "14 módulos: settings, catalog, content_language, seo, collections, theme, payments, orders, shipping, discounts, navigation, apps, performance, b2c_vs_b2b + strategic_seo. GraphQL SEO read-back (fetchProductSeoMap). scoreMax 135 base + 5 content_language + 10 strategic."
+      },
+      "shopify-fix-all": {
+        "supabase_version": 3,
+        "semantic_version": "v3",
+        "status": "ACTIVE",
+        "notes": "Race condition FIXED. Phase 1: batch title generation (1 Claude call/10 products). Phase 2: combined seo_title+seo_desc in ONE productUpdate mutation per product. desc_enrich separate (different Shopify field). Cost: ~$0.17/run for 62 products."
+      },
+      "shopify-fix": {"supabase_version": 6, "semantic_version": "v6", "status": "ACTIVE", "notes": "4 fix types. toGid + descriptionHtml + gqlError."},
+      "shopify-store-lookup": {"supabase_version": 1, "status": "ACTIVE"},
+      "shopify-audit-brief": {"supabase_version": 1, "status": "ACTIVE"},
+      "shopify-oauth": {"supabase_version": 4, "status": "ACTIVE", "notes": "STORE_REGISTRY: NeuroneSCF:b2b + NeuroneSCF:b2c"}
     },
-    "supabase_rpcs": ["get_shopify_store", "get_shopify_store_by_domain", "list_connected_stores", "save_shopify_audit_run", "get_latest_audit", "save_theme_snapshot"],
-    "connected_stores": [
-      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 96},
-      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": null}
-    ],
     "fix_types": {
+      "fix_seo_combined": {"scope": "write_products", "status": "deployed v3 ✅ — title+desc combined, race condition fixed"},
+      "fix_seo_title_enriched": {"scope": "write_products", "status": "superseded by fix_seo_combined"},
+      "fix_seo_description": {"scope": "write_products", "status": "superseded by fix_seo_combined"},
+      "fix_description_enrich": {"scope": "write_products", "status": "deployed"},
       "inventory_tracking_on": {"scope": "write_inventory", "status": "deployed"},
       "seo_title_from_product": {"scope": "write_products", "status": "deployed"},
       "theme_add_canonical": {"scope": "write_themes", "status": "deployed"},
       "theme_add_og_tags": {"scope": "write_themes", "status": "deployed — TESTED ✅"}
     },
-    "pending_improvements": [
+    "cost_model": {
+      "per_store_62_products": "~$0.17 (SEO title batch + 62 meta desc calls)",
+      "at_scale_10_stores": "~$1.70",
+      "at_scale_100_stores": "~$17.00",
+      "notes": "v3 same Claude call count as v2 — savings are architectural (quality), not cost"
+    },
+    "tech_debt": [
+      "CAT-LANG-002: Detectar mezcla ES/EN dentro de la misma página (título vs descripción). Requiere detección a nivel párrafo — nombres de marca son language-neutral.",
+      "fix_language_translate: Auto-traducción via Claude de descripciones en idioma incorrecto.",
+      "Multi-agent architecture para >1000 productos (partición A/B/C del catálogo para 3x throughput).",
       "brand.json marketing_context → auto-inject as strategic_context (no form for ecosystem brands)",
       "marketing_context debe tener sub-secciones b2b y b2c cuando hay ambos canales",
       "Sales closing: intake form (7q) + landing + fix packs pricing",
-      "fix_description_enrich via Claude API",
       "fix_theme_json_ld"
+    ],
+    "connected_stores": [
+      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 96, "last_audit_max": 135},
+      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 100, "last_audit_max": 145}
     ]
   },
   "labs": [
@@ -176,7 +200,7 @@
   ],
   "skills_roadmap": [
     {"id": "SKILL-UIUX", "name": "ui-ux-layer", "priority": 1, "status": "COMPLETE v2.1"},
-    {"id": "SKILL-SA", "name": "shopify-auditor", "priority": 2, "status": "READY FOR BUSINESS v3.2", "location": "Tools/shopify-auditor/", "app": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html"},
+    {"id": "SKILL-SA", "name": "shopify-auditor", "priority": 2, "status": "READY FOR BUSINESS v3.3", "location": "Tools/shopify-auditor/", "app": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html"},
     {"id": "SKILL-IP", "name": "image-processing", "priority": 3, "status": "COMPLETE v1.0"},
     {"id": "SKILL-AB", "name": "agent-builder", "priority": 4, "status": "COMPLETE v1.0"},
     {"id": "SKILL-AIFE", "name": "aife", "priority": 5, "status": "COMPLETE v1.1"},
@@ -201,11 +225,12 @@
     {
       "id": "INFRA-SB",
       "name": "Supabase amlvyycfepwhiindxgzw",
-      "schemas": "public.* + intel.* + content.* + shopify.*(stores,audit_runs,fix_log,theme_snapshots)",
+      "schemas": "public.* + intel.* + content.* + shopify.*(stores,audit_runs,fix_runs,fix_log,theme_snapshots)",
       "ef_secrets_active": ["ANTHROPIC_API_KEY", "RESEND_API_KEY", "IID_CRON_SECRET", "SUPABASE_SERVICE_ROLE_KEY"],
       "ef_secrets_pending": ["GEMINI_API_KEY", "FAL_API_KEY", "ELEVENLABS_API_KEY"]
     },
-    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor + ShopifyAuditor v3.2",
+    {
+      "id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor + ShopifyAuditor v3.3",
       "structure": {
         "api/gh.js": "GitHub proxy",
         "api/audit-proxy.js": "Shopify audit+fix proxy (mode=brief|audit|fix)",
@@ -219,10 +244,10 @@
     {"id": "INFRA-OPS", "name": "UNRLVL-OPS", "url": "https://unrlvl-ops.vercel.app", "status": "LIVE"}
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF brand.json: definir marketing_context B2C (consumidor final vs profesional, tono, keywords) → commit brand.json completo B2B+B2C",
-    "PRIORIDAD 2 — Strategic audit B2B con keywords reales de NeuroneSCF",
-    "PRIORIDAD 3 — Audit completo NeuroneSCF B2C (primer run)",
-    "PRIORIDAD 4 — ShopifyAuditor mejora: leer brand.json marketing_context automáticamente para strategic_context (no formulario para marcas del ecosistema)",
+    "PRIORIDAD 1 — NeuroneSCF B2C: fixes manuales (Patricia en Shopify Admin) — políticas, precios, imágenes, payment gateway",
+    "PRIORIDAD 2 — CAT-LANG-002: implementar detección mezcla ES/EN en misma página (v9.5)",
+    "PRIORIDAD 3 — NeuroneSCF B2B: fix-all v3 run + actualizar score B2B",
+    "PRIORIDAD 4 — ShopifyAuditor mejora: leer brand.json marketing_context automáticamente (no formulario para marcas del ecosistema)",
     "PRIORIDAD 5 — Sales closing: intake form 7q + landing + fix packs pricing",
     "PRIORIDAD 6 — IID approval flow test: piece e75bdb73",
     "PRIORIDAD 7 — ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
