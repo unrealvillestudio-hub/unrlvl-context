@@ -1,22 +1,15 @@
 {
   "_meta": {
-    "version": "2026-05-01",
+    "version": "2026-05-01-v2",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
       "ecosystem_filemap": "https://unrlvl-context.vercel.app/ecosystem_filemap.md",
-      "session_protocol": "https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md",
-      "tiers_pricing": "https://unrlvl-context.vercel.app/TIERS.md",
-      "plan_maestro": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/PLAN_MAESTRO_LABS_SKILLS.md",
-      "lucien_books": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/LUCIEN_BOOKS_MASTER.md",
-      "crm_integrations": "https://unrlvl-context.vercel.app/brands/UnrealvilleStudio/CRM_INTEGRATIONS.md",
-      "document_factory_plan": "https://unrlvl-context.vercel.app/brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md",
-      "fphsops_spec": "https://unrlvl-context.vercel.app/brands/ForumPHs/FPHSOPS_SPEC.md",
-      "ai_labs_strategy": "https://unrlvl-context.vercel.app/docs/UNRLVL_Labs_Strategy.html"
+      "session_protocol": "https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md"
     },
     "last_audit": {
       "date": "2026-05-01",
-      "status": "ShopifyAuditor v3 COMPLETE + deployed. NeuroneSCF B2B OAuth connected + audit ran. Tools repo restructured: shopify-auditor/ + api/audit-proxy.js committed. EF shopify-audit v6 (read_apps, strategic context, RPC save). Context recovery protocol defined. Two-tier audit (Technical + Strategic). Fix engine operational with write scopes. Claude Brief feature live. Tests PENDIENTE post-update.",
+      "status": "ShopifyAuditor v3 READY FOR BUSINESS. NeuroneSCF B2B score 96/135. Fix engine operativo (OG tags applied). B2B+B2C OAuth connected. audit EF v8, fix EF v2, oauth EF v4. brand.json marketing_context PENDIENTE COMMIT — esperando definición B2C context de Sam.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -82,19 +75,23 @@
           "internal_domain": "nj5ybc-n1.myshopify.com",
           "display": "PRO-Neurone SCFlorida",
           "store_id": "5bc2d55b-da9f-47f6-bddf-7289e9a688bb",
-          "oauth_status": "CONNECTED — token in shopify.stores",
-          "token_note": "shpat_0eb5... (stored Supabase only, never log)",
-          "scopes": "read_analytics,read_customers,read_price_rules,write_discounts,read_draft_orders,write_inventory,read_orders,write_products,read_script_tags,read_shipping,write_content,write_themes,read_apps",
-          "last_audit_score": null,
-          "audit_status": "PENDING first full test"
+          "oauth_status": "CONNECTED — read_apps included",
+          "scopes": "read_analytics,read_apps,read_customers,read_price_rules,write_discounts,read_draft_orders,write_inventory,read_inventory,read_orders,write_products,read_script_tags,read_shipping,write_content,write_themes",
+          "last_audit_score": 96,
+          "last_audit_date": "2026-05-01",
+          "audit_status": "TESTED ✅ — Fix engine operational"
         },
         "b2c": {
-          "domain": "neuronescflorida.com",
-          "oauth_status": "PENDING — OAuth URL ready, not yet authorized"
+          "internal_domain": "egdk1n-gt.myshopify.com",
+          "display": "Neurone SCFlorida B2C",
+          "oauth_status": "CONNECTED — read_apps included",
+          "last_audit_score": null,
+          "last_audit_date": null,
+          "audit_status": "PENDING first audit"
         }
       },
-      "gaps": "BP_COPY_1.0 · Privacy/Refund/ToS policies · Custom domain · Shipping rates · Payment gateway (B2B invoice model TBD with Patricia)",
-      "completed": "Meta BM · Facebook Page · TikTok · 7 aliases · SMA · Shopify B2B OAuth connected · ShopifyAuditor v3 targeting this store"
+      "gaps": "Privacy/Refund/ToS policies · Shipping rates · Payment gateway (B2B invoice model TBD Patricia) · brand.json marketing_context pending B2C definition",
+      "completed": "Meta BM · Facebook Page · TikTok · Shopify B2B+B2C OAuth ✅ · ShopifyAuditor v3 · OG tags fix applied · read_apps scope active"
     },
     {
       "id": "ForumPHs",
@@ -115,186 +112,71 @@
       "status": "active",
       "health": "green",
       "web": "LIVE EN+ES",
-      "skills": "P1-P8 COMPLETOS — skills/P1 ui-ux · P2 shopify-auditor · P3 image-processing · P4 agent-builder · P5 aife · P6 copylab-reference · P7 security · P8 cost-layer",
+      "skills": "P1-P8 COMPLETOS — P2 shopify-auditor READY FOR BUSINESS v3",
       "iid_pipeline": "OPERATIONAL — primer email de aprobación confirmado 2026-04-26",
       "content_pieces_created": 1,
-      "oauth_social": "PENDIENTE — brand_oauth_tokens tabla lista, OAuth flows por implementar"
+      "oauth_social": "PENDIENTE"
     },
     {"id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green"}
   ],
   "shopify_auditor": {
-    "version": "3.0",
-    "status": "COMPLETE — deployed, pending live tests",
-    "objective": "Servicio de auditoría Shopify técnica + estratégica. Doble propósito: (1) uso interno UNRLVL para gestionar tiendas del ecosistema, (2) servicio de prospección — audit gratuito como lead gen que cierra con oferta de correcciones. Diferenciador clave: el fix engine permite demostrar valor en tiempo real durante la presentación al prospecto.",
+    "version": "3.2",
+    "status": "READY FOR BUSINESS ✅",
+    "objective": "Auditoría Shopify técnica + estratégica. Uso interno UNRLVL + lead gen externo.",
     "repo": "GitHub/unrealvillestudio-hub/Tools",
     "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
     "skill_url": "https://unrlvl-tools.vercel.app/shopify-auditor/SKILL_shopify-auditor.md",
     "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
     "context_recovery_protocol": {
       "triggers": ["shopify audit de [X]", "auditar tienda [X]", "shopify auditor", "audit [domain]", "carga shopify auditor"],
-      "flow_ecosystem_brand": "Cargar SKILL + brand.json → llamar audit-proxy → presentar brief con fixes disponibles",
-      "flow_external_client": "Cargar SKILL → pedir 4 datos en 1 mensaje (dominio, nombre, B2B/B2C, keywords opcional) → correr audit → presentar hallazgos",
-      "flow_no_store": "Preguntar: ¿Para qué tienda? Connected: NeuroneSCF B2B · NeuroneSCF B2C"
-    },
-    "audit_types": {
-      "technical": {
-        "modules": 13,
-        "max_score": 100,
-        "description": "Estructura, configuración, SEO presencia/calidad, tema, apps, órdenes, pagos. Siempre disponible."
-      },
-      "strategic": {
-        "additional_module": "strategic_seo",
-        "additional_pts": 10,
-        "max_score": 110,
-        "trigger": "strategic_context object in POST body",
-        "checks": ["keyword coverage en SEO titles y descripciones", "CTA alignment para B2B/B2C", "brand voice coherence"],
-        "context_fields": ["keywords", "buyer_type", "market", "brand_voice", "category", "discovery", "problem"]
-      }
-    },
-    "modules": {
-      "settings": 20, "catalog": 20, "seo": 10, "strategic_seo": 10,
-      "theme": 15, "collections": 10, "payments": 10, "orders": 10,
-      "shipping": 5, "discounts": 5, "navigation": 10, "apps": 10,
-      "performance": 5, "b2c_vs_b2b": 5
-    },
-    "fix_engine": {
-      "design_principle": "Confirmación obligatoria antes de aplicar. Descripción de cambios + conteo de items afectados. Nunca ejecutar sin aprobación.",
-      "theme_safety": "Snapshot automático en shopify.theme_snapshots antes de cualquier edición de theme.liquid",
-      "fix_types": {
-        "inventory_tracking_on": {"scope": "write_inventory", "method": "PUT inventory_items/{id}", "description": "Activa tracking en variantes sin inventario activo"},
-        "seo_title_from_product": {"scope": "write_products", "method": "GraphQL productUpdate mutation", "description": "Setea SEO title = product title (máx 60 chars)"},
-        "theme_add_canonical": {"scope": "write_themes", "method": "PUT themes/{id}/assets.json", "description": "Añade <link rel=canonical> a layout/theme.liquid"},
-        "theme_add_og_tags": {"scope": "write_themes", "method": "PUT themes/{id}/assets.json", "description": "Añade og:title, og:description, og:image a theme.liquid"}
-      },
-      "fixes_in_development": ["fix_description_enrich (Claude API)", "fix_vendor_bulk", "fix_seo_description", "fix_theme_json_ld", "fix_theme_analytics"]
-    },
-    "claude_brief_feature": {
-      "description": "Botón en la app genera markdown completo con todos los hallazgos + fix payloads JSON. Usuario copia y pega en Claude chat. Claude lee el brief y puede aplicar fixes directamente llamando shopify-fix EF.",
-      "workflow": "App → 📋 Claude Brief → copy → paste en chat → 'fix all critical' → Claude confirma cada fix → aplica → reporta resultado",
-      "why_important": "Permite a Claude operar como agente de reparación sin que el usuario tenga que estar en la UI. Especialmente útil para fixes en bulk o complejos."
+      "flow_ecosystem_brand": "Cargar SKILL + brand.json → extraer marketing_context → correr audit → presentar brief",
+      "flow_external_client": "Cargar SKILL → pedir 4 datos (dominio, nombre, B2B/B2C, keywords opcional) → correr audit",
+      "flow_no_store": "Preguntar: ¿Para qué tienda? Connected: NeuroneSCF B2B · NeuroneSCF B2C",
+      "important": "Para marcas del ecosistema NO mostrar formulario de 7 preguntas — leer brand.json marketing_context directamente"
     },
     "edge_functions": {
-      "shopify-audit": {"version": "v6", "status": "ACTIVE", "notes": "13 módulos + strategic_seo. read_apps real. Save via RPC. SEO quality scoring (largo, duplicados, genéricos)."},
-      "shopify-fix": {"version": "v1", "status": "ACTIVE", "notes": "4 fix types. Snapshot theme antes de editar."},
-      "shopify-store-lookup": {"version": "v1", "status": "ACTIVE", "notes": "Lookup por dominio + lista connected stores"},
-      "shopify-audit-brief": {"version": "v1", "status": "ACTIVE", "notes": "Genera markdown brief desde último audit guardado o corre nuevo"},
-      "shopify-oauth": {"version": "v3", "status": "ACTIVE", "notes": "Captura token OAuth, guarda en shopify.stores"}
+      "shopify-audit": {"version": "v8", "status": "ACTIVE", "notes": "13 módulos + strategic_seo. read_apps. maxScore fix (settings:20). Split product queries. Explicit error handling."},
+      "shopify-fix": {"version": "v2", "status": "ACTIVE", "notes": "4 fix types. Snapshot via RPC save_theme_snapshot (fix schema bug v1)."},
+      "shopify-store-lookup": {"version": "v1", "status": "ACTIVE"},
+      "shopify-audit-brief": {"version": "v1", "status": "ACTIVE"},
+      "shopify-oauth": {"version": "v4", "status": "ACTIVE", "notes": "STORE_REGISTRY: NeuroneSCF:b2b + NeuroneSCF:b2c"}
     },
-    "supabase_schema": {
-      "schema": "shopify.*",
-      "tables": ["stores (tokens OAuth)", "audit_runs (histórico + full_report JSONB)", "fix_log (registro fixes)", "theme_snapshots (backup theme.liquid)"],
-      "rpcs": ["get_shopify_store", "get_shopify_store_by_domain", "list_connected_stores", "save_shopify_audit_run", "get_latest_audit"],
-      "save_note": "CRÍTICO: usar RPC save_shopify_audit_run — NO direct .schema('shopify' as any) insert (falla silenciosamente en Supabase JS client)"
-    },
-    "oauth_credentials": {
-      "client_id": "765d92065a411c74f776cfc559482255",
-      "client_secret_note": "shpss_47dc... stored in Supabase only",
-      "redirect_uri": "https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-oauth",
-      "scopes": "read_analytics,read_customers,read_price_rules,write_discounts,read_draft_orders,write_inventory,read_orders,write_products,read_script_tags,read_shipping,write_content,write_themes,read_apps",
-      "state_format": "[BrandId]:[store_type]",
-      "oauth_url_pattern": "https://[store].myshopify.com/admin/oauth/authorize?client_id={client_id}&scope={scopes}&redirect_uri={redirect_uri}&state={brand_id}:{type}"
-    },
+    "supabase_rpcs": ["get_shopify_store", "get_shopify_store_by_domain", "list_connected_stores", "save_shopify_audit_run", "get_latest_audit", "save_theme_snapshot"],
     "connected_stores": [
-      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "CONNECTED"},
-      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "neuronescflorida.com", "status": "PENDING OAuth"}
+      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 96},
+      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": null}
     ],
-    "service_design": {
-      "lead_gen_flow": "Prospect llega → 7 preguntas estratégicas → audit técnico + estratégico → reporte con score y hallazgos → oferta: 'Te hacemos las correcciones' → fix engine demuestra valor inmediato",
-      "intake_form_questions": 7,
-      "differentiator": "No solo reporta problemas — los resuelve en tiempo real. Ninguna agencia Shopify hace esto.",
-      "status": "Concepto diseñado, intake form pendiente de construir como landing/tool separada",
-      "next_step": "Diseñar el intake form (7q) + landing de resultado + pricing de los fix packs"
+    "fix_types": {
+      "inventory_tracking_on": {"scope": "write_inventory", "status": "deployed"},
+      "seo_title_from_product": {"scope": "write_products", "status": "deployed"},
+      "theme_add_canonical": {"scope": "write_themes", "status": "deployed"},
+      "theme_add_og_tags": {"scope": "write_themes", "status": "deployed — TESTED ✅"}
     },
-    "session_learnings": {
-      "date": "2026-05-01",
-      "key_decisions": [
-        "Tools repo es el canonical location para auditing tools (shopify-auditor/, github-auditor/). Patrón: tool en carpeta propia con SKILL.md, proxy en api/.",
-        "audit-proxy.js DEBE estar en /api/ a nivel raíz del proyecto Vercel — no se puede mover.",
-        "EF save a Supabase schema custom ('shopify') FALLA silenciosamente con .schema() en JS client. Solución: usar RPCs.",
-        "SEO scoring debe verificar calidad (largo, keywords, duplicados, genéricos) — no solo presencia binaria.",
-        "Strategic audit requiere contexto (7 preguntas) para evaluar keyword coverage y CTA alignment. Sin contexto = technical only.",
-        "Claude Brief como mecanismo de handoff entre UI y chat es el pattern correcto para fix engine desde Claude.",
-        "Fix engine siempre requiere confirmación explícita antes de aplicar. Nunca ejecutar en batch sin revisar cada uno.",
-        "read_apps scope: añadir al scope list SIEMPRE en nuevas integraciones. Cost analysis + missing apps detectables.",
-        "Protocolo de recuperación de contexto: SKILL define los flows A/B/C para diferentes tipos de tiendas."
-      ],
-      "architectural_patterns_established": [
-        "Tool = carpeta en Tools repo + SKILL.md + app HTML + api/proxy.js en raíz",
-        "Audit EF = lee store por dominio OR brand_id+type (multibrand desde v6)",
-        "Fix EF = siempre preview=true primero en modal, luego preview=false al confirmar",
-        "Theme edits = snapshot en Supabase antes de cualquier write",
-        "Claude en chat = llama EFs directamente vía fetch con CORS abierto"
-      ]
-    }
+    "pending_improvements": [
+      "brand.json marketing_context → auto-inject as strategic_context (no form for ecosystem brands)",
+      "marketing_context debe tener sub-secciones b2b y b2c cuando hay ambos canales",
+      "Sales closing: intake form (7q) + landing + fix packs pricing",
+      "fix_description_enrich via Claude API",
+      "fix_theme_json_ld"
+    ]
   },
   "labs": [
-    {
-      "id": "LAB-CPL",
-      "name": "CopyLab",
-      "status": "LIVE v8.1 — direct EF call",
-      "url": "https://unrlvl-copy-lab.vercel.app",
-      "vercel_protection": "OFF",
-      "execute_endpoint": "POST /api/execute",
-      "pipeline_mode": "DIRECT — content-run-stage v1.10 llama Anthropic directamente desde EF. ~9s.",
-      "contract": "{brandId, stage, params{pack, canal, extra_instructions}, previousOutputs} → {output: string, status: 'ok'}"
-    },
-    {
-      "id": "LAB-WL",
-      "name": "WebLab",
-      "status": "PASSED — Shopify module completo",
-      "pending": "SKILL_weblab-shopify sesión propia"
-    },
-    {
-      "id": "LAB-IL",
-      "name": "ImageLab",
-      "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout",
-      "url": "https://image-lab-unrlvl.vercel.app",
-      "vercel_protection": "OFF",
-      "pipeline_mode": "CURRENT: Vercel call con 50s AbortSignal (non-critical skip). TARGET: direct EF call via Gemini 2.5 Flash + Imagen 3 (~25s). Requiere GEMINI_API_KEY en EF secrets.",
-      "fix_next_session": "content-run-stage v1.11: callImagenDirect() — Gemini 2.5 Flash prompt + Imagen 3 predict."
-    },
+    {"id": "LAB-CPL", "name": "CopyLab", "status": "LIVE v8.1", "url": "https://unrlvl-copy-lab.vercel.app"},
+    {"id": "LAB-WL", "name": "WebLab", "status": "PASSED"},
+    {"id": "LAB-IL", "name": "ImageLab", "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout", "fix": "content-run-stage v1.11 callImagenDirect()"},
     {"id": "LAB-AL", "name": "AgentLab", "status": "PASSED"},
     {"id": "LAB-BPL", "name": "BlueprintLab", "status": "PASSED"},
-    {
-      "id": "LAB-ORCH",
-      "name": "Orchestrator",
-      "status": "OR_1.1 LIVE",
-      "url": "https://orchestrator-unrlvl.vercel.app",
-      "build_tag": "OR_1.1",
-      "tabs": ["Orchestrator (hub)", "Launchpad", "Monitor", "IID Intel"],
-      "endpoints": ["api/approve-job.ts", "api/trigger-job.ts"]
-    },
-    {
-      "id": "LAB-SL",
-      "name": "SocialLab",
-      "status": "LIVE — bypassed en pipeline IID",
-      "url": "https://social-lab-flame.vercel.app",
-      "vercel_protection": "OFF",
-      "pipeline_mode": "BYPASSED — content-run-stage v1.10 llama Anthropic directamente + escribe en scheduled_posts."
-    },
-    {"id": "LAB-VDL", "name": "VideoLab", "status": "PLANNED — Fase 2"},
-    {"id": "LAB-VOL", "name": "VoiceLab", "status": "PLANNED — Fase 3"},
-    {"id": "LAB-AVL", "name": "AvatarLab", "status": "PLANNED — Fase 4"},
-    {"id": "LAB-PCL", "name": "PodcastLab", "status": "PLANNED — Fase 5"},
-    {
-      "id": "LAB-OPS",
-      "name": "UNRLVL-OPS",
-      "status": "LIVE — Cost Layer + OPS Tracking completo",
-      "url": "https://unrlvl-ops.vercel.app/cost-layer"
-    },
-    {"id": "LAB-OBD", "name": "Onboarding App", "status": "PASSED Phase 4"}
+    {"id": "LAB-ORCH", "name": "Orchestrator", "status": "OR_1.1 LIVE", "url": "https://orchestrator-unrlvl.vercel.app"},
+    {"id": "LAB-SL", "name": "SocialLab", "status": "LIVE — bypassed en pipeline IID", "url": "https://social-lab-flame.vercel.app"},
+    {"id": "LAB-VDL", "name": "VideoLab", "status": "PLANNED Fase 2"},
+    {"id": "LAB-VOL", "name": "VoiceLab", "status": "PLANNED Fase 3"},
+    {"id": "LAB-AVL", "name": "AvatarLab", "status": "PLANNED Fase 4"},
+    {"id": "LAB-PCL", "name": "PodcastLab", "status": "PLANNED Fase 5"},
+    {"id": "LAB-OPS", "name": "UNRLVL-OPS", "status": "LIVE", "url": "https://unrlvl-ops.vercel.app"}
   ],
   "skills_roadmap": [
     {"id": "SKILL-UIUX", "name": "ui-ux-layer", "priority": 1, "status": "COMPLETE v2.1"},
-    {
-      "id": "SKILL-SA",
-      "name": "shopify-auditor",
-      "priority": 2,
-      "status": "COMPLETE v3.0",
-      "location": "Tools/shopify-auditor/SKILL_shopify-auditor.md",
-      "app": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
-      "notes": "v3: 13 módulos + strategic_seo, read_apps, Fix Queue, Claude Brief, context recovery protocol. EF v6 deployed."
-    },
+    {"id": "SKILL-SA", "name": "shopify-auditor", "priority": 2, "status": "READY FOR BUSINESS v3.2", "location": "Tools/shopify-auditor/", "app": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html"},
     {"id": "SKILL-IP", "name": "image-processing", "priority": 3, "status": "COMPLETE v1.0"},
     {"id": "SKILL-AB", "name": "agent-builder", "priority": 4, "status": "COMPLETE v1.0"},
     {"id": "SKILL-AIFE", "name": "aife", "priority": 5, "status": "COMPLETE v1.1"},
@@ -305,74 +187,45 @@
   ],
   "iid_network": {
     "status": "OPERATIONAL — Pipeline end-to-end CONFIRMADO 2026-04-26",
-    "architecture": "Two-step genérico: iid-research → iid_research_raw → iid-process → iid-core → dos streams",
-    "agents_count": 14,
-    "crons_count": 27,
-    "schemas": "intel.* (7 tablas) + content.* (5 tablas)",
     "edge_functions": {
       "iid-core": "v1.1 ACTIVE", "iid-research": "v1 ACTIVE", "iid-process": "v1 ACTIVE",
-      "iid-brief-generator": "v1 ACTIVE", "aife-filter": "v1.1 ACTIVE",
-      "content-dispatcher": "v2.3 ACTIVE", "content-run-stage": "v1.10 ACTIVE",
-      "context-cache": "v4 ACTIVE"
+      "content-run-stage": "v1.10 ACTIVE", "aife-filter": "v1.1 ACTIVE"
     },
     "pipeline_status": {
-      "copylab": "OK", "aife": "OK", "imagelab": "SKIP — fix pendiente v1.11", "sociallab": "OK",
-      "total_time": "~71s", "pieces_created": 1, "email_confirmed": true,
+      "copylab": "OK", "aife": "OK", "imagelab": "SKIP — fix pendiente", "sociallab": "OK",
       "approval_flow": "PENDIENTE TEST — piece e75bdb73 awaiting_approval"
     }
-  },
-  "content_engine": {
-    "status": "OPERATIONAL — primer email aprobación confirmado 2026-04-26",
-    "flow": "iid_content_queue → content-dispatcher → orchestrator_jobs → content-run-stage v1.10 → [CopyLab→AIFE→ImageLab(skip)→SocialLab] → content_pieces → email Sam → approve-job → published",
-    "oauth_status": "PENDIENTE — scheduled_posts en status pending_oauth"
-  },
-  "github_auditor": {
-    "status": "LIVE — bug fix 2026-04-25",
-    "url": "https://unrlvl-tools.vercel.app/api/gh",
-    "usage": {"tree": "?repo=NAME&action=tree", "file": "?repo=NAME&path=src/file.ts"},
-    "skill_url": "https://unrlvl-tools.vercel.app/github-auditor/SKILL.md"
   },
   "infrastructure": [
     {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app"},
     {
       "id": "INFRA-SB",
-      "name": "Supabase",
-      "project_id": "amlvyycfepwhiindxgzw",
-      "plan": "Free (150s EF wall clock) — upgrade a Pro al activar VideoLab",
-      "schemas": "public.* 50+ tablas + intel.* (7 tablas IID) + content.* (5 tablas) + shopify.* (4 tablas: stores, audit_runs, fix_log, theme_snapshots)",
-      "extensions": ["pg_cron 1.6.4", "pg_net 0.20.0"],
-      "ef_secrets_active": ["ANTHROPIC_API_KEY", "RESEND_API_KEY", "IID_CRON_SECRET", "SUPABASE_SERVICE_ROLE_KEY", "ORCHESTRATOR_URL", "VERCEL_BYPASS_SECRET"],
-      "ef_secrets_pending": ["GEMINI_API_KEY", "FAL_API_KEY", "ELEVENLABS_API_KEY", "HEYGEN_API_KEY", "CREATOMATE_API_KEY"]
+      "name": "Supabase amlvyycfepwhiindxgzw",
+      "schemas": "public.* + intel.* + content.* + shopify.*(stores,audit_runs,fix_log,theme_snapshots)",
+      "ef_secrets_active": ["ANTHROPIC_API_KEY", "RESEND_API_KEY", "IID_CRON_SECRET", "SUPABASE_SERVICE_ROLE_KEY"],
+      "ef_secrets_pending": ["GEMINI_API_KEY", "FAL_API_KEY", "ELEVENLABS_API_KEY"]
     },
-    {"id": "INFRA-OPS", "name": "UNRLVL-OPS", "url": "https://unrlvl-ops.vercel.app", "status": "LIVE — Cost Layer + 8 KPI views"},
-    {"id": "INFRA-ORCH", "name": "Orchestrator", "url": "https://orchestrator-unrlvl.vercel.app", "status": "OR_1.1 LIVE"},
-    {"id": "INFRA-CRM", "name": "UNRLVL CRM v1.0", "status": "OPERATIVO", "pending": ["Speaks→CRM", "Shopify→CRM"]},
-    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
-    {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED v2.1 — pending deploy + domain"},
-    {
-      "id": "INFRA-TOOLS",
-      "name": "unrlvl-tools.vercel.app",
-      "status": "LIVE — GitHub Auditor + ShopifyAuditor v3",
-      "repo": "GitHub/unrealvillestudio-hub/Tools",
+    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor + ShopifyAuditor v3.2",
       "structure": {
-        "api/gh.js": "GitHub proxy para Claude",
-        "api/audit-proxy.js": "Shopify audit proxy para Claude",
-        "github-auditor/SKILL.md": "GitHub auditing skill",
+        "api/gh.js": "GitHub proxy",
+        "api/audit-proxy.js": "Shopify audit+fix proxy (mode=brief|audit|fix)",
         "shopify-auditor/shopify_audit.html": "ShopifyAuditor v3 app",
-        "shopify-auditor/SKILL_shopify-auditor.md": "ShopifyAuditor skill + context recovery protocol",
-        "historical_context_builder.html": "Context builder tool"
-      },
-      "pattern": "Cada tool vive en su propia carpeta con SKILL.md. Proxies Claude en api/ raíz (Vercel requirement)."
-    }
+        "shopify-auditor/SKILL_shopify-auditor.md": "SKILL + context recovery protocol"
+      }
+    },
+    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
+    {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy"},
+    {"id": "INFRA-ORCH", "name": "Orchestrator", "url": "https://orchestrator-unrlvl.vercel.app", "status": "OR_1.1 LIVE"},
+    {"id": "INFRA-OPS", "name": "UNRLVL-OPS", "url": "https://unrlvl-ops.vercel.app", "status": "LIVE"}
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — ShopifyAuditor: test completo NeuroneSCF B2B (score, findings, fixer en vivo). Luego B2C OAuth + test. Declarar ready4business o lista de fixes.",
-    "PRIORIDAD 2 — ShopifyAuditor sales closing: diseñar intake form (7 preguntas estratégicas) + landing de resultado + fix packs pricing. Este es el diferenciador de negocio.",
-    "PRIORIDAD 3 — Test approval flow IID: GET orchestrator-unrlvl.vercel.app/api/approve-job?token={TOKEN}&action=approve con piece e75bdb73.",
-    "PRIORIDAD 4 — ImageLab directo: verificar GEMINI_API_KEY en Supabase EF secrets, deploy content-run-stage v1.11 con callImagenDirect().",
-    "PRIORIDAD 5 — OAuth social media: Instagram/LinkedIn/TikTok/X para Unrealville y Lucien.",
-    "PENDIENTE PARALELO — Lucien Books: Brief Libro 1.",
-    "PENDIENTE PARALELO — NeuroneSCF B2C: OAuth + primer audit.",
-    "COMMIT pendiente: luciensael.com deploy + DNS. Why UNRLVL v4."
+    "PRIORIDAD 1 — NeuroneSCF brand.json: definir marketing_context B2C (consumidor final vs profesional, tono, keywords) → commit brand.json completo B2B+B2C",
+    "PRIORIDAD 2 — Strategic audit B2B con keywords reales de NeuroneSCF",
+    "PRIORIDAD 3 — Audit completo NeuroneSCF B2C (primer run)",
+    "PRIORIDAD 4 — ShopifyAuditor mejora: leer brand.json marketing_context automáticamente para strategic_context (no formulario para marcas del ecosistema)",
+    "PRIORIDAD 5 — Sales closing: intake form 7q + landing + fix packs pricing",
+    "PRIORIDAD 6 — IID approval flow test: piece e75bdb73",
+    "PRIORIDAD 7 — ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
+    "PENDIENTE — OAuth social media, luciensael.com deploy, Lucien Books Libro 1"
   ]
 }
