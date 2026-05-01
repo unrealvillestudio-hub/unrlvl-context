@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-30",
+    "version": "2026-05-01",
     "maintained_by": "Claude — do not edit manually",
     "deep_reference_docs": {
       "ecosystem_narrative": "https://unrlvl-context.vercel.app/ecosystem.md",
@@ -15,9 +15,8 @@
       "ai_labs_strategy": "https://unrlvl-context.vercel.app/docs/UNRLVL_Labs_Strategy.html"
     },
     "last_audit": {
-      "date": "2026-04-30",
-      "status": "content-run-stage v1.11 LIVE — ImageLab pipeline completo fal.ai directo. approve-piece EF. approve-job v2.0. brand_oauth_tokens creada. Social accounts UNRLVL+Lucien en progreso (Meta App + Instagram + TikTok). unrealvillestudio.com index v3 generado. luciensael.com index v3 + legal pages propias. BP_Brand_Person_id.md Lucien COMPLETE v1.0. LucienSael brand en Supabase. PENDIENTE: deploy CoreProject+Lucien, DNS www Cloudflare, OAuth social, MJ master shot Lucien.",
-       Pipeline completo: copylab:ok + aife:ok + imagelab:failed(skip) + sociallab:ok → content_piece creado → email aprobación Sam confirmado. Bug resuelto: EdgeRuntime.waitUntil reemplazado por arquitectura síncrona. content-run-stage v1.10 auto-loguea costos en ops_generation_ledger. AI Labs Strategy definida: 8 labs, 5 fases, fal.ai como media bus. OPS cost tracking: ops_generation_ledger + ops_lab_rates + 8 KPI views. PENDIENTE PRÓXIMA SESIÓN: test approval flow, imagelab directo EF, OAuth social, fal.ai account.",
+      "date": "2026-05-01",
+      "status": "ShopifyAuditor v3 COMPLETE + deployed. NeuroneSCF B2B OAuth connected + audit ran. Tools repo restructured: shopify-auditor/ + api/audit-proxy.js committed. EF shopify-audit v6 (read_apps, strategic context, RPC save). Context recovery protocol defined. Two-tier audit (Technical + Strategic). Fix engine operational with write scopes. Claude Brief feature live. Tests PENDIENTE post-update.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -37,19 +36,14 @@
     "tagline": "I build worlds. Some of them survive.",
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
-   "web_status": "GENERATED v3 — PENDING DEPLOY + domain DNS",
+    "web_status": "GENERATED v3 — PENDING DEPLOY + domain DNS",
     "brand_identity": {
       "version": "v1.0",
       "status": "COMPLETE",
       "palette": {
-        "obsidian": "#0D0D0B",
-        "carbon": "#1C1C1A",
-        "smoke": "#2E2E2B",
-        "ash": "#4A4A45",
-        "bone": "#EDE8DF",
-        "parchment": "#C4BDB0",
-        "ember": "#D4622A",
-        "gold": "#B8922A"
+        "obsidian": "#0D0D0B", "carbon": "#1C1C1A", "smoke": "#2E2E2B",
+        "ash": "#4A4A45", "bone": "#EDE8DF", "parchment": "#C4BDB0",
+        "ember": "#D4622A", "gold": "#B8922A"
       },
       "typography": {
         "display": "Cormorant Garamond 300/300i/600i",
@@ -83,8 +77,24 @@
       "domain": "neuronescflorida.com",
       "status": "active",
       "health": "yellow",
-      "gaps": "BP_COPY_1.0 · 87 SKUs · Instagram vinculación · WhatsApp API · assets",
-      "completed": "Meta BM · Facebook Page · TikTok · 7 aliases · SMA · Shopify B2C+B2B LIVE Payments"
+      "shopify": {
+        "b2b": {
+          "internal_domain": "nj5ybc-n1.myshopify.com",
+          "display": "PRO-Neurone SCFlorida",
+          "store_id": "5bc2d55b-da9f-47f6-bddf-7289e9a688bb",
+          "oauth_status": "CONNECTED — token in shopify.stores",
+          "token_note": "shpat_0eb5... (stored Supabase only, never log)",
+          "scopes": "read_analytics,read_customers,read_price_rules,write_discounts,read_draft_orders,write_inventory,read_orders,write_products,read_script_tags,read_shipping,write_content,write_themes,read_apps",
+          "last_audit_score": null,
+          "audit_status": "PENDING first full test"
+        },
+        "b2c": {
+          "domain": "neuronescflorida.com",
+          "oauth_status": "PENDING — OAuth URL ready, not yet authorized"
+        }
+      },
+      "gaps": "BP_COPY_1.0 · Privacy/Refund/ToS policies · Custom domain · Shipping rates · Payment gateway (B2B invoice model TBD with Patricia)",
+      "completed": "Meta BM · Facebook Page · TikTok · 7 aliases · SMA · Shopify B2B OAuth connected · ShopifyAuditor v3 targeting this store"
     },
     {
       "id": "ForumPHs",
@@ -112,6 +122,111 @@
     },
     {"id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green"}
   ],
+  "shopify_auditor": {
+    "version": "3.0",
+    "status": "COMPLETE — deployed, pending live tests",
+    "objective": "Servicio de auditoría Shopify técnica + estratégica. Doble propósito: (1) uso interno UNRLVL para gestionar tiendas del ecosistema, (2) servicio de prospección — audit gratuito como lead gen que cierra con oferta de correcciones. Diferenciador clave: el fix engine permite demostrar valor en tiempo real durante la presentación al prospecto.",
+    "repo": "GitHub/unrealvillestudio-hub/Tools",
+    "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
+    "skill_url": "https://unrlvl-tools.vercel.app/shopify-auditor/SKILL_shopify-auditor.md",
+    "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
+    "context_recovery_protocol": {
+      "triggers": ["shopify audit de [X]", "auditar tienda [X]", "shopify auditor", "audit [domain]", "carga shopify auditor"],
+      "flow_ecosystem_brand": "Cargar SKILL + brand.json → llamar audit-proxy → presentar brief con fixes disponibles",
+      "flow_external_client": "Cargar SKILL → pedir 4 datos en 1 mensaje (dominio, nombre, B2B/B2C, keywords opcional) → correr audit → presentar hallazgos",
+      "flow_no_store": "Preguntar: ¿Para qué tienda? Connected: NeuroneSCF B2B · NeuroneSCF B2C"
+    },
+    "audit_types": {
+      "technical": {
+        "modules": 13,
+        "max_score": 100,
+        "description": "Estructura, configuración, SEO presencia/calidad, tema, apps, órdenes, pagos. Siempre disponible."
+      },
+      "strategic": {
+        "additional_module": "strategic_seo",
+        "additional_pts": 10,
+        "max_score": 110,
+        "trigger": "strategic_context object in POST body",
+        "checks": ["keyword coverage en SEO titles y descripciones", "CTA alignment para B2B/B2C", "brand voice coherence"],
+        "context_fields": ["keywords", "buyer_type", "market", "brand_voice", "category", "discovery", "problem"]
+      }
+    },
+    "modules": {
+      "settings": 20, "catalog": 20, "seo": 10, "strategic_seo": 10,
+      "theme": 15, "collections": 10, "payments": 10, "orders": 10,
+      "shipping": 5, "discounts": 5, "navigation": 10, "apps": 10,
+      "performance": 5, "b2c_vs_b2b": 5
+    },
+    "fix_engine": {
+      "design_principle": "Confirmación obligatoria antes de aplicar. Descripción de cambios + conteo de items afectados. Nunca ejecutar sin aprobación.",
+      "theme_safety": "Snapshot automático en shopify.theme_snapshots antes de cualquier edición de theme.liquid",
+      "fix_types": {
+        "inventory_tracking_on": {"scope": "write_inventory", "method": "PUT inventory_items/{id}", "description": "Activa tracking en variantes sin inventario activo"},
+        "seo_title_from_product": {"scope": "write_products", "method": "GraphQL productUpdate mutation", "description": "Setea SEO title = product title (máx 60 chars)"},
+        "theme_add_canonical": {"scope": "write_themes", "method": "PUT themes/{id}/assets.json", "description": "Añade <link rel=canonical> a layout/theme.liquid"},
+        "theme_add_og_tags": {"scope": "write_themes", "method": "PUT themes/{id}/assets.json", "description": "Añade og:title, og:description, og:image a theme.liquid"}
+      },
+      "fixes_in_development": ["fix_description_enrich (Claude API)", "fix_vendor_bulk", "fix_seo_description", "fix_theme_json_ld", "fix_theme_analytics"]
+    },
+    "claude_brief_feature": {
+      "description": "Botón en la app genera markdown completo con todos los hallazgos + fix payloads JSON. Usuario copia y pega en Claude chat. Claude lee el brief y puede aplicar fixes directamente llamando shopify-fix EF.",
+      "workflow": "App → 📋 Claude Brief → copy → paste en chat → 'fix all critical' → Claude confirma cada fix → aplica → reporta resultado",
+      "why_important": "Permite a Claude operar como agente de reparación sin que el usuario tenga que estar en la UI. Especialmente útil para fixes en bulk o complejos."
+    },
+    "edge_functions": {
+      "shopify-audit": {"version": "v6", "status": "ACTIVE", "notes": "13 módulos + strategic_seo. read_apps real. Save via RPC. SEO quality scoring (largo, duplicados, genéricos)."},
+      "shopify-fix": {"version": "v1", "status": "ACTIVE", "notes": "4 fix types. Snapshot theme antes de editar."},
+      "shopify-store-lookup": {"version": "v1", "status": "ACTIVE", "notes": "Lookup por dominio + lista connected stores"},
+      "shopify-audit-brief": {"version": "v1", "status": "ACTIVE", "notes": "Genera markdown brief desde último audit guardado o corre nuevo"},
+      "shopify-oauth": {"version": "v3", "status": "ACTIVE", "notes": "Captura token OAuth, guarda en shopify.stores"}
+    },
+    "supabase_schema": {
+      "schema": "shopify.*",
+      "tables": ["stores (tokens OAuth)", "audit_runs (histórico + full_report JSONB)", "fix_log (registro fixes)", "theme_snapshots (backup theme.liquid)"],
+      "rpcs": ["get_shopify_store", "get_shopify_store_by_domain", "list_connected_stores", "save_shopify_audit_run", "get_latest_audit"],
+      "save_note": "CRÍTICO: usar RPC save_shopify_audit_run — NO direct .schema('shopify' as any) insert (falla silenciosamente en Supabase JS client)"
+    },
+    "oauth_credentials": {
+      "client_id": "765d92065a411c74f776cfc559482255",
+      "client_secret_note": "shpss_47dc... stored in Supabase only",
+      "redirect_uri": "https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/shopify-oauth",
+      "scopes": "read_analytics,read_customers,read_price_rules,write_discounts,read_draft_orders,write_inventory,read_orders,write_products,read_script_tags,read_shipping,write_content,write_themes,read_apps",
+      "state_format": "[BrandId]:[store_type]",
+      "oauth_url_pattern": "https://[store].myshopify.com/admin/oauth/authorize?client_id={client_id}&scope={scopes}&redirect_uri={redirect_uri}&state={brand_id}:{type}"
+    },
+    "connected_stores": [
+      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "CONNECTED"},
+      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "neuronescflorida.com", "status": "PENDING OAuth"}
+    ],
+    "service_design": {
+      "lead_gen_flow": "Prospect llega → 7 preguntas estratégicas → audit técnico + estratégico → reporte con score y hallazgos → oferta: 'Te hacemos las correcciones' → fix engine demuestra valor inmediato",
+      "intake_form_questions": 7,
+      "differentiator": "No solo reporta problemas — los resuelve en tiempo real. Ninguna agencia Shopify hace esto.",
+      "status": "Concepto diseñado, intake form pendiente de construir como landing/tool separada",
+      "next_step": "Diseñar el intake form (7q) + landing de resultado + pricing de los fix packs"
+    },
+    "session_learnings": {
+      "date": "2026-05-01",
+      "key_decisions": [
+        "Tools repo es el canonical location para auditing tools (shopify-auditor/, github-auditor/). Patrón: tool en carpeta propia con SKILL.md, proxy en api/.",
+        "audit-proxy.js DEBE estar en /api/ a nivel raíz del proyecto Vercel — no se puede mover.",
+        "EF save a Supabase schema custom ('shopify') FALLA silenciosamente con .schema() en JS client. Solución: usar RPCs.",
+        "SEO scoring debe verificar calidad (largo, keywords, duplicados, genéricos) — no solo presencia binaria.",
+        "Strategic audit requiere contexto (7 preguntas) para evaluar keyword coverage y CTA alignment. Sin contexto = technical only.",
+        "Claude Brief como mecanismo de handoff entre UI y chat es el pattern correcto para fix engine desde Claude.",
+        "Fix engine siempre requiere confirmación explícita antes de aplicar. Nunca ejecutar en batch sin revisar cada uno.",
+        "read_apps scope: añadir al scope list SIEMPRE en nuevas integraciones. Cost analysis + missing apps detectables.",
+        "Protocolo de recuperación de contexto: SKILL define los flows A/B/C para diferentes tipos de tiendas."
+      ],
+      "architectural_patterns_established": [
+        "Tool = carpeta en Tools repo + SKILL.md + app HTML + api/proxy.js en raíz",
+        "Audit EF = lee store por dominio OR brand_id+type (multibrand desde v6)",
+        "Fix EF = siempre preview=true primero en modal, luego preview=false al confirmar",
+        "Theme edits = snapshot en Supabase antes de cualquier write",
+        "Claude en chat = llama EFs directamente vía fetch con CORS abierto"
+      ]
+    }
+  },
   "labs": [
     {
       "id": "LAB-CPL",
@@ -120,9 +235,8 @@
       "url": "https://unrlvl-copy-lab.vercel.app",
       "vercel_protection": "OFF",
       "execute_endpoint": "POST /api/execute",
-      "pipeline_mode": "DIRECT — content-run-stage v1.10 llama Anthropic directamente desde EF (no via Vercel). ~9s.",
-      "contract": "{brandId, stage, params{pack, canal, extra_instructions}, previousOutputs} → {output: string, status: 'ok'}",
-      "notes": "maxDuration=60 en vercel.json. Vercel UI sigue disponible para uso manual."
+      "pipeline_mode": "DIRECT — content-run-stage v1.10 llama Anthropic directamente desde EF. ~9s.",
+      "contract": "{brandId, stage, params{pack, canal, extra_instructions}, previousOutputs} → {output: string, status: 'ok'}"
     },
     {
       "id": "LAB-WL",
@@ -136,21 +250,11 @@
       "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout",
       "url": "https://image-lab-unrlvl.vercel.app",
       "vercel_protection": "OFF",
-      "execute_endpoint": "POST /api/execute",
       "pipeline_mode": "CURRENT: Vercel call con 50s AbortSignal (non-critical skip). TARGET: direct EF call via Gemini 2.5 Flash + Imagen 3 (~25s). Requiere GEMINI_API_KEY en EF secrets.",
-      "contract": "{brandId, stage, params{canal, psycho_preset, aspect_ratio}, previousOutputs.copylab} → {output: string, image_data_url: base64, status: 'ok'}",
-      "fix_next_session": "content-run-stage v1.11: callImagenDirect() — Gemini 2.5 Flash prompt + Imagen 3 predict. Loguear: {lab: imagelab, unitType: per_image, outputUnits: 1, costUsd: 0.05}"
+      "fix_next_session": "content-run-stage v1.11: callImagenDirect() — Gemini 2.5 Flash prompt + Imagen 3 predict."
     },
-    {
-      "id": "LAB-AL",
-      "name": "AgentLab",
-      "status": "PASSED"
-    },
-    {
-      "id": "LAB-BPL",
-      "name": "BlueprintLab",
-      "status": "PASSED"
-    },
+    {"id": "LAB-AL", "name": "AgentLab", "status": "PASSED"},
+    {"id": "LAB-BPL", "name": "BlueprintLab", "status": "PASSED"},
     {
       "id": "LAB-ORCH",
       "name": "Orchestrator",
@@ -158,12 +262,7 @@
       "url": "https://orchestrator-unrlvl.vercel.app",
       "build_tag": "OR_1.1",
       "tabs": ["Orchestrator (hub)", "Launchpad", "Monitor", "IID Intel"],
-      "endpoints": [
-        "api/approve-job.ts — 1-click email approval (Edge runtime)",
-        "api/trigger-job.ts — programmatic IID trigger (Edge runtime)"
-      ],
-      "env_vars_needed": "SUPABASE_URL · SUPABASE_SERVICE_ROLE_KEY · IID_CRON_SECRET · SOCIALLAB_URL · RESEND_API_KEY",
-      "oauth_ui_pending": "/oauth page — conectar cuentas sociales de Unrealville + Lucien (Fase 1)"
+      "endpoints": ["api/approve-job.ts", "api/trigger-job.ts"]
     },
     {
       "id": "LAB-SL",
@@ -171,110 +270,31 @@
       "status": "LIVE — bypassed en pipeline IID",
       "url": "https://social-lab-flame.vercel.app",
       "vercel_protection": "OFF",
-      "execute_endpoint": "POST /api/execute",
-      "pipeline_mode": "BYPASSED — content-run-stage v1.10 llama Anthropic directamente + escribe en scheduled_posts. SocialLab Vercel disponible para UI manual.",
-      "contract": "{brandId, stage, params{platforms, schedule_at}, previousOutputs.copylab} → {output, results[{platform, post_id, status}]}",
-      "notes": "Posts en scheduled_posts con status: pending_oauth. OAuth real (Meta/TikTok/LinkedIn/X) es Fase 1 próxima sesión."
+      "pipeline_mode": "BYPASSED — content-run-stage v1.10 llama Anthropic directamente + escribe en scheduled_posts."
     },
-    {
-      "id": "LAB-VDL",
-      "name": "VideoLab",
-      "status": "PLANNED — Fase 2",
-      "vercel_project_id": "prj_R0t1QvEnagCNn71Qq4iBLwgxy1MJ",
-      "provider": "fal.ai / Kling 2.5 Turbo Pro ($0.07/seg)",
-      "fallback": "fal.ai / Veo 3.1 Lite ($0.05/seg) para contenido sin personas",
-      "architecture": "ASYNC OBLIGATORIO — stage runner fires POST fal.ai → {request_id} en 2s → fal-poller EF (cron 30s) consulta status → actualiza piece",
-      "activation": "content_score >= 85 AND platforms IN [TIKTOK, INSTAGRAM_REELS, YOUTUBE_SHORTS]",
-      "requires": "FAL_API_KEY en Supabase EF secrets · Supabase Pro upgrade ($25/mes)"
-    },
-    {
-      "id": "LAB-VOL",
-      "name": "VoiceLab",
-      "status": "PLANNED — Fase 3",
-      "provider": "ElevenLabs API — eleven_multilingual_v2 ($0.15/1K chars)",
-      "requires": "ELEVENLABS_API_KEY · 30s audio de Sam para clonar voz Lucien Sael · Plan Creator $22/mes"
-    },
-    {
-      "id": "LAB-AVL",
-      "name": "AvatarLab",
-      "status": "PLANNED — Fase 4",
-      "provider": "HeyGen API — avatar-v2 ($0.08/seg)",
-      "requires": "HEYGEN_API_KEY · 2 min video de Sam para crear avatar Lucien · Plan Business $89/mes"
-    },
-    {
-      "id": "LAB-PCL",
-      "name": "PodcastLab",
-      "status": "PLANNED — Fase 5",
-      "description": "Orchestración multi-lab: CopyLab (script) → VoiceLab (audio) → AvatarLab (talking head) → VideoLab (B-roll) → Creatomate (composición)",
-      "cost_per_episode": "$4.00 (5 min) vs $200-2000 producción tradicional",
-      "requires": "CREATOMATE_API_KEY · Plan Starter $49/mes · Todos los labs anteriores activos"
-    },
+    {"id": "LAB-VDL", "name": "VideoLab", "status": "PLANNED — Fase 2"},
+    {"id": "LAB-VOL", "name": "VoiceLab", "status": "PLANNED — Fase 3"},
+    {"id": "LAB-AVL", "name": "AvatarLab", "status": "PLANNED — Fase 4"},
+    {"id": "LAB-PCL", "name": "PodcastLab", "status": "PLANNED — Fase 5"},
     {
       "id": "LAB-OPS",
       "name": "UNRLVL-OPS",
       "status": "LIVE — Cost Layer + OPS Tracking completo",
-      "url": "https://unrlvl-ops.vercel.app/cost-layer",
-      "ops_schema": {
-        "ops_generation_ledger": "Una fila por lab run. Auto-logueado desde content-run-stage v1.10.",
-        "ops_lab_rates": "Rate card para providers media (Imagen3, Kling, ElevenLabs, HeyGen, Creatomate)",
-        "ops_compute_cost": "FUNCTION SQL — calcula costo dado lab, model, unit_type, units",
-        "ops_log_generation": "FUNCTION SQL — loguea desde cualquier cliente",
-        "kpi_views": [
-          "v_ops_cost_by_client_month",
-          "v_ops_cost_by_lab_month",
-          "v_ops_cost_by_output_type",
-          "v_ops_cost_per_piece",
-          "v_ops_pipeline_kpis",
-          "v_ops_content_velocity",
-          "v_ops_lab_health",
-          "v_ops_monthly_dashboard"
-        ],
-        "dashboard_ui": "Sprint futuro — data en Supabase lista para conectar"
-      }
+      "url": "https://unrlvl-ops.vercel.app/cost-layer"
     },
     {"id": "LAB-OBD", "name": "Onboarding App", "status": "PASSED Phase 4"}
   ],
-  "ai_labs_strategy": {
-    "version": "1.0",
-    "date": "2026-04-26",
-    "doc_html": "https://unrlvl-context.vercel.app/docs/UNRLVL_Labs_Strategy.html",
-    "media_bus": "fal.ai — una sola API key, 50+ modelos. Cambiar modelo = cambiar string en lab_configs.default_params",
-    "decision_tree": {
-      "texto_copy": "Claude Sonnet 4 — Anthropic directo desde EF",
-      "imagen_estatica": "fal.ai — Imagen 3 (default) o FLUX 1.1 Ultra",
-      "video_social_30s": "fal.ai — Kling 2.5 Turbo Pro (default) o Veo 3.1 Lite",
-      "talking_head_presenter": "HeyGen API",
-      "voz_marca": "ElevenLabs API",
-      "composicion_larga": "PodcastLab + Creatomate"
-    },
-    "model_change_rule": "Solo cuando: ≥20% mejor calidad, ≥30% más económico, incidente crítico del provider, o A/B pipeline muestra preferencia estadística. No por hype.",
-    "phases": [
-      {"phase": 1, "name": "Production Ready Core", "status": "IN PROGRESS", "kpi": "10 piezas publicadas en cuentas reales"},
-      {"phase": 2, "name": "Video Social", "status": "PLANNED", "kpi": "Primer TikTok via pipeline IID"},
-      {"phase": 3, "name": "Identidad Sonora", "status": "PLANNED", "kpi": "Pieza con voz Lucien publicada"},
-      {"phase": 4, "name": "Identidad Visual", "status": "PLANNED", "kpi": "Talking head video Lucien publicado"},
-      {"phase": 5, "name": "Flagship Product", "status": "PLANNED", "kpi": "Primer episodio The Unrealville Intel Brief"}
-    ],
-    "subscriptions": [
-      {"service": "Anthropic API", "plan": "pay-per-use", "cost_month": "~$50-100", "phase": 0, "status": "active"},
-      {"service": "fal.ai", "plan": "pay-per-use", "cost_month": "~$15-50", "phase": 1, "status": "pending_account"},
-      {"service": "Google AI Studio", "plan": "pay-per-use", "cost_month": "~$5-15", "phase": 1, "status": "verify_key"},
-      {"service": "Supabase", "plan": "Pro", "cost_month": "$25", "phase": 2, "status": "upgrade_when_video"},
-      {"service": "Resend", "plan": "pay-per-use", "cost_month": "~$5", "phase": 0, "status": "active"},
-      {"service": "ElevenLabs", "plan": "Creator", "cost_month": "$22", "phase": 3, "status": "pending"},
-      {"service": "HeyGen", "plan": "Business", "cost_month": "$89", "phase": 4, "status": "pending"},
-      {"service": "Creatomate", "plan": "Starter", "cost_month": "$49", "phase": 5, "status": "pending"}
-    ],
-    "client_tiers": [
-      {"tier": "Basico", "name": "Social Content Engine", "labs": ["copylab","aife","imagelab","sociallab"], "cost_per_piece": "$0.08"},
-      {"tier": "Estandar", "name": "Video Social Engine", "labs": ["copylab","aife","imagelab","sociallab","videolab"], "cost_per_piece": "$0.77"},
-      {"tier": "Premium", "name": "Brand Presence Engine", "labs": ["copylab","aife","imagelab","sociallab","videolab","voicelab","avatarlab"], "cost_per_piece": "$3.17"},
-      {"tier": "Flagship", "name": "Authority Content Engine", "labs": "all", "cost_per_episode": "$4.00"}
-    ]
-  },
   "skills_roadmap": [
     {"id": "SKILL-UIUX", "name": "ui-ux-layer", "priority": 1, "status": "COMPLETE v2.1"},
-    {"id": "SKILL-SA", "name": "shopify-auditor", "priority": 2, "status": "COMPLETE v1.1"},
+    {
+      "id": "SKILL-SA",
+      "name": "shopify-auditor",
+      "priority": 2,
+      "status": "COMPLETE v3.0",
+      "location": "Tools/shopify-auditor/SKILL_shopify-auditor.md",
+      "app": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
+      "notes": "v3: 13 módulos + strategic_seo, read_apps, Fix Queue, Claude Brief, context recovery protocol. EF v6 deployed."
+    },
     {"id": "SKILL-IP", "name": "image-processing", "priority": 3, "status": "COMPLETE v1.0"},
     {"id": "SKILL-AB", "name": "agent-builder", "priority": 4, "status": "COMPLETE v1.0"},
     {"id": "SKILL-AIFE", "name": "aife", "priority": 5, "status": "COMPLETE v1.1"},
@@ -290,67 +310,26 @@
     "crons_count": 27,
     "schemas": "intel.* (7 tablas) + content.* (5 tablas)",
     "edge_functions": {
-      "iid-core": "v1.1 ACTIVE",
-      "iid-research": "v1 ACTIVE",
-      "iid-process": "v1 ACTIVE",
-      "iid-brief-generator": "v1 ACTIVE",
-      "aife-filter": "v1.1 ACTIVE",
-      "content-dispatcher": "v2.3 ACTIVE — síncrono, no waitUntil",
-      "content-run-stage": "v1.10 ACTIVE — direct Claude EF calls + auto cost logging",
-      "context-cache": "v4 ACTIVE — brand_context_cache table, 11 triggers, ~500ms HIT"
+      "iid-core": "v1.1 ACTIVE", "iid-research": "v1 ACTIVE", "iid-process": "v1 ACTIVE",
+      "iid-brief-generator": "v1 ACTIVE", "aife-filter": "v1.1 ACTIVE",
+      "content-dispatcher": "v2.3 ACTIVE", "content-run-stage": "v1.10 ACTIVE",
+      "context-cache": "v4 ACTIVE"
     },
     "pipeline_status": {
-      "copylab": "OK — Claude directo desde EF (~9s)",
-      "aife": "OK — Vercel AIFE EF (~4s)",
-      "imagelab": "SKIP — Vercel 50s AbortSignal timeout, non-critical. Fix pendiente: callImagenDirect() en v1.11",
-      "sociallab": "OK — Claude directo desde EF + write scheduled_posts (~8s)",
-      "total_time": "~71s",
-      "pieces_created": 1,
-      "email_confirmed": true,
+      "copylab": "OK", "aife": "OK", "imagelab": "SKIP — fix pendiente v1.11", "sociallab": "OK",
+      "total_time": "~71s", "pieces_created": 1, "email_confirmed": true,
       "approval_flow": "PENDIENTE TEST — piece e75bdb73 awaiting_approval"
-    },
-    "scoring": {
-      "ecosystem_R1_R6": "R1 capability 25 · R2 quality 20 · R3 cost 25 · R4 implementation 15 · R5 time_to_value 10 · R6 client 5",
-      "content_C1_C5": "C1 novelty 25 · C2 audience_relevance 25 · C3 contrarian 20 · C4 timeliness 15 · C5 expertise_signal 15",
-      "thresholds": {"top": ">=70", "watchlist": "50-69", "discard": "<50"},
-      "autopublish": "content_score >=85 AND urgency=breaking"
-    },
-    "lab_configs_iid_pipeline": {
-      "copylab":  {"iid_stage_order": 1, "supports_iid": true, "execute_path": "/api/execute"},
-      "aife":     {"iid_stage_order": 2, "supports_iid": true, "execute_path": "/functions/v1/aife-filter"},
-      "imagelab": {"iid_stage_order": 3, "supports_iid": true, "execute_path": "/api/execute"},
-      "sociallab":{"iid_stage_order": 4, "supports_iid": true, "execute_path": "/api/execute"},
-      "videolab": {"iid_stage_order": 5, "supports_iid": false, "execute_path": "/api/execute", "note": "Fase 2 — async fal-poller pattern"}
-    },
-    "vercel_bypass_secret": "3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU — aplica a CopyLab, ImageLab, SocialLab. Header: x-vercel-protection-bypass.",
-    "brand_id_for_iid": "UnrealvilleStudio — voces unrlvl y lucien viven bajo esta marca en Supabase"
+    }
   },
   "content_engine": {
     "status": "OPERATIONAL — primer email aprobación confirmado 2026-04-26",
-    "flow": "iid_content_queue (pending) → content-dispatcher → orchestrator_jobs → content-run-stage v1.10 → [CopyLab direct → AIFE → ImageLab(skip) → SocialLab direct] → content_pieces → email Sam → approve-job → published",
-    "approval": "Email con preview AIFE-filtered + PUBLICAR AHORA + RECHAZAR. Endpoint: Orchestrator /api/approve-job",
-    "autopublish": "content_score >=85 + urgency breaking → SocialLab directo, sin email",
-    "brand_voices": "content.brand_voices — UNRLVL + Lucien con templates, ICR rules, image_style, psycho_affinities",
-    "cost_tracking": "Automático desde v1.10 — cada lab run loguea en ops_generation_ledger",
-    "oauth_status": "PENDIENTE — scheduled_posts en status pending_oauth. OAuth Meta/LinkedIn/TikTok/X = Fase 1 próxima sesión",
-    "supabase_schema": {
-      "content.orchestrator_jobs": "assets JSONB + platforms text[] + approved_by + finding_id",
-      "intel.iid_content_queue": "iid_source_tag añadido 2026-04-25",
-      "lab_configs": "supports_iid boolean + iid_stage_order integer",
-      "public.ops_generation_ledger": "NUEVO 2026-04-26 — ledger de costos por generación",
-      "public.ops_lab_rates": "NUEVO 2026-04-26 — rate card para providers media",
-      "public.brand_oauth_tokens": "PENDING — schema listo, crear en próxima sesión",
-      "public.brand_context_cache": "ACTIVO — 11 triggers dirty flag, TTL 60min"
-    }
+    "flow": "iid_content_queue → content-dispatcher → orchestrator_jobs → content-run-stage v1.10 → [CopyLab→AIFE→ImageLab(skip)→SocialLab] → content_pieces → email Sam → approve-job → published",
+    "oauth_status": "PENDIENTE — scheduled_posts en status pending_oauth"
   },
   "github_auditor": {
     "status": "LIVE — bug fix 2026-04-25",
     "url": "https://unrlvl-tools.vercel.app/api/gh",
-    "usage": {
-      "tree": "?repo=NAME&action=tree",
-      "file": "?repo=NAME&path=src/file.ts",
-      "legacy": "?path=/repos/ORG/REPO/..."
-    },
+    "usage": {"tree": "?repo=NAME&action=tree", "file": "?repo=NAME&path=src/file.ts"},
     "skill_url": "https://unrlvl-tools.vercel.app/github-auditor/SKILL.md"
   },
   "infrastructure": [
@@ -360,38 +339,40 @@
       "name": "Supabase",
       "project_id": "amlvyycfepwhiindxgzw",
       "plan": "Free (150s EF wall clock) — upgrade a Pro al activar VideoLab",
-      "schemas": "public.* 50+ tablas + intel.* (7 tablas IID) + content.* (5 tablas Content Engine)",
+      "schemas": "public.* 50+ tablas + intel.* (7 tablas IID) + content.* (5 tablas) + shopify.* (4 tablas: stores, audit_runs, fix_log, theme_snapshots)",
       "extensions": ["pg_cron 1.6.4", "pg_net 0.20.0"],
-      "exposed_schemas": "public, intel, content",
       "ef_secrets_active": ["ANTHROPIC_API_KEY", "RESEND_API_KEY", "IID_CRON_SECRET", "SUPABASE_SERVICE_ROLE_KEY", "ORCHESTRATOR_URL", "VERCEL_BYPASS_SECRET"],
       "ef_secrets_pending": ["GEMINI_API_KEY", "FAL_API_KEY", "ELEVENLABS_API_KEY", "HEYGEN_API_KEY", "CREATOMATE_API_KEY"]
     },
-    {
-      "id": "INFRA-OPS",
-      "name": "UNRLVL-OPS",
-      "url": "https://unrlvl-ops.vercel.app",
-      "status": "LIVE — Cost Layer + 8 KPI views activas en Supabase"
-    },
-    {
-      "id": "INFRA-ORCH",
-      "name": "Orchestrator",
-      "url": "https://orchestrator-unrlvl.vercel.app",
-      "status": "OR_1.1 LIVE — 4 tabs + approve-job + trigger-job"
-    },
+    {"id": "INFRA-OPS", "name": "UNRLVL-OPS", "url": "https://unrlvl-ops.vercel.app", "status": "LIVE — Cost Layer + 8 KPI views"},
+    {"id": "INFRA-ORCH", "name": "Orchestrator", "url": "https://orchestrator-unrlvl.vercel.app", "status": "OR_1.1 LIVE"},
     {"id": "INFRA-CRM", "name": "UNRLVL CRM v1.0", "status": "OPERATIVO", "pending": ["Speaks→CRM", "Shopify→CRM"]},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
     {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED v2.1 — pending deploy + domain"},
-    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — GitHub Auditor proxy FIXED 2026-04-25"}
+    {
+      "id": "INFRA-TOOLS",
+      "name": "unrlvl-tools.vercel.app",
+      "status": "LIVE — GitHub Auditor + ShopifyAuditor v3",
+      "repo": "GitHub/unrealvillestudio-hub/Tools",
+      "structure": {
+        "api/gh.js": "GitHub proxy para Claude",
+        "api/audit-proxy.js": "Shopify audit proxy para Claude",
+        "github-auditor/SKILL.md": "GitHub auditing skill",
+        "shopify-auditor/shopify_audit.html": "ShopifyAuditor v3 app",
+        "shopify-auditor/SKILL_shopify-auditor.md": "ShopifyAuditor skill + context recovery protocol",
+        "historical_context_builder.html": "Context builder tool"
+      },
+      "pattern": "Cada tool vive en su propia carpeta con SKILL.md. Proxies Claude en api/ raíz (Vercel requirement)."
+    }
   ],
   "next_session_agenda": [
-    "PASO 1 BLOQUEANTE — Test approval flow: GET orchestrator-unrlvl.vercel.app/api/approve-job?token={TOKEN}&action=approve con piece e75bdb73. Verificar piece.status = published.",
-    "PASO 2 — ImageLab directo desde EF: verificar GEMINI_API_KEY en Supabase EF secrets, deploy content-run-stage v1.11 con callImagenDirect() (Gemini 2.5 Flash + Imagen 3, ~25s).",
-    "PASO 3 — Crear cuenta fal.ai y añadir FAL_API_KEY a Supabase EF secrets. Desbloquea VideoLab.",
-    "PASO 4 — OAuth social media: crear tabla brand_oauth_tokens, conectar Instagram/LinkedIn/TikTok/X para Unrealville y Lucien, crear EF social-publisher (cron 15min).",
-    "PASO 5 — Labs Tests T1-T7: approval flow, imagen, publicación real, cache invalidation, autopublish, social-publisher, videolab.",
-    "PENDIENTE PARALELO — Lucien Books: Brief Libro 1 — Sam trae pensamiento libre sobre el personaje.",
-    "PENDIENTE PARALELO — NeuroneSCF B2B: brand_ids + acento navy.",
-    "PENDIENTE PARALELO — ForumPHs: datos 8+ edificios + foto Ivette.",
-    "COMMIT pendiente: Why UNRLVL v4 → CoreProject. DEPLOY: luciensael.com v2.1."
+    "PRIORIDAD 1 — ShopifyAuditor: test completo NeuroneSCF B2B (score, findings, fixer en vivo). Luego B2C OAuth + test. Declarar ready4business o lista de fixes.",
+    "PRIORIDAD 2 — ShopifyAuditor sales closing: diseñar intake form (7 preguntas estratégicas) + landing de resultado + fix packs pricing. Este es el diferenciador de negocio.",
+    "PRIORIDAD 3 — Test approval flow IID: GET orchestrator-unrlvl.vercel.app/api/approve-job?token={TOKEN}&action=approve con piece e75bdb73.",
+    "PRIORIDAD 4 — ImageLab directo: verificar GEMINI_API_KEY en Supabase EF secrets, deploy content-run-stage v1.11 con callImagenDirect().",
+    "PRIORIDAD 5 — OAuth social media: Instagram/LinkedIn/TikTok/X para Unrealville y Lucien.",
+    "PENDIENTE PARALELO — Lucien Books: Brief Libro 1.",
+    "PENDIENTE PARALELO — NeuroneSCF B2C: OAuth + primer audit.",
+    "COMMIT pendiente: luciensael.com deploy + DNS. Why UNRLVL v4."
   ]
 }

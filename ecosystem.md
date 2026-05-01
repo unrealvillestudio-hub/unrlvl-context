@@ -1,202 +1,161 @@
 # UNRLVL Ecosystem — Narrative Reference
-_Versión: 2026-04-26 · Generado desde ecosystem.json_
+**Version:** 2026-05-01 | Auto-generated from ecosystem.json
 
 ---
 
 ## Studio
-
-**Unrealville Studio** — Brand Intelligence Infrastructure. North Miami, FL. Fundador público: **Lucien Sael** (seudónimo de Sam). Web: unrealvillestudio.com (LIVE EN+ES).
-
----
-
-## IID Network — OPERATIONAL ✅
-
-Sistema de inteligencia que investiga, puntúa y convierte hallazgos en contenido público y mejoras internas.
-
-### Arquitectura two-step (permanente)
-
-```
-pg_cron → iid-research (Claude + web_search → iid_research_raw)
-        → iid-process  (estructura JSON → iid-core → dos streams)
-```
-
-**Stream Ecosystem:** findings ≥70 → `intel.iid_findings` → brief biweekly email Sam.  
-**Stream Content:** findings ≥70 (content_score) → `intel.iid_content_queue` → Content Engine → SocialLab.
-
-### 14 agentes, 27 crons
-
-IID-CORE · IMAGE · VIDEO · VOICE · LLM · META · TIKTOK · GOOGLE · LINKEDIN · X · ECOMMERCE · FLORIDA · WHOLESALE · PERSONAL-BRAND
-
-Primer run IID-ECOMMERCE: 2026-04-24. 4 findings reales.
+**Unrealville Studio** — Brand Intelligence Infrastructure. "Not for everyone."
+Owner: Sam | Founder public: Lucien Sael | HQ: 12951 Biscayne Blvd · North Miami, FL 33181
+Web: unrealvillestudio.com (LIVE EN+ES) | GitHub: unrealvillestudio-hub
 
 ---
 
-## Content Engine — OPERATIONAL ✅
+## Brands
 
-**Primer email de aprobación confirmado recibido: 2026-04-26.**
-
-### Flujo real en producción
-
-```
-iid_content_queue (pending)
-  ↓ content-dispatcher (Supabase EF)
-  ↓ crea content.orchestrator_jobs
-content-run-stage v1.10
-  ↓ copylab:   Claude directo desde EF (~9s)   ✅
-  ↓ aife:      Vercel AIFE EF (~4s)            ✅
-  ↓ imagelab:  Vercel 50s AbortSignal skip     ⚠️ fix pendiente
-  ↓ sociallab: Claude directo + scheduled_posts ✅
-  ↓ content_pieces (awaiting_approval)
-  ↓ email Sam: PUBLICAR AHORA / RECHAZAR
-  ↓ approve-job → published
-```
-
-**Tiempo total pipeline:** ~71 segundos.  
-**Bug resuelto:** EdgeRuntime.waitUntil reemplazado por arquitectura síncrona.  
-**Cost tracking:** cada lab run se loguea automáticamente en `ops_generation_ledger`.
-
-### Lab contracts
-
-| Lab | Modo pipeline | Costo/run |
-|---|---|---|
-| CopyLab | Claude directo EF (no Vercel) | ~$0.015 |
-| AIFE | Vercel EF | ~$0.008 |
-| ImageLab | Vercel 50s skip → fix a EF directo | ~$0.05 |
-| SocialLab | Claude directo EF (no Vercel) | ~$0.008/plataforma |
-| VideoLab | fal.ai async (Fase 2) | $0.07/seg |
-
-**brandId para IID:** `"UnrealvilleStudio"` (voces unrlvl y lucien).  
-**OAuth:** posts en `scheduled_posts` con `pending_oauth`. Conexión real Meta/LinkedIn/TikTok/X = Fase 1.
-
----
-
-## AI Labs Strategy v1.0
-
-**Documento de referencia permanente:** `docs/UNRLVL_Labs_Strategy.html`
-
-### 8 Labs — Ecosistema completo
-
-| Stage | Lab | Provider | Estado |
+| Brand | Market | Health | Notes |
 |---|---|---|---|
-| 01 | CopyLab | Claude Sonnet 4 (directo) | ✅ Live |
-| 02 | AIFE | Claude Sonnet 4 (directo) | ✅ Live |
-| 03 | ImageLab | fal.ai / Imagen 3 | ⚠️ Fix pendiente |
-| 04 | SocialLab | Claude Sonnet 4 (directo) | ✅ Live |
-| 05 | VideoLab | fal.ai / Kling 2.5 Turbo Pro | 🔲 Fase 2 |
-| 06 | VoiceLab | ElevenLabs API | 🔲 Fase 3 |
-| 07 | AvatarLab | HeyGen API | 🔲 Fase 4 |
-| 08 | PodcastLab | Multi-lab + Creatomate | 🔲 Fase 5 |
+| Diamond Details | Alicante, España | 🟢 | Active |
+| Vizos Cosmetics | Miami + España | 🟢 | Active |
+| D7 Herbal | Alicante, España | 🟢 | Active |
+| Vivose Mask | España | 🟡 | Active |
+| Patricia Osorio · Personal | Miami FL | 🟢 | |
+| Patricia Osorio · Comunidad | Miami FL | 🟢 | |
+| Patricia Osorio · Vizos Salon | Miami FL | 🟢 | |
+| Patricia Osorio · Conectando | Miami + LATAM | 🟢 | |
+| **NeuroneSCF** | South & Central Florida | 🟡 | B2B OAuth connected · B2C pending |
+| ForumPHs | Panamá | 🟢 | Document Factory PROD v1.5 |
+| Unrealville Studio | Florida + LATAM | 🟢 | IID pipeline operational |
+| Unrealville Stores | Florida USA | 🟢 | |
 
-### fal.ai como Media Bus
+### NeuroneSCF — Shopify Status
+- **B2B:** nj5ybc-n1.myshopify.com · OAuth CONNECTED · Audit PENDING test
+- **B2C:** neuronescflorida.com · OAuth PENDING authorization
+- **Gaps:** Privacy/Refund/ToS policies · Custom domain · Shipping rates · Payment gateway (B2B invoice model TBD with Patricia)
 
-Una sola API key, 50+ modelos. Cambiar modelo = cambiar string en `lab_configs.default_params`. No hay código nuevo.
+---
 
-**VideoLab — arquitectura async obligatoria:**
-Stage runner envía POST a fal.ai → `{request_id}` en 2s, retorna. EF `fal-poller` (cron 30s) consulta y actualiza piece. Resuelve el wall clock de Supabase.
+## ShopifyAuditor v3 — COMPLETE
+**Objetivo dual:** Gestión interna de tiendas + servicio de lead gen (audit gratuito → oferta de correcciones).
+**Diferenciador:** Fix engine demuestra valor en tiempo real. Ninguna agencia Shopify hace esto.
 
-### Árbol de decisión
+| | |
+|---|---|
+| **App** | https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html |
+| **SKILL** | Tools/shopify-auditor/SKILL_shopify-auditor.md |
+| **Proxy Claude** | https://unrlvl-tools.vercel.app/api/audit-proxy |
+| **Repo** | GitHub/unrealvillestudio-hub/Tools |
 
+### Context Recovery Protocol
+- `"shopify audit de [X]"` → carga SKILL + brand context → jala último audit → presenta brief
+- `"shopify audit de [dominio externo]"` → carga SKILL → pide 4 datos → corre audit
+- `"shopify auditor"` sin tienda → lista tiendas conectadas
+
+### Audit Types
+**Technical (100 pts):** 13 módulos. Estructura, configuración, SEO calidad, tema, apps, órdenes, pagos.
+**Technical + Strategic (110 pts):** + módulo `strategic_seo`. Keyword coverage, CTA alignment, brand voice. Requiere 7 preguntas de contexto.
+
+### Módulos (13+1)
+settings(20) · catalog(20) · seo(10) · strategic_seo(10★) · theme(15) · collections(10) · payments(10) · orders(10) · shipping(5) · discounts(5) · navigation(10) · apps(10) · performance(5) · b2c_vs_b2b(5)
+★ Solo cuando strategic_context provided
+
+### Fix Engine
+Fixes disponibles (write scopes activos): `inventory_tracking_on` · `seo_title_from_product` · `theme_add_canonical` · `theme_add_og_tags`
+En desarrollo: `fix_description_enrich` · `fix_vendor_bulk` · `fix_seo_description` · `fix_theme_json_ld`
+**Regla:** siempre confirmación antes de aplicar. Theme edits = snapshot en Supabase primero.
+
+### Claude Brief Feature
+App → 📋 Claude Brief → markdown con todos hallazgos + fix payloads JSON → pegar en chat → "fix all critical" → Claude aplica directamente.
+
+### Edge Functions (amlvyycfepwhiindxgzw)
+- `shopify-audit v6` — 13 módulos, read_apps real, strategic scoring, save via RPC
+- `shopify-fix v1` — 4 fix types con snapshot
+- `shopify-store-lookup v1` — lookup por dominio + lista connected
+- `shopify-audit-brief v1` — genera brief markdown
+- `shopify-oauth v3` — OAuth token capture
+
+### Supabase Schema: shopify.*
+Tables: stores · audit_runs · fix_log · theme_snapshots
+RPCs: get_shopify_store · get_shopify_store_by_domain · save_shopify_audit_run · get_latest_audit
+**CRÍTICO:** Usar RPC para save — .schema('shopify') falla silenciosamente en JS client.
+
+### Tiendas Conectadas
+| Brand | Type | Domain | Status |
+|---|---|---|---|
+| NeuroneSCF | b2b | nj5ybc-n1.myshopify.com | ✅ CONNECTED |
+| NeuroneSCF | b2c | neuronescflorida.com | ⏳ OAuth pending |
+
+### Service Design (R4B)
+1. Prospect → 7 preguntas estratégicas → audit técnico + estratégico
+2. Reporte con score + hallazgos → impacto visible inmediato
+3. Oferta: "¿Te hacemos las correcciones?"
+4. Fix engine demuestra valor en tiempo real durante presentación
+**Pendiente:** intake form (7q) + landing resultado + fix packs pricing
+
+---
+
+## Tools Repo — Patrón Canónico
 ```
-¿Genera texto/copy?          → Claude (Anthropic directo)
-¿Genera imagen estática?     → fal.ai (Imagen 3 o FLUX)
-¿Genera video <30s social?   → fal.ai / Kling Turbo Pro
-¿Talking head / presenter?   → HeyGen API
-¿Voz de marca?               → ElevenLabs API
-¿Composición multi-modal?    → PodcastLab + Creatomate
-¿Nuevo tipo de contenido?    → verificar en fal.ai primero
+Tools/ (GitHub → unrlvl-tools.vercel.app)
+├── api/
+│   ├── gh.js              — GitHub proxy para Claude
+│   └── audit-proxy.js     — Shopify audit proxy para Claude
+├── github-auditor/
+│   └── SKILL.md
+├── shopify-auditor/
+│   ├── shopify_audit.html
+│   └── SKILL_shopify-auditor.md
+└── historical_context_builder.html
 ```
+**Patrón:** tool en carpeta propia + SKILL.md. Proxies en api/ raíz (Vercel requirement).
 
-### Costo por pieza (fullstack)
+---
 
-| Tier | Labs | Costo/pieza |
+## IID Network
+Status: OPERATIONAL — pipeline end-to-end confirmado 2026-04-26
+14 agents · 27 crons · schemas intel.* + content.*
+Pipeline: iid-research → iid-process → iid-core → CopyLab → AIFE → ImageLab(skip) → SocialLab
+Fix pendiente: ImageLab directo (Gemini + Imagen 3) en content-run-stage v1.11
+
+---
+
+## Labs
+
+| Lab | Status | URL |
 |---|---|---|
-| Básico | Copy + AIFE + Image + Social | ~$0.08 |
-| Estándar | + VideoLab (10s) | ~$0.77 |
-| Premium | + VoiceLab + AvatarLab | ~$3.17 |
-| Flagship | + PodcastLab (episodio 5min) | ~$4.00 |
-
-### Infraestructura total Fase 5 completa: ~$255-340/mes
-
----
-
-## OPS Cost Tracking — LIVE ✅
-
-### Schema en Supabase (desde 2026-04-26)
-
-**`ops_generation_ledger`** — una fila por lab run. Auto-logueado desde content-run-stage v1.10.
-
-**`ops_lab_rates`** — rate card activa:
-- Imagen 3: $0.05/image · FLUX Schnell: $0.025/image
-- Kling 2.5 Turbo Pro: $0.07/seg · Veo 3.1 Lite: $0.05/seg
-- ElevenLabs multilingual v2: $0.15/1K chars
-- HeyGen avatar v2: $0.08/seg
-- Creatomate: $0.10/render
-
-**KPI Views disponibles:**
-
-```sql
-SELECT * FROM v_ops_cost_by_client_month;   -- costo total por cliente
-SELECT * FROM v_ops_cost_by_lab_month;      -- qué labs cuestan más
-SELECT * FROM v_ops_cost_per_piece;         -- costo fully loaded por pieza
-SELECT * FROM v_ops_pipeline_kpis;          -- completion rate, publish rate
-SELECT * FROM v_ops_content_velocity;       -- piezas/día por marca
-SELECT * FROM v_ops_lab_health;             -- failure rates y latencia
-SELECT * FROM v_ops_monthly_dashboard;      -- dashboard con margen
-```
+| CopyLab | LIVE v8.1 | https://unrlvl-copy-lab.vercel.app |
+| WebLab | PASSED | — |
+| ImageLab | ⚠️ FIX PENDING | https://image-lab-unrlvl.vercel.app |
+| AgentLab | PASSED | — |
+| BlueprintLab | PASSED | — |
+| Orchestrator | OR_1.1 LIVE | https://orchestrator-unrlvl.vercel.app |
+| SocialLab | LIVE (bypassed) | https://social-lab-flame.vercel.app |
+| VideoLab | PLANNED Fase 2 | — |
+| VoiceLab | PLANNED Fase 3 | — |
+| AvatarLab | PLANNED Fase 4 | — |
+| PodcastLab | PLANNED Fase 5 | — |
+| UNRLVL-OPS | LIVE | https://unrlvl-ops.vercel.app |
 
 ---
 
-## Orchestrator — OR_1.1
+## Infrastructure
 
-**URL:** orchestrator-unrlvl.vercel.app  
-**Tabs:** Orchestrator · Launchpad · Monitor · IID Intel
-
-- `api/approve-job.ts` — 1-click email approval
-- `api/trigger-job.ts` — trigger programático IID
-- **OAuth UI pendiente** — `/oauth` page para conectar cuentas sociales
-
----
-
-## GitHub Auditor
-
-**URL:** unrlvl-tools.vercel.app/api/gh
-
-```
-Tree:  ?repo=NAME&action=tree
-File:  ?repo=NAME&path=src/file.ts
-```
+| ID | Name | Status |
+|---|---|---|
+| INFRA-CTX | Context System | https://unrlvl-context.vercel.app |
+| INFRA-SB | Supabase amlvyycfepwhiindxgzw | Free plan. Schemas: public + intel + content + shopify |
+| INFRA-OPS | UNRLVL-OPS | LIVE — Cost Layer + 8 KPI views |
+| INFRA-ORCH | Orchestrator | OR_1.1 LIVE |
+| INFRA-CRM | UNRLVL CRM v1.0 | OPERATIVO |
+| INFRA-WEB | unrealvillestudio.com | LIVE EN+ES |
+| INFRA-LUCIEN | luciensael.com | GENERATED — pending deploy |
+| INFRA-TOOLS | unrlvl-tools.vercel.app | LIVE — GitHub Auditor + ShopifyAuditor v3 |
 
 ---
 
-## Supabase
-
-**Project:** amlvyycfepwhiindxgzw  
-**Plan:** Free (150s EF wall clock) — upgrade a Pro al activar VideoLab  
-**Schemas:** public · intel (IID) · content (Content Engine)
-
-### Edge Functions activas (content pipeline)
-
-```
-content-dispatcher   v2.3  — ACTIVE (síncrono)
-content-run-stage    v1.10 — ACTIVE (direct EF calls + cost logging)
-context-cache        v4    — ACTIVE (brand context cache, 11 triggers)
-aife-filter          v1.1  — ACTIVE
-```
-
-### Secrets activos en EF
-`ANTHROPIC_API_KEY` · `RESEND_API_KEY` · `IID_CRON_SECRET` · `SUPABASE_SERVICE_ROLE_KEY` · `ORCHESTRATOR_URL` · `VERCEL_BYPASS_SECRET`
-
-### Secrets pendientes
-`GEMINI_API_KEY` (Fase 1) · `FAL_API_KEY` (Fase 1) · `ELEVENLABS_API_KEY` (Fase 3) · `HEYGEN_API_KEY` (Fase 4) · `CREATOMATE_API_KEY` (Fase 5)
-
----
-
-## Próxima sesión — Ejecución inmediata
-
-1. **BLOQUEANTE** — Test approval flow: piece `e75bdb73` → botón PUBLICAR → verificar `piece.status = published`
-2. **ImageLab fix** — `GEMINI_API_KEY` en EF secrets → deploy v1.11 con `callImagenDirect()`
-3. **fal.ai account** — crear cuenta, `FAL_API_KEY` a EF secrets
-4. **OAuth social** — `brand_oauth_tokens` tabla + flows Meta/LinkedIn/TikTok/X para Unrealville + Lucien + EF `social-publisher`
-5. **Labs Tests T1-T7**
-
-**Paralelo:** Lucien Books Libro 1 · NeuroneSCF B2B · ForumPHs edificios · Deploy luciensael.com
+## Next Session Agenda
+1. **ShopifyAuditor tests** — B2B completo (score, findings, fixer). B2C OAuth + test. Ready4business?
+2. **Sales closing design** — intake form 7q + landing + fix packs pricing
+3. **IID approval flow** — test piece e75bdb73
+4. **ImageLab fix** — GEMINI_API_KEY + v1.11 callImagenDirect()
+5. **OAuth social** — Instagram/LinkedIn/TikTok/X
+6. Paralelo: Lucien Books Libro 1 · NeuroneSCF B2C · luciensael.com deploy
