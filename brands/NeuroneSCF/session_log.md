@@ -2,6 +2,114 @@
 
 ---
 
+## SESIÓN 2026-05-02 R2 — B2C: Logo, Pro Portal, i18n Round 2, Key Benefits
+**Operador:** Sam | **Claude:** Sonnet 4.6
+
+### Resumen ejecutivo
+Segunda ronda intensiva de fixes sobre la tienda B2C. Se completó el logo, la eliminación del Pro Portal, la corrección del bug crítico de `locale_root` (404 en nav EN), las traducciones de product types (HUMEDAD/RESTAURAR/ANTI-CAÍDA), el batch translation de Key Benefits para 7 productos via metafield `benefit_claims_en`, la limpieza del sidebar de colecciones y múltiples correcciones de locale-awareness en footer/hero/product-detail.
+
+### EF Infrastructure
+
+| EF | Versión | Descripción |
+|---|---|---|
+| shopify-theme-locale | v8 | Action router completo: fix_v2, fix_v3, fix_v3b, fix_logo_asset_url, fix_headline_translation, fix_remaining_logos, upload_logo, put_asset, read_asset |
+| shopify-fix-benefits | v3 | Batch job: lee benefit_claims EN→ traduce via Claude → crea metafield benefit_claims_en por producto. Paginación via since_id. |
+
+### Trabajo realizado
+
+**Bug crítico fix — locale_root 404:**
+`request.locale.root_url` devuelve `/en` (sin trailing slash) → todos los links del nav EN daban 404. Corregido en `nc-header.liquid`: `locale_root = '/' | append: iso_code | append: '/'`.
+
+**Logo NSCF_Logo_WT_TC.png:**
+- Subido como theme asset a la CDN B2C: `cdn.shopify.com/s/files/1/0969/9567/2391/t/8/assets/NSCF_Logo_WT_TC.png`
+- Aplicado en: header (reemplaza text "Neurone Cosmética"), footer, hero media placeholder
+- Hero: clase `nc-hero-product-img nc-reveal` para animación
+- Footer logo: indentación exacta corregida (12 vs 10 spaces — fix con string exacto)
+
+**Pro Portal eliminado:**
+- `nc-header.liquid`: nav desktop + mobile menu
+- `nc-footer.liquid`: columna de Info
+- `nc-product-detail.liquid`: tab Shipping (link + párrafo)
+
+**Hero i18n:**
+- CTA buttons URL ahora locale-aware (`locale_root | append: 'collections/all'`)
+- Headline: "Cuando Tu" (era "Cuando el") → EN translation registrada: "WHEN YOUR" via `translationsRegister`
+
+**Filtros en colección cleanup:**
+- "Ordenar por" sidebar: eliminado
+- "Otras Líneas" sidebar: eliminado
+- "Tipo de Cabello" / "Hair Type": mejorado visualmente (texto uppercase, border-bottom)
+- Sort dropdown en header de grid: eliminado
+- Strings hardcodeados ES→EN: eyebrow, empty state, product count
+
+**Product type EN mapping expandido:**
+
+| ES | EN |
+|---|---|
+| ANTI-CAÍDA / Anti-Caída | Anti-Hair Loss |
+| HUMEDAD / Humedad | Moisture |
+| RESTAURAR / Restaurar | Restore |
+| CUERO CABELLUDO | Scalp |
+| TRATAMIENTO | Treatment |
+| ALISADO | Smoothing |
+| PURIFICANTE | Purifying |
+
+**Collection title EN translations:**
+Registradas via `translationsRegister` para 5 colecciones: Moisture, Restore, Styling, Color Rescue, Scalp.
+
+**"Also from COLLECTION" mapping:**
+`nc-product-detail.liquid`: case statement que convierte títulos ES a EN en la sección de related products.
+
+**Shipping tab:**
+Eliminada de `nc-product-detail.liquid` (botón + panel completo).
+
+**Option name "Presentación" → "Presentation":**
+Inline Liquid mapping en `nc-product-detail.liquid` para variant option names en EN.
+
+**Format mapping:**
+`pump_bottle` → "Pump Bottle", `spray_bottle` → "Spray Bottle", `capsula` → "Capsule" en EN.
+
+**Footer links locale-aware:**
+`nc-footer.liquid`: todos los hrefs hardcodeados de /collections/*, /pages/*, /policies/* ahora con `request.locale.root_url | default: '/'`.
+
+**Key Benefits batch translation:**
+- `shopify-fix-benefits` EF desplegado (v3)
+- 4 batches: 61 productos total, 7 con benefit_claims en español
+- 7 productos tradujeron vía Claude Sonnet 4.6 y crearon `neurone.benefit_claims_en` metafield
+- `nc-product-detail.liquid` actualizado: usa `benefit_claims_en` cuando disponible en EN, fallback a `benefit_claims`
+
+**Collection grid locale:**
+`nc-collection-grid.liquid`: link "Ver todo el catálogo" ahora locale-aware.
+
+### Estado post-sesión
+
+```
+B2C theme: Pro Portal eliminado ✅ | Logo NSCF ✅ | locale_root 404 fix ✅
+B2C i18n: Product types EN ✅ | Collection titles registered EN ✅ | Hero "WHEN YOUR" ✅
+B2C product detail: Key Benefits EN (7/7 con benefits) ✅ | Format mapping ✅ | Shipping tab removed ✅
+B2C footer: Locale-aware links ✅
+```
+
+### Pendientes manuales (Shopify Admin)
+
+**Patricia — contenido:**
+- Páginas 404: `/pages/about`, `/pages/la-ciencia`, `/pages/faq`, `/pages/contacto` — crear en Admin > Pages
+- Policy pages: Terms of Service, Shipping Policy, Refund Policy — Admin > Settings > Policies
+- WhatsApp: verificar que el campo WhatsApp en Customizer > Footer settings esté vacío
+- Precios $0.00 (20 variantes pendientes)
+- Imágenes kits (12 productos sin imagen)
+- Payment gateway
+- Shipping rates (zona Florida)
+
+**Verificación:**
+- Collection tiles "CUERO CABELLUDO/RESTAURAR/HUMEDAD": template tiene nombres EN correctos, es browser cache — hard refresh `Ctrl/Cmd+Shift+R`
+- Re-auditar B2C para score actualizado
+
+### Nota técnica
+El metafield `neurone.benefit_claims_en` no aparece en `translatableResources` porque no tiene `MetafieldDefinition` registrada. La estrategia elegida fue crear el metafield EN como campo separado. Para futuro: crear la MetafieldDefinition y migrar al enfoque oficial de Shopify Translate & Adapt.
+
+---
+
 ## SESIÓN 2026-05-02 — Theme i18n: bilingüismo completo B2C
 **Operador:** Sam | **Claude:** Sonnet 4.6
 
@@ -23,58 +131,16 @@ Completamos el trabajo de bilingüismo del tema B2C. Todos los strings hardcodea
 - B2C: 2 strings ES aplicados, 21 skipped (ya en EN o brand names) ✅
 
 **theme-i18n-fix EF (nuevo, one-shot):**
-Actualizó 6 archivos del tema B2C vía PUT a la Shopify Assets API:
+Actualizó 6 archivos del tema B2C vía PUT a la Shopify Assets API.
 
-| Archivo | Strings corregidos |
-|---|---|
-| sections/nc-product-detail.liquid | 24 strings (tabs, trust strip, benefits, related, cart) |
-| sections/nc-header.liquid | Nav, cart drawer, aria-labels completos |
-| sections/nc-featured-products.liquid | "Ver Todos" + default fallbacks |
-| sections/nc-collection-grid.liquid | "Todo el Catálogo" + "productos" |
-| sections/nc-footer.liquid | Completo: tagline, nav, newsletter, copyright, legal links |
-| locales/en.json | nav.*, header.*, footer.*, collections.*, products.product.tabs.* |
-| locales/es.default.json | Todos los keys anteriores en ES |
-
-**B2B fixes (desde Claude Brief):**
-- fix_seo_combined: 73/73 aplicados, 0 errores, 31.3s ✅
-- fix_theme_json_ld: aplicado ✅
-- B2B score: 120 → 130/155 (+10pts) · SSEO-OK: 100% keyword coverage
+**B2B fixes:** fix_seo_combined: 73/73 aplicados. B2B score: 120 → 130/155 (+10pts).
 
 ### Estado post-sesión
-
 ```
-B2C score: 109/155 | fixable: 1 (THEME-LANG-001 - 21 strings restantes)
-B2B score: 130/155 | fixable: 1 (SEO-003 - 5 COLOR titles <30 chars)
+B2C score: 109/155 | fixable: 1 (THEME-LANG-001)
+B2B score: 130/155 | fixable: 1 (SEO-003)
 Theme i18n: COMPLETE para header/footer/product/featured/collection-grid
 ```
-
-### Pendientes manuales críticos (Shopify Admin)
-
-**Colecciones — renombrar en Shopify:**
-- HUMEDAD → **Moisture** (nombre de línea) o **Hidratación** (ES)
-- CUERO CABELLUDO → **Scalp** o **Cuero Cabelludo** (ya OK en ES)
-- RESTAURAR → **Restore** (nombre de línea)
-- Decisión pendiente: ¿Los nombres de línea van en EN o ES?
-
-**Logo:**
-- B2C header/footer usan `section.settings.logo` (image picker)
-- Para igualar al B2B: Shopify Admin → Online Store → Customize → Header → Logo → upload
-- No requiere código, es configuración del tema
-
-**Fijos (ambas tiendas):**
-- Policies (Refund, ToS, Privacy, Shipping)
-- Precios $0.00 (20 variantes)
-- Imágenes de kits (12 sin imagen)
-- Payment gateway
-- Shipping rates Florida zone
-- Cookie consent app
-- Footer legal links
-
-### Deuda técnica documentada
-
-- CAT-LANG-002: benefit_claims metafields en ES — contenido de datos, no tema. Requiere cargar metafield EN por producto o usar Translate & Adapt para metafields
-- Sections adicionales con strings hardcodeados: nc-hero, nc-sales-layer, nc-trust-strip, nc-science-strip — revisar en próxima sesión
-- B2B fix-all v4: fix_description_enrich threshold 50 vs audit threshold 30 — ajustar a 30 si se quiere enriquecer más productos
 
 ---
 

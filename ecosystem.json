@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-02-v1",
+    "version": "2026-05-02-v2",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
       "date": "2026-05-02",
-      "status": "ShopifyAuditor v9.5 R4B. B2C 109/155 (theme i18n complete, fixable:1). B2B 130/155 (fixable:1). Theme bilingüe ES/EN via Liquid t-filters. 6 theme files updated.",
+      "status": "ShopifyAuditor v9.5 R4B. B2C 109/155 (re-audit pending post-R2 fixes). B2B 130/155 (fixable:1). Theme bilingüe ES/EN completo: logo, Pro Portal removal, locale_root fix, product types EN, Key Benefits EN batch. 7 benefit_claims_en metafields creados.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -80,13 +80,15 @@
           "last_audit_score": 109,
           "last_audit_score_max": 155,
           "last_audit_date": "2026-05-02",
-          "audit_status": "✅ 109/155 — fixable:1 (THEME-LANG-001)",
+          "audit_status": "✅ 109/155 — re-audit pending (multiple R2 fixes applied post-audit)",
           "seo_status": "62/62 enriched SEO title+desc (GraphQL verified · 98% kw coverage)",
-          "theme_i18n": "COMPLETE — 6 files updated via Liquid t-filters · ES/EN fully separated"
+          "theme_i18n": "COMPLETE R2 — logo NSCF, Pro Portal removed, locale_root fix, product types EN, benefit_claims_en, format mapping, footer locale links, hero animation",
+          "theme_logo": "assets/NSCF_Logo_WT_TC.png — Shopify CDN: cdn.shopify.com/s/files/1/0969/9567/2391/t/8/assets/NSCF_Logo_WT_TC.png",
+          "benefit_claims_en": "7/7 productos con benefit_claims en ES traducidos via Claude → metafield neurone.benefit_claims_en creado"
         }
       },
-      "gaps": "MANUAL ONLY: Collection titles (HUMEDAD→Moisture/Hidratación · RESTAURAR→Restore · CUERO CABELLUDO→Scalp) · Logo upload in Shopify Customizer · Policies · $0.00 prices · Kit images · Payment gateway · Shipping rates · Cookie consent · Footer legal links",
-      "completed": "Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · ShopifyAuditor v9.5 · fix-all v4 · theme i18n (header/footer/product/featured/collection-grid) · GraphQL SEO + apps · content_language + theme_language modules · fix_theme_translate worker"
+      "gaps": "MANUAL ONLY: Páginas 404 (about/la-ciencia/faq/contacto) · Policies (Terms/Shipping/Returns) · WhatsApp setting vacío en Customizer · $0.00 prices (20 variants) · Kit images (12 products) · Payment gateway · Shipping rates FL zone · Cookie consent · Collection tiles hard refresh (browser cache)",
+      "completed": "Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · ShopifyAuditor v9.5 · fix-all v4 · theme i18n R1+R2 · GraphQL SEO + apps · content_language + theme_language modules · fix_theme_translate · Pro Portal removed · NSCF Logo theme asset · locale_root 404 fix · product type EN mapping · collection title EN translations · Key Benefits EN (benefit_claims_en) · format mapping · shipping tab removed · footer locale-aware links · hero WHEN YOUR"
     },
     {
       "id": "ForumPHs",
@@ -123,20 +125,24 @@
       "shopify-fix-all": {"supabase_version": 4, "semantic_version": "v4", "status": "ACTIVE", "notes": "fix_seo_combined (race-free) + fix_description_enrich + fix_theme_translate. Cost ~$0.17/run for 62 products."},
       "shopify-fix": {"supabase_version": 6, "semantic_version": "v6", "status": "ACTIVE"},
       "shopify-oauth": {"supabase_version": 4, "status": "ACTIVE", "notes": "Scopes: ...write_themes + read_locales + write_translations"},
-      "theme-i18n-fix": {"supabase_version": 2, "status": "ACTIVE", "notes": "One-shot EF: PUT Assets API for 6 theme files. Reusable for new stores."}
+      "theme-i18n-fix": {"supabase_version": 2, "status": "ACTIVE", "notes": "One-shot EF: PUT Assets API for 6 theme files. Reusable for new stores."},
+      "shopify-theme-locale": {"supabase_version": 8, "semantic_version": "v8", "status": "ACTIVE", "notes": "Action router: fix_v2 (locale_root, logo, Pro Portal, hero title, filter cleanup, product card types, product detail) · fix_v3 (product type mapping expanded, shipping tab, Also From, footer links, hero animation, collection title translations) · fix_v3b (benefit_claims_en usage, format mapping) · fix_remaining_logos · upload_logo · put_asset/read_asset"},
+      "shopify-fix-benefits": {"supabase_version": 3, "semantic_version": "v3", "status": "ACTIVE", "notes": "Batch job: lee benefit_claims ES por producto via REST → Claude Sonnet traduce → crea neurone.benefit_claims_en metafield. Paginación via since_id. 7/62 productos tenían claims en ES — todos procesados."}
     },
     "connected_stores": [
       {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 130, "last_audit_max": 155},
       {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 109, "last_audit_max": 155}
     ],
     "tech_debt": [
-      "CAT-LANG-002: ES/EN mixing dentro de la misma página (benefit_claims metafields en ES)",
-      "nc-hero, nc-sales-layer, nc-trust-strip, nc-science-strip: revisar strings hardcodeados",
-      "Collection titles en Shopify: HUMEDAD/RESTAURAR/CUERO CABELLUDO necesitan renombrarse",
+      "benefit_claims_en metafield: no tiene MetafieldDefinition → no aparece en Translate & Adapt. Para migrar al enfoque oficial: crear MetafieldDefinition(neurone, benefit_claims, multi_line_text_field) y re-registrar traducciones.",
+      "nc-hero, nc-sales-layer, nc-trust-strip, nc-science-strip: strings hardcodeados revisados parcialmente — nc-hero OK, resto pendiente audit",
+      "Collection tiles homepage: template.json tiene nombres EN correctos, browser cache puede mostrar ES — hard refresh resuelve",
+      "B2C filter tags: 'Anti-caida', 'B2c' etc. aparecen como opciones en el sidebar — product tags necesitan limpieza en Shopify Admin",
       "fix_description_enrich threshold: 50 words (considerar bajar a 30 para B2B)",
       "Sales closing: intake form + landing + fix packs pricing",
       "fix_theme_json_ld: pending proper implementation",
-      "ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11"
+      "ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
+      "B2C re-audit pendiente: score 109/155 desactualizado post múltiples fixes R2"
     ]
   },
   "labs": [
@@ -161,11 +167,11 @@
     {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy"}
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF: renombrar colecciones en Shopify (HUMEDAD, RESTAURAR, CUERO CABELLUDO) y decidir si nombres de línea van EN o ES",
-    "PRIORIDAD 2 — NeuroneSCF: logo upload en Shopify Customizer B2C",
-    "PRIORIDAD 3 — NeuroneSCF: fixes manuales Patricia (policies, precios, imágenes, payment gateway)",
-    "PRIORIDAD 4 — NeuroneSCF: revisar sections restantes (nc-hero, nc-sales-layer, nc-trust-strip, nc-science-strip) para strings hardcodeados",
-    "PRIORIDAD 5 — NeuroneSCF: benefit_claims metafields — estrategia para contenido bilingüe",
+    "PRIORIDAD 1 — NeuroneSCF B2C: re-audit para score actualizado post R2 fixes",
+    "PRIORIDAD 2 — NeuroneSCF B2C: Patricia crea páginas (about, la-ciencia, faq, contacto) y policies (Terms/Shipping/Returns)",
+    "PRIORIDAD 3 — NeuroneSCF B2C: limpiar product tags en Shopify Admin (B2c, Anti-caida raw tags visibles en filtros)",
+    "PRIORIDAD 4 — NeuroneSCF B2C: verificar hero logo sizing en mobile (posible CSS issue con announcement bar)",
+    "PRIORIDAD 5 — NeuroneSCF: precios $0.00 (20 variantes), imágenes kits (12 productos), payment gateway, shipping rates FL",
     "PRIORIDAD 6 — ShopifyAuditor: sales closing (intake form + landing + fix packs pricing)",
     "PRIORIDAD 7 — IID approval flow test · ImageLab fix · luciensael.com deploy"
   ]

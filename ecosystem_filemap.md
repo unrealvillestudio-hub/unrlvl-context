@@ -1,95 +1,84 @@
-# UNRLVL Ecosystem — File Map
-**Version:** 2026-05-01 | Auto-generated from ecosystem.json
+# Unreal>ille Context System — File Map
+_Generado automáticamente · 2026-05-02-v2_
 
 ---
 
-## unrlvl-context (Vercel: unrlvl-context.vercel.app)
-```
-/
-├── ecosystem.json                          — master context (este archivo)
-├── ecosystem.md                            — narrative version
-├── ecosystem_filemap.md                    — este archivo
-├── TIERS.md                                — pricing tiers
-├── protocols/
-│   └── SESSION_PROTOCOL.md
-├── docs/
-│   └── UNRLVL_Labs_Strategy.html
-└── brands/
-    ├── UnrealvilleStudio/
-    │   ├── brand.json
-    │   ├── BP_Brand_Context.md
-    │   ├── session_log.md
-    │   ├── PLAN_MAESTRO_LABS_SKILLS.md
-    │   ├── LUCIEN_BOOKS_MASTER.md
-    │   └── CRM_INTEGRATIONS.md
-    ├── NeuroneSCF/
-    │   ├── brand.json
-    │   ├── BP_Brand_Context.md
-    │   └── session_log.md
-    ├── ForumPHs/
-    │   ├── brand.json
-    │   ├── BP_Brand_Context.md
-    │   ├── session_log.md
-    │   ├── DOCUMENT_FACTORY_PLAN.md
-    │   └── FPHSOPS_SPEC.md
-    └── [otros brands]/
-```
+## Raíz del repo `/`
 
----
-
-## Tools (GitHub: unrealvillestudio-hub/Tools → unrlvl-tools.vercel.app)
-```
-/
-├── api/
-│   ├── gh.js                               — GitHub proxy (Claude → GitHub API)
-│   └── audit-proxy.js                      — Shopify audit proxy (Claude → Supabase EFs)
-├── github-auditor/
-│   └── SKILL.md                            — GitHub auditing skill for Claude
-├── shopify-auditor/
-│   ├── shopify_audit.html                  — ShopifyAuditor v3 app
-│   └── SKILL_shopify-auditor.md            — ShopifyAuditor skill + context recovery protocol
-└── historical_context_builder.html         — Context builder tool
-```
-
-**URLs:**
-- GitHub Auditor: https://unrlvl-tools.vercel.app/github-auditor/SKILL.md
-- ShopifyAuditor app: https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html
-- ShopifyAuditor skill: https://unrlvl-tools.vercel.app/shopify-auditor/SKILL_shopify-auditor.md
-- GitHub proxy: https://unrlvl-tools.vercel.app/api/gh
-- Audit proxy: https://unrlvl-tools.vercel.app/api/audit-proxy
-
----
-
-## Supabase (amlvyycfepwhiindxgzw)
-```
-schemas/
-├── public.*          — 50+ tablas generales, RPCs, ops_generation_ledger, brand_context_cache
-├── intel.*           — 7 tablas IID (findings, agents, queues, research_raw)
-├── content.*         — 5 tablas Content Engine (pieces, jobs, voices, posts)
-└── shopify.*         — 4 tablas ShopifyAuditor (stores, audit_runs, fix_log, theme_snapshots)
-
-edge_functions/
-├── IID: iid-core v1.1, iid-research v1, iid-process v1, iid-brief-generator v1
-├── Content: content-run-stage v1.10, content-dispatcher v2.3, aife-filter v1.1
-├── Context: context-cache v4
-├── Shopify: shopify-audit v6, shopify-fix v1, shopify-store-lookup v1,
-│            shopify-audit-brief v1, shopify-oauth v3
-└── Approvals: approve-piece v1.0
-```
-
----
-
-## Vercel Projects
-| Project | URL | Repo |
+| Archivo | Descripción | Última modificación |
 |---|---|---|
-| unrlvl-context | unrlvl-context.vercel.app | unrlvl-context |
-| tools | unrlvl-tools.vercel.app | Tools |
-| orchestrator | orchestrator-unrlvl.vercel.app | orchestrator |
-| copy-lab | unrlvl-copy-lab.vercel.app | copy-lab |
-| image-lab | image-lab-unrlvl.vercel.app | image-lab |
-| social-lab | social-lab-flame.vercel.app | social-lab |
-| unrlvl-ops | unrlvl-ops.vercel.app | unrlvl-ops |
-| unrlvl-core-project | unrealvillestudio.com | CoreProject |
-| forumphs-com | forumphs.com | forumphs-com |
-| forumphs-document-factory | — | forumphs-document-factory |
-| forumphs-speaks | speaks.forumphs.com | forumphs-speaks |
+| `ecosystem.json` | Estado completo del ecosistema — source of truth | 2026-05-02-v2 |
+| `ecosystem.md` | Resumen legible del ecosistema | 2026-05-02-v2 |
+| `ecosystem_filemap.md` | Este archivo — mapa de archivos del context system | 2026-05-02-v2 |
+
+---
+
+## `/brands/`
+
+### `/brands/NeuroneSCF/`
+
+| Archivo | Descripción |
+|---|---|
+| `brand.json` | Config técnica de la marca (Shopify IDs, OAuth, scores) |
+| `BP_Brand_Context.md` | Business Plan y contexto completo de marca |
+| `session_log.md` | Log de sesiones de trabajo — más reciente al tope |
+
+### `/brands/DiamondDetails/`
+
+| Archivo | Descripción |
+|---|---|
+| `brand.json` | Config técnica |
+| `BP_Brand_Context.md` | Contexto de marca |
+| `session_log.md` | Log de sesiones |
+
+### `/brands/VizosCosmetics/`
+_(misma estructura que arriba)_
+
+### `/brands/ForumPHs/`
+
+| Archivo | Descripción |
+|---|---|
+| `brand.json` | Config técnica |
+| `BP_Brand_Context.md` | Contexto de marca · document_factory PROD v1.5 |
+| `session_log.md` | Log de sesiones |
+
+### `/brands/PatriciaOsorio*/`
+_(carpeta por cada sub-brand de Patricia)_
+
+---
+
+## `/protocols/`
+
+| Archivo | Descripción |
+|---|---|
+| `SESSION_PROTOCOL.md` | Protocolo completo de sesión — incluye comando Actualiza |
+
+---
+
+## `/agents/`
+
+### `/agents/social-media-agent/`
+
+| Archivo | Descripción |
+|---|---|
+| `session_log.md` | Log de infraestructura Neurone SCF social media (Laura/PO/Sam) |
+
+---
+
+## Notas de estructura
+
+- **Archivos de marca** van en `brands/[Marca]/`
+- **Archivos de ecosistema** van en la raíz `/`
+- **Agentes** van en `agents/[agent-name]/`
+- **Protocolos** van en `protocols/`
+- GitHub Desktop debe mostrar MODIFICACIONES (no archivos nuevos) — si aparecen nuevos, el nombre canónico difiere
+
+---
+
+## Última actualización protocolo
+El comando `Actualiza` de Sam regenera automáticamente:
+1. Verifica Social Media Agent → `agents/social-media-agent/session_log.md`
+2. Añade nueva entrada a `brands/[Marca]/session_log.md`
+3. Si ecosystem.json cambió: regenera `ecosystem.md` y `ecosystem_filemap.md`
+4. Genera todos los archivos como outputs descargables
+5. Provee mensaje de commit listo para pegar
