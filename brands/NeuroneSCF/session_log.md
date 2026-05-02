@@ -2,6 +2,113 @@
 
 ---
 
+## SESIÓN 2026-05-02 R3 — ShopifyAuditor v9.12 + Fix nav double-slash B2C
+**Operador:** Sam | **Claude:** Sonnet 4.6
+
+### Resumen ejecutivo
+Sesión intensiva de evolución del ShopifyAuditor EF y corrección del bug crítico de navegación en el tema B2C. Se deployaron las versiones v9.10→v9.12 del auditor con módulo de tracking, detección de delivery profiles para shipping y filosofía de mensajería constructiva. Se identificó y corrigió el bug `locale_root` double-slash en `nc-header.liquid` del B2C que generaba URLs `//collections/all` en vez de `/collections/all`.
+
+### EF Infrastructure
+
+| EF | Versión Supabase | Semántica | Descripción |
+|---|---|---|---|
+| shopify-audit | v22 | v9.12 | Tracking module, constructive messaging, delivery profiles |
+| shopify-theme-locale | v21 | — | read_nav + fix_nav_links + fix_iso_code_comparisons |
+| shopify-debug | v6 | — | Diagnóstico locale_root bug + fix aplicado |
+
+### Trabajo realizado
+
+**ShopifyAuditor v9.10 — Delivery Profiles:**
+- Añadido fetch `delivery_profiles.json` al pipeline de audit
+- `extractDeliveryProfileInfo()`: parsea `profile_locations[].location_group.location_group_zones[].method_definitions[]`
+- `hasZoneRates` movido a scope externo (fix bug ReferenceError)
+- SHIP-RATES-SUGGEST: mensaje constructivo cuando zona existe pero tarifas no verificables
+- **Diagnóstico confirmado**: el store B2B tiene zona "United States" con tarifa €10.00 en delivery profile; la location "Vizos Salón" debe activarse con "Start shipping" para que se detecte
+
+**ShopifyAuditor v9.11 — Módulo TRACKING:**
+- Nuevo módulo `tracking` (max 5pts) → scoreMax sube 155→160
+- Detecta: Meta Pixel (`fbq`), TikTok Pixel (`ttq`), Google Analytics/GTM (`gtag`/`dataLayer`), Klaviyo (`_learnq`), Pinterest, Snapchat
+- Fuentes de detección: `theme.liquid` + `script_tags.json` + apps instaladas via GraphQL
+- `tracking_debug` en response: `{hasMeta, hasTikTok, hasGoogle, hasKlaviyo, scriptTagCount}`
+- B2C y B2B confirmados: sin pixels instalados → TRACK-SUGGEST
+
+**ShopifyAuditor v9.12 — Filosofía constructiva:**
+- **PAYMENTS**: `PAY-B2B-SUGGEST` y `PAY-SUGGEST` reemplazan alarmas con sugerencias accionables
+- **SHIPPING**: `SHIP-RATES-SUGGEST` y `SHIP-SUGGEST` con instrucciones de configuración
+- **TRACKING**: `TRACK-SUGGEST` y `TRACK-PARTIAL` con recomendación apps oficiales Shopify App Store
+- Todos los módulos: mensajes más descriptivos, `how_to_fix` con paths exactos de Admin
+- Campo `suggestion` añadido a findings críticos con contexto y alternativas
+
+**Fix bug navegación B2C — locale_root double-slash:**
+- **Síntoma**: links del menú B2C generaban `href="//collections/all"` → DNS_PROBE_FINISHED_NXDOMAIN
+- **Root cause**: en `nc-header.liquid`, cuando `request.locale.root_url == '/'` (no blank), el bloque `if/else` asignaba `locale_root = '/' | append: '/' = '//'`
+- **Fix aplicado** (via pg_net → shopify-debug EF v6):
+
+```liquid
+-- ANTES (buggy) --
+{%- if request.locale.root_url == blank -%}
+{%- assign locale_root = '/' -%}
+{%- else -%}
+{%- assign locale_root = request.locale.root_url | append: '/' -%}
+{%- endif -%}
+
+-- DESPUÉS (fixed) --
+{%- assign locale_root = request.locale.root_url | append: '/' | replace: '//', '/' -%}
+```
+
+- Fix verificado post-apply: `locale_block_found: false` (bloque roto eliminado), nueva línea confirmada en `href_sample`
+- Cubre todos los casos: `root_url=''` → `/`, `root_url='/'` → `/`, `root_url='/es'` → `/es/`
+
+**Infraestructura pg_net:**
+- Descubierto y utilizado `net.http_post()` via `Supabase:execute_sql` para llamar EFs directamente desde SQL
+- Timeout configurable via `timeout_milliseconds := 30000`
+- Permite invocar EFs sin necesidad de proxy HTTP externo
+
+### Audit B2B — Estado actual (v9.12)
+
+| Módulo | Score | Código/Estado |
+|---|---|---|
+| settings | 7/20 | SET-002 No Refund Policy (critical) |
+| catalog | 20/20 | ✅ 73 productos limpios |
+| content_language | 5/5 | ✅ EN |
+| theme_language | 10/10 | ✅ Monolingual |
+| seo | 9/10 | SEO-003: 5 products short title |
+| collections | 10/10 | ✅ |
+| theme | 9/15 | THEME-004 cookie, THEME-005 footer links |
+| payments | 8/10 | PAY-B2B-SUGGEST |
+| orders | 10/10 | ✅ |
+| shipping | 3/5 | SHIP-RATES-SUGGEST |
+| discounts | 5/5 | DISC-003 opportunity |
+| navigation | 7/10 | NAV-002 no Refund page |
+| tracking | 0/5 | TRACK-SUGGEST — sin pixels |
+| apps | 10/10 | ✅ |
+| performance | 5/5 | ✅ |
+| b2c_vs_b2b | 5/5 | ✅ |
+| strategic_seo | 10/10 | ✅ 100% kw coverage |
+| **TOTAL** | **133/160** | |
+
+### Pendientes manuales — acción requerida Patricia/Sam
+
+**Críticos (bloquean operación):**
+- **Shopify Payments B2B**: Admin → Settings → Payments → Shopify Payments → Complete setup
+- **Shopify Payments B2C**: ídem
+- **Shipping "Start shipping"**: Settings → Shipping → "Vizos Salón" → Start shipping (activa location)
+
+**Importantes (para lanzamiento):**
+- **Policy pages**: Settings → Policies → crear Refund Policy, Terms of Service, Privacy Policy, Shipping Policy
+- **Footer menu**: Online Store → Navigation → Footer → añadir links a Policy pages
+- **Tracking pixels**: instalar vía Shopify App Store: "Facebook & Instagram", "Google & YouTube", "TikTok"
+- **Cookie consent**: instalar CookieYes desde App Store
+- **SEO-003**: 5 COLOR products con SEO title <30 chars (fixable con auditor)
+
+**B2C pendientes adicionales:**
+- Precios $0.00 en 20 variantes
+- Imágenes en 12 productos kit
+- Tags de filtro visibles en sidebar ("B2c", "Anti-caida")
+- Páginas: about, la-ciencia, faq, contacto (Admin → Pages)
+
+---
+
 ## SESIÓN 2026-05-02 R2 — B2C: Logo, Pro Portal, i18n Round 2, Key Benefits
 **Operador:** Sam | **Claude:** Sonnet 4.6
 
