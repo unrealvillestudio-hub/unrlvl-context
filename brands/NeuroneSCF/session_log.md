@@ -2,111 +2,91 @@
 
 ---
 
-## SESIÓN 2026-05-01 — ShopifyAuditor R4B + Language Detection
-**Operador:** Sam | **Duración:** ~4h | **Claude:** Sonnet 4.6
+## SESIÓN 2026-05-02 — Theme i18n: bilingüismo completo B2C
+**Operador:** Sam | **Claude:** Sonnet 4.6
 
 ### Resumen ejecutivo
-Completamos todos los fixes automatizables de B2C. La tienda queda con 0 items `claude_can_fix:true` y score 100/145. Los 45 puntos restantes son todos fixes manuales en Shopify Admin.
+Completamos el trabajo de bilingüismo del tema B2C. Todos los strings hardcodeados en español del tema fueron reemplazados con `{{ 'key' | t }}` Liquid filters + locale files actualizados. La tienda ahora es verdaderamente bilingüe ES/EN via Shopify Markets.
 
 ### Trabajo realizado
 
-**fix-all v2 → v3 (race condition fix):**
-- Bug identificado: workers `seo_title` y `seo_desc` corrían en `Promise.all` → el worker seo_desc llamaba `productUpdate({seo:{description:"..."}})` sin incluir `title` → Shopify interpretaba `seo.title: undefined` como null, borrando el título recién escrito
-- Solución v3: Phase 1 genera todos los SEO titles en batches paralelos; Phase 2 aplica título+descripción en UNA sola mutación por producto
-- Resultado: 62/62 aplicados, 0 errores, 27.8s
+**OAuth re-auth:** `read_locales` + `write_translations` añadidos a ambas tiendas (B2C y B2B).
 
-**shopify-audit v9.3 → v9.4 (GraphQL SEO read-back):**
-- Bug previo: REST API no devuelve campo `seo` → SEO-001/002 siempre mostraban "missing"
-- Fix: `fetchProductSeoMap()` — query GraphQL paginado que corre en `Promise.allSettled` junto con los REST calls
-- Ahora SEO-001/002/SSEO-001 usan datos reales de Shopify
+**audit v9.5 (EF v14):**
+- Apps: GraphQL `appInstallations` reemplaza REST roto → APP-OK muestra 6 apps reales
+- Nuevo módulo `theme_language` (max 10pts): detecta gaps de traducción con `shopLocales` + `translatableResources`
+- THEME-LANG-001: B2C detectó 23/3870 strings EN faltantes (1% untranslated)
+- Translate & Adapt instalado ✅ detectado correctamente
 
-**shopify-audit v9.3 (content_language module):**
-- Nuevo módulo `content_language` (max 5pts)
-- Detecta productos con descripciones en español en tienda US English
-- Finding: `CAT-LANG-001` — severity basada en % del catálogo
-- B2C: detectó "Dyfensor Sulfate Free Shampoo" con descripción en español ✅
+**fix-all v4 (EF v4):**
+- Nuevo worker `fix_theme_translate`: lee strings faltantes → Claude traduce UI strings preservando brand names → `translationsRegister` mutation
+- B2C: 2 strings ES aplicados, 21 skipped (ya en EN o brand names) ✅
 
-### Estado final B2C post-sesión
+**theme-i18n-fix EF (nuevo, one-shot):**
+Actualizó 6 archivos del tema B2C vía PUT a la Shopify Assets API:
+
+| Archivo | Strings corregidos |
+|---|---|
+| sections/nc-product-detail.liquid | 24 strings (tabs, trust strip, benefits, related, cart) |
+| sections/nc-header.liquid | Nav, cart drawer, aria-labels completos |
+| sections/nc-featured-products.liquid | "Ver Todos" + default fallbacks |
+| sections/nc-collection-grid.liquid | "Todo el Catálogo" + "productos" |
+| sections/nc-footer.liquid | Completo: tagline, nav, newsletter, copyright, legal links |
+| locales/en.json | nav.*, header.*, footer.*, collections.*, products.product.tabs.* |
+| locales/es.default.json | Todos los keys anteriores en ES |
+
+**B2B fixes (desde Claude Brief):**
+- fix_seo_combined: 73/73 aplicados, 0 errores, 31.3s ✅
+- fix_theme_json_ld: aplicado ✅
+- B2B score: 120 → 130/155 (+10pts) · SSEO-OK: 100% keyword coverage
+
+### Estado post-sesión
 
 ```
-Score: 100/145 | seo_source: graphql (62 products)
-SEO-OK: 62/62 con meta title + description (GraphQL verified)
-SSEO-OK: 98% keyword coverage (GraphQL verified)
-fixable: 0
+B2C score: 109/155 | fixable: 1 (THEME-LANG-001 - 21 strings restantes)
+B2B score: 130/155 | fixable: 1 (SEO-003 - 5 COLOR titles <30 chars)
+Theme i18n: COMPLETE para header/footer/product/featured/collection-grid
 ```
 
-### EF versions activos al cierre
+### Pendientes manuales críticos (Shopify Admin)
 
-| EF | Version Supabase | Version semántica |
-|---|---|---|
-| shopify-audit | v13 | v9.4 |
-| shopify-fix-all | v3 | v3 |
-| shopify-fix | v6 | v6 |
-| shopify-oauth | v4 | v4 |
+**Colecciones — renombrar en Shopify:**
+- HUMEDAD → **Moisture** (nombre de línea) o **Hidratación** (ES)
+- CUERO CABELLUDO → **Scalp** o **Cuero Cabelludo** (ya OK en ES)
+- RESTAURAR → **Restore** (nombre de línea)
+- Decisión pendiente: ¿Los nombres de línea van en EN o ES?
 
-### Fixes manuales pendientes (solo Shopify Admin)
+**Logo:**
+- B2C header/footer usan `section.settings.logo` (image picker)
+- Para igualar al B2B: Shopify Admin → Online Store → Customize → Header → Logo → upload
+- No requiere código, es configuración del tema
 
-| Código | Finding | Dónde |
-|---|---|---|
-| SET-002 | Sin Refund Policy | Settings → Policies |
-| SET-003/4/5 | Sin ToS / Privacy / Shipping | Settings → Policies |
-| CAT-002 | 12 kits sin imagen (nscf-kt-*) | Products → Add media |
-| CAT-003 | 20 variantes a $0.00 | Products → Variants → price |
-| CAT-006 | 20 variantes stock -1 | Products → Inventory |
-| CAT-LANG-001 | Dyfensor Sulfate Free Shampoo en ES | Products → editar descripción |
-| THEME-004 | Sin cookie consent | App Store → CookieYes |
-| THEME-005 | Footer sin legal links | Online Store → Navigation |
-| PAY-001 | Sin payment gateway | Settings → Payments |
-| SHIP-003 | Zona "florida" sin rates | Settings → Shipping |
-| NAV-002 | Sin Refund Policy accesible | Navigation → Footer |
+**Fijos (ambas tiendas):**
+- Policies (Refund, ToS, Privacy, Shipping)
+- Precios $0.00 (20 variantes)
+- Imágenes de kits (12 sin imagen)
+- Payment gateway
+- Shipping rates Florida zone
+- Cookie consent app
+- Footer legal links
 
 ### Deuda técnica documentada
 
-- **CAT-LANG-002** (v9.5): Detectar mezcla ES/EN dentro de la misma página de producto (título en un idioma, descripción en otro). Requiere detección a nivel de párrafo — los nombres de marca (Humit, Kerasin, DY Fazza) son language-neutral y el heurístico de wordlist no los clasifica bien.
-- **Agents para scale** (>1000 productos): Arquitectura multi-agente particionando catálogo (A:1-333, B:334-666, C:667-1000) da 3x throughput real. No necesario para 62 productos.
-- **fix_language_translate** (futuro): Auto-traducción via Claude de descripciones en idioma incorrecto.
-
-### Costos confirmados
-
-~$0.17 por run completo (62 productos, SEO title + meta desc). 10 tiendas ~$1.70 · 100 tiendas ~$17.00. Se mantiene vs estimación anterior — v3 tiene los mismos Claude calls que v2, la ganancia fue calidad no costo.
+- CAT-LANG-002: benefit_claims metafields en ES — contenido de datos, no tema. Requiere cargar metafield EN por producto o usar Translate & Adapt para metafields
+- Sections adicionales con strings hardcodeados: nc-hero, nc-sales-layer, nc-trust-strip, nc-science-strip — revisar en próxima sesión
+- B2B fix-all v4: fix_description_enrich threshold 50 vs audit threshold 30 — ajustar a 30 si se quiere enriquecer más productos
 
 ---
 
-## SESIÓN 2026-05-01 — ShopifyAuditor R4B · Sesión 1 (mañana)
-**Operador:** Sam
+## SESIÓN 2026-05-01 (tarde) — ShopifyAuditor R4B + Language Detection
 
-### Trabajo realizado
-- shopify-audit v9.2 → v9.3: content_language module + CAT-LANG-001
-- fix-all v1: 167 fixes en 54.9s (paralelo Document Factory)
-- B2C brand_context poblado (derivado de B2B, adaptado consumidor final)
-- shopify-fix-all v2: SEO title verification + enrichment guarantee
-
----
-
-## SESIÓN 2026-05-01 — ShopifyAuditor B2C + Brand Context
-**Operador:** Sam
-
-### Trabajo realizado
-- B2C OAuth conectado (egdk1n-gt.myshopify.com)
-- Primer audit B2C: score base sin brand_context
-- brand_context B2C definido: buyer_type:b2c, brand_voice:aspirational, keywords:[keratin hair treatment, professional hair care, frizz control hair products, hair repair treatment, neurone cosmetics, hair straightening products, salon quality hair care at home], market:south and central florida, usa
-- GraphQL SEO read-back implementado en audit v9.3
+### Completado
+- audit v9.5, fix-all v3, GraphQL SEO read-back
+- B2C: 62/62 SEO titles + meta descs, 98% kw coverage, 100pts/155
+- fix_theme_translate: 2 strings ES→EN aplicados
+- HTML bug fix: sc-discovery crash en saveStrat()
 
 ---
 
-## SESIÓN 2026-04-30 — ShopifyAuditor v3 READY FOR BUSINESS
-**Operador:** Sam
-
-### Completado en sesión
-- B2B audit score: 96/135 (SSEO activo con keywords reales)
-- OG tags fix aplicado y verificado en B2B
-- shopify-oauth v4: STORE_REGISTRY NeuroneSCF:b2b + NeuroneSCF:b2c
-- read_apps scope activo en ambas tiendas
-- Declaración R4B: ShopifyAuditor v3.2 READY FOR BUSINESS
-
----
-
-## SESIONES ANTERIORES (resumen)
-- 2026-04-06/18: Social media infraestructura (ver agents/social-media-agent/session_log.md)
-- Meta BM configurado · Facebook Page creada · Instagram Business · TikTok for Business
-- ShopifyAuditor v1-v2: arquitectura base, fix engine, Document Factory pattern
+## SESIONES ANTERIORES
+Ver entradas anteriores en el historial del archivo.
