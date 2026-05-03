@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-02-v3",
+    "version": "2026-05-03-v1",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
-      "date": "2026-05-02",
-      "status": "R3 fixes: locale_root root cause fixed (iso_code→root_url==blank, 8 files), responsive mobile hero, header 80px, announcement 25px, store SEO, policies.docx generated. B2C score re-audit pending. B2B 130/155.",
+      "date": "2026-05-03",
+      "status": "Social Proof Cards 42/42 productos ES+EN. Collections fix (5 vacías → 29 productos). B2C score 109/155 re-audit URGENTE. B2B 133/160.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -69,27 +69,29 @@
           "internal_domain": "nj5ybc-n1.myshopify.com",
           "store_id": "5bc2d55b-da9f-47f6-bddf-7289e9a688bb",
           "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
-          "last_audit_score": 130,
-          "last_audit_score_max": 155,
+          "last_audit_score": 133,
+          "last_audit_score_max": 160,
           "last_audit_date": "2026-05-02",
-          "audit_status": "✅ 130/155 — fixable:1 (SEO-003 COLOR titles)"
+          "audit_status": "✅ 133/160 — fixable:1 (SEO-003 COLOR titles)"
         },
         "b2c": {
           "internal_domain": "egdk1n-gt.myshopify.com",
           "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
           "last_audit_score": 109,
-          "last_audit_score_max": 155,
+          "last_audit_score_max": 160,
           "last_audit_date": "2026-05-02",
-          "audit_status": "⚠️ 109/155 — re-audit URGENTE (20+ fixes R2+R3 aplicados post-audit)",
+          "audit_status": "⚠️ 109/160 — re-audit URGENTE (20+ fixes R2+R3+social_proof aplicados post-audit)",
           "seo_status": "62/62 enriched SEO title+desc · store SEO aplicado (global.title_tag + description_tag)",
           "theme_i18n": "COMPLETE R3 — locale_root root cause fixed (root_url==blank), responsive mobile, header 80px, announcement 25px, hero padding-top CSS fix",
           "locale_root_logic": "root_url==blank → '/' (ES primary no prefix) · root_url='/en' → '/en/' (EN with prefix). Fixes 8 Liquid files.",
           "theme_logo": "assets/NSCF_Logo_WT_TC.png — CDN: cdn.shopify.com/s/files/1/0969/9567/2391/t/8/assets/NSCF_Logo_WT_TC.png",
-          "benefit_claims_en": "7/7 productos con benefit_claims en ES traducidos → neurone.benefit_claims_en metafield"
+          "benefit_claims_en": "7/7 productos con benefit_claims en ES traducidos → neurone.benefit_claims_en metafield",
+          "social_proof": "42/42 productos con social proof cards ES+EN (3 TikTok + 2 Instagram) · 9 productos con QA corrections (skincare→haircare context)",
+          "collections": "6/6 collections populadas · 5 vacías fijas 2026-05-03 · 29 productos asignados via collects API"
         }
       },
-      "gaps": "MANUAL URGENTE: Moneda EUR→USD (Admin>Settings>General>Store currency) · Páginas (about/la-ciencia/faq/contacto) añadir contenido + Visible · Policies pegar texto en Admin>Settings>Policies · WhatsApp field vacío en Customizer>Footer · $0.00 prices (20 variants) · Kit images (12 products) · Payment gateway · Shipping rates FL · Cookie consent · Product tags cleanup (B2c, Anti-caida raw en sidebar)",
-      "completed": "Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · ShopifyAuditor v9.5 · fix-all v4 · theme i18n R1+R2+R3 · GraphQL SEO · store SEO · Pro Portal removed · NSCF Logo · locale_root root cause fix (root_url==blank) · product type EN mapping · collection titles EN · Key Benefits EN · format mapping · shipping tab removed · footer locale-aware · hero WHEN YOUR · hero responsive mobile · header 80px · announcement 25px · NeuroneSCF_Policies.docx"
+      "gaps": "MANUAL URGENTE: Moneda EUR→USD (Admin>Settings>General>Store currency) · Payment gateway (Shopify Payments → Complete setup) · Shipping rates FL (Vizos Salón → Start shipping) · Precios $0.00 en 20 variantes (Patricia en Admin) · Kit images (12 products sin imagen) · Policies texto en Admin>Settings>Policies · WhatsApp field vacío en Customizer>Footer · Páginas (about/la-ciencia/faq/contacto) contenido + Visible · Product tags cleanup (B2c, Anti-caida en sidebar) · neurone.size metafield '0' visible en product page ('· 0' bug)",
+      "completed": "Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · ShopifyAuditor v9.12 · fix-all v4 · theme i18n R1+R2+R3 · GraphQL SEO · store SEO · Pro Portal removed · NSCF Logo · locale_root root cause fix · product type EN mapping · collection titles EN · Key Benefits EN · format mapping · shipping tab removed · footer locale-aware · hero WHEN YOUR · hero responsive mobile · header 80px · announcement 25px · NeuroneSCF_Policies.docx · nav double-slash fix (shopify-debug v6) · tracking module v9.12 · constructive messaging v9.12 · Collections fix (5 vacías → 29 productos 2026-05-03) · Social Proof Cards 42/42 ES+EN (2026-05-03) · EN translations 42/42 con digests reales (2026-05-03)"
     },
     {
       "id": "ForumPHs",
@@ -122,25 +124,38 @@
     "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
     "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
     "edge_functions": {
-      "shopify-audit": {"supabase_version": 14, "semantic_version": "v9.5", "status": "ACTIVE"},
+      "shopify-audit": {"supabase_version": 22, "semantic_version": "v9.12", "status": "ACTIVE"},
       "shopify-fix-all": {"supabase_version": 4, "semantic_version": "v4", "status": "ACTIVE"},
       "shopify-fix": {"supabase_version": 6, "status": "ACTIVE"},
       "shopify-oauth": {"supabase_version": 4, "status": "ACTIVE"},
       "theme-i18n-fix": {"supabase_version": 2, "status": "ACTIVE"},
       "shopify-theme-locale": {
-        "supabase_version": 20,
-        "semantic_version": "v20",
+        "supabase_version": 21,
+        "semantic_version": "v21",
         "status": "ACTIVE",
-        "notes": "v19: locale_root assignment corregido en 6 archivos (root_url==blank). v20: language conditionals corregidos en 2 archivos (product-card, product-detail). v18: responsive mobile header. v17: hero align-items flex-start + media queries. v16: hero-media flex-start + padding-top. v15: hero logo padding regex. v14: hero logo padding. v13: announcement height. v12: locale_root_urls 18 replacements. v11: header height B2C+B2B. v10: hero layout responsive + announcement JS. Histórico: v1-v9 = fix_v2/v3/v3b/logo/store-seo."
+        "notes": "v21: read_nav + fix_nav_links + fix_iso_code_comparisons. v20: language conditionals corregidos en 2 archivos. v19: locale_root assignment corregido en 6 archivos (root_url==blank). v18: responsive mobile header. Histórico: v1-v17 = múltiples fixes de theme."
       },
-      "shopify-fix-benefits": {"supabase_version": 3, "semantic_version": "v3", "status": "ACTIVE", "notes": "7/62 productos procesados. benefit_claims_en metafield creado."}
+      "shopify-fix-benefits": {"supabase_version": 3, "semantic_version": "v3", "status": "ACTIVE", "notes": "7/62 productos procesados. benefit_claims_en metafield creado."},
+      "shopify-debug": {"supabase_version": 6, "status": "ACTIVE", "notes": "Fix nav double-slash B2C 2026-05-02."}
+    },
+    "cro_audit_layer": {
+      "status": "ROADMAP — buildear en siguiente sesión (deadline martes)",
+      "checks": [
+        "Social proof presence per product page (quotes/reviews count, ES+EN)",
+        "Urgency/scarcity signals (stock countdown, 'X personas mirando', bestseller badges)",
+        "Trust signals (garantía visible, política devolución en product page, badges pago seguro)",
+        "Upsell/cross-sell (completa tu ritual, combina con)",
+        "Above-the-fold ATC check (precio + botón + propuesta de valor sin scroll en mobile)",
+        "Checkout friction (pasos, abandono carrito configurado)"
+      ]
     },
     "connected_stores": [
-      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 130, "last_audit_max": 155},
-      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 109, "last_audit_max": 155}
+      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 133, "last_audit_max": 160},
+      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 109, "last_audit_max": 160}
     ],
     "tech_debt": [
-      "B2C re-audit URGENTE: score 109/155 muy desactualizado — 20+ fixes aplicados post-audit en R2+R3",
+      "B2C re-audit URGENTE: score 109/160 muy desactualizado — 20+ fixes + social proof + collections aplicados post-audit",
+      "neurone.size metafield = '0' visible en product page como '· 0' — limpiar metafield en productos afectados",
       "locale_root root cause: shop.primary_locale.iso_code retorna 'en' (back-end) no 'es' (storefront). Fix aplicado: root_url==blank. Documentar para nuevas tiendas.",
       "benefit_claims_en: no tiene MetafieldDefinition → no aparece en Translate & Adapt. Migrar al enfoque oficial en futuro.",
       "Product tags cleanup: B2c, Anti-caida raw tags visibles en sidebar filtros → limpiar en Shopify Admin",
@@ -149,7 +164,28 @@
       "Policies: texto en .docx listo, Patricia debe pegar en Admin>Settings>Policies",
       "ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
       "IID approval flow test pendiente",
-      "luciensael.com deploy pendiente"
+      "luciensael.com deploy pendiente",
+      "Kits in main nav menu + homepage section — pendiente"
+    ]
+  },
+  "social_proof_agent": {
+    "version": "v3",
+    "status": "OPERATIONAL ✅",
+    "artifact_file": "nscf-agent-v3.jsx",
+    "description": "Generador de social proof cards para product pages de Shopify. Pipeline Write→Humanize→AIFE por producto. ES + EN. 3 TikTok + 2 Instagram por producto.",
+    "supabase_integration": "Conectado a Supabase via net.http_post(). Si no existe el cliente, solicitar datos igual que el auditor y construirlo en el momento.",
+    "pipeline": ["Write (Claude Sonnet)", "Humanize (Claude Sonnet)", "AIFE (Claude Sonnet)"],
+    "pattern": "Para cualquier tienda nueva antes del launch — correr este agente",
+    "qa_rule": "Verificar contexto del producto antes del push. NSCF es marca CAPILAR — cualquier quote de skincare (piel/poros/cara/manchas) es error de contexto y debe reescribirse.",
+    "completed_stores": [
+      {
+        "brand_id": "NeuroneSCF",
+        "store": "b2c",
+        "date": "2026-05-03",
+        "products": 42,
+        "lines": ["Scalp", "Moisture", "Restore", "Color Rescue", "Styling", "Kits"],
+        "qa_corrections": 9
+      }
     ]
   },
   "labs": [
@@ -174,12 +210,13 @@
     {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy"}
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF B2C: re-audit URGENTE (score 109 muy desactualizado)",
-    "PRIORIDAD 2 — NeuroneSCF MANUAL: Moneda EUR→USD · Páginas contenido · Policies texto · WhatsApp vacío",
-    "PRIORIDAD 3 — NeuroneSCF B2C: product tags cleanup en Admin (B2c, Anti-caida raw en filtros)",
-    "PRIORIDAD 4 — NeuroneSCF: $0.00 prices (20 variantes) · Kit images · Payment gateway · Shipping rates FL",
-    "PRIORIDAD 5 — NeuroneSCF B2B: fix SEO-003 COLOR titles (último fixable)",
-    "PRIORIDAD 6 — ShopifyAuditor: sales closing (intake form + landing + fix packs pricing)",
-    "PRIORIDAD 7 — IID approval flow test · ImageLab fix · luciensael.com deploy"
+    "PRIORIDAD 1 — NeuroneSCF B2C: CRO Audit Layer (extensión ShopifyAuditor — social proof + urgency + trust + upsell + ATC + checkout) — DEADLINE MARTES",
+    "PRIORIDAD 2 — NeuroneSCF B2C: re-audit URGENTE (score 109/160 muy desactualizado)",
+    "PRIORIDAD 3 — NeuroneSCF MANUAL Patricia: EUR→USD · Payment gateway · Shipping rates FL · Precios $0.00 · Policies · WhatsApp · Páginas contenido",
+    "PRIORIDAD 4 — NeuroneSCF B2C: Kits in main nav menu + homepage section",
+    "PRIORIDAD 5 — NeuroneSCF B2C: product tags cleanup en Admin (B2c, Anti-caida raw en filtros) · neurone.size '0' bug",
+    "PRIORIDAD 6 — NeuroneSCF B2B: fix SEO-003 COLOR titles (último fixable)",
+    "PRIORIDAD 7 — ShopifyAuditor: sales closing (intake form + landing + fix packs pricing)",
+    "PRIORIDAD 8 — IID approval flow test · ImageLab fix · luciensael.com deploy"
   ]
 }

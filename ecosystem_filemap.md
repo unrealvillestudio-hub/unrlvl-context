@@ -1,34 +1,99 @@
-# Unreal>ille Context System — File Map
-_Generado automáticamente · 2026-05-02-v3_
+# Unrealville Studio — Ecosystem Filemap
+_Versión: 2026-05-03-v1 · Mantenido por Claude_
 
-## Raíz `/`
+---
 
-| Archivo | Descripción | Última modificación |
+## Estructura del Repositorio `unrlvl-context`
+
+```
+unrlvl-context/
+├── ecosystem.json                          ← JSON maestro del ecosistema (este archivo es la fuente de verdad)
+├── ecosystem.md                            ← Vista legible del ecosistema (generado desde ecosystem.json)
+├── ecosystem_filemap.md                    ← Este archivo
+│
+├── brands/
+│   ├── NeuroneSCF/
+│   │   ├── brand.json                      ← Config de marca NSCF
+│   │   ├── BP_Brand_Context.md             ← Brand Context completo NSCF
+│   │   └── session_log.md                  ← Log de sesiones NSCF (entrada más reciente al tope)
+│   │
+│   ├── DiamondDetails/
+│   │   ├── brand.json
+│   │   ├── BP_Brand_Context.md
+│   │   └── session_log.md
+│   │
+│   ├── VizosCosmetics/
+│   │   ├── brand.json
+│   │   ├── BP_Brand_Context.md
+│   │   └── session_log.md
+│   │
+│   ├── D7Herbal/
+│   │   ├── brand.json
+│   │   └── session_log.md
+│   │
+│   ├── VivoseMask/
+│   │   ├── brand.json
+│   │   └── session_log.md
+│   │
+│   ├── ForumPHs/
+│   │   ├── brand.json
+│   │   ├── BP_Brand_Context.md
+│   │   └── session_log.md
+│   │
+│   └── PatriciaOsorio/
+│       ├── brand.json
+│       └── session_log.md
+│
+├── agents/
+│   └── social-media-agent/
+│       └── session_log.md                  ← Log del Social Media Agent (Laura/PO/Sam activity)
+│
+└── protocols/
+    └── SESSION_PROTOCOL.md                 ← Protocolo completo de sesiones
+```
+
+---
+
+## Reglas de Nomenclatura (CRÍTICAS)
+
+Los archivos de output deben tener el nombre **EXACTO** del archivo en el repo. Si el nombre difiere, GitHub Desktop crea archivos nuevos en vez de reemplazar.
+
+| Archivo | Ruta en repo | Notas |
 |---|---|---|
-| `ecosystem.json` | Estado completo — source of truth | 2026-05-02-v3 |
-| `ecosystem.md` | Resumen legible | 2026-05-02-v3 |
-| `ecosystem_filemap.md` | Este archivo | 2026-05-02-v3 |
+| `session_log.md` | `brands/[Marca]/session_log.md` | Nueva entrada AL TOPE |
+| `brand.json` | `brands/[Marca]/brand.json` | |
+| `BP_Brand_Context.md` | `brands/[Marca]/BP_Brand_Context.md` | |
+| `ecosystem.json` | `/ecosystem.json` | Fuente de verdad |
+| `ecosystem.md` | `/ecosystem.md` | Generado desde .json |
+| `ecosystem_filemap.md` | `/ecosystem_filemap.md` | Este archivo |
+| `SESSION_PROTOCOL.md` | `protocols/SESSION_PROTOCOL.md` | |
+| `session_log.md` (agente) | `agents/social-media-agent/session_log.md` | |
 
-## `/brands/NeuroneSCF/`
+**NO usar prefijos de marca** (e.g., `NeuroneSCF_session_log.md` es INCORRECTO).
 
-| Archivo | Descripción |
-|---|---|
-| `brand.json` | Config técnica (Shopify IDs, OAuth, scores) |
-| `BP_Brand_Context.md` | Business Plan y contexto de marca |
-| `session_log.md` | Log de sesiones — más reciente al tope |
+---
 
-## `/brands/[OtrasMarcas]/`
-DiamondDetails · VizosCosmetics · ForumPHs · PatriciaOsorio* — misma estructura
+## Rutas de Commit (referencia rápida)
 
-## `/protocols/`
-`SESSION_PROTOCOL.md` — Protocolo completo incluyendo comando Actualiza
+```
+brands/NeuroneSCF/session_log.md
+brands/NeuroneSCF/brand.json
+ecosystem.json
+ecosystem.md
+ecosystem_filemap.md
+agents/social-media-agent/session_log.md
+protocols/SESSION_PROTOCOL.md
+```
 
-## `/agents/social-media-agent/`
-`session_log.md` — Log infraestructura Neurone SCF social media (Laura/PO/Sam)
+---
 
-## Reglas de nomenclatura
-- Archivos de marca → `brands/[Marca]/`
-- Archivos de ecosistema → raíz `/`
-- Agentes → `agents/[agent-name]/`
-- Protocolos → `protocols/`
-- GitHub Desktop debe mostrar **modificaciones**, no archivos nuevos
+## Archivos por Sesión 2026-05-03
+
+Los siguientes archivos cambiaron en esta sesión y deben commitearse:
+
+```
+brands/NeuroneSCF/session_log.md     ← Nueva entrada (Social Proof Cards + Collections Fix)
+ecosystem.json                        ← Version bump 2026-05-03-v1, Social Proof Agent, B2B 133/160, social_proof completado
+ecosystem.md                          ← Regenerado desde ecosystem.json
+ecosystem_filemap.md                  ← Actualizado con Social Proof Agent
+```

@@ -2,6 +2,106 @@
 
 ---
 
+## SESIÓN 2026-05-03 — Social Proof Cards × 42 productos + Collections Fix
+**Operador:** Sam | **Claude:** Sonnet 4.6
+
+### Resumen ejecutivo
+Sesión completa de infraestructura de conversión para la tienda B2C. Se construyó y ejecutó el Social Proof Agent v3 (JSX, pipeline Write→Humanize→AIFE) para generar social cards para los 42 productos del catálogo completo. Se corrigió el bug de collections vacías que rompía los nav links. Se hicieron correcciones QA críticas en 9 productos donde el agente generó quotes de skincare para productos capilares. Todos los productos tienen ahora social proof cards en ES + EN.
+
+### Trabajo realizado
+
+**1. Collections Fix — Bug crítico**
+- **Síntoma**: 5 collections existían pero vacías → nav links rotos (sin productos)
+- **Fix**: Asignados 29 productos a 5 collections via Shopify `collects` API:
+  - `moisture` (668458385735): Humit Shampoo, Humit Mask, DY Fazza x2
+  - `restore` (668458418503): Kerasin HB x3, Velvety Control
+  - `scalp` (668458549575): Capissen x2, Depura, Menthol Ice
+  - `styling` (668458484039): Neurona Gloss x2, Lisothermic, Thermo Dual
+  - `color-rescue` (668458516807): Dyfensor SF, Total Violet x2, DY Fazza Color x2, Revenant x5, Dyfensor Serum, Green 100, Hyaloneurine
+  - `ritual-kits` (672207995207): ya tenía 13 kits ✅
+
+**2. Social Proof Agent v3 (JSX Artifact)**
+- Pipeline: Write → Humanize → AIFE por producto, ES + EN
+- Filtrado por línea: Scalp / Moisture / Restore / Color Rescue / Styling / Kits
+- Export via textarea click-to-select (no createObjectURL — bloqueado en sandbox)
+- Persistencia via window.storage (key: "nscf_v3") — guarda después de cada producto
+- Rate limit retry con backoff (429/529)
+- **Nota técnica**: JSX artifact tiene API key injection. show_widget HTML NO — calls fallan silently
+
+**3. Social Cards — 42 productos × ES + EN × 5 cards (3 TikTok + 2 Instagram)**
+
+| Línea | Productos | Estado |
+|---|---|---|
+| Scalp | Capissen Shampoo, Capissen Loción, Shampoo Depura, Menthol Ice | ✅ |
+| Moisture | Shampoo Humit, Humit Mask, DY Fazza 200ml, DY Fazza 400ml | ✅ |
+| Restore | Shampoo Kerasin HB, Kerasin HB Mask, Kerasin HB Leave-In, Velvety Control | ✅ |
+| Color Rescue | Dyfensor SF, Total Violet x2, DY Fazza Color x2, Revenant x5, Dyfensor Serum, Green 100, Hyaloneurine | ✅ |
+| Styling | Neurona Gloss x2, Lisothermic, Thermo Dual | ✅ |
+| Kits | HUMIT x3, KERASIN x3, TV Color x2, TV Control x3, SOS, Serum Duo | ✅ |
+
+**4. QA Corrections — Contexto skincare detectado y corregido**
+
+| Producto | Problema | Fix |
+|---|---|---|
+| HUMIT MASK | Quotes sobre piel/cara | Reescrito contexto capilar |
+| DY FAZZA 200ml | Quotes sobre piel/cara | Reescrito contexto capilar |
+| DY FAZZA 400ml (EN) | Quotes sobre piel/cara | Reescrito contexto capilar |
+| HUMIT Hydration Ritual | Quotes sobre piel/poros | Reescrito contexto capilar |
+| HUMIT Ritual Plus | Quotes sobre piel/manchas | Reescrito contexto capilar |
+| HUMIT Ritual + Finish | Quotes sobre piel/maquillaje | Reescrito contexto capilar |
+| TV Control Ritual (EN) | Quotes T-zone/skin | Reescrito contexto cuero cabelludo |
+| TV Control Ritual Plus (EN) | Quotes poros/skin | Reescrito contexto frizz/cabello |
+| SERUM DUO | Quotes manchas/cara | Reescrito contexto capilar (Hyaloneurine + Dyfensor para cabello) |
+
+**5. EN Translations**
+- Todos los 42 productos tienen `translationsRegister` con digest real del body_html actual
+- Digestos obtenidos via `translatableResources` query antes de cada push
+
+### Decisiones estratégicas
+
+**Social Proof Agent como stack tool:**
+- Patrón establecido: para cualquier tienda nueva antes del launch, correr este agente
+- Conectado a Supabase; si no existe el cliente, solicitar datos igual que el auditor
+- Documentado en ecosystem como "Social Proof Agent v3"
+
+**CRO Audit Layer:**
+- Extensión del ShopifyAuditor para detectar ausencia de social proof, urgency/scarcity, trust signals, upsell/cross-sell, above-the-fold ATC, checkout friction
+- Buildear en siguiente sesión — deadline martes
+
+### Estado post-sesión
+
+```
+B2C Social Proof: 42/42 productos con cards ES + EN ✅
+B2C Collections: 5 collections populadas (29 productos) ✅
+B2C EN Translations: 42/42 con digests reales ✅
+B2C Score: 109/155 (re-audit URGENTE — 20+ fixes aplicados post-audit)
+B2B Score: 133/160 ✅
+```
+
+### Pendientes manuales — acción requerida Patricia/Sam
+
+**Críticos antes del martes (bloquean ventas):**
+- **EUR→USD**: Admin → Settings → General → Store currency
+- **Payment gateway**: Admin → Settings → Payments → Shopify Payments → Complete setup
+- **Shipping rates FL**: Admin → Settings → Shipping → Vizos Salón → Start shipping + crear tarifa Florida
+- **Precios $0.00**: 20 variantes — Patricia en Admin
+
+**Importantes para launch:**
+- **Kit images**: 12 productos sin imagen — solicitar a Neurone Cosmética
+- **Policies**: pegar texto del NeuroneSCF_Policies.docx en Admin → Settings → Policies
+- **WhatsApp in footer**: Customizer → Footer settings
+- **Pages content**: about / la-ciencia / faq / contacto → Admin → Pages
+- **Product tags cleanup**: B2c, Anti-caida visibles en sidebar → Admin → Products → Tags
+
+### Agenda próxima sesión
+
+1. **PRIORIDAD MARTES**: CRO Audit Layer — extensión del ShopifyAuditor
+2. **B2C re-audit**: score 109 muy desactualizado
+3. **Kits in main nav menu** + homepage section
+4. **"· 0" display bug**: `neurone.size` metafield = "0" visible en product page
+
+---
+
 ## SESIÓN 2026-05-02 R3 — ShopifyAuditor v9.12 + Fix nav double-slash B2C
 **Operador:** Sam | **Claude:** Sonnet 4.6
 
