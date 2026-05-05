@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-04-v2",
+    "version": "2026-05-05-v1",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
-      "date": "2026-05-04",
-      "status": "shopify-audit v13 (Customer Events) + shopify-fix v7 (3 SEO fix types) + Auditor Full Capacity 22 módulos 180pts. Kit punta titles aplicados (revisión pendiente mañana).",
+      "date": "2026-05-05",
+      "status": "shopify-audit v16.1 + shopify-fix v9 + Agent Network (theme-analyzer v1, link-crawler v1, orchestrator v1). NSCF B2C: 136/200 (B, was 109/160). COMP-OK: compliance limpia. Compliance engine v2 multi-category + context system. Anti-Caída → Scalp Strength. CAPISSEN drug claims → cosmetic claims. Ritual Kits menu animado. Tags fix (v16.1).",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -77,22 +77,46 @@
         "b2c": {
           "internal_domain": "egdk1n-gt.myshopify.com",
           "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
-          "last_audit_score": 109,
-          "last_audit_score_max": 160,
-          "last_audit_date": "2026-05-02",
-          "audit_status": "⚠️ 109/160 — re-audit URGENTE (20+ fixes R2+R3+social_proof aplicados post-audit). Nuevo score max = 180 (auditor v12).",
-          "seo_status": "62/62 enriched SEO title+desc · store SEO aplicado (global.title_tag + description_tag)",
-          "theme_i18n": "COMPLETE R3 — locale_root root cause fixed (root_url==blank), responsive mobile, header 80px, announcement 25px, hero padding-top CSS fix",
-          "locale_root_logic": "root_url==blank → '/' (ES primary no prefix) · root_url='/en' → '/en/' (EN with prefix). Fixes 8 Liquid files.",
-          "theme_logo": "assets/NSCF_Logo_WT_TC.png — CDN: cdn.shopify.com/s/files/1/0969/9567/2391/t/8/assets/NSCF_Logo_WT_TC.png",
-          "benefit_claims_en": "7/7 productos con benefit_claims en ES traducidos → neurone.benefit_claims_en metafield",
-          "social_proof": "42/42 productos con social proof cards ES+EN (3 TikTok + 2 Instagram) · 9 productos con QA corrections (skincare→haircare context)",
-          "collections": "6/6 collections populadas · 5 vacías fijas 2026-05-03 · 29 productos asignados via collects API",
-          "kit_naming": "⚠️ 4 punta kits con títulos aplicados (Deep Moisture Recovery, Hydra Boost Duo, Perfect Blonde, Extreme Repair) — revisión pendiente 2026-05-05. Taglines 13 kits aprobados y activos."
+          "last_audit_score": 136,
+          "last_audit_score_max": 200,
+          "last_audit_date": "2026-05-05",
+          "audit_status": "⚠️ 136/200 (B) — 5 critical · 13 important · compliance CLEAN ✅",
+          "audit_score_breakdown": {
+            "settings": "7/20 — CRITICAL: missing all 4 policies (Refund/TOS/Privacy/Shipping)",
+            "catalog": "12/20 — CRITICAL: 12 kits sin imágenes",
+            "content_language": "1/5 — descripciones ES detectadas en store US",
+            "theme_language": "9/10",
+            "seo": "7/10",
+            "collection_health": "6/10",
+            "theme": "9/15",
+            "payments": "0/10 — CRITICAL: no payment gateway",
+            "orders": "10/10 ✅",
+            "shipping": "2/5",
+            "discounts": "5/5 ✅",
+            "navigation": "7/10",
+            "tracking": "0/5 — no pixels detected",
+            "apps": "10/10 ✅",
+            "performance": "3/5",
+            "b2c_vs_b2b": "5/5 ✅",
+            "cro": "4/10",
+            "images": "4/5",
+            "catalog_quality": "5/5 ✅",
+            "inventory_quality": "5/5 ✅",
+            "price_psychology": "5/5 ✅",
+            "compliance": "10/10 ✅ — COMP-OK: no drug claims detected",
+            "strategic_seo": "10/10 ✅"
+          },
+          "seo_status": "62/62 enriched SEO title+desc · store SEO aplicado",
+          "theme_i18n": "COMPLETE R3 — locale_root root cause fixed · theme-analyzer: 18 files CLEAN ✅",
+          "compliance_status": "✅ CLEAN — Anti-Caída tag → Scalp Strength · CAPISSEN drug claims → cosmetic claims · 0 violations detected in audit v16.1",
+          "benefit_claims_en": "7/7 productos con benefit_claims en ES traducidos",
+          "social_proof": "42/42 productos con social proof cards ES+EN",
+          "collections": "6/6 collections populadas · 29 productos asignados",
+          "kit_naming": "⚠️ 4 punta kits con títulos aplicados — revisión pendiente con Patricia. Taglines 13 kits aprobados."
         }
       },
-      "gaps": "MANUAL URGENTE: Moneda EUR→USD (Admin>Settings>General>Store currency) · Payment gateway (Shopify Payments → Complete setup) · Shipping rates FL (Vizos Salón → Start shipping) · Precios $0.00 en 20 variantes (Patricia en Admin) · Kit images (12 products sin imagen) · Policies texto en Admin>Settings>Policies · WhatsApp field vacío en Customizer>Footer · Páginas (about/la-ciencia/faq/contacto) contenido + Visible · Product tags cleanup (B2c, Anti-caida en sidebar) · neurone.size metafield '0' visible en product page ('· 0' bug) · Kit naming revisión (4 punta kits — Sam revisa mañana con Patricia)",
-      "completed": "Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · ShopifyAuditor v9.12 → v13.0 · shopify-fix v6 → v7 (3 new SEO fix types: fix_seo_title_structure + fix_seo_brand_suffix + fix_seo_title_trim) · shopify-audit v12 Full Capacity (22 módulos 180pts: images + collection health real + catalog quality + inventory quality + performance real + price psychology + CRO-007 + congruence engine) · shopify-audit v13 (Customer Events / Web Pixels: fetchWebPixels + hasMeta/hasTikTok/hasGoogle cross-reference + TRACK-CE-SCOPE/OK) · Kit Naming System: taglines 13 kits aprobados y activos · nscf-kit-seo-revert: 4 punta kit titles aplicados (revisión pendiente) · fix-all v4 · theme i18n R1+R2+R3 · GraphQL SEO · store SEO · Pro Portal removed · NSCF Logo · locale_root root cause fix · product type EN mapping · collection titles EN · Key Benefits EN · format mapping · shipping tab removed · footer locale-aware · hero WHEN YOUR · hero responsive mobile · header 80px · announcement 25px · NeuroneSCF_Policies.docx · nav double-slash fix (shopify-debug v6) · tracking module v9.12 · constructive messaging v9.12 · Collections fix (5 vacías → 29 productos 2026-05-03) · Social Proof Cards 42/42 ES+EN (2026-05-03) · EN translations 42/42 con digests reales (2026-05-03)"
+      "gaps": "MANUAL URGENTE: Moneda EUR→USD · Payment gateway (Shopify Payments) · Shipping rates FL · Precios $0.00 en ~20 variantes · Policies texto en Admin (NeuroneSCF_Policies.docx listo) · WhatsApp field vacío en Customizer>Footer · Páginas (about/la-ciencia/faq/contacto) contenido · Kit images (12 products sin imagen) · Kit naming revisión con Patricia (4 punta kits) · neurone.size '0' visible en product page ('· 0' bug) · Tracking: Meta + TikTok + Google pixels pendientes",
+      "completed": "Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · Auditor v13→v16.1 · shopify-fix v7→v9 (compliance category-aware) · Compliance Engine v2 (multi-category: cosmetics/supplements/FTC universal) · Anti-Caída tag → Scalp Strength (CAPISSEN SHAMPOO + LOTION) · CAPISSEN drug claims corregidos (ES+EN) · Menu Ritual Kits animado (naranja pulsante CSS) · Kit Naming System: taglines 13 kits aprobados · 4 punta kit titles aplicados · Agent Network: shopify-theme-analyzer v1 + shopify-link-crawler v1 + shopify-audit-orchestrator v1 · save_to_db flag (no Supabase write desde orchestrator) · Generic language detection (sin hair industry vocabulary) · Context system: context_questions + context_status · fix-all v4 · theme i18n R1+R2+R3 · GraphQL SEO · store SEO · Pro Portal removed · NSCF Logo · locale_root root cause fix · product type EN mapping · collection titles EN · Key Benefits EN · format mapping · shipping tab removed · footer locale-aware · hero responsive mobile · header 80px · announcement 25px · nav double-slash fix · tracking module v9.12 · Collections fix (5 vacías → 29 productos) · Social Proof Cards 42/42 ES+EN · EN translations 42/42"
     },
     {
       "id": "ForumPHs",
@@ -113,65 +137,95 @@
       "status": "active",
       "health": "green",
       "web": "LIVE EN+ES",
-      "skills": "P1-P8 COMPLETOS — P2 shopify-auditor READY FOR BUSINESS v3.3",
+      "skills": "P1-P8 COMPLETOS — P2 shopify-auditor READY FOR BUSINESS v3.5",
       "iid_pipeline": "OPERATIONAL — primer email de aprobación confirmado 2026-04-26"
     },
     {"id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green"}
   ],
   "shopify_auditor": {
-    "version": "3.4",
-    "status": "READY FOR BUSINESS ✅ — Full Capacity v13",
+    "version": "3.5",
+    "status": "READY FOR BUSINESS ✅ — Full Capacity v16.1 + Agent Network",
     "supabase_project": "amlvyycfepwhiindxgzw",
     "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
     "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
     "audit_engine": {
-      "version": "v13.0",
-      "modules": 22,
-      "score_max": 180,
-      "score_max_with_strategic": 190,
-      "new_modules_v12": ["images (5pts)", "collection_health_real (10pts)", "catalog_quality (5pts)", "inventory_quality (5pts)", "performance_real (5pts)", "price_psychology (5pts)", "CRO-007"],
-      "new_v13": "Customer Events / Web Pixels — fetchWebPixels (read_customer_events scope) · hasMeta/hasTikTok/hasGoogle cross-reference · TRACK-CE-SCOPE (false negative warning) · TRACK-CE-OK",
-      "congruence_engine": "isDigitalStore · isNewStore · isSmallCatalog · isB2BModel — every check adapts severity based on store model"
+      "version": "v16.1",
+      "modules": 23,
+      "score_max": 200,
+      "score_max_with_strategic": 200,
+      "new_v16": [
+        "save_to_db flag (false = no Supabase write, used by orchestrator)",
+        "Generic language detection — ES_WORDS/EN_WORDS sin vocabulario de industria",
+        "tags detection fix (REST API returns string, not array — v16.1)",
+        "Compliance Engine v2 multi-category: cosmetics + supplements + FTC universal",
+        "detectProductCategory(): auto-detect from context_overrides > brandCtx > product_types > titles",
+        "context_questions: structured questions when brand_context incomplete",
+        "context_status in response: category, confidence, completeness",
+        "CONTEXT-001 finding: nudges user to provide missing context"
+      ],
+      "compliance_patterns": {
+        "cosmetics_es": 23, "cosmetics_en": 20,
+        "supplements_es": 8, "supplements_en": 7,
+        "ftc_universal_es": 8, "ftc_universal_en": 8,
+        "gray_area": 5,
+        "categories": ["cosmetics", "supplements", "food_beverage", "ingestible", "apparel", "electronics", "unknown"]
+      },
+      "agent_network": {
+        "orchestrator": "shopify-audit-orchestrator v1 — runs 3 agents in parallel, generates executive report JSON, nothing persists",
+        "theme_analyzer": "shopify-theme-analyzer v1 — static Liquid analysis: LINK-LOCALE-001/002, LINK-HANDLE-001, LINK-ABSOLUTE-001",
+        "link_crawler": "shopify-link-crawler v1 — crawls sitemap, HEAD checks up to 180 links, locale mismatch detection",
+        "architecture": "point-in-time · no Supabase persistence · executive report presented to client · done"
+      }
     },
     "fixer_engine": {
-      "shopify_fix_version": "v7",
-      "fix_types": ["inventory_tracking_on", "seo_title_from_product", "fix_seo_title_enriched", "fix_seo_description", "fix_description_enrich", "theme_add_canonical", "theme_add_og_tags", "fix_theme_json_ld", "fix_seo_title_structure", "fix_seo_brand_suffix", "fix_seo_title_trim"],
-      "new_v7_no_llm": ["fix_seo_title_structure (inverted prefix regex)", "fix_seo_brand_suffix (extractBrandName from shop.name)", "fix_seo_title_trim (preserve brand suffix)"]
+      "shopify_fix_version": "v9",
+      "fix_types": ["inventory_tracking_on", "seo_title_from_product", "fix_seo_title_enriched", "fix_seo_description", "fix_description_enrich", "theme_add_canonical", "theme_add_og_tags", "fix_theme_json_ld", "fix_seo_title_structure", "fix_seo_brand_suffix", "fix_seo_title_trim", "fix_compliance_claims"],
+      "compliance_fix": {
+        "fix_type": "fix_compliance_claims",
+        "category_aware": true,
+        "categories": ["cosmetics", "supplements", "food_beverage", "unknown (FTC universal)"],
+        "per_product_detection": true,
+        "updates": "ES body_html + EN translationsRegister"
+      }
     },
     "edge_functions": {
-      "shopify-audit": {"supabase_version": 26, "semantic_version": "v13.0", "status": "ACTIVE", "notes": "v13: Customer Events/Web Pixels. v12: Full Capacity 22 modules 180pts."},
-      "shopify-fix": {"supabase_version": 7, "semantic_version": "v7", "status": "ACTIVE", "notes": "v7: fix_seo_title_structure + fix_seo_brand_suffix + fix_seo_title_trim (all no-LLM deterministic)"},
+      "shopify-audit": {"supabase_version": 30, "semantic_version": "v16.1", "status": "ACTIVE", "notes": "v16.1: tags string fix (REST API). v16: save_to_db flag + generic language detection + compliance v2 multi-category + context system. v15: context_questions + detectProductCategory."},
+      "shopify-fix": {"supabase_version": 9, "semantic_version": "v9", "status": "ACTIVE", "notes": "v9: fix_compliance_claims category-aware (cosmetics/supplements/food/FTC universal). v8: compliance claims basic."},
       "shopify-fix-all": {"supabase_version": 11, "semantic_version": "v5.6", "status": "ACTIVE"},
+      "shopify-audit-orchestrator": {"supabase_version": 1, "semantic_version": "v1", "status": "ACTIVE", "notes": "v1: runs audit+theme-analyzer+link-crawler in parallel. Executive report JSON. save_to_db:false. Nothing persists."},
+      "shopify-theme-analyzer": {"supabase_version": 1, "semantic_version": "v1", "status": "ACTIVE", "notes": "v1: static Liquid analysis. LINK-LOCALE-001/002 (missing locale_root). LINK-HANDLE-001 (dead handles). LINK-ABSOLUTE-001."},
+      "shopify-link-crawler": {"supabase_version": 1, "semantic_version": "v1", "status": "ACTIVE", "notes": "v1: crawls sitemap.xml. GET pages + extract hrefs. HEAD-check up to 180 links. Locale mismatch detection."},
       "shopify-oauth": {"supabase_version": 4, "status": "ACTIVE"},
-      "theme-i18n-fix": {"supabase_version": 2, "status": "ACTIVE"},
-      "shopify-theme-locale": {
-        "supabase_version": 21,
-        "semantic_version": "v21",
-        "status": "ACTIVE",
-        "notes": "v21: read_nav + fix_nav_links + fix_iso_code_comparisons."
-      },
+      "shopify-theme-locale": {"supabase_version": 21, "semantic_version": "v21", "status": "ACTIVE"},
       "shopify-fix-benefits": {"supabase_version": 3, "semantic_version": "v3", "status": "ACTIVE"},
       "shopify-debug": {"supabase_version": 6, "status": "ACTIVE"},
-      "nscf-kit-seo-revert": {"supabase_version": 2, "status": "ACTIVE", "notes": "Applied Patricia's titles to 4 punta kits 2026-05-04. Revisión pendiente."},
-      "nscf-kit-pipeline": {"supabase_version": 1, "status": "ACTIVE", "notes": "Kit naming pipeline. Taglines 13 kits aprobados."}
+      "nscf-fix-anticaida": {"supabase_version": 1, "status": "ACTIVE", "notes": "Applied 2026-05-05: anti-caida tag → Scalp Strength on CAPISSEN SHAMPOO + LOTION."},
+      "nscf-fix-capissen-descriptions": {"supabase_version": 1, "status": "ACTIVE", "notes": "Applied 2026-05-05: drug claims → cosmetic claims in ES body_html + EN translations."},
+      "nscf-menu-kits": {"supabase_version": 1, "status": "ACTIVE", "notes": "Applied 2026-05-05: Ritual Kits animated link in header (naranja pulsante CSS, locale_root aware)."},
+      "nscf-kit-seo-revert": {"supabase_version": 2, "status": "ACTIVE", "notes": "Applied 2026-05-04: 4 punta kit titles. Revisión pendiente con Patricia."}
     },
     "connected_stores": [
       {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 133, "last_audit_max": 160},
-      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 109, "last_audit_max": 160, "note": "score max now 180 with auditor v12"}
+      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 136, "last_audit_max": 200, "compliance": "CLEAN ✅"}
     ],
     "tech_debt": [
-      "B2C re-audit URGENTE: score 109/160 very stale — 20+ fixes + social proof + collections aplicados post-audit. New max = 180.",
-      "Kit naming 4 punta kits: revisión pendiente con Patricia 2026-05-05",
-      "neurone.size metafield = '0' visible en product page como '· 0' — limpiar metafield",
-      "benefit_claims_en: no tiene MetafieldDefinition → no aparece en Translate & Adapt.",
-      "Product tags cleanup: B2c, Anti-caida raw tags visibles en sidebar filtros",
-      "Moneda: EUR→USD MANUAL URGENTE antes de launch",
-      "Páginas content vacías (about/la-ciencia/faq/contacto)",
-      "Policies: texto en .docx listo, Patricia debe pegar en Admin",
+      "NSCF B2C CRÍTICO: Payment gateway 0/10 — Shopify Payments setup pendiente Patricia",
+      "NSCF B2C CRÍTICO: Policies 0/20 — Refund/TOS/Privacy/Shipping text pending Admin (NeuroneSCF_Policies.docx listo)",
+      "NSCF B2C CRÍTICO: 12 kits sin imágenes (CAT-002)",
+      "NSCF B2C: Tracking 0/5 — Meta + TikTok + Google pixels pendientes",
+      "NSCF B2C: Shipping zones not configured (2/5)",
+      "NSCF B2C: Kit naming 4 punta — revisión pendiente con Patricia",
+      "NSCF B2C: neurone.size metafield = '0' visible en product page ('· 0' bug)",
+      "NSCF B2C: Precios $0.00 en ~20 variantes (Patricia en Admin)",
+      "NSCF B2C: Páginas content vacías (about/la-ciencia/faq/contacto)",
+      "NSCF B2C: WhatsApp field vacío en Customizer>Footer",
+      "NSCF B2B: fix SEO-003 COLOR titles",
+      "read_customer_events scope no concedido → TRACK-CE-SCOPE warning activo",
+      "Orchestrator HTTP-to-HTTP latency: EF calls via public URL add overhead — may need optimization",
+      "Proxy update needed: unrlvl-tools.vercel.app/api/audit-proxy points to shopify-audit directly, orchestrator needs separate endpoint",
       "ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
       "luciensael.com deploy pendiente",
-      "Kits in main nav menu + homepage section — pendiente",
-      "read_customer_events scope no concedido → TRACK-CE-SCOPE warning activo en audits"
+      "benefit_claims_en: no MetafieldDefinition → no aparece en Translate & Adapt"
     ]
   },
   "social_proof_agent": {
@@ -179,19 +233,8 @@
     "status": "OPERATIONAL ✅",
     "artifact_file": "nscf-agent-v3.jsx",
     "description": "Generador de social proof cards para product pages de Shopify. Pipeline Write→Humanize→AIFE por producto. ES + EN. 3 TikTok + 2 Instagram por producto.",
-    "supabase_integration": "Conectado a Supabase via net.http_post().",
-    "pipeline": ["Write (Claude Sonnet)", "Humanize (Claude Sonnet)", "AIFE (Claude Sonnet)"],
-    "pattern": "Para cualquier tienda nueva antes del launch — correr este agente",
-    "qa_rule": "Verificar contexto del producto antes del push. NSCF es marca CAPILAR — cualquier quote de skincare es error de contexto.",
     "completed_stores": [
-      {
-        "brand_id": "NeuroneSCF",
-        "store": "b2c",
-        "date": "2026-05-03",
-        "products": 42,
-        "lines": ["Scalp", "Moisture", "Restore", "Color Rescue", "Styling", "Kits"],
-        "qa_corrections": 9
-      }
+      {"brand_id": "NeuroneSCF", "store": "b2c", "date": "2026-05-03", "products": 42, "lines": ["Scalp", "Moisture", "Restore", "Color Rescue", "Styling", "Kits"], "qa_corrections": 9}
     ]
   },
   "labs": [
@@ -211,19 +254,19 @@
   "infrastructure": [
     {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app"},
     {"id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "schemas": "public.* + shopify.*"},
-    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.4 (v13.0 engine)"},
+    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.5 (v16.1 engine)"},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
     {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy"}
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF Kit Naming: revisar 4 punta kit titles con Patricia (Deep Moisture Recovery, Hydra Boost Duo, Perfect Blonde, Extreme Repair) — Sam dice 'no quedaron bien'",
-    "PRIORIDAD 2 — NeuroneSCF B2C: re-audit URGENTE (score 109/160 muy desactualizado, new max=180)",
-    "PRIORIDAD 3 — NeuroneSCF MANUAL Patricia: EUR→USD · Payment gateway · Shipping rates FL · Precios $0.00 · Policies · WhatsApp · Páginas contenido",
-    "PRIORIDAD 4 — NeuroneSCF B2C: Kits in main nav menu + homepage section",
-    "PRIORIDAD 5 — NeuroneSCF B2C: product tags cleanup · neurone.size '0' bug",
+    "PRIORIDAD 1 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway (Shopify Payments) · EUR→USD · Policies (pegar texto de NeuroneSCF_Policies.docx) · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido",
+    "PRIORIDAD 2 — NeuroneSCF B2C: Kit images (12 kits sin imagen — CAT-002 critical)",
+    "PRIORIDAD 3 — NeuroneSCF B2C: Kit naming revisión con Patricia (4 punta kits — Sam dijo 'no quedaron bien')",
+    "PRIORIDAD 4 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/5 en audit)",
+    "PRIORIDAD 5 — NeuroneSCF B2C: neurone.size metafield '0' bug · product tags cleanup",
     "PRIORIDAD 6 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
-    "PRIORIDAD 7 — ShopifyAuditor: read_customer_events scope para NeuroneSCF (fix TRACK-CE-SCOPE)",
-    "PRIORIDAD 8 — ShopifyAuditor: sales closing (intake form + landing + fix packs pricing)",
+    "PRIORIDAD 7 — ShopifyAuditor: read_customer_events scope para NeuroneSCF",
+    "PRIORIDAD 8 — ShopifyAuditor: proxy update (orchestrator endpoint) + sales closing (intake form + landing + fix packs pricing)",
     "PRIORIDAD 9 — IID approval flow test · ImageLab fix · luciensael.com deploy"
   ]
 }

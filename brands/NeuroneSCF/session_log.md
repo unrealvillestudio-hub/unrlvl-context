@@ -1,106 +1,118 @@
-# SESSION LOG — NeuroneSCF
-_Última actualización: 2026-05-04_
+# NeuroneSCF B2C — Session Log
 
 ---
 
-## 2026-05-04 — SESIÓN PRINCIPAL
+## 2026-05-05 | Sprint: Compliance + Auditor Agent Network
 
-### Contexto
-Brand: NeuroneSCF · Stores: B2C + B2B · Operator: Sam
+### AUDIT RUN — shopify-audit v16.1
+- **Score: 136/200 (B)** — anterior: 109/160 (old scale)
+- Compliance: **COMP-OK ✅ — 0 drug claims detected**
+- Theme analyzer: **18 Liquid files CLEAN ✅ — 0 locale link issues**
+- Context: cosmetics / high confidence / complete ✅
 
-### Trabajo completado
+#### Score Breakdown
+| Módulo | Score | Estado |
+|---|---|---|
+| Settings | 7/20 | ❌ CRÍTICO: 4 policies faltantes |
+| Catalog | 12/20 | ❌ CRÍTICO: 12 kits sin imágenes |
+| Content Language | 1/5 | ⚠️ descripciones ES en store US |
+| Theme Language | 9/10 | ✅ |
+| SEO | 7/10 | ✅ |
+| Collection Health | 6/10 | ⚠️ |
+| Theme | 9/15 | ⚠️ |
+| **Payments** | **0/10** | ❌ **CRÍTICO: no payment gateway** |
+| Orders | 10/10 | ✅ |
+| Shipping | 2/5 | ⚠️ |
+| Discounts | 5/5 | ✅ |
+| Navigation | 7/10 | ⚠️ |
+| **Tracking** | **0/5** | ❌ **Meta + TikTok + Google no detectados** |
+| Apps | 10/10 | ✅ |
+| Performance | 3/5 | ⚠️ |
+| B2C vs B2B | 5/5 | ✅ |
+| CRO | 4/10 | ⚠️ |
+| Images | 4/5 | ✅ |
+| Catalog Quality | 5/5 | ✅ |
+| Inventory Quality | 5/5 | ✅ |
+| Price Psychology | 5/5 | ✅ |
+| **Compliance** | **10/10** | ✅ **COMP-OK — limpio** |
+| Strategic SEO | 10/10 | ✅ |
 
-#### ShopifyAuditor Full Capacity Upgrade (v11 → v13)
+### FIXES APLICADOS HOY
 
-**Auditor v12 — Full Capacity (22 módulos, 180pts max):**
-- IMAGES: alt text coverage + image count (5pts)
-- COLLECTION HEALTH real: replaces always-10/10 fake — checks desc, image, productCount, handle (10pts)
-- CATALOG QUALITY: URL handles con patrones internos, vendor, product_type (5pts)
-- INVENTORY QUALITY: tracking, weight, barcode/GTIN (5pts)
-- PERFORMANCE real: script_tags >5, sitemap, robots.txt (5pts)
-- PRICE PSYCHOLOGY: price endings consistency, compare_at_price (5pts)
-- CRO-007: post-purchase upsell detection
-- Congruence engine: isDigitalStore · isNewStore · isSmallCatalog · isB2BModel — severity adapts per store model
-- Products fetch: añade vendor + product_type fields
-- Collections: via GQL con productCount real
-- Sitemap + robots.txt via HTTP público paralelo
-- PAY-BROKEN: distingue tienda con órdenes previas sin gateway vs tienda nueva
+#### 1. Anti-Caída → Scalp Strength (FDA Compliance)
+- EF: `nscf-fix-anticaida v1`
+- Productos: CAPISSEN SHAMPOO + CAPISSEN LOTION
+- Tag `anti-caida` removido → `Scalp Strength` añadido
+- Motivo: "anti-caída" = drug claim bajo FDA 21 CFR 201.128. Ilegal en productos cosméticos US sin aprobación de drug.
 
-**Auditor v13 — Customer Events / Web Pixels:**
-- fetchWebPixels: queries `{webPixels(first:20){edges{node{id settings}}}}` con scope guard
-- hasMeta/hasTikTok/hasGoogle cross-reference con Customer Events pixel settings
-- TRACK-CE-SCOPE: warning cuando read_customer_events no granted (potential false negatives)
-- TRACK-CE-OK: confirma cuántos pixels via Customer Events y qué plataformas
-- tracking_debug expandido: customerEventsScope, webPixelCount, detectedViaCustomerEvents
+#### 2. CAPISSEN Descripciones — Drug Claims → Cosmetic Claims
+- EF: `nscf-fix-capissen-descriptions v1`
+- Productos: CAPISSEN SHAMPOO + CAPISSEN LOTION
+- ES body_html + EN translations actualizados
+- Removido: "reactivar folículos inactivos", "reducción de caída", "dormant follicles", "reduced shedding"
+- Reemplazado: "nutre el cuero cabelludo", "entorno óptimo para el crecimiento", "visibly stronger hair"
 
-**shopify-fix v7 — 3 nuevos fix_types determinísticos (sin LLM):**
-- fix_seo_title_structure: regex swap inverted prefix ("Kit Name" → "Name Kit")
-- fix_seo_brand_suffix: extractBrandName(shop.name) at runtime, brand-agnostic
-- fix_seo_title_trim: trim >60ch preservando " | Brand" suffix
-- Fix types disponibles v7: inventory_tracking_on | seo_title_from_product | fix_seo_title_enriched | fix_seo_description | fix_description_enrich | theme_add_canonical | theme_add_og_tags | fix_theme_json_ld | fix_seo_title_structure | fix_seo_brand_suffix | fix_seo_title_trim
+#### 3. Menu Ritual Kits — Animated Link
+- EF: `nscf-menu-kits v1`
+- Link animado "Ritual Kits" añadido a desktop nav + mobile menu
+- CSS: punto naranja #C4622D pulsante con ring en loop 2s
+- Locale-aware: usa `{{ locale_root }}` correctamente (ES + EN)
 
-#### Kit Naming — Punta Kits (NeuroneSCF B2C)
-- nscf-kit-seo-revert v2 deployed y ejecutado
-- 4 punta kits actualizados: product.title + seo.title + EN translation
-  - KT-101P: HUMIT Hydration Ritual Plus → **Deep Moisture Recovery**
-  - KT-SDUO: SERUM DUO → **Hydra Boost Duo**
-  - KT-103V: TOTAL VIOLET Control Ritual → **Perfect Blonde**
-  - KT-102P: KERASIN Repair Ritual Plus → **Extreme Repair**
-- ⚠️ Sam dice "los nombres no quedaron bien" — revisión pendiente con Patricia 2026-05-05
-- Taglines 13 kits: APROBADOS (no se tocaron)
+#### 4. Kit Naming — 4 Punta Kits (revisión pendiente)
+- EF: `nscf-kit-seo-revert v2`
+- KT-101P: Deep Moisture Recovery
+- KT-SDUO: Hydra Boost Duo
+- KT-103V: Perfect Blonde
+- KT-102P: Extreme Repair
+- ⚠️ Sam revisará con Patricia — "no quedaron bien"
 
-#### Discusiones de arquitectura
-- Analytics: Customer Events vs script_tags vs theme.liquid — 3 detección layers
-- GA4 vs UA migration check: identificado como mejora futura del auditor
-- Pixel duplicados (tema + script_tag): identificado como oportunidad de check v14+
-- Fixer congruencia: todos los nuevos checks adaptan severidad al modelo de tienda
+### AUDITOR UPGRADES HOY
 
-### EFs activos hoy
-| EF | Supabase v | Semantic v | Estado |
-|---|---|---|---|
-| shopify-audit | 26 | v13.0 | ACTIVE |
-| shopify-fix | 7 | v7 | ACTIVE |
-| shopify-fix-all | 11 | v5.6 | ACTIVE |
-| nscf-kit-seo-revert | 2 | v2 | ACTIVE |
+| EF | Versión | Cambio |
+|---|---|---|
+| shopify-audit | v30 (v16.1) | fix tags string bug + generic language detection + save_to_db flag |
+| shopify-fix | v9 | fix_compliance_claims category-aware |
+| shopify-theme-analyzer | v1 (NEW) | Static Liquid analysis: locale links, dead handles |
+| shopify-link-crawler | v1 (NEW) | Sitemap crawl + HEAD checks + locale mismatch |
+| shopify-audit-orchestrator | v1 (NEW) | Parallel agents → executive report JSON |
 
-### Pendientes para mañana
-1. Revisar kit naming 4 punta kits con Patricia
-2. Re-audit NeuroneSCF B2C (score muy desactualizado, nuevo max=180)
-3. Manual Patricia: EUR→USD, payment gateway, precios $0.00
-4. read_customer_events scope para NeuroneSCF
+### PENDIENTES MANUALES (Patricia)
+- ❌ EUR → USD en Admin > Settings > General > Store currency
+- ❌ Payment gateway: Shopify Payments → Complete setup
+- ❌ Shipping rates FL (Settings > Shipping > Add zone)
+- ❌ Precios $0.00 en ~20 variantes
+- ❌ Policies: pegar texto de NeuroneSCF_Policies.docx en Admin > Settings > Policies
+- ❌ WhatsApp field en Customizer > Footer
+- ❌ Kit images: 12 kits sin imagen (CAT-002 critical)
+- ❌ Páginas about/la-ciencia/faq/contacto — contenido + visible
 
 ---
 
-## 2026-05-03 — SESIÓN ANTERIOR (resumen)
+## 2026-05-04 | Sprint: Kit Naming + Auditor v13→v14
 
-### Trabajo completado
-- Social Proof Cards: 42/42 productos B2C con cards ES+EN · 9 QA corrections
-- EN translations: 42/42 con digests reales via GraphQL translationsRegister
-- Collections fix: 5 colecciones vacías → 29 productos asignados via collects API
-- ShopifyAuditor v9.12 → v10 → v11: SEO-004/005/006/007 multi-marca
+### COMPLETADO
+- shopify-audit v13→v14 (compliance module básico: COMP-001 anti-caída)
+- nscf-kit-seo-revert v2: 4 punta kit titles aplicados
+- KT-SDUO product_type: Serum → Ritual Kit
 
 ---
 
-## ESTADO INFRAESTRUCTURA
+## 2026-05-03 | Sprint: Social Proof + Collections + SEO
 
-### NeuroneSCF B2C
-- OAuth: CONNECTED (read_apps + read_locales + write_translations)
-- Last audit score: 109/160 (muy desactualizado — nuevo max 180 con auditor v12)
-- SEO: 62/62 products con título+descripción
-- Social proof: 42/42 ES+EN
-- Theme i18n: COMPLETE R3
-- Kit naming: 4 punta titles aplicados (revisión pendiente)
+### COMPLETADO
+- Social Proof Cards 42/42 ES+EN
+- EN translations 42/42 con digests reales
+- Collections fix: 5 vacías → 29 productos asignados
+- SEO enriquecido: 62/62 products
 
-### NeuroneSCF B2B
-- OAuth: CONNECTED
-- Last audit score: 133/160
-- Pending: fix SEO-003 COLOR titles
+---
 
-### Manual pendiente (Patricia)
-- EUR → USD en Admin>Settings>General
-- Payment gateway: Shopify Payments → Complete setup
-- Shipping rates FL
-- Precios $0.00 en 20 variantes
-- Policies texto en Admin
-- WhatsApp field en Customizer>Footer
-- Páginas content (about/la-ciencia/faq/contacto)
+## 2026-05-02 | Sprint: Theme i18n R3 + OAuth + Full Audit
+
+### COMPLETADO
+- OAuth B2C conectado
+- Theme i18n R1+R2+R3 COMPLETE
+- Audit baseline B2C: 109/160
+- Audit baseline B2B: 133/160
+- locale_root root cause fix
+- NSCF Logo CDN
