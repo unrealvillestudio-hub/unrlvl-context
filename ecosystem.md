@@ -1,179 +1,158 @@
-# Unrealville Studio — Ecosystem Overview
-_Versión: 2026-05-03-v1 · Mantenido por Claude_
+# UNRLVL Ecosystem — Estado del Sistema
+_Actualizado: 2026-05-06-v1 · 2026-05-06_
 
 ---
 
 ## Studio
-
-**Unrealville Studio** — Brand Intelligence Infrastructure  
-_"Not for everyone."_  
-Fundador público: **Lucien Sael** | Owner: Sam  
-HQ: 12951 Biscayne Blvd · North Miami, FL 33181  
-Web: unrealvillestudio.com (LIVE EN+ES)
+**Unrealville Studio** · Owner: Sam / Lucien Sael
+- Web: unrealvillestudio.com (LIVE — EN + ES)
+- HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 ---
 
 ## Lucien Sael
-
-Seudónimo profesional público de Sam para UNRLVL y proyectos propios.  
-_"I build worlds. Some of them survive."_  
-Email: iam@luciensael.com | Web: luciensael.com (GENERATED — pending deploy)
-
-**Brand Identity v1.0 COMPLETE**
-- Palette: Obsidian #0D0D0B · Carbon #1C1C1A · Smoke #2E2E2B · Ash #4A4A45 · Bone #EDE8DF · Parchment #C4BDB0 · Ember #D4622A · Gold #B8922A
-- Typography: Cormorant Garamond (display) · Crimson Pro (body) · JetBrains Mono (system)
-- Rule Never: cyan, pure white, blue, Bebas Neue, Space Mono
-
-**Books:** Arquitectura fundacional completa. 5 libros como sistema. Brief Libro 1 pendiente.
+Seudónimo profesional público de Sam. Tagline: _I build worlds. Some of them survive._
+- Web: luciensael.com — GENERATED v3 — PENDING DEPLOY + domain DNS
+- Books: ARQUITECTURA FUNDACIONAL COMPLETA — Brief Libro 1 pendiente
 
 ---
 
-## Brands
+## Marcas y Proyectos
 
-| ID | Nombre | Tipo | Mercado | Estado | Salud |
-|---|---|---|---|---|---|
-| DiamondDetails | Diamond Details | Brand | Alicante, España | active | 🟢 |
-| VizosCosmetics | Vizos Cosmetics | Brand | Miami + España | active | 🟢 |
-| D7Herbal | D7 Herbal | Brand | Alicante, España | active | 🟢 |
-| VivoseMask | Vivose Mask | Brand | España | active | 🟡 |
-| PatriciaOsorioPersonal | Patricia Osorio · Personal | Personal Brand | Miami, FL | active | 🟢 |
-| PatriciaOsorioComunidad | Patricia Osorio · Comunidad | Personal Brand | Miami, FL | active | 🟢 |
-| PatriciaOsorioVizosSalon | Patricia Osorio · Vizos Salon | Personal Brand | Miami, FL | active | 🟢 |
-| PatriciaOsorioConectando | Patricia Osorio · Conectando | Personal Brand | Miami + LATAM | active | 🟢 |
-| **NeuroneSCF** | **Neurone South & Central Florida** | Brand | South & Central Florida | active | 🟡 |
-| ForumPHs | ForumPHs | Brand | Panama | active | 🟢 |
-| UnrealvilleStudio | Unrealville Studio | Studio | Florida USA + LATAM | active | 🟢 |
-| UnrealvilleStores | Unrealville Stores | Ecommerce | Florida USA | active | 🟢 |
+### 🟢 Diamond Details (`DiamondDetails`)
+- Tipo: brand · Mercado: Alicante, Espana · Status: active
 
----
+### 🟢 Vizos Cosmetics (`VizosCosmetics`)
+- Tipo: brand · Mercado: Miami + Espana · Status: active
 
-## Neurone South & Central Florida — Detalle
+### 🟢 D7 Herbal (`D7Herbal`)
+- Tipo: brand · Mercado: Alicante, Espana · Status: active
 
-**Dominio:** neuronescflorida.com
+### 🟡 Vivose Mask (`VivoseMask`)
+- Tipo: brand · Mercado: Espana · Status: active
 
-### Shopify B2B
-- **Store:** nj5ybc-n1.myshopify.com
-- **OAuth:** CONNECTED — read_apps + read_locales + write_translations
-- **Score:** 133/160 ✅
-- **Estado:** fixable:1 (SEO-003 COLOR titles)
+### 🟢 Patricia Osorio · Personal (`PatriciaOsorioPersonal`)
+- Tipo: personal_brand · Mercado: Miami, FL · Status: active
 
-### Shopify B2C
-- **Store:** egdk1n-gt.myshopify.com
-- **OAuth:** CONNECTED — read_apps + read_locales + write_translations
-- **Score:** 109/160 ⚠️ (re-audit URGENTE — 20+ fixes + social proof + collections post-audit)
-- **SEO:** 62/62 enriched · store SEO aplicado
-- **Theme i18n:** COMPLETE R3 — locale_root fix, responsive mobile, header/announcement
-- **Social Proof:** ✅ 42/42 productos con cards ES+EN (3 TikTok + 2 Instagram)
-- **Collections:** ✅ 6/6 populadas · 5 vacías corregidas 2026-05-03
+### 🟢 Patricia Osorio · Comunidad (`PatriciaOsorioComunidad`)
+- Tipo: personal_brand · Mercado: Miami, FL · Status: active
 
-### Gaps Manuales (URGENTE antes del martes)
-- EUR→USD: Admin > Settings > General > Store currency
-- Payment gateway: Shopify Payments → Complete setup
-- Shipping rates FL: Vizos Salón → Start shipping
-- Precios $0.00: 20 variantes (Patricia en Admin)
-- Kit images: 12 productos sin imagen
-- Policies: pegar texto en Admin > Settings > Policies
-- WhatsApp: campo vacío en Customizer > Footer
-- Páginas: about / la-ciencia / faq / contacto — contenido + Visible
-- Product tags: B2c, Anti-caida visibles en sidebar
+### 🟢 Patricia Osorio · Vizos Salon (`PatriciaOsorioVizosSalon`)
+- Tipo: personal_brand · Mercado: Miami, FL · Status: active
 
-### Completado
-Meta BM · Facebook Page · TikTok · OAuth B2B+B2C · ShopifyAuditor v9.12 · fix-all v4 · theme i18n R1+R2+R3 · GraphQL SEO · store SEO · Pro Portal removed · NSCF Logo · locale_root root cause fix · product type EN mapping · collection titles EN · Key Benefits EN · format mapping · shipping tab removed · footer locale-aware · hero WHEN YOUR · hero responsive mobile · header 80px · announcement 25px · NeuroneSCF_Policies.docx · nav double-slash fix · tracking module v9.12 · constructive messaging v9.12 · **Collections fix 2026-05-03** · **Social Proof Cards 42/42 ES+EN 2026-05-03** · **EN translations 42/42 con digests reales 2026-05-03**
+### 🟢 Patricia Osorio · Conectando (`PatriciaOsorioConectando`)
+- Tipo: personal_brand · Mercado: Miami + LATAM · Status: active
+
+### 🟡 Neurone South & Central Florida (`NeuroneSCF`)
+- Tipo: brand · Mercado: South & Central Florida, USA · Status: active
+- **B2C:** 137/200 — ⚠️ 137/200 — 5 critical · 15 important · compliance CLEAN ✅
+  - SEO: SEO titles: 5/42 missing (was 12) · descriptions: 29/42 missing · fixer v13 ready · post-write verification active
+  - SP: 42/42 productos con SP cards ES+EN · ⚠️ 3 productos con contenido facial incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — sp-fix-targeted v1 ready · proxy pending
+  - Compliance: ✅ CLEAN — Anti-Caída → Scalp Strength · CAPISSEN drug claims → cosmetic claims
+- **B2B:** 133/160 — ✅ 133/160 — fixable:1 (SEO-003 COLOR titles)
+- **Gaps:** MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido · Kit images (12 products sin imagen). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13)
+
+### 🟢 ForumPHs (`ForumPHs`)
+- Tipo: brand · Mercado: Panama · Status: active
+- Document Factory: PROD v1.5 READY
+
+### 🟢 Unrealville Studio (`UnrealvilleStudio`)
+- Tipo: studio · Mercado: Florida USA + LATAM · Status: active
+- Skills: P1-P8 COMPLETOS — P2 shopify-auditor READY FOR BUSINESS v3.5
+
+### 🟢 Unrealville Stores (`UnrealvilleStores`)
+- Tipo: ecommerce · Mercado: Florida USA · Status: active
 
 ---
 
-## ShopifyAuditor v3.3
+## ShopifyAuditor
+**v3.5** — READY FOR BUSINESS ✅ — Full Capacity v16.1 + enrichFixPayloads + post-write verification
 
-**URL:** https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html  
-**Status:** READY FOR BUSINESS ✅  
-**Supabase:** amlvyycfepwhiindxgzw
+- App: https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html
+- Audit Engine: v16.1 · 23 módulos · max 200pts
+- Fixer Engine: shopify-fix **v15** · 16 fix_types
+- Post-write verification: v13+ — mutation returns written value, compared against sent value. applied=verified only if Shopify confirms persistence.
 
-### Edge Functions
+### Edge Functions activos
+- `shopify-audit` v16.1 — ACTIVE
+- `shopify-fix` v15 — ACTIVE · v15: sp_scan+sp_fix. v13: post-write verification (verified≠applied). v12: sever...
+- `shopify-fix-all` v5.6 — ACTIVE
+- `shopify-audit-orchestrator` v1 — ACTIVE
+- `shopify-theme-analyzer` v1 — ACTIVE
+- `shopify-link-crawler` v1 — ACTIVE
+- `shopify-oauth` v4 — ACTIVE
+- `shopify-theme-locale` v21 — ACTIVE
+- `seo-audit-check` v1 — ACTIVE · NEW 2026-05-06: GraphQL truth checker — reads real SEO state directly from Shopi...
+- `sp-reader-full` v2 — ACTIVE · NEW 2026-05-06: reads all 42 SP metafields (ES+EN), scans for facial skincare ke...
+- `sp-fix-targeted` v1 — ACTIVE · NEW 2026-05-06: hardcoded fix for 3 products with wrong SP content (DY FAZZA, Hy...
+- `nscf-fix-anticaida` v1 — ACTIVE · Applied 2026-05-05.
+- `nscf-fix-capissen-descriptions` v1 — ACTIVE
+- `nscf-menu-kits` v1 — ACTIVE
+- `nscf-kit-seo-revert` v2 — ACTIVE · Applied 2026-05-04. Revisión pendiente con Patricia.
 
-| EF | Versión | Status |
-|---|---|---|
-| shopify-audit | v22 (v9.12) | ACTIVE |
-| shopify-fix-all | v4 | ACTIVE |
-| shopify-fix | v6 | ACTIVE |
-| shopify-oauth | v4 | ACTIVE |
-| theme-i18n-fix | v2 | ACTIVE |
-| shopify-theme-locale | v21 | ACTIVE |
-| shopify-fix-benefits | v3 | ACTIVE |
-| shopify-debug | v6 | ACTIVE |
-
-### CRO Audit Layer (ROADMAP — deadline martes)
-Extensión del ShopifyAuditor que detecta ausencia de señales de conversión:
-- Social proof presence (quotes/reviews por product page)
-- Urgency/scarcity signals (stock countdown, bestseller badges)
-- Trust signals (garantía, política devolución, badges pago seguro)
-- Upsell/cross-sell (combina con, completa tu ritual)
-- Above-the-fold ATC (precio + botón sin scroll en mobile)
-- Checkout friction (pasos, abandono carrito)
-
-### Connected Stores
-
-| Brand | Tipo | Dominio | Score |
-|---|---|---|---|
-| NeuroneSCF | B2B | nj5ybc-n1.myshopify.com | 133/160 ✅ |
-| NeuroneSCF | B2C | egdk1n-gt.myshopify.com | 109/160 ⚠️ |
-
----
-
-## Social Proof Agent v3
-
-**Status:** OPERATIONAL ✅  
-**Pipeline:** Write → Humanize → AIFE (Claude Sonnet 4.6)  
-**Output:** 5 cards por producto (3 TikTok + 2 Instagram) × ES + EN  
-**Supabase:** Conectado. Si no existe el cliente, solicitar datos como el auditor.  
-**Patrón:** Para cualquier tienda nueva antes del launch — correr este agente.  
-**QA Rule:** Verificar contexto del producto. NSCF es marca CAPILAR — quotes de skincare son error.
-
-**Completado:**
-- NeuroneSCF B2C: 42 productos (Scalp x4, Moisture x4, Restore x4, Color Rescue x13, Styling x4, Kits x13) — 2026-05-03
+### Tech Debt Activo
+- NSCF B2C CRÍTICO: Payment gateway 0/10 — Shopify Payments setup pendiente Patricia
+- NSCF B2C CRÍTICO: Policies 0/20 — Refund/TOS/Privacy/Shipping text pending Admin
+- NSCF B2C CRÍTICO: 12 kits sin imágenes (CAT-002)
+- NSCF B2C: SP fix pendiente — 3 productos con contenido facial (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). EF sp-fix-targeted v1 ready. ⚠️ Proxy route en fix-proxy.js no habilitada.
+- NSCF B2C: SEO descriptions 29/42 missing — fixer v13 pendiente de run. Inconsistencia entre audit-proxy (v9-fresh) y HTML auditor (v16.1).
+- NSCF B2C: Auditor inconsistencia — v9-fresh vs v16.1 cuentan diferente. Unificar a un solo EF.
+- NSCF B2C: Tracking 0/5 — Meta + TikTok + Google pixels pendientes
+- NSCF B2C: Shipping zones not configured (2/5)
+- NSCF B2C: Kit naming 4 punta — revisión pendiente con Patricia
+- NSCF B2C: neurone.size metafield = '0' visible en product page
+- NSCF B2C: Precios $0.00 en ~20 variantes
+- NSCF B2C: Páginas content vacías (about/la-ciencia/faq/contacto)
+- NSCF B2B: fix SEO-003 COLOR titles
+- read_customer_events scope no concedido → TRACK-CE-SCOPE warning
+- ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11
+- luciensael.com deploy pendiente
 
 ---
 
-## Labs
+## Social Proof Agent
+**vv3** — OPERATIONAL ✅
 
-| ID | Nombre | Status |
-|---|---|---|
-| LAB-CPL | CopyLab | LIVE v8.1 |
-| LAB-WL | WebLab | PASSED |
-| LAB-IL | ImageLab | ⚠️ FIX PENDIENTE (Vercel 50s timeout) |
-| LAB-AL | AgentLab | PASSED |
-| LAB-BPL | BlueprintLab | PASSED |
-| LAB-ORCH | Orchestrator | OR_1.1 LIVE |
-| LAB-SL | SocialLab | LIVE — bypassed en pipeline IID |
-| LAB-OPS | UNRLVL-OPS | LIVE |
+**Scan 2026-05-06:** 39/42 limpios · 3 incorrectos (contenido facial skincare)
+- ⚠️ **DY FAZZA** — Reviews about facial moisturizer (mejillas, piel, sequedad facial, skincare routine)
+- ⚠️ **Hydra Boost Duo** — Reviews about facial serum (manchas, poros, cara, dark spots, hyperpigmentation)
+- ⚠️ **Deep Moisture Recovery** — Reviews about skin care kit (piel seca, piel mixta, poros, dark spots)
+
+⚠️ sp-fix-targeted v1 deployed — proxy route pending (first task tomorrow)
 
 ---
 
-## IID Network
-
-**Status:** OPERATIONAL  
-Pipeline: CopyLab ✅ · AIFE ✅ · ImageLab ⚠️ SKIP · SocialLab ✅ · Approval Flow PENDIENTE TEST
+## Laboratorios
+- **CopyLab** (`LAB-CPL`): LIVE v8.1 · https://unrlvl-copy-lab.vercel.app
+- **WebLab** (`LAB-WL`): PASSED
+- **ImageLab** (`LAB-IL`): ⚠️ FIX PENDIENTE — Vercel 50s timeout
+- **AgentLab** (`LAB-AL`): PASSED
+- **BlueprintLab** (`LAB-BPL`): PASSED
+- **Orchestrator** (`LAB-ORCH`): OR_1.1 LIVE · https://orchestrator-unrlvl.vercel.app
+- **SocialLab** (`LAB-SL`): LIVE — bypassed en pipeline IID
+- **UNRLVL-OPS** (`LAB-OPS`): LIVE · https://unrlvl-ops.vercel.app
 
 ---
 
 ## Infraestructura
-
-| ID | Nombre | Status |
-|---|---|---|
-| INFRA-CTX | Context System | https://unrlvl-context.vercel.app |
-| INFRA-SB | Supabase amlvyycfepwhiindxgzw | public.* + shopify.* |
-| INFRA-TOOLS | unrlvl-tools.vercel.app | LIVE — ShopifyAuditor v3.3 |
-| INFRA-WEB | unrealvillestudio.com | LIVE EN+ES |
-| INFRA-LUCIEN | luciensael.com | GENERATED — pending deploy |
+- **Context System**: 
+- **Supabase amlvyycfepwhiindxgzw**: public.* + shopify.*
+- **unrlvl-tools.vercel.app**: LIVE — ShopifyAuditor v3.5 (v16.1 engine + enrichFixPayloads patch 2026-05-06)
+- **unrealvillestudio.com**: LIVE EN+ES
+- **luciensael.com**: GENERATED — pending deploy
 
 ---
 
 ## Agenda Próxima Sesión
+- PRIORIDAD 1 — NeuroneSCF B2C: SP fix — activar proxy route para sp-fix-targeted en fix-proxy.js (DY FAZZA + Hydra Boost Duo + Deep Moisture Recovery)
+- PRIORIDAD 2 — NeuroneSCF B2C: SEO descriptions — ejecutar shopify-fix v13 (fix_seo_description, 29 productos). Resolver inconsistencia audit-proxy vs HTML auditor.
+- PRIORIDAD 3 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway · EUR→USD · Policies (NeuroneSCF_Policies.docx listo) · Shipping rates FL · Precios $0.00 · WhatsApp field
+- PRIORIDAD 4 — NeuroneSCF B2C: Kit images (12 kits sin imagen — CAT-002 critical)
+- PRIORIDAD 5 — NeuroneSCF B2C: Kit naming revisión con Patricia (4 punta kits)
+- PRIORIDAD 6 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)
+- PRIORIDAD 7 — NeuroneSCF B2B: fix SEO-003 COLOR titles
+- PRIORIDAD 8 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1 · unificar audit EF · proxy update (orchestrator endpoint)
+- PRIORIDAD 9 — IID approval flow test · ImageLab fix · luciensael.com deploy
 
-1. **PRIORIDAD 1** — NeuroneSCF B2C: CRO Audit Layer — DEADLINE MARTES
-2. **PRIORIDAD 2** — NeuroneSCF B2C: re-audit (score 109/160 desactualizado)
-3. **PRIORIDAD 3** — NeuroneSCF MANUAL Patricia: EUR→USD · Payment gateway · Shipping · $0.00 prices · Policies · WhatsApp · Páginas
-4. **PRIORIDAD 4** — NeuroneSCF B2C: Kits in main nav + homepage section
-5. **PRIORIDAD 5** — NeuroneSCF B2C: product tags cleanup · neurone.size '0' bug
-6. **PRIORIDAD 6** — NeuroneSCF B2B: fix SEO-003 COLOR titles
-7. **PRIORIDAD 7** — ShopifyAuditor: sales closing
-8. **PRIORIDAD 8** — IID approval flow test · ImageLab fix · luciensael.com deploy
+---
+_Last audit: shopify-audit v16.1 (HTML enrichFixPayloads patch) + shopify-fix v15 (post-write verification + sp_scan/sp_fix). NSCF B2C: 137/200 (was 132). SEO titles: 12→5 missing. 3 SP cards with facial skincare content identified (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). sp-fix-targeted v1 deployed — proxy pending._
