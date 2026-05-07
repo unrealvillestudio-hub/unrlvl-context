@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-07-v1",
+    "version": "2026-05-07-v2",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
       "date": "2026-05-07",
-      "status": "Kit Naming CERRADO — nombres PO confirmados + taglines insignia adoptados 12 kits. Alt text generado. Shopify fields doc pendiente post-upload. SP fix proxy pendiente. SEO descriptions 29 missing.",
+      "status": "Sprint 3 COMPLETO — locale_root FIXED definitivamente · Science/About/FAQ published · Legal pages 3/4 issues (manual fix needed) · EN translations pending · shopify-auto-translate EF deployed",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -28,95 +28,21 @@
     "brand_identity": {
       "version": "v1.0",
       "status": "COMPLETE",
-      "palette": {
-        "obsidian": "#0D0D0B",
-        "carbon": "#1C1C1A",
-        "smoke": "#2E2E2B",
-        "ash": "#4A4A45",
-        "bone": "#EDE8DF",
-        "parchment": "#C4BDB0",
-        "ember": "#D4622A",
-        "gold": "#B8922A"
-      },
-      "typography": {
-        "display": "Cormorant Garamond 300/300i/600i",
-        "body": "Crimson Pro 300/300i/400/400i/600i",
-        "system": "JetBrains Mono 300/400/700"
-      },
+      "palette": { "obsidian": "#0D0D0B", "carbon": "#1C1C1A", "smoke": "#2E2E2B", "ash": "#4A4A45", "bone": "#EDE8DF", "parchment": "#C4BDB0", "ember": "#D4622A", "gold": "#B8922A" },
+      "typography": { "display": "Cormorant Garamond 300/300i/600i", "body": "Crimson Pro 300/300i/400/400i/600i", "system": "JetBrains Mono 300/400/700" },
       "rule_never": "cyan, pure white, blue, Bebas Neue, Space Mono — those are UNRLVL"
     },
-    "books": {
-      "project_id": "LUCIEN-BOOKS",
-      "status": "ARQUITECTURA FUNDACIONAL COMPLETA — Brief Libro 1 pendiente",
-      "concept": "5 libros como sistema. No saga. Arquitectura invisible.",
-      "next_step": "Sam trae pensamiento libre sobre el personaje del Libro 1."
-    }
+    "books": { "project_id": "LUCIEN-BOOKS", "status": "ARQUITECTURA FUNDACIONAL COMPLETA — Brief Libro 1 pendiente", "concept": "5 libros como sistema. No saga. Arquitectura invisible.", "next_step": "Sam trae pensamiento libre sobre el personaje del Libro 1." }
   },
   "brands": [
-    {
-      "id": "DiamondDetails",
-      "name": "Diamond Details",
-      "type": "brand",
-      "market": "Alicante, Espana",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "VizosCosmetics",
-      "name": "Vizos Cosmetics",
-      "type": "brand",
-      "market": "Miami + Espana",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "D7Herbal",
-      "name": "D7 Herbal",
-      "type": "brand",
-      "market": "Alicante, Espana",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "VivoseMask",
-      "name": "Vivose Mask",
-      "type": "brand",
-      "market": "Espana",
-      "status": "active",
-      "health": "yellow"
-    },
-    {
-      "id": "PatriciaOsorioPersonal",
-      "name": "Patricia Osorio · Personal",
-      "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "PatriciaOsorioComunidad",
-      "name": "Patricia Osorio · Comunidad",
-      "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "PatriciaOsorioVizosSalon",
-      "name": "Patricia Osorio · Vizos Salon",
-      "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "PatriciaOsorioConectando",
-      "name": "Patricia Osorio · Conectando",
-      "type": "personal_brand",
-      "market": "Miami + LATAM",
-      "status": "active",
-      "health": "green"
-    },
+    { "id": "DiamondDetails", "name": "Diamond Details", "type": "brand", "market": "Alicante, Espana", "status": "active", "health": "green" },
+    { "id": "VizosCosmetics", "name": "Vizos Cosmetics", "type": "brand", "market": "Miami + Espana", "status": "active", "health": "green" },
+    { "id": "D7Herbal", "name": "D7 Herbal", "type": "brand", "market": "Alicante, Espana", "status": "active", "health": "green" },
+    { "id": "VivoseMask", "name": "Vivose Mask", "type": "brand", "market": "Espana", "status": "active", "health": "yellow" },
+    { "id": "PatriciaOsorioPersonal", "name": "Patricia Osorio · Personal", "type": "personal_brand", "market": "Miami, FL", "status": "active", "health": "green" },
+    { "id": "PatriciaOsorioComunidad", "name": "Patricia Osorio · Comunidad", "type": "personal_brand", "market": "Miami, FL", "status": "active", "health": "green" },
+    { "id": "PatriciaOsorioVizosSalon", "name": "Patricia Osorio · Vizos Salon", "type": "personal_brand", "market": "Miami, FL", "status": "active", "health": "green" },
+    { "id": "PatriciaOsorioConectando", "name": "Patricia Osorio · Conectando", "type": "personal_brand", "market": "Miami + LATAM", "status": "active", "health": "green" },
     {
       "id": "NeuroneSCF",
       "name": "Neurone South & Central Florida",
@@ -128,375 +54,148 @@
       "shopify": {
         "b2b": {
           "internal_domain": "nj5ybc-n1.myshopify.com",
-          "store_id": "5bc2d55b-da9f-47f6-bddf-7289e9a688bb",
-          "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
+          "oauth_status": "CONNECTED",
           "last_audit_score": 133,
           "last_audit_score_max": 160,
-          "last_audit_date": "2026-05-02",
-          "audit_status": "✅ 133/160 — fixable:1 (SEO-003 COLOR titles)"
+          "audit_status": "✅ 133/160 — SEO-003 COLOR titles pending"
         },
         "b2c": {
           "internal_domain": "egdk1n-gt.myshopify.com",
-          "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
+          "oauth_status": "CONNECTED — NOTE: write_legal_policies scope MISSING",
           "last_audit_score": 137,
           "last_audit_score_max": 200,
-          "last_audit_date": "2026-05-06",
-          "audit_status": "⚠️ 137/200 — 5 critical · 15 important · compliance CLEAN ✅",
-          "audit_score_breakdown": {
-            "settings": "7/20 — CRITICAL: missing all 4 policies (Refund/TOS/Privacy/Shipping)",
-            "catalog": "12/20 — CRITICAL: 12 kits sin imágenes",
-            "content_language": "4/5",
-            "theme_language": "9/10",
-            "seo": "5/10 — 5 titles missing · 29 descriptions missing (fixer v13 pending run)",
-            "collection_health": "6/10",
-            "theme": "9/15",
-            "payments": "0/10 — CRITICAL: no payment gateway",
-            "orders": "10/10 ✅",
-            "shipping": "2/5",
-            "discounts": "5/5 ✅",
-            "navigation": "7/10",
-            "tracking": "0/10 — no pixels detected",
-            "apps": "10/10 ✅",
-            "performance": "3/5",
-            "b2c_vs_b2b": "5/5 ✅",
-            "cro": "4/10",
-            "images": "4/10",
-            "catalog_quality": "5/10 ✅",
-            "inventory_quality": "5/10 ✅",
-            "price_psychology": "5/10 ✅",
-            "compliance": "10/10 ✅ — COMP-OK: no drug claims",
-            "strategic_seo": "10/10 ✅"
+          "audit_status": "⚠️ 137/200",
+          "theme_i18n": "COMPLETE R4 — locale_root FIXED 2026-05-07",
+          "locale_root_rule": "ALWAYS: request.locale.root_url | append: '/' | replace: '//', '/' — NEVER if-blank (broken in production)",
+          "geo_redirect": "DISABLED 2026-05-07",
+          "translate_adapt_app": "INSTALLED — no embeds, no function. Safe to uninstall.",
+          "pages": {
+            "la-ciencia": "✅ ES published id:162313175367 · digests: title=11f277e... body=253e82... · EN pending",
+            "about": "✅ ES published id:162313142599 title='Neurone South & Central Florida' · EN pending",
+            "faq": "✅ Published id:162313208135 · 15 questions",
+            "contacto": "⚠️ UNKNOWN — verify exists"
           },
-          "seo_status": "SEO titles: 5/42 missing (was 12) · descriptions: 29/42 missing · fixer v13 ready · post-write verification active",
-          "theme_i18n": "COMPLETE R3 — locale_root root cause fixed",
-          "compliance_status": "✅ CLEAN — Anti-Caída → Scalp Strength · CAPISSEN drug claims → cosmetic claims",
-          "social_proof": "42/42 productos con SP cards ES+EN · ⚠️ 3 productos con contenido facial incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — sp-fix-targeted v1 ready · proxy pending",
-          "collections": "6/6 collections populadas",
-          "kit_naming": "✅ CERRADO (2026-05-07) — nombres PO: Deep Moisture Recovery · Hydra Boost Duo · Perfect Blonde · Extreme Repair · SOS Hair Revue. Taglines insignia adoptados 12 kits. Alt text generado. Shopify fields doc pendiente post image upload."
+          "legal_pages": {
+            "privacy_policy": "✅ Complete",
+            "refund_policy": "⚠️ placeholder [INSERTAR DIRECCIÓN] → fix: 1303 N 46th Ave, Hollywood FL 33021",
+            "terms_of_service": "⚠️ [EMPRENDEDOR] [ENLACE] 'Prestige Beauty' — needs rewrite in Admin",
+            "shipping_policy": "❌ MISSING — footer 404. Create in Admin.",
+            "api_limitation": "write_legal_policies NOT in OAuth — all policy updates via Admin (Online Store → Legal)"
+          },
+          "collections": "7/7 — ritual-kits · moisture · restore · styling · color-rescue · scalp · serums",
+          "seo_status": "titles 37/42 · descriptions 29/42 missing",
+          "social_proof": "42/42 · 3 products facial content pending fix (proxy missing)",
+          "compliance_status": "✅ CLEAN"
         }
       },
-      "gaps": "MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido · Kit images (Patricia subiendo — Shopify fields doc pendiente post-upload). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13)",
-      "completed": "OAuth B2B+B2C · shopify-audit v16.1 · shopify-fix v15 (post-write verification) · enrichFixPayloads HTML patch · Compliance Engine v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System ✅ CERRADO (2026-05-07) · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3"
+      "gaps": "MANUAL: Payment gateway · Shipping Policy MISSING · TOS fix · Refund address · Precios $0.00. API: EN translations · SP fix proxy · SEO descriptions · Tracking pixels",
+      "completed": "OAuth · shopify-audit v16.1 · shopify-fix v15 · Compliance Engine v2 · SP 42/42 · Collections 7/7 · SEO titles 37/42 · Theme i18n R4(FIXED) · Pages Science+About+FAQ · Footer · Geo-redirect disabled"
     },
-    {
-      "id": "ForumPHs",
-      "name": "ForumPHs",
-      "type": "brand",
-      "key_person": "Ivette Flores",
-      "market": "Panama",
-      "status": "active",
-      "health": "green",
-      "document_factory": "PROD v1.5 READY",
-      "speaks": "speaks.forumphs.com LIVE · foto Ivette pendiente"
-    },
-    {
-      "id": "UnrealvilleStudio",
-      "name": "Unrealville Studio",
-      "type": "studio",
-      "market": "Florida USA + LATAM",
-      "status": "active",
-      "health": "green",
-      "web": "LIVE EN+ES",
-      "skills": "P1-P8 COMPLETOS — P2 shopify-auditor READY FOR BUSINESS v3.5",
-      "iid_pipeline": "OPERATIONAL — primer email de aprobación confirmado 2026-04-26"
-    },
-    {
-      "id": "UnrealvilleStores",
-      "name": "Unrealville Stores",
-      "type": "ecommerce",
-      "market": "Florida USA",
-      "status": "active",
-      "health": "green"
-    }
+    { "id": "ForumPHs", "name": "ForumPHs", "type": "brand", "key_person": "Ivette Flores", "market": "Panama", "status": "active", "health": "green", "document_factory": "PROD v1.5 READY", "speaks": "speaks.forumphs.com LIVE" },
+    { "id": "UnrealvilleStudio", "name": "Unrealville Studio", "type": "studio", "market": "Florida USA + LATAM", "status": "active", "health": "green", "web": "LIVE EN+ES", "skills": "P1-P8 COMPLETOS — shopify-auditor READY FOR BUSINESS v3.5", "iid_pipeline": "OPERATIONAL" },
+    { "id": "UnrealvilleStores", "name": "Unrealville Stores", "type": "ecommerce", "market": "Florida USA", "status": "active", "health": "green" }
   ],
   "shopify_auditor": {
     "version": "3.5",
-    "status": "READY FOR BUSINESS ✅ — Full Capacity v16.1 + enrichFixPayloads + post-write verification",
+    "status": "READY FOR BUSINESS ✅",
     "supabase_project": "amlvyycfepwhiindxgzw",
     "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
     "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
-    "html_patches": {
-      "enrichFixPayloads": "2026-05-06 — construye fix_payload.products desde affected_resources · remapea fix_seo_combined → fix_seo_title_enriched"
-    },
-    "audit_engine": {
-      "version": "v16.1",
-      "modules": 23,
-      "score_max": 200,
-      "agent_network": {
-        "orchestrator": "shopify-audit-orchestrator v1",
-        "theme_analyzer": "shopify-theme-analyzer v1",
-        "link_crawler": "shopify-link-crawler v1"
-      }
-    },
-    "fixer_engine": {
-      "shopify_fix_version": "v15",
-      "fix_types": [
-        "inventory_tracking_on",
-        "seo_title_from_product",
-        "fix_seo_title_enriched",
-        "fix_seo_description",
-        "fix_description_enrich",
-        "theme_add_canonical",
-        "theme_add_og_tags",
-        "fix_theme_json_ld",
-        "fix_seo_title_structure",
-        "fix_seo_brand_suffix",
-        "fix_seo_title_trim",
-        "fix_compliance_claims",
-        "fix_theme_translate",
-        "sp_scan",
-        "sp_fix",
-        "sp_fix_targeted"
-      ],
-      "post_write_verification": "v13+ — mutation returns written value, compared against sent value. applied=verified only if Shopify confirms persistence.",
-      "batch_sizes": {
-        "fix_description_enrich": 15,
-        "fix_seo_description": 20,
-        "fix_seo_title_enriched": 20
-      }
-    },
     "edge_functions": {
-      "shopify-audit": {
-        "supabase_version": 30,
-        "semantic_version": "v16.1",
-        "status": "ACTIVE"
-      },
-      "shopify-fix": {
-        "supabase_version": 15,
-        "semantic_version": "v15",
-        "status": "ACTIVE",
-        "notes": "v15: sp_scan+sp_fix. v13: post-write verification. v12: severe batch sizes."
-      },
-      "shopify-fix-all": {
-        "supabase_version": 11,
-        "semantic_version": "v5.6",
-        "status": "ACTIVE"
-      },
-      "shopify-audit-orchestrator": {
-        "supabase_version": 1,
-        "semantic_version": "v1",
-        "status": "ACTIVE"
-      },
-      "shopify-theme-analyzer": {
-        "supabase_version": 1,
-        "semantic_version": "v1",
-        "status": "ACTIVE"
-      },
-      "shopify-link-crawler": {
-        "supabase_version": 1,
-        "semantic_version": "v1",
-        "status": "ACTIVE"
-      },
-      "shopify-oauth": {
-        "supabase_version": 4,
-        "status": "ACTIVE"
-      },
-      "shopify-theme-locale": {
-        "supabase_version": 21,
-        "semantic_version": "v21",
-        "status": "ACTIVE"
-      },
-      "seo-audit-check": {
-        "supabase_version": 1,
-        "semantic_version": "v1",
-        "status": "ACTIVE",
-        "notes": "NEW 2026-05-06: GraphQL truth checker — reads real SEO state directly from Shopify."
-      },
-      "sp-reader-full": {
-        "supabase_version": 2,
-        "semantic_version": "v2",
-        "status": "ACTIVE",
-        "notes": "NEW 2026-05-06: reads all 42 SP metafields (ES+EN), scans for facial skincare keywords."
-      },
-      "sp-fix-targeted": {
-        "supabase_version": 1,
-        "semantic_version": "v1",
-        "status": "ACTIVE",
-        "notes": "NEW 2026-05-06: hardcoded fix for 3 products with wrong SP content. ⚠️ PROXY PENDING."
-      },
-      "nscf-fix-anticaida": {
-        "supabase_version": 1,
-        "status": "ACTIVE",
-        "notes": "Applied 2026-05-05."
-      },
-      "nscf-fix-capissen-descriptions": {
-        "supabase_version": 1,
-        "status": "ACTIVE"
-      },
-      "nscf-menu-kits": {
-        "supabase_version": 1,
-        "status": "ACTIVE"
-      },
-      "nscf-kit-seo-revert": {
-        "supabase_version": 2,
-        "status": "ACTIVE",
-        "notes": "Applied 2026-05-04."
-      }
+      "shopify-audit": { "supabase_version": 30, "semantic_version": "v16.1", "status": "ACTIVE" },
+      "shopify-fix": { "supabase_version": 26, "semantic_version": "v15", "status": "ACTIVE" },
+      "shopify-fix-all": { "supabase_version": 11, "semantic_version": "v5.6", "status": "ACTIVE" },
+      "shopify-auto-translate": { "supabase_version": 1, "semantic_version": "v1", "status": "ACTIVE", "notes": "NEW 2026-05-07. ES→EN translation via Claude + brand voice. verify_jwt:false. NOT callable from bash (egress). Needs Vercel proxy route — PENDING." },
+      "shopify-audit-orchestrator": { "supabase_version": 1, "status": "ACTIVE" },
+      "shopify-theme-analyzer": { "supabase_version": 1, "status": "ACTIVE" },
+      "shopify-link-crawler": { "supabase_version": 1, "status": "ACTIVE" },
+      "shopify-oauth": { "supabase_version": 4, "status": "ACTIVE" },
+      "shopify-theme-locale": { "supabase_version": 21, "semantic_version": "v21", "status": "ACTIVE" },
+      "seo-audit-check": { "supabase_version": 1, "status": "ACTIVE" },
+      "sp-reader-full": { "supabase_version": 2, "status": "ACTIVE" },
+      "sp-fix-targeted": { "supabase_version": 1, "status": "ACTIVE", "notes": "3 products facial content. PROXY ROUTE PENDING." },
+      "nscf-fix-anticaida": { "supabase_version": 1, "status": "ACTIVE" },
+      "nscf-fix-capissen-descriptions": { "supabase_version": 1, "status": "ACTIVE" },
+      "nscf-menu-kits": { "supabase_version": 1, "status": "ACTIVE" },
+      "nscf-kit-seo-revert": { "supabase_version": 2, "status": "ACTIVE" }
     },
-    "connected_stores": [
-      {
-        "brand_id": "NeuroneSCF",
-        "type": "b2b",
-        "domain": "nj5ybc-n1.myshopify.com",
-        "status": "✅ CONNECTED",
-        "last_audit": 133,
-        "last_audit_max": 160
-      },
-      {
-        "brand_id": "NeuroneSCF",
-        "type": "b2c",
-        "domain": "egdk1n-gt.myshopify.com",
-        "status": "✅ CONNECTED",
-        "last_audit": 137,
-        "last_audit_max": 200,
-        "compliance": "CLEAN ✅"
-      }
-    ],
     "tech_debt": [
-      "NSCF B2C CRÍTICO: Payment gateway 0/10 — Shopify Payments setup pendiente Patricia",
-      "NSCF B2C CRÍTICO: Policies 0/20 — Refund/TOS/Privacy/Shipping text pending Admin",
-      "NSCF B2C CRÍTICO: Kit images — Patricia subiendo. Shopify fields doc (title/tagline/SEO/alt/tags) pendiente post-upload.",
-      "NSCF B2C: SP fix pendiente — 3 productos con contenido facial (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). EF sp-fix-targeted v1 ready. ⚠️ Proxy route en fix-proxy.js no habilitada.",
-      "NSCF B2C: SEO descriptions 29/42 missing — fixer v13 pendiente de run.",
-      "NSCF B2C: Auditor inconsistencia — v9-fresh vs v16.1 cuentan diferente. Unificar a un solo EF.",
-      "NSCF B2C: Tracking 0/5 — Meta + TikTok + Google pixels pendientes",
-      "NSCF B2C: neurone.size metafield = '0' visible en product page",
-      "NSCF B2C: Precios $0.00 en ~20 variantes",
-      "NSCF B2C: Páginas content vacías (about/la-ciencia/faq/contacto)",
-      "NSCF B2B: fix SEO-003 COLOR titles",
-      "read_customer_events scope no concedido → TRACK-CE-SCOPE warning",
-      "ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
-      "luciensael.com deploy pendiente"
+      "NSCF B2C BLOCKING: Payment gateway — Shopify Payments pendiente Patricia",
+      "NSCF B2C BLOCKING: Shipping Policy MISSING — create in Admin (Online Store → Legal)",
+      "NSCF B2C BLOCKING: TOS placeholders [EMPRENDEDOR][ENLACE]'Prestige Beauty' — fix in Admin",
+      "NSCF B2C BLOCKING: Refund Policy [INSERTAR DIRECCIÓN] → 1303 N 46th Ave, Hollywood FL 33021 — fix in Admin",
+      "NSCF B2C BLOCKING: Precios $0.00 en ~20 variantes",
+      "NSCF B2C HIGH: EN translations Science+About — translationsRegister or shopify-auto-translate (proxy needed)",
+      "NSCF B2C HIGH: Proxy route shopify-auto-translate — add to unrlvl-tools.vercel.app/api/",
+      "NSCF B2C HIGH: SP fix 3 productos (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — proxy route pending",
+      "NSCF B2C HIGH: SEO descriptions 29/42 — fixer v13 pending run",
+      "NSCF B2C HIGH: Tracking 0/10 — Meta + TikTok + Google pixels",
+      "NSCF B2C MED: Translate & Adapt — desinstalar",
+      "NSCF B2C MED: accounts.neuronescflorida.com Invalid DNS — CNAME → shops.myshopify.com",
+      "NSCF B2C MED: Contacto page (pages/contacto) — verify/create",
+      "NSCF B2C MED: Product descriptions ES decision pending",
+      "NSCF B2B: SEO-003 COLOR titles fix",
+      "INFRA: write_legal_policies scope missing from OAuth — reinstall with that scope to enable API policy updates",
+      "INFRA: luciensael.com deploy pending",
+      "INFRA: ImageLab GEMINI_API_KEY fix pending"
     ]
+  },
+  "content_pipeline": {
+    "version": "v1.0",
+    "mandatory": true,
+    "stages": ["WRITE", "H+AIFE", "PSYCHO", "CRO/SEO", "QA"],
+    "rule": "ALL public-facing content must pass full pipeline. No exceptions.",
+    "psycho_combos": {
+      "product_science_pages": "PSY-AUTHORITY + PSY-TRUST + PSY-ASPIRATION",
+      "about_pages": "PSY-TRUST + PSY-SOCIAL-PROOF + PSY-IDENTITY",
+      "faq_pages": "PSY-TRUST + PSY-AUTHORITY"
+    },
+    "brand_voice_NeuroneSCF": {
+      "tone_primary": "authoritative",
+      "tone_secondary": "technical",
+      "rhythm": "5-8 word punchy alternated with 15-20 word technical",
+      "signatures_es": ["ayuda a", "favorece", "contribuye a", "potencia", "nutre", "fortalece", "hidrata", "protege"],
+      "signatures_en": ["helps", "supports", "contributes to", "strengthens", "nourishes", "hydrates", "protects", "enhances"],
+      "prohibited": ["trata", "cura", "elimina", "garantizado", "médico", "revolucionario", "innovador", "pivotal", "crucial", "vibrant", "delve", "meticulous", "showcasing", "tapestry", "fostering"]
+    }
   },
   "social_proof_agent": {
     "version": "v3",
     "status": "OPERATIONAL ✅",
-    "description": "Generador de social proof cards para product pages. Pipeline Write→Humanize→AIFE. ES + EN. 3 TikTok + 2 Instagram por producto.",
-    "completed_stores": [
-      {
-        "brand_id": "NeuroneSCF",
-        "store": "b2c",
-        "date": "2026-05-03",
-        "products": 42,
-        "qa_corrections": 9
-      }
-    ],
-    "qa_findings_2026_05_06": {
-      "sp_scan_date": "2026-05-06",
-      "total_scanned": 42,
-      "clean": 39,
-      "incorrect": 3,
-      "incorrect_products": [
-        {
-          "id": "10771520356679",
-          "title": "DY FAZZA",
-          "issue": "Reviews about facial moisturizer"
-        },
-        {
-          "id": "10771522945351",
-          "title": "Hydra Boost Duo",
-          "issue": "Reviews about facial serum"
-        },
-        {
-          "id": "10777103171911",
-          "title": "Deep Moisture Recovery",
-          "issue": "Reviews about skin care kit"
-        }
-      ],
-      "fix_status": "⚠️ sp-fix-targeted v1 deployed — proxy route pending (PRIORIDAD 1)"
+    "completed_stores": [{ "brand_id": "NeuroneSCF", "store": "b2c", "date": "2026-05-03", "products": 42 }],
+    "pending_fix": {
+      "products": ["DY FAZZA id:10771520356679", "Hydra Boost Duo id:10771522945351", "Deep Moisture Recovery id:10777103171911"],
+      "issue": "Reviews about facial skincare — wrong content for hair products",
+      "fix_status": "sp-fix-targeted v1 deployed — proxy route PENDING"
     }
   },
   "labs": [
-    {
-      "id": "LAB-CPL",
-      "name": "CopyLab",
-      "status": "LIVE v8.1",
-      "url": "https://unrlvl-copy-lab.vercel.app"
-    },
-    {
-      "id": "LAB-WL",
-      "name": "WebLab",
-      "status": "PASSED"
-    },
-    {
-      "id": "LAB-IL",
-      "name": "ImageLab",
-      "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout"
-    },
-    {
-      "id": "LAB-AL",
-      "name": "AgentLab",
-      "status": "PASSED"
-    },
-    {
-      "id": "LAB-BPL",
-      "name": "BlueprintLab",
-      "status": "PASSED"
-    },
-    {
-      "id": "LAB-ORCH",
-      "name": "Orchestrator",
-      "status": "OR_1.1 LIVE",
-      "url": "https://orchestrator-unrlvl.vercel.app"
-    },
-    {
-      "id": "LAB-SL",
-      "name": "SocialLab",
-      "status": "LIVE — bypassed en pipeline IID"
-    },
-    {
-      "id": "LAB-OPS",
-      "name": "UNRLVL-OPS",
-      "status": "LIVE",
-      "url": "https://unrlvl-ops.vercel.app"
-    }
+    { "id": "LAB-CPL", "name": "CopyLab", "status": "LIVE v8.1", "url": "https://unrlvl-copy-lab.vercel.app" },
+    { "id": "LAB-WL", "name": "WebLab", "status": "PASSED" },
+    { "id": "LAB-IL", "name": "ImageLab", "status": "⚠️ FIX PENDIENTE — GEMINI_API_KEY + Vercel timeout" },
+    { "id": "LAB-AL", "name": "AgentLab", "status": "PASSED" },
+    { "id": "LAB-BPL", "name": "BlueprintLab", "status": "PASSED" },
+    { "id": "LAB-ORCH", "name": "Orchestrator", "status": "OR_1.1 LIVE", "url": "https://orchestrator-unrlvl.vercel.app" },
+    { "id": "LAB-SL", "name": "SocialLab", "status": "LIVE" },
+    { "id": "LAB-OPS", "name": "UNRLVL-OPS", "status": "LIVE", "url": "https://unrlvl-ops.vercel.app" }
   ],
-  "iid_network": {
-    "status": "OPERATIONAL",
-    "pipeline_status": {
-      "copylab": "OK",
-      "aife": "OK",
-      "imagelab": "SKIP — fix pendiente",
-      "sociallab": "OK",
-      "approval_flow": "PENDIENTE TEST"
-    }
-  },
   "infrastructure": [
-    {
-      "id": "INFRA-CTX",
-      "name": "Context System",
-      "url": "https://unrlvl-context.vercel.app"
-    },
-    {
-      "id": "INFRA-SB",
-      "name": "Supabase amlvyycfepwhiindxgzw",
-      "schemas": "public.* + shopify.*"
-    },
-    {
-      "id": "INFRA-TOOLS",
-      "name": "unrlvl-tools.vercel.app",
-      "status": "LIVE — ShopifyAuditor v3.5 (v16.1 engine + enrichFixPayloads patch 2026-05-06)"
-    },
-    {
-      "id": "INFRA-WEB",
-      "name": "unrealvillestudio.com",
-      "status": "LIVE EN+ES"
-    },
-    {
-      "id": "INFRA-LUCIEN",
-      "name": "luciensael.com",
-      "status": "GENERATED — pending deploy"
-    }
+    { "id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app" },
+    { "id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "schemas": "public.* + shopify.*" },
+    { "id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.5" },
+    { "id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES" },
+    { "id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy" }
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF B2C: SP fix — activar proxy route para sp-fix-targeted en fix-proxy.js (DY FAZZA + Hydra Boost Duo + Deep Moisture Recovery)",
-    "PRIORIDAD 2 — NeuroneSCF B2C: SEO descriptions — ejecutar shopify-fix v13 (fix_seo_description, 29 productos). Resolver inconsistencia audit-proxy vs HTML auditor.",
-    "PRIORIDAD 3 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway · EUR→USD · Policies (NeuroneSCF_Policies.docx listo) · Shipping rates FL · Precios $0.00 · WhatsApp field",
-    "PRIORIDAD 4 — NeuroneSCF B2C: Kit images + Shopify fields doc — Patricia subiendo imágenes. Cuando confirme: Sam genera doc campos (title/tagline opening/SEO title/SEO desc/alt text/tags) por kit listo para pegar.",
-    "PRIORIDAD 5 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
-    "PRIORIDAD 6 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
-    "PRIORIDAD 7 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1 · unificar audit EF · proxy update (orchestrator endpoint)",
-    "PRIORIDAD 8 — IID approval flow test · ImageLab fix · luciensael.com deploy"
+    "P0 MANUAL Sam Admin: Crear Shipping Policy + Fix TOS + Fix Refund dirección — BLOCKING para launch",
+    "P1 EN translations Science+About — translationsRegister (digests Science conocidos: title=11f277e... body=253e82...)",
+    "P2 Proxy route shopify-auto-translate en unrlvl-tools.vercel.app/api/",
+    "P3 SP fix proxy — activar sp-fix-targeted route (3 productos)",
+    "P4 SEO descriptions 29/42 — shopify-fix v13 run",
+    "P5 Payment gateway — Patricia Shopify Payments",
+    "P6 Tracking pixels — Meta + TikTok + Google",
+    "P7 Kit images + fields doc post-upload",
+    "P8 B2B SEO-003 COLOR titles",
+    "P9 Translate & Adapt desinstalar + WABA + domain verification Meta"
   ]
 }
