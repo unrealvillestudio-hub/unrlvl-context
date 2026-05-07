@@ -1,103 +1,78 @@
 # SOCIAL MEDIA AGENT — Session Log
-_Última actualización: 2026-05-04_
+_Última actualización: 2026-05-07_
 
 ---
 
-## ESTADO ACTUAL INFRAESTRUCTURA NEURONE SCF
+## ESTADO REAL DE INFRAESTRUCTURA NEURONE SCF
 
-### Completado ✅
-- Meta Business Manager: configurado (verificación dominio pendiente)
-- Facebook Page: creada "Neurone South & Central Florida"
-- Instagram Business: @neuronescflorida creado, conversión a Business completa
-- TikTok for Business: cuenta creada y convertida a Business
-
-### En curso ⏳
-- Instagram → Facebook Page: vinculación pendiente (Laura no lo ha logrado aún)
-- Meta Developer App: Laura bloqueada — Meta pide crear App para generar System User tokens
-- WhatsApp Business API: pendiente (requiere verificación y número dedicado)
-
-### Pendiente ❌
-- Meta System User Token para UNRLVL-Orchestrator (bloqueado por App requirement)
-- TikTok Access Token para orchestrator
-- Logos/assets en todas las cuentas
-- Bio/perfil completo en Instagram y TikTok
-- Verificación dominio neuronescflorida.com en Meta BM
-- WhatsApp Business API setup completo
-
----
-
-## LOG SESIONES
-
-### 2026-05-04 — Laura (ops)
-
-**Contexto:** Sam requiere Developer API tokens para automatización desde Orchestrator.
-
-**Progreso:**
-- Laura solicitó paso a paso para crear tokens por plataforma (Meta + TikTok)
-- Meta está pidiendo crear una App en developers.facebook.com para poder generar System User tokens
-- Instrucciones dadas: crear App tipo "Empresa" en developers.facebook.com → añadir productos WhatsApp Business Platform + Facebook Login + Instagram Basic Display → luego generar tokens
-- Laura reporta que Meta pide App antes de agregar usuarios — bloqueado al final de sesión
-
-**Próximo paso para Laura:**
-1. Patricia va a developers.facebook.com
-2. Crear App → tipo "Empresa" → nombre "Neurone SCF API"
-3. Añadir productos: WhatsApp Business Platform + Facebook Login
-4. Desde Configuración empresarial → System Users → crear UNRLVL-Orchestrator
-5. Generar token con permisos: pages_manage_posts, ads_management, instagram_content_publish
-6. Entregar a Sam por canal seguro (Signal/Bitwarden)
-
-### 2026-04-18 — Laura (ops)
-- Instagram Business: cuenta creada, conversión a Business completada
-- TikTok for Business: cuenta creada desde web
-- Vinculación Instagram→Facebook Page: pendiente
-
-### 2026-04-17 — Laura (ops)
-- Confirmado: Facebook Page ya existe
-- Instrucciones para Instagram Business dadas
-- Instrucciones para TikTok for Business dadas
-
-### 2026-04-15 — Laura (ops)
-- Meta BM: pasos 1-2 completados (nombre empresa + dirección)
-- Verificación de dominio: sin acceso al website — diferida
-- Decisión: continuar sin verificación de dominio por ahora
-
-### 2026-04-10 — Laura (ops)
-- Meta BM: instrucciones para completar configuración dadas
-
-### 2026-04-06 — Laura (ops)
-- TikTok Shop: requiere dirección comercial — diferido
-- Opciones de dirección comercial vs residencial discutidas
-
-### 2026-04-10 — Sam (admin)
-- Estructura de 7 aliases de email definida (admin, ig, waba, tiktok, ads, support, hello)
-- Estrategia de números telefónicos establecida
-
-### 2026-03-23 — Sam (admin) [último Actualiza previo]
-- ✅ Estructura aliases email (7 aliases)
-- ✅ Estrategia números telefónicos
-- ✅ Compliance Meta verificado
-- ❌ Aliases en servidor
-- ❌ Número comercial dedicado
-- ❌ Setup redes sociales (todo)
-
----
-
-## NOTAS TÉCNICAS
-
-### Meta Developer App — Requerimiento
-Meta exige una App registrada en developers.facebook.com para generar System User tokens con permisos de API. Sin esta App, no se pueden crear tokens para automatización.
-
-**App a crear:**
-- Nombre: "Neurone SCF API"
-- Tipo: Empresa
-- BM: Neurone SCF
-- Productos: WhatsApp Business Platform + Facebook Login + Instagram Basic Display
-
-### Tokens necesarios
-| Plataforma | Token Type | Para qué |
+### META / FACEBOOK
+| Elemento | Estado | Notas |
 |---|---|---|
-| Meta | System User Token | Publicaciones, ads, Instagram |
-| TikTok | Access Token | Campaigns, creatives |
+| Meta Business Manager | ✅ CONFIGURADO | Información empresa completa (pasos 1-2). Verificación de dominio ⚠️ pendiente |
+| Dominio neuronescflorida.com | ⚠️ SIN VERIFICAR | Laura no tiene acceso al hosting. Diferido. |
+| Facebook Page | ✅ CREADA | "Neurone South & Central Florida" |
+| Facebook Domain Verification | ❌ PENDIENTE | Requiere acceso a hosting o DNS |
+| Meta App (developers.facebook.com) | ⚠️ EN PROGRESO | Meta está solicitando app para System User tokens. Patricia llegó a este paso el 2026-05-04. Pendiente crear app en developers.facebook.com |
+| System User Token (UNRLVL-Orchestrator) | ❌ BLOQUEADO | Requiere Meta App primero |
 
-### Canal seguro entrega tokens
-Nunca por WhatsApp/email/Slack. Usar Signal (mensajes que se borran) o Bitwarden Send.
+### INSTAGRAM
+| Elemento | Estado | Notas |
+|---|---|---|
+| Instagram Business | ✅ CREADO | @neuronescflorida — categoría Belleza |
+| Vinculación Facebook Page | ⚠️ PENDIENTE | Laura lo dejó pendiente el 2026-04-18. Patricia debe hacer desde app móvil: Configuración → Cuentas vinculadas → Facebook |
+
+### TIKTOK
+| Elemento | Estado | Notas |
+|---|---|---|
+| TikTok for Business | ✅ CREADO | tiktok@neuronescflorida.com · vía web |
+| TikTok Access Token | ❌ PENDIENTE | No iniciado |
+
+### WHATSAPP BUSINESS API
+| Elemento | Estado | Notas |
+|---|---|---|
+| WhatsApp Business API | ⚠️ EN PROGRESO | Setup iniciado pero bloqueado por Meta App requirement |
+| Número dedicado | ❌ PENDIENTE | Número T-Mobile Patricia propuesto — Patricia debe confirmar |
+
+### CORREOS CORPORATIVOS
+| Alias | Estado |
+|---|---|
+| admin@neuronescflorida.com | ✅ (usado en cuentas) |
+| ig@neuronescflorida.com | ✅ (usado en Instagram) |
+| tiktok@neuronescflorida.com | ✅ (usado en TikTok) |
+| waba@neuronescflorida.com | ⚠️ Pendiente confirmar creación |
+| ads@neuronescflorida.com | ⚠️ Pendiente confirmar creación |
+| support@neuronescflorida.com | ⚠️ Pendiente confirmar creación |
+| hello@neuronescflorida.com | ⚠️ Pendiente confirmar creación |
+
+---
+
+## PRÓXIMOS PASOS PRIORITARIOS
+
+1. **Meta App** — Patricia en developers.facebook.com → crear app "Neurone SCF API" tipo Empresa → agregar WhatsApp + Facebook Login + Instagram Basic Display
+2. **Vinculación Instagram → Facebook Page** — Patricia desde app móvil
+3. **WhatsApp Business API** — retomar una vez Meta App creada
+4. **System User Token** — retomar una vez Meta App creada
+5. **Verificación dominio** — coordinar con Sam acceso a DNS/hosting neuronescflorida.com
+
+---
+
+## HISTORIAL DE SESIONES
+
+### Laura (ops)
+- **2026-04-06**: TikTok Shop requerimientos + conflicto de direcciones → recomendación: dirección oficial para Meta/TikTok Ads, TikTok Shop diferido
+- **2026-04-10**: Reanudó setup redes. Meta BM info empresa completada (pasos 1-2). Verificación dominio diferida por falta de acceso a hosting.
+- **2026-04-15**: Facebook Page creada. Instagram Business creado, vinculación FB pendiente. TikTok for Business creado (vía web).
+- **2026-04-17**: Continuación setup. Intentó vincular Instagram → Facebook Page, quedó pendiente.
+- **2026-04-18**: TikTok for Business completado vía web. WhatsApp Business API iniciado. 
+- **2026-05-04**: API tokens — Meta requiere crear app en developers.facebook.com primero. Patricia llegó a ese paso y se quedó ahí.
+
+### Sam (admin)
+- **2026-04-06**: Verificó estado — sesión de inicialización
+- **2026-04-10**: Definió estructura de 7 aliases de email. Estrategia número telefónico. Compliance Meta.
+
+### Patricia (PO)
+- **2026-04-06**: Sesión de inicialización — checklist preparación
+
+---
+
+_Social Media Agent v3 · Neurone SCF · unrealvillestudio.com_

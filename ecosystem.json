@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-06-v1",
+    "version": "2026-05-07-v1",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
-      "date": "2026-05-06",
-      "status": "shopify-audit v16.1 (HTML enrichFixPayloads patch) + shopify-fix v15 (post-write verification + sp_scan/sp_fix). NSCF B2C: 137/200 (was 132). SEO titles: 12→5 missing. 3 SP cards with facial skincare content identified (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). sp-fix-targeted v1 deployed — proxy pending.",
+      "date": "2026-05-07",
+      "status": "Kit Naming CERRADO — nombres PO confirmados + taglines insignia adoptados 12 kits. Alt text generado. Shopify fields doc pendiente post-upload. SP fix proxy pendiente. SEO descriptions 29 missing.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -172,11 +172,11 @@
           "compliance_status": "✅ CLEAN — Anti-Caída → Scalp Strength · CAPISSEN drug claims → cosmetic claims",
           "social_proof": "42/42 productos con SP cards ES+EN · ⚠️ 3 productos con contenido facial incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — sp-fix-targeted v1 ready · proxy pending",
           "collections": "6/6 collections populadas",
-          "kit_naming": "⚠️ 4 punta kits — revisión pendiente con Patricia"
+          "kit_naming": "✅ CERRADO (2026-05-07) — nombres PO: Deep Moisture Recovery · Hydra Boost Duo · Perfect Blonde · Extreme Repair · SOS Hair Revue. Taglines insignia adoptados 12 kits. Alt text generado. Shopify fields doc pendiente post image upload."
         }
       },
-      "gaps": "MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido · Kit images (12 products sin imagen). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13)",
-      "completed": "OAuth B2B+B2C · shopify-audit v16.1 · shopify-fix v15 (post-write verification) · enrichFixPayloads HTML patch · Compliance Engine v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3"
+      "gaps": "MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido · Kit images (Patricia subiendo — Shopify fields doc pendiente post-upload). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13)",
+      "completed": "OAuth B2B+B2C · shopify-audit v16.1 · shopify-fix v15 (post-write verification) · enrichFixPayloads HTML patch · Compliance Engine v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System ✅ CERRADO (2026-05-07) · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3"
     },
     {
       "id": "ForumPHs",
@@ -265,7 +265,7 @@
         "supabase_version": 15,
         "semantic_version": "v15",
         "status": "ACTIVE",
-        "notes": "v15: sp_scan+sp_fix. v13: post-write verification (verified≠applied). v12: severe batch sizes. All previous: compliance, SEO, theme fixes."
+        "notes": "v15: sp_scan+sp_fix. v13: post-write verification. v12: severe batch sizes."
       },
       "shopify-fix-all": {
         "supabase_version": 11,
@@ -300,7 +300,7 @@
         "supabase_version": 1,
         "semantic_version": "v1",
         "status": "ACTIVE",
-        "notes": "NEW 2026-05-06: GraphQL truth checker — reads real SEO state directly from Shopify, bypasses auditor interpretation."
+        "notes": "NEW 2026-05-06: GraphQL truth checker — reads real SEO state directly from Shopify."
       },
       "sp-reader-full": {
         "supabase_version": 2,
@@ -312,7 +312,7 @@
         "supabase_version": 1,
         "semantic_version": "v1",
         "status": "ACTIVE",
-        "notes": "NEW 2026-05-06: hardcoded fix for 3 products with wrong SP content (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). Reads current SP, rewrites to hair care context. ⚠️ PROXY PENDING."
+        "notes": "NEW 2026-05-06: hardcoded fix for 3 products with wrong SP content. ⚠️ PROXY PENDING."
       },
       "nscf-fix-anticaida": {
         "supabase_version": 1,
@@ -330,7 +330,7 @@
       "nscf-kit-seo-revert": {
         "supabase_version": 2,
         "status": "ACTIVE",
-        "notes": "Applied 2026-05-04. Revisión pendiente con Patricia."
+        "notes": "Applied 2026-05-04."
       }
     },
     "connected_stores": [
@@ -355,13 +355,11 @@
     "tech_debt": [
       "NSCF B2C CRÍTICO: Payment gateway 0/10 — Shopify Payments setup pendiente Patricia",
       "NSCF B2C CRÍTICO: Policies 0/20 — Refund/TOS/Privacy/Shipping text pending Admin",
-      "NSCF B2C CRÍTICO: 12 kits sin imágenes (CAT-002)",
+      "NSCF B2C CRÍTICO: Kit images — Patricia subiendo. Shopify fields doc (title/tagline/SEO/alt/tags) pendiente post-upload.",
       "NSCF B2C: SP fix pendiente — 3 productos con contenido facial (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). EF sp-fix-targeted v1 ready. ⚠️ Proxy route en fix-proxy.js no habilitada.",
-      "NSCF B2C: SEO descriptions 29/42 missing — fixer v13 pendiente de run. Inconsistencia entre audit-proxy (v9-fresh) y HTML auditor (v16.1).",
+      "NSCF B2C: SEO descriptions 29/42 missing — fixer v13 pendiente de run.",
       "NSCF B2C: Auditor inconsistencia — v9-fresh vs v16.1 cuentan diferente. Unificar a un solo EF.",
       "NSCF B2C: Tracking 0/5 — Meta + TikTok + Google pixels pendientes",
-      "NSCF B2C: Shipping zones not configured (2/5)",
-      "NSCF B2C: Kit naming 4 punta — revisión pendiente con Patricia",
       "NSCF B2C: neurone.size metafield = '0' visible en product page",
       "NSCF B2C: Precios $0.00 en ~20 variantes",
       "NSCF B2C: Páginas content vacías (about/la-ciencia/faq/contacto)",
@@ -393,20 +391,20 @@
         {
           "id": "10771520356679",
           "title": "DY FAZZA",
-          "issue": "Reviews about facial moisturizer (mejillas, piel, sequedad facial, skincare routine)"
+          "issue": "Reviews about facial moisturizer"
         },
         {
           "id": "10771522945351",
           "title": "Hydra Boost Duo",
-          "issue": "Reviews about facial serum (manchas, poros, cara, dark spots, hyperpigmentation)"
+          "issue": "Reviews about facial serum"
         },
         {
           "id": "10777103171911",
           "title": "Deep Moisture Recovery",
-          "issue": "Reviews about skin care kit (piel seca, piel mixta, poros, dark spots)"
+          "issue": "Reviews about skin care kit"
         }
       ],
-      "fix_status": "⚠️ sp-fix-targeted v1 deployed — proxy route pending (first task tomorrow)"
+      "fix_status": "⚠️ sp-fix-targeted v1 deployed — proxy route pending (PRIORIDAD 1)"
     }
   },
   "labs": [
@@ -495,11 +493,10 @@
     "PRIORIDAD 1 — NeuroneSCF B2C: SP fix — activar proxy route para sp-fix-targeted en fix-proxy.js (DY FAZZA + Hydra Boost Duo + Deep Moisture Recovery)",
     "PRIORIDAD 2 — NeuroneSCF B2C: SEO descriptions — ejecutar shopify-fix v13 (fix_seo_description, 29 productos). Resolver inconsistencia audit-proxy vs HTML auditor.",
     "PRIORIDAD 3 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway · EUR→USD · Policies (NeuroneSCF_Policies.docx listo) · Shipping rates FL · Precios $0.00 · WhatsApp field",
-    "PRIORIDAD 4 — NeuroneSCF B2C: Kit images (12 kits sin imagen — CAT-002 critical)",
-    "PRIORIDAD 5 — NeuroneSCF B2C: Kit naming revisión con Patricia (4 punta kits)",
-    "PRIORIDAD 6 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
-    "PRIORIDAD 7 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
-    "PRIORIDAD 8 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1 · unificar audit EF · proxy update (orchestrator endpoint)",
-    "PRIORIDAD 9 — IID approval flow test · ImageLab fix · luciensael.com deploy"
+    "PRIORIDAD 4 — NeuroneSCF B2C: Kit images + Shopify fields doc — Patricia subiendo imágenes. Cuando confirme: Sam genera doc campos (title/tagline opening/SEO title/SEO desc/alt text/tags) por kit listo para pegar.",
+    "PRIORIDAD 5 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
+    "PRIORIDAD 6 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
+    "PRIORIDAD 7 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1 · unificar audit EF · proxy update (orchestrator endpoint)",
+    "PRIORIDAD 8 — IID approval flow test · ImageLab fix · luciensael.com deploy"
   ]
 }

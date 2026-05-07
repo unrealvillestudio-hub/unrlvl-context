@@ -1,121 +1,97 @@
-# SESSION LOG — NeuroneSCF B2C
+# NeuroneSCF — Session Log
 _Última actualización: 2026-05-07_
 
 ---
 
-## SESIÓN 2026-05-07 — Sprint Shopify B2C (continuación de 2026-05-06)
+## SESIÓN 2026-05-07 — Kit Naming + Catálogo + Shopify Prep
 
-### COMPLETADO EN ESTA SESIÓN
+### Decisiones tomadas
 
-#### ✅ Security Module (shopify-audit v31)
-- Módulo security añadido al auditor (10pts, read-only)
-- SEC-001: storefront access control
-- SEC-002: OAuth scopes sensibles
-- SEC-003: scripts externos no verificados
-- SEC-004: credenciales hardcodeadas en theme.liquid
-- SEC-005: checkout abierto sin payment gateway
-- Score_max B2C: 200 → 210
+**Kit Naming — CERRADO:**
+Patricia confirmó que se quedan sus nombres para los 5 kits spearhead. Los taglines de la propuesta Claude/Sam fueron adoptados para los 12 kits como "tagline insignia" (mecanismo de continuidad ad → product page).
 
-#### ✅ SEO Completo
-- SEO-001: 21/21 títulos escritos y verificados (seo-title-batch v1, 3 runs)
-- SSEO-001: todos los títulos contienen "Neurone" + keywords
-- THEME-LANG-001: 2/2 strings ES→EN Done
-
-#### ✅ CAPISSEN Anti-Caída — CERRADO DEFINITIVAMENTE
-- Problema raíz: EN translation tenía drug claims ("reactivate dormant follicles", "natural growth cycle") — NO en ES ni tags
-- Fix: nscf-capissen-fix-en v2 con `translatableContentDigest` (requerido por Shopify para persistir)
-- Resultado: SHAMPOO 877 chars, LOTION 1021 chars — verificado
-- CAPISSEN product_type: "ANTI-CAÍDA" → "Scalp" (nscf-fix-capissen-type v1)
-
-#### ✅ Ritual Kits — CSS/JS Badge
-- fix_ritual_style aplicado en theme.liquid "Neurone Custom Theme v1.0"
-- CSS: `.unrlvl-ritual-badge` con animated border `#C4622D` pulsing glow
-- JS: `<script defer>` con MutationObserver — aplica badge a nav/footer links con "Ritual Kits" text
-- fix_script_defer: corregido ParserBlockingScript — `<script>` → `<script defer>`
-
-#### ✅ nc-header.liquid y nc-footer.liquid
-- Theme hardcodeado (no usa Shopify Navigation API — `menus:[]` confirmado)
-- "Rituals & Kits" posición 2 (después de Home) — desktop nav + mobile menu + footer
-- URL: `{{ locale_root }}collections/ritual-kits` — locale-aware (ES: /collections/ritual-kits, EN: /en/collections/ritual-kits)
-- Footer: `locale_root` unificado con `| append: '/' | replace: '//', '/'` — fix DNS error //collections
-- Dot (nc-kits-dot) eliminado — solo color accent
-
-#### ✅ shopify-fix v26 activo
-Delegaciones activas: `capissen_fix_type | capissen_check | capissen_fix | capissen_fix_en | fix_ritual_style | fix_script_defer | ritual_diagnostic | seo_title_batch | seo_desc_batch | sp_scan | sp_fix_targeted | inventory_tracking_on | fix_seo_brand_suffix | fix_seo_combined | fix_compliance_claims | fix_theme_translate | seo_title_from_product`
-
-### PENDIENTE PRÓXIMA SESIÓN
-
-#### 🔴 Ritual & Kits — Colección vacía (404)
-- Colección GID: `gid://shopify/Collection/672207995207` handle: `ritual-kits` — EXISTE pero 0 productos
-- Shopify devuelve 404 en colecciones vacías
-- **Acción Patricia:** Shopify Admin → Collections → Ritual & Kits → Add products
-- Modelo: kits tienen SKU propio, componentes se descuentan via Bundles App
-- Sprint: llenar campos de kits (SEO, traducción EN, social proof cards) cuando Patricia termine de subir imágenes
-- Kits count pendiente confirmar
-
-#### 🔴 Manuales sin resolver (Patricia)
-- Payment gateway (PAY-BROKEN — crítico)
-- Refund Policy, TOS, Privacy Policy, Shipping Policy
-- Shipping zones FL
-- Tracking pixels (Meta, Google, TikTok)
-- 12+ kits sin imágenes (en proceso)
-
----
-
-## SESIÓN 2026-05-06 — Sprint Shopify B2C
-
-### SCORE
-- Score actual: 142/210
-- Score alcanzable solo automation: ~160/210
-- Score con Patricia completa: ~190/210
-
-### TRABAJO COMPLETADO
-
-#### ✅ Social Proof Cards — CERRADO
-- 42/42 limpios (sp_scan suspicious_count: 0)
-- 3 productos corregidos: DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery
-
-#### ✅ SEO base
-- 21/21 títulos + 9 descripciones escritas sesión anterior
-
-#### ✅ Theme i18n
-- THEME-LANG-001: COMPLETE
-
-#### ✅ Compliance
-- 10/10 — sin drug claims
-
----
-
-## ARQUITECTURA TÉCNICA SHOPIFY — DOCUMENTACIÓN COMPLETA
-
-### ⚠️ DOCUMENTO CRÍTICO — Leer antes de cualquier sprint Shopify
-
-Ver archivo: `brands/NeuroneSCF/SHOPIFY_ARCHITECTURE.md`
-
----
-
-## ESTADO EFs SUPABASE (amlvyycfepwhiindxgzw)
-
-| EF | Versión | Función |
+| SKU | Nombre acordado | Tagline insignia |
 |---|---|---|
-| shopify-audit | v31 (semantic v17) | Auditor completo — 24 módulos, 210pts |
-| shopify-fix | v26 | Fix dispatcher — todas las delegaciones |
-| seo-title-batch | v1 | 8 productos/call, Claude batch |
-| seo-desc-batch | v2 | 5 productos/call, Claude batch |
-| sp-fix-targeted | v3 | Social proof cards fix |
-| nscf-capissen-check | v3 | Check CAPISSEN (tags array fix) |
-| nscf-capissen-fix-en | v2 | Fix EN translations con digest |
-| nscf-fix-capissen-type | v1 | Fix product_type CAPISSEN |
-| nscf-ritual-diagnostic | v1 | Lee menus + collections kit/ritual |
-| nscf-publish-ritual-kits | v1 | Check/publish colección ritual-kits |
-| nscf-fix-script-defer | v1 | Fix ParserBlockingScript en theme |
-| seo-audit-check | v1 | GraphQL truth checker SEO |
-| sp-reader-full | v2 | Lee SP metafields |
-| shopify-audit-brief | v2 | Brief condensado |
+| NSCF-KT-101P | **Deep Moisture Recovery** | "For when dry became your new normal." |
+| NSCF-KT-101 | Deep Moisture Ritual | "Your daily hydration, simplified." |
+| NSCF-KT-101T | Deep Moisture + Shine | — (bloqueado) |
+| NSCF-KT-SDUO | **Hydra Boost Duo** | "HA + Collagen. Your healthiest hair starts here." |
+| NSCF-KT-103V | **Perfect Blonde** | "For blonde that actually stays blonde." |
+| NSCF-KT-103VP | Perfect Blonde Plus | "Everything your blonde needs. Plus the gloss." |
+| NSCF-KT-103 | Blonde Color Ritual | "Tone. Moisture. Color that lasts." |
+| NSCF-KT-103P | Blonde Color Plus | "Complete color care, from wash to finish." |
+| NSCF-KT-103VT | Perfect Blonde + Definition | — (bloqueado) |
+| NSCF-KT-102P | **Extreme Repair** | "For hair that's been through everything." |
+| NSCF-KT-102 | Repair Ritual | "The foundation. Rebuilding from the inside." |
+| NSCF-KT-102T | Repair & Shield | "Rebuild it. Then protect it." |
+| NSCF-KT-104 | **SOS Hair Revue** | "The complete reset. When your hair needs more than a product." |
 
-### URLs operativas
-- Auditor HTML: `https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html`
-- Fix proxy: `https://unrlvl-tools.vercel.app/api/fix-proxy?brand_id=NeuroneSCF&store_type=b2c&fix_type=XXX`
-- Audit proxy: `https://unrlvl-tools.vercel.app/api/audit-proxy`
-- Context: `https://unrlvl-context.vercel.app`
-- Social agent export: `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR`
+**Entregables generados:**
+- `NSCF_Kit_Naming_System.html` — framework de naming con rationale completo
+- `NSCF_Kit_Catalog.pdf` — catálogo con nombres, taglines, composición y stock por kit
+- Alt text para las 12 imágenes de producto en Shopify (listos)
+- Documento de campos Shopify para carga manual: **PENDIENTE** (Sam esperando que PO termine de subir imágenes)
+
+**Confirmado sobre Shopify:**
+- No hay MCP de Shopify conectado — carga sigue siendo manual por Patricia
+- Cuando PO termine de subir imágenes, Sam pide documento con todos los campos (title, description opening, SEO title, SEO desc, alt text, tags) por kit en orden del admin, listo para pegar
+
+### Estado B2C post-sesión
+- kit_naming: ✅ CERRADO — nombres PO + taglines Claude/Sam adoptados
+- Imágenes kits: ⚠️ Patricia subiendo (en progreso al cierre de sesión)
+- Campos Shopify (title/desc/SEO/alt): pendiente documento — aguarda confirmación PO imagen upload completo
+
+---
+
+## SESIÓN 2026-05-06 — Shopify Audit v16.1 + SP Scan
+
+- Audit B2C: 137/200 (era 132). SEO titles: 12→5 missing.
+- SP scan: 3 productos con contenido facial incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery)
+- sp-fix-targeted v1 deployado — proxy route pendiente
+- enrichFixPayloads HTML patch aplicado
+- seo-audit-check EF nueva: GraphQL truth checker
+- sp-reader-full EF nueva: lee 42 SP metafields, detecta keywords faciales
+
+---
+
+## SESIÓN 2026-05-05 — Compliance + Anti-Caída + Kits Nav
+
+- Anti-Caída fix aplicado: productos renombrados a "Scalp Strength"
+- CAPISSEN drug claims → cosmetic claims corregidos
+- Menu Kits animado activado en nav B2C
+- Collections fix: 6/6 populadas
+- SEO titles: progresó a 37/42
+
+---
+
+## SESIÓN 2026-05-04 — Kit Naming (primera ronda) + SEO
+
+- Kit naming system iniciado (HTML v1)
+- nscf-kit-seo-revert v2 aplicado
+- Social Proof 42/42 ES+EN completado (9 QA corrections)
+- Theme i18n R3: locale_root fix
+
+---
+
+## SESIÓN 2026-05-03 — Audit B2C + Theme i18n
+
+- Primer audit B2C: 132/200
+- Theme i18n R1+R2: traducciones ES+EN
+- OAuth B2B+B2C conectados
+
+---
+
+## PENDIENTES PRIORITARIOS (al cierre 2026-05-07)
+
+1. **CRÍTICO** — SP fix: activar proxy route para sp-fix-targeted (DY FAZZA + Hydra Boost Duo + Deep Moisture Recovery)
+2. **CRÍTICO** — SEO descriptions: shopify-fix v13 run (29 productos pendientes)
+3. **MANUAL PATRICIA URGENTE** — Payment gateway · EUR→USD · Policies · Shipping FL · Precios $0.00 · WhatsApp field
+4. **MANUAL PATRICIA** — Imágenes 12 kits (en progreso)
+5. **PENDIENTE SAM** — Documento campos Shopify por kit (cuando PO confirme imágenes subidas)
+6. **Tracking** — Meta + TikTok + Google pixels (0/10)
+7. **B2B** — SEO-003 COLOR titles fix
+8. **Auditor** — Inconsistencia v9-fresh vs v16.1 · unificar audit EF
+
+---
+
+_Unreal>ille Studio · unrealvillestudio.com_
