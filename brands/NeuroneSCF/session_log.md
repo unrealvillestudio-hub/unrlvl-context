@@ -1,5 +1,41 @@
 # SESSION LOG — Neurone South & Central Florida (NeuroneSCF)
-_Mantenido por: Claude | Actualizado: 2026-05-07_
+_Mantenido por: Claude | Actualizado: 2026-05-10_
+
+---
+
+## SESIÓN 2026-05-10 — Kit Images Sprint (Sam)
+
+### OBJETIVO
+Resolver el bloqueante CAT-002: 12 kits sin imágenes en Shopify B2C.
+
+### TRABAJO REALIZADO
+
+**Revisión de product shots:**
+- Sam subió 9 imágenes de los 4 kits punta
+- Diagnóstico: fondo lightbox visible, ángulo imperfecto, sombras duras
+- Kit blanco (Hyaloneurine + Dyfensor): riesgo de extracción por botellas translúcidas
+- Imágenes 8 y 9 eran duplicadas (revisión pendiente con Patricia)
+
+**Pipeline adoptado: Remove.bg + Affinity Photo**
+- Se descartó Canva (sin suscripción), Gemini (no trabaja con productos reales), fal.ai (curva técnica)
+- Remove.bg para extracción de fondo → Affinity para composición
+- Drop Shadow en Affinity: Layer > Layer Effects > Outer Shadow (no "Blending Options" como Photoshop)
+
+**Estado imágenes procesadas:**
+
+| Kit | Archivo | Estado | Listo |
+|-----|---------|--------|-------|
+| Humit Moisture (azul) | 5.webp → procesar | ✅ Remove.bg OK | LISTO |
+| Kerasin HB Restore (cobre) | 3.webp | ✅ Extracción limpia | LISTO |
+| Total Violet (burdeos+azul+cobre) | procesar | ✅ Buena base | LISTO |
+| Hyaloneurine + Dyfensor (blanco) | 5.webp final | ✅ Sorprendentemente bien | LISTO |
+
+**Resultado:** 4 de 12 kits punta tienen imagen lista para subir a Shopify. CAT-002 parcialmente resuelto.
+
+### PENDIENTES DE ESTA SESIÓN
+- [ ] Subir 4 imágenes a Shopify (productos: nombres exactos pendientes de confirmar)
+- [ ] Alt texts SEO (pendiente nombres exactos de kits en Shopify)
+- [ ] 8 kits restantes: imágenes pendientes
 
 ---
 
@@ -117,10 +153,10 @@ FAQ:         id=162313208135  handle=faq
 ❌ **`write_legal_policies` — FALTANTE** → no puede actualizar TOS/Privacy/Refund/Shipping via API
 
 ### Limitaciones conocidas del MCP
-1. **`shopify_graphql` "No approval received":** Ocurre con algunas mutaciones complejas (ej: `translationsRegister` con body HTML largo, `translatableResource` queries) — al parecer un timeout o límite del MCP. Workaround: queries más simples, o variables separadas.
-2. **`write_legal_policies` scope missing:** Política de Shopify require reinstalación del OAuth con ese scope explícito. Sin él, `shopPolicyUpdate` mutation retorna `ACCESS_DENIED`.
-3. **Supabase.co bloqueado desde bash:** El egress proxy no permite llamadas a `*.supabase.co` — las EFs no son callable directamente desde `bash_tool`. Usar `Supabase:execute_sql` para queries DB, o Vercel proxy para EFs.
-4. **`markets` field:** Requiere scope adicional — retorna `ACCESS_DENIED`. No puede consultarse via MCP.
+1. **`shopify_graphql` "No approval received":** Ocurre con algunas mutaciones complejas — workaround: queries más simples, o variables separadas.
+2. **`write_legal_policies` scope missing:** Requiere reinstalación del OAuth. Sin él, `shopPolicyUpdate` retorna `ACCESS_DENIED`.
+3. **Supabase.co bloqueado desde bash:** El egress proxy no permite llamadas a `*.supabase.co`. Usar `Supabase:execute_sql` para queries DB, o Vercel proxy para EFs.
+4. **`markets` field:** Requiere scope adicional — retorna `ACCESS_DENIED`.
 
 ### GraphQL mutations que funcionan
 ```graphql
@@ -162,29 +198,21 @@ shopify_put(
   path="themes/192983662919/assets.json",
   body={"asset": {"key": "sections/nc-header.liquid", "value": "...liquid content..."}}
 )
-
-# GET para leer asset:
-shopify_get(
-  brand_id="NeuroneSCF",
-  store_type="b2c",
-  path="themes/192983662919/assets.json?asset[key]=sections/nc-header.liquid"
-)
 ```
 
 ---
 
-## CONTENIDO PUBLICADO HOY
+## CONTENIDO PUBLICADO (2026-05-07)
 
 **La Ciencia (ES)** — ID: 162313175367 | handle: `la-ciencia`
 - Pipeline completo: PSY-AUTHORITY + PSY-TRUST + PSY-ASPIRATION
 - Hero: "Los productos que actúan solo en superficie no duran tres semanas."
-- Digests EN: title=`11f277e594bafa8c9592b8c4e890ad4ae080121fcfd35ecb63bcca37d6676413` body=`253e82185c8fef1a755f4b8d83df3d640077575afaa9297549fba287898e6b21`
 - ⚠️ EN translation pendiente
 
 **About (ES)** — ID: 162313142599 | handle: `about`
-- Título: "Neurone South & Central Florida" (eliminado "About")
+- Título: "Neurone South & Central Florida"
 - Pipeline: PSY-TRUST + PSY-SOCIAL-PROOF + PSY-IDENTITY
-- ⚠️ EN translation pendiente (fetch digests before)
+- ⚠️ EN translation pendiente
 
 **FAQ** — ID: 162313208135 | handle: `faq` | título: "Preguntas Frecuentes"
 - 15 preguntas · 5 categorías · Pipeline completo
@@ -193,8 +221,6 @@ shopify_get(
 
 ## EF DEPLOYADA: shopify-auto-translate v1
 - Supabase: `amlvyycfepwhiindxgzw` | slug: `shopify-auto-translate` | verify_jwt: false
-- Input: `{brand_id, store_type, resource_type, resource_id, locale_from, locale_to, dry_run}`
-- Flow: translatable content + digests → Claude API (brand voice) → translationsRegister
 - ⚠️ NO callable desde bash (egress proxy bloquea supabase.co)
 - ⚠️ Necesita Vercel proxy route en unrlvl-tools.vercel.app/api/
 
@@ -212,33 +238,21 @@ shopify_get(
 
 ---
 
-## Translate & Adapt App
-- Sin app embeds · Sin geo-redirect · No hace nada útil
-- ✅ Seguro desinstalar
-
----
-
 ## APRENDIZAJES PERMANENTES
 
 1. **locale_root:** `append | replace` es el único método confiable en producción Shopify. `if blank` falla silenciosamente.
-
 2. **Policies API:** `write_legal_policies` es scope separado no incluido en OAuth estándar. Legal = manual en Admin.
-
 3. **shopify-auto-translate EF:** Deployada y funcional pero solo callable via Vercel proxy. Proxy route en unrlvl-tools PENDIENTE.
-
 4. **Geo-redirect:** Está en `Online Store → Preferences` — NO en Markets, NO en Translate & Adapt app.
-
 5. **Content Pipeline:** OBLIGATORIO para todo contenido público. PSY combos según tipo de página.
-
-6. **shopify_graphql "No approval received":** Timeout del MCP con mutations complejas o HTML largo. Usar payloads más simples o variables separadas.
-
-7. **Hero CTA URLs:** El `default` filter de Liquid encadenado falla con URL-type settings vacíos. Siempre variable intermedia.
-
-8. **Translate & Adapt:** Sin app embeds. Cualquier redirect viene de Shopify nativo (Online Store → Preferences), no del app.
+6. **shopify_graphql "No approval received":** Timeout del MCP con mutations complejas o HTML largo.
+7. **Hero CTA URLs:** El `default` filter de Liquid encadenado falla con URL-type settings vacíos.
+8. **Translate & Adapt:** Sin app embeds. Cualquier redirect viene de Shopify nativo.
+9. **Kit images:** Remove.bg + Affinity Photo es el pipeline adoptado. Drop Shadow en Affinity = Layer > Layer Effects > Outer Shadow.
 
 ---
 
-## PENDIENTES SESIÓN SIGUIENTE
+## PENDIENTES ACTIVOS
 
 ### BLOCKING
 - [ ] **Shipping Policy** — crear en Admin. Texto disponible bajo petición.
@@ -248,22 +262,24 @@ shopify_get(
 - [ ] **Precios $0.00** — ~20 variantes.
 
 ### HIGH
-- [ ] **EN translations** Science + About — digests Science conocidos
-- [ ] **Proxy route shopify-auto-translate** — unrlvl-tools.vercel.app/api/
-- [ ] **SP fix 3 productos** — proxy route pending
+- [ ] **Subir 4 kit images** a Shopify (punta kits listos)
+- [ ] **Alt texts** para los 4 kits (pendiente nombres exactos)
+- [ ] **8 kits restantes** — imágenes pendientes
+- [ ] **EN translations** Science + About
+- [ ] **Proxy route shopify-auto-translate**
+- [ ] **SP fix 3 productos** — proxy route pending (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery)
 - [ ] **SEO descriptions** — 29/42 (fixer v13)
 - [ ] **Tracking pixels** — Meta + TikTok + Google
 
 ### MEDIUM
 - [ ] Desinstalar Translate & Adapt
 - [ ] `accounts.neuronescflorida.com` Invalid DNS → CNAME: `shops.myshopify.com`
-- [ ] Contacto page — verificar/crear
 - [ ] Product descriptions ES — decisión pendiente
 - [ ] B2B SEO-003 COLOR titles
 
 ---
 
-## HISTORIAL PREVIO (sesiones anteriores)
+## HISTORIAL PREVIO
 
 ### Infraestructura completada
 - OAuth B2B + B2C: CONNECTED · shopify-audit v16.1 · shopify-fix v15: ACTIVE
@@ -277,4 +293,4 @@ shopify_get(
 - WABA ⏳ Patricia Step 1 · IG→FB link ❌ · Domain verification Meta ❌
 
 ---
-_Mensaje inicio próximo chat: "Hola Sam. Protocolo cargado. Tenemos 3 páginas legales bloqueantes para el launch (Shipping Policy no existe, TOS con placeholders, Refund sin dirección) — todas requieren 10 min en Admin porque write_legal_policies no está en nuestro OAuth. Tengo los textos listos para pegar. ¿Empezamos por eso o hay algo más urgente?"_
+_Mensaje inicio próximo chat: "Hola Sam. Protocolo cargado. 4 kit images listas para subir — dame los nombres exactos de los productos en Shopify y generamos alt texts + subimos. Tenemos también 3 páginas legales bloqueantes y el SP fix proxy pendiente."_
