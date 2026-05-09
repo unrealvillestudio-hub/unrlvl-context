@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-04-13",
+    "version": "2026-05-09",
     "maintained_by": "Claude",
     "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
   },
@@ -11,9 +11,15 @@
     "ruc": "15576814-2-2025",
     "constituted": "2025-06-03",
     "tagline": "Construiste tu patrimonio. Nosotros le construimos un sistema.",
+    "tagline_secondary": "Especialistas en lo único que importa: tu patrimonio.",
     "identity_system": "Amatista Carbon",
     "wordmark_rule": "Puramente tipográfico — sin PNG ni raster",
-    "domain": "forumphs.com"
+    "domain": "forumphs.com",
+    "contact": {
+      "email": "ivetteflores@forumphs.com",
+      "whatsapp": "+50766866775",
+      "wa_link": "https://wa.me/50766866775"
+    }
   },
   "people": {
     "sam": {
@@ -24,6 +30,7 @@
       "role": "Gerente General",
       "title": "Abogada especialista en propiedad horizontal",
       "cedula": "8-368-46",
+      "honorarios_reales": "$1,200–$1,700/mes (no $4,800 — corrección sesión 2026-05-09)",
       "decision_style": "Ver BP_Brand_Context.md capa relacional",
       "signature_authority": "Total — Sam define viabilidad contractual caso a caso como proceso"
     },
@@ -31,7 +38,8 @@
       "name": "Marlene Molina",
       "cedula": "PE-11-2157",
       "cpa": "0488-2020",
-      "role": "Contadora de la empresa de administración — NO es propietaria de PH"
+      "role": "Contadora de la empresa de administración — NO es propietaria de PH",
+      "nota": "Entrega de informes con retraso — informe preliminar DF cubre día 5, Marlene firma después"
     }
   },
   "portfolio": {
@@ -41,113 +49,259 @@
       { "name": "Torres de Castilla", "fee": 3700.00, "note": "Impuesto complementario" },
       { "name": "PH Venezia Tower", "fee": 3300.00 },
       { "name": "PH Luxor 300", "fee": 3100.00, "note": "Tasa única" },
-      { "name": "PH Parque Lefevre 75", "fee": 2407.50, "note": "⚠ Prorrateo pendiente confirmar — deadline 31 Mar" },
+      { "name": "PH Parque Lefevre 75", "fee": 2407.50, "note": "⚠ Prorrateo pendiente confirmar" },
       { "name": "Los Álamos", "fee": 2000.00 },
       { "name": "PH Firenze", "fee": 1200.00 },
-      { "name": "PH Plaza España", "fee": 1000.00, "note": "⚠ Revisar rentabilidad — decisión proceso pendiente 25 Mar" },
-      { "name": "PH Parque Central Arraiján", "fee": 600.00, "note": "⚠ Revisar rentabilidad — decisión proceso pendiente 25 Mar" }
-    ]
+      { "name": "PH Plaza España", "fee": 1000.00, "note": "⚠ Revisar rentabilidad" },
+      { "name": "PH Parque Central Arraiján", "fee": 600.00, "note": "⚠ Revisar rentabilidad" }
+    ],
+    "prospect": {
+      "name": "PH Star & Herald",
+      "location": "Casco Viejo, Ciudad de Panamá",
+      "contact": "Mayra Paredes — Presidenta Junta Directiva",
+      "status": "PROPUESTA ENVIADA — pendiente reunión",
+      "fee_ofrecido": 800,
+      "fee_calculadora_min": 3091,
+      "fee_calculadora_max": 7412,
+      "nota_fee": "Excepción estratégica — Mayra preside múltiples JDs. Calculadora: ~10-26% del precio real",
+      "unidades": "25 (SEACO) vs 42 (Google) — confirmar con IF",
+      "mora_actual": {
+        "bruta_mar": 5045,
+        "critica": [
+          { "apto": 10, "monto": 1442, "meses": 7 },
+          { "apto": 20, "monto": 1722, "meses": 15 },
+          { "apto": 14, "monto": 1220, "meses": 15 }
+        ]
+      },
+      "activo_ancla": { "concepto": "Alquiler antena", "monto_mensual": 1869.56 },
+      "saldo_banco_mar": 23713,
+      "banco": "Banco General Cta Corriente 03-04-01-097849-3",
+      "precio_con_mora_critica": 1050,
+      "nota_mora": "Tarifa $800 + recargo Esencial mora crítica $250 = $1,050/mes hasta bajar mora"
+    }
   },
   "financials": {
-    "eeff_2025": { "period": "Nov–Dic 2025 (2 meses)", "ingresos": 18207.50, "gastos": 17251.19, "utilidad_neta": 956.31, "margen": "5.25%", "efectivo_propio_cierre": 956.31, "capital_social": 10000, "capital_social_nota": "Pendiente cobro a socios — no es efectivo disponible" },
+    "eeff_2025": {
+      "period": "Nov–Dic 2025 (2 meses)",
+      "ingresos": 18207.50, "gastos": 17251.19, "utilidad_neta": 956.31, "margen": "5.25%"
+    },
     "eeff_2026_ytd": {
       "period": "Ene–Feb 2026",
       "enero": { "ingresos": 17307.50, "gastos": 13879.74, "utilidad": 3427.76, "margen": "19.8%" },
       "febrero": { "ingresos": 17307.50, "gastos": 15458.17, "utilidad": 1849.33, "margen": "10.7%" },
-      "acumulado": { "ingresos": 34615.00, "gastos": 29337.91, "utilidad": 5277.09 }
+      "promedio_margen": "15.2%",
+      "costo_promedio_ph": 1834
     },
-    "pasivo_laboral_historico": { "estimado": 25000, "registrado_eeff_2025": 0, "status": "⚠ No provisionado — validar monto exacto con CPA deadline 15 Abr", "plan_recomendado": "24 meses — $1,041.67/mes" },
-    "reservas_laborales_corrientes": { "status": "No iniciadas — inicio comprometido 1 Mayo 2026", "monto_mensual_requerido": 1014.89 },
-    "isr_2025": { "impuesto_causado": 239.08, "impuesto_complementario": 28.69, "total": 267.77, "status": "Pagado" },
-    "umbral_sostenibilidad": 20500,
-    "brecha_actual": 3193
+    "costos_reales_desglose": {
+      "planilla_6_personas": { "ene": 5366, "feb": 5966, "avg": 5666 },
+      "cass": { "ene": 904, "feb": 1005, "avg": 955 },
+      "honorarios_nomina_4_personas_incl_if": { "ene": 5900, "feb": 6450, "avg": 6175 },
+      "viaticos": { "ene": 650, "feb": 600, "avg": 625 },
+      "honorarios_servicios_facturas_imp": { "ene": 1060, "feb": 1437, "avg": 1249, "nota": "Variable — IF confirma desglose" },
+      "stack_tecnologico": { "actual": 170, "post_sprints": 300 }
+    },
+    "stack_desglose": {
+      "console_claude_api": "~$80/mes (variable por demanda)",
+      "claude_ai_max5": "$100/mes (cubierto por UNRLVL)",
+      "supabase": "$0 free tier → $25 Pro cuando S&H firme",
+      "vercel": "$0 (plan UNRLVL) → $20 post-sprints",
+      "klaviyo": "$0 → $45 post-sprints",
+      "twilio_wa": "$0 → $35 post-sprints",
+      "cloudflare": "~$5/mes fijo",
+      "total_actual_cobrado": 170,
+      "total_post_sprints": 300,
+      "regla": "No escala con PHs excepto Console.Claude por demanda"
+    },
+    "escenarios_escala": {
+      "8_phs": { "costo_ph": 1834, "margen": "15.2%" },
+      "10_phs": { "costo_ph": 1486, "margen_est": "~22%" },
+      "15_phs": { "costo_ph": 1211, "margen_est": "~28%" },
+      "20_phs": { "costo_ph": 960, "margen_est": "~38%" }
+    },
+    "pasivo_laboral_historico": {
+      "estimado": 25000, "registrado_eeff_2025": 0,
+      "status": "⚠ No provisionado — VENCIDO 15 Abr",
+      "plan": "24 meses — $1,041.67/mes"
+    },
+    "reservas_laborales_corrientes": {
+      "status": "⚠ VENCIDO — inicio comprometido 1 Mayo 2026",
+      "monto_mensual": 1014.89
+    }
+  },
+  "services_model": {
+    "tiers": [
+      {
+        "name": "ESENCIAL",
+        "perfil": "50–150 uds · <15,000 m²",
+        "tarifa_rango": "$1,200–$2,500/mes",
+        "horas_if_mes": "~12–16h",
+        "coordinador": "Compartido",
+        "asambleas_ext_incluidas": "1 virtual/año",
+        "inscripcion_rp": "Add-on $300/acto",
+        "representacion_legal": "— activa en F-III"
+      },
+      {
+        "name": "PROFESIONAL",
+        "perfil": "150–280 uds · 15–25k m²",
+        "tarifa_rango": "$2,500–$4,500/mes",
+        "horas_if_mes": "~18–24h",
+        "coordinador": "Dedicado",
+        "asambleas_ext_incluidas": "2 (1v+1p)/año",
+        "inscripcion_rp": "Incluida",
+        "representacion_legal": "— activa en F-III"
+      },
+      {
+        "name": "ÉLITE",
+        "perfil": "280+ uds · >25,000 m²",
+        "tarifa_rango": "$4,500+/mes",
+        "horas_if_mes": "~28–40h+",
+        "coordinador": "Equipo dedicado",
+        "asambleas_ext_incluidas": "Ilimitadas",
+        "inscripcion_rp": "Incluida",
+        "representacion_legal": "✓ 50h/año incluidas"
+      }
+    ],
+    "base_services_all_tiers": [
+      "Administración general y supervisión operativa",
+      "Suite BI + Informe mensual día 5",
+      "Proyección financiera anual + presupuesto asamblea",
+      "Compliance Ley 284 + asesoría legal ordinaria JD",
+      "Elaboración de actas con validez legal",
+      "Gestión mora Fases I y II (incl. carta extrajudicial IF)",
+      "Asambleas ordinarias",
+      "ForumPHs Speaks — consultas Ley 284 ilimitadas",
+      "Portal de Propietarios (disponible primeros 60 días)"
+    ],
+    "mora_protocol": {
+      "fase_I": {
+        "duracion": "30 días",
+        "comunicaciones": "4 emails escalados alternando FPHs + Junta · 2 WhatsApp",
+        "costo_por_unidad": "~$5/mes",
+        "herramienta": "Klaviyo + Twilio"
+      },
+      "fase_II": {
+        "comunicaciones": "Email FPHs+Junta · 1 carta extrajudicial firmada por IF (Abogada Ley 284) con deadline 7 días",
+        "costo_por_unidad": "~$28",
+        "incluida_en_tarifa": true
+      },
+      "fase_III": {
+        "activacion": "Automática si F-II sin respuesta",
+        "notificacion": "Una sola · ya saben lo que viene",
+        "recargo_esencial": { "10_20": "+$150", "20_35": "+$250", ">35": "+$400" },
+        "recargo_profesional": { "10_20": "+$200", "20_35": "+$350", ">35": "+$550" },
+        "recargo_elite": { "10_20": "+$300", "20_35": "+$500", ">35": "+$750" },
+        "honorario_exito": "10% sobre monto recuperado (incluye 50h IF)",
+        "judicial": "Decisión de la JD — FPHs entrega expediente completo"
+      }
+    },
+    "pending_decisions_IF": [
+      "¿Asistencia a asambleas ordinarias es obligatoria por Ley 284?",
+      "¿Cuántas cartas extrajudiciales F-II puede IF firmar/mes dentro del honorario base?",
+      "¿$1,200/mes es precio correcto para Esencial en mercado panameño?",
+      "¿m² y unidades reales de Star & Herald? (25 SEACO vs 42 Google)",
+      "¿Qué hay en línea 'Honorarios servicios + facturas' ($500 Ene / $1,437 Feb)?"
+    ]
+  },
+  "tech_roadmap": {
+    "status": "PLANIFICADO — inicio post-lanzamiento NSCF",
+    "supabase_forumphs": {
+      "org_slug": "qybmxrjwrwurdgddgbnx",
+      "status": "PENDIENTE CREAR — cuenta IF creada, MCP no tiene permisos aún",
+      "plan": "Free tier con cron ping · upgrade Pro cuando S&H firme",
+      "schema_tablas": ["phs", "propietarios", "pagos", "mora_mensual", "informes", "activos", "comunicaciones", "mantenimientos"]
+    },
+    "sprints": [
+      { "id": "S1", "dates": "12–23 May", "name": "Foundation", "items": ["Speaks 100%", "Supabase schema", "DF módulo BI + informe mensual"] },
+      { "id": "S2", "dates": "26 May–6 Jun", "name": "Tracker mora", "items": ["Tracker V0 ACH", "Tracker V1 Claude Vision foto recibo"] },
+      { "id": "S3", "dates": "9–20 Jun", "name": "Portal", "items": ["Portal Propietarios Next.js + Supabase Auth"] },
+      { "id": "S4", "dates": "23 Jun–4 Jul", "name": "Comms", "items": ["Klaviyo flows", "Twilio WA", "Biblioteca 12 templates"] },
+      { "id": "S5", "dates": "7–18 Jul", "name": "OPS + Piloto", "items": ["Calendario mantenimientos", "Piloto S&H completo", "Runbook onboarding"] }
+    ],
+    "custom_mcp_connector": "Pendiente — post-launch NSCF · server multi-tenant para Supabase ForumPHs"
   },
   "active_projects": [
-    { "id": "FPH-001", "name": "Financial Intelligence Engine — BI 2026", "status": "delivered", "output": "ForumPHs_BI_2026.html (7 paneles + simulador timing)", "blocking": false },
-    { "id": "FPH-002", "name": "Plan Estratégico v3.0", "status": "pendiente aprobación IF — reunión 25 Mar", "output": "ForumPHs_Plan_Estrategico_v3.docx", "blocking": true },
     {
       "id": "FPH-003",
       "name": "Document Factory — Actas + Contratos",
-      "status": "PRODUCCIÓN — pipeline completo 2026-04-13",
-      "version": "v1.4",
+      "status": "PRODUCCIÓN v1.5 READY",
       "vercel_url": "forumphs-document-factory.vercel.app",
-      "repo": "unrealvillestudio-hub/forumphs-document-factory",
-      "pipeline": "ZIP Extractor (local) → JSON → Pre-flight → Paso 0.5 (17 agentes Edge Function, grupos de 6) → Generar DOCX → QA mecánico → ICR semántico → Descarga",
-      "last_test": { "date": "2026-04-13", "ph": "PH Los Álamos", "blocks": "328/328 (100%)", "pages": "~38", "completeness": "100% 7/7 OK", "icr_findings": 14 },
-      "key_components": {
-        "fphs-formalize": "Supabase Edge Function v6 — SYS0/SYS1/SYS2 tolerancia adaptativa, grupos 6 agentes secuenciales, template fallback attempt 3",
-        "bold_rule": "**Nombre, del apartamento XXX** en negrita — consistente en los 3 prompts",
-        "qa": "QA mecánico (8 tipos) + ICR Claude auditor legal (CRITICAL/HIGH/MEDIUM/LOW)",
-        "retry": "Auto-retry si bloques<60% Y páginas<22. Banner decisión usuario a 60-70%.",
-        "parsers": "parseResumen extrae Presidenta/Secretaria. Daniel Puentes/Hypal → administración."
-      },
-      "next_sprint": {
-        "id": "FPH-012",
-        "name": "ICR Final Process",
-        "description": "Ivette revisa hallazgos ICR 1x1 con botones Aplicar/Ignorar/Editar. Claude implementa todas las decisiones aceptadas y genera DOCX final corregido.",
-        "architecture": {
-          "new_route": "/api/icr-apply — recibe {acta_text, corrections:[{finding_id, action, note}]}, devuelve texto corregido",
-          "new_component": "ICRResolution.tsx — lista hallazgos con checkboxes + textarea por hallazgo",
-          "new_step": "ICR Resolution en navbar — entre ICR y Descarga",
-          "flow": "ICR report → usuario decide por cada hallazgo → Claude aplica → DOCX final"
-        },
-        "status": "pendiente — próximo sprint"
-      },
-      "blocking": false
+      "next": "FPH-012 ICR Final Process — Ivette revisa hallazgos hallazgo a hallazgo"
     },
-    { "id": "FPH-004", "name": "Agenda Estratégica IF — Documento Sesión 25 Mar", "status": "delivered — ICR QA", "blocking": false },
-    { "id": "FPH-005", "name": "4 Fondos de Sostenibilidad — Implementación", "status": "diseñado — no iniciado", "blocking": true },
-    { "id": "FPH-006", "name": "ForumPHs Speaks — Lead Capture Activo", "status": "PRODUCCIÓN — operativo. ANTHROPIC_API_KEY pendiente en Supabase Secrets", "blocking": false },
-    { "id": "FPH-007", "name": "FPHs Web Institucional (Sitelab v2) — forumphs.com", "status": "ICR-ready — pendiente foto IF", "blocking": false },
-    { "id": "FPH-008", "name": "FPHs Landings (AGGRO v2) — captación pagada", "status": "pendiente cirugía landing pura", "blocking": false },
-    { "id": "FPH-009", "name": "Branded Sales Kit v1", "status": "diseñado — no iniciado", "blocking": false },
-    { "id": "FPH-010", "name": "Sistema Operativo de Campo + Ticket System", "status": "diseñado — no iniciado · via UNRLVL-OPS", "blocking": false },
-    { "id": "FPH-011", "name": "Programa de Capacitación — 5 Módulos", "status": "diseñado — no iniciado", "blocking": false },
     {
-      "id": "FPH-012",
-      "name": "ICR Final Process — Corrección asistida por Ivette",
-      "status": "pendiente — próximo sprint",
-      "description": "Después del reporte ICR, Ivette revisa hallazgo por hallazgo con opciones Aplicar / Ignorar / Editar manualmente. Claude implementa todas las decisiones aceptadas sobre el texto del acta y genera un DOCX final corregido.",
-      "blocking": false,
-      "priority": "ALTA — cierra el loop de calidad del pipeline"
-    }
+      "id": "FPH-006",
+      "name": "ForumPHs Speaks",
+      "status": "PRODUCCIÓN — speaks.forumphs.com LIVE · 90% ready · 2 días para 100%",
+      "nota": "ANTHROPIC_API_KEY pendiente en Supabase Secrets"
+    },
+    {
+      "id": "FPH-020",
+      "name": "Propuesta PH Star & Herald",
+      "status": "ICR READY — pendiente aprobación IF → pasar a Mayra Paredes",
+      "archivo": "ForumPHs_Propuesta_StarHerald_2026.html",
+      "bi_embebido": true
+    },
+    {
+      "id": "FPH-021",
+      "name": "Documento de Decisión Servicios & Tarifas",
+      "status": "LISTO — pendiente revisión IF + Sam antes de presentar propuesta",
+      "archivo": "ForumPHs_Documento_Decision_Servicios_2026.html"
+    },
+    {
+      "id": "FPH-022",
+      "name": "Tech Stack Roadmap 2026",
+      "status": "PLANIFICADO — 5 sprints ~10 semanas",
+      "archivo": "ForumPHs_TechStack_Roadmap_2026.html"
+    },
+    { "id": "FPH-007", "name": "FPHs Web Institucional", "status": "ICR-ready — pendiente foto IF" },
+    { "id": "FPH-010", "name": "ForumPHs-OPS", "status": "Diseñado — no iniciado · Sprint S5" }
   ],
   "captacion": {
     "objetivo_q2_q3": "+2–3 PHs nuevos antes de sep 2026",
+    "meta_critica": "Primer cliente nuevo antes del 30 Junio 2026",
     "funnel": {
       "etapas": ["Siembra", "Captura", "Nurturing", "Propuesta", "Cierre"],
-      "track_a": "Outreach directo IF con guión UNRLVL — red legal, colegas, notarías, JDs actuales",
-      "track_b": "Marketing suave + Branded Sales Kit — Web Institucional, Landings, Orchestrator RRSS",
+      "track_a": "Outreach directo IF — Star & Herald como piloto activo",
       "filosofia_cierre": "IF no cierra — el funnel hace que el prospecto llegue sediento."
-    },
-    "perfiles": {
-      "A": { "fee_rango": "$2000–3500/mes", "tipo": "PH mediano consolidado con dolor activo", "impacto": "Cierra brecha $3193" },
-      "B": { "fee_rango": "$800–1800/mes inicial", "tipo": "PH en construcción o recién constituido", "impacto": "Largo plazo 5–10 años" },
-      "C": { "fee_rango": "variable", "tipo": "Referido de propietario actual", "impacto": "Efecto red" }
     }
   },
   "pending_decisions": [
-    "Aprobación Plan Estratégico v3.0 — reunión 25 Mar",
-    "Confirmar monto exacto pasivo laboral histórico con CPA Marlene Molina — deadline 15 Abr",
-    "Confirmar fee definitivo PH Lefevre 75 (prorrateo pendiente) — deadline 31 Mar",
-    "Resolver doble compensación Irja Saldaña + Yarisel Jaén — deadline 15 Abr",
-    "Decisión de proceso Arraiján ($600) y Plaza España ($1,000) — reunión 25 Mar",
-    "Inicio reservas laborales corrientes $1,014.89/mes — deadline 1 Mayo 2026",
+    "URGENTE: IF aprueba propuesta Star & Herald → pasa a Mayra Paredes",
+    "URGENTE: IF responde 5 decisiones del documento de servicios/tarifas",
+    "VENCIDO: Reservas laborales corrientes $1,014.89/mes — inicio comprometido 1 Mayo",
+    "VENCIDO: Marlene — mapa pasivo laboral individual",
+    "Confirmar m² y unidades reales Star & Herald",
+    "Desglose 'Honorarios servicios + facturas' del EEFF",
+    "Apertura 4 cuentas bancarias ForumPHs",
     "Foto IF para FPHs Web Institucional",
-    "Document Factory: ¿genera contratos desde cero o solo revisa contratos subidos? — decisión Sam"
+    "BD PHs completa (datos todos los edificios) — bloqueante para Supabase"
   ],
   "alerts": [
-    { "level": "critical", "msg": "Plan Estratégico v3.0 pendiente aprobación IF — bisagra de todo el plan 2026" },
-    { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — reunión CPA deadline 15 Abr" },
-    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — inicio comprometido 1 Mayo 2026 ($1,014.89/mes)" },
-    { "level": "warning", "msg": "ForumPHs Speaks: ANTHROPIC_API_KEY pendiente en Supabase Secrets — chat no responde en prod" },
-    { "level": "warning", "msg": "Lefevre 75: fee pendiente confirmar — deadline 31 Mar" },
-    { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo para bajar" },
-    { "level": "info", "msg": "Document Factory FPH-003: pipeline completo en producción. Next: ICR Final Process (FPH-012)." }
+    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — VENCIDO 1 Mayo 2026 ($1,014.89/mes)" },
+    { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — VENCIDO 15 Abr" },
+    { "level": "high", "msg": "Propuesta Star & Herald lista — IF debe aprobar y pasar a Mayra ASAP" },
+    { "level": "high", "msg": "Meta crítica: primer cliente nuevo antes del 30 Junio 2026" },
+    { "level": "warning", "msg": "Speaks: ANTHROPIC_API_KEY pendiente en Supabase Secrets" },
+    { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo" },
+    { "level": "info", "msg": "Supabase ForumPHs pendiente crear en cuenta IF (org: qybmxrjwrwurdgddgbnx)" }
   ],
   "identity": {
-    "palette": { "amatista": "#5C3472", "carbon_profundo": "#1C2233", "terra": "#C4622D", "parch": "#F0EDE8" },
-    "typography": ["EB Garamond", "DM Sans", "Cormorant Garamond"],
-    "bp_voice_ivette": { "status": "pendiente — audio IF por grabar", "uso": "Material audiovisual para redes sociales y ads", "nota": "Arquitectura: BP_VOICE_Ivette separado de BP_PERSON_Ivette_ForumPHs · roadmap Mes 4–6" }
+    "palette": {
+      "amatista": "#5C3472",
+      "amatista_light": "#EAD9F5",
+      "carbon_profundo": "#1C2233",
+      "carbon_dark": "#0E1018",
+      "terra": "#C4622D",
+      "terra_light": "#F5E0D4",
+      "parch": "#F0EDE8",
+      "cream": "#FAFAF7"
+    },
+    "typography": ["EB Garamond", "DM Sans", "Cormorant Garamond", "Cinzel", "Bebas Neue", "Space Mono"],
+    "design_system_rules": {
+      "eyebrow": "Cinzel · 11px · letter-spacing .22em · color terra · opacity .85",
+      "section_title": "EB Garamond · 28–44px · color parch en dark sections · color ink en light sections",
+      "service_card_dark": "background rgba(92,52,114,.08) · border-left terra · unified across all cards",
+      "bi_nav_animation": "border-pulse infinite desde apertura · fill terra en activo · fill green en back-btn",
+      "cta_primary": "WhatsApp green #25D366 · wa-pulse animation"
+    }
   }
 }
