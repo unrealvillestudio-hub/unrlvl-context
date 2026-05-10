@@ -1,96 +1,73 @@
-# AGENDA — Unreal>ille Studio
-_Generado: 2026-04-21 · Fuente: ecosystem.json v2026-04-19b · No editar directamente_
+# AGENDA — Unrealville Studio
+_Versión: 2026-05-10-v4 | Actualizada por: Claude_
 
 ---
 
-## PRODUCCIÓN ACTIVA ✅
+## 🔴 PRIORIDAD INMEDIATA — NeuroneSCF B2C
 
-| Sistema | Estado |
-|---|---|
-| Labs (CopyLab · WebLab · ImageLab · SocialLab · AgentLab · BlueprintLab · Orchestrator · UNRLVL-OPS · OnboardingApp) | ✅ PROD |
-| ForumPHs Speaks | ✅ speaks.forumphs.com LIVE |
-| ForumPHs Document Factory | ✅ v1.5 READY FOR BUSINESS |
-| UNRLVL CRM v1.0 | ✅ OPERATIVO (Profiler→CRM activo) |
-| FPHs-OPS schema | ✅ 22 tablas fph.* activas |
-| Profiler Agent v7.4 | ✅ LIVE · USD only · tiers pitch |
-| unrealvillestudio.com | ✅ LIVE EN+ES |
-| Lucien Sael Brand Identity v1.0 | ✅ COMPLETO |
+| # | Tarea | Estado | Notas |
+|---|-------|--------|-------|
+| 1 | **Tracking pixels** — Meta + TikTok + Google | ❌ 0/10 | SIGUIENTE SESIÓN — prerrequisito para ads |
+| 2 | **CRO Checkout** — Bundle + apps CRO | ⏳ Bundle instalada sin config | Sprint dedicado |
+| 3 | **Re-run audit** post-fixes | ⏳ Esperado ~160+/200 | Tras pixels + Bundle |
+| 4 | **Ads** — lanzamiento paid media | ⏳ Post-audit | Meta + TikTok |
 
 ---
 
-## PRIORIDAD 1 — INMEDIATO
+## 🟠 DEUDA TÉCNICA ACTIVA — NeuroneSCF B2C
 
-### UNRLVL / Lucien Sael
-- [ ] COMMIT: Why UNRLVL v4 → CoreProject (index.html + es/index.html)
-- [ ] DEPLOY: luciensael.com v2.1 — registrar dominio + Vercel
-- [ ] CREATE: LinkedIn Lucien Sael
-- [ ] CREATE: Instagram @luciensael
-- [ ] CREATE: Meta Page Lucien Sael
-
-### ForumPHs
-- [ ] Document Factory: ImageRun type fix (1 línea · generate/route.ts ~488)
-- [ ] Datos Ivette: 8 edificios → poblar fph.*
-- [ ] FPHs-OPS: construir módulo COBROS
-- [ ] Speaks → CRM (integración pendiente)
-- [ ] Foto Ivette para Speaks
-
-### NeuroneSCF — SAM
-- [ ] Verificación dominio Meta → añadir DNS TXT en Cloudflare
-- [ ] WABA: confirmar SMS recibido y verificado
-
-### NeuroneSCF — Laura/PO
-- [ ] Vincular Instagram → Facebook Page
-- [ ] WABA: completar configuración en Meta BM
-- [ ] Conseguir logos/assets oficiales de Neurone
-
-### Datos
-- [ ] BP_COPY_1.0 — NeuroneSCF + ForumPHs + UnrealvilleStudio
-- [ ] Onboarding ForumPHs + VivoseMask + PO×3
-- [ ] 87 SKUs Neurone + precios reales → PO confirma
-- [ ] Cargar 87 SKUs + 12 kits en Shopify
+| Tarea | Estado | Notas |
+|-------|--------|-------|
+| DY Fazza imagen | ⚠️ Sam sube foto → API asigna | NSCF-TR-013 + NSCF-BTP-003 |
+| EN descriptions 42 productos | ⚠️ EF bug bloqueando | shopify-auto-translate fix Supabase |
+| SP metafield fix 3 productos | ⚠️ Cosmético | proxy route sp-fix-targeted pendiente |
+| Shipping zones | ⚠️ 2/5 | Admin manual |
+| EN La Ciencia | ⚠️ EF fix prerrequisito | |
+| SEO titles 5/42 | ⚠️ | |
 
 ---
 
-## PRIORIDAD 2
+## 🟠 NeuroneSCF B2B
 
-### NeuroneSCF — Shopify
-- [ ] Shopify Payments + POS Vizos
-- [ ] UpPromote + embajadoras
-- [ ] Shop Pay Installments + Afterpay
-
-### NeuroneSCF — Contenido
-- [ ] Video PO Kit SOS → TikTok (asset urgente)
-
-### Labs / Infraestructura
-- [ ] Social Media Agent: inyectar URL session_log en system prompt
-- [ ] WebLab sprint: Objectives Window + plantillas institucionales
-- [ ] Shopify desde Claude: probar client credentials flow con Neurone
-
-### Cuentas externas
-- [ ] ElevenLabs + audio PO + voice clone
-- [ ] HeyGen + Kling + Fal.ai → desbloquea VideoLab
+| Tarea | Estado |
+|-------|--------|
+| SEO-003 COLOR titles | ⚠️ fix pendiente |
 
 ---
 
-## PRIORIDAD 3
+## 🟡 PO SOCIAL — Sesión Dedicada (TBD)
 
-- [ ] VideoLab sprint (API keys HeyGen + Kling)
-- [ ] OAuth Meta/TikTok → SocialLab publica real
-- [ ] Skill ui-ux-layer + ImageLab LoRA Prep
-- [ ] Psycho Layer extensión → CopyLab · SocialLab · VideoLab · VoiceLab
-
----
-
-## PRIORIDAD 4
-
-- [ ] LoRA Fal.ai + fotos PO (~$20 one-time)
+| Tarea | Estado |
+|-------|--------|
+| Meta Developer App | ❌ Prerrequisito para tokens |
+| System User tokens UNRLVL-Orchestrator | ❌ Bloqueado hasta App |
+| Instagram → Facebook Page link | ❌ |
+| Domain verification Meta (neuronescflorida.com) | ❌ Sam via Cloudflare TXT |
+| TikTok API tokens | ❌ |
+| WABA configuración | ⏳ En progreso |
 
 ---
 
-## IDEAS EN DESARROLLO
+## 🟡 STUDIO / INFRA
 
-### 💡 Psycho Layer — extensión multi-lab
-Capa transversal de objetivo psicológico (urgencia, autoridad, pertenencia, confianza, FOMO, identidad, reciprocidad, contraste). Ya en PROD en ImageLab + unrealvillestudio.com. Pendiente extender a CopyLab, SocialLab, VideoLab, VoiceLab.
+| Tarea | Estado |
+|-------|--------|
+| shopify-auditor/SKILL.md actualizar a v3.5 | ⚠️ Dice v2.0 |
+| luciensael.com deploy | ⏳ Generado, pendiente DNS |
+| ImageLab fix (Vercel 50s timeout) | ⚠️ |
+| IID approval flow test | ⏳ |
 
 ---
-_AGENDA.md se regenera automáticamente en cada protocolo Actualiza · No editar directamente_
+
+## ✅ COMPLETADO RECIENTEMENTE
+
+- Kit Images **12/12** ✅ — 2026-05-10
+- Skills System v1.0 — 16 skills operativos ✅ — 2026-05-10
+- Custom Instructions actualizadas ✅ — 2026-05-10
+- SESSION_PROTOCOL v10 ✅ — 2026-05-10
+- Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅
+- SP Pool 80 cards ✅ · CRO Layer + Polish ✅
+- About ES+EN ✅ · Language switcher ✅
+
+---
+_Regenerada: 2026-05-10 · ecosystem.json v4_
