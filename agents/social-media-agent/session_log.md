@@ -1,78 +1,98 @@
-# SOCIAL MEDIA AGENT — Session Log
-_Actualizado: 2026-05-10_
+# SESSION LOG — Social Media Agent
+_Repo: `unrlvl-context` · Ruta: `agents/social-media-agent/session_log.md`_
+_Última actualización: 2026-05-10_
 
 ---
 
-## ESTADO ACTUAL DE INFRAESTRUCTURA
+## ESTADO ACTUAL — INFRAESTRUCTURA DIGITAL NEURONE SCF
 
-| Plataforma | Estado | Notas |
-|-----------|--------|-------|
-| Meta Business Manager | ✅ Configurado | Info empresa completa |
-| Facebook Page | ✅ Creada | "Neurone South & Central Florida" |
-| Instagram Business | ✅ @neuronescflorida | Conversión a Business completa |
-| TikTok for Business | ✅ @neuronescflorida | Creado desde web |
-| Instagram → FB link | ❌ PENDIENTE | Laura detectó que no estaba vinculada (2026-04-18) |
-| WhatsApp Business API | ⏳ EN PROGRESO | Patricia en Step 1 — requiere App en Meta Developers |
-| Meta Developer App | ⏳ PENDIENTE | Meta está pidiendo App para System User tokens |
-| Domain verification | ❌ PENDIENTE | Laura no tiene acceso al website — Sam puede via Cloudflare TXT |
-| System User tokens | ❌ BLOQUEADO | Prerequisito: App en Meta Developers |
-| TikTok API tokens | ❌ PENDIENTE | Después de Meta App |
+### COMPLETADO ✅
+
+| Item | Detalle |
+|------|---------|
+| Correos corporativos | 7 aliases bajo neuronescflorida.com: admin, ig, waba, tiktok, ads, support, hello |
+| Número comercial | T-Mobile dedicado de Patricia — activo y verificado |
+| Meta Business Manager | Configurado. Información de empresa completa. Verificación de dominio pendiente. |
+| Facebook Page | "Neurone South & Central Florida" — creada en BM |
+| Instagram Business | @neuronescflorida — creado con ig@neuronescflorida.com, categoría Belleza |
+| TikTok for Business | @neuronescflorida — creado con tiktok@neuronescflorida.com, cuenta Pro/Empresa |
+| Estrategia de compliance | Número personal PO intocable · Un BM por marca · Tokens via System User |
 
 ---
 
-## BLOQUEANTE PRINCIPAL
+### EN PROCESO ⏳
 
-Meta requiere una App en **developers.facebook.com** para poder generar System User tokens. Patricia llegó hasta ese punto el 2026-05-04 pero no completó la creación de la App.
+| Item | Estado | Blocker |
+|------|--------|---------|
+| Instagram → Facebook Page link | Parcial — opción visible pero no confirmada | Laura necesita confirmar desde app |
+| WABA (WhatsApp Business API) | Setup iniciado en Meta BM | Pendiente confirmación configuración final |
+| Meta System User token | Bloqueado | Meta requiere crear App primero en developers.facebook.com |
+| App en Meta for Developers | Pendiente | Patricia necesita crearla en developers.facebook.com con email admin@neuronescflorida.com |
 
-**Próximos pasos concretos:**
-1. Patricia crea App en developers.facebook.com → tipo "Empresa" → nombre "Neurone SCF API"
-2. Sam o Patricia vinculan Instagram → Facebook Page
-3. Sam verifica dominio neuronescflorida.com via Cloudflare (TXT record)
-4. Con App creada → System User → tokens para Orchestrator
+---
 
-**Sesión dedicada programada:** Sam + PO + pantalla compartida (fecha TBD)
+### PENDIENTE ❌
+
+| Item | Notas |
+|------|-------|
+| Meta App en developers.facebook.com | Nombre sugerido: "Neurone SCF API" · Tipo: Empresa |
+| Meta System User token (UNRLVL-Orchestrator) | Depende de App creada · Permisos: pages_manage_posts, ads_management, instagram_content_publish |
+| TikTok Access Token | Desde ads.tiktok.com · Operador Sam · Duración 365 días |
+| Verificación dominio neuronescflorida.com | Método DNS TXT (Laura no tiene acceso al hosting — Sam debe coordinar) |
+| Logos y assets oficiales | Pendiente de Neurone Cosmética o UNRLVL · Necesario para completar perfiles |
+| Foto de perfil todas las cuentas | Mismo blocker que logos |
+| WABA confirmación final | Confirmar número T-Mobile registrado correctamente en BM |
+
+---
+
+## PRÓXIMOS PASOS CONCRETOS
+
+**Orden de ejecución sugerido:**
+
+1. **Patricia crea Meta App** en developers.facebook.com (30 min con guía del agente)
+2. **Con App creada** → generar System User token UNRLVL-Orchestrator → enviar a Sam por canal seguro
+3. **Confirmar link Instagram → Facebook Page** desde app Patricia
+4. **Sam coordina** verificación dominio neuronescflorida.com (acceso hosting)
+5. **TikTok access token** — Sam en ads.tiktok.com como Operador
+
+---
+
+## USUARIOS ACTIVOS
+
+| Usuario | Rol | Estado | Última sesión |
+|---------|-----|--------|--------------|
+| Sam | admin | Activo | 2026-05-04 |
+| Laura | ops | Activo | 2026-05-04 |
+| Paty | po | Activo | 2026-04-06 |
 
 ---
 
 ## HISTORIAL DE SESIONES
 
-### Laura (ops)
-
-**2026-04-06:** TikTok Shop requerimientos — decidido diferir hasta tener dirección comercial. Meta BM con dirección de documentos oficiales.
-
-**2026-04-10:** Completar Meta BM — Info empresa. Patricia en Miami sin VPN.
-
-**2026-04-15:** BM configurado ✅. Domain verification bloqueada (Laura sin acceso al website). Facebook Page creada ✅.
-
-**2026-04-17:** Instagram Business convertido a cuenta profesional ✅. Vinculación IG→FB pendiente.
-
-**2026-04-18:** TikTok for Business creado desde web ✅. WABA setup iniciado — aclaración API vs App. Patricia llegó a configuración WABA pero necesita App primero.
-
-**2026-05-04:** Laura pide tokens para Orchestrator/Labs. Instrucciones dadas para Meta System User. **Meta bloqueó el proceso — requiere App en developers.facebook.com primero.**
-
-### Sam (admin)
-
-**2026-04-06:** Definición emails (7 aliases). Estrategia números. Un BM por marca.
-
-**2026-04-10:** Aliases y estado de sesiones.
-
-### Patricia Osorio (po)
-
-**2026-04-06:** Primera sesión — checklist previo al setup.
+| Fecha | Usuario | Avance |
+|-------|---------|--------|
+| 2026-03-23 | Sam | Definición aliases email + estrategia números + compliance Meta |
+| 2026-04-06 | Laura | TikTok Shop requirements. Meta BM parcialmente configurado. |
+| 2026-04-06 | Sam | Verificación de estado del agente. Session log no accesible desde agente. |
+| 2026-04-06 | Paty | Primera sesión. Checklist de prerequisitos. |
+| 2026-04-10 | Laura | Continuación setup Meta BM — información de empresa completada. |
+| 2026-04-10 | Sam | Confirmación de estructura de correos. |
+| 2026-04-15 | Laura | Verificación campos Meta BM. Dominio sin verificar. |
+| 2026-04-17 | Laura | Facebook Page creada. Instagram Business iniciado. |
+| 2026-04-18 | Laura | Instagram Business completado. TikTok for Business completado. WABA setup iniciado. |
+| 2026-05-04 | Laura | Sam solicita API tokens. Meta requiere App primero — proceso iniciado. |
 
 ---
 
-## EMAILS CONFIGURADOS
+## NOTAS TÉCNICAS
 
-| Email | Función |
-|-------|---------|
-| admin@neuronescflorida.com | Administración |
-| hello@neuronescflorida.com | Contacto público |
-| support@neuronescflorida.com | Soporte |
-| ig@neuronescflorida.com | Instagram |
-| tiktok@neuronescflorida.com | TikTok |
-| waba@neuronescflorida.com | WhatsApp API |
-| ads@neuronescflorida.com | Meta Ads |
+**Meta System User — nombre:** `UNRLVL-Orchestrator` · Rol: Empleado (nunca Admin)
+**Permisos requeridos:** `pages_manage_posts` · `pages_read_engagement` · `pages_manage_metadata` · `ads_management` · `ads_read` · `instagram_basic` · `instagram_content_publish`
+**Token delivery:** Canal seguro (Bitwarden Send o Signal) — nunca WhatsApp/email
+
+**TikTok token:** Access Token vía ads.tiktok.com · Duración 365 días · Refresh token 365 días
+**WABA:** Número T-Mobile Patricia · No reutilizable · Tier 1: 1,000 conversaciones/día
 
 ---
-_Social Media Agent · NeuroneSCF · Actualizado 2026-05-10_
+
+_Social Media Agent · Unreal>ille Studio · 2026-05-10_
