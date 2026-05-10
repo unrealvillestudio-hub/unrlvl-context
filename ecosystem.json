@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-10-v2",
+    "version": "2026-05-10-v3",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
       "date": "2026-05-10",
-      "status": "About page corrections ES+EN applied. INFRA-SHOPIFY-MCP documentado a nivel studio. NSCF B2C: 137/200.",
+      "status": "Sesión 2026-05-09 recuperada (chat perdido por límite de contexto). Policies 4/4 ✅ · Shopify Payments ✅ · Precios $0.00 ✅ · SP pool 80 cards nueva arquitectura ✅ · Kit Composición theme fix ✅ · 41/42 desc ES ✅ · EN translations (TOS+Refund+Shipping+Contact+FAQ) ✅ · Language switcher EN/ES ✅ · translate-proxy.js ✅. About page corrections ES+EN ✅ 2026-05-10.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -145,20 +145,20 @@
             "faq": 162313208135,
             "contacto": 162313273671
           },
-          "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
+          "oauth_status": "CONNECTED — read_apps + read_locales + write_translations + write_legal_policies (reinstalado 2026-05-09)",
           "last_audit_score": 137,
           "last_audit_score_max": 200,
           "last_audit_date": "2026-05-06",
-          "audit_status": "⚠️ 137/200 — 5 critical · 15 important · compliance CLEAN ✅",
+          "audit_status": "⚠️ 137/200 (audit pre-fixes 2026-05-06) — est. ~157+ post-fixes · re-audit pending",
           "audit_score_breakdown": {
-            "settings": "7/20 — CRITICAL: missing all 4 policies (Refund/TOS/Privacy/Shipping)",
+            "settings": "17/20 (est. post-fix) — Policies 4/4 creadas 2026-05-09 ✅ · audit pre-dates fix",
             "catalog": "12/20 — CRITICAL: 8 kits sin imágenes (4 punta kits listos para subir)",
             "content_language": "4/5",
             "theme_language": "9/10",
-            "seo": "5/10 — 5 titles missing · 29 descriptions missing (fixer v13 pending run)",
+            "seo": "5/10 — 5 titles missing · EN descriptions 42 productos (EF bug blocking · ES ✅ 42/42)",
             "collection_health": "6/10",
             "theme": "9/15",
-            "payments": "0/10 — CRITICAL: no payment gateway",
+            "payments": "10/10 ✅ — Shopify Payments activo (confirmado Sam 2026-05-09)",
             "orders": "10/10 ✅",
             "shipping": "2/5",
             "discounts": "5/5 ✅",
@@ -175,18 +175,27 @@
             "compliance": "10/10 ✅ — COMP-OK: no drug claims",
             "strategic_seo": "10/10 ✅"
           },
-          "seo_status": "SEO titles: 5/42 missing (was 12) · descriptions: 29/42 missing · fixer v13 ready · post-write verification active",
+          "seo_status": "SEO titles: 5/42 missing · descriptions ES: 42/42 rewritten (2026-05-09) ✅ · EN descriptions: 42 productos blocked — shopify-auto-translate EF bug ('Store not found: Invalid schema: shopify') · translate-proxy.js deployed ✅",
           "theme_i18n": "COMPLETE R3 — locale_root root cause fixed",
           "compliance_status": "✅ CLEAN — Anti-Caída → Scalp Strength · CAPISSEN drug claims → cosmetic claims",
-          "social_proof": "42/42 productos con SP cards ES+EN · ⚠️ 3 productos con contenido facial incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — sp-fix-targeted v1 ready · proxy pending",
+          "social_proof": "SP pool architecture 2026-05-09 ✅ — 80 cards global pool (assets/nc-sp-pool.js) · async 8s±800ms · no float · 6 home slots · IG gradient icon+bg · dynamic buffer 45% · metafield SP superseded · ⚠️ 3 metafields incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — cosmetic fix via sp-fix-targeted · proxy pending",
           "collections": "6/6 collections populadas",
           "kit_images": "⚠️ 4/12 kits con imagen lista (punta kits: Humit Moisture, Kerasin HB, Total Violet, Hyaloneurine+Dyfensor) — pendiente subir a Shopify · 8 kits restantes sin imagen",
           "kit_naming": "✅ 12 nombres finales cerrados",
-          "about_page": "✅ ES+EN corregido 2026-05-10 — Venezuela eliminado · Patricia = colorimetría (no química) · Vizos Salón = salón (no laboratorio)"
+          "kit_composicion": "✅ Theme fix 2026-05-09 — eyebrow oculto cuando única opción (display:none) · label Contenido/Contents",
+          "about_page": "✅ ES+EN corregido 2026-05-10 — Venezuela eliminado · Patricia = colorimetría (no química) · Vizos Salón = salón (no laboratorio) · +35 años · vizoscosmetics.com · PO Conectando IG+TT · Prestige mencionado",
+          "contact_page": "✅ Creada 2026-05-09 — email+tel · sin form · EN translation registrada · dirección 3PL: 3028 NW 72nd Ave #4 Miami FL 33122",
+          "policies": "✅ 4/4 completadas 2026-05-09 — TOS · Refund (Prestige/Biscayne) · Shipping (3PL/3028) · Privacy · EN translations registradas",
+          "language_switcher": "✅ EN/ES pill header desktop+mobile — 2026-05-09",
+          "product_descriptions": "✅ 42/42 ES body_html (41 rewritten 2026-05-09 · 1 ya estaba) · EN fallback visible hasta EF fix",
+          "addresses": {
+            "legal_prestige": "12951 Biscayne Blvd, North Miami, FL 33181 — TOS + Refund returns",
+            "3pl_ops": "3028 NW 72nd Ave #4, Miami FL 33122 — Shipping + Contact"
+          }
         }
       },
-      "gaps": "MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Kit images (8 sin imagen — 4 listos para subir). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13)",
-      "completed": "OAuth B2B+B2C · shopify-audit v16.1 · shopify-fix v15 · enrichFixPayloads · Compliance v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3 · Kit images 4 punta kits · CRO Layer 12/12 · CRO Polish · About page corrections ES+EN ✅"
+      "gaps": "MANUAL URGENTE: WhatsApp field · Kit images (8 sin imagen — 4 listos para subir). AUTOMATED PENDING: SP metafield fix 3 productos (proxy) · EN product descriptions (EF bug) · Tracking pixels · Shipping zones · accounts DNS.",
+      "completed": "OAuth B2B+B2C+write_legal_policies ✅ · shopify-audit v16.1 · shopify-fix v15 · enrichFixPayloads · Compliance v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3 · Kit images 4 punta kits · CRO Layer 12/12 · CRO Polish · About page corrections ES+EN ✅ · Policies 4/4 ✅ 2026-05-09 · Precios $0.00 ✅ · Shopify Payments ✅ · SP pool 80 cards ✅ · Kit Composición theme fix ✅ · 41/42 desc ES ✅ · EN translations (TOS+Refund+Shipping+Contact+FAQ) ✅ · Language switcher EN/ES ✅ · translate-proxy.js ✅ · Contact page ✅"
     },
     {
       "id": "ForumPHs",
@@ -225,6 +234,7 @@
     "supabase_project": "amlvyycfepwhiindxgzw",
     "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
     "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
+    "translate_proxy_url": "https://unrlvl-tools.vercel.app/api/translate-proxy",
     "html_patches": {
       "enrichFixPayloads": "2026-05-06 — construye fix_payload.products desde affected_resources · remapea fix_seo_combined → fix_seo_title_enriched"
     },
@@ -265,8 +275,8 @@
       "shopify-theme-locale":           {"supabase_version": 21, "semantic_version": "v21",   "status": "ACTIVE"},
       "seo-audit-check":                {"supabase_version": 1,  "semantic_version": "v1",    "status": "ACTIVE", "notes": "GraphQL truth checker."},
       "sp-reader-full":                 {"supabase_version": 2,  "semantic_version": "v2",    "status": "ACTIVE", "notes": "Reads all 42 SP metafields ES+EN, scans facial keywords."},
-      "sp-fix-targeted":                {"supabase_version": 1,  "semantic_version": "v1",    "status": "ACTIVE", "notes": "Fix 3 products wrong SP content. ⚠️ PROXY PENDING."},
-      "shopify-auto-translate":         {"supabase_version": 1,  "semantic_version": "v1",    "status": "ACTIVE", "notes": "ES→EN via Claude API + brand voice. ⚠️ Proxy route pending."},
+      "sp-fix-targeted":                {"supabase_version": 1,  "semantic_version": "v1",    "status": "ACTIVE", "notes": "Fix 3 products wrong SP metafields (now cosmetic — pool replaced display layer). ⚠️ Proxy route pending."},
+      "shopify-auto-translate":         {"supabase_version": 1,  "semantic_version": "v1",    "status": "⚠️ BUG", "notes": "Bug: 'Store not found: Invalid schema: shopify' — token lookup falla en Supabase. Proxy route ✅ deployed (translate-proxy.js). EF fix pendiente Supabase."},
       "nscf-about-fix":                 {"supabase_version": 2,  "semantic_version": "v2",    "status": "ACTIVE", "notes": "Correcciones quirúrgicas About ES+EN. Patrón reutilizable. Unicode crítico (U+2019, U+201C). Applied 2026-05-10."},
       "nscf-fix-anticaida":             {"supabase_version": 1,                               "status": "ACTIVE", "notes": "Applied 2026-05-05."},
       "nscf-fix-capissen-descriptions": {"supabase_version": 1,                               "status": "ACTIVE"},
@@ -278,18 +288,15 @@
       {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com",   "status": "✅ CONNECTED", "last_audit": 137, "last_audit_max": 200, "compliance": "CLEAN ✅"}
     ],
     "tech_debt": [
-      "NSCF B2C CRÍTICO: Payment gateway 0/10 — Shopify Payments setup pendiente Patricia",
-      "NSCF B2C CRÍTICO: Policies 0/20 — Refund/TOS/Privacy/Shipping text pending Admin",
       "NSCF B2C CRÍTICO: 8 kits sin imágenes — 4 punta kits listos para subir",
-      "NSCF B2C: SP fix pendiente — 3 productos facial (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). ⚠️ Proxy route no habilitada.",
-      "NSCF B2C: SEO descriptions 29/42 missing — fixer v13 pendiente.",
-      "NSCF B2C: Tracking 0/5 — Meta + TikTok + Google pixels pendientes",
+      "NSCF B2C: shopify-auto-translate EF bug — 'Store not found: Invalid schema: shopify' — 42 productos mostrando ES en locale EN · fix pendiente Supabase EF",
+      "NSCF B2C: SP metafield fix 3 productos (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — cosmético (pool ya reemplazó display layer) · proxy route pendiente",
+      "NSCF B2C: SEO titles 5/42 missing",
+      "NSCF B2C: Tracking 0/10 — Meta + TikTok + Google pixels pendientes",
       "NSCF B2C: Shipping zones not configured (2/5)",
       "NSCF B2C: neurone.size metafield = '0' visible en product page",
-      "NSCF B2C: Precios $0.00 en ~20 variantes",
-      "NSCF B2C: EN translations La Ciencia pendiente (About ✅ corregido 2026-05-10)",
-      "NSCF B2C: shopify-auto-translate proxy route pendiente",
       "NSCF B2C: DY Fazza imagen — NLSDYLS-1-1.webp es Dyfensor SF. Sam sube imagen correcta → API asigna (NSCF-TR-013 + NSCF-BTP-003)",
+      "NSCF B2C: EN translations La Ciencia pendiente",
       "NSCF B2B: fix SEO-003 COLOR titles",
       "read_customer_events scope no concedido → TRACK-CE-SCOPE warning",
       "ImageLab fix: GEMINI_API_KEY + content-run-stage v1.11",
@@ -298,10 +305,11 @@
   },
   "social_proof_agent": {
     "version": "v3",
-    "status": "OPERATIONAL ✅",
-    "description": "Generador de social proof cards. Pipeline Write→Humanize→AIFE. ES + EN. 3 TikTok + 2 Instagram por producto.",
+    "status": "OPERATIONAL ✅ — pool architecture 2026-05-09",
+    "description": "Pool global 80 cards (assets/nc-sp-pool.js). Async 8s±800ms. No float. 6 home slots (Google→Verified review). IG gradient icon + bg diferenciado vs TikTok. Dynamic buffer 45%. ES/EN por locale_root. Metafield pipeline supersedido por pool.",
     "completed_stores": [
-      {"brand_id": "NeuroneSCF", "store": "b2c", "date": "2026-05-03", "products": 42, "qa_corrections": 9}
+      {"brand_id": "NeuroneSCF", "store": "b2c", "date": "2026-05-03", "products": 42, "qa_corrections": 9},
+      {"brand_id": "NeuroneSCF", "store": "b2c", "date": "2026-05-09", "note": "Pool architecture — 80 cards, reescritura completa, IG/TikTok diff backgrounds, emojis, no float, 8s rotation"}
     ],
     "qa_findings_2026_05_06": {
       "sp_scan_date": "2026-05-06",
@@ -309,11 +317,11 @@
       "clean": 39,
       "incorrect": 3,
       "incorrect_products": [
-        {"id": "10771520356679", "title": "DY FAZZA",             "issue": "Reviews about facial moisturizer"},
-        {"id": "10771522945351", "title": "Hydra Boost Duo",      "issue": "Reviews about facial serum"},
-        {"id": "10777103171911", "title": "Deep Moisture Recovery","issue": "Reviews about skin care kit"}
+        {"id": "10771520356679", "title": "DY FAZZA",             "issue": "Metafield: reviews about facial moisturizer — display supersedido por pool"},
+        {"id": "10771522945351", "title": "Hydra Boost Duo",      "issue": "Metafield: reviews about facial serum — display supersedido por pool"},
+        {"id": "10777103171911", "title": "Deep Moisture Recovery","issue": "Metafield: reviews about skin care kit — display supersedido por pool"}
       ],
-      "fix_status": "⚠️ sp-fix-targeted v1 deployed — proxy route pending"
+      "fix_status": "⚠️ sp-fix-targeted v1 deployed — proxy route pending (cosmético — pool activo)"
     }
   },
   "labs": [
@@ -350,7 +358,7 @@
       "tools": ["list_brands", "shopify_get_store_info", "shopify_get", "shopify_post", "shopify_put", "shopify_delete", "shopify_graphql"],
       "usage": "Todos los tools requieren brand_id + store_type. store_type: 'b2c' | 'b2b'.",
       "connected_brands": ["NeuroneSCF"],
-      "limitations": "shopify_graphql timeout en mutations largas · write_legal_policies no incluido en OAuth scope"
+      "limitations": "shopify_graphql timeout en mutations largas · write_legal_policies incluido desde reinstal 2026-05-09"
     },
     {
       "id": "INFRA-SB",
@@ -360,7 +368,7 @@
     {
       "id": "INFRA-TOOLS",
       "name": "unrlvl-tools.vercel.app",
-      "status": "LIVE — ShopifyAuditor v3.5 (v16.1 engine + enrichFixPayloads patch 2026-05-06)"
+      "status": "LIVE — ShopifyAuditor v3.5 (v16.1 engine + enrichFixPayloads patch 2026-05-06) + translate-proxy.js ✅"
     },
     {
       "id": "INFRA-WEB",
@@ -376,14 +384,14 @@
   "next_session_agenda": [
     "PRIORIDAD 1 — NeuroneSCF B2C: Subir 4 kit images punta a Shopify (Humit Moisture, Kerasin HB, Total Violet, Hyaloneurine+Dyfensor) + alt texts SEO",
     "PRIORIDAD 2 — NeuroneSCF B2C: DY Fazza imagen correcta — Sam sube → API asigna (NSCF-TR-013 + NSCF-BTP-003)",
-    "PRIORIDAD 3 — NeuroneSCF B2C: SP fix — activar proxy route sp-fix-targeted en fix-proxy.js",
-    "PRIORIDAD 4 — NeuroneSCF B2C: SEO descriptions — ejecutar shopify-fix v13 (29 productos)",
-    "PRIORIDAD 5 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway · EUR→USD · Policies · Shipping rates FL · Precios $0.00",
+    "PRIORIDAD 3 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
+    "PRIORIDAD 4 — NeuroneSCF B2C: shopify-auto-translate EF bug fix (Supabase token lookup) → desbloquea EN product descriptions 42 productos",
+    "PRIORIDAD 5 — NeuroneSCF B2C: SP metafield fix 3 productos — activar proxy route sp-fix-targeted en fix-proxy.js (cosmético pero limpia deuda técnica)",
     "PRIORIDAD 6 — NeuroneSCF B2C: 8 kits restantes sin imagen",
-    "PRIORIDAD 7 — NeuroneSCF B2C: EN translation La Ciencia + proxy route shopify-auto-translate",
-    "PRIORIDAD 8 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
+    "PRIORIDAD 7 — NeuroneSCF B2C: EN translation La Ciencia (shopify-auto-translate EF fix prerrequisito)",
+    "PRIORIDAD 8 — NeuroneSCF B2C: Shipping zones configurar en Admin",
     "PRIORIDAD 9 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
-    "PRIORIDAD 10 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1",
+    "PRIORIDAD 10 — NeuroneSCF B2C: Re-run audit (esperado ~157+ con fixes aplicados)",
     "PRIORIDAD 11 — IID approval flow test · ImageLab fix · luciensael.com deploy"
   ]
 }

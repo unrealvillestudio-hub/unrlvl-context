@@ -1,5 +1,5 @@
 # ECOSISTEMA UNREALVILLE STUDIO
-_Versión: 2026-05-10-v1 | Mantenido por: Claude_
+_Versión: 2026-05-10-v3 | Mantenido por: Claude_
 
 ---
 
@@ -40,20 +40,36 @@ _Versión: 2026-05-10-v1 | Mantenido por: Claude_
 
 ### Shopify B2C
 - Domain: egdk1n-gt.myshopify.com / neuronescflorida.com
-- Score: **137/200** ⚠️
+- Score: **137/200** ⚠️ (audit 2026-05-06 · est. ~157+ post-fixes · re-audit pendiente)
 - Compliance: ✅ CLEAN
 - Theme i18n: ✅ COMPLETE R3
+- OAuth: ✅ write_legal_policies incluido (reinstalado 2026-05-09)
 
-**Críticos activos:**
+**Estado post-sesión 2026-05-09:**
+
+| Item | Estado |
+|------|--------|
+| Policies (4) | ✅ TOS · Refund · Shipping · Privacy |
+| EN translations | ✅ TOS · Refund · Shipping · Contact · FAQ |
+| Shopify Payments | ✅ Activo |
+| Precios $0.00 | ✅ Resueltos |
+| Product descriptions ES | ✅ 42/42 |
+| SP pool 80 cards | ✅ async 8s · no float · IG/TikTok diff |
+| Language switcher EN/ES | ✅ Header |
+| Contact page | ✅ Creada |
+| Kit Composición fix | ✅ Theme eyebrow |
+
+**Pendientes activos:**
+
 | Issue | Estado |
 |-------|--------|
-| Payment gateway | ❌ 0/10 — Patricia pendiente |
-| Policies (4) | ❌ 0/20 — Manual Admin |
 | Kit images | ⚠️ 4/12 listos para subir · 8 pendientes |
-| SP fix 3 productos | ⚠️ EF ready · proxy pendiente |
-| SEO descriptions | ⚠️ 29/42 · fixer v13 pendiente |
+| DY Fazza imagen | ⚠️ NLSDYLS-1-1.webp es Dyfensor SF |
+| EN descriptions | ⚠️ EF bug shopify-auto-translate |
 | Tracking pixels | ❌ 0/10 |
-| Precios $0.00 | ⚠️ ~20 variantes |
+| SP metafield fix | ⚠️ proxy pendiente (cosmético) |
+| Shipping zones | ⚠️ no configuradas |
+| EN La Ciencia | ⚠️ pendiente (EF bug) |
 
 **Kit images procesadas (Remove.bg + Affinity):**
 - ✅ Humit Moisture (azul) — lista para subir
@@ -65,6 +81,10 @@ _Versión: 2026-05-10-v1 | Mantenido por: Claude_
 - Meta BM ✅ · FB Page ✅ · Instagram ✅ · TikTok ✅
 - WABA ⏳ · IG→FB link ❌ · Domain verification ❌
 
+**Direcciones:**
+- Legal/Refunds: 12951 Biscayne Blvd, North Miami FL 33181 (Prestige Beauty Global Distribution)
+- 3PL/Shipping/Contact: 3028 NW 72nd Ave #4, Miami FL 33122
+
 ---
 
 ## SHOPIFY AUDITOR v3.5
@@ -72,10 +92,11 @@ _Versión: 2026-05-10-v1 | Mantenido por: Claude_
 - App: https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html
 - Engine: v16.1 · 23 módulos · Score max: 200
 - Fixer: shopify-fix v15 (post-write verification)
+- translate-proxy: https://unrlvl-tools.vercel.app/api/translate-proxy ✅
 - Supabase: amlvyycfepwhiindxgzw
 
 **Edge Functions activas:**
-shopify-audit v16.1 · shopify-fix v15 · shopify-fix-all v5.6 · shopify-audit-orchestrator v1 · shopify-theme-analyzer v1 · shopify-link-crawler v1 · shopify-oauth v4 · shopify-theme-locale v21 · seo-audit-check v1 · sp-reader-full v2 · sp-fix-targeted v1 · shopify-auto-translate v1 · nscf-fix-anticaida · nscf-fix-capissen-descriptions · nscf-menu-kits · nscf-kit-seo-revert v2
+shopify-audit v16.1 · shopify-fix v15 · shopify-fix-all v5.6 · shopify-audit-orchestrator v1 · shopify-theme-analyzer v1 · shopify-link-crawler v1 · shopify-oauth v4 · shopify-theme-locale v21 · seo-audit-check v1 · sp-reader-full v2 · sp-fix-targeted v1 · shopify-auto-translate v1 ⚠️BUG · nscf-about-fix v2 · nscf-fix-anticaida · nscf-fix-capissen-descriptions · nscf-menu-kits · nscf-kit-seo-revert v2
 
 ---
 
@@ -101,8 +122,9 @@ shopify-audit v16.1 · shopify-fix v15 · shopify-fix-all v5.6 · shopify-audit-
 | Sistema | Estado |
 |---------|--------|
 | Context System | https://unrlvl-context.vercel.app |
+| Shopify MCP — Unrealville Studio | https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp · ACTIVE · multimarca |
 | Supabase amlvyycfepwhiindxgzw | ACTIVE — public.* + shopify.* |
-| unrlvl-tools.vercel.app | LIVE — ShopifyAuditor v3.5 |
+| unrlvl-tools.vercel.app | LIVE — ShopifyAuditor v3.5 + translate-proxy ✅ |
 | unrealvillestudio.com | LIVE EN+ES |
 | luciensael.com | GENERATED — pending deploy |
 
@@ -119,11 +141,10 @@ shopify-audit v16.1 · shopify-fix v15 · shopify-fix-all v5.6 · shopify-audit-
 
 ## AGENDA PRÓXIMA SESIÓN
 
-1. 🔴 Subir 4 kit images a Shopify + alt texts
-2. 🔴 SP fix proxy route (DY FAZZA / Hydra Boost / Deep Moisture)
-3. 🔴 SEO descriptions 29/42 — fixer v13
-4. 🔴 Patricia MANUAL: Payment · Policies · Precios $0.00
-5. 🟠 8 kits restantes sin imagen
-6. 🟠 Tracking pixels 0/10
-7. 🟠 EN translations + proxy shopify-auto-translate
-8. 🟡 B2B SEO-003 · Auditor inconsistencia · IID test · luciensael.com deploy
+1. 🔴 Subir 4 kit images punta a Shopify + alt texts SEO
+2. 🔴 DY Fazza imagen correcta (NSCF-TR-013 + NSCF-BTP-003)
+3. 🔴 Tracking pixels 0/10 — Meta + TikTok + Google
+4. 🟠 Fix shopify-auto-translate EF bug → desbloquea EN descriptions 42 productos
+5. 🟠 SP metafield fix proxy route (cosmético)
+6. 🟠 8 kits restantes sin imagen
+7. 🟡 EN translation La Ciencia · Shipping zones · B2B SEO-003 · Re-run audit

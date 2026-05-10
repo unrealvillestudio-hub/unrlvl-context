@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-05-10", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-05-10-v2", "maintained_by": "Claude" },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -19,12 +19,16 @@
         "faq": 162313208135,
         "contacto": 162313273671
       },
-      "scope_missing": ["write_legal_policies"]
+      "oauth_scopes": "read_apps + read_locales + write_translations + write_legal_policies (reinstalado 2026-05-09)"
     },
     "b2b": {
       "internal_domain": "nj5ybc-n1.myshopify.com"
     },
     "note": "Conector MCP en INFRA-SHOPIFY-MCP (studio). brand_id='NeuroneSCF' para ambas tiendas."
+  },
+  "addresses": {
+    "legal_prestige": "12951 Biscayne Blvd, North Miami, FL 33181 — TOS + Refund returns (Prestige Beauty Global Distribution)",
+    "ops_3pl": "3028 NW 72nd Ave #4, Miami FL 33122 — Shipping + Contact"
   },
   "social_media_infrastructure": {
     "meta_business_manager": "✅ configurado",
@@ -75,8 +79,11 @@
     {"level":"warning",  "msg":"Vinculación Instagram → Facebook Page pendiente"},
     {"level":"action",   "msg":"Sam: verificar dominio neuronescflorida.com en Meta vía Cloudflare TXT record"},
     {"level":"warning",  "msg":"Logos/Assets sin confirmar de Neurone Cosmética"},
-    {"level":"warning",  "msg":"Shopify: precios $0.00 placeholder — no activar sin resolver"},
     {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
+    {"level":"action",   "msg":"4 kit images punta listas para subir a Shopify (Humit Moisture · Kerasin HB · Total Violet · Hyaloneurine+Dyfensor)"},
+    {"level":"warning",  "msg":"DY Fazza: NLSDYLS-1-1.webp es Dyfensor SF — Sam sube imagen correcta (NSCF-TR-013 + NSCF-BTP-003)"},
+    {"level":"warning",  "msg":"shopify-auto-translate EF bug — 42 productos mostrando ES en locale EN"},
+    {"level":"warning",  "msg":"Tracking 0/10 — Meta + TikTok + Google pixels pendientes"},
     {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
   ]
 }
