@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-04-18", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-05-10", "maintained_by": "Claude" },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -7,6 +7,24 @@
     "market": "South & Central Florida, USA",
     "status": "active",
     "health": "yellow"
+  },
+  "shopify": {
+    "b2c": {
+      "internal_domain": "egdk1n-gt.myshopify.com",
+      "public_domain": "neuronescflorida.com",
+      "theme_id": 192983662919,
+      "page_ids": {
+        "about": 162313142599,
+        "la_ciencia": 162313175367,
+        "faq": 162313208135,
+        "contacto": 162313273671
+      },
+      "scope_missing": ["write_legal_policies"]
+    },
+    "b2b": {
+      "internal_domain": "nj5ybc-n1.myshopify.com"
+    },
+    "note": "Conector MCP en INFRA-SHOPIFY-MCP (studio). brand_id='NeuroneSCF' para ambas tiendas."
   },
   "social_media_infrastructure": {
     "meta_business_manager": "✅ configurado",
@@ -35,15 +53,15 @@
     "strategy_doc": "neurone_kits_strategy_v4.html",
     "pricing_decision": "Todos los kits 1-3.3 a precio ÓPTIMO. Kit SOS a precio DESEADO — uso controlado Mes 3+.",
     "kits_base": [
-      {"sku":"NSCF-KT-101",  "price_po":99.99,  "margin_real":0.555},
-      {"sku":"NSCF-KT-101P", "price_po":99.99,  "margin_real":0.519},
-      {"sku":"NSCF-KT-102",  "price_po":99.99,  "margin_real":0.533},
-      {"sku":"NSCF-KT-102P", "price_po":109.99, "margin_real":0.542},
-      {"sku":"NSCF-KT-103",  "price_po":99.99,  "margin_real":0.533},
-      {"sku":"NSCF-KT-103P", "price_po":109.99, "margin_real":0.542},
-      {"sku":"NSCF-KT-103V", "price_po":84.99,  "margin_real":0.480},
-      {"sku":"NSCF-KT-103VP","price_po":99.99,  "margin_real":0.522},
-      {"sku":"NSCF-KT-104",  "price_po":179.99, "margin_real":0.470, "status":"APROBADO uso controlado Mes 3+"}
+      {"sku":"NSCF-KT-101",   "price_po":99.99,  "margin_real":0.555},
+      {"sku":"NSCF-KT-101P",  "price_po":99.99,  "margin_real":0.519},
+      {"sku":"NSCF-KT-102",   "price_po":99.99,  "margin_real":0.533},
+      {"sku":"NSCF-KT-102P",  "price_po":109.99, "margin_real":0.542},
+      {"sku":"NSCF-KT-103",   "price_po":99.99,  "margin_real":0.533},
+      {"sku":"NSCF-KT-103P",  "price_po":109.99, "margin_real":0.542},
+      {"sku":"NSCF-KT-103V",  "price_po":84.99,  "margin_real":0.480},
+      {"sku":"NSCF-KT-103VP", "price_po":99.99,  "margin_real":0.522},
+      {"sku":"NSCF-KT-104",   "price_po":179.99, "margin_real":0.470, "status":"APROBADO uso controlado Mes 3+"}
     ],
     "kits_derivados": [
       {"sku":"NSCF-KT-101T",  "price_po":109.99, "margin_real":0.555},
@@ -52,13 +70,13 @@
     ]
   },
   "alerts": [
-    {"level":"blocking","msg":"Autorización marca Neurone US pendiente — bloquea lanzamiento"},
-    {"level":"warning", "msg":"WABA pendiente de completar — Patricia en Step 1"},
-    {"level":"warning", "msg":"Vinculación Instagram → Facebook Page pendiente"},
-    {"level":"action",  "msg":"Sam: verificar dominio neuronescflorida.com en Meta vía Cloudflare TXT record"},
-    {"level":"warning", "msg":"Logos/Assets sin confirmar de Neurone Cosmética"},
-    {"level":"warning", "msg":"Shopify: precios $0.00 placeholder — no activar sin resolver"},
-    {"level":"warning", "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
-    {"level":"info",    "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
+    {"level":"blocking", "msg":"Autorización marca Neurone US pendiente — bloquea lanzamiento"},
+    {"level":"warning",  "msg":"WABA pendiente de completar — Patricia en Step 1"},
+    {"level":"warning",  "msg":"Vinculación Instagram → Facebook Page pendiente"},
+    {"level":"action",   "msg":"Sam: verificar dominio neuronescflorida.com en Meta vía Cloudflare TXT record"},
+    {"level":"warning",  "msg":"Logos/Assets sin confirmar de Neurone Cosmética"},
+    {"level":"warning",  "msg":"Shopify: precios $0.00 placeholder — no activar sin resolver"},
+    {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
+    {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
   ]
 }
