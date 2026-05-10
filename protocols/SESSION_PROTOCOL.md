@@ -7,41 +7,32 @@
 
 ### Fuente de verdad única: `ecosystem.json`
 
-`ecosystem.json` es el único archivo que Claude carga automáticamente en cada sesión. Contiene el estado completo del ecosistema: marcas, labs, agentes, infraestructura, gaps, agenda.
-
-Los `.md` son **renders derivados** del JSON — nunca se editan directamente.
-
 | Archivo | Rol | Se actualiza cuando |
 |---|---|---|
 | `ecosystem.json` | **Fuente de verdad** — Claude lo carga siempre | Hay cambios en labs, marcas, gaps o agenda |
 | `ecosystem.md` | Render narrativo del ecosistema | `ecosystem.json` cambia → Claude lo regenera |
 | `ecosystem_filemap.md` | Render de dependencias y flujos | `ecosystem.json` cambia → Claude lo regenera |
 | `AGENDA.md` | **Agenda visual de pendientes** | **Siempre** en cada Actualiza |
+| `skills/INDEX.md` | Tabla de decisión de skills | Cuando se añaden skills nuevos |
+| `skills/[nombre]/SKILL.md` | Skills del sistema | Cuando el skill cambia |
 | `brands/[Marca]/brand.json` | Estado actual de la marca | Hay cambios en la marca |
 | `brands/[Marca]/BP_Brand_Context.md` | ADN permanente de la marca | Solo si cambia algo estructural |
 | `brands/[Marca]/session_log.md` | Hilo vivo entre sesiones | Siempre — se añade al tope |
 | `agents/[nombre]/session_log.md` | Log de sesiones de agentes | El agente genera y Sam commitea |
-| `skills/INDEX.md` | Tabla de decisión de skills | Cuando se añaden skills nuevos |
-| `skills/[nombre]/SKILL.md` | Skills del sistema | Cuando el skill cambia |
 
 ### Regla crítica de los `.md`
-Los archivos `ecosystem.md`, `ecosystem_filemap.md` y `AGENDA.md` **nunca se editan manualmente**.
-Son generados por Claude a partir de `ecosystem.json`.
+`ecosystem.md`, `ecosystem_filemap.md` y `AGENDA.md` **nunca se editan manualmente** — generados por Claude desde `ecosystem.json`.
 
 ---
 
-## SKILL — GitHub Proxy (SIEMPRE DISPONIBLE)
-
-Claude puede leer cualquier archivo de cualquier repo privado de `unrealvillestudio-hub` vía:
+## SKILL — GitHub Proxy + Vercel (SIEMPRE DISPONIBLES)
 
 ```
 Vercel:web_fetch_vercel_url → https://unrlvl-context.vercel.app/api/gh?action=[tree|file|repos]&repo=[REPO]&path=[PATH]
 ```
 
 El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
-
-**Referencia completa:** `skills/github-auditor/SKILL.md`
-**Referencia Vercel:** `skills/vercel/SKILL.md`
+**Referencia:** `skills/github-auditor/SKILL.md` · `skills/vercel/SKILL.md`
 
 ---
 
@@ -79,15 +70,16 @@ El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
 ```
 
 ### Paso 4 — Skills bajo demanda
+
 Consultar `skills/INDEX.md` según el trabajo declarado. Cargar solo los relevantes.
 
 | Sam dice | Skills a cargar |
 |----------|----------------|
 | "Shopify / tienda / audit / fix" | `shopify-auditor` + `shopify-mcp` |
-| "HTML / diseño / componente" | `ui-ux-layer` |
+| "HTML / diseño / componente / visual" | `ui-ux-layer` |
 | "copy / texto / post / contenido" | `aife` + `copylab-reference` |
 | "agente / WhatsApp / bot" | `agent-builder` + `security` |
-| "imagen / video / creative / LoRA" | `image-processing` + `higgsfield` (si MCP activo) |
+| "imagen / video / creative / LoRA" | `image-processing` + `higgsfield` |
 | "ads / campaña / Meta / TikTok" | `ads-mcp` |
 | "costos / margen / tokens / OPS" | `cost-layer` |
 | "deploy / nueva EF / Supabase" | `security` |
@@ -123,24 +115,16 @@ Fetch GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yf
 - `AGENDA.md` — **siempre**
 
 **3. REGLA CRÍTICA DE NOMENCLATURA**
-Los outputs se generan con el nombre **EXACTO** del archivo en el repo:
-- `session_log.md` · `brand.json` · `ecosystem.json` · `ecosystem.md`
-- `ecosystem_filemap.md` · `AGENDA.md` · `BP_Brand_Context.md`
-- `SESSION_PROTOCOL.md` · `SKILL.md` · `INDEX.md`
-- `social_media_agent_session_log.md`
-
-Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez de reemplazar.
+Outputs con nombre **EXACTO** del archivo en el repo:
+`session_log.md` · `brand.json` · `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` · `BP_Brand_Context.md` · `SESSION_PROTOCOL.md` · `SKILL.md` · `INDEX.md` · `social_media_agent_session_log.md`
 
 **4. Provee el mensaje de commit** listo para pegar con rutas exactas.
 
 **5. Recuerda a Sam:**
 - Raíz: `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` · `TIERS.md`
-- Marca: `brands/[Marca]/`
-- Agentes: `agents/[nombre]/`
-- Protocolos: `protocols/`
-- Skills: `skills/[nombre]/` — el archivo siempre se llama `SKILL.md`
-- Index: `skills/INDEX.md`
-- Verificar que GitHub Desktop muestre **modificaciones**, no archivos nuevos
+- Skills: `skills/[nombre]/SKILL.md` (crear subcarpeta si es nueva) · Index: `skills/INDEX.md`
+- Marcas: `brands/[Marca]/` · Agentes: `agents/[nombre]/` · Protocolos: `protocols/`
+- GitHub Desktop debe mostrar **modificaciones**, no archivos nuevos
 
 **6. Verifica** con `Vercel:web_fetch_vercel_url` post-deploy y confirma:
 > *"Listo Sam. Sistema actualizado."*
@@ -149,32 +133,20 @@ Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez d
 
 ## PUSH DIRECTO A GITHUB DESDE CLAUDE
 
-Claude puede hacer push directamente a repos de código sin GitHub Desktop.
-**Cuándo usarlo:** repos de código (CoreProject, WebLab, BluePrints, labs, etc.)
-**Cuándo NO usarlo:** `unrlvl-context` — requiere Vercel redeploy → usar outputs + GitHub Desktop.
+**Cuándo usarlo:** repos de código (CoreProject, WebLab, BluePrints, labs)
+**Cuándo NO:** `unrlvl-context` — requiere Vercel redeploy → GitHub Desktop siempre.
 
 ```bash
 git clone https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git /tmp/repo
-cd /tmp/repo
-git config user.email "sam@unrealvillestudio.com"
-git config user.name "Sam UNRLVL"
-git add [archivos]
-git commit -m "[mensaje]"
+cd /tmp/repo && git config user.email "sam@unrealvillestudio.com" && git config user.name "Sam UNRLVL"
+git add [archivos] && git commit -m "[mensaje]"
 git push https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git main
 ```
-
-| Repo | Cuándo |
-|---|---|
-| `CoreProject` | CONTEXT.md, FILEMAP.md, workflows, assets |
-| `WebLab` / otros labs | Fixes de código, config, componentes |
-| `BluePrints` | Assets de marca |
-| `unrlvl-context` | ❌ NUNCA — usar GitHub Desktop |
 
 ---
 
 ## ACTUALIZACIÓN DIARIA
 
-Claude pregunta una vez al día al detectar que Sam está por irse:
 > *"Sam, antes de que te vayas — ¿Actualiza?"*
 
 ---
@@ -182,20 +154,13 @@ Claude pregunta una vez al día al detectar que Sam está por irse:
 ## FLUJO DE COMMIT — GitHub Desktop
 
 1. Descargar archivos que Claude generó como outputs
-2. Arrastrar a la carpeta local `unrlvl-context`:
-   - Raíz: `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` · `TIERS.md`
-   - Marca: `brands/[Marca]/`
-   - Agentes: `agents/[nombre]/`
-   - Protocolos: `protocols/`
-   - Skills: `skills/[nombre]/SKILL.md` (crear subcarpeta si es nueva)
-   - Index: `skills/INDEX.md`
-3. GitHub Desktop muestra los cambios → pegar mensaje de commit → Commit → Push
-4. Vercel redesploya en ~30 segundos
-5. Claude verifica y confirma
+2. Arrastrar a la carpeta local `unrlvl-context` con rutas exactas
+3. GitHub Desktop: Commit → Push → Vercel redesploya (~30s)
+4. Claude verifica y confirma
 
 ---
 
-## AGENTES AUTÓNOMOS — Protocolo de log
+## AGENTES AUTÓNOMOS
 
 | Agente | URL | Export endpoint | Marca |
 |---|---|---|---|
@@ -209,17 +174,6 @@ Claude pregunta una vez al día al detectar que Sam está por irse:
 Un chat = una marca. Si Sam mezcla sin intención:
 > *"Sam, esto es de [Marca X]. ¿Lo anoto en su session_log y seguimos, o cambiamos de chat?"*
 
-**Excepción:** chats de ecosistema declarados al inicio.
-
----
-
-## SEÑALES DE ALERTA
-
-Claude interrumpe activamente si:
-- Sam se va sin haber actualizado ese día
-- Sesión con más de 24h sin actualización y hubo decisiones importantes
-- `blocking: true` sin resolverse en más de 7 días
-
 ---
 
 ## REFERENCIA RÁPIDA — URLs
@@ -227,12 +181,9 @@ Claude interrumpe activamente si:
 | Archivo | URL |
 |---|---|
 | Ecosistema (JSON) | `https://unrlvl-context.vercel.app/ecosystem.json` |
-| Ecosistema narrativo | `https://unrlvl-context.vercel.app/ecosystem.md` |
-| Mapa dependencias | `https://unrlvl-context.vercel.app/ecosystem_filemap.md` |
-| **Agenda visual** | `https://unrlvl-context.vercel.app/AGENDA.md` |
-| **Skills INDEX** | `https://unrlvl-context.vercel.app/skills/INDEX.md` |
+| AGENDA | `https://unrlvl-context.vercel.app/AGENDA.md` |
+| Skills INDEX | `https://unrlvl-context.vercel.app/skills/INDEX.md` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
-| ForumPHs log | `https://unrlvl-context.vercel.app/brands/ForumPHs/session_log.md` |
-| NeuroneSCF log | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/session_log.md` |
 | GitHub Proxy | `https://unrlvl-context.vercel.app/api/gh` |
+| NeuroneSCF log | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/session_log.md` |
 | SMA export | `https://unrlvl-social-media-agent.vercel.app/api/export?secret=[SECRET]` |
