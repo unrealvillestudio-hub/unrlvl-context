@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-10-v1",
+    "version": "2026-05-10-v2",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
       "date": "2026-05-10",
-      "status": "Kit images sprint: 4 punta kits listos (Remove.bg + Affinity). 8 kits restantes pendientes. NSCF B2C: 137/200 (sin cambio). SP fix proxy + SEO descriptions pendientes.",
+      "status": "Kit naming CERRADO. CRO layer 12/12 kits (compare_at_price + savings HTML). KT-103VT eliminado. SOS variant title corregido. GH_PAT expira HOY.",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -159,7 +159,7 @@
             "apps": "10/10 ✅",
             "performance": "3/5",
             "b2c_vs_b2b": "5/5 ✅",
-            "cro": "4/10",
+            "cro": "7/10 — compare_at_price + savings HTML 12/12 kits ✅",
             "images": "4/10",
             "catalog_quality": "5/10 ✅",
             "inventory_quality": "5/10 ✅",
@@ -173,11 +173,14 @@
           "social_proof": "42/42 productos con SP cards ES+EN · ⚠️ 3 productos con contenido facial incorrecto (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery) — sp-fix-targeted v1 ready · proxy pending",
           "collections": "6/6 collections populadas",
           "kit_images": "⚠️ 4/12 kits con imagen lista (punta kits: Humit Moisture, Kerasin HB, Total Violet, Hyaloneurine+Dyfensor) — pendiente subir a Shopify · 8 kits restantes sin imagen",
-          "kit_naming": "⚠️ 4 punta kits — revisión pendiente con Patricia"
+          "kit_naming": "✅ CERRADO 2026-05-10 — 12 kits con nombres finales · KT-103VT eliminado",
+          "kit_cro": "✅ COMPLETO 2026-05-10 — compare_at_price + savings HTML 12/12 kits · ahorros 23%–49%",
+          "kit_catalog": "11 kits activos + SOS (activación controlada M3+) · Shopify Bundles pendiente instalar",
+          "spearheads": "M1: KT-101P ($99.99) + KT-SDUO ($64.99) | M2: KT-103V ($84.99) | M3: KT-102P ($109.99)"
         }
       },
-      "gaps": "MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido · Kit images (8 productos sin imagen — 4 listos para subir). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13)",
-      "completed": "OAuth B2B+B2C · shopify-audit v16.1 · shopify-fix v15 (post-write verification) · enrichFixPayloads HTML patch · Compliance Engine v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3 · Kit images 4 punta kits procesados (Remove.bg+Affinity)"
+      "gaps": "MANUAL URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00 · WhatsApp field · Páginas contenido · Kit images (8 productos sin imagen — 4 listos para subir). AUTOMATED PENDING: SP fix 3 productos (proxy) · SEO descriptions 29 productos (fixer v13). INFRA URGENTE: GH_PAT expira 2026-05-11.",
+      "completed": "OAuth B2B+B2C · shopify-audit v16.1 · shopify-fix v15 · enrichFixPayloads HTML patch · Compliance Engine v2 · Anti-Caída fix · CAPISSEN fix · Menu Kits animado · Kit Naming System ✅ · Kit CRO Layer ✅ · Agent Network · Social Proof 42/42 ES+EN · Collections fix · SEO titles 37/42 · Theme i18n R1+R2+R3 · Kit images 4 punta kits procesados (Remove.bg+Affinity)"
     },
     {
       "id": "ForumPHs",
@@ -337,7 +340,7 @@
       "nscf-kit-seo-revert": {
         "supabase_version": 2,
         "status": "ACTIVE",
-        "notes": "Applied 2026-05-04. Revisión pendiente con Patricia."
+        "notes": "Applied 2026-05-04."
       }
     },
     "connected_stores": [
@@ -360,15 +363,17 @@
       }
     ],
     "tech_debt": [
+      "⚠️ URGENTE HOY: GH_PAT @unrealvillestudio-hub expira 2026-05-11 — regenerar en GitHub → Vercel unrlvl-context → Settings → Env → GH_PAT → Edit → Redeploy",
       "NSCF B2C CRÍTICO: Payment gateway 0/10 — Shopify Payments setup pendiente Patricia",
       "NSCF B2C CRÍTICO: Policies 0/20 — Refund/TOS/Privacy/Shipping text pending Admin",
       "NSCF B2C CRÍTICO: 8 kits sin imágenes (CAT-002) — 4 punta kits listos para subir · 8 restantes pendientes",
+      "NSCF B2C: Shopify Bundles — instalar (App Store, gratis) + configurar composición 12 kits",
+      "NSCF B2C: DY Fazza imagen — Sam confirmar SKU exacto donde ve imagen de Dyfensor",
+      "NSCF B2C: Resplander Shine (NSCF-ST-006) — traspasar de B2B a B2C para activar KT-101T (Moisture & Shine)",
       "NSCF B2C: SP fix pendiente — 3 productos con contenido facial (DY FAZZA, Hydra Boost Duo, Deep Moisture Recovery). EF sp-fix-targeted v1 ready. ⚠️ Proxy route en fix-proxy.js no habilitada.",
       "NSCF B2C: SEO descriptions 29/42 missing — fixer v13 pendiente de run.",
-      "NSCF B2C: Auditor inconsistencia — v9-fresh vs v16.1 cuentan diferente. Unificar a un solo EF.",
       "NSCF B2C: Tracking 0/5 — Meta + TikTok + Google pixels pendientes",
       "NSCF B2C: Shipping zones not configured (2/5)",
-      "NSCF B2C: Kit naming 4 punta — revisión pendiente con Patricia",
       "NSCF B2C: neurone.size metafield = '0' visible en product page",
       "NSCF B2C: Precios $0.00 en ~20 variantes",
       "NSCF B2C: Páginas content vacías (about/la-ciencia/faq/contacto)",
@@ -501,16 +506,18 @@
     }
   ],
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF B2C: Subir 4 kit images punta a Shopify (listos: Humit Moisture, Kerasin HB, Total Violet, Hyaloneurine+Dyfensor) + alt texts SEO",
-    "PRIORIDAD 2 — NeuroneSCF B2C: SP fix — activar proxy route para sp-fix-targeted en fix-proxy.js",
-    "PRIORIDAD 3 — NeuroneSCF B2C: SEO descriptions — ejecutar shopify-fix v13 (29 productos)",
-    "PRIORIDAD 4 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway · EUR→USD · Policies · Shipping rates FL · Precios $0.00",
-    "PRIORIDAD 5 — NeuroneSCF B2C: 8 kits restantes sin imagen",
-    "PRIORIDAD 6 — NeuroneSCF B2C: Kit naming revisión con Patricia (4 punta kits)",
-    "PRIORIDAD 7 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
-    "PRIORIDAD 8 — NeuroneSCF B2C: EN translations (La Ciencia + About) + proxy route shopify-auto-translate",
-    "PRIORIDAD 9 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
-    "PRIORIDAD 10 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1",
-    "PRIORIDAD 11 — IID approval flow test · ImageLab fix · luciensael.com deploy"
+    "⚠️ URGENTE ANTES DE ARRANCAR: Renovar GH_PAT (expira 2026-05-11) — GitHub → regenerar → Vercel unrlvl-context → Settings → Env → GH_PAT → Edit → Redeploy",
+    "PRIORIDAD 1 — NeuroneSCF B2C: Instalar Shopify Bundles + configurar composición 12 kits",
+    "PRIORIDAD 2 — NeuroneSCF B2C: Subir 4 kit images punta a Shopify (listos: Humit Moisture, Kerasin HB, Total Violet, Hyaloneurine+Dyfensor) + alt texts SEO",
+    "PRIORIDAD 3 — NeuroneSCF B2C: DY Fazza imagen — Sam confirmar SKU exacto donde ve imagen de Dyfensor",
+    "PRIORIDAD 4 — NeuroneSCF B2C: SP fix — activar proxy route para sp-fix-targeted en fix-proxy.js",
+    "PRIORIDAD 5 — NeuroneSCF B2C: SEO descriptions — ejecutar shopify-fix v13 (29 productos)",
+    "PRIORIDAD 6 — NeuroneSCF MANUAL Patricia URGENTE: Payment gateway · Policies · Shipping rates FL · Precios $0.00",
+    "PRIORIDAD 7 — NeuroneSCF B2C: 8 kits restantes sin imagen",
+    "PRIORIDAD 8 — NeuroneSCF B2C: Tracking — Meta + TikTok + Google pixels (0/10)",
+    "PRIORIDAD 9 — NeuroneSCF B2C: EN translations (La Ciencia + About) + proxy route shopify-auto-translate",
+    "PRIORIDAD 10 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
+    "PRIORIDAD 11 — ShopifyAuditor: resolver inconsistencia v9-fresh vs v16.1",
+    "PRIORIDAD 12 — IID approval flow test · ImageLab fix · luciensael.com deploy"
   ]
 }
