@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-05-10-v10 | **Mantenido por:** Claude
+**Versión:** 2026-05-11-v11 | **Mantenido por:** Claude
 
 ---
 
@@ -77,7 +77,7 @@ Consultar `skills/INDEX.md` según el trabajo declarado. Cargar solo los relevan
 |----------|----------------|
 | "Shopify / tienda / audit / fix" | `shopify-auditor` + `shopify-mcp` |
 | "HTML / diseño / componente / visual" | `ui-ux-layer` |
-| "copy / texto / post / contenido" | `aife` + `copylab-reference` |
+| "copy / texto / post / contenido" | `content-pipeline` |
 | "agente / WhatsApp / bot" | `agent-builder` + `security` |
 | "imagen / video / creative / LoRA" | `image-processing` + `higgsfield` |
 | "ads / campaña / Meta / TikTok" | `ads-mcp` |
@@ -94,10 +94,15 @@ Consultar `skills/INDEX.md` según el trabajo declarado. Cargar solo los relevan
 
 Cuando Sam escribe **"Actualiza"**, Claude ejecuta sin preguntar:
 
-**1. Verifica agentes**
-Fetch GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url`:
-- Si hay log → generar como output `social_media_agent_session_log.md`
-- Si no hay → confirmar "Sin novedades del agente" y continuar
+**1. Verifica agentes — CHECK LIGERO**
+
+Fetch headers (HEAD) de `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url` para obtener `ETag` o `Last-Modified`.
+
+- Si **igual al ETag de la sesión anterior** (anotado en session_log.md) → declarar `"Sin novedades del SMA"` y continuar. **No cargar el export completo.**
+- Si **ETag cambió** → cargar export completo, procesar log, generar `social_media_agent_session_log.md` como output.
+- Si no hay ETag previo registrado → cargar export completo esta vez y anotar el ETag en session_log.md para la próxima.
+
+**Nota:** el ETag del SMA se registra en session_log.md como `_sma_etag: "valor"` al final del bloque de la sesión.
 
 **2. Genera todos los archivos que cambiaron**
 
