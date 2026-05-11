@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-11-v5",
+    "version": "2026-05-11-v6",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
       "date": "2026-05-11",
-      "status": "Blog Hair Intelligence LIVE ✅ · 4 artículos ES+EN ✅ · UNRLVL Signature B2C+B2B ✅ · Pillar cards bilingual ✅ · Patricia suggest blocks 4/4 ✅ · ImageLab presets 4/4 ✅ · Pixels pendientes → SIGUIENTE",
+      "status": "Blog LIVE ✅ · Content Pipeline v2.1 ✅ · Brand Cache LIVE ✅ · RLS 4 tablas ✅ · Artículos pendientes reescritura L0+L3",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -24,98 +24,9 @@
     "tagline": "I build worlds. Some of them survive.",
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
-    "web_status": "GENERATED v3 — PENDING DEPLOY + domain DNS",
-    "brand_identity": {
-      "version": "v1.0",
-      "status": "COMPLETE",
-      "palette": {
-        "obsidian": "#0D0D0B",
-        "carbon": "#1C1C1A",
-        "smoke": "#2E2E2B",
-        "ash": "#4A4A45",
-        "bone": "#EDE8DF",
-        "parchment": "#C4BDB0",
-        "ember": "#D4622A",
-        "gold": "#B8922A"
-      },
-      "typography": {
-        "display": "Cormorant Garamond 300/300i/600i",
-        "body": "Crimson Pro 300/300i/400/400i/600i",
-        "system": "JetBrains Mono 300/400/700"
-      }
-    },
-    "books": {
-      "project_id": "LUCIEN-BOOKS",
-      "status": "ARQUITECTURA FUNDACIONAL COMPLETA — Brief Libro 1 pendiente",
-      "concept": "5 libros como sistema. No saga. Arquitectura invisible.",
-      "next_step": "Sam trae pensamiento libre sobre el personaje del Libro 1."
-    }
+    "web_status": "GENERATED v3 — PENDING DEPLOY + domain DNS"
   },
   "brands": [
-    {
-      "id": "DiamondDetails",
-      "name": "Diamond Details",
-      "type": "brand",
-      "market": "Alicante, Espana",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "VizosCosmetics",
-      "name": "Vizos Cosmetics",
-      "type": "brand",
-      "market": "Miami + Espana",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "D7Herbal",
-      "name": "D7 Herbal",
-      "type": "brand",
-      "market": "Alicante, Espana",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "VivoseMask",
-      "name": "Vivose Mask",
-      "type": "brand",
-      "market": "Espana",
-      "status": "active",
-      "health": "yellow"
-    },
-    {
-      "id": "PatriciaOsorioPersonal",
-      "name": "Patricia Osorio · Personal",
-      "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "PatriciaOsorioComunidad",
-      "name": "Patricia Osorio · Comunidad",
-      "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "PatriciaOsorioVizosSalon",
-      "name": "Patricia Osorio · Vizos Salon",
-      "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "PatriciaOsorioConectando",
-      "name": "Patricia Osorio · Conectando",
-      "type": "personal_brand",
-      "market": "Miami + LATAM",
-      "status": "active",
-      "health": "green"
-    },
     {
       "id": "NeuroneSCF",
       "name": "Neurone South & Central Florida",
@@ -127,30 +38,20 @@
       "shopify": {
         "b2b": {
           "internal_domain": "nj5ybc-n1.myshopify.com",
-          "store_id": "5bc2d55b-da9f-47f6-bddf-7289e9a688bb",
-          "oauth_status": "CONNECTED — read_apps + read_locales + write_translations",
+          "theme_id": "149164392526",
           "last_audit_score": 133,
-          "last_audit_score_max": 160,
-          "last_audit_date": "2026-05-02",
-          "audit_status": "✅ 133/160 — fixable:1 (SEO-003 COLOR titles)"
+          "last_audit_date": "2026-05-02"
         },
         "b2c": {
           "internal_domain": "egdk1n-gt.myshopify.com",
           "public_domain": "neuronescflorida.com",
           "theme_id": 192983662919,
-          "page_ids": {
-            "about": 162313142599,
-            "la_ciencia": 162313175367,
-            "faq": 162313208135,
-            "contacto": 162313273671
-          },
           "blog": {
             "id": 126248255815,
             "handle": "hair-intelligence-1",
-            "title": "Hair Intelligence",
-            "url": "neuronescflorida.com/blogs/hair-intelligence-1",
             "articles_count": 4,
-            "status": "LIVE ✅ — ES+EN · 4 pilares · pillar cards · Patricia suggest blocks",
+            "status": "LIVE ✅ ES+EN · pillar cards · Patricia suggest blocks",
+            "pending": "Reescritura 4 artículos con L0+L3 HUMANIZE EMOTIONAL — brief en session_log.md",
             "articles": [
               {"id": 613706334535, "pilar": "Color Intelligence", "handle_es": "color-capilar-se-va-rapido-miami", "handle_en": "why-hair-color-fades-faster-miami"},
               {"id": 613706662215, "pilar": "Hair Science", "handle_es": "cabello-seco-acondicionador-reconstruccion", "handle_en": "conditioner-dry-hair-reconstruction"},
@@ -158,146 +59,54 @@
               {"id": 613706727751, "pilar": "Rituals", "handle_es": "rutina-capilar-sur-florida-protocolo", "handle_en": "hair-ritual-south-florida"}
             ]
           },
-          "oauth_status": "CONNECTED — read_apps + read_locales + write_translations + write_legal_policies",
           "last_audit_score": 137,
-          "last_audit_score_max": 200,
           "last_audit_date": "2026-05-06",
-          "audit_status": "⚠️ 137/200 pre-fixes · est. ~160+ post-fixes · re-audit pendiente",
-          "catalog": "✅ 12/12 kits con imagen ✅ · 42 productos · catálogo completo",
-          "kit_images": "✅ 12/12 COMPLETOS — 2026-05-10",
-          "compliance_status": "✅ CLEAN",
-          "theme_i18n": "✅ COMPLETE R3",
-          "about_page": "✅ ES+EN corregido",
-          "contact_page": "✅ Creada",
-          "policies": "✅ 4/4 — TOS · Refund · Shipping · Privacy",
-          "language_switcher": "✅ EN/ES pill header",
-          "product_descriptions": "✅ 42/42 ES · EN blocked (EF bug)",
-          "social_proof": "✅ Pool 80 cards · async 8s · no float",
-          "shopify_payments": "✅ Activo",
-          "cro_layer": "✅ 12/12 — compare_at_price + savings + terra accent",
           "tracking": "❌ 0/10 — Meta + TikTok + Google pixels PENDIENTES",
-          "checkout_cro": "⏳ PENDIENTE — Bundle instalada sin configurar · apps CRO",
-          "unrlvl_signature": "✅ snippets/unrlvl-signature.liquid — BP_BRAND v1.2",
-          "blog": "✅ Hair Intelligence LIVE — 4 artículos · ES+EN · pillar cards · Patricia blocks",
-          "nav_hair_intelligence": "✅ Separator + link desktop+mobile",
-          "addresses": {
-            "legal_prestige": "12951 Biscayne Blvd, North Miami, FL 33181",
-            "ops_3pl": "3028 NW 72nd Ave #4, Miami FL 33122"
-          }
+          "checkout_cro": "⏳ Bundle instalada sin configurar",
+          "unrlvl_signature": "✅ snippets/unrlvl-signature.liquid B2C+B2B",
+          "completed": "OAuth ✅ · Audit v16.1 · Compliance ✅ · SP Pool ✅ · Kits 12/12 ✅ · CRO Layer ✅ · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅ · Language switcher ✅ · Contact ✅ · Signature ✅ · Blog LIVE ✅ · 4 arts ES+EN ✅",
+          "gaps": "NEXT: Artículos L0+L3 → Pixels (0/10) → CRO Checkout → Audit → Ads. DY Fazza. EN descriptions EF bug. SP metafield 3 productos."
         }
-      },
-      "gaps": "NEXT: Tracking pixels (0/10) → CRO Checkout + Bundle → Audit → Ads. DY Fazza imagen pendiente. EN descriptions (EF bug). SP metafield fix 3 productos. Supabase RLS 4 tablas. ImageLab timeout fix.",
-      "completed": "OAuth B2B+B2C ✅ · Audit v16.1 · Compliance ✅ · SP Pool 80 cards ✅ · Kit Naming ✅ · Kit Images 12/12 ✅ · CRO Layer ✅ · CRO Polish ✅ · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅ · Language switcher ✅ · translate-proxy.js ✅ · Contact page ✅ · UNRLVL Signature B2C+B2B ✅ · Blog Hair Intelligence LIVE ✅ · 4 artículos ES+EN ✅ · Pillar cards bilingual ✅ · Patricia suggest blocks ✅ · ImageLab presets 4/4 ✅"
+      }
     },
-    {
-      "id": "ForumPHs",
-      "name": "ForumPHs",
-      "type": "brand",
-      "key_person": "Ivette Flores",
-      "market": "Panama",
-      "status": "active",
-      "health": "green"
-    },
-    {
-      "id": "UnrealvilleStudio",
-      "name": "Unrealville Studio",
-      "type": "studio",
-      "market": "Florida USA + LATAM",
-      "status": "active",
-      "health": "green",
-      "web": "LIVE EN+ES",
-      "skills": "Skills system v1.0 OPERATIVO — 16 skills · INDEX.md · SESSION_PROTOCOL v10",
-      "iid_pipeline": "OPERATIONAL",
-      "unrlvl_signature": "✅ BP_BRAND v1.2 — Supabase unrlvl_signature_enabled para todas las marcas"
-    },
-    {
-      "id": "UnrealvilleStores",
-      "name": "Unrealville Stores",
-      "type": "ecommerce",
-      "market": "Florida USA",
-      "status": "active",
-      "health": "green"
-    }
+    {"id": "DiamondDetails", "name": "Diamond Details", "type": "brand", "market": "Alicante, España", "status": "active"},
+    {"id": "VizosCosmetics", "name": "Vizos Cosmetics", "type": "brand", "market": "Miami + España", "status": "active"},
+    {"id": "D7Herbal", "name": "D7 Herbal", "type": "brand", "market": "Alicante, España", "status": "active"},
+    {"id": "VivoseMask", "name": "Vivose Mask", "type": "brand", "market": "España", "status": "active"},
+    {"id": "PatriciaOsorioPersonal", "name": "Patricia Osorio · Personal", "type": "personal_brand", "market": "Miami, FL", "status": "active"},
+    {"id": "ForumPHs", "name": "ForumPHs", "type": "brand", "market": "Panama", "status": "active"},
+    {"id": "UnrealvilleStudio", "name": "Unrealville Studio", "type": "studio", "market": "Florida USA + LATAM", "status": "active"}
   ],
-  "shopify_auditor": {
-    "version": "3.5",
-    "status": "READY FOR BUSINESS ✅",
-    "supabase_project": "amlvyycfepwhiindxgzw",
-    "app_url": "https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html",
-    "proxy_url": "https://unrlvl-tools.vercel.app/api/audit-proxy",
-    "translate_proxy_url": "https://unrlvl-tools.vercel.app/api/translate-proxy",
-    "audit_engine": { "version": "v16.1", "modules": 23, "score_max": 200 },
-    "fixer_engine": { "shopify_fix_version": "v15" },
-    "connected_stores": [
-      {"brand_id": "NeuroneSCF", "type": "b2b", "domain": "nj5ybc-n1.myshopify.com", "status": "✅ CONNECTED", "last_audit": 133},
-      {"brand_id": "NeuroneSCF", "type": "b2c", "domain": "egdk1n-gt.myshopify.com", "status": "✅ CONNECTED", "last_audit": 137}
-    ],
-    "tech_debt": [
-      "NSCF B2C: shopify-auto-translate EF bug — 42 productos mostrando ES en locale EN",
-      "NSCF B2C: SP metafield fix 3 productos (proxy route pendiente — cosmético)",
-      "NSCF B2C: SEO titles 5/42 missing",
-      "NSCF B2C: Tracking 0/10 — Meta + TikTok + Google pixels pendientes",
-      "NSCF B2C: Shipping zones not configured",
-      "NSCF B2C: DY Fazza imagen incorrecta (NLSDYLS-1-1.webp es Dyfensor SF)",
-      "NSCF B2C: EN translations La Ciencia pendiente",
-      "NSCF B2C: Checkout CRO + Bundle sin configurar",
-      "NSCF B2B: fix SEO-003 COLOR titles",
-      "skills/shopify-auditor/SKILL.md desactualizado (dice v2.0 — tool es v3.5)",
-      "Supabase RLS disabled: ops_lab_rates, shopify_enrich_jobs, pipeline_skills, pipeline_results — sesión de infra pendiente"
-    ]
+  "content_pipeline": {
+    "version": "2.1",
+    "skill_url": "https://unrlvl-context.vercel.app/skills/content-pipeline/SKILL.md",
+    "brand_cache_url": "https://unrlvl-context.vercel.app/api/brand-cache?brand_id={brand_id}",
+    "layers": ["L0 AUDIENCE_BRIEF", "L1 WRITE", "L2 H+AIFE", "L3 HUMANIZE_EMOTIONAL", "L4 PSYCHO", "L5 CRO", "L6 SEO", "L7 QA"],
+    "supabase_pipeline_skills": "8 rows v2.0",
+    "deprecated": ["skills/CONTENT_PIPELINE_SKILLS.md", "skills/aife/SKILL.md"]
   },
-  "skills_system": {
-    "version": "1.0",
-    "status": "OPERATIVO ✅ — 2026-05-10",
-    "total_skills": 16,
-    "index_url": "https://unrlvl-context.vercel.app/skills/INDEX.md",
-    "skills": [
-      "github-auditor", "shopify-auditor", "shopify-mcp", "ui-ux-layer",
-      "aife", "agent-builder", "copylab-reference", "image-processing",
-      "cost-layer", "security", "vercel", "content-pipeline",
-      "ads-mcp", "higgsfield", "agent-browser"
-    ],
-    "pending_skills": ["tiktok-mcp", "meta-organic", "wordpress-mcp", "elevenlabs", "weblab-shopify"],
-    "note": "shopify-auditor/SKILL.md desactualizado — dice v2.0, tool es v3.5. Actualizar próxima sesión."
-  },
-  "labs": [
-    {"id": "LAB-CPL", "name": "CopyLab", "status": "LIVE v8.1", "url": "https://unrlvl-copy-lab.vercel.app"},
-    {"id": "LAB-WL", "name": "WebLab", "status": "PASSED"},
-    {"id": "LAB-IL", "name": "ImageLab", "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout · presets NSCF blog listos en Supabase"},
-    {"id": "LAB-AL", "name": "AgentLab", "status": "PASSED"},
-    {"id": "LAB-BPL", "name": "BlueprintLab", "status": "PASSED"},
-    {"id": "LAB-ORCH", "name": "Orchestrator", "status": "OR_1.1 LIVE", "url": "https://orchestrator-unrlvl.vercel.app"},
-    {"id": "LAB-SL", "name": "SocialLab", "status": "LIVE"},
-    {"id": "LAB-OPS", "name": "UNRLVL-OPS", "status": "LIVE", "url": "https://unrlvl-ops.vercel.app"}
-  ],
   "infrastructure": [
     {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app"},
-    {
-      "id": "INFRA-SHOPIFY-MCP",
-      "name": "Shopify MCP — Unrealville Studio",
-      "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp",
-      "connector_name": "Shopify — Unrealville Studio",
-      "status": "ACTIVE",
-      "architecture": "Multimarca. Credenciales por Supabase (shopify_stores).",
-      "connected_brands": ["NeuroneSCF"]
-    },
-    {"id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "schemas": "public.* + shopify.*", "note": "RLS disabled: ops_lab_rates, shopify_enrich_jobs, pipeline_skills, pipeline_results — fix pendiente"},
-    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.5 + translate-proxy.js ✅"},
-    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
-    {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy"}
+    {"id": "INFRA-BRAND-CACHE", "name": "Brand Cache API", "url": "https://unrlvl-context.vercel.app/api/brand-cache", "status": "LIVE ✅", "note": "?brand_id=X · ?refresh=true · ?debug=true"},
+    {"id": "INFRA-SHOPIFY-MCP", "name": "Shopify MCP", "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp", "status": "ACTIVE"},
+    {"id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "rls_status": "✅ ALL 4 previously exposed tables now secured"},
+    {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.5 + proxies"},
+    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"}
   ],
+  "skills_system": {
+    "version": "1.1",
+    "status": "OPERATIVO ✅",
+    "total_skills": 15,
+    "index_url": "https://unrlvl-context.vercel.app/skills/INDEX.md",
+    "changes_v1_1": "content-pipeline nuevo path canónico · aife DEPRECATED y eliminado"
+  },
   "next_session_agenda": [
-    "PRIORIDAD 1 — NeuroneSCF B2C: Tracking pixels — Meta Pixel + TikTok Pixel + Google Analytics/Tag Manager",
-    "PRIORIDAD 2 — NeuroneSCF B2C: CRO Checkout — configurar Bundle + apps CRO required",
-    "PRIORIDAD 3 — NeuroneSCF B2C: Re-run audit post-fixes (esperado ~160+/200)",
-    "PRIORIDAD 4 — NeuroneSCF B2C: DY Fazza imagen correcta (NSCF-TR-013 + NSCF-BTP-003)",
-    "PRIORIDAD 5 — NeuroneSCF B2C: shopify-auto-translate EF bug fix → EN descriptions 42 productos",
-    "PRIORIDAD 6 — NeuroneSCF B2C: Ads — lanzamiento paid media (post audit ✅)",
-    "PRIORIDAD 7 — NeuroneSCF B2C: SP metafield fix 3 productos (proxy route)",
-    "PRIORIDAD 8 — NeuroneSCF B2C: Shipping zones + EN La Ciencia",
-    "PRIORIDAD 9 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
-    "PRIORIDAD 10 — PO Social: Meta Developer App + System User tokens (sesión dedicada)",
-    "PRIORIDAD 11 — Infra: Supabase RLS fix (4 tablas) · ImageLab timeout fix · shopify-auditor SKILL.md v3.5 · luciensael.com deploy",
-    "PRIORIDAD 12 — Blog: Artículos 05-08 · IID pipeline activation · imágenes via ImageLab"
+    "PRIORIDAD 0 — NeuroneSCF: Reescritura 4 artículos blog con L0+L3 (brief completo en session_log.md)",
+    "PRIORIDAD 1 — NeuroneSCF: Tracking pixels Meta + TikTok + Google (0/10)",
+    "PRIORIDAD 2 — NeuroneSCF: CRO Checkout — Bundle configurar + apps",
+    "PRIORIDAD 3 — NeuroneSCF: Re-audit post-fixes (~160+/200)",
+    "PRIORIDAD 4 — NeuroneSCF: DY Fazza imagen correcta",
+    "PRIORIDAD 5 — NeuroneSCF: shopify-auto-translate EF bug fix",
+    "PRIORIDAD 6 — Infra: Brand cache otras marcas del ecosistema"
   ]
 }
