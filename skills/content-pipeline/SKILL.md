@@ -1,16 +1,18 @@
-# UNRLVL Content Pipeline Skills
-## Definición Canónica · ICR v1.1
+# CONTENT PIPELINE SKILL
+## UNRLVL · Versión canónica · v2.0
 **Propietario:** Unreal>ille Studio · Sam  
-**Estado:** DRAFT → pendiente graduación ICR  
-**Ruta canónica en repo:** `/skills/CONTENT_PIPELINE_SKILLS.md`  
-**Última actualización:** 2026-05-05 · v1.1 — AIFE exhaustivo integrado desde Wikipedia AI Writing Patterns
+**Estado:** ICR ✅ — R4B (Ready for Business)  
+**Ruta canónica:** `skills/content-pipeline/SKILL.md`  
+**Reemplaza:** `skills/CONTENT_PIPELINE_SKILLS.md` v1.1 + `skills/aife/SKILL.md` v1.1 — ambos deprecados  
+**Última actualización:** 2026-05-11 · v2.0
 
 ---
 
-## 0. Estándares del Ecosistema
+## 0. ESTÁNDARES DEL ECOSISTEMA
 
 ### ICR — Industrial Consistency Ready
-Estándar de calidad firma de Unreal>ille Studio. Una solución, herramienta, skill o proceso alcanza ICR cuando su comportamiento y output han sido verificados y producen el mismo resultado cada vez que se repite la misma actividad bajo las mismas condiciones. ICR es una promesa de negocio: el cliente y el ecosistema pueden confiar en el resultado sin supervisión manual constante. Sinónimo operativo: **R4B (Ready for Business)**.
+
+Estándar de calidad firma de Unreal>ille Studio. Una solución alcanza ICR cuando su output es verificablemente consistente bajo las mismas condiciones, sin supervisión manual constante. Sinónimo operativo: **R4B (Ready for Business)**.
 
 Una solución NO es ICR si:
 - Su output varía significativamente entre ejecuciones sin razón declarada
@@ -19,145 +21,262 @@ Una solución NO es ICR si:
 - Sus reglas de operación no están documentadas en el ecosistema
 
 ### QA — Quality Assurance Layer
-QA es la verificación de cumplimiento de requerimientos y objetivos **antes de entregar**. No es revisión post-entrega. No es corrección. Es la capa que garantiza que lo que se declara como "listo" realmente lo está.
 
-**Definición operativa:** Antes de cualquier entrega — ya sea un output de texto, una acción en Shopify, un despliegue de código, o un documento — QA verifica contra un checklist de requerimientos declarados al inicio de la tarea. Si algún punto no se cumple, el output no se entrega: se corrige primero.
+Verificación de cumplimiento **antes de entregar**. No es revisión post-entrega.
 
-**Contrato:**
-- Input: output generado + lista de requerimientos originales
-- Output: PASS (entrega) | FAIL (lista de gaps + corrección automática)
-- Costo: una llamada adicional a Claude por output — asumido como necesario para ICR
-
-**Aplicación a Claude en chat:** Antes de responder "listo, hecho", Claude verifica internamente:
-1. ¿El output cumple todos los requisitos declarados explícitamente?
-2. ¿El output cumple los objetivos implícitos del contexto?
-3. ¿Hay partes declaradas como resueltas que no lo están?
-4. ¿El scope fue respetado o hubo omisiones?
-
-Si detecta gaps: los declara antes de entregar, no después.
+**Contrato QA:**
+- Input: output generado + requerimientos originales
+- Output: PASS (entrega) | FAIL (gaps + corrección automática)
+- En chat: Claude verifica internamente antes de declarar "listo". Gaps → declarar antes de entregar, nunca después.
 
 ---
 
-## 1. Pipeline de Contenido UNRLVL
-
-### Arquitectura General
+## 1. ARQUITECTURA DEL PIPELINE
 
 ```
-INPUT (producto / ad / post / brief)
+INPUT (brief / producto / canal / ad)
   │
-  ├── [1] WRITE        → Draft base desde brand_copy_profiles
-  ├── [2] H+AIFE       → Humanización profunda + borrado de huella IA
-  ├── [3] PSYCHO       → Capas psicológicas de persuasión
-  ├── [4] CRO / SEO    → Optimización de conversión o búsqueda (por canal)
-  └── [5] QA           → Verificación de cumplimiento antes de entrega
+  ├── [L0] AUDIENCE BRIEF       → Quién es el receptor. Pain points. Objeciones.
+  ├── [L1] WRITE                → Draft base desde brand_copy_profiles
+  ├── [L2] H+AIFE               → Humanización profunda + borrado de huella IA
+  ├── [L3] HUMANIZE EMOTIONAL   → Dolor → mecanismo → beneficio sentido
+  ├── [L4] PSYCHO               → Capas psicológicas de persuasión
+  ├── [L5] CRO                  → Arquitectura de conversión + desarme de objeciones
+  ├── [L6] SEO                  → Optimización de búsqueda (si aplica)
+  └── [L7] QA                   → Verificación final antes de entrega
        │
-OUTPUT listo para publicación / write a Shopify / entrega
+  OUTPUT — listo para publicación / Shopify / plataforma
 ```
 
-Cada layer lee su configuración de Supabase en runtime. Ningún layer tiene lógica hardcodeada de marca — todo viene del ecosistema.
+**Activación por content_type:**
+
+| Content type | L0 | L1 | L2 | L3 | L4 | L5 | L6 | L7 |
+|---|---|---|---|---|---|---|---|---|
+| Descripción producto B2C | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | med | ✅ |
+| Blog post / artículo largo | ✅ | ✅ | ✅ | ✅ | ✅ | med | ✅ | ✅ |
+| Ad performance | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Post orgánico | ✅ | ✅ | ✅ | ✅ | med | ❌ | ❌ | ✅ |
+| Descripción producto B2B | ✅ | ✅ | ✅ | med | ✅ | ✅ | med | ✅ |
+| Landing page | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | med | ✅ |
+| Script de video | ✅ | ✅ | ✅ | ✅ | ✅ | med | ❌ | ✅ |
+| Email marketing | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Contenido UNRLVL / Lucien | ✅ | ✅ | ✅ | ✅ | ✅ | med | med | ✅ |
+
+**med = aplica parcialmente según objetivo declarado de la pieza**
 
 ---
 
-## 2. Layers — Definición Canónica
+## LAYER 0 · AUDIENCE BRIEF
+
+**Función:** Cargar el contexto de audiencia antes de generar cualquier contenido. Layer fundacional — sin él, todos los demás operan en abstracto y producen contenido técnicamente correcto pero emocionalmente neutro.
+
+**Fuentes de datos (Supabase → brand-cache):**
+
+| Tabla | Columnas clave | Para qué |
+|---|---|---|
+| `brand_personas` | `persona_key` · `pain_points` · `motivations` · `objections` · `copy_hooks` · `buying_trigger` · `tone_for_segment` · `avoid` | Perfil completo del receptor |
+| `brand_copy_profiles` | `voice_tone_primary` · `voice_writing_style` · `style_hooks` · `style_signature_phrases` · `style_avoid_phrases` | Voz de marca para WRITE |
+| `geomix` | `local_slang` · `avoid_slang` · `cultural_refs` · `language` | Contexto geográfico y cultural |
+| `brand_goals` | Objetivos estratégicos activos | Dirección de conversión |
+| `compliance_rules` | Claims prohibidos · disclaimers obligatorios | Qué no se puede decir |
+
+**Input contract:** `brand_id` + `content_type` + `persona_key` (si declarado) + `language`  
+**Output contract:** brief de audiencia activo — contexto de sistema que alimenta L1-L7
+
+**Selección de persona:**
+```
+persona_key declarado   → cargar esa persona
+B2C sin declarar        → persona priority=1 del brand
+B2B sin declarar        → persona B2B priority=1
+blog editorial          → combinar top 2 personas B2C activas
+```
+
+**Ejemplo cargado — NSCF B2C (`b2c_latina_color`):**
+```
+Segmento:       Mujer Latina Cabello Teñido · 30-45 · Miami
+Pain points:    "Cabello teñido que se destiñe rápido"
+                "Frizz clima Miami"
+                "Productos que prometen y no cumplen"
+Motivaciones:   Mantener color vibrante · Cabello saludable sin daño
+Objeciones:     "Precio más alto que supermercado"
+                "No conoce la marca"
+                "Desconfía marcas nuevas en e-commerce"
+Buying trigger: Recomendación estilista o PO en redes. UGC resultado visible.
+Tono:           Cercano, técnico-accesible. Spanglish natural.
+Copy hooks:     "¿Tu color dura menos de 3 semanas?"
+                "La tecnología que Miami necesitaba"
+Avoid:          Jerga técnica sin traducir · Tono clínico frío
+Geo Miami:      local_slang + cultural_refs activos desde geomix
+```
+
+**Regla crítica:** si no existe `brand_personas` para el `brand_id` → usar `DEFAULT_PERSONA` y declarar el gap. Un output sin audiencia definida no es ICR.
 
 ---
 
-### LAYER 1 · WRITE
-**Función:** Generar el draft base del contenido a partir del perfil de marca.  
-**Fuente de datos:** `brand_copy_profiles[brand_id]` + `brand_personas` + `keywords`  
-**Input contract:** product_id | ad_brief | social_brief + brand_id + content_type + language  
-**Output contract:** texto draft en el idioma declarado, sin aplicar capas de humanización ni persuasión  
-**Fallback si no hay brand_copy_profiles:** usar `brand_copy_profiles[DEFAULT]` + brand_context de Supabase. Si tampoco existe: error explícito, no inventar voz de marca.  
-**No hace:** no humaniza, no aplica psicología, no optimiza SEO/CRO  
-**Regla crítica:** Si no hay input suficiente para generar contenido real, devuelve error en vez de inventar.
+## LAYER 1 · WRITE
+
+**Función:** Generar el draft base a partir del perfil de marca y el brief de audiencia de L0.
+
+**Fuentes:** `brand_copy_profiles[brand_id]` + output L0 + `keywords[brand_id]` + `output_templates[brand_id + content_type]`
+
+**Input contract:** brief L0 + `product_id | ad_brief | social_brief` + `content_type` + `language`  
+**Output contract:** texto draft en el idioma declarado, sin humanizar ni aplicar persuasión.
+
+**Fallbacks:**
+```
+Sin brand_copy_profiles → DEFAULT_COPY_PROFILE + declarar gap
+Sin keywords            → generar sin keyword injection + declarar
+Sin output_templates    → longitud estándar por content_type
+Sin persona en L0       → ERROR EXPLÍCITO — no continuar
+```
+
+**No hace:** no humaniza, no aplica psicología, no optimiza. Solo genera el material base con la voz correcta dirigido a la audiencia correcta.
 
 ---
 
-### LAYER 2 · H+AIFE (Humanize + AI Footprint Eraser)
-**Función:** Eliminar toda huella de escritura generada por IA — tanto a nivel superficial (perceptible por humano promedio) como a nivel profundo (perceptible por sistemas de detección, lingüistas, y análisis estadístico de patrones).
+## LAYER 2 · H+AIFE (Humanize + AI Footprint Eraser)
 
-**Origen:** Artículo Wikipedia "AI Writing Patterns" — análisis exhaustivo de patrones matemáticos y estilísticos que identifican escritura IA. Analizados y convertidos en reglas de borrado activo para el ecosistema UNRLVL.
+**Función:** Eliminar toda huella de escritura generada por IA — a nivel superficial (perceptible por lector promedio) y profundo (detectable por herramientas, lingüistas y análisis estadístico de patrones).
 
-**Arquitectura del layer:** Dos subniveles integrados en una sola pasada:
+**Posición:** después de WRITE, antes de HUMANIZE EMOTIONAL. Limpia la forma sin cambiar el mensaje.
+
+**Fuente de datos:** `humanize_profiles[brand_id + medium]`
 
 ---
 
-#### H (Humanize) — Nivel 1: Patrones superficiales
+### H · Nivel 1 — Patrones superficiales
 
-Elimina lo que cualquier lector promedio nota como "suena a robot":
-
-**Vocabulario IA por era — eliminar o sustituir activamente:**
+**Vocabulario IA por era — eliminar activamente:**
 
 Era 2023–mid 2024 (GPT-4):
-`Additionally` (al inicio de frase), `boasts`, `bolstered`, `crucial`, `delve`, `emphasizing`, `enduring`, `garner`, `intricate/intricacies`, `interplay`, `key` (adjetivo), `landscape` (abstracto), `meticulous/meticulously`, `pivotal`, `underscore` (verbo), `tapestry` (abstracto), `testament`, `valuable`, `vibrant`
+`Additionally` (apertura) · `boasts` · `bolstered` · `crucial` · `delve/delving` · `emphasizing` · `enduring` · `garner` · `intricate/intricacies` · `interplay` · `key` (adjetivo) · `landscape` (abstracto) · `meticulous/meticulously` · `pivotal` · `underscore` (verbo) · `tapestry` (abstracto) · `testament` · `valuable` · `vibrant`
 
 Era mid-2024 a mid-2025 (GPT-4o):
-`align with`, `bolstered`, `crucial`, `emphasizing`, `enhance`, `enduring`, `fostering`, `highlighting`, `pivotal`, `showcasing`, `underscore`, `vibrant`
+`align with` · `bolstered` · `crucial` · `emphasizing` · `enhance` · `enduring` · `fostering` · `highlighting` · `pivotal` · `showcasing` · `underscore` · `vibrant`
 
 Era mid-2025 en adelante (GPT-5):
-`emphasizing`, `enhance`, `highlighting`, `showcasing` + patrones de énfasis en notabilidad y cobertura mediática
+`emphasizing` · `enhance` · `highlighting` · `showcasing` + patrones de énfasis en notabilidad mediática
 
-**Patrones estructurales superficiales a eliminar:**
-- Apertura de frase con el nombre del producto como sujeto directo
-- Simetría excesiva entre frases: "A hace X, B hace Y, C hace Z" (rule of three sistemático)
-- Transiciones artificiales: "en resumen", "en conclusión", "cabe destacar", "In summary", "Overall"
-- Secciones de "Conclusión" o "Future Outlook" que resumen lo ya dicho
-- Párrafo final que repite la idea central con palabras distintas
-- Tono uniformemente positivo sin textura, contraste ni especificidad
-- Lenguaje promocional de travel guide: `nestled`, `in the heart of`, `vibrant`, `rich cultural heritage`, `natural beauty`, `diverse array`
-- Énfasis genérico de importancia: `groundbreaking`, `revolutionary`, `exceptional`, `transformador`, `renowned`, `commitment to`
+**Protocolo:** nunca eliminar sin reemplazar → término concreto del contexto, construcción activa directa, o eliminación completa si la frase no añadía valor real.
+
+**Patrones estructurales a eliminar:**
+- Apertura de frase con nombre del producto como sujeto directo
+- Simetría excesiva "A hace X, B hace Y, C hace Z" (rule of three formulario)
+- Transiciones artificiales: "en resumen" · "en conclusión" · "cabe destacar" · "In summary" · "Overall"
+- Secciones de "Conclusión" que repiten lo ya dicho
+- Tono uniformemente positivo sin textura ni contraste
+- Lenguaje de travel guide: `nestled` · `vibrant` · `rich cultural heritage` · `diverse array`
+- Énfasis genérico: `groundbreaking` · `revolutionary` · `exceptional` · `renowned` · `commitment to`
 
 ---
 
-#### AIFE (AI Footprint Eraser) — Nivel 2: Patrones profundos
+### AIFE · Nivel 2 — Patrones profundos (estadísticos y lingüísticos)
 
-Elimina los patrones matemáticos/estadísticos detectables por herramientas y lingüistas:
+*Origen: análisis de patrones matemáticos identificados en producción masiva de LLMs 2023-2026*
 
 **Patrones de contenido — regresión a la media estadística:**
-- Sustituir datos específicos por descripciones genéricas positivas ("inventor del primer dispositivo X" → "revolucionario titán de la industria")
-- Énfasis injustificado en significado, legado y tendencias amplias: `stands as`, `serves as`, `marks a pivotal moment`, `represents a shift`, `setting the stage for`, `shaping the`, `key turning point`, `evolving landscape`, `indelible mark`, `deeply rooted`, `symbolizing its enduring`
-- Análisis superficiales adjuntos con participio presente: frases que terminan en "...highlighting its importance", "...reflecting broader trends", "...contributing to the field", "...fostering a sense of community", "...ensuring its relevance"
-- Atribuciones vagas de opinión: "Industry reports indicate", "Observers have cited", "Experts argue", "Some critics argue", "several sources suggest" — sin cita real
-- Exageración de cantidad de fuentes: una fuente presentada como consenso amplio
-- Afirmar que algo "ha generado debate" o "ha levantado discusión" sin evidencia de ello
-- Declaraciones sobre "active social media presence" en contextos donde no aporta nada
+- Sustituir datos específicos por frases genéricas positivas → revertir al dato concreto
+- Énfasis injustificado en legado: `stands as` · `serves as` · `marks a pivotal moment` · `represents a shift` · `indelible mark` · `deeply rooted` · `symbolizing its enduring`
+- Participios presentes como cierre superficial: "...highlighting its importance" · "...reflecting broader trends" · "...fostering a sense of community"
+- Atribuciones vagas sin fuente real: "Industry reports indicate" · "Experts argue" → eliminar o citar fuente real
 
 **Patrones lingüísticos profundos:**
-- **Evitar copulativos básicos:** IA reemplaza "is" / "are" con "serves as", "stands as", "marks", "represents", "boasts", "features", "maintains", "offers" → revertir a construcciones directas con "es/está/tiene"
-- **Paraleliismos negativos artificiales:** "Not just X, but also Y" / "It's not X, it's Y" / "No solo X sino también Y" → reestructurar en afirmaciones directas
-- **Variación elegante forzada:** IA evita repetir palabras usando sinónimos en cadena (protagonist → key player → eponymous character) por penalización de repetición → permitir repetición natural de términos clave
-- **Rule of three sistemático:** "adjective, adjective, adjective" o "phrase, phrase, and phrase" como patrón formulario para aparentar exhaustividad → romper la simetría donde no sea necesaria
+- **Copulativos inflados:** `serves as` · `stands as` · `marks` · `represents` · `boasts` · `features` → revertir a "es / tiene / está"
+- **Paralelismos negativos artificiales:** "Not just X, but also Y" → reestructurar en afirmaciones directas
+- **Variación elegante forzada:** sinónimos en cadena para evitar repetición → permitir repetición natural de términos clave
+- **Rule of three formulario** → romper simetría donde no sea necesaria
 
 **Patrones estadísticos de distribución:**
-- **Longitud de frases demasiado uniforme:** IA varía entre 15-25 palabras de forma consistente → introducir variación real: frases cortas de 5-8 palabras intercaladas con frases más largas
-- **Colocación predecible de conectores de transición:** IA los coloca cada N oraciones → redistribuir irregularmente o eliminar donde el flujo lo permite
-- **Vocabulario estadísticamente "seguro":** IA evita palabras poco frecuentes que un humano experto usaría → usar terminología técnica específica del campo cuando corresponde
-- **Estructura argumental demasiado completa:** IA explicita todo; los humanos dejan cosas implícitas para el lector → permitir que algunas ideas queden sugeridas, no declaradas
-- **Redundancia semántica de párrafo:** IA repite la idea central de cada párrafo con palabras distintas al inicio y al final → asegurar que cada párrafo avance, no repita
+- **Longitud de frases uniforme** (IA varía entre 15-25 palabras constante) → variación real: frases cortas 5-8 palabras como anclas emocionales + frases largas para desarrollo técnico
+- **Colocación predecible de conectores** → redistribuir irregularmente o eliminar
+- **Vocabulario estadísticamente seguro** → usar terminología técnica específica del campo cuando corresponde
+- **Estructura argumental demasiado completa** → permitir que algunas ideas queden sugeridas, no declaradas
+- **Redundancia semántica de párrafo** → cada párrafo avanza, no repite
 
-**Patrones de estilo tipográfico a verificar:**
-- Em dashes en exceso para énfasis dramático estilo sales copy — reducir
-- Negritas en frases clave como "key takeaways" — solo bold para términos técnicos necesarios
-- Listas con inline header en negrita: `• **Header:** descripción` — convertir a prosa donde sea posible
-- Title Case en subtítulos que no son nombres propios — usar sentence case
+**Tipografía:**
+- Em dashes en exceso → reducir
+- Bold en "key takeaways" → solo para términos técnicos necesarios
+- Bullet `• **Header:** descripción` → convertir a prosa donde posible
+- Title Case en subtítulos no propios → sentence case
 
-**Fuente de datos en Supabase:** `humanize_profiles[brand_id + medium]` — `vocabulary_include`, `vocabulary_exclude`, `anti_patterns`, `authenticity_rules`  
-**Input contract:** texto draft del LAYER WRITE  
-**Output contract:** texto con todos los patrones IA eliminados, manteniendo mensaje, información y tono de marca  
-**Regla crítica:** H+AIFE no cambia el mensaje ni la información — solo la forma. Si tiene que elegir entre naturalidad y precisión informativa, gana la precisión.
+**Burstiness — inyección obligatoria:**
+```
+ANTES (AI uniforme):
+"El producto tiene una fórmula avanzada. Se diseñó para el mercado latino.
+Su diferenciador es la tecnología. El equipo es experto."
+
+DESPUÉS (bursty):
+"La fórmula fue diseñada para este mercado específico.
+
+Cabello latino, clima de Miami, humedad constante — tres variables que los
+laboratorios en Europa y Japón no tienen en sus protocolos de prueba.
+Neurone sí.
+
+La diferencia se nota en semanas, no en promesas."
+```
+
+**Regla crítica:** H+AIFE no cambia mensaje ni información — solo la forma. Conflicto entre naturalidad y precisión → gana la precisión.
 
 ---
 
-### LAYER 3 · PSYCHO
-**Función:** Inyectar capas psicológicas de persuasión calibradas al objetivo del contenido y la audiencia.  
-**Fuente de datos:** `psycho_presets[preset_id]`
+## LAYER 3 · HUMANIZE EMOTIONAL
 
-**10 presets disponibles:**
+**Función:** Traducir mecanismos técnicos correctos en experiencia humana reconocible. Convierte "información precisa" en "me está hablando a mí."
 
-| ID | Nombre | Uso principal | Injection copy |
+**Posición:** después de H+AIFE. Presupone texto ya limpio — ahora lo hace relevante para esta persona específica.
+
+**La fórmula canónica:**
+
+```
+DOLOR RECONOCIBLE  →  MECANISMO (una línea)  →  BENEFICIO SENTIDO
+```
+
+**DOLOR RECONOCIBLE:** El momento de frustración concreto que el receptor ya vivió. Fuente: `pain_points[brand_personas]`.
+Para NSCF: no "pérdida de color" — sino "el jueves con el cabello opaco cuando el lunes saliste perfecta del salón."
+
+**MECANISMO (una línea):** La lógica del por qué, en una frase sin jerga. El puente entre el dolor y la solución.
+Para NSCF: no "la cutícula permanece en estado de apertura parcial" — sino "Miami mantiene tu cutícula abierta casi todo el año, y por ahí se va el color."
+
+**BENEFICIO SENTIDO:** Qué va a notar diferente, en experiencia real. Fuente: `motivations[brand_personas]`.
+Para NSCF: no "mayor retención del pigmento" — sino "el viernes con el mismo color del lunes."
+
+**Ejemplo completo — NSCF Art 01:**
+```
+ANTES (correcto pero neutro):
+"La cutícula permanece parcialmente abierta con la humedad alta.
+Las moléculas de color migran hacia afuera."
+
+DESPUÉS:
+"¿Tu color se ve vivo el lunes y opaco el jueves, sin haber hecho
+nada diferente?
+
+No es tu imaginación. En Miami la humedad mantiene la cutícula
+abierta casi todo el año — y por ahí se va el color, despacio,
+desde el día después de tu cita.
+
+Con el protocolo correcto, ese viernes de color vivo empieza a
+parecerse mucho más al lunes."
+```
+
+**El test de Patricia:** ¿sonaría esto en la silla del salón, en conversación con una clienta de 35 años? Si suena a white paper, este layer no terminó.
+
+**B2B:** misma fórmula, dolor de negocio. "La clienta pregunta por productos que no tienes" → "los proveedores genéricos no tienen exclusividad real" → "exclusividad en tu zona, precio de distribuidor."
+
+**Fuente:** `brand_personas[brand_id]` → `pain_points` + `motivations` + `copy_hooks`  
+**No hace:** no cambia datos ni argumentos. Si el argumento base era débil, este layer no lo rescata.
+
+---
+
+## LAYER 4 · PSYCHO
+
+**Función:** Inyectar capas psicológicas de persuasión calibradas al objetivo del contenido y la audiencia de L0.
+
+**Fuente:** `psycho_presets[preset_id]` (10 presets activos en Supabase)
+
+| ID | Nombre | Uso principal | Cómo se aplica |
 |---|---|---|---|
-| PSY-URGENCY | Urgencia | Tiempo limitado, acción inmediata | Lenguaje de tiempo limitado, deadline, CTA directo |
-| PSY-SCARCITY | Escasez | Disponibilidad limitada | Disponibilidad reducida (sin cifras inventadas) |
+| PSY-URGENCY | Urgencia | Tiempo limitado | Lenguaje de ventana temporal, deadline, CTA directo |
+| PSY-SCARCITY | Escasez | Disponibilidad limitada | Disponibilidad reducida sin cifras inventadas |
 | PSY-AUTHORITY | Autoridad | Credencial experta | Dato concreto en primeros 15 palabras, tono didáctico |
 | PSY-TRUST | Confianza | Seguridad en la decisión | Transparencia, especificidad, sin exageraciones |
 | PSY-SOCIAL-PROOF | Prueba social | Validación por comunidad | Referencia a resultados o experiencias reales |
@@ -167,164 +286,210 @@ Elimina los patrones matemáticos/estadísticos detectables por herramientas y l
 | PSY-BELONGING | Pertenencia | No estar solo | Comunidad, red de pares |
 | PSY-CURIOSITY | Curiosidad | Enganche intelectual | Apertura con incógnita, dato inesperado |
 
-**Combinaciones default por content_type:**
-- Producto B2C cosmetics: PSY-AUTHORITY + PSY-TRUST + PSY-ASPIRATION
-- Ad de performance: PSY-URGENCY + PSY-SCARCITY
-- Post orgánico: PSY-CURIOSITY + PSY-BELONGING
-- B2B producto profesional: PSY-AUTHORITY + PSY-TRUST
-- Landing page: PSY-ASPIRATION + PSY-SOCIAL-PROOF + PSY-TRUST
+**Combinaciones default:**
 
-**Input contract:** texto post H+AIFE + preset_ids declarados o derivados de `brand_goals`  
-**Output contract:** texto con triggers psicológicos integrados de forma natural — no mencionados explícitamente, aplicados como estructura y énfasis  
-**Regla crítica:** Los triggers no se nombran. No "¡Oferta limitada!" — sino estructura y framing que activan el trigger de forma implícita.
-
----
-
-### LAYER 4a · CRO (Conversion Rate Optimization)
-**Función:** Estructurar el contenido para maximizar la acción deseada.  
-**Aplica a:** Descripciones de producto, landing pages, ads, CTAs, posts de conversión  
-**No aplica a:** Posts informativos puros, contenido de awareness de marca
-
-**Estructura CRO para descripción de producto:**
-1. **Hook (1-2 frases):** problema o deseo que resuelve — sin nombrar el producto primero
-2. **Beneficio principal:** resultado para el usuario, no características del producto
-3. **Prueba o credencial:** ingrediente, tecnología, resultado medible — por qué creerlo
-4. **Diferenciador:** qué lo separa de alternativas
-5. **Cierre orientado a acción:** CTA implícito o explícito según canal
-
-**CRO para ads:**
-- Hook de interrupción en los primeros 3 segundos / 5 palabras
-- Propuesta de valor antes de los 8 segundos / 15 palabras
-- Un solo CTA — no múltiples acciones posibles
-
-**Regla crítica:** CRO es arquitectura de información, no urgencia artificial. La persuasión viene del layer PSYCHO. CRO estructura el viaje de decisión; PSYCHO lo carga emocionalmente.
-
----
-
-### LAYER 4b · SEO
-**Función:** Asegurar que el contenido es indexable y relevante para búsquedas declaradas.  
-**Aplica a:** Meta titles, meta descriptions, headings, copy de página, blog posts  
-**No aplica a:** Stories, reels, posts sociales efímeros, contenido de conversación
-
-**Reglas SEO para copy:**
-- Keyword principal: en los primeros 100 caracteres
-- Keyword secundaria: una vez en el cuerpo, de forma natural
-- Densidad: máximo 2-3% — si suena forzado, se reduce
-- Meta description: 150-160 chars, orientada a click (no a información)
-- SEO title: máximo 60 chars, brand suffix obligatorio en Shopify
-
-**Fuente de datos:** `seo_meta[brand_id + product_id]` + `keywords[brand_id]`
-
-**Relación CRO vs SEO:**
-
-| Dimensión | CRO | SEO |
+| Content type | NSCF B2C | NSCF B2B |
 |---|---|---|
-| Audiencia | Humano en la página | Algoritmo de búsqueda |
-| Objetivo | Convertir al que llegó | Traer más tráfico |
-| Opera en | Estructura y tono del copy | Keywords y meta fields |
-| Prioridad en product page | Alta | Media (meta fields primero) |
-| Prioridad en ad | Alta | No aplica |
-| Prioridad en post social | Media | Baja |
+| Descripción producto | PSY-AUTHORITY + PSY-TRUST + PSY-ASPIRATION | PSY-AUTHORITY + PSY-TRUST |
+| Blog post | PSY-CURIOSITY + PSY-AUTHORITY + PSY-BELONGING | PSY-AUTHORITY + PSY-SOCIAL-PROOF |
+| Ad performance | PSY-URGENCY + PSY-SCARCITY | PSY-FOMO + PSY-AUTHORITY |
+| Post orgánico | PSY-CURIOSITY + PSY-BELONGING | PSY-IDENTITY + PSY-BELONGING |
+| Landing page | PSY-ASPIRATION + PSY-SOCIAL-PROOF + PSY-TRUST | PSY-AUTHORITY + PSY-TRUST |
 
-**Nota para Shopify:** SEO opera principalmente en meta fields (cubierto por shopify-fix). En body copy, CRO tiene prioridad.
+**Regla crítica:** los triggers no se nombran ni se declaran en el output. Trabajan en la arquitectura del texto, no en el copy superficial.
 
 ---
 
-### LAYER 5 · QA
-**Función:** Verificar que el output final cumple los requerimientos originales antes de entregar o escribir a cualquier destino (Shopify, social, ad platform).
+## LAYER 5 · CRO (Conversion Rate Optimization)
 
-**Checklist QA para copy de producto:**
-- ✓ Idioma correcto y consistente en todo el texto
-- ✓ Longitud dentro del rango declarado
-- ✓ Ninguno de los patrones H+AIFE detectados en el output final
-- ✓ Brand voice del `humanize_profiles[brand_id]` respetado
+**Función:** Estructurar el contenido para maximizar la acción deseada **y desarmar las objeciones específicas de esta audiencia** antes de que bloqueen la conversión. La persuasión emocional viene de PSYCHO — CRO estructura el viaje de decisión y gestiona la fricción.
+
+**Fuente:** `brand_personas[brand_id]` → `objections` + `buying_trigger`
+
+**Objeciones NSCF B2C y cómo CRO las desarma:**
+
+| Objeción | Estrategia |
+|---|---|
+| "Precio más alto que supermercado" | Justificación de valor antes del precio: protocolo específico para Miami, formulación que los supermercados no tienen, 35 años de expertise de Patricia. El precio no se defiende — se contextualiza. |
+| "No conoce la marca" | Señales de autoridad temprana: Patricia como cara visible con trayectoria concreta, distribuidora autorizada Neurone Cosmética, el único protocolo diseñado para este clima específico. |
+| "Desconfía marcas nuevas en e-commerce" | Prueba social (UGC, resultados visibles) + transparencia de proceso + Patricia como garantía humana — persona real, no marca anónima. |
+
+**Objeciones NSCF B2B:**
+
+| Objeción | Estrategia |
+|---|---|
+| "¿Exclusividad real?" | Especificar zona geográfica, proceso de onboarding, compromisos de la distribuidora. Exclusividad documentada, no promesa vaga. |
+| "¿Mínimo de pedido?" | Comunicar flexibilidad de entrada (kit de inicio, primer pedido bajo) antes de hablar de catálogo completo. |
+
+**Estructura CRO para descripción de producto B2C:**
+1. Hook: problema o deseo — sin nombrar el producto primero
+2. Beneficio principal: resultado para el usuario, no características
+3. Prueba o credencial: por qué creerlo — dato concreto
+4. Diferenciador + desarme objeción de precio: valor antes de número
+5. Cierre orientado a acción
+
+**Estructura CRO para blog post:**
+- Acción primaria: leer siguiente artículo (suggest block Patricia) o ir al producto referenciado
+- Acción secundaria: guardar / compartir / suscribir
+- Flujo de intención: cada párrafo empuja hacia la siguiente acción o está sobrando
+
+**Estructura CRO para ads:**
+- Hook de interrupción: primeros 3 segundos / 5 palabras
+- Propuesta de valor: antes de 8 segundos / 15 palabras
+- Un solo CTA
+
+---
+
+## LAYER 6 · SEO
+
+**Función:** Asegurar que el contenido es indexable y relevante para búsquedas declaradas.
+
+**Aplica a:** meta titles, meta descriptions, headings, copy de página, blog posts  
+**No aplica a:** stories, reels, posts efímeros, conversación
+
+**Reglas:**
+- Keyword principal en los primeros 100 caracteres
+- Keyword secundaria: una vez en el cuerpo, de forma natural
+- Densidad máximo 2-3%
+- Meta description: 150-160 chars, orientada a click
+- SEO title: máximo 60 chars, brand suffix obligatorio
+
+**NSCF blog — estrategia geo SEO:**
+- Miami / South Florida como anchor de autoridad en los primeros 12-15 artículos antes de expandir
+- Encuadre: "Miami como caso extremo del que deriva autoridad universal" — si funciona aquí, funciona en cualquier clima húmedo
+- No abrir track USA genérico hasta tener tráfico orgánico establecido en South Florida
+- `geomix[NeuroneSCF]` → `local_slang` y `cultural_refs` activos — incorporar de forma natural
+
+**Fuente:** `seo_meta[brand_id]` + `keywords[brand_id]` + `geomix[brand_id]`
+
+---
+
+## LAYER 7 · QA
+
+**Función:** Verificación de cumplimiento antes de entregar o publicar.
+
+**Checklist blog / artículo largo:**
+- ✓ Idioma correcto y consistente
+- ✓ Dolor reconocible en los primeros 100 palabras
+- ✓ Fórmula dolor→mecanismo→beneficio presente en al menos una sección
+- ✓ Ningún patrón H+AIFE en el output
+- ✓ Voz de marca del `humanize_profiles[brand_id]` respetada
 - ✓ Al menos un trigger PSYCHO activo e implícito
-- ✓ Estructura CRO completa (si content_type = product/ad)
-- ✓ Keyword principal presente (si SEO activo)
-- ✓ Sin claims de compliance prohibidos (`compliance_rules[brand_id]`)
-- ✓ No empieza con el nombre del producto como sujeto
+- ✓ Suggest block o CTA de flujo presente
+- ✓ Keyword principal en primeros 100 chars (si SEO activo)
+- ✓ Sin claims prohibidos (`compliance_rules[brand_id]`)
+- ✓ No empieza con nombre del producto como sujeto
 - ✓ No termina con resumen que repite lo ya dicho
+- ✓ **Test Patricia:** ¿sonaría en la silla del salón? Sí / revisar
 
-**Output QA:**
-- PASS: output listo para entrega/write
-- FAIL: lista de gaps + corrección automática antes de re-verificar
+**Checklist descripción de producto:**
+- ✓ Hook resuelve dolor antes de nombrar el producto
+- ✓ Beneficio en experiencia del usuario, no en propiedad del producto
+- ✓ Credencial o prueba presente
+- ✓ Objeción de precio/marca abordada en la estructura (si B2C)
+- ✓ Un solo CTA
+- ✓ Sin patrones H+AIFE
+- ✓ Compliance respetado
 
-**Regla crítica:** QA no es opcional. Un output sin QA no es ICR.
+**Output:** PASS → entrega | FAIL → gaps específicos + corrección automática + re-verificar
 
----
-
-## 3. Estrategia de Implementación
-
-### Fase 1 — Shopify (Sprint actual)
-**Objetivo:** Pipeline completo para enriquecimiento de descripciones de producto NeuroneSCF B2C y cualquier tienda del ecosistema.
-
-**Entregables por sprint:**
-
-Sprint 1 (impacto inmediato):
-- Tabla `pipeline_skills` en Supabase con este documento como seed
-- EF `shopify-content-pipeline` que orquesta layers 1-2-5 (WRITE + H+AIFE + QA)
-- Fix type `fix_description_pipeline` en shopify-fix (reemplaza `fix_description_enrich`)
-- Archivos skill `.md` en repo de contexto `/skills/`
-
-Sprint 2:
-- PSYCHO + CRO integrados al pipeline
-- Combinaciones default por brand_id desde `brand_goals`
-
-Sprint 3:
-- QA como llamada independiente a Claude con checklist formal
-- Graduación ICR del pipeline completo
-- Dashboard: score de calidad por pieza generada
-
-### Fase 2 — Ecosistema completo
-**Objetivo:** Mismo pipeline para ads, posts orgánicos, social media — clientes UNRLVL y marcas propias (incluyendo Lucien).
-
-**Extensiones:**
-- `content_type`: `product | ad_performance | ad_awareness | post_organic | post_social | landing | email`
-- Layer SEO activo para posts de blog y landing pages
-- Conexión con Social Agent — outputs pasan por pipeline antes de programar
-- Aplicación a contenido UNRLVL y Lucien con sus respectivos `humanize_profiles`
+**Regla crítica:** QA no es opcional. Sin QA no hay ICR.
 
 ---
 
-## 4. Almacenamiento y Accesibilidad
+## MULTIMARCA — CONFIGURACIÓN
 
-**Fuente de verdad:** `/skills/CONTENT_PIPELINE_SKILLS.md` en repo de contexto  
-**Runtime:** Tabla `pipeline_skills` en Supabase — los EFs consultan para configurar cada layer  
-**Acceso para Claude:** `Vercel:web_fetch_vercel_url` → `unrlvl-context.vercel.app/skills/CONTENT_PIPELINE_SKILLS.md`  
-**Actualización:** Push a GitHub → Vercel lo sirve → sync tabla Supabase
-
-**Tablas Supabase relacionadas:**
-- `humanize_profiles` — perfiles H+AIFE por marca y medio
-- `psycho_presets` — 10 presets PSYCHO
-- `brand_copy_profiles` — voz de marca para WRITE
-- `compliance_rules` — reglas de compliance por categoría
-- `seo_meta` + `keywords` — datos SEO por marca
-- `pipeline_skills` — configuración del pipeline (a crear)
+| Marca | Persona prioritaria | Tono L0 | Vocabulario de reemplazo | Evitar |
+|---|---|---|---|---|
+| **NeuroneSCF B2C** | `b2c_latina_color` + `b2c_latina_repair` | Cercano, técnico-accesible, Spanglish natural | Específico fibra capilar y clima Miami | Clínico frío · jerga sin traducir |
+| **NeuroneSCF B2B** | `b2b_salon_owner` + `b2b_colorist` | Directo, datos primero, entre pares | Márgenes · exclusividad · protocolo | Consumer language · promesas emocionales |
+| **UNRLVL / Lucien** | `brand_personas[UNRLVL]` | Directivo, técnico, sin adornos | Específico de negocio y craft | Corporativo genérico · buzzwords de agencia |
+| **ForumPHs** | `brand_personas[ForumPHs]` | Legal-técnico accesible | Términos legales exactos | Jerga que Ivette no usaría |
+| **PO (Patricia)** | `person_blueprints[PO]` | Cálido, femenino, motivacional | Experiencia directa, primera persona | Frío · transaccional · corporativo |
 
 ---
 
-## 5. QA de este documento (v1.1)
+## ARQUITECTURA DE CACHE — COMBUSTIBLE DEL PIPELINE
 
-**Requerimientos declarados por Sam:**
-- ✅ QA definido como layer operativo con checklist
-- ✅ ICR definido con criterios de graduación y lo que NO es ICR
-- ✅ H+AIFE unificado en un layer — dos niveles dentro de uno
-- ✅ AIFE conectado a su origen (Wikipedia AI Writing Patterns) con patrones EXHAUSTIVOS
-- ✅ Vocabulario IA por era (GPT-4 / GPT-4o / GPT-5) documentado
-- ✅ Patrones matemáticos/estadísticos profundos documentados
-- ✅ Patrones superficiales documentados
-- ✅ SEO y CRO diferenciados con tabla de cuándo aplica cada uno
-- ✅ PSYCHO con 10 presets y combinaciones default por content_type
-- ✅ WRITE con fallback declarado para marcas sin perfil
-- ✅ QA layer con checklist formal
-- ✅ Estrategia en 2 fases con sprint sequence
-- ✅ Almacenamiento declarado para herramientas
+El pipeline consume datos de Supabase. Para producción (agentes IID, Claude en chat):
 
-**Gaps resueltos vs v1.0:**
-- ✅ WRITE fallback: ahora declarado
-- ✅ AIFE exhaustivo: integrado desde Wikipedia
-- ⚠️ Fase 2 timing: sigue sin fechas — correcto, depende de graduación ICR de Fase 1
+```
+Supabase (fuente de verdad)
+    ↓ sync on-demand o scheduled
+/brand-cache/[brand_id].json  ← endpoint Vercel (pendiente implementar)
+    ↓ fetch único al inicio de sesión / pipeline run
+Claude + CopyLab + Agents IID + Orchestrator
+```
+
+**Al cache (estable):**
+`brand_personas` · `brand_copy_profiles` · `humanize_profiles` · `psycho_presets` · `compliance_rules` · `brand_goals` · `geomix` · `channel_prompt_rules`
+
+**NO al cache (operacional — siempre fresh):**
+`keywords` · `seo_meta` · `pipeline_results` · `scheduled_posts`
+
+**Mientras el endpoint no existe:** Claude consulta Supabase directamente con las tablas declaradas en L0.
 
 ---
 
-*v1.1 · 2026-05-05 · Fuente AIFE: Wikipedia "AI Writing Patterns" (revisado y analizado 2026-05-05)*
+## ACTIVACIÓN EN AGENTES IID
+
+| Agente IID | Layer que ejecuta |
+|---|---|
+| WRITE agent | L0 (carga brand-cache) + L1 (draft) |
+| H+AIFE agent | L2 |
+| HUMANIZE agent | L3 |
+| PSYCHO agent | L4 |
+| CRO/SEO agent | L5 + L6 |
+| QA agent | L7 |
+
+Sin brand-cache en L0, ningún agente ejecuta — error explícito antes que output sin audiencia.
+
+---
+
+## AUTO-CHECK DE CLAUDE
+
+Antes de entregar cualquier output de texto público:
+
+```
+ 1. ¿L0 activo? ¿Sé a quién le hablo?              → Sí / cargar brand_personas
+ 2. ¿Pain point reconocible en el primer bloque?    → Sí / añadir ancla
+ 3. ¿Palabras de lista negra H+AIFE presentes?      → Reemplazar
+ 4. ¿Oraciones con variación de longitud?           → Ajustar si uniformes
+ 5. ¿Paralelismos automáticos?                      → Destruir
+ 6. ¿Hedging innecesario?                           → Eliminar
+ 7. ¿Más de 2 bold por 500 palabras?                → Reducir
+ 8. ¿Bullets donde debería ser prosa?               → Convertir
+ 9. ¿Participios presentes en cadena?               → Reescribir como activas
+10. ¿Beneficio en experiencia del usuario?          → Sí / reencuadrar
+11. ¿Objeción principal de esta audiencia abordada? → Sí / integrar en estructura
+12. ¿Test Patricia: sonaría en la silla del salón?  → Sí / revisar
+13. ¿QA completo?                                   → PASS antes de entregar
+```
+
+---
+
+## TABLAS SUPABASE — REFERENCIA
+
+| Tabla | Función | Layer | RLS |
+|---|---|---|---|
+| `brand_personas` | Perfil audiencia · pain points · objeciones · copy hooks | L0 | ✅ |
+| `brand_copy_profiles` | Voz de marca · tono · estilo · compliance | L0 + L1 | ✅ |
+| `humanize_profiles` | Parámetros H+AIFE por marca y medio | L2 | ✅ |
+| `geomix` | Geo intelligence · slang local · cultural refs | L0 + L6 | ✅ |
+| `compliance_rules` | Claims prohibidos · disclaimers obligatorios | L7 | ✅ |
+| `psycho_presets` | 10 presets PSYCHO | L4 | ✅ |
+| `brand_goals` | Objetivos estratégicos activos | L0 | ✅ |
+| `channel_prompt_rules` | Tipos de prompt permitidos por canal | L1 | ✅ |
+| `keywords` | Keywords por marca | L1 + L6 | ✅ |
+| `output_templates` | Longitud y estructura por content_type | L1 | ✅ |
+| `seo_meta` | Meta titles y descriptions | L6 | ✅ (vacía — poblar) |
+| `pipeline_skills` | Config del pipeline | Sistema | ⚠️ SIN RLS |
+| `pipeline_results` | Resultados de runs | Sistema | ⚠️ SIN RLS |
+
+**⚠️ Pendiente crítico:** `pipeline_skills` y `pipeline_results` sin RLS — habilitar junto con `ops_lab_rates` y `shopify_enrich_jobs` en sesión de infra.
+
+---
+
+*CONTENT PIPELINE SKILL v2.0 · Unreal>ille Studio · 2026-05-11*  
+*Consolida y reemplaza: `skills/CONTENT_PIPELINE_SKILLS.md` v1.1 + `skills/aife/SKILL.md` v1.1*  
+*Motor: 7 layers · Combustible: brand cache desde Supabase*
