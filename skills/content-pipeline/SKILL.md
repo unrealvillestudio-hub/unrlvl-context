@@ -4,7 +4,7 @@
 **Estado:** ICR ✅ — R4B (Ready for Business)  
 **Ruta canónica:** `skills/content-pipeline/SKILL.md`  
 **Reemplaza:** `skills/CONTENT_PIPELINE_SKILLS.md` v1.1 + `skills/aife/SKILL.md` v1.1 — ambos deprecados  
-**Última actualización:** 2026-05-11 · v2.0
+**Última actualización:** 2026-05-11 · v2.1
 
 ---
 
@@ -273,18 +273,31 @@ parecerse mucho más al lunes."
 
 **Fuente:** `psycho_presets[preset_id]` (10 presets activos en Supabase)
 
-| ID | Nombre | Uso principal | Cómo se aplica |
+**Campos disponibles por preset — cada uno tiene instrucción específica por medio:**
+
+| Campo | Medio | Usa cuando... |
+|---|---|---|
+| `injection_copy` | Texto | Blog, producto, ad, landing, email |
+| `injection_visual` | Imagen | ImageLab, prompts visuales, thumbnails |
+| `injection_video` | Video | VideoLab, scripts de video, reels |
+| `injection_voice` | Audio | VoiceLab, scripts de locución |
+
+Claude en chat usa `injection_copy`. Los labs de producción (ImageLab, VideoLab, VoiceLab) consumen su campo correspondiente del mismo preset — mismo trigger psicológico, ejecución adaptada al medio.
+
+**Los 10 presets:**
+
+| ID | Nombre | Uso principal | `injection_copy` resumido |
 |---|---|---|---|
 | PSY-URGENCY | Urgencia | Tiempo limitado | Lenguaje de ventana temporal, deadline, CTA directo |
 | PSY-SCARCITY | Escasez | Disponibilidad limitada | Disponibilidad reducida sin cifras inventadas |
 | PSY-AUTHORITY | Autoridad | Credencial experta | Dato concreto en primeros 15 palabras, tono didáctico |
 | PSY-TRUST | Confianza | Seguridad en la decisión | Transparencia, especificidad, sin exageraciones |
-| PSY-SOCIAL-PROOF | Prueba social | Validación por comunidad | Referencia a resultados o experiencias reales |
-| PSY-FOMO | FOMO | Miedo a perderse algo | Ventana de acción, consecuencia de no actuar |
-| PSY-ASPIRATION | Aspiración | Identidad deseada | Versión mejorada del usuario, resultado transformador |
-| PSY-IDENTITY | Identidad | Pertenencia a tribu | Nosotros vs ellos, comunidad de valores |
-| PSY-BELONGING | Pertenencia | No estar solo | Comunidad, red de pares |
-| PSY-CURIOSITY | Curiosidad | Enganche intelectual | Apertura con incógnita, dato inesperado |
+| PSY-SOCIAL-PROOF | Prueba social | Validación por comunidad | Número concreto o testimonio real integrado |
+| PSY-FOMO | FOMO | Miedo a perderse algo | Referencia a lo que otros ya tienen, pregunta retórica |
+| PSY-ASPIRATION | Aspiración | Identidad deseada | Estado futuro primero, producto después |
+| PSY-IDENTITY | Identidad | Pertenencia a tribu | Conectar producto con rasgo de identidad del ICP |
+| PSY-BELONGING | Pertenencia | No estar solo | Lenguaje inclusivo, referencia a comunidad compartida |
+| PSY-CURIOSITY | Curiosidad | Enganche intelectual | Abre con pregunta o dato sorpresivo, gap de información |
 
 **Combinaciones default:**
 
@@ -296,7 +309,7 @@ parecerse mucho más al lunes."
 | Post orgánico | PSY-CURIOSITY + PSY-BELONGING | PSY-IDENTITY + PSY-BELONGING |
 | Landing page | PSY-ASPIRATION + PSY-SOCIAL-PROOF + PSY-TRUST | PSY-AUTHORITY + PSY-TRUST |
 
-**Regla crítica:** los triggers no se nombran ni se declaran en el output. Trabajan en la arquitectura del texto, no en el copy superficial.
+**Regla crítica:** los triggers no se nombran ni se declaran en el output. Trabajan en la arquitectura del texto/visual/audio, no en el copy superficial.
 
 ---
 
@@ -416,7 +429,7 @@ El pipeline consume datos de Supabase. Para producción (agentes IID, Claude en 
 ```
 Supabase (fuente de verdad)
     ↓ sync on-demand o scheduled
-/brand-cache/[brand_id].json  ← endpoint Vercel (pendiente implementar)
+/brand-cache/[brand_id].json  ← endpoint Vercel ✅ LIVE
     ↓ fetch único al inicio de sesión / pipeline run
 Claude + CopyLab + Agents IID + Orchestrator
 ```
@@ -483,13 +496,11 @@ Antes de entregar cualquier output de texto público:
 | `keywords` | Keywords por marca | L1 + L6 | ✅ |
 | `output_templates` | Longitud y estructura por content_type | L1 | ✅ |
 | `seo_meta` | Meta titles y descriptions | L6 | ✅ (vacía — poblar) |
-| `pipeline_skills` | Config del pipeline | Sistema | ⚠️ SIN RLS |
-| `pipeline_results` | Resultados de runs | Sistema | ⚠️ SIN RLS |
-
-**⚠️ Pendiente crítico:** `pipeline_skills` y `pipeline_results` sin RLS — habilitar junto con `ops_lab_rates` y `shopify_enrich_jobs` en sesión de infra.
+| `pipeline_skills` | Config del pipeline | Sistema | ✅ anon SELECT · service_role ALL |
+| `pipeline_results` | Resultados de runs | Sistema | ✅ authenticated SELECT · service_role ALL |
 
 ---
 
-*CONTENT PIPELINE SKILL v2.0 · Unreal>ille Studio · 2026-05-11*  
+*CONTENT PIPELINE SKILL v2.1 · Unreal>ille Studio · 2026-05-11*  
 *Consolida y reemplaza: `skills/CONTENT_PIPELINE_SKILLS.md` v1.1 + `skills/aife/SKILL.md` v1.1*  
 *Motor: 7 layers · Combustible: brand cache desde Supabase*
