@@ -1,25 +1,35 @@
 /**
- * UNRLVL Brand Cache Endpoint v1.1
+ * UNRLVL Brand Cache Endpoint v1.2
  * GET /api/brand-cache?brand_id=NeuroneSCF
- * GET /api/brand-cache?brand_id=NeuroneSCF&refresh=true
- * GET /api/brand-cache?brand_id=NeuroneSCF&debug=true  → muestra errores raw de Supabase
+ * GET /api/brand-cache?brand_id=NeuroneSCF&refresh=true   → bypass CDN cache
+ * GET /api/brand-cache?brand_id=NeuroneSCF&debug=true     → muestra errores Supabase raw
+ *
+ * Returns consolidated brand intelligence for the content pipeline (L0).
+ * Stable tables only. Operational data (keywords, seo_meta, pipeline_results)
+ * is queried directly from Supabase by each lab/agent.
+ *
+ * Cache: s-maxage=3600 (1h fresh), stale-while-revalidate=86400 (24h stale)
  */
 
 export const config = { runtime: 'edge' };
 
-const STABLE_TABLES = [
+// Brand-specific tables (filtered by brand_id)
+const BRAND_TABLES = [
   'brand_personas',
   'brand_copy_profiles',
   'humanize_profiles',
   'compliance_rules',
   'brand_goals',
   'geomix',
+];
+
+// Global tables (no brand filter — channel/system-level data)
+const GLOBAL_TABLES = [
+  'psycho_presets',
   'channel_prompt_rules',
 ];
 
-const GLOBAL_TABLES = ['psycho_presets'];
-
-// Tables that have active filter (only fetch active=true rows)
+// Tables where we filter active=is.true
 const ACTIVE_FILTER_TABLES = ['brand_personas', 'brand_copy_profiles', 'geomix'];
 
 export default async function handler(req) {
@@ -29,7 +39,7 @@ export default async function handler(req) {
   const debug = url.searchParams.get('debug') === 'true';
 
   if (!brandId) {
-    return json({ error: 'brand_id is required' }, 400);
+    return json({ error: 'brand_id is required. Example: /api/brand-cache?brand_id=NeuroneSCF' }, 400);
   }
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -43,27 +53,22 @@ export default async function handler(req) {
     'apikey': SUPABASE_KEY,
     'Authorization': `Bearer ${SUPABASE_KEY}`,
     'Content-Type': 'application/json',
-    'Prefer': 'return=representation',
   };
 
   const base = `${SUPABASE_URL}/rest/v1`;
 
   try {
-    // Fetch brand-specific tables
-    const brandFetches = STABLE_TABLES.map(async table => {
-      let query = `${base}/${table}?brand_id=eq.${encodeURIComponent(brandId)}&select=*`;
-      if (ACTIVE_FILTER_TABLES.includes(table)) {
-        query += '&active=is.true';
-      }
-      if (table === 'brand_personas') {
-        query += '&order=priority.asc';
-      }
-      const res = await fetch(query, { headers: sbHeaders });
+    // Brand-specific fetches
+    const brandFetches = BRAND_TABLES.map(async table => {
+      let q = `${base}/${table}?brand_id=eq.${encodeURIComponent(brandId)}&select=*`;
+      if (ACTIVE_FILTER_TABLES.includes(table)) q += '&active=is.true';
+      if (table === 'brand_personas') q += '&order=priority.asc';
+      const res = await fetch(q, { headers: sbHeaders });
       const data = await res.json();
       return [table, res.status, data];
     });
 
-    // Fetch global tables (no brand filter)
+    // Global fetches (no brand filter)
     const globalFetches = GLOBAL_TABLES.map(async table => {
       const res = await fetch(`${base}/${table}?select=*`, { headers: sbHeaders });
       const data = await res.json();
@@ -77,7 +82,7 @@ export default async function handler(req) {
         brand_id: brandId,
         generated_at: new Date().toISOString(),
         ttl_seconds: 3600,
-        stable_tables: STABLE_TABLES,
+        brand_tables: BRAND_TABLES,
         global_tables: GLOBAL_TABLES,
         note: 'Operational data (keywords, seo_meta, pipeline_results) queries Supabase directly.',
       },
@@ -89,7 +94,6 @@ export default async function handler(req) {
       if (status === 200 && Array.isArray(data)) {
         cache[table] = data;
       } else {
-        // Surface the real error
         cache[table] = [];
         errors[table] = { status, response: data };
       }
