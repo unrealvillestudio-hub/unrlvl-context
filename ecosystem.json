@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-10-v4",
+    "version": "2026-05-11-v5",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
-      "date": "2026-05-10",
-      "status": "Kits 12/12 completos ✅ · Skills system v1.0 operativo ✅ · Custom Instructions actualizadas ✅ · SESSION_PROTOCOL v10 · Roadmap lanzamiento confirmado: Pixels → CRO Checkout → Audit → Ads",
+      "date": "2026-05-11",
+      "status": "Blog Hair Intelligence LIVE ✅ · 4 artículos ES+EN ✅ · UNRLVL Signature B2C+B2B ✅ · Pillar cards bilingual ✅ · Patricia suggest blocks 4/4 ✅ · ImageLab presets 4/4 ✅ · Pixels pendientes → SIGUIENTE",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -144,6 +144,20 @@
             "faq": 162313208135,
             "contacto": 162313273671
           },
+          "blog": {
+            "id": 126248255815,
+            "handle": "hair-intelligence-1",
+            "title": "Hair Intelligence",
+            "url": "neuronescflorida.com/blogs/hair-intelligence-1",
+            "articles_count": 4,
+            "status": "LIVE ✅ — ES+EN · 4 pilares · pillar cards · Patricia suggest blocks",
+            "articles": [
+              {"id": 613706334535, "pilar": "Color Intelligence", "handle_es": "color-capilar-se-va-rapido-miami", "handle_en": "why-hair-color-fades-faster-miami"},
+              {"id": 613706662215, "pilar": "Hair Science", "handle_es": "cabello-seco-acondicionador-reconstruccion", "handle_en": "conditioner-dry-hair-reconstruction"},
+              {"id": 613706694983, "pilar": "Miami Hair", "handle_es": "sal-cloro-sol-cabello-miami", "handle_en": "salt-chlorine-sun-miami-hair-protocol"},
+              {"id": 613706727751, "pilar": "Rituals", "handle_es": "rutina-capilar-sur-florida-protocolo", "handle_en": "hair-ritual-south-florida"}
+            ]
+          },
           "oauth_status": "CONNECTED — read_apps + read_locales + write_translations + write_legal_policies",
           "last_audit_score": 137,
           "last_audit_score_max": 200,
@@ -163,14 +177,17 @@
           "cro_layer": "✅ 12/12 — compare_at_price + savings + terra accent",
           "tracking": "❌ 0/10 — Meta + TikTok + Google pixels PENDIENTES",
           "checkout_cro": "⏳ PENDIENTE — Bundle instalada sin configurar · apps CRO",
+          "unrlvl_signature": "✅ snippets/unrlvl-signature.liquid — BP_BRAND v1.2",
+          "blog": "✅ Hair Intelligence LIVE — 4 artículos · ES+EN · pillar cards · Patricia blocks",
+          "nav_hair_intelligence": "✅ Separator + link desktop+mobile",
           "addresses": {
             "legal_prestige": "12951 Biscayne Blvd, North Miami, FL 33181",
             "ops_3pl": "3028 NW 72nd Ave #4, Miami FL 33122"
           }
         }
       },
-      "gaps": "NEXT: Tracking pixels (0/10) → CRO Checkout + Bundle → Audit → Ads. DY Fazza imagen pendiente. EN descriptions (EF bug). SP metafield fix 3 productos.",
-      "completed": "OAuth B2B+B2C ✅ · Audit v16.1 · Compliance ✅ · SP Pool 80 cards ✅ · Kit Naming ✅ · Kit Images 12/12 ✅ · CRO Layer ✅ · CRO Polish ✅ · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅ · Language switcher ✅ · translate-proxy.js ✅"
+      "gaps": "NEXT: Tracking pixels (0/10) → CRO Checkout + Bundle → Audit → Ads. DY Fazza imagen pendiente. EN descriptions (EF bug). SP metafield fix 3 productos. Supabase RLS 4 tablas. ImageLab timeout fix.",
+      "completed": "OAuth B2B+B2C ✅ · Audit v16.1 · Compliance ✅ · SP Pool 80 cards ✅ · Kit Naming ✅ · Kit Images 12/12 ✅ · CRO Layer ✅ · CRO Polish ✅ · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅ · Language switcher ✅ · translate-proxy.js ✅ · Contact page ✅ · UNRLVL Signature B2C+B2B ✅ · Blog Hair Intelligence LIVE ✅ · 4 artículos ES+EN ✅ · Pillar cards bilingual ✅ · Patricia suggest blocks ✅ · ImageLab presets 4/4 ✅"
     },
     {
       "id": "ForumPHs",
@@ -190,7 +207,8 @@
       "health": "green",
       "web": "LIVE EN+ES",
       "skills": "Skills system v1.0 OPERATIVO — 16 skills · INDEX.md · SESSION_PROTOCOL v10",
-      "iid_pipeline": "OPERATIONAL"
+      "iid_pipeline": "OPERATIONAL",
+      "unrlvl_signature": "✅ BP_BRAND v1.2 — Supabase unrlvl_signature_enabled para todas las marcas"
     },
     {
       "id": "UnrealvilleStores",
@@ -224,7 +242,8 @@
       "NSCF B2C: EN translations La Ciencia pendiente",
       "NSCF B2C: Checkout CRO + Bundle sin configurar",
       "NSCF B2B: fix SEO-003 COLOR titles",
-      "skills/shopify-auditor/SKILL.md desactualizado (dice v2.0 — tool es v3.5)"
+      "skills/shopify-auditor/SKILL.md desactualizado (dice v2.0 — tool es v3.5)",
+      "Supabase RLS disabled: ops_lab_rates, shopify_enrich_jobs, pipeline_skills, pipeline_results — sesión de infra pendiente"
     ]
   },
   "skills_system": {
@@ -244,7 +263,7 @@
   "labs": [
     {"id": "LAB-CPL", "name": "CopyLab", "status": "LIVE v8.1", "url": "https://unrlvl-copy-lab.vercel.app"},
     {"id": "LAB-WL", "name": "WebLab", "status": "PASSED"},
-    {"id": "LAB-IL", "name": "ImageLab", "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout"},
+    {"id": "LAB-IL", "name": "ImageLab", "status": "⚠️ FIX PENDIENTE — Vercel 50s timeout · presets NSCF blog listos en Supabase"},
     {"id": "LAB-AL", "name": "AgentLab", "status": "PASSED"},
     {"id": "LAB-BPL", "name": "BlueprintLab", "status": "PASSED"},
     {"id": "LAB-ORCH", "name": "Orchestrator", "status": "OR_1.1 LIVE", "url": "https://orchestrator-unrlvl.vercel.app"},
@@ -262,7 +281,7 @@
       "architecture": "Multimarca. Credenciales por Supabase (shopify_stores).",
       "connected_brands": ["NeuroneSCF"]
     },
-    {"id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "schemas": "public.* + shopify.*"},
+    {"id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "schemas": "public.* + shopify.*", "note": "RLS disabled: ops_lab_rates, shopify_enrich_jobs, pipeline_skills, pipeline_results — fix pendiente"},
     {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.5 + translate-proxy.js ✅"},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"},
     {"id": "INFRA-LUCIEN", "name": "luciensael.com", "status": "GENERATED — pending deploy"}
@@ -278,6 +297,7 @@
     "PRIORIDAD 8 — NeuroneSCF B2C: Shipping zones + EN La Ciencia",
     "PRIORIDAD 9 — NeuroneSCF B2B: fix SEO-003 COLOR titles",
     "PRIORIDAD 10 — PO Social: Meta Developer App + System User tokens (sesión dedicada)",
-    "PRIORIDAD 11 — Studio: shopify-auditor/SKILL.md actualizar a v3.5 · luciensael.com deploy · ImageLab fix"
+    "PRIORIDAD 11 — Infra: Supabase RLS fix (4 tablas) · ImageLab timeout fix · shopify-auditor SKILL.md v3.5 · luciensael.com deploy",
+    "PRIORIDAD 12 — Blog: Artículos 05-08 · IID pipeline activation · imágenes via ImageLab"
   ]
 }
