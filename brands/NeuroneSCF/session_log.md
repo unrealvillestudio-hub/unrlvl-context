@@ -1,141 +1,123 @@
-# SESSION LOG — Neurone South & Central Florida (NeuroneSCF)
-_Mantenido por: Claude | Actualizado: 2026-05-12_
+# SESSION LOG — Neurone South & Central Florida
+_Última actualización: 2026-05-13_
 
 ---
 
-## SESIÓN 2026-05-12 — Artículos Blog v4 + PO Voice + Content Pipeline Skill v2.4 + Compliance Ecosystem (Sam)
+## SESIÓN 2026-05-13 — Sam
 
-### COMPLETADO
+### TRABAJO REALIZADO
 
-**4 Artículos Blog Hair Intelligence — ES v4 ✅ PUBLICADOS EN SHOPIFY**
-- Pipeline: Content Pipeline v2.4 · L0→L7 · QA PASS
-- Publicados vía REST PUT · updated_at confirmado en los 4
+#### 1. TRACKING / PIXELS — EN PROCESO
+- Decisión de approach: Meta + TikTok vía apps nativas (Conversions API server-side automático), GA4 vía GTM híbrido
+- Decisión de email: usar `xam.moreno.m@gmail.com` para las tres plataformas (sam@unrealvillestudio.com reservado para cuando se vincule Unrealville formalmente a Meta)
+- **Instrucciones enviadas a Patricia vía WhatsApp** para que añada a Sam como admin en:
+  - Meta Business Manager → Personas → xam.moreno.m@gmail.com
+  - TikTok Ads Manager → Gestión de miembros → xam.moreno.m@gmail.com (Admin)
+  - Google Analytics → Gestión de acceso → xam.moreno.m@gmail.com (Administrador)
+- **Estado:** Esperando que Patricia envíe las invitaciones. Sam acepta y crea los pixels.
+- **Pendiente post-acceso:** Crear Meta Pixel, TikTok Pixel, GA4 Measurement ID e instalar vía Shopify channels oficiales
 
-| Art | ID | Handle | Updated |
+#### 2. SHOPIFY APPS — DIAGNÓSTICO COMPLETO
+Apps instaladas en tienda B2C:
+- Bundles (Shopify nativa) — instalada ✅ — configurada ✅ (completado hoy)
+- Messaging (Shopify) — instalada, email + SMS básico
+- Claude_NSCFL_Shop_API, Neurone_API_Token, UNRLVL_Auditor — internas UNRLVL
+- Pagos activos: Shop Pay ✅ · Apple Pay ✅ · Google Pay ✅ · USD ✅
+- Script tags: 0 — sin ningún pixel instalado actualmente
+
+**Stack pendiente de instalar (priorizado):**
+1. Meta Channel (oficial) — pixel + Conversions API — gratis
+2. TikTok Channel (oficial) — pixel + catálogo — gratis
+3. Google & YouTube (oficial) — GA4 + Google Ads — gratis
+4. Afterpay o Sezzle — BNPL, impacto conversión kits — gratis (comisión)
+5. Judge.me — Reviews/UGC — free plan para arranque / $15/mes
+6. Reconvert — Post-purchase upsell — instalar post-lanzamiento con tráfico
+7. Order tracking (17Track o Track123) — instalar cuando haya pedidos reales
+8. Klaviyo — cuando volumen de email lo justifique
+
+#### 3. BUNDLES — CONFIGURADO ✅
+- Confirmado: 3PL trabaja bajo demanda (Método B) — Bundles nativa aplica
+- Comportamiento en checkout: kit como línea principal + desglose de componentes visibles ✅
+- Configurado via `productBundleUpdate` API (no `productBundleCreate` — ese crea productos nuevos)
+
+| Kit | SKU | Estado | Componentes |
 |---|---|---|---|
-| ¿Por qué el color de tu cabello se va tan rápido en Florida? | 613706334535 | color-capilar-se-va-rapido-miami | 2026-05-12 17:22 |
-| Por qué el acondicionador no le basta al cabello seco | 613706662215 | cabello-seco-acondicionador-reconstruccion | 2026-05-12 17:23 |
-| Sal, cloro y sol: lo que le hacen a tu cabello en Florida | 613706694983 | sal-cloro-sol-cabello-miami | 2026-05-12 17:23 |
-| La rutina capilar para Florida: por qué el orden sí importa | 613706727751 | rutina-capilar-sur-florida-protocolo | 2026-05-12 17:24 |
+| Hydra Boost | NSCF-KT-SDUO | ✅ COMPLETE | SR-004-U + SR-005-U |
+| Moisture Recovery | NSCF-KT-101 | ✅ COMPLETE | BCP-003 + BTP-005 + TR-013 |
+| Moisture Recovery Plus | NSCF-KT-101P | ✅ COMPLETE | BCP-003 + BTP-005 + TR-013 + TR-016 |
+| Restore Therapy | NSCF-KT-102 | ✅ COMPLETE | BCP-011 + BTP-010 + TR-015 |
+| Restore Therapy Plus | NSCF-KT-102P | ✅ COMPLETE | BCP-011 + BTP-010 + TR-015 + TR-016 |
+| Restore & Shield | NSCF-KT-102T | ✅ COMPLETE | BCP-011 + BTP-010 + TR-015 + TR-021 |
+| Blonde Guard | NSCF-KT-103 | ✅ COMPLETE | BCP-001 + BTP-007 + TR-015 |
+| Blonde Guard Plus | NSCF-KT-103P | ✅ COMPLETE | BCP-001 + BTP-007 + TR-015 + TR-016 |
+| Perfect Blonde | NSCF-KT-103V | ✅ COMPLETE | BCP-001 + BTP-007 + BTP-001 |
+| Perfect Blonde Plus | NSCF-KT-103VP | ✅ COMPLETE | BCP-001 + BTP-007 + BTP-001 + TR-016 |
+| Moisture & Shine | NSCF-KT-101T | ⏳ PENDIENTE | Resplander Shine no existe en catálogo — investigar mañana |
+| S.O.S Rescue System | NSCF-KT-104 | ⏳ PENDIENTE | Verificar tamaño DY Fazza: descripción dice 400ml/$49.99 pero SKU NSCF-TR-013 es 200ml/$44.99 |
 
-**Cambios v4 sobre v3:**
-- Sugerencias ChatGPT: 7 aceptadas/contrapropuestas, 4 rechazadas (ver aprendizaje #31)
-- "conserve mejor su intensidad entre lavados" (Art 01)
-- "apoyar la fibra más allá de la hidratación superficial" (Art 01 suggest)
-- "Florida, donde conviven el cabello latino, anglosajón y europeo como en pocos lugares del país" (Art 01 — contrapropuesta que conserva posicionamiento)
-- "Para la mayoría del cabello tratado [...] es parte del mantenimiento básico" (Art 02 — cita Patricia)
-- "disminuye mucho" en vez de "no existe" para Minneapolis (Art 03)
-- "La exposición solar sigue siendo relevante durante gran parte del año" (Art 03)
-- "conserve mejor su condición semana tras semana" (Art 04)
-- "reducir su impacto paso a paso" (Art 04 suggest)
-- Defendidos: "Florida concentra esos tres mundos como ningún otro estado" · "converge con" · "uno de los pasos que más puede ayudar" (over-hedging sin razón de compliance)
+#### 4. SAVINGS BADGE EN CART — LIVE ✅
+- Metafield `neurone.kit_savings` creado (single_line_text_field, PUBLIC_READ)
+- Definition ID: `gid://shopify/MetafieldDefinition/386818343239`
+- Valores aplicados a los 10 kits configurados
+- `templates/cart.liquid` actualizado — página del carrito completamente bilingüe (ES/EN)
 
----
+**Badge behavior:**
+- Solo aparece en productos kit (los que tengan el metafield)
+- Productos individuales no lo muestran
+- ES: `Ahorras $XX.XX · Envío gratis incluido`
+- EN: `You save $XX.XX · Free shipping included`
+- Color: #D4622A (naranja Neurone) con ícono de regalo
 
-**PO_VOICE_ARTICLES.md v1.0 ✅ — nuevo documento**
-- Ruta canónica: `brands/NeuroneSCF/PO_VOICE_ARTICLES.md`
-- 10 principios del voice de Patricia Osorio para artículos de blog
-- Instrucciones específicas para agents IID (WRITE, H+AIFE, HUMANIZE, QA)
-- Test de la Silla del Salón como verificación definitiva
-- Generado desde sesión real — no es documento teórico
-- Ver detalle completo en el archivo
-
----
-
-**Content Pipeline Skill v2.4 ✅ — pushed**
-- Compliance architecture: L1 pre-filtro (hard) + L5 shaping (soft) + L7 QA
-- Compliance Scope Rule: mecanismo vs. experiencial
-- City rotation rule: pool 25+ ciudades USA
-- BLOCK behavior documentado
-
----
-
-**Compliance Ecosystem — Supabase ✅**
-- NeuroneSCF: Miami → Florida en hard y soft
-- 9 nuevas rows: UnrealvilleStores · PatriciaOsorioComunidad · PatriciaOsorioVizosSalon · PatriciaOsorioPersonal (hard) · UnrealvilleStudio
-- ForumPHs: BLOCK total — setup completo requerido
-- Soft gap pendiente: D7Herbal · DiamondDetails · VivoseMask · VizosCosmetics
+**Valores de ahorro por kit:**
+| Kit | Ahorro |
+|---|---|
+| Hydra Boost (NSCF-KT-SDUO) | $19.99 |
+| Moisture Recovery (NSCF-KT-101) | $44.98 |
+| Moisture Recovery Plus (NSCF-KT-101P) | $89.97 |
+| Restore Therapy (NSCF-KT-102) | $44.98 |
+| Restore Therapy Plus (NSCF-KT-102P) | $79.97 |
+| Restore & Shield (NSCF-KT-102T) | $84.97 |
+| Blonde Guard (NSCF-KT-103) | $49.98 |
+| Blonde Guard Plus (NSCF-KT-103P) | $84.97 |
+| Perfect Blonde (NSCF-KT-103V) | $64.98 |
+| Perfect Blonde Plus (NSCF-KT-103VP) | $94.97 |
 
 ---
 
-**Mensaje WA Patricia — estrategia Florida-first ✅**
-- Explicación de por qué Florida primero, USA después
-- Listo para copiar/pegar
+## ESTADO GENERAL CRO — PRE-LANZAMIENTO
+
+| Área | Estado |
+|---|---|
+| Tracking Meta Pixel | ⏳ Esperando acceso Patricia |
+| Tracking TikTok Pixel | ⏳ Esperando acceso Patricia |
+| Tracking GA4 | ⏳ Esperando acceso Patricia |
+| Bundles checkout breakdown | ✅ 10/12 kits activos |
+| Bundles KT-101T + KT-104 | ⏳ Investigar mañana |
+| Savings badge en cart (bilingüe) | ✅ Live en producción |
+| BNPL (Afterpay/Sezzle) | ❌ Pendiente instalar |
+| Reviews (Judge.me) | ❌ Pendiente instalar |
+| Post-purchase upsell (Reconvert) | ❌ Post-lanzamiento |
+| Order tracking | ❌ Post-lanzamiento |
+| Verificación dominio Meta (DNS TXT Cloudflare) | ❌ Pendiente |
+| Instagram → Facebook Page link | ❌ Pendiente (Patricia) |
 
 ---
 
-_sma_etag: "W/\"ab5b-LKbnVrE2RoXcukAtcZQZjS3bNSg\""_ — Sin novedades nuevas (última actividad: 2026-05-11).
+## NOTAS TÉCNICAS
 
----
+### Shopify Bundles API
+- Usar `productBundleUpdate` con `productId` del kit existente para kits ya creados
+- `productBundleCreate` genera producto nuevo — no usar para kits existentes
+- Input requerido por componente: `productId` + `quantity` + `optionSelections[componentOptionId, name, values]`
+- Verificar estado: `node(id: "gid://shopify/ProductBundleOperation/XXX")` → status `COMPLETE` = OK
 
-## AGENDA MAÑANA — 2026-05-13
+### Savings Badge
+- Metafield definition ID: `gid://shopify/MetafieldDefinition/386818343239`
+- Namespace: `neurone` / Key: `kit_savings`
+- Acceso en Liquid: `item.product.metafields.neurone.kit_savings.value`
+- Locale check: `request.locale.iso_code == 'en'`
 
-### 🔴 PRIORIDAD 0 — Imágenes del blog
-Crear imágenes para los 4 artículos publicados. Briefing: estética Neurone SCF, cabello femenino latino en contexto Florida.
-
-### 🔴 PRIORIDAD 1 — Tracking pixels
-Sam tiene usuario Meta y TikTok ✅. GA4 pendiente confirmación esta noche.
-- Meta Pixel → Shopify
-- TikTok Pixel → Shopify
-- GA4 → Shopify (en cuanto Sam confirme credenciales)
-
-### 🟠 PRIORIDAD 2 — Re-audit (~160+/200 esperado)
-### 🟠 PRIORIDAD 3 — CRO Checkout
-### 🟠 PRIORIDAD 4 — DY Fazza imagen (NSCF-TR-013 + NSCF-BTP-003)
-### 🟠 PRIORIDAD 5 — shopify-auto-translate EF bug (42 EN descriptions)
-### 🟠 Compliance soft gap — D7Herbal · DiamondDetails · VivoseMask · VizosCosmetics
-### 🟠 ForumPHs — setup completo en Supabase
-
----
-
-## APRENDIZAJES PERMANENTES
-
-1. **locale_root:** `append | replace` único método fiable. `if blank` falla.
-2. **Policies API:** `write_legal_policies` scope → OAuth reinstal. `shopPoliciesUpdate` GraphQL.
-3. **shopify-auto-translate:** Proxy ✅ deployed. EF bug token lookup pendiente fix Supabase.
-4. **Kit images:** Remove.bg + Affinity. Drop Shadow = Layer > Layer Effects > Outer Shadow.
-5. **CRO inventory_policy:** `deny` o `continue` (no `ALLOW`).
-6. **SOS variant title:** siempre 1×.
-7. **Terra precio kits:** `#D4622A` en `nc-product-detail` y `nc-product-card`.
-8. **DY Fazza imagen:** `NLSDYLS-1-1.webp` es Dyfensor SF.
-9. **Page corrections Unicode:** U+2019, U+201C. EF `nscf-about-fix` como patrón.
-10. **Patricia Osorio:** colorimetría + químicos. Nunca solo "South Florida". Trayectoria internacional Sur/Centro/Norte América + Europa. Florida = habitat natural por concentración de mercados.
-11. **SP pool architecture:** pool JS global en `assets/`. Previene patrones percibibles.
-12. **Product descriptions:** body_html siempre en locale default (ES).
-13. **Addresses:** Prestige/legal = 12951 Biscayne · 3PL/ops = 3028 NW 72nd Ave #4.
-14. **UNRLVL Signature:** snippet Liquid. BP_BRAND v1.2 fuente de verdad.
-15. **Blog bilingual:** patrón `is_en` con `request.locale.iso_code == 'en'` para texto hardcodeado.
-16. **translationsRegister digest:** re-fetch obligatorio si ES canonical fue modificado.
-17. **Pillar cards:** recuadros > pestañas para blog navigation.
-18. **reconstructor ≠ acondicionador:** crítico para contenido NSCF. Nano Tribología = fibra level.
-19. **Content pipeline L0:** brand_personas tiene `objections` — crítico para CRO. Incluir siempre.
-20. **Supabase anon key:** requiere RLS policy + GRANT SELECT. Policy sin grant = 42501 silencioso.
-21. **PostgREST boolean:** `active=is.true` no `active=eq.true`.
-22. **Brand cache:** tablas estables → Vercel TTL. Operacionales → Supabase directo.
-23. **psycho_presets:** 4 campos — injection_copy/visual/video/voice. Cada lab consume el suyo.
-24. **Compliance Scope Rule:** compliance filtra CLAIMS DE MECANISMO, no lenguaje experiencial. "El viernes se parece al lunes" = experiencial → sin hedging. Claims de mecanismo → hedging aplicado.
-25. **City rotation rule:** comparaciones climáticas rotan entre 25+ ciudades USA. Nunca fijar NY/Chicago/Houston por defecto. Elegir según argumento del artículo, temporada y audiencia.
-26. **"Neurone nació para South Florida":** NUNCA usar. Limita geo y no es cierto. La línea es versátil. El protocolo SCF sí es para Florida.
-27. **Vizos Cosmetics – The Healing Systems:** Casa Diseñadora de Belleza Capilar · +10 años · diseñó los Rituals & Kits de NSCF. Mencionar al hablar de la autoridad detrás de las recomendaciones.
-28. **compliance_rules jsonb:** `applies_to` es tipo jsonb — usar `'["copy","video"]'::jsonb`, no `ARRAY[...]`.
-29. **ForumPHs:** no existe en Supabase. BLOCK total. Requiere setup desde cero.
-30. **SMA ETag check:** HEAD check antes de cargar export. Si ETag igual al registrado → "Sin novedades", no generar archivo. Registrar ETag nuevo al final del bloque de sesión.
-31. **Sugerencias de ChatGPT sobre artículos:** útil para compliance técnico (hedging de mecanismos), pero tiende a over-hedgear lenguaje experiencial y debilitar copy con fuerza emocional donde no hay riesgo real. Evaluar sugerencia por sugerencia aplicando Compliance Scope Rule. Defender: imágenes vividas ("el viernes se parece al lunes"), posicionamiento geográfico ("Florida concentra esos tres mundos como ningún otro estado"), verbos precisos ("converge" no "se une").
-32. **PO Voice Articles:** voice de Patricia para blog documentado en `brands/NeuroneSCF/PO_VOICE_ARTICLES.md`. 10 principios operativos. Test: la Silla del Salón. Cargar antes de cualquier pipeline de artículos para NeuroneSCF. Aplica a Claude en sesión Y a agents IID cuando se activen.
-
----
-
-## REFERENCIA TÉCNICA
-
-**Brand Cache:** `https://unrlvl-context.vercel.app/api/brand-cache?brand_id=NeuroneSCF`
-**IDs B2C:** Theme `192983662919` · Blog `126248255815` · Arts `613706334535/662215/694983/727751`
-**Addresses:** Legal `12951 Biscayne Blvd North Miami FL 33181` · 3PL `3028 NW 72nd Ave #4 Miami FL 33122`
-
----
-
-## HISTORIAL COMPLETADO
-
-OAuth B2B+B2C ✅ · Audit v16.1 · Compliance ✅ · SP Pool 80 cards ✅ · Kit Naming ✅ · Kit Images 12/12 ✅ · CRO Layer ✅ · Collections 7/7 · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅ · Language switcher ✅ · Contact page ✅ · UNRLVL Signature B2C+B2B ✅ · Blog Hair Intelligence LIVE ✅ · Blog templates ✅ · Pillar cards bilingual ✅ · Patricia suggest blocks 4/4 ✅ · ImageLab presets 4/4 ✅ · **Content Pipeline Skill v2.4 ✅** · **Brand Cache LIVE ✅** · **pipeline_skills v2.0 ✅** · **RLS 4 tablas ✅** · **Compliance Ecosystem 10 marcas ✅** · **4 artículos ES v4 PUBLICADOS ✅** · **PO_VOICE_ARTICLES v1.0 ✅** · **Mensaje WA Patricia Florida-first ✅**
-
----
-_Próxima sesión: Imágenes blog · Pixels (Meta/TikTok/GA4) · CRO Checkout_
+### Tienda — Idiomas
+- ES: primario ✅ publicado
+- EN: no primario ✅ publicado
+- Theme activo: `gid://shopify/OnlineStoreTheme/192983662919` — Neurone Custom Theme v1.0
