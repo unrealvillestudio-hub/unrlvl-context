@@ -1,21 +1,25 @@
 # CONTENT PIPELINE SKILL
-## UNRLVL · Versión canónica · v2.3
+## UNRLVL · Versión canónica · v2.4
 **Propietario:** Unreal>ille Studio · Sam  
 **Estado:** ICR ✅ — R4B (Ready for Business)  
 **Ruta canónica:** `skills/content-pipeline/SKILL.md`  
-**Reemplaza:** v2.2 (2026-05-12)  
-**Última actualización:** 2026-05-12 · v2.3
+**Reemplaza:** v2.3 (2026-05-12)  
+**Última actualización:** 2026-05-12 · v2.4
+
+**Cambios v2.4:**
+- Comparaciones climáticas: pool de 25+ ciudades USA con criterios de rotación obligatoria
+- Regla explícita: nunca fijar NY/Chicago/Houston como trío por defecto
+- Selección de ciudad por argumento del artículo, temporada y audiencia — no por fórmula
 
 **Cambios v2.3:**
-- Compliance Scope Rule: compliance filtra claims de mecanismo, NO lenguaje experiencial/observacional
-- Protección explícita de copy con fuerza emocional: hedging solo aplica a claims de mecanismo
-- Tabla de cobertura del ecosistema actualizada — 5 marcas nuevas con hard+soft en Supabase
-- ForumPHs flaggeada: no existe en Supabase, requiere setup completo antes de cualquier pipeline run
+- Compliance Scope Rule: compliance filtra claims de mecanismo, NO lenguaje experiencial
+- Protección de copy con fuerza emocional: hedging solo en claims de mecanismo
+- Tabla de cobertura del ecosistema actualizada — 5 marcas nuevas en Supabase
+- ForumPHs flaggeada: setup completo requerido
 
 **Cambios v2.2:**
 - Compliance en dos posiciones: L1 pre-filtro (hard) + L5 shaping (soft)
 - Comportamiento BLOCK: sin compliance_rules → preguntar antes de generar
-- Modelo de ponderación por severity documentado
 - Corrección geo NeuroneSCF: South & Central Florida
 
 ---
@@ -405,8 +409,47 @@ Aplicación:
 **NSCF blog — estrategia geo SEO:**
 - Florida como anchor de autoridad en los primeros 12-15 artículos antes de expandir a USA
 - Encuadre: "Florida como caso extremo del que deriva autoridad universal" — si funciona aquí todo el año, funciona en cualquier clima exigente
-- Comparaciones climáticas con otras zonas USA (NY, Houston, Chicago) como argumento de posicionamiento — no como geo target
 - No abrir track USA genérico hasta tener tráfico orgánico establecido en Florida
+
+**Comparaciones climáticas con otras ciudades USA — regla de variación obligatoria:**
+
+Las referencias a otras ciudades son un recurso editorial que debe **rotar** entre artículos. Nunca usar las mismas ciudades en dos piezas publicadas en un período corto. La comparación sirve al argumento del artículo específico — no es una fórmula.
+
+```
+CRITERIOS DE SELECCIÓN POR ARTÍCULO:
+1. ¿Qué perfil climático contrasta mejor con el argumento central?
+2. ¿Cuál ciudad resuena con la audiencia de ese momento / temporada?
+3. ¿Esta combinación ya se usó recientemente? → rotar
+
+POOL DE CIUDADES CON PERFIL CLIMÁTICO (rotar entre estos):
+
+Fríos / cuatro estaciones marcadas:
+  Boston, Minneapolis, Detroit, Denver, Chicago, Philadelphia,
+  Pittsburgh, Cleveland, Kansas City
+
+Templados / estacionales suaves:
+  Atlanta, Charlotte, Nashville, Raleigh, Washington DC,
+  Portland OR, Seattle, San Francisco
+
+Secos / calor sin humedad:
+  Phoenix, Las Vegas, Albuquerque, El Paso, Salt Lake City
+
+Cálidos / con verano húmedo pero invierno real:
+  Dallas, Houston, San Antonio, Austin, New Orleans
+
+Costa / similar a Florida pero con invierno:
+  Los Angeles, San Diego, New York, Miami Beach (referencia interna)
+
+NUNCA fijar NY + Chicago + Houston como trío por defecto.
+Esas son las más obvias — y por eso las menos interesantes editorialmente.
+```
+
+**Ángulos de comparación según argumento del artículo:**
+- "El agresor es constante todo el año" → contrastar con ciudad con invierno real (Boston, Minneapolis, Denver)
+- "Calor + humedad simultáneos" → contrastar con ciudad de calor seco (Phoenix, Las Vegas)
+- "Sin temporada de recuperación" → contrastar con ciudad estacional (Atlanta, Nashville, Charlotte)
+- "Pool y playa de forma habitual" → contrastar con ciudad sin esa exposición regular (Seattle, Portland, Denver)
+- "Cabello latino en este clima" → considerar ciudades con comunidades latinas grandes y clima diferente (Dallas, Los Angeles, San Antonio)
 
 ---
 
