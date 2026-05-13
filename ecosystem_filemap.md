@@ -1,5 +1,5 @@
 # ECOSYSTEM FILEMAP
-_Versión: 2026-05-10-v3 | Mantenido por: Claude_
+_Versión: 2026-05-13-v4 | Mantenido por: Claude_
 
 ---
 
@@ -30,7 +30,19 @@ unrlvl-context/
 │   ├── vercel/SKILL.md                     ← Infra base · fetch · GitHub proxy
 │   ├── ads-mcp/SKILL.md                    ← Meta Ads + TikTok Ads MCP
 │   ├── higgsfield/SKILL.md                 ← Image+Video MCP · Soul · 30+ modelos
-│   └── agent-browser/SKILL.md             ← Browser automation · Vercel Labs
+│   ├── agent-browser/SKILL.md             ← Browser automation · Vercel Labs
+│   └── compliance/                         ← PLANNED Sprint 6
+│       ├── SKILL.md                        ← Compliance Guardian knowledge base
+│       ├── meta-ads-policies.md
+│       ├── google-ads-policies.md
+│       ├── tiktok-ads-policies.md
+│       ├── prohibited-categories.md
+│       ├── restricted-categories.md
+│       ├── appeal-protocols/
+│       │   ├── meta-appeal-playbook.md
+│       │   ├── google-appeal-playbook.md
+│       │   └── tiktok-appeal-playbook.md
+│       └── case-library/                   ← Crece con cada caso resuelto
 │
 ├── brands/
 │   ├── NeuroneSCF/
@@ -46,6 +58,7 @@ unrlvl-context/
 │   │   └── BP_Brand_Person_id.md
 │   ├── PatriciaOsorioConectando/
 │   │   ├── BP_Brand_Context.md · session_log.md
+│   │   └── personal_voice_PO.md            ← PENDING · crear con Patricia
 │   ├── VizosCosmetics/
 │   │   ├── brand.json · session_log.md
 │   ├── Unrealville/                        ← Alias UnrealvilleStudio
@@ -56,14 +69,30 @@ unrlvl-context/
 │       ├── PARTNERSHIP_STRUCTURE_SAM_PO.md
 │       ├── CRM_INTEGRATIONS.md
 │       ├── LUCIEN_BOOKS_MASTER.md
+│       ├── UNRLVL_AGENT_INFRASTRUCTURE_PLAN.md  ← NUEVO · 2026-05-13
 │       └── docs/UNRLVL_Labs_Strategy.html
 │
 ├── agents/
-│   ├── social-media-agent/session_log.md
-│   └── ddmv-assistant/session_log.md
+│   ├── social-media-agent/
+│   │   └── session_log.md                  ← Actualizado 2026-05-13
+│   ├── ddmv-assistant/
+│   │   ├── session_log.md
+│   │   └── skills/
+│   │       ├── persona.md                  ← PENDING · tono bloqueado · Sprint 1
+│   │       └── personal_voice_DDMV.md      ← PENDING · Sprint 1
+│   ├── po-faq-appointments/                ← PLANNED · Sprint 2
+│   │   └── agent.json
+│   ├── forumph-ops/                        ← PLANNED · Sprint 3
+│   │   └── agent.json
+│   └── compliance-guardian/               ← PLANNED · Sprint 6
+│       └── agent.json
 │
 ├── labs/
-│   └── OnboardingApp/session_log.md
+│   ├── OnboardingApp/session_log.md
+│   ├── AgentLab/                           ← PLANNED · Sprint 4
+│   │   └── session_log.md
+│   └── VoiceLab/                           ← PLANNED · Sprint 5
+│       └── session_log.md
 │
 ├── projects/
 │   └── FinancialIntelligenceEngine.json
@@ -87,6 +116,21 @@ unrlvl-context/
 
 ---
 
+## REPOS EXTERNOS RELACIONADOS
+
+```
+unrealvillestudio-hub/ (GitHub org)
+│
+├── unrlvl-context/                         ← Este repo
+├── unrlvl-social-media-agent/              ← SMA · operativo
+├── unrlvl-shopify-mcp/                     ← Shopify MCP · operativo
+├── unrlvl-tools/                           ← ShopifyAuditor v3.5 · operativo
+├── unrlvl-agent-template/                  ← PLANNED · Sprint 0 · repo base canónico
+└── unrlvl-voicelab/                        ← PLANNED · Sprint 5
+```
+
+---
+
 ## REGLAS DE NOMENCLATURA
 
 **CRÍTICO:** Nombre EXACTO del repo. Diferente = GitHub Desktop crea archivo nuevo.
@@ -104,6 +148,9 @@ unrlvl-context/
 | Brief estratégico | `BP_Brand_Context.md` | `brands/[Marca]/` |
 | Log de sesión | `session_log.md` | `brands/[Marca]/` o `agents/[nombre]/` |
 | Protocolo | `SESSION_PROTOCOL.md` | `protocols/` |
+| Spec de agente | `agent.json` | `agents/[nombre]/` |
+| Voz personal | `personal_voice_[ID].md` | `agents/[nombre]/skills/` o `brands/[Marca]/` |
+| Infra plan | `UNRLVL_AGENT_INFRASTRUCTURE_PLAN.md` | `brands/UnrealvilleStudio/` |
 
 ---
 
@@ -113,9 +160,10 @@ unrlvl-context/
 2. Index → `skills/INDEX.md`
 3. Marcas → `brands/[Marca]/`
 4. Agentes → `agents/[nombre]/`
-5. Protocolos → `protocols/`
-6. Ecosistema y agenda → raíz
-7. GitHub Desktop debe mostrar **modificaciones**, no archivos nuevos
+5. Labs → `labs/[nombre]/`
+6. Protocolos → `protocols/`
+7. Ecosistema y agenda → raíz
+8. GitHub Desktop debe mostrar **modificaciones**, no archivos nuevos
 
 ---
-_Regenerado: 2026-05-10 · 56+ archivos mapeados_
+_Regenerado: 2026-05-13 · 60+ archivos mapeados_

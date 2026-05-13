@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-05-11-v6",
+    "version": "2026-05-13-v7",
     "maintained_by": "Claude — do not edit manually",
     "last_audit": {
-      "date": "2026-05-11",
-      "status": "Blog LIVE ✅ · Content Pipeline v2.1 ✅ · Brand Cache LIVE ✅ · RLS 4 tablas ✅ · Artículos pendientes reescritura L0+L3",
+      "date": "2026-05-13",
+      "status": "Agent Infrastructure Standard v1.0 definido ✅ · 6 agentes mapeados · Agent Infra Plan generado · SMA session log actualizado",
       "conducted_by": "Claude Sonnet 4.6"
     }
   },
@@ -77,6 +77,154 @@
     {"id": "ForumPHs", "name": "ForumPHs", "type": "brand", "market": "Panama", "status": "active"},
     {"id": "UnrealvilleStudio", "name": "Unrealville Studio", "type": "studio", "market": "Florida USA + LATAM", "status": "active"}
   ],
+  "agents": {
+    "_standard": "UNRLVL Agent Infrastructure Standard v1.0 · 2026-05-13",
+    "_plan": "brands/UnrealvilleStudio/UNRLVL_AGENT_INFRASTRUCTURE_PLAN.md",
+    "_classes": {
+      "frontend": "Hablan con humanos · latencia crítica <1,500ms",
+      "service": "Hablan con sistemas/agentes · async · sin canal"
+    },
+    "_stack": {
+      "runtime": "Vercel",
+      "database": "Supabase · multi-tenant via DB Router",
+      "cache": "Hot (in-memory) + Warm (Vercel KV) + Cold (Supabase)",
+      "brain_frontend": "claude-sonnet-4-6",
+      "brain_service": "claude-haiku-4-5",
+      "channel_adapters": ["twilio-whatsapp", "twilio-sms", "web-widget"],
+      "voice_future": "ElevenLabs → unrlvl-voicelab.vercel.app"
+    },
+    "_db_tenants": {
+      "default": "amlvyycfepwhiindxgzw · UNRLVL + brands + agents + sessions",
+      "forumph": "instancia aislada · owners · accounts · SLA · legal · PII level: legal_sensitive"
+    },
+    "_memory_standard": {
+      "tiers": ["T1: últimos 10-15 msgs sesión anterior", "T2: resúmenes 7 días (~150 tokens/sesión)", "T3: resumen consolidado días 8-15", "T4: entity_facts del contacto"],
+      "retention_options_days": [7, 15, 30, 365],
+      "backend": "Supabase agents.*",
+      "summary_generator": "Claude Haiku · async post-sesión · costo ~$0.002/sesión"
+    },
+    "existing": [
+      {
+        "id": "social-media-agent",
+        "name": "Social Media Agent",
+        "class": "frontend",
+        "type": "social_ops",
+        "status": "OPERATIONAL",
+        "channel": "internal",
+        "brain": "claude-api",
+        "deploy": "vercel",
+        "url": "unrlvl-social-media-agent.vercel.app",
+        "repo": "unrealvillestudio-hub/unrlvl-social-media-agent",
+        "brands": ["*"],
+        "session_log": "agents/social-media-agent/session_log.md",
+        "migration_to_standard": "PENDING Sprint 0"
+      },
+      {
+        "id": "ddmv-assistant",
+        "name": "DDMV Assistant",
+        "class": "frontend",
+        "type": "faq_appointments",
+        "status": "OPERATIONAL · FIX NEEDED",
+        "channel": "whatsapp_twilio",
+        "brain": "claude-api",
+        "deploy": "vercel",
+        "brands": ["personal"],
+        "session_log": "agents/ddmv-assistant/session_log.md",
+        "issues": ["memoria no persiste entre sesiones", "tono inconsistente"],
+        "fix_sprint": "Sprint 1",
+        "memory_target_days": 15
+      },
+      {
+        "id": "forumph-speaks",
+        "name": "ForumPH Speaks",
+        "class": "frontend",
+        "type": "knowledge_legal",
+        "status": "OPERATIONAL",
+        "channel": "web",
+        "brain": "claude-api",
+        "deploy": "vercel",
+        "url": "speaks.forumphs.com",
+        "brands": ["ForumPHs"],
+        "session_log": null,
+        "migration_to_standard": "PENDING Sprint 0"
+      }
+    ],
+    "planned": [
+      {
+        "id": "po-faq-appointments",
+        "name": "PO Agent",
+        "class": "frontend",
+        "type": "faq_appointments",
+        "status": "PLANNED · Sprint 2",
+        "channel": ["whatsapp_twilio", "sms_twilio"],
+        "market": "Miami FL · ES/EN + multilingual",
+        "brain": "claude-sonnet-4-6",
+        "persona_file": "skills/personal_voice_PO.md",
+        "brand_context": "brands/PatriciaOsorioConectando/brand.json",
+        "capabilities": ["faq", "appointments", "proactive_sales"],
+        "commercial_check": true,
+        "memory_days": 15,
+        "calendar_integration": "google_calendar",
+        "voice_future": "patricia_osorio",
+        "multilingual": true,
+        "pre_build_required": "Workshop 30min con Patricia · corpus personal_voice_PO.md · FAQ real"
+      },
+      {
+        "id": "forumph-ops",
+        "name": "ForumPHs-OPS",
+        "class": "frontend",
+        "type": "ops_financial",
+        "status": "PLANNED · Sprint 3",
+        "channel": "whatsapp_twilio",
+        "brain": "claude-sonnet-4-6",
+        "database": "forumph",
+        "data_residency": "isolated",
+        "pii_level": "legal_sensitive",
+        "scale": "1500 propiedades hoy → 3000 en 12 meses",
+        "tone_engine": {
+          "al_dia": {"tone": "amigable y servicial"},
+          "aviso_cobro": {"tone": "profesional y directo"},
+          "moroso_30": {"tone": "formal y firme"},
+          "proceso_legal": {"tone": "formal/legal exclusivamente"}
+        },
+        "cache_invalidation": "webhook inmediato en cambio de estado financiero",
+        "voice_future": "ivette_flores",
+        "multilingual": true
+      },
+      {
+        "id": "compliance-guardian",
+        "name": "Compliance Guardian",
+        "class": "service",
+        "type": "compliance",
+        "status": "PLANNED · Sprint 6",
+        "channel": "internal",
+        "integrates_with": ["signal-lab", "unrlvl-ops"],
+        "monitors": ["meta_ads", "google_ads", "tiktok_ads"],
+        "modes": ["proactive_surveillance", "reactive_resolution"],
+        "knowledge_base": "skills/compliance/",
+        "case_library": "supabase:compliance.cases",
+        "learning_loop": true,
+        "NOT_connected_to": ["meta.ai", "google.ai", "tiktok.ai"]
+      }
+    ],
+    "labs": [
+      {
+        "id": "agent-lab",
+        "name": "AgentLab",
+        "status": "PASSED · SPEC PENDING · Sprint 4",
+        "function": "Fábrica de agentes: brief → agent.json → template clone → deploy → register en ecosystem.json"
+      },
+      {
+        "id": "voice-lab",
+        "name": "VoiceLab",
+        "status": "WISHLIST · Sprint 5",
+        "url_future": "unrlvl-voicelab.vercel.app",
+        "provider": "ElevenLabs",
+        "voices": ["patricia_osorio", "ivette_flores"],
+        "format": "OGG/Opus para WhatsApp"
+      }
+    ]
+  },
   "content_pipeline": {
     "version": "2.1",
     "skill_url": "https://unrlvl-context.vercel.app/skills/content-pipeline/SKILL.md",
@@ -90,6 +238,9 @@
     {"id": "INFRA-BRAND-CACHE", "name": "Brand Cache API", "url": "https://unrlvl-context.vercel.app/api/brand-cache", "status": "LIVE ✅", "note": "?brand_id=X · ?refresh=true · ?debug=true"},
     {"id": "INFRA-SHOPIFY-MCP", "name": "Shopify MCP", "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp", "status": "ACTIVE"},
     {"id": "INFRA-SB", "name": "Supabase amlvyycfepwhiindxgzw", "rls_status": "✅ ALL 4 previously exposed tables now secured"},
+    {"id": "INFRA-SB-FORUMPH", "name": "Supabase ForumPHs", "status": "PLANNED · Sprint 3", "note": "Instancia aislada · datos sensibles legales"},
+    {"id": "INFRA-VERCEL-KV", "name": "Vercel KV (Redis)", "status": "PLANNED · Sprint 0", "note": "Cache caliente/tibio para agentes"},
+    {"id": "INFRA-AGENT-TEMPLATE", "name": "unrlvl-agent-template repo", "status": "PLANNED · Sprint 0", "note": "Base canónica para todos los agentes"},
     {"id": "INFRA-TOOLS", "name": "unrlvl-tools.vercel.app", "status": "LIVE — ShopifyAuditor v3.5 + proxies"},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "status": "LIVE EN+ES"}
   ],
@@ -101,12 +252,12 @@
     "changes_v1_1": "content-pipeline nuevo path canónico · aife DEPRECATED y eliminado"
   },
   "next_session_agenda": [
-    "PRIORIDAD 0 — NeuroneSCF: Reescritura 4 artículos blog con L0+L3 (brief completo en session_log.md)",
-    "PRIORIDAD 1 — NeuroneSCF: Tracking pixels Meta + TikTok + Google (0/10)",
-    "PRIORIDAD 2 — NeuroneSCF: CRO Checkout — Bundle configurar + apps",
-    "PRIORIDAD 3 — NeuroneSCF: Re-audit post-fixes (~160+/200)",
-    "PRIORIDAD 4 — NeuroneSCF: DY Fazza imagen correcta",
-    "PRIORIDAD 5 — NeuroneSCF: shopify-auto-translate EF bug fix",
+    "PRIORIDAD 0 — Infra: MCP Server propio UNRLVL — exploración arquitectura (próxima sesión)",
+    "PRIORIDAD 1 — Infra: Sprint 0 S0.1 — Schema Supabase agents.* + DB Router multi-tenant",
+    "PRIORIDAD 2 — NeuroneSCF: Reescritura 4 artículos blog con L0+L3 (brief en session_log.md)",
+    "PRIORIDAD 3 — NeuroneSCF: Tracking pixels Meta + TikTok + Google (0/10)",
+    "PRIORIDAD 4 — NeuroneSCF: API Tokens Orchestrator — desbloquear con BM ID de UNRLVL",
+    "PRIORIDAD 5 — NeuroneSCF: CRO Checkout — Bundle configurar + apps",
     "PRIORIDAD 6 — Infra: Brand cache otras marcas del ecosistema"
   ]
 }

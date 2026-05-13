@@ -1,150 +1,154 @@
-# ECOSISTEMA UNREALVILLE STUDIO
-_Versión: 2026-05-10-v3 | Mantenido por: Claude_
+# UNRLVL ECOSYSTEM
+_Versión: 2026-05-13-v7 · Derivado de ecosystem.json · Mantenido por Claude_
 
 ---
 
 ## STUDIO
 
-**Unrealville Studio** · Brand Intelligence Infrastructure · "Not for everyone."
-- Owner: Sam (founder público: Lucien Sael)
-- HQ: 12951 Biscayne Blvd · North Miami, FL 33181
-- Web: unrealvillestudio.com — LIVE EN+ES
+**Unrealville Studio** · Brand Intelligence Infrastructure · _"Not for everyone."_
+Owner: Sam · Founder público: Lucien Sael
+HQ: 12951 Biscayne Blvd · North Miami, FL 33181
+Web: unrealvillestudio.com (LIVE EN+ES)
+
+**Lucien Sael** — seudónimo profesional público de Sam
+luciensael.com · GENERATED v3 — PENDING DEPLOY + domain DNS
 
 ---
 
-## MARCAS Y PROYECTOS
+## MARCAS ACTIVAS
 
-| Marca | Mercado | Tipo | Health |
-|-------|---------|------|--------|
-| Diamond Details | Alicante, España | Brand | 🟢 |
-| Vizos Cosmetics | Miami + España | Brand | 🟢 |
-| D7 Herbal | Alicante, España | Brand | 🟢 |
-| Vivose Mask | España | Brand | 🟡 |
-| Patricia Osorio · Personal | Miami, FL | Personal Brand | 🟢 |
-| Patricia Osorio · Comunidad | Miami, FL | Personal Brand | 🟢 |
-| Patricia Osorio · Vizos Salon | Miami, FL | Personal Brand | 🟢 |
-| Patricia Osorio · Conectando | Miami + LATAM | Personal Brand | 🟢 |
-| **Neurone SCF** | South & Central Florida | Brand | 🟡 |
-| ForumPHs | Panama | Brand | 🟢 |
-| Unrealville Studio | Florida + LATAM | Studio | 🟢 |
-| Unrealville Stores | Florida USA | Ecommerce | 🟢 |
+| ID | Nombre | Mercado | Estado |
+|---|---|---|---|
+| NeuroneSCF | Neurone South & Central Florida | South & Central Florida, USA | 🟡 Active |
+| DiamondDetails | Diamond Details | Alicante, España | 🟢 Active |
+| VizosCosmetics | Vizos Cosmetics | Miami + España | 🟢 Active |
+| D7Herbal | D7 Herbal | Alicante, España | 🟢 Active |
+| VivoseMask | Vivose Mask | España | 🟢 Active |
+| PatriciaOsorioPersonal | Patricia Osorio · Personal | Miami, FL | 🟢 Active |
+| ForumPHs | ForumPHs | Panama | 🟢 Active |
+| UnrealvilleStudio | Unrealville Studio | Florida USA + LATAM | 🟢 Active |
 
----
-
-## NEURONE SCF — ESTADO DETALLADO
-
-### Shopify B2B
-- Domain: nj5ybc-n1.myshopify.com
-- Score: **133/160** ✅
-- Pendiente: SEO-003 COLOR titles
-
-### Shopify B2C
-- Domain: egdk1n-gt.myshopify.com / neuronescflorida.com
-- Score: **137/200** ⚠️ (audit 2026-05-06 · est. ~157+ post-fixes · re-audit pendiente)
-- Compliance: ✅ CLEAN
-- Theme i18n: ✅ COMPLETE R3
-- OAuth: ✅ write_legal_policies incluido (reinstalado 2026-05-09)
-
-**Estado post-sesión 2026-05-09:**
-
-| Item | Estado |
-|------|--------|
-| Policies (4) | ✅ TOS · Refund · Shipping · Privacy |
-| EN translations | ✅ TOS · Refund · Shipping · Contact · FAQ |
-| Shopify Payments | ✅ Activo |
-| Precios $0.00 | ✅ Resueltos |
-| Product descriptions ES | ✅ 42/42 |
-| SP pool 80 cards | ✅ async 8s · no float · IG/TikTok diff |
-| Language switcher EN/ES | ✅ Header |
-| Contact page | ✅ Creada |
-| Kit Composición fix | ✅ Theme eyebrow |
-
-**Pendientes activos:**
-
-| Issue | Estado |
-|-------|--------|
-| Kit images | ⚠️ 4/12 listos para subir · 8 pendientes |
-| DY Fazza imagen | ⚠️ NLSDYLS-1-1.webp es Dyfensor SF |
-| EN descriptions | ⚠️ EF bug shopify-auto-translate |
-| Tracking pixels | ❌ 0/10 |
-| SP metafield fix | ⚠️ proxy pendiente (cosmético) |
-| Shipping zones | ⚠️ no configuradas |
-| EN La Ciencia | ⚠️ pendiente (EF bug) |
-
-**Kit images procesadas (Remove.bg + Affinity):**
-- ✅ Humit Moisture (azul) — lista para subir
-- ✅ Kerasin HB Restore (cobre) — lista para subir
-- ✅ Total Violet (burdeos+azul) — lista para subir
-- ✅ Hyaloneurine + Dyfensor (blanco) — lista para subir
-
-**Social Media:**
-- Meta BM ✅ · FB Page ✅ · Instagram ✅ · TikTok ✅
-- WABA ⏳ · IG→FB link ❌ · Domain verification ❌
-
-**Direcciones:**
-- Legal/Refunds: 12951 Biscayne Blvd, North Miami FL 33181 (Prestige Beauty Global Distribution)
-- 3PL/Shipping/Contact: 3028 NW 72nd Ave #4, Miami FL 33122
+### NeuroneSCF — Detalle
+- **Dominio:** neuronescflorida.com
+- **B2C Shopify:** egdk1n-gt.myshopify.com · Audit score: 137 · 2026-05-06
+- **B2B Shopify:** nj5ybc-n1.myshopify.com · Audit score: 133 · 2026-05-02
+- **Blog:** LIVE ✅ · 4 artículos ES+EN · Hair Intelligence
+- **Tracking:** ❌ 0/10 pixels pendientes (Meta + TikTok + Google)
+- **Gaps:** Artículos L0+L3 → Pixels → CRO Checkout → Re-audit → Ads
 
 ---
 
-## SHOPIFY AUDITOR v3.5
+## ECOSISTEMA DE AGENTES
 
-- App: https://unrlvl-tools.vercel.app/shopify-auditor/shopify_audit.html
-- Engine: v16.1 · 23 módulos · Score max: 200
-- Fixer: shopify-fix v15 (post-write verification)
-- translate-proxy: https://unrlvl-tools.vercel.app/api/translate-proxy ✅
-- Supabase: amlvyycfepwhiindxgzw
+**UNRLVL Agent Infrastructure Standard v1.0** · Definido 2026-05-13
 
-**Edge Functions activas:**
-shopify-audit v16.1 · shopify-fix v15 · shopify-fix-all v5.6 · shopify-audit-orchestrator v1 · shopify-theme-analyzer v1 · shopify-link-crawler v1 · shopify-oauth v4 · shopify-theme-locale v21 · seo-audit-check v1 · sp-reader-full v2 · sp-fix-targeted v1 · shopify-auto-translate v1 ⚠️BUG · nscf-about-fix v2 · nscf-fix-anticaida · nscf-fix-capissen-descriptions · nscf-menu-kits · nscf-kit-seo-revert v2
+### Stack Universal
+- Runtime: Vercel · DB: Supabase multi-tenant · Cache: Hot + Warm (Vercel KV) + Cold
+- Brain frontend: claude-sonnet-4-6 · Brain service: claude-haiku-4-5
+- Canal: Twilio WhatsApp/SMS · Web widget
+- Voz (futuro): ElevenLabs → unrlvl-voicelab.vercel.app
+
+### Tenants de Base de Datos
+- `default` — amlvyycfepwhiindxgzw · UNRLVL + brands + agents + sessions
+- `forumph` — instancia aislada · owners · accounts · SLA · legal · PII: legal_sensitive
+
+### Sistema de Memoria (estándar)
+- T1: últimos 10-15 mensajes sesión anterior
+- T2: resúmenes comprimidos 7 días (~150 tokens/sesión)
+- T3: resumen consolidado días 8-15
+- T4: entity_facts del contacto
+- Retención configurable: 7 / 15 / 30 / 365 días
 
 ---
 
-## LABS
+### Agentes Existentes
 
-| Lab | Estado | URL |
-|-----|--------|-----|
-| CopyLab | LIVE v8.1 | https://unrlvl-copy-lab.vercel.app |
-| WebLab | PASSED | — |
-| ImageLab | ⚠️ FIX PENDIENTE (timeout) | — |
-| AgentLab | PASSED | — |
-| BlueprintLab | PASSED | — |
-| Orchestrator | OR_1.1 LIVE | https://orchestrator-unrlvl.vercel.app |
-| SocialLab | LIVE | — |
-| UNRLVL-OPS | LIVE | https://unrlvl-ops.vercel.app |
+| ID | Nombre | Canal | Estado | Sprint |
+|---|---|---|---|---|
+| social-media-agent | Social Media Agent | Interno | ✅ Operativo | Registrar S0 |
+| ddmv-assistant | DDMV Assistant | WhatsApp | ⚠️ Fix urgente | Sprint 1 |
+| forumph-speaks | ForumPH Speaks | Web | ✅ Operativo | Registrar S0 |
 
-**IID Network:** OPERATIONAL · ImageLab SKIP
+**DDMV issues:** memoria no persiste entre sesiones · tono inconsistente · fix en Sprint 1 · target 15 días memoria
+
+### Agentes Planificados
+
+| ID | Nombre | Canal | Sprint | Estado |
+|---|---|---|---|---|
+| po-faq-appointments | PO Agent | WhatsApp + SMS | Sprint 2 | PLANNED |
+| forumph-ops | ForumPHs-OPS | WhatsApp | Sprint 3 | PLANNED |
+| compliance-guardian | Compliance Guardian | Interno | Sprint 6 | PLANNED |
+
+**PO Agent:** FAQ + citas + ventas proactivas · voz de Patricia · memoria 15 días · multiidioma · pre-requisito: workshop 30min con Patricia
+**ForumPHs-OPS:** 1,500→3,000 propiedades · tone engine dinámico (4 perfiles) · DB tenant aislado · cache invalidation por cambio de estado financiero
+**Compliance Guardian:** vigilancia Meta/Google/TikTok + resolución de baneos · case library con aprendizaje reciclado · NO conectado a Meta.ai/Google.ai/TikTok.ai
+
+### Labs
+
+| Lab | Estado |
+|---|---|
+| AgentLab | PASSED · Spec pendiente · Sprint 4 |
+| VoiceLab | Wishlist · Sprint 5 · ElevenLabs · voces: PO + Ivette |
+
+---
+
+## CONTENT PIPELINE v2.1
+
+Capas: L0 AUDIENCE_BRIEF → L1 WRITE → L2 H+AIFE → L3 HUMANIZE_EMOTIONAL → L4 PSYCHO → L5 CRO → L6 SEO → L7 QA
+Skill: skills/content-pipeline/SKILL.md
+Brand Cache: /api/brand-cache?brand_id={brand_id}
+Supabase pipeline skills: 8 rows v2.0
+Deprecated: skills/CONTENT_PIPELINE_SKILLS.md · skills/aife/SKILL.md
 
 ---
 
 ## INFRAESTRUCTURA
 
-| Sistema | Estado |
-|---------|--------|
-| Context System | https://unrlvl-context.vercel.app |
-| Shopify MCP — Unrealville Studio | https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp · ACTIVE · multimarca |
-| Supabase amlvyycfepwhiindxgzw | ACTIVE — public.* + shopify.* |
-| unrlvl-tools.vercel.app | LIVE — ShopifyAuditor v3.5 + translate-proxy ✅ |
-| unrealvillestudio.com | LIVE EN+ES |
-| luciensael.com | GENERATED — pending deploy |
+| ID | Nombre | Estado |
+|---|---|---|
+| INFRA-CTX | Context System | unrlvl-context.vercel.app |
+| INFRA-BRAND-CACHE | Brand Cache API | LIVE ✅ |
+| INFRA-SHOPIFY-MCP | Shopify MCP | ACTIVE |
+| INFRA-SB | Supabase UNRLVL | ✅ RLS 4 tablas secured |
+| INFRA-SB-FORUMPH | Supabase ForumPHs | PLANNED · Sprint 3 |
+| INFRA-VERCEL-KV | Vercel KV (Redis) | PLANNED · Sprint 0 |
+| INFRA-AGENT-TEMPLATE | unrlvl-agent-template repo | PLANNED · Sprint 0 |
+| INFRA-TOOLS | unrlvl-tools.vercel.app | LIVE · ShopifyAuditor v3.5 |
+| INFRA-WEB | unrealvillestudio.com | LIVE EN+ES |
 
 ---
 
-## LUCIEN SAEL
+## SKILLS SYSTEM v1.1
 
-- Seudónimo profesional público de Sam
-- Email: iam@luciensael.com · Web: luciensael.com (pending deploy)
-- Brand identity v1.0 COMPLETE: paleta Obsidian/Ember/Gold · tipografía Cormorant/Crimson Pro
-- Libros: arquitectura fundacional completa · Brief Libro 1 pendiente
+Operativo ✅ · 15 skills · Index: skills/INDEX.md
+
+---
+
+## ROADMAP — AGENT INFRASTRUCTURE SPRINTS
+
+| Sprint | Nombre | Sesiones | Entregable |
+|---|---|---|---|
+| S0 | Foundation | 2-3 | Schema Supabase agents.* · DB Router · agent.json spec · Vercel KV · repo template |
+| S1 | DDMV Fix | 1-2 | Memoria 15 días · tono bloqueado · primera validación del estándar |
+| S2 | PO Agent | 3-4 | Primer agente nuevo desde estándar · Patricia facturando |
+| S3 | ForumPHs-OPS | 4-5 | 1,500 propietarios · multi-tenant · cache invalidation |
+| S4 | AgentLab | 3-4 | Fábrica operativa · Industrial Consistency alcanzada |
+| S5 | VoiceLab | 2-3 | PO e Ivette responden con su propia voz |
+| S6 | Compliance Guardian | 3-4 | Protección activa · case library · learning loop |
+
+**Total:** 18-24 sesiones · 8-12 semanas · Costo final ~$200-222/mes
 
 ---
 
 ## AGENDA PRÓXIMA SESIÓN
 
-1. 🔴 Subir 4 kit images punta a Shopify + alt texts SEO
-2. 🔴 DY Fazza imagen correcta (NSCF-TR-013 + NSCF-BTP-003)
-3. 🔴 Tracking pixels 0/10 — Meta + TikTok + Google
-4. 🟠 Fix shopify-auto-translate EF bug → desbloquea EN descriptions 42 productos
-5. 🟠 SP metafield fix proxy route (cosmético)
-6. 🟠 8 kits restantes sin imagen
-7. 🟡 EN translation La Ciencia · Shipping zones · B2B SEO-003 · Re-run audit
+1. **P0** — MCP Server propio UNRLVL (exploración arquitectura — próxima sesión)
+2. **P1** — Sprint 0 S0.1 — Schema Supabase `agents.*` + DB Router multi-tenant
+3. **P2** — NeuroneSCF: Reescritura 4 artículos blog con L0+L3
+4. **P3** — NeuroneSCF: Tracking pixels Meta + TikTok + Google (0/10)
+5. **P4** — NeuroneSCF: API Tokens Orchestrator — desbloquear con BM ID de UNRLVL
+6. **P5** — NeuroneSCF: CRO Checkout — Bundle configurar
+7. **P6** — Brand cache otras marcas del ecosistema
+
+---
+_Regenerado: 2026-05-13 · Claude Sonnet 4.6_
