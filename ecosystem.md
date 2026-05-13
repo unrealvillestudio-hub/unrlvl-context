@@ -1,154 +1,179 @@
-# UNRLVL ECOSYSTEM
-_Versión: 2026-05-13-v7 · Derivado de ecosystem.json · Mantenido por Claude_
+# ECOSYSTEM — Unrealville Studio
+_Generado desde ecosystem.json v8 · 2026-05-13_
 
 ---
 
 ## STUDIO
 
-**Unrealville Studio** · Brand Intelligence Infrastructure · _"Not for everyone."_
-Owner: Sam · Founder público: Lucien Sael
-HQ: 12951 Biscayne Blvd · North Miami, FL 33181
-Web: unrealvillestudio.com (LIVE EN+ES)
+**Unrealville Studio** · Brand Intelligence Infrastructure · "Not for everyone."
+- Owner: Sam · Founder público: Lucien Sael
+- Web: unrealvillestudio.com (LIVE EN+ES)
+- GitHub Org: unrealvillestudio-hub
+- HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
-**Lucien Sael** — seudónimo profesional público de Sam
-luciensael.com · GENERATED v3 — PENDING DEPLOY + domain DNS
+**Lucien Sael:** seudónimo profesional de Sam · luciensael.com (GENERATED v3 — PENDING DEPLOY)
 
 ---
 
-## MARCAS ACTIVAS
+## MARCAS (8)
 
-| ID | Nombre | Mercado | Estado |
-|---|---|---|---|
-| NeuroneSCF | Neurone South & Central Florida | South & Central Florida, USA | 🟡 Active |
-| DiamondDetails | Diamond Details | Alicante, España | 🟢 Active |
-| VizosCosmetics | Vizos Cosmetics | Miami + España | 🟢 Active |
-| D7Herbal | D7 Herbal | Alicante, España | 🟢 Active |
-| VivoseMask | Vivose Mask | España | 🟢 Active |
-| PatriciaOsorioPersonal | Patricia Osorio · Personal | Miami, FL | 🟢 Active |
-| ForumPHs | ForumPHs | Panama | 🟢 Active |
-| UnrealvilleStudio | Unrealville Studio | Florida USA + LATAM | 🟢 Active |
+| ID | Nombre | Tipo | Mercado | Estado |
+|---|---|---|---|---|
+| NeuroneSCF | Neurone South & Central Florida | brand | South & Central Florida, USA | active 🟡 |
+| DiamondDetails | Diamond Details | brand | Alicante, España | active |
+| VizosCosmetics | Vizos Cosmetics | brand | Miami + España | active |
+| D7Herbal | D7 Herbal | brand | Alicante, España | active |
+| VivoseMask | Vivose Mask | brand | España | active |
+| PatriciaOsorioPersonal | Patricia Osorio · Personal | personal_brand | Miami, FL | active |
+| ForumPHs | ForumPHs | brand | Panama | active |
+| UnrealvilleStudio | Unrealville Studio | studio | Florida USA + LATAM | active |
 
-### NeuroneSCF — Detalle
-- **Dominio:** neuronescflorida.com
-- **B2C Shopify:** egdk1n-gt.myshopify.com · Audit score: 137 · 2026-05-06
-- **B2B Shopify:** nj5ybc-n1.myshopify.com · Audit score: 133 · 2026-05-02
-- **Blog:** LIVE ✅ · 4 artículos ES+EN · Hair Intelligence
+### NeuroneSCF — Shopify Detail
+- **B2C:** egdk1n-gt.myshopify.com → neuronescflorida.com · Score: 137/200 (audit 2026-05-06)
+- **B2B:** nj5ybc-n1.myshopify.com · Score: 133/160 (audit 2026-05-02)
 - **Tracking:** ❌ 0/10 pixels pendientes (Meta + TikTok + Google)
-- **Gaps:** Artículos L0+L3 → Pixels → CRO Checkout → Re-audit → Ads
+- **Blog:** LIVE ✅ · 4 artículos ES+EN · reescritura L0+L3 pendiente
+- **Gaps:** Pixels → CRO Checkout → Audit → Ads · DY Fazza imagen · EN descriptions EF bug
 
 ---
 
-## ECOSISTEMA DE AGENTES
+## LABS (11)
 
-**UNRLVL Agent Infrastructure Standard v1.0** · Definido 2026-05-13
-
-### Stack Universal
-- Runtime: Vercel · DB: Supabase multi-tenant · Cache: Hot + Warm (Vercel KV) + Cold
-- Brain frontend: claude-sonnet-4-6 · Brain service: claude-haiku-4-5
-- Canal: Twilio WhatsApp/SMS · Web widget
-- Voz (futuro): ElevenLabs → unrlvl-voicelab.vercel.app
-
-### Tenants de Base de Datos
-- `default` — amlvyycfepwhiindxgzw · UNRLVL + brands + agents + sessions
-- `forumph` — instancia aislada · owners · accounts · SLA · legal · PII: legal_sensitive
-
-### Sistema de Memoria (estándar)
-- T1: últimos 10-15 mensajes sesión anterior
-- T2: resúmenes comprimidos 7 días (~150 tokens/sesión)
-- T3: resumen consolidado días 8-15
-- T4: entity_facts del contacto
-- Retención configurable: 7 / 15 / 30 / 365 días
+| Lab | URL | AI | Estado |
+|---|---|---|---|
+| Orchestrator | orchestrator-unrlvl.vercel.app | claude | live |
+| CopyLab | unrlvl-copy-lab.vercel.app | gemini | live |
+| ImageLab | image-lab-unrlvl.vercel.app | gemini | **bug** — gemini_timeout_50s |
+| SocialLab | social-lab-flame.vercel.app | gemini | live |
+| WebLab | web-lab-unrlvl.vercel.app | gemini | live |
+| AgentLab | agent-lab-unrlvl.vercel.app | claude | live |
+| BlueprintLab | unrlvl-blueprint-lab.vercel.app | claude | live |
+| VideoLab | unrlvl-video-lab.vercel.app | gemini | live |
+| VoiceLab | unrlvl-voice-lab.vercel.app | elevenlabs | live |
+| OnboardingApp | unrlvl-onboarding-app.vercel.app | claude | live |
+| SignalLab | — | claude | not_deployed |
 
 ---
 
-### Agentes Existentes
+## SUPABASE (3 proyectos)
 
-| ID | Nombre | Canal | Estado | Sprint |
+### unrlvl-db (principal) — amlvyycfepwhiindxgzw
+- **Region:** us-east-1 · **Status:** ACTIVE_HEALTHY
+- **Schemas:** public(57t) · content(6t) · crm(13t) · fph(22t·LEGACY) · intel(7t) · shopify(6t)
+- **Edge Functions:** 53 activas
+  - Shopify ecosystem: 22 · NSCF-específicas: 17 · Content/IID: 12 · ForumPHs: 5 · Otros: 4
+  - Bug activo: `shopify-auto-translate` (open since 2026-05-06) → bloquea 42 desc EN
+
+### XMMs (personal Sam) — puoybldykxqvhvtnwrld
+- Uso: DDMV-Assistant DB + proyecto muerto pendiente eliminar
+- ⚠️ Personal — NO patrón de arquitectura · misplaced: nscf_embajadoras, nscf_salones
+
+### ForumPHs (cuenta propia)
+- Instancia aislada EXISTENTE · pendiente migración tablas fph + adecuación + carga datos Ivette
+
+---
+
+## AGENTES
+
+### Existentes (4)
+
+| ID | Nombre | Canal | Estado | URL |
 |---|---|---|---|---|
-| social-media-agent | Social Media Agent | Interno | ✅ Operativo | Registrar S0 |
-| ddmv-assistant | DDMV Assistant | WhatsApp | ⚠️ Fix urgente | Sprint 1 |
-| forumph-speaks | ForumPH Speaks | Web | ✅ Operativo | Registrar S0 |
+| social-media-agent | Social Media Agent | interno | OPERATIONAL | unrlvl-social-media-agent.vercel.app |
+| ddmv-assistant | DDMV Assistant | WhatsApp | OPERATIONAL · FIX NEEDED | ddmv-assistant.vercel.app |
+| forumph-speaks | ForumPH Speaks | web | OPERATIONAL | forumphs-speaks.vercel.app |
+| forumph-document-factory | ForumPH Document Factory | web | OPERATIONAL | forumphs-document-factory.vercel.app |
 
-**DDMV issues:** memoria no persiste entre sesiones · tono inconsistente · fix en Sprint 1 · target 15 días memoria
+**DDMV issues:** memoria no persiste entre sesiones · tono inconsistente · Fix Sprint 1 Agent
 
-### Agentes Planificados
+### Planificados (3)
 
-| ID | Nombre | Canal | Sprint | Estado |
-|---|---|---|---|---|
-| po-faq-appointments | PO Agent | WhatsApp + SMS | Sprint 2 | PLANNED |
-| forumph-ops | ForumPHs-OPS | WhatsApp | Sprint 3 | PLANNED |
-| compliance-guardian | Compliance Guardian | Interno | Sprint 6 | PLANNED |
-
-**PO Agent:** FAQ + citas + ventas proactivas · voz de Patricia · memoria 15 días · multiidioma · pre-requisito: workshop 30min con Patricia
-**ForumPHs-OPS:** 1,500→3,000 propiedades · tone engine dinámico (4 perfiles) · DB tenant aislado · cache invalidation por cambio de estado financiero
-**Compliance Guardian:** vigilancia Meta/Google/TikTok + resolución de baneos · case library con aprendizaje reciclado · NO conectado a Meta.ai/Google.ai/TikTok.ai
-
-### Labs
-
-| Lab | Estado |
-|---|---|
-| AgentLab | PASSED · Spec pendiente · Sprint 4 |
-| VoiceLab | Wishlist · Sprint 5 · ElevenLabs · voces: PO + Ivette |
+| ID | Nombre | Sprint | Canal |
+|---|---|---|---|
+| po-faq-appointments | PO Agent | Sprint 2 Agent | WhatsApp + SMS |
+| forumph-ops | ForumPHs-OPS | Sprint 3 Agent | WhatsApp |
+| compliance-guardian | Compliance Guardian | Sprint 6 Ayra | interno |
 
 ---
 
-## CONTENT PIPELINE v2.1
+## AYRA
 
-Capas: L0 AUDIENCE_BRIEF → L1 WRITE → L2 H+AIFE → L3 HUMANIZE_EMOTIONAL → L4 PSYCHO → L5 CRO → L6 SEO → L7 QA
-Skill: skills/content-pipeline/SKILL.md
-Brand Cache: /api/brand-cache?brand_id={brand_id}
-Supabase pipeline skills: 8 rows v2.0
-Deprecated: skills/CONTENT_PIPELINE_SKILLS.md · skills/aife/SKILL.md
+**Estado:** PLANNED · Sprint 0 pendiente
+**Plan:** protocols/AYRA_MASTER_PLAN.md v3.3
+**Repo:** unrealvillestudio-hub/unrlvl-ayra — **POR CREAR**
+**URL:** ayra.unrealvillestudio.com — **POR CONFIGURAR**
+
+| Sprint | Fechas | Objetivo |
+|---|---|---|
+| Sprint 0 | antes Jun 5 | Repo + DB schema + prereqs |
+| Sprint 1 | Jun 5-15 | EcosystemGraph + health EP + graph_validate |
+| Sprint 2 | Jun 16-30 | Primeros jobs autónomos |
+| Sprint 3 | Jul 1-14 | Daily Digest 7am ET |
+| Sprint 4 | Jul 15-31 | Simuladores Fase 1 |
+| Sprint 5 | Ago 1-31 | Memoria L1+L2+L4 → **AYRA v1.0** |
+| Sprint 6 | Sep-Oct 2026 | MCP Layer |
+
+**Milestone:** AYRA v1.0 el 31 de agosto de 2026
+
+---
+
+## UNRLVL-OPS
+
+- **URL:** unrlvl-ops.vercel.app (mantener vercel.app — opacidad intencional)
+- **Status:** LIVE · framework: Vite · last deploy: 2026-04-22
+- **Features live:** Cost Layer · Insights panel
+- **DB:** 11 tablas ops_* en public schema · ops_costs: 10 rows · ops_renewals: 4 rows
+- **Integración Ayra:** api/cost-export (Sprint 2) → cost_center: ayra_compute
 
 ---
 
 ## INFRAESTRUCTURA
 
-| ID | Nombre | Estado |
-|---|---|---|
-| INFRA-CTX | Context System | unrlvl-context.vercel.app |
-| INFRA-BRAND-CACHE | Brand Cache API | LIVE ✅ |
-| INFRA-SHOPIFY-MCP | Shopify MCP | ACTIVE |
-| INFRA-SB | Supabase UNRLVL | ✅ RLS 4 tablas secured |
-| INFRA-SB-FORUMPH | Supabase ForumPHs | PLANNED · Sprint 3 |
-| INFRA-VERCEL-KV | Vercel KV (Redis) | PLANNED · Sprint 0 |
-| INFRA-AGENT-TEMPLATE | unrlvl-agent-template repo | PLANNED · Sprint 0 |
-| INFRA-TOOLS | unrlvl-tools.vercel.app | LIVE · ShopifyAuditor v3.5 |
-| INFRA-WEB | unrealvillestudio.com | LIVE EN+ES |
+| ID | Nombre | URL / ID | Estado |
+|---|---|---|---|
+| INFRA-CTX | Context System | unrlvl-context.vercel.app | LIVE |
+| INFRA-BRAND-CACHE | Brand Cache API | .../api/brand-cache | LIVE ✅ |
+| INFRA-SHOPIFY-MCP | Shopify MCP | unrlvl-shopify-mcp.vercel.app | ACTIVE |
+| INFRA-TOOLS | UNRLVL Tools | unrlvl-tools.vercel.app | LIVE — ShopifyAuditor v3.5 |
+| INFRA-WEB | unrealvillestudio.com | unrealvillestudio.com | LIVE EN+ES |
+| INFRA-BLUEPRINTS | BluePrints | unrlvl-blueprints.vercel.app | LIVE |
+| INFRA-FORUMPHS-COM | forumphs.com | forumphs.com | LIVE |
+| INFRA-SB-MAIN | Supabase unrlvl-db | amlvyycfepwhiindxgzw | ACTIVE_HEALTHY |
+| INFRA-SB-FORUMPH | Supabase ForumPHs | cuenta propia | EXISTE · pendiente migración |
+| INFRA-SB-PERSONAL | Supabase XMMs | puoybldykxqvhvtnwrld | personal · pendiente limpieza |
+| INFRA-AYRA | AYRA | ayra.unrealvillestudio.com | PLANNED · Sprint 0 |
+| INFRA-VERCEL-KV | Vercel KV | — | PLANNED · Sprint 0 Ayra |
+| INFRA-AGENT-TEMPLATE | agent-template repo | — | PLANNED · Sprint 0 Agent |
+
+---
+
+## CONTENT PIPELINE v2.1
+
+- Skill: skills/content-pipeline/SKILL.md
+- Layers: L0→L7 (AUDIENCE_BRIEF → WRITE → H+AIFE → HUMANIZE_EMOTIONAL → PSYCHO → CRO → SEO → QA)
+- IID Pipeline activo: intel.iid_content_queue (117 items) · 7 EFs activas
+- Monitorear con Ayra job `iid_queue_check`
 
 ---
 
 ## SKILLS SYSTEM v1.1
 
-Operativo ✅ · 15 skills · Index: skills/INDEX.md
+- 15 skills operativos · Index: skills/INDEX.md
+- content-pipeline: path canónico · aife: DEPRECATED
 
 ---
 
-## ROADMAP — AGENT INFRASTRUCTURE SPRINTS
+## AGENDA — PRÓXIMA SESIÓN
 
-| Sprint | Nombre | Sesiones | Entregable |
-|---|---|---|---|
-| S0 | Foundation | 2-3 | Schema Supabase agents.* · DB Router · agent.json spec · Vercel KV · repo template |
-| S1 | DDMV Fix | 1-2 | Memoria 15 días · tono bloqueado · primera validación del estándar |
-| S2 | PO Agent | 3-4 | Primer agente nuevo desde estándar · Patricia facturando |
-| S3 | ForumPHs-OPS | 4-5 | 1,500 propietarios · multi-tenant · cache invalidation |
-| S4 | AgentLab | 3-4 | Fábrica operativa · Industrial Consistency alcanzada |
-| S5 | VoiceLab | 2-3 | PO e Ivette responden con su propia voz |
-| S6 | Compliance Guardian | 3-4 | Protección activa · case library · learning loop |
-
-**Total:** 18-24 sesiones · 8-12 semanas · Costo final ~$200-222/mes
+1. **PRIORIDAD 0** — NSCF: Follow-up Patricia accesos Meta BM + TikTok + GA4 (48h máximo)
+2. **PRIORIDAD 1** — Legal: Iniciar Stripe Atlas LLC Delaware ($500)
+3. **PRIORIDAD 2** — NSCF: DNS Cloudflare TXT → Meta domain verification
+4. **PRIORIDAD 3** — NSCF: Decisión KT-104 DY Fazza 200ml vs 400ml
+5. **PRIORIDAD 4** — Ayra Sprint 0: CREATE SCHEMA ayra + 11 tablas en Supabase main
+6. **PRIORIDAD 5** — Ayra Sprint 0: Crear repo unrlvl-ayra + proyecto Vercel
+7. **PRIORIDAD 6** — Infra: luciensael.com DNS apuntar (10 min)
+8. **PRIORIDAD 7** — XMMs: eliminar proyecto muerto
 
 ---
 
-## AGENDA PRÓXIMA SESIÓN
-
-1. **P0** — MCP Server propio UNRLVL (exploración arquitectura — próxima sesión)
-2. **P1** — Sprint 0 S0.1 — Schema Supabase `agents.*` + DB Router multi-tenant
-3. **P2** — NeuroneSCF: Reescritura 4 artículos blog con L0+L3
-4. **P3** — NeuroneSCF: Tracking pixels Meta + TikTok + Google (0/10)
-5. **P4** — NeuroneSCF: API Tokens Orchestrator — desbloquear con BM ID de UNRLVL
-6. **P5** — NeuroneSCF: CRO Checkout — Bundle configurar
-7. **P6** — Brand cache otras marcas del ecosistema
-
----
-_Regenerado: 2026-05-13 · Claude Sonnet 4.6_
+_ecosystem.md · generado desde ecosystem.json v8 · 2026-05-13_

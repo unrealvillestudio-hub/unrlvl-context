@@ -1,132 +1,83 @@
-# SOCIAL MEDIA AGENT — Session Log
-_Actualizado: 2026-05-13 · Actualiza ejecutado por Sam_
+# SESSION LOG — Social Media Agent
+_Última actualización: 2026-05-13 · Comando Actualiza_
 
 ---
 
-## NOVEDADES — Mayo 2026
+## NOVEDADES — 2026-05-13
 
-### Estado al 2026-05-13
+**Sin actividad nueva desde último Actualiza.** Estado del agente verificado vía export.
 
-**PROGRESO DESDE ÚLTIMO ACTUALIZA (2026-03-23):**
+Último estado por usuario:
+- **Laura (ops):** Bloqueada en verificación de teléfono para Meta Developer App (2026-05-11). El SMS de verificación no llega. Pendiente resolución antes de poder generar tokens API para Orchestrator.
+- **Sam (admin):** Sin sesiones recientes en el agente.
+- **Paty (PO):** Sin sesiones recientes en el agente.
 
-Laura completó el setup de redes sociales de Neurone SCF entre abril y mayo:
-
-✅ **Meta Business Manager** — configurado (verificación de dominio pendiente)
-✅ **Facebook Page** — creada: "Neurone South & Central Florida"
-✅ **Instagram Business** — creado @neuronescflorida · vinculación a Facebook Page pendiente
-✅ **TikTok for Business** — creado @neuronescflorida
-⚠️ **WhatsApp Business API** — bloqueado: código de verificación no llega al T-Mobile
-⚠️ **Meta Developer App** — bloqueado: mismo problema de verificación telefónica
-❌ **API Tokens para Orchestrator** — no completado (depende de Developer App)
+**Bloqueador activo:** Meta Developer App requiere verificación telefónica → sin ella no se pueden crear System User tokens para UNRLVL-Orchestrator. Sam debe coordinar con Patricia para resolver (posiblemente usar número alternativo o método de verificación diferente).
 
 ---
 
-### Sesiones Laura (ops)
+## PROGRESO INFRAESTRUCTURA DIGITAL — NSCF
 
-#### 2026-04-06
-- TikTok Shop: requiere dirección comercial + licencia + EIN. Decisión: diferir hasta tener dirección comercial.
-- Dirección en documentos oficiales (residencial) vs. Vizos Salón. Recomendación: usar dirección de documentos para Meta/TikTok Ads. TikTok Shop diferir.
+### COMPLETADO ✅
+- Meta Business Manager configurado (verificación dominio pendiente)
+- Facebook Page "Neurone South & Central Florida" creada
+- Instagram Business @neuronescflorida creado
+- TikTok for Business creado
+- WhatsApp Business API configurado en proceso
+- Estructura de 7 aliases email definida
 
-#### 2026-04-10
-- Meta BM: campos básicos completados (pasos 1-2). Verificación de cuenta (paso 3) pendiente.
-- Verificación de dominio neuronescflorida.com: Laura sin acceso al hosting. Diferida.
-- Siguiente paso definido: Facebook Page.
+### PENDIENTE CRÍTICO ❌
+- Meta Developer App (verificación teléfono bloqueada) → tokens Orchestrator
+- System User token UNRLVL-Orchestrator → Meta automatización
+- Instagram → Facebook Page vinculación completar
+- Domain verification neuronescflorida.com (DNS TXT Cloudflare)
+- TikTok Access Token para Orchestrator
 
-#### 2026-04-15
-- BM pasos 1-2 completados por Patricia.
-- Verificación de dominio y Facebook Page: pendientes por falta de acceso y assets.
-
-#### 2026-04-17
-- Facebook Page creada ✅
-- Instagram Business: creado, pendiente vinculación a Facebook Page.
-- Decisión: continuar sin logos (placeholder).
-
-#### 2026-04-18 (sesión larga)
-- Instagram Business configurado como cuenta profesional ✅
-- TikTok for Business creado desde web ✅
-- WABA iniciado: Patricia no puede completar verificación telefónica (código no llega).
-- Instrucciones completas dadas para Meta Developer App y tokens de sistema.
-
-#### 2026-05-04
-- Sam solicita developer API tokens para que Labs/Orchestrator puedan publicar y gestionar ads de forma automatizada.
-- Instrucciones detalladas dadas para Meta System User Token y TikTok Access Token.
-- Bloqueado en Meta Developers: verificación telefónica no funciona.
-- Alternativa sugerida: acceso compartido vía Business Manager ID de UNRLVL.
-
-#### 2026-05-11
-- Laura confirma que no ha podido avanzar con tokens requeridos por Sam.
-- Problema específico: código de verificación de teléfono en developers.facebook.com no llega.
-- Alternativa activa: usar Business Manager ID de UNRLVL para acceso compartido directo.
+### PENDIENTE OPERATIVO ⏳
+- 7 aliases email crear en servidor neuronescflorida.com
+- Logos en formatos requeridos para todas las plataformas
+- WhatsApp Business API completar configuración
 
 ---
 
-### Sesiones Sam (admin)
+## HISTORIAL DE SESIONES
 
-#### 2026-04-06
-- Sam detecta que el agente no accede correctamente al session_log.md. El agente no tenía el archivo en contexto.
-- Confirmado: session_log vive en `unrlvl-context/brands/NeuroneSCF/session_log.md`.
+### LAURA (ops)
 
-#### 2026-04-10
-- Definidos 7 aliases de email por función bajo neuronescflorida.com.
-- Estrategia de número comercial dedicado confirmada.
+| Fecha | Sesiones | Progreso |
+|---|---|---|
+| 2026-04-06 | 2 | TikTok Shop requerimientos · estrategia de direcciones |
+| 2026-04-10 | 1 | Meta BM configuración · Facebook Page status |
+| 2026-04-15 | 5 | Meta BM checklist · domain verification approach |
+| 2026-04-17 | 3 | Facebook Page confirmada · Instagram Business creado |
+| 2026-04-18 | 14 | Instagram setup completo · TikTok for Business creado · WABA inicio |
+| 2026-05-04 | 3 | Tokens API: instrucciones Meta System User + TikTok Access Token |
+| 2026-05-11 | 2 | Bloqueada: Meta Developer App verificación teléfono no llega |
 
----
+### SAM (admin)
 
-### Sesiones Paty (po)
+| Fecha | Sesiones | Progreso |
+|---|---|---|
+| 2026-04-06 | 3 | Orientación inicial · session_log.md awareness |
+| 2026-04-10 | 2 | Estructura emails · estado del proyecto |
 
-#### 2026-04-06
-- Primera sesión. Checklist inicial presentado. Sin avances propios — todo gestionado vía Laura.
+### PATY (PO)
 
----
-
-## ESTADO ACTUAL COMPLETO
-
-| Plataforma | Estado | Responsable | Bloqueante |
-|---|---|---|---|
-| Meta Business Manager | ✅ Configurado | Patricia/Laura | — |
-| Facebook Page | ✅ Creada | Laura | — |
-| Instagram Business | ⚠️ Creado, sin vincular | Patricia | Vinculación FB Page pendiente |
-| TikTok for Business | ✅ Creado | Laura | — |
-| WhatsApp Business API | ❌ Bloqueado | Patricia | Código verificación no llega |
-| Meta Developer App | ❌ Bloqueado | Patricia | Mismo problema teléfono |
-| API Tokens Orchestrator | ❌ Pendiente | Sam/Laura | Depende de Developer App |
-| Verificación dominio | ❌ Diferida | Sam | Acceso hosting |
-| Logos/Assets | ❌ Pendiente | Patricia | Contactar Neurone Cosmética |
+| Fecha | Sesiones | Progreso |
+|---|---|---|
+| 2026-04-06 | 1 | Orientación inicial |
 
 ---
 
-## ACCIONES PENDIENTES PRIORITARIAS
+## PRÓXIMO PASO CONCRETO
 
-**P0 — DESBLOQUEANTE:**
-- Resolver verificación telefónica Meta Developers:
-  - Intentar desde número diferente
-  - O usar Business Manager ID de UNRLVL para acceso compartido directo (Sam debe dar su BM ID a Laura)
+**Desbloquear Meta Developer App:**
+1. Patricia intenta verificación con número alternativo
+2. O usar método "Llamarme" en lugar de SMS
+3. Una vez verificada: crear app "Neurone SCF API" → System User UNRLVL-Orchestrator → tokens
 
-**P1 — Laura:**
-- Completar vinculación Instagram → Facebook Page (desde app, cuenta Patricia)
-
-**P2 — Sam:**
-- Proporcionar Business Manager ID de UNRLVL a Laura para acceso compartido como alternativa a Developer App
-
-**P3 — Patricia:**
-- Contactar Neurone Cosmética para obtener brand assets oficiales (logos, imágenes)
-
-**P4 — Sam:**
-- Verificar dominio neuronescflorida.com (acceso hosting necesario)
+**Sam debe comunicar a Patricia/Laura** el Business Manager ID de UNRLVL como alternativa si la App sigue bloqueada.
 
 ---
 
-## HISTORIAL ANTERIOR (resumen al 2026-03-23)
-
-**Completado:**
-- Definición de 7 aliases de email (admin, ig, waba, tiktok, ads, support, hello)
-- Estrategia de números telefónicos (separación comercial/personal)
-- Compliance Meta verificado (un número por Business Manager)
-
-**Decisiones tomadas:**
-- Número comercial separado obligatorio para compliance Meta
-- Número personal PO mantener intocable
-- Un Business Manager por marca
-
----
-_Social Media Agent · Actualizado por Sam · 2026-05-13_
+_Social Media Agent Session Log · Unrealville Studio · 2026-05-13_
