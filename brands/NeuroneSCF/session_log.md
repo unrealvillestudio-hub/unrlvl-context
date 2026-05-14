@@ -5,119 +5,189 @@ _Última actualización: 2026-05-13_
 
 ## SESIÓN 2026-05-13 — Sam
 
-### TRABAJO REALIZADO
+### COMPLETADO HOY
 
-#### 1. TRACKING / PIXELS — EN PROCESO
-- Decisión de approach: Meta + TikTok vía apps nativas (Conversions API server-side automático), GA4 vía GTM híbrido
-- Decisión de email: usar `xam.moreno.m@gmail.com` para las tres plataformas (sam@unrealvillestudio.com reservado para cuando se vincule Unrealville formalmente a Meta)
-- **Instrucciones enviadas a Patricia vía WhatsApp** para que añada a Sam como admin en:
-  - Meta Business Manager → Personas → xam.moreno.m@gmail.com
-  - TikTok Ads Manager → Gestión de miembros → xam.moreno.m@gmail.com (Admin)
-  - Google Analytics → Gestión de acceso → xam.moreno.m@gmail.com (Administrador)
-- **Estado:** Esperando que Patricia envíe las invitaciones. Sam acepta y crea los pixels.
-- **Pendiente post-acceso:** Crear Meta Pixel, TikTok Pixel, GA4 Measurement ID e instalar vía Shopify channels oficiales
+#### 1. TRACKING — CONFIGURADO ✅
+- **TikTok Pixel** instalado en `layout/theme.liquid` — ID: `D832THJC77UATASL0OO0`
+- **Snippet `tiktok-events.liquid`** creado e incluido — eventos activos:
+  - `PageView` — todas las páginas ✅
+  - `ViewContent` — PDPs ✅
+  - `AddToCart` — botón ATC ✅
+  - `Search` — resultados búsqueda ✅
+  - `InitiateCheckout` — botón checkout en carrito ✅
+  - `Identify` — clientes logueados (SHA-256 hashed) ✅
+  - `Purchase` — cubierto server-side vía TikTok Events API (app oficial conectada, pendiente aprobación contrato)
+- **TikTok app** conectada + ad account vinculado — esperando aprobación y contrato
+- **Sam añadido** como admin en Meta Business Manager y TikTok Ads Manager (Patricia completó)
+- **GA4** — Sam creó la propiedad. Measurement ID pendiente de instalar en Shopify
+- **Meta Pixel** — acceso recibido. Crear pixel e instalar pendiente (próxima sesión)
 
-#### 2. SHOPIFY APPS — DIAGNÓSTICO COMPLETO
-Apps instaladas en tienda B2C:
-- Bundles (Shopify nativa) — instalada ✅ — configurada ✅ (completado hoy)
-- Messaging (Shopify) — instalada, email + SMS básico
-- Claude_NSCFL_Shop_API, Neurone_API_Token, UNRLVL_Auditor — internas UNRLVL
-- Pagos activos: Shop Pay ✅ · Apple Pay ✅ · Google Pay ✅ · USD ✅
-- Script tags: 0 — sin ningún pixel instalado actualmente
+#### 2. BUNDLES — 10/12 CONFIGURADOS ✅
+- Configurados via `productBundleUpdate` API
+- Método: 3PL bajo demanda (Método B) ✅
+- Checkout muestra: kit como línea principal + desglose de componentes visibles ✅
 
-**Stack pendiente de instalar (priorizado):**
-1. Meta Channel (oficial) — pixel + Conversions API — gratis
-2. TikTok Channel (oficial) — pixel + catálogo — gratis
-3. Google & YouTube (oficial) — GA4 + Google Ads — gratis
-4. Afterpay o Sezzle — BNPL, impacto conversión kits — gratis (comisión)
-5. Judge.me — Reviews/UGC — free plan para arranque / $15/mes
-6. Reconvert — Post-purchase upsell — instalar post-lanzamiento con tráfico
-7. Order tracking (17Track o Track123) — instalar cuando haya pedidos reales
-8. Klaviyo — cuando volumen de email lo justifique
+| Kit | SKU | Estado |
+|---|---|---|
+| Hydra Boost | NSCF-KT-SDUO | ✅ |
+| Moisture Recovery | NSCF-KT-101 | ✅ |
+| Moisture Recovery Plus | NSCF-KT-101P | ✅ |
+| Restore Therapy | NSCF-KT-102 | ✅ |
+| Restore Therapy Plus | NSCF-KT-102P | ✅ |
+| Restore & Shield | NSCF-KT-102T | ✅ |
+| Blonde Guard | NSCF-KT-103 | ✅ |
+| Blonde Guard Plus | NSCF-KT-103P | ✅ |
+| Perfect Blonde | NSCF-KT-103V | ✅ |
+| Perfect Blonde Plus | NSCF-KT-103VP | ✅ |
+| Moisture & Shine | NSCF-KT-101T | ⏳ Resplander Shine — verificar mañana |
+| S.O.S Rescue System | NSCF-KT-104 | ⏳ Verificar componentes mañana |
 
-#### 3. BUNDLES — CONFIGURADO ✅
-- Confirmado: 3PL trabaja bajo demanda (Método B) — Bundles nativa aplica
-- Comportamiento en checkout: kit como línea principal + desglose de componentes visibles ✅
-- Configurado via `productBundleUpdate` API (no `productBundleCreate` — ese crea productos nuevos)
-
-| Kit | SKU | Estado | Componentes |
-|---|---|---|---|
-| Hydra Boost | NSCF-KT-SDUO | ✅ COMPLETE | SR-004-U + SR-005-U |
-| Moisture Recovery | NSCF-KT-101 | ✅ COMPLETE | BCP-003 + BTP-005 + TR-013 |
-| Moisture Recovery Plus | NSCF-KT-101P | ✅ COMPLETE | BCP-003 + BTP-005 + TR-013 + TR-016 |
-| Restore Therapy | NSCF-KT-102 | ✅ COMPLETE | BCP-011 + BTP-010 + TR-015 |
-| Restore Therapy Plus | NSCF-KT-102P | ✅ COMPLETE | BCP-011 + BTP-010 + TR-015 + TR-016 |
-| Restore & Shield | NSCF-KT-102T | ✅ COMPLETE | BCP-011 + BTP-010 + TR-015 + TR-021 |
-| Blonde Guard | NSCF-KT-103 | ✅ COMPLETE | BCP-001 + BTP-007 + TR-015 |
-| Blonde Guard Plus | NSCF-KT-103P | ✅ COMPLETE | BCP-001 + BTP-007 + TR-015 + TR-016 |
-| Perfect Blonde | NSCF-KT-103V | ✅ COMPLETE | BCP-001 + BTP-007 + BTP-001 |
-| Perfect Blonde Plus | NSCF-KT-103VP | ✅ COMPLETE | BCP-001 + BTP-007 + BTP-001 + TR-016 |
-| Moisture & Shine | NSCF-KT-101T | ⏳ PENDIENTE | Resplander Shine no existe en catálogo — investigar mañana |
-| S.O.S Rescue System | NSCF-KT-104 | ⏳ PENDIENTE | Verificar tamaño DY Fazza: descripción dice 400ml/$49.99 pero SKU NSCF-TR-013 es 200ml/$44.99 |
-
-#### 4. SAVINGS BADGE EN CART — LIVE ✅
-- Metafield `neurone.kit_savings` creado (single_line_text_field, PUBLIC_READ)
-- Definition ID: `gid://shopify/MetafieldDefinition/386818343239`
-- Valores aplicados a los 10 kits configurados
-- `templates/cart.liquid` actualizado — página del carrito completamente bilingüe (ES/EN)
-
-**Badge behavior:**
-- Solo aparece en productos kit (los que tengan el metafield)
-- Productos individuales no lo muestran
-- ES: `Ahorras $XX.XX · Envío gratis incluido`
-- EN: `You save $XX.XX · Free shipping included`
+#### 3. SAVINGS BADGE EN CART ✅
+- Metafield `neurone.kit_savings` — definition ID: `gid://shopify/MetafieldDefinition/386818343239`
+- Aplicado a 10 kits con valores de ahorro reales
+- Badge bilingüe ES/EN en `templates/cart.liquid` — live en producción
 - Color: #D4622A (naranja Neurone) con ícono de regalo
+- Solo aparece en productos con el metafield (kits) — individuales sin badge
 
-**Valores de ahorro por kit:**
 | Kit | Ahorro |
 |---|---|
-| Hydra Boost (NSCF-KT-SDUO) | $19.99 |
-| Moisture Recovery (NSCF-KT-101) | $44.98 |
-| Moisture Recovery Plus (NSCF-KT-101P) | $89.97 |
-| Restore Therapy (NSCF-KT-102) | $44.98 |
-| Restore Therapy Plus (NSCF-KT-102P) | $79.97 |
-| Restore & Shield (NSCF-KT-102T) | $84.97 |
-| Blonde Guard (NSCF-KT-103) | $49.98 |
-| Blonde Guard Plus (NSCF-KT-103P) | $84.97 |
-| Perfect Blonde (NSCF-KT-103V) | $64.98 |
-| Perfect Blonde Plus (NSCF-KT-103VP) | $94.97 |
+| Hydra Boost | $19.99 |
+| Moisture Recovery | $44.98 |
+| Moisture Recovery Plus | $89.97 |
+| Restore Therapy | $44.98 |
+| Restore Therapy Plus | $79.97 |
+| Restore & Shield | $84.97 |
+| Blonde Guard | $49.98 |
+| Blonde Guard Plus | $84.97 |
+| Perfect Blonde | $64.98 |
+| Perfect Blonde Plus | $94.97 |
+
+#### 4. CART — FIXES ✅
+- Imagen rota en cart corregida (`item.image` + fallback `product.featured_image`)
+- Layout móvil corregido — grid responsive, columna única en <720px
+- Página de carrito completamente bilingüe ES/EN
+
+#### 5. FREE SHIPPING KITS ✅
+- **Descuento automático activo:** "Free Shipping — Ritual Kits"
+  - ID: `gid://shopify/DiscountAutomaticNode/1889210106183`
+  - Umbral: subtotal ≥ $60.00 USD
+  - Cubre todos los kits ($64.99–$179.99) ✅
+  - No activa para productos individuales (máx $54.99) ✅
+  - Gap de seguridad: $10
+- **Perfil "Kits - Free Shipping"** — creado, zona US configurada, tarifa $0
+  - Moisture & Shine y SOS asignados directamente
+  - Los otros 10 kits son Shopify Bundles — limitación de Shopify impide asignarlos via API o UI
+  - El descuento automático los cubre como workaround
+- **Bug de divisa corregido:** tarifa general estaba en EUR → Sam la corrigió a USD en Admin
+
+#### 6. APPS INSTALADAS ✅
+| App | Estado |
+|---|---|
+| Meta Channel (Facebook & Instagram) | ✅ Instalada — pixel pendiente crear |
+| TikTok (oficial) | ✅ Instalada + conectada — pendiente aprobación |
+| Google & YouTube | ✅ Instalada + Merchant Center activado |
+| Judge.me | ✅ Instalada — pendiente configuración |
+| Afterpay US | ✅ Registro completado — pendiente aprobación |
+| Bundles (nativa) | ✅ Configurada 10/12 |
+
+#### 7. PAYMENTS ✅
+- Shop Pay, Apple Pay, Google Pay — activos
+- Afterpay US — registro completado, pendiente aprobación (1-5 días)
+- Klarna — no disponible en USA via Shopify Payments (descartada)
+- Affirm — disponible, pendiente decisión
 
 ---
 
-## ESTADO GENERAL CRO — PRE-LANZAMIENTO
+## PENDIENTES PRÓXIMA SESIÓN
 
-| Área | Estado |
-|---|---|
-| Tracking Meta Pixel | ⏳ Esperando acceso Patricia |
-| Tracking TikTok Pixel | ⏳ Esperando acceso Patricia |
-| Tracking GA4 | ⏳ Esperando acceso Patricia |
-| Bundles checkout breakdown | ✅ 10/12 kits activos |
-| Bundles KT-101T + KT-104 | ⏳ Investigar mañana |
-| Savings badge en cart (bilingüe) | ✅ Live en producción |
-| BNPL (Afterpay/Sezzle) | ❌ Pendiente instalar |
-| Reviews (Judge.me) | ❌ Pendiente instalar |
-| Post-purchase upsell (Reconvert) | ❌ Post-lanzamiento |
-| Order tracking | ❌ Post-lanzamiento |
-| Verificación dominio Meta (DNS TXT Cloudflare) | ❌ Pendiente |
-| Instagram → Facebook Page link | ❌ Pendiente (Patricia) |
+### Mañana (prioridad)
+- [ ] Configurar KT-101T (Moisture & Shine) — verificar Resplander Shine
+- [ ] Configurar KT-104 (SOS) — verificar componentes
+- [ ] Imágenes DY Fazza vs Dyfensor — corregir confusión
+- [ ] 2 productos con especificación — Sam explicará
+- [ ] Instalar y configurar **Judge.me** (Sam instaló, configuración pendiente)
+- [ ] Crear Meta Pixel + instalar via Meta Channel
+- [ ] Instalar GA4 Measurement ID en Shopify
+
+### Stack CRO pendiente de instalar/decidir
+Ver sección "Respuesta de Claude: Stack CRO Completo" abajo
+
+---
+
+## RESPUESTA DE CLAUDE: STACK CRO COMPLETO
+
+### Lo que ya tienes activo
+| Área | Herramienta | Estado |
+|---|---|---|
+| Tracking | TikTok Pixel + Events | ✅ Live |
+| Tracking | GA4 | ⏳ Conectar |
+| Tracking | Meta Pixel | ⏳ Crear e instalar |
+| Bundles/kits checkout | Shopify Bundles | ✅ |
+| Valor percibido | Savings badge cart | ✅ |
+| Pagos flexibles BNPL | Afterpay US | ⏳ Aprobación |
+| Reviews/UGC | Judge.me | ⏳ Configurar |
+
+### Lo que falta — Stack CRO priorizado
+
+**FASE 1 — Pre-lanzamiento (instalar ya):**
+
+| App | Función CRO | Costo | Prioridad |
+|---|---|---|---|
+| **Judge.me** | Reviews + estrellas en PDP + emails automáticos post-compra pidiendo review | Free / $15/mes | 🔴 Alta — sin reviews no hay prueba social |
+| **Klaviyo** | Email marketing — abandoned cart, welcome flow, post-purchase, win-back | Free hasta 250 contactos / $20/mes+ | 🔴 Alta — el email es el canal de mayor ROI |
+| **Reconvert** | Post-purchase upsell — oferta one-click en thank you page | $4.99/mes | 🟡 Media — sin tráfico no hay con qué probar |
+
+**FASE 2 — Post-lanzamiento (con primeras ventas):**
+
+| App | Función CRO | Costo | Timing |
+|---|---|---|---|
+| **Loox** o **Okendo** | Video reviews + UGC — alternativa premium a Judge.me | $9–$19/mes | Cuando tengas primeras compras |
+| **Rebuy** | Smart upsell/cross-sell en PDP, carrito y post-purchase con IA | $99/mes | Mes 2-3 |
+| **Stamped** | Loyalty program — puntos, referidos | $19/mes | Mes 3+ |
+| **Postscript** | SMS marketing USA | $0.01/SMS | Cuando tengas base de contactos |
+| **17Track / Track123** | Order tracking branded | Free / $9/mes | Cuando haya pedidos reales |
+
+**FASE 3 — Escala:**
+
+| App | Función CRO | Cuándo |
+|---|---|---|
+| **Gorgias** | Customer support integrado con Shopify | Con volumen de tickets |
+| **Yotpo** | Reviews enterprise + loyalty + SMS todo en uno | Cuando Loox/Judge.me se quede corto |
+| **Triple Whale** | Analytics de ads unificado (Meta+TikTok+Google en un dashboard) | Cuando corran 3+ campañas simultáneas |
+
+### Decisión inmediata que te pido
+
+**Klaviyo ahora.** Es la app de mayor impacto a largo plazo y tarda en "calentar" — cuanto antes empieces a construir la lista y los flows, mejor. El plan free cubre los primeros 250 contactos y los flows básicos. Reconvert lo dejamos para cuando haya tráfico real.
 
 ---
 
 ## NOTAS TÉCNICAS
 
-### Shopify Bundles API
-- Usar `productBundleUpdate` con `productId` del kit existente para kits ya creados
-- `productBundleCreate` genera producto nuevo — no usar para kits existentes
-- Input requerido por componente: `productId` + `quantity` + `optionSelections[componentOptionId, name, values]`
-- Verificar estado: `node(id: "gid://shopify/ProductBundleOperation/XXX")` → status `COMPLETE` = OK
+### Bundles API
+- `productBundleUpdate` — usar para kits existentes (no `productBundleCreate`)
+- Bundle products NO se pueden asignar a custom shipping profiles vía API ni UI (limitación Shopify)
+- Workaround: descuento automático free shipping ≥ $60
 
 ### Savings Badge
-- Metafield definition ID: `gid://shopify/MetafieldDefinition/386818343239`
-- Namespace: `neurone` / Key: `kit_savings`
-- Acceso en Liquid: `item.product.metafields.neurone.kit_savings.value`
-- Locale check: `request.locale.iso_code == 'en'`
+- Metafield: `neurone.kit_savings` / namespace: `neurone` / key: `kit_savings`
+- Liquid: `item.product.metafields.neurone.kit_savings.value`
 
-### Tienda — Idiomas
-- ES: primario ✅ publicado
-- EN: no primario ✅ publicado
-- Theme activo: `gid://shopify/OnlineStoreTheme/192983662919` — Neurone Custom Theme v1.0
+### Tienda
+- Idiomas: ES (primario) + EN (publicado)
+- Theme: `gid://shopify/OnlineStoreTheme/192983662919` — Neurone Custom Theme v1.0
+- Locale check en Liquid: `request.locale.iso_code == 'en'`
+
+### Tracking
+- TikTok Pixel ID: `D832THJC77UATASL0OO0`
+- Snippet: `snippets/tiktok-events.liquid`
+- GA4 Measurement ID: pendiente — Sam lo tiene, hay que instalarlo
+- Meta Pixel ID: pendiente — crear en Meta Events Manager
+
+### Shipping
+- Descuento auto free shipping: `gid://shopify/DiscountAutomaticNode/1889210106183`
+- Perfil "Kits - Free Shipping": `gid://shopify/DeliveryProfile/134683099463`
+- Perfil General: `gid://shopify/DeliveryProfile/132833870151` — tarifa corregida a USD
+
+### Accesos
+- Sam añadido como admin: Meta BM ✅ · TikTok Ads Manager ✅ · GA4 ✅
+- Email usado: xam.moreno.m@gmail.com
