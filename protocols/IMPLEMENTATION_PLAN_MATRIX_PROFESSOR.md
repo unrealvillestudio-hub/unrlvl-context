@@ -1,20 +1,23 @@
 # PLAN DE IMPLEMENTACIÓN
 ## DECISION_MATRIX + PROFESSOR SYSTEM
 ## Unreal>ille Studio — Ecosistema UNRLVL
-_Generado: 2026-05-17 · Versión: 1.0 · Estado: Pendiente implementación_
+_Generado: 2026-05-17 · Versión: 1.1 · Estado: Implementado — Sprints 1-4 completados_
 
 ---
 
 ## CONTEXTO Y DECISIONES TOMADAS
 
 ### Lo que resuelve este sistema
+
 1. **DECISION_MATRIX:** Elimina decisiones tomadas sin base lógica. Provee criterios objetivos ponderados para que Claude evalúe antes de ejecutar — especialmente en outputs externos, decisiones irreversibles, y situaciones de riesgo.
 
 2. **Professor:** Convierte aprendizajes de sesión en conocimiento institucional operativo. Evita que el mismo problema se resuelva dos veces desde cero. Calibra la DECISION_MATRIX con casos reales.
 
 3. **Supabase como backend:** Los pesos, casos, variables y aprendizajes viven en tablas consultables en tiempo real — no en archivos estáticos que requieren commit para actualizarse.
 
-4. **Conteo de mensajes como trigger:** Cada 10 mensajes Claude ejecuta un micro-checkpoint del Professor — captura aprendizajes del bloque sin interrumpir el flujo.
+4. **Cache con TTLs diferenciados:** Los datos que raramente cambian (pesos, veto rules, variables de plataforma) se cachean 24h. Los datos semi-frecuentes (casos recientes, learnings pendientes) se cachean 1h. Los datos que deben ser inmediatos (bypasses, log de decisiones) nunca se cachean.
+
+5. **Conteo de mensajes como trigger:** Cada 10 mensajes Claude ejecuta un micro-checkpoint del Professor — captura aprendizajes del bloque sin interrumpir el flujo.
 
 ---
 
@@ -25,10 +28,11 @@ _Generado: 2026-05-17 · Versión: 1.0 · Estado: Pendiente implementación_
 │                    INICIO DE SESIÓN                      │
 │  protocolo actualización                                  │
 │    → ecosystem.json + AGENDA.md + skills/INDEX.md        │
-│    → DECISION_MATRIX.md (Vercel — narrativo)             │
-│    → professor_weights (Supabase — operativo)            │
-│    → professor_platform_variables (Supabase)             │
-│    → professor_learnings pending (Supabase)              │
+│    → professor-get-context EF (con cache)                │
+│        TTL 24h: weights + veto_rules + criteria          │
+│                 + platform_variables                     │
+│        TTL 1h:  recent_cases + pending_learnings_count   │
+│        Real-time: sam_bypasses (nunca cacheado)          │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
@@ -41,11 +45,11 @@ _Generado: 2026-05-17 · Versión: 1.0 · Estado: Pendiente implementación_
 │  PROFESSOR CHECKPOINT — cada 10 mensajes               │
 │    → micro-revisión del bloque                          │
 │    → captura candidatos a aprendizaje                   │
-│    → acumula en lista temporal del contexto             │
+│    → acumula en professor_learnings (filter_passed)     │
 │                                                          │
 │  "Professor, anota" — trigger manual de Sam             │
 │    → captura el contexto inmediato                      │
-│    → añade a lista temporal                             │
+│    → llama professor-submit-learning EF                 │
 └─────────────────────────────────────────────────────────┘
                           ↓
 ┌─────────────────────────────────────────────────────────┐
@@ -58,7 +62,7 @@ _Generado: 2026-05-17 · Versión: 1.0 · Estado: Pendiente implementación_
 │    → mensaje de commit                                  │
 │                                                          │
 │  Comando: Professor                                      │
-│    → consolida lista temporal de checkpoints            │
+│    → consolida lista de professor_learnings             │
 │    → aplica filtro de relevancia (3 criterios)          │
 │    → propone lista para aprobación de Sam               │
 │    → Sam aprueba/rechaza cada ítem                      │
@@ -73,7 +77,9 @@ _Generado: 2026-05-17 · Versión: 1.0 · Estado: Pendiente implementación_
 
 ## FASE 1 — SUPABASE SCHEMA
 
-### Tablas a crear
+### Estado: ✅ IMPLEMENTADO — 2026-05-17
+
+### Tablas creadas (9 + 1 cache)
 
 ```sql
 -- 1. Criterios de la matriz (dimensiones A, B, C, D)
@@ -90,7 +96,7 @@ CREATE TABLE professor_decision_criteria (
 -- 2. Reglas de veto absoluto
 CREATE TABLE professor_veto_rules (
   id TEXT PRIMARY KEY,
-  code TEXT NOT NULL, -- V1, V2, V3, V4
+  code TEXT NOT NULL,
   description TEXT NOT NULL,
   bypass_allowed BOOLEAN DEFAULT false,
   active BOOLEAN DEFAULT true,
@@ -104,8 +110,8 @@ CREATE TABLE professor_decision_cases (
   brand_id TEXT,
   session_description TEXT,
   context_description TEXT NOT NULL,
-  dimensions_activated TEXT[], -- ['B2','C1','A3']
-  veto_triggered TEXT, -- NULL o código de veto
+  dimensions_activated TEXT[],
+  veto_triggered TEXT,
   bypass_by_sam BOOLEAN DEFAULT false,
   bypass_justification TEXT,
   outcome TEXT,
@@ -140,7 +146,7 @@ CREATE TABLE professor_manuals (
   status TEXT CHECK (status IN ('draft','reviewed','approved','deprecated')) DEFAULT 'draft',
   version TEXT DEFAULT 'v1.0',
   content_summary TEXT,
-  markdown_path TEXT, -- path en el repo Vercel
+  markdown_path TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -170,7 +176,7 @@ CREATE TABLE professor_learnings (
   filter_reason TEXT,
   converted_to_manual_id UUID REFERENCES professor_manuals(id),
   approved_by_sam BOOLEAN DEFAULT false,
-  checkpoint_number INTEGER, -- en qué checkpoint fue capturado
+  checkpoint_number INTEGER,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -201,7 +207,8 @@ CREATE TABLE professor_sam_bypasses (
 );
 ```
 
-### Índices para performance
+### Índices
+
 ```sql
 CREATE INDEX idx_decision_cases_brand ON professor_decision_cases(brand_id);
 CREATE INDEX idx_decision_cases_date ON professor_decision_cases(date);
@@ -212,483 +219,282 @@ CREATE INDEX idx_platform_vars ON professor_platform_variables(platform, brand_i
 CREATE INDEX idx_weights_active ON professor_weights(active);
 ```
 
----
+### GRANTs y RLS
 
-## FASE 2 — DATOS INICIALES
-
-### Criterios de la matriz (seed data)
-
+Todas las tablas `professor_*` tienen RLS habilitado con política `service_only`:
 ```sql
--- DIMENSIÓN A — Stakeholder
-INSERT INTO professor_decision_criteria VALUES
-('A1','Cliente final','A','Comprador o usuario del producto',0.35,true,NOW()),
-('A2','Partner/asociado','A','Patricia, distribuidores, familia, socios',0.25,true,NOW()),
-('A3','UNRLVL como negocio','A','Marca, activos, operación, reputación corporativa',0.25,true,NOW()),
-('A4','Sam como persona','A','Reputación personal, responsabilidad legal, tiempo',0.15,true,NOW());
-
--- DIMENSIÓN B — Tipo de consecuencia
-INSERT INTO professor_decision_criteria VALUES
-('B1','Financiero','B','Pérdida monetaria directa, multa, valor de contrato',0.20,true,NOW()),
-('B2','Legal/regulatorio','B','FDA, FTC, TOS de plataforma, contrato, normativa',0.30,true,NOW()),
-('B3','Reputacional','B','Marca, relación, confianza pública o privada',0.20,true,NOW()),
-('B4','Operativo','B','Flujo de trabajo, sistema, proceso, herramienta',0.15,true,NOW()),
-('B5','Relacional','B','Vínculo humano, partnership de largo plazo',0.15,true,NOW());
-
--- DIMENSIÓN C — Reversibilidad
-INSERT INTO professor_decision_criteria VALUES
-('C1','Irreversible','C','No se puede deshacer bajo ninguna circunstancia',1.0,true,NOW()),
-('C2','Reversible con costo alto','C','Se puede revertir pero con pérdida significativa',0.65,true,NOW()),
-('C3','Reversible con costo bajo','C','Corrección posible con esfuerzo menor',0.30,true,NOW()),
-('C4','Completamente reversible','C','Sin consecuencia si se corrige',0.10,true,NOW());
-
--- DIMENSIÓN D — Horizonte temporal
-INSERT INTO professor_decision_criteria VALUES
-('D1','Impacto inmediato','D','Horas o días',0.40,true,NOW()),
-('D2','Impacto medio plazo','D','Semanas o meses',0.35,true,NOW()),
-('D3','Impacto largo plazo','D','Años o permanente',0.25,true,NOW());
-```
-
-### Reglas de veto absoluto
-
-```sql
-INSERT INTO professor_veto_rules VALUES
-('V1','LEGAL_IRREVERSIBLE',
- 'Consecuencia legal irreversible — B2 + C1 activos simultáneamente',
- false, true, NOW()),
-('V2','HARM_VULNERABLE',
- 'Daño a menor, persona vulnerable o tercero sin capacidad de consentir',
- false, true, NOW()),
-('V3','COMPLIANCE_HARD',
- 'Violación de compliance hard declarado de una marca (FDA, FTC, TOS)',
- false, true, NOW()),
-('V4','SAM_EXPLICIT_LIMIT',
- 'Acción que Sam ha declarado explícitamente fuera de límites en sesión activa',
- false, true, NOW());
-```
-
-### Casos calibrados iniciales (de esta sesión)
-
-```sql
-INSERT INTO professor_decision_cases VALUES
-(gen_random_uuid(), '2026-05-17', 'NeuroneSCF',
- 'Sesión Klaviyo + DECISION_MATRIX',
- 'Sam solicitó crear reviews falsas para Judge.me',
- ARRAY['B2','B3','C1','D3'],
- 'V1', false, NULL,
- 'Claude rechazó correctamente. FTC Florida multas reales. Judge.me ban de cuenta.',
- true,
- 'Reviews falsas activan V1 (B2+C1) independientemente de quien lo pida. Bypass de Sam no aplica cuando hay veto absoluto.',
- 'v1.0', NOW()),
-
-(gen_random_uuid(), '2026-05-17', 'NeuroneSCF',
- 'Sesión Klaviyo + DECISION_MATRIX',
- 'Content pipeline ejecutado sin skill cargado — templates Klaviyo con copy deficiente',
- ARRAY['A1','B3','C2','D2'],
- NULL, false, NULL,
- 'Templates entregados con copy de calidad media. Sam detectó el problema y lo señaló.',
- false,
- 'Cuando skill no está disponible (contexto incompleto) y output va a cliente externo, DECLARAR el gap y esperar confirmación. No proceder con aproximación.',
- 'v1.0', NOW());
-```
-
-### Variables de plataforma conocidas
-
-```sql
-INSERT INTO professor_platform_variables VALUES
-(gen_random_uuid(), 'klaviyo', 'NeuroneSCF', 
- 'public_api_key', 'UNF8Ee', 
- 'Site ID para tracking script', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'klaviyo', NULL,
- 'api_limitation_delete_templates', 'true',
- 'Public API key no permite DELETE en templates ni rename', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'klaviyo', NULL,
- 'api_limitation_create_flows', 'true',
- 'REST API no permite crear flow actions — solo crear flows vacíos', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'klaviyo', NULL,
- 'money_filter_incompatible', 'true',
- 'Filtro Liquid | money de Shopify no funciona en templates Klaviyo — usar {{ item.price }} directamente', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'judge_me', 'NeuroneSCF',
- 'badge_metafield_key', 'judgeme.badge',
- 'El metafield correcto para el badge es badge, NO preview_badge', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'judge_me', 'NeuroneSCF',
- 'badge_display_none', 'true',
- 'El metafield badge tiene style=display:none inline — stripear con Liquid replace antes de renderizar', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'agent_browser', NULL,
- 'windows_requires_separate_terminal', 'true',
- 'En Windows, npx agent-browser-mcp debe correr en terminal separada y mantenerse activo mientras Claude Code opera', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'agent_browser', NULL,
- 'claudeai_local_mcp_not_supported', 'true',
- 'claude.ai web no soporta MCP servers locales stdio — solo remote HTTP. agent-browser solo funciona desde Claude Code CLI', '2026-05-17', true, NOW()),
-
-(gen_random_uuid(), 'shopify', 'NeuroneSCF',
- 'checkout_branding_api_requires_plus', 'true',
- 'checkoutBrandingUpsert requiere plan Plus o Development store — no disponible en Basic', '2026-05-17', true, NOW());
+-- Patrón aplicado a las 9 tablas:
+ALTER TABLE professor_[tabla] ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "service_only" ON professor_[tabla]
+  FOR ALL USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+GRANT ALL ON professor_[tabla] TO service_role;
 ```
 
 ---
 
-## FASE 3 — EDGE FUNCTIONS
+### CACHE STRATEGY
 
-### EF 1: `professor-get-context`
-Carga al inicio de sesión. Devuelve pesos activos + variables relevantes.
+#### Por qué cache
 
-```typescript
-// Input: { brand_id?: string }
-// Output: { weights, veto_rules, platform_variables, pending_learnings_count }
+`professor-get-context` se llama al inicio de cada sesión. Los datos que devuelve cambian con frecuencia muy distinta: los pesos y veto rules raramente cambian (cada semanas o meses), los casos recientes cambian varias veces al día. Sin cache, cada apertura de sesión hace 5-6 queries a Supabase. Con cache, la mayoría de aperturas son una sola query a `professor_cache`.
+
+#### Tabla de cache
+
+```sql
+CREATE TABLE professor_cache (
+  key         TEXT PRIMARY KEY,
+  value       JSONB NOT NULL,
+  expires_at  TIMESTAMPTZ NOT NULL,
+  created_at  TIMESTAMPTZ DEFAULT NOW(),
+  hit_count   INTEGER DEFAULT 0
+);
+
+CREATE INDEX idx_professor_cache_expires ON professor_cache(expires_at);
+
+ALTER TABLE professor_cache ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "service_only" ON professor_cache
+  FOR ALL USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+GRANT ALL ON professor_cache TO service_role;
+
+-- Función de limpieza de entradas expiradas
+CREATE OR REPLACE FUNCTION professor_cache_cleanup()
+RETURNS INTEGER AS $$
+DECLARE deleted_count INTEGER;
+BEGIN
+  DELETE FROM professor_cache WHERE expires_at < NOW();
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RETURN deleted_count;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 ```
 
-### EF 2: `professor-evaluate-decision`
-Evalúa una decisión contra la matriz.
+#### TTLs diferenciados
 
-```typescript
-// Input: { context_description, dimensions: string[], brand_id?: string }
-// Output: { veto_triggered, veto_code, recommendation, similar_cases, score }
-```
+| Dataset | Cache key | TTL | Razón |
+|---|---|---|---|
+| `professor_veto_rules` | `veto_rules` | **24h** | Cambia solo cuando Sam añade veto nuevo |
+| `professor_decision_criteria` | `criteria` | **24h** | Taxonomía A/B/C/D — raramente cambia |
+| `professor_weights` | `weights` | **24h** | Pesos base — se actualizan con calibración manual |
+| `professor_platform_variables` | `platform_vars_[brand_id\|global]` | **24h** | Variables de plataforma confirmadas — estables |
+| `professor_decision_cases` recientes | `recent_cases_[brand_id\|global]` | **1h** | Nuevos casos se añaden durante sesiones activas |
+| `professor_learnings` pendientes (count) | `pending_learnings_count` | **1h** | Cambia cuando Sam aprueba o llega checkpoint |
 
-### EF 3: `professor-log-case`
-Registra un caso calibrado.
+#### Sin cache — real-time siempre
 
-```typescript
-// Input: { brand_id, context_description, dimensions, veto_triggered, 
-//          bypass_by_sam, outcome, correct_decision, lesson_learned }
-// Output: { id, created }
-```
+| Dataset | Razón |
+|---|---|
+| `professor_sam_bypasses` | Cada bypass se registra al instante — debe ser visible inmediatamente |
+| Escrituras a `professor_decision_cases` | Escritura inmediata via `professor-log-case`, nunca pasa por cache |
 
-### EF 4: `professor-submit-learning`
-Procesa un aprendizaje candidato con el filtro de relevancia.
+#### Invalidación manual
 
-```typescript
-// Input: { raw_learning, brand_id, session_date, checkpoint_number }
-// Output: { relevance_score, filter_passed, filter_reason, category, suggested_path }
-```
+`professor-get-context` acepta `{ force_refresh: true }` para invalidar el cache y recargar todo desde las tablas. Usar cuando:
+- Sam añade nuevas variables de plataforma en sesión
+- Se actualiza un peso de la matriz
+- Se añade un veto rule nuevo
 
-### EF 5: `professor-approve-learning`
-Marca un aprendizaje como aprobado por Sam.
+#### Limpieza de entradas expiradas
 
-```typescript
-// Input: { learning_id, approved: boolean, manual_path?: string }
-// Output: { updated, markdown_generated }
-```
-
-### EF 6: `professor-checkpoint`
-Ejecutado cada 10 mensajes. Revisa el bloque y captura candidatos.
-
-```typescript
-// Input: { messages_block: string[], brand_id?: string, checkpoint_number: int }
-// Output: { candidates: Learning[], count: number }
+```sql
+SELECT professor_cache_cleanup(); -- devuelve número de filas eliminadas
 ```
 
 ---
 
-## FASE 4 — ARCHIVOS VERCEL (MARKDOWN)
+### Seed data inicial (inserción 2026-05-17)
 
-### Estructura de directorios a crear
+**Criterios — 16 rows** (A1-A4, B1-B5, C1-C4, D1-D3)
+**Veto rules — 4 rows** (V1-V4, bypass_allowed=false en todos)
+**Casos calibrados — 2 rows** (reviews falsas NeuroneSCF + content pipeline sin skill)
+**Platform variables — 9 rows** (Klaviyo ×4, Judge.me ×2, agent-browser ×2, Shopify ×1)
+
+**Manuales — 5 rows** (Klaviyo, Judge.me, agent-browser, Shopify, NeuroneSCF Platform Notes)
+**Errores conocidos — 10 rows** (distribuidos entre los 4 manuales de plataforma)
+
+---
+
+## FASE 2 — EDGE FUNCTIONS
+
+### Estado: ✅ IMPLEMENTADO — 2026-05-17
+
+### EFs deployadas (6) — proyecto `amlvyycfepwhiindxgzw`
+
+| EF | Versión | Tipo | Claude API | Descripción |
+|---|---|---|---|---|
+| `professor-get-context` | v3 | Lectura + Cache | ❌ | Carga contexto completo al inicio de sesión. Cache TTL 24h/1h. |
+| `professor-evaluate-decision` | v1 | Lógica determinista | ❌ | Evalúa dimensiones contra la matriz. Detecta vetos. Calcula score. |
+| `professor-log-case` | v1 | Escritura | ❌ | Registra casos en `professor_decision_cases`. Auto-registra en `professor_sam_bypasses` si hay bypass. |
+| `professor-submit-learning` | v1 | Filtro F1→F2→F3 | ✅ Haiku | Procesa aprendizaje candidato con scoring. Guarda en `professor_learnings`. |
+| `professor-approve-learning` | v1 | Escritura | ❌ | Sam aprueba/rechaza ítem. Actualiza `approved_by_sam`. Crea manual si hay `manual_path`. |
+| `professor-checkpoint` | v1 | Detección automática | ✅ Haiku | Cada 10 mensajes. Escanea bloque. Guarda candidatos score ≥ 3. |
+
+### Autenticación
+
+Todas las EFs usan `verify_jwt: false` + custom secret via header `Authorization`.
+Secret: variable de entorno `PROFESSOR_SECRET` en Supabase → Settings → Edge Functions → Secrets.
+**El secret debe configurarse manualmente en el Dashboard — no requiere redeploy de EFs.**
+
+### Llamadas desde Claude en sesión
+
+```
+Inicio de sesión:
+  POST .../professor-get-context
+  Body: { brand_id?: string, force_refresh?: boolean }
+
+Antes de acción relevante:
+  POST .../professor-evaluate-decision
+  Body: { context_description, dimensions: string[], brand_id? }
+
+Al rechazar o ejecutar acción con riesgo:
+  POST .../professor-log-case
+  Body: { context_description, dimensions_activated[], veto_triggered?,
+          bypass_by_sam?, outcome?, correct_decision?, lesson_learned? }
+
+"Professor, anota" (manual):
+  POST .../professor-submit-learning
+  Body: { raw_learning, brand_id?, session_date?, checkpoint_number? }
+
+Cada 10 mensajes (automático):
+  POST .../professor-checkpoint
+  Body: { messages_block: string[], brand_id?, checkpoint_number }
+
+Sam aprueba aprendizaje:
+  POST .../professor-approve-learning
+  Body: { learning_id, approved: boolean, manual_path? }
+```
+
+---
+
+## FASE 3 — ARCHIVOS VERCEL (knowledge/)
+
+### Estado: ✅ IMPLEMENTADO — 2026-05-17
+
+### Estructura creada en `unrlvl-context`
 
 ```
 knowledge/
   _templates/
-    MANUAL_TEMPLATE.md
-    CASE_TEMPLATE.md
-  
+    MANUAL_TEMPLATE.md          ← template universal para manuales
+    CASE_TEMPLATE.md            ← template para casos calibrados
+
   ecosystem/
     decision-matrix/
-      DECISION_MATRIX.md       ← narrativo completo
-      CHANGELOG.md
+      DECISION_MATRIX.md        ← documento narrativo operativo completo
+      CHANGELOG.md              ← historial de versiones de la matriz
     professor/
-      PROFESSOR_PROTOCOL.md
-      CHECKPOINT_RULES.md
-  
+      PROFESSOR_PROTOCOL.md     ← protocolo completo del sistema Professor
+      CHECKPOINT_RULES.md       ← reglas del checkpoint automático
+
   platforms/
-    shopify/MANUAL.md
-    klaviyo/MANUAL.md
-    judge-me/MANUAL.md
-    agent-browser/MANUAL.md
-    supabase/MANUAL.md
-    meta-ads/MANUAL.md
-  
+    shopify/MANUAL.md           ← limitaciones de plan, variables de tiendas
+    klaviyo/MANUAL.md           ← limitaciones API, flow bilingüe, templates
+    judge-me/MANUAL.md          ← metafields correctos, dark theme, display:none
+    agent-browser/MANUAL.md     ← stdio vs HTTP, Windows terminal separada
+
   clients/
     NeuroneSCF/
-      PLATFORM_NOTES.md        ← variaciones específicas
-  
+      PLATFORM_NOTES.md         ← config específica: Klaviyo keys, Pixel ID, pendientes
+```
+
+### Archivos pendientes de crear (crecen con el uso)
+
+```
+knowledge/
+  ecosystem/
+    decision-matrix/
+      CASES.md                  ← generado cuando hay ≥5 casos calibrados
   core-business/
-    email-marketing/MANUAL.md
+    email-marketing/MANUAL.md   ← cuando haya patrones transversales de email
     ecommerce-patterns/MANUAL.md
     content-pipeline/MANUAL.md
-```
-
-### MANUAL_TEMPLATE.md
-
-```markdown
-# [TÍTULO DEL MANUAL]
-_Categoría: [platform|client|ecosystem|core-business]_
-_Plataforma/Cliente: [nombre]_
-_Versión: v1.0 · Fecha: [fecha] · Estado: [draft|approved]_
-_ID Supabase: [manual_id]_
-
-## QUÉ ES
-Una línea. Sin ambigüedad.
-
-## CUÁNDO USAR
-Condiciones específicas que activan este manual.
-Lista concisa.
-
-## PRE-REQUISITOS
-Lo que debe existir antes de ejecutar.
-
-## LIMITACIONES CONOCIDAS
-Lo que NO puede hacer esta solución.
-Especialmente: limitaciones de API, plan, permisos.
-
-## PROCEDIMIENTO
-Pasos exactos en orden.
-Incluir comandos reales donde aplica.
-
-## ERRORES CONOCIDOS
-| Error | Causa | Solución |
-|-------|-------|---------|
-| [error] | [causa] | [solución exacta] |
-
-## CASOS CALIBRADOS
-Referencias a professor_decision_cases en Supabase.
-
-## VARIACIONES POR CLIENTE
-Solo si aplica. Diferencias específicas.
-
-## CHANGELOG
-| Versión | Fecha | Cambio |
-|---------|-------|--------|
-| v1.0 | [fecha] | Creación inicial |
+  clients/
+    ForumPHs/PLATFORM_NOTES.md  ← cuando haya sesión dedicada con errores conocidos
 ```
 
 ---
 
-## FASE 5 — DECISION_MATRIX.md COMPLETO
+## FASE 4 — INTEGRACIÓN SESSION_PROTOCOL
 
-```markdown
-# DECISION_MATRIX v1.0
-_Unreal>ille Studio · Operativo desde: 2026-05-17_
-_Backend: Supabase professor_weights + professor_veto_rules_
+### Estado: ✅ IMPLEMENTADO — 2026-05-17
 
-## MECANISMO DE EVALUACIÓN
+### SESSION_PROTOCOL.md v12 — cambios respecto a v11
 
-Antes de ejecutar cualquier output relevante, evalúo:
+1. **Paso 1 del protocolo de carga** — añadida llamada a `professor-get-context` EF al inicio
+2. **Sección DECISION_MATRIX** — documenta que opera en background, cuándo se anuncia, formato de declaración
+3. **Sección COMANDOS PROFESSOR** — `"Professor, anota"` + checkpoint automático cada 10 mensajes + `"Professor"` al final de sesión
+4. **Comando `ecosystem scan`** — pregunta obligatoria antes de ejecutar: `"Sam, lo quieres identificativo o también contextual?"`
+5. **Sección CIERRE DE SESIÓN** — orden correcto: Actualiza → Professor → commit único
+6. **Regla de nomenclatura** — añadidos `MANUAL.md`, `DECISION_MATRIX.md`, `PROFESSOR_PROTOCOL.md`
+7. **URLs de referencia rápida** — añadidas rutas a DECISION_MATRIX y PROFESSOR_PROTOCOL
 
-### PASO 1 — VETO ABSOLUTO (no se pondera, es binario)
-Si cualquiera de estas condiciones está presente → PARAR sin cálculo:
+---
 
-| Código | Condición | Bypass Sam |
-|--------|-----------|------------|
-| V1 | Consecuencia legal irreversible (B2 + C1) | NO |
-| V2 | Daño a persona vulnerable | NO |
-| V3 | Violación compliance hard de marca | NO |
-| V4 | Acción explícitamente fuera de límites por Sam | NO |
+## NOTAS DE IMPLEMENTACIÓN
 
-### PASO 2 — BYPASS DE SAM
-Si Sam declara explícitamente:
-- Conoce el riesgo
-- Asume la consecuencia
-- La decisión NO activa veto absoluto
-→ EJECUTAR y registrar en professor_sam_bypasses
+### Secret PROFESSOR_SECRET
 
-### PASO 3 — TAXONOMÍA (identificar dimensiones activas)
+**Cómo configurarlo:**
+Supabase Dashboard → proyecto `amlvyycfepwhiindxgzw` → Settings → Edge Functions → Secrets → Add new secret:
+- Name: `PROFESSOR_SECRET`
+- Value: string seguro de tu elección
 
-**DIMENSIÓN A — Stakeholder primario afectado**
-- A1: Cliente final
-- A2: Partner/asociado (Patricia, distribuidores, familia)
-- A3: UNRLVL como negocio
-- A4: Sam como persona
+Las EFs leen `Deno.env.get("PROFESSOR_SECRET")` automáticamente. No requiere redeploy. El nombre debe coincidir exactamente.
 
-**DIMENSIÓN B — Tipo de consecuencia**
-- B1: Financiero
-- B2: Legal/regulatorio ⚠️
-- B3: Reputacional
-- B4: Operativo
-- B5: Relacional
+**⚠️ Si el secret no está configurado:** las EFs responden a cualquier request sin autenticación. Configurarlo es el primer paso antes de usar el sistema en producción.
 
-**DIMENSIÓN C — Reversibilidad**
-- C1: Irreversible ⚠️
-- C2: Reversible con costo alto
-- C3: Reversible con costo bajo
-- C4: Completamente reversible
+### Instrucciones para Claude (operativas)
 
-**DIMENSIÓN D — Horizonte temporal**
-- D1: Impacto inmediato
-- D2: Impacto medio plazo
-- D3: Impacto largo plazo
+1. **La DECISION_MATRIX no se anuncia cuando todo está bien.** Solo declara `[Matriz]: ...` cuando activa PARAR, DECLARAR gap, o registra bypass.
 
-### PASO 4 — DECISIÓN
+2. **El checkpoint es completamente silencioso** salvo score = 5, donde inserta una línea: `[Professor: anotado — título]`.
 
-Consulto professor_weights en Supabase con las dimensiones activas.
+3. **El Professor no publica nada sin aprobación de Sam.** Siempre propone → Sam decide → Claude ejecuta.
 
-| Score | Acción |
-|-------|--------|
-| Bajo | PROCEDER con autonomía |
-| Medio-bajo | PROCEDER declarando limitación |
-| Medio-alto | CONSULTAR a Sam antes de ejecutar |
-| Alto | PARAR. No ejecutar hasta tener contexto completo |
+4. **Vetos V1-V4 no tienen bypass.** Ni Sam puede anularlos. Si Sam insiste, Claude explica el veto y no ejecuta.
 
-### CÓMO LO DECLARO EN CONVERSACIÓN
-"[Matriz]: contexto [dimensiones] → [acción] — [razón en una línea]"
+5. **`force_refresh: true`** en `professor-get-context` cuando se actualicen pesos, veto rules, o platform variables en sesión — para que la próxima carga no sirva datos stale del cache.
 
-Ejemplos:
-"[Matriz]: B2+C1 → VETO V1 activo → PARAR"
-"[Matriz]: skill incompleto + output externo → DECLARAR gap antes de ejecutar"
-"[Matriz]: Sam bypass activo → EJECUTAR + registrar"
+### Comandos de mantenimiento Supabase
 
-## CASOS CALIBRADOS
-Ver professor_decision_cases en Supabase.
-Ver también: knowledge/ecosystem/decision-matrix/CASES.md
+```sql
+-- Ver estado del cache
+SELECT key, expires_at, hit_count,
+       expires_at > NOW() AS active
+FROM professor_cache ORDER BY expires_at;
 
-## VERSIONES
-| Versión | Fecha | Cambio |
-|---------|-------|--------|
-| v1.0 | 2026-05-17 | Creación inicial — taxonomía A+B+C+D + vetos + bypass Sam |
+-- Limpiar entradas expiradas
+SELECT professor_cache_cleanup();
+
+-- Ver aprendizajes pendientes de aprobación
+SELECT id, session_date, brand_id, raw_learning, relevance_score, category
+FROM professor_learnings
+WHERE filter_passed = true AND approved_by_sam = false
+ORDER BY relevance_score DESC, session_date DESC;
+
+-- Ver errores conocidos por plataforma
+SELECT platform, error_description, solution
+FROM professor_errors_known
+ORDER BY platform, created_at;
 ```
 
 ---
 
-## FASE 6 — PROFESSOR_PROTOCOL.md
+## ESTADO FINAL DEL SISTEMA
 
-```markdown
-# PROFESSOR PROTOCOL v1.0
-_Unreal>ille Studio · Operativo desde: 2026-05-17_
-
-## COMANDOS
-
-### Durante la sesión
-- `"Professor, anota"` → captura contexto inmediato + añade a lista temporal
-- Checkpoint automático cada 10 mensajes → micro-revisión silenciosa
-
-### Final de sesión
-1. `Actualiza` → archivos operativos + session_log
-2. `Professor` → consolida aprendizajes + propone lista para aprobación Sam
-3. Commit único
-
-## FILTRO DE RELEVANCIA (3 criterios en cascada)
-
-**F1 — ¿Es reproducible?**
-¿Útil en situación futura similar, en este u otro cliente?
-NO → descartar · SÍ → F2
-
-**F2 — ¿Corrige error o establece patrón?**
-Error corregido → CASES de DECISION_MATRIX
-Patrón nuevo → MANUAL nuevo
-Optimización → actualizar MANUAL existente
-
-**F3 — ¿Específico de cliente o transversal?**
-Específico → knowledge/clients/[Cliente]/
-Transversal → knowledge/core-business/[categoría]/
-Plataforma → knowledge/platforms/[plataforma]/
-
-## FORMATO DE PROPUESTA AL FINAL DE SESIÓN
-
-"Sam, estos son los aprendizajes de hoy:
-
-[1] APROBAR / RECHAZAR / MODIFICAR
-Aprendizaje: [descripción en una línea]
-Categoría: [platform|client|ecosystem|core-business]
-Destino: [path exacto en knowledge/]
-Tipo: [error_known|pattern|manual_new|manual_update|decision_case]
-
-[2] ..."
-
-## ESTRUCTURA knowledge/ (por prioridad de consulta)
-
-knowledge/
-  _templates/          ← templates universales
-  ecosystem/           ← soluciones inhouse UNRLVL
-  platforms/           ← herramientas de terceros
-  clients/             ← específico por cliente
-  core-business/       ← conocimiento transversal
-
-## CHECKPOINT CADA 10 MENSAJES
-
-Claude ejecuta silenciosamente:
-1. Revisa los últimos 10 mensajes
-2. Aplica F1 → si no hay nada reproducible, continúa sin output
-3. Si hay candidatos: añade a lista temporal interna
-4. No interrumpe el flujo de trabajo
-5. Lista se consolida en comando Professor final
-```
+| Componente | Estado | Detalles |
+|---|---|---|
+| 9 tablas professor_* | ✅ LIVE | RLS + GRANTs + 7 índices |
+| professor_cache | ✅ LIVE | TTL 24h/1h + cleanup function |
+| Seed data | ✅ LIVE | 16 criterios + 4 vetos + 2 casos + 9 vars + 5 manuales + 10 errores |
+| 6 Edge Functions | ✅ LIVE | professor-get-context v3 con cache |
+| knowledge/ estructura | ✅ PENDIENTE COMMIT | 11 archivos generados — Sam commitea vía GitHub Desktop |
+| SESSION_PROTOCOL v12 | ✅ PENDIENTE COMMIT | Comandos Professor + ecosystem scan + cierre sesión |
+| PROFESSOR_SECRET | ⏳ PENDIENTE SAM | Configurar en Supabase Dashboard antes de usar en producción |
+| ecosystem.json | ⏳ PENDIENTE | Actualizar: 63 EFs, nscf-kiosko, sección professor |
 
 ---
 
-## FASE 7 — INTEGRACIÓN EN SESSION_PROTOCOL
-
-### Cambios al SESSION_PROTOCOL.md existente
-
-**Añadir al inicio (después de carga de ecosystem.json):**
-```
-4. Edge Function: professor-get-context → carga pesos + variables activas
-5. Confirmar: "Contexto operativo cargado. [N] variables de plataforma. 
-   [N] aprendizajes pendientes de aprobación."
-```
-
-**Añadir sección de comandos:**
-```
-## COMANDOS PROFESSOR
-- "Professor, anota" → captura aprendizaje inmediato
-- "Professor" (final sesión) → consolida + propone lista
-- Checkpoint automático cada 10 mensajes (silencioso)
-```
-
-**Añadir al final (después de "Actualiza"):**
-```
-## CIERRE DE SESIÓN
-1. Actualiza → archivos operativos
-2. Professor → aprendizajes (Sam aprueba/rechaza)
-3. Commit único con todos los archivos
-```
-
----
-
-## ORDEN DE IMPLEMENTACIÓN
-
-### Sprint 1 — Base de datos (1 sesión)
-- [ ] Crear 9 tablas en Supabase con schema completo
-- [ ] Insertar seed data: criterios, vetos, casos iniciales, variables conocidas
-- [ ] Verificar índices y performance
-
-### Sprint 2 — Edge Functions (1 sesión)
-- [ ] professor-get-context
-- [ ] professor-evaluate-decision
-- [ ] professor-log-case
-- [ ] professor-submit-learning
-- [ ] professor-approve-learning
-- [ ] professor-checkpoint
-
-### Sprint 3 — Archivos Vercel (1 sesión)
-- [ ] Crear estructura knowledge/
-- [ ] MANUAL_TEMPLATE.md + CASE_TEMPLATE.md
-- [ ] DECISION_MATRIX.md completo
-- [ ] PROFESSOR_PROTOCOL.md
-- [ ] Primeros manuales: agent-browser, klaviyo, judge-me, shopify
-
-### Sprint 4 — Integración SESSION_PROTOCOL (1 sesión)
-- [ ] Actualizar SESSION_PROTOCOL.md con nuevos comandos
-- [ ] Actualizar ecosystem.json con nuevas rutas
-- [ ] Test completo del flujo inicio→durante→final
-- [ ] Primera sesión real con sistema activo
-
----
-
-## NOTAS IMPORTANTES PARA IMPLEMENTACIÓN
-
-1. **Contexto limpio:** Iniciar cada sprint en sesión nueva con este plan como primer documento cargado.
-
-2. **GRANTs Supabase:** Aplicar `GRANT ALL ON professor_* TO service_role` después de crear tablas.
-
-3. **No mezclar sprints:** Cada sprint tiene un entregable concreto y verificable antes de pasar al siguiente.
-
-4. **El Professor no es autónomo en publicación:** Siempre propone, Sam aprueba. La autonomía está en la detección y el formateo.
-
-5. **Veto absoluto no se negocia:** V1-V4 no tienen bypass, ni siquiera Sam puede anularlos.
-
-6. **Bypass de Sam se registra siempre:** Incluso cuando Sam asume el riesgo conscientemente, queda en professor_sam_bypasses para calibración futura.
+_IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md · Unreal>ille Studio · v1.1 · 2026-05-17_
+_v1.0 → v1.1: Cache Strategy añadida (professor_cache + TTLs) · professor-get-context v3 · Sprints 1-4 completados_
