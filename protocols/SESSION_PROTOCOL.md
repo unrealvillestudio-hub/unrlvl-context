@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-05-11-v11 | **Mantenido por:** Claude
+**Versión:** 2026-05-17-v12 | **Mantenido por:** Claude
 
 ---
 
@@ -49,10 +49,14 @@ El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
 1. https://unrlvl-context.vercel.app/ecosystem.json
 2. https://unrlvl-context.vercel.app/AGENDA.md
 3. https://unrlvl-context.vercel.app/skills/INDEX.md
+4. professor-get-context EF → carga pesos + variables activas + aprendizajes pendientes
+   POST https://[supabase]/functions/v1/professor-get-context { brand_id: "[si aplica]" }
 ```
 
 ### Paso 2 — Pregunta
 > *"Hola Sam, ¿con qué marca y proyecto vamos a trabajar?"*
+
+Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprendizajes pendientes de aprobación."`
 
 ### Paso 3 — Carga por contexto
 
@@ -90,6 +94,45 @@ Consultar `skills/INDEX.md` según el trabajo declarado. Cargar solo los relevan
 
 ---
 
+## DECISION_MATRIX — Siempre activa (silenciosa)
+
+La DECISION_MATRIX opera en background durante toda la sesión. Claude la aplica antes de cualquier output relevante sin anunciarlo, salvo cuando activa un flag.
+
+**Documento:** `knowledge/ecosystem/decision-matrix/DECISION_MATRIX.md`
+**Backend:** Supabase `professor_*` tables
+
+**Cuándo se anuncia:**
+```
+[Matriz]: [dimensiones] → [acción] — [razón en una línea]
+```
+
+Solo cuando activa PARAR, DECLARAR gap, o registra un bypass de Sam.
+
+---
+
+## COMANDOS PROFESSOR
+
+### Durante la sesión
+
+**`"Professor, anota"`** — captura inmediata del contexto actual.
+Claude formula el aprendizaje, confirma con una línea, y continúa.
+
+**Checkpoint automático cada 10 mensajes** — completamente silencioso.
+Claude llama `professor-checkpoint` EF. Si hay candidatos score ≥ 3, se guardan en `professor_learnings`. Solo score = 5 genera output visible: `[Professor: anotado — título]`.
+
+### Final de sesión
+
+**`"Professor"`** — consolida aprendizajes y propone lista para aprobación.
+
+Secuencia:
+1. Consulta `professor_learnings` pendientes de aprobación de la sesión
+2. Presenta lista ítem por ítem con destino propuesto en `knowledge/`
+3. Sam aprueba/rechaza cada ítem
+4. Claude llama `professor-approve-learning` por cada aprobado
+5. Genera archivos Markdown aprobados como outputs descargables
+
+---
+
 ## COMANDO "Actualiza" — Lo único que Sam necesita decir
 
 Cuando Sam escribe **"Actualiza"**, Claude ejecuta sin preguntar:
@@ -98,11 +141,9 @@ Cuando Sam escribe **"Actualiza"**, Claude ejecuta sin preguntar:
 
 Fetch headers (HEAD) de `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url` para obtener `ETag` o `Last-Modified`.
 
-- Si **igual al ETag de la sesión anterior** (anotado en session_log.md) → declarar `"Sin novedades del SMA"` y continuar. **No cargar el export completo.**
-- Si **ETag cambió** → cargar export completo, procesar log, generar `social_media_agent_session_log.md` como output.
-- Si no hay ETag previo registrado → cargar export completo esta vez y anotar el ETag en session_log.md para la próxima.
-
-**Nota:** el ETag del SMA se registra en session_log.md como `_sma_etag: "valor"` al final del bloque de la sesión.
+- Si **igual al ETag de la sesión anterior** → declarar `"Sin novedades del SMA"` y continuar.
+- Si **ETag cambió** → cargar export completo, procesar log, generar `social_media_agent_session_log.md`.
+- Si no hay ETag previo → cargar export completo y anotar ETag en session_log.md.
 
 **2. Genera todos los archivos que cambiaron**
 
@@ -121,18 +162,42 @@ Fetch headers (HEAD) de `https://unrlvl-social-media-agent.vercel.app/api/export
 
 **3. REGLA CRÍTICA DE NOMENCLATURA**
 Outputs con nombre **EXACTO** del archivo en el repo:
-`session_log.md` · `brand.json` · `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` · `BP_Brand_Context.md` · `SESSION_PROTOCOL.md` · `SKILL.md` · `INDEX.md` · `social_media_agent_session_log.md`
+`session_log.md` · `brand.json` · `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` · `BP_Brand_Context.md` · `SESSION_PROTOCOL.md` · `SKILL.md` · `INDEX.md` · `MANUAL.md` · `DECISION_MATRIX.md` · `PROFESSOR_PROTOCOL.md`
 
 **4. Provee el mensaje de commit** listo para pegar con rutas exactas.
 
 **5. Recuerda a Sam:**
-- Raíz: `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` · `TIERS.md`
-- Skills: `skills/[nombre]/SKILL.md` (crear subcarpeta si es nueva) · Index: `skills/INDEX.md`
+- Raíz: `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md`
+- Skills: `skills/[nombre]/SKILL.md` · Index: `skills/INDEX.md`
 - Marcas: `brands/[Marca]/` · Agentes: `agents/[nombre]/` · Protocolos: `protocols/`
+- Knowledge: `knowledge/[ecosystem|platforms|clients|core-business]/`
 - GitHub Desktop debe mostrar **modificaciones**, no archivos nuevos
 
 **6. Verifica** con `Vercel:web_fetch_vercel_url` post-deploy y confirma:
 > *"Listo Sam. Sistema actualizado."*
+
+---
+
+## COMANDO "ecosystem scan"
+
+Cuando Sam escribe **"ecosystem scan"**, Claude pregunta **siempre** antes de ejecutar:
+
+> *"Sam, lo quieres identificativo o también contextual?"*
+
+- **Identificativo** — inventario: lista de repos, proyectos Vercel, EFs, tablas. Sin leer contenido.
+- **Contextual** — inventario + lectura de archivos clave para entender el propósito, estado y relaciones de cada componente. Incluye session_logs, brand contexts, schema, planes activos.
+
+**No hay excepción a esta pregunta.** Aunque el contexto parezca obvio, Claude siempre pregunta.
+
+---
+
+## CIERRE DE SESIÓN — Orden correcto
+
+```
+1. "Actualiza"  → archivos operativos + session_log
+2. "Professor"  → aprendizajes (Sam aprueba/rechaza)
+3. Commit único → session_log + archivos + knowledge updates aprobados
+```
 
 ---
 
@@ -189,6 +254,8 @@ Un chat = una marca. Si Sam mezcla sin intención:
 | AGENDA | `https://unrlvl-context.vercel.app/AGENDA.md` |
 | Skills INDEX | `https://unrlvl-context.vercel.app/skills/INDEX.md` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
+| DECISION_MATRIX | `https://unrlvl-context.vercel.app/knowledge/ecosystem/decision-matrix/DECISION_MATRIX.md` |
+| PROFESSOR_PROTOCOL | `https://unrlvl-context.vercel.app/knowledge/ecosystem/professor/PROFESSOR_PROTOCOL.md` |
 | GitHub Proxy | `https://unrlvl-context.vercel.app/api/gh` |
 | NeuroneSCF log | `https://unrlvl-context.vercel.app/brands/NeuroneSCF/session_log.md` |
 | SMA export | `https://unrlvl-social-media-agent.vercel.app/api/export?secret=[SECRET]` |
