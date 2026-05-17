@@ -1,9 +1,51 @@
 # SESSION LOG — Neurone South & Central Florida
-_Última actualización: 2026-05-17_
+_Última actualización: 2026-05-17 · cierre de sesión_
+_sma_etag: "W/\"ab5b-ofuN2S50PKjAqtujmSW7K/E7bcI\""_
 
 ---
 
-## SESIÓN 2026-05-17 — Sam (parte 2)
+## SESIÓN 2026-05-17 — Sam · Cierre
+
+### APRENDIZAJE APROBADO (Professor)
+
+**[1] `ecosystem scan` — pregunta obligatoria antes de ejecutar**
+Cuando Sam dice "ecosystem scan", Claude debe preguntar siempre:
+`"Sam, lo quieres identificativo o también contextual?"`
+Sin excepción, aunque el contexto parezca obvio.
+Categoría: ecosystem · Destino: `protocols/SESSION_PROTOCOL.md` ✅ ya integrado en v13
+
+---
+
+### COMPLETADO — DECISION_MATRIX + Professor System ✅
+
+Implementación completa del sistema DECISION_MATRIX + Professor en 4 sprints:
+
+**Sprint 1 — Base de datos:**
+- 10 tablas `professor_*` + `professor_cache` en Supabase `amlvyycfepwhiindxgzw`
+- RLS service_only en todas las tablas · 7 índices
+- Seed: 16 criterios (A/B/C/D) · 4 veto rules (V1-V4) · 2 casos calibrados · 9 platform variables
+
+**Sprint 2 — Edge Functions (6):**
+- `professor-get-context` v3 con cache TTL 24h/1h
+- `professor-evaluate-decision` · `professor-log-case` · `professor-submit-learning`
+- `professor-approve-learning` · `professor-checkpoint`
+- Cache strategy: TTL 24h (weights/veto_rules/criteria/platform_vars) · TTL 1h (casos/learnings) · real-time (bypasses)
+
+**Sprint 3 — knowledge/ base:**
+- 11 archivos: DECISION_MATRIX.md · PROFESSOR_PROTOCOL.md · CHECKPOINT_RULES.md
+- 4 manuales de plataforma (Klaviyo · Judge.me · agent-browser · Shopify)
+- NeuroneSCF PLATFORM_NOTES.md · 2 templates
+- 5 manuales + 10 errores conocidos en Supabase
+
+**Sprint 4 — SESSION_PROTOCOL v13:**
+- Comandos Professor integrados · ecosystem scan · orden correcto cierre sesión
+- **Mejora de protocolo:** Professor va ANTES de Actualiza para que session_log refleje outcomes reales
+
+**Pendiente Sam:** `PROFESSOR_SECRET` en Supabase Dashboard → Settings → Edge Functions → Secrets
+
+---
+
+## SESIÓN 2026-05-17 — Sam (parte 1)
 
 ### COMPLETADO HOY
 
@@ -16,137 +58,51 @@ _Última actualización: 2026-05-17_
 #### 2. META PIXEL ✅ VERIFICADO
 - Pixel ID: `1348252664025025` — "Neurone SCF — Web"
 - Instalado en `layout/theme.liquid`
-- Todos los eventos procesados en Events Manager:
-  PageView ✅ · ViewContent ✅ · AddToCart ✅ · InitiateCheckout ✅ · SubscribedButtonClick ✅
+- Eventos activos: PageView · ViewContent · AddToCart · InitiateCheckout · SubscribedButtonClick
 - Dominio `neuronescflorida.com` verificado vía Cloudflare TXT ✅
-- Meta: Instagram → Facebook Page vinculadas ✅
-- Meta: payment method añadido ✅
+- Instagram → Facebook Page vinculadas ✅ · payment method añadido ✅
 
 #### 3. CHECKOUT BRANDING ✅ (manual — Basic plan)
 - Logo NSCF · Button #0076A8 · Montserrat headings · Helvetica Neue body
-- Branding API requiere Plus — no disponible vía código
-- Order Status scripts: no permitido en Basic
+- `checkoutBrandingUpsert` requiere Plus — configurado manualmente en admin
 
-#### 4. JUDGE.ME — IMPLEMENTACIÓN COMPLETA ✅
-- `snippets/judgeme_widgets.liquid` v15 — snippet oficial con dark theme
-- Badge: con reviews → SSR desde `judgeme.badge` (display:none stripeado con Liquid)
-- Badge: sin reviews → 5 estrellas naranja sólido #C4622D + "Sin reseñas aún"
-- Widget tab Reseñas: con reviews → SSR desde `judgeme.widget`
-- Widget tab Reseñas: sin reviews → HTML puro custom (no Judge.me JS — evita sobreescritura)
-- Dark theme: `element.style.setProperty('important')` — beats CDN CSS
-- Oculto: `.jdgm-rev-widg__summary`, `.jdgm-histogram`, `.jdgm-rev-widg__sort-wrapper`
-- Visible en TODOS los productos con o sin reviews
+#### 4. JUDGE.ME ✅ IMPLEMENTACIÓN COMPLETA
+- `snippets/judgeme_widgets.liquid` v15 · dark theme
+- Badge: `judgeme.badge` con strip `display:none` · sin reviews → 5 estrellas #C4622D
+- Widget: `judgeme.widget` con strip `jdgm-temp-hiding-style`
+- Dark theme override: `setProperty('important')` en JS
 
-#### 5. KLAVIYO ✅ INSTALADO Y CONFIGURADO
-- Plan: Email $20/mes
-- Public API Key: `UNF8Ee`
-- Private API Key: `pk_UNF8Ee_cbb0f530b9ab65ce7358756994fefe53bd`
-- Script instalado en `layout/theme.liquid`
-- Integración Shopify: conectada y activa ✅
-- Dominio email verificado: `neuronescflorida.com` ✅
-- DNS Cloudflare: NS + DKIM + SPF + DMARC configurados ✅
-- Tracking activo: Viewed Product, Active on Site, Identify (clientes logueados)
-- Shopify sync: Checkout Started ✅ · Placed Order ✅
+#### 5. KLAVIYO ✅ INSTALADO
+- Plan Email $20/mes · Public Key `UNF8Ee` · script en `layout/theme.liquid`
+- Dominio `neuronescflorida.com` verificado · DNS completo · Shopify sync activo
 
-#### 6. KLAVIYO TEMPLATES ✅ CREADOS (10 templates — EN + ES)
+#### 6. KLAVIYO TEMPLATES ✅ (10 — EN + ES)
 
-**Templates EN:**
-| Template | ID |
-|---|---|
-| NSCF - Abandoned Cart A | `X57LJu` |
-| NSCF - Abandoned Cart B | `Ws6J7R` |
-| NSCF - Post Purchase | `SedUug` |
-| NSCF - Review Request | `U2DMYK` |
-| NSCF - Welcome | `XBvyZH` |
+| Template | ID EN | ID ES |
+|---|---|---|
+| Abandoned Cart A | `X57LJu` | `Tm3JWE` |
+| Abandoned Cart B | `Ws6J7R` | `QVANPy` |
+| Post Purchase | `SedUug` | `UwszQw` |
+| Review Request | `U2DMYK` | `S6ZDHq` |
+| Welcome | `XBvyZH` | `TTrxdT` |
 
-**Templates ES:**
-| Template | ID |
-|---|---|
-| NSCF-ES - Abandoned Cart A | `Tm3JWE` |
-| NSCF-ES - Abandoned Cart B | `QVANPy` |
-| NSCF-ES - Post Purchase | `UwszQw` |
-| NSCF-ES - Review Request | `S6ZDHq` |
-| NSCF-ES - Welcome | `TTrxdT` |
-
-**Copy pipeline ejecutado con datos reales de Supabase:**
-- psycho_presets: PSY-ASPIRATION, PSY-IDENTITY, PSY-URGENCY, PSY-SCARCITY, PSY-AUTHORITY, PSY-TRUST, PSY-SOCIAL-PROOF, PSY-BELONGING, PSY-CURIOSITY
-- humanize_profiles NeuroneSCF: tono científico-accesible, Spanglish controlado, voz Patricia
-- compliance_rules: sin cura/trata/elimina/garantizado
-- Imagen dinámica de producto incluida en todos los templates
-
-**Subjects finales:**
-- Cart A ES: "Lo dejaste ahí. Tu cabello sabe por qué. 🧴"
-- Cart B ES: "Pocas unidades. Mucha humedad. Tú decides. ⏱"
-- Cart A EN: "You stopped. Your hair already knows why. 🧴"
-- Cart B EN: "Limited stock. Unlimited humidity. You choose. ⏱"
-- Post Purchase ES: "Llegó. Aquí lo que Patricia quiere que sepas. 🖤"
-- Post Purchase EN: "It arrived. Here's what Patricia wants you to know. 🖤"
-- Review ES: "Tu cabello habló. ¿Nos cuentas? ⭐"
-- Review EN: "Your hair spoke. Will you tell us? ⭐"
-- Welcome ES: "No es una lista de correos. Es otra cosa. 🖤"
-- Welcome EN: "This isn't a mailing list. It's something else. 🖤"
-
-#### 7. KLAVIYO FLOWS — ESTRUCTURA BILINGÜE DEFINIDA ✅
-Lógica: ES = es-US · EN = todo lo demás (incluyendo RU, FR, etc.)
-Estructura para los 4 flows:
-```
-Trigger → Delay → Conditional Split ($locale = es-US)
-  YES → Email ES
-  NO  → Email EN
-```
-
-**Configuración por flow:**
-- Abandoned Cart: trigger Checkout Started · delay 1h · split · Email A · delay 23h · Email B
-- Post Purchase: trigger Placed Order · delay 2 días · split · Email único
-- Review Request: trigger Placed Order · delay 14 días · split · Email único
-- Welcome: trigger List (Email List) · inmediato · split · Email único
-
-**PENDIENTE:** Configurar los flows manualmente en Klaviyo UI
-(API no permite añadir actions a flows — limitación confirmada)
-
-#### 8. DECISION_MATRIX + PROFESSOR — DISEÑO COMPLETO ✅
-- Taxonomía A+B+C+D definida
-- Vetos absolutos V1-V4 definidos
-- Mecanismo bypass de Sam definido
-- Arquitectura Supabase + Vercel definida
-- Schema de 9 tablas diseñado
-- Checkpoint cada 10 mensajes acordado
-- Comandos: "Professor, anota" + "Professor" (final sesión)
-- Plan de implementación completo generado
-
-**PENDIENTE:** Implementación (4 sprints — ver plan adjunto)
+#### 7. KLAVIYO FLOWS — ESTRUCTURA DEFINIDA ✅
+Split bilingüe: `$locale = es-US` → ES · todo lo demás → EN
+**PENDIENTE:** configurar 4 flows manualmente en UI (API no permite actions)
 
 ---
 
 ## PENDIENTES ACTIVOS
 
-### NeuroneSCF — inmediatos
-- [ ] **Klaviyo flows** — configurar los 4 flows en UI (bilingüe ES/EN)
-- [ ] **Klaviyo imágenes** — verificar property name real de image_url en line_items (ver Activity Feed → Checkout Started event)
-- [ ] **Judge.me** — activar review request emails en Settings → Automations
-- [ ] **Judge.me templates viejos** — borrar manualmente en Klaviyo (8 duplicados sin ID en nombre)
-- [ ] **DY Fazza** — confirmar 200ml vs 400ml con PO (bloquea SOS bundle + Moisture & Shine)
-- [ ] **B2B language switcher** — implementar bilingüe
-- [ ] **Traducciones EN** — re-run batch fallidos
-- [ ] **La Ciencia page EN** — auto-translate
-- [ ] **Vizos B2B pricing** — cuenta cliente + descuento
-- [ ] **DY Fazza foto incorrecta** (NSCF-TR-013)
+- [ ] **PROFESSOR_SECRET** — Supabase Dashboard · Settings · Edge Functions · Secrets (2 min)
+- [ ] **GA4** — instalar Measurement ID en theme.liquid (5 min)
+- [ ] **Klaviyo flows** — 4 flows bilingüe configurar en UI
+- [ ] **Klaviyo image_url** — verificar property name desde Activity Feed
+- [ ] **Judge.me automations** — activar review request en Settings → Automations
+- [ ] **DY Fazza** — confirmar 200ml vs 400ml con PO (KT-104)
+- [ ] **EN descriptions** — bloqueadas por bug `shopify-auto-translate`
 - [ ] **Shipping zones** — 3/5 pendientes
-- [ ] **GA4 Measurement ID** — instalar en Shopify
-- [ ] **Kiosko** — test real con embajadora en salón
-
-### DECISION_MATRIX + PROFESSOR — implementación
-- [ ] **Sprint 1** — Schema Supabase (9 tablas + seed data + índices)
-- [ ] **Sprint 2** — 6 Edge Functions
-- [ ] **Sprint 3** — Archivos Vercel (knowledge/ + DECISION_MATRIX.md + PROFESSOR_PROTOCOL.md)
-- [ ] **Sprint 4** — Integración SESSION_PROTOCOL
-- **Documento:** `IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md` — listo para cargar al inicio del sprint
-
-### Ecosistema
-- [ ] **Stripe Atlas LLC Delaware** — P1
-- [ ] **Ayra Sprint 0** — antes del 5 Jun
-- [ ] **luciensael.com DNS** — 10 min
-- [ ] **XMMs** — eliminar proyecto muerto
+- [ ] **Kiosko** — test con embajadora real en salón
 
 ---
 
@@ -154,68 +110,32 @@ Trigger → Delay → Conditional Split ($locale = es-US)
 
 ### Judge.me
 - Metafield correcto: `product.metafields.judgeme.badge` (NO `preview_badge`)
-- Metafield widget: `product.metafields.judgeme.widget`
-- Stripear `style='display:none'` con Liquid replace
-- Stripear `<style class='jdgm-temp-hiding-style'>` del widget
+- Strip `style='display:none'` con Liquid replace antes de renderizar
+- Strip `<style class='jdgm-temp-hiding-style'>` del widget
 - Dark theme: `element.style.setProperty(prop, value, 'important')` — CSS no puede ganar
-- Sin reviews: NO usar `data-auto-install='true'` — Judge.me sobreescribe con empty state propio
+- Sin reviews: NO usar `data-auto-install='true'`
 
 ### Klaviyo
 - Public Key: `UNF8Ee`
-- API limitation: DELETE/rename templates no disponible con public key
-- API limitation: REST API no permite crear flow actions — solo flows vacíos
-- Filtro Liquid `| money` de Shopify NO funciona en templates Klaviyo — usar `{{ item.price }}` directo
-- Image URL en line_items: verificar property name real desde Activity Feed (puede ser `image_url` o `ImageUrl`)
-- Trigger "Added to Cart" requiere configuración especial — usar "Checkout Started" como alternativa
-- "Checkout Started" es igual o mejor (cliente ya escribió email)
+- DELETE/rename templates: no disponible con public key
+- Flow actions: REST API no permite crearlas — solo flows vacíos
+- Filtro Liquid `| money`: NO funciona en Klaviyo — usar `{{ item.price }}`
+- Image URL: verificar `image_url` vs `ImageUrl` desde Activity Feed
 
 ### Meta
-- Pixel ID: `1348252664025025`
-- Dominio verificado ✅
-- Instagram + Facebook Page vinculadas ✅
-- Payment method añadido ✅
-
-### agent-browser (Windows)
-- Requiere terminal separada para `npx agent-browser-mcp` (mantener activa)
-- claude.ai web NO soporta MCP servers locales stdio — solo funciona desde Claude Code CLI
-- Claude Code: instalar con `npm install -g @anthropic-ai/claude-code`
-- Registrar MCP: `claude mcp add agent-browser --transport stdio -- npx agent-browser-mcp`
-- Para tareas de UI puntual: hacerlo manual es más rápido que el setup
+- Pixel ID: `1348252664025025` · dominio verificado · IG+FB vinculadas · payment ✅
 
 ### Shopify B2C Theme `192983662919`
 - Locale check: `request.locale.iso_code == 'en'`
-- Metafield judge.me: usar namespace `judgeme`, key `badge` y `widget`
-
-### Klaviyo Templates con imagen de producto
-```html
-{% if item.image_url %}
-  <img src="{{ item.image_url }}" ...>
-{% elsif item.ImageUrl %}
-  <img src="{{ item.ImageUrl }}" ...>
-{% else %}
-  <!-- fallback N de Neurone -->
-{% endif %}
-```
-
-### DECISION_MATRIX — casos calibrados iniciales
-1. Reviews falsas → V1 activo (B2+C1) · bypass Sam NO aplica · correcto rechazar
-2. Content pipeline sin skill → output externo con gap de contexto → debió DECLARAR gap y esperar
+- `checkoutBrandingUpsert`: requiere Plus — no disponible en Basic
 
 ---
 
 ## PARA EL PRÓXIMO CHAT
 
-### Prioridad 1: Implementar DECISION_MATRIX + Professor
-Cargar: `IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md`
-Arrancar Sprint 1: schema Supabase
+1. PROFESSOR_SECRET + GA4 (7 min)
+2. Klaviyo flows UI
+3. DY Fazza decisión
+4. Ayra Sprint 0
 
-### Prioridad 2: Terminar Klaviyo flows
-- Verificar image_url property en Activity Feed
-- Configurar 4 flows bilingües en UI
-
-### Prioridad 3: GA4
-- Sam tiene el Measurement ID
-- Instalar en theme.liquid (5 min)
-
-### Social Media Agent
-Sin novedades nuevas desde último export.
+SMA: sin novedades · ETag: `W/"ab5b-ofuN2S50PKjAqtujmSW7K/E7bcI"`
