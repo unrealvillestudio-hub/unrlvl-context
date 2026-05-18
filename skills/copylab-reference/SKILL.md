@@ -1,6 +1,11 @@
-# SKILL — copylab-reference v1.0
+# SKILL — copylab-reference v1.1
 _UNRLVL CopyLab · Templates · Canal Blocks · BP_COPY · Humanize_
-_Versión: 1.0 · 2026-04-24_
+_Versión: 1.1 · 2026-05-18_
+
+**Cambios v1.1:**
+- Voz de PO actualizada: 35+ años Técnica en química capilar · Vizos Cosmetics - The Healing Systems · Vizos Salón · 3 continentes · no "colorista"
+- NeuroneSCF B2C: personas actualizadas — 7 segmentos por tipo de dolor, sin calificador étnico
+- Humanize F2.5 NeuroneSCF: tono diagnóstico-prescriptivo. Protagonista: tu cabello / your hair
 
 ---
 
@@ -43,7 +48,7 @@ GENERACIÓN (modo AGGRO — estándar base de UNRLVL)
     ↓
 Humanize F2.5 (siempre — aplica voz y tono de marca)
     ↓
-AIFE (cuando el output va público — ver SKILL aife)
+AIFE (cuando el output va público)
     ↓
 ICR — validación final
     ↓
@@ -52,9 +57,9 @@ OUTPUT
 
 ### Modo AGGRO — el estándar
 
-AGGRO es la intensidad base de todo copy generado por UNRLVL. No es un modo "agresivo" en sentido negativo — es copy con convicción, directo, sin hedging, sin relleno. Todo output sale en modo AGGRO por defecto.
+AGGRO es la intensidad base de todo copy generado por UNRLVL. Copy con convicción, directo, sin hedging, sin relleno. Todo output sale en modo AGGRO por defecto.
 
-Humanize F2.5 trabaja **sobre** el output AGGRO, aplicando la voz específica de la marca sin suavizar la convicción central. No compiten — son capas secuenciales.
+Humanize F2.5 trabaja sobre el output AGGRO, aplicando la voz específica de la marca. No compiten — son capas secuenciales.
 
 ```
 AGGRO genera: convicción + directness + zero relleno
@@ -112,37 +117,9 @@ AIFE finaliza: elimina huellas estructurales AI (cuando aplica)
 | Estrategia de contenido 30 días | `Social_Strategy_30D` |
 | Plan de ejecución semana 1 | `Social_Week1_Execution_Pack` |
 
-### Cómo leer un template desde Supabase
-
-```sql
-SELECT id, name, template_text, variables, applies_to, platforms
-FROM public.output_templates
-WHERE id = '[template_id]' AND active = true;
-```
-
-### Cómo modificar un template (protocolo)
-
-1. Leer template actual completo
-2. Identificar qué campo cambia (`template_text`, `variables`, `platforms`)
-3. Mostrar diff a Sam antes de ejecutar
-4. Sam aprueba
-5. Ejecutar UPDATE con campo específico — nunca reemplazar el row completo
-6. Verificar que `version` se incrementa
-
-```sql
-UPDATE public.output_templates
-SET template_text = '[nuevo texto]',
-    version = '8.0'
-WHERE id = '[template_id]';
-```
-
 ---
 
 ## SECCIÓN 3 — CANAL BLOCKS (canal_blocks en Supabase)
-
-Los canal blocks definen las restricciones del canal: límite de caracteres, tono modifier, formato.
-
-### Catálogo completo activo
 
 | ID | Canal | Formato | Char limit | Tone modifier |
 |---|---|---|---|---|
@@ -159,151 +136,107 @@ Los canal blocks definen las restricciones del canal: límite de caracteres, ton
 | `ECOMMERCE` | ecommerce | ficha_producto | — | conversion_informativa |
 | `YOUTUBE` | youtube | video_organico | 5000 | educativa_entretenimiento |
 | `OMNICANAL` | multiple | adaptable | — | mensaje_core |
-| `BLOG_HTML` | blog | — | — | — |
-| `LANDING_HTML` | landing | — | — | — |
-| `WEB_HTML` | web | — | — | — |
-| `BRANDHUB_HTML` | web | — | — | — |
-
-### Cómo aplicar un canal block
-
-El canal block se aplica después del template pero antes de Humanize:
-- Verificar que el output no excede `char_limit`
-- Aplicar `tone_modifier` como capa adicional sobre el copy generado
-- Para canales con char_limit estricto (Google RSA 30 chars, TikTok Ads 100): generar múltiples variaciones
-
-```sql
-SELECT id, name, char_limit, tone_modifier, restrictions, media_types, aspect_ratios
-FROM public.canal_blocks
-WHERE id = '[canal_block_id]' AND active = true;
-```
 
 ---
 
 ## SECCIÓN 4 — HUMANIZE F2.5
 
-Humanize se aplica siempre después de AGGRO. Carga el perfil de la marca desde `humanize_profiles` en Supabase.
-
 ### Perfiles activos
 
-| brand_id | Medio | Tono | Sentence style | Personalidad |
-|---|---|---|---|---|
-| `DEFAULT` | copy | Auténtico, directo, humano. Varía entre cercano y experto según el medio | Alterna frases cortas (impacto) con largas. Párrafos max 3-4 líneas | Experto que habla como amigo de confianza |
-| `DEFAULT` | image | Visual auténtico. Imperfección deliberada | — | Fotógrafo de calle, no de estudio |
-| `DEFAULT` | video | Movimiento orgánico. Handheld sobre gimbal | — | Documentalista, no director de publicidad |
-| `DEFAULT` | voice | Velocidad variable. Micro-hesitaciones naturales | — | Locutor que piensa mientras habla |
-| `DEFAULT` | web | Conversacional. Segunda persona directa | Párrafos max 3-4 líneas. Headlines como frases reales | — |
-| `NeuroneSCF` | copy | Científico-accesible. Bilingual ES/EN. Autoridad técnica con calidez latina | B2C: emocional primero, técnico después. B2B: dato primero, beneficio después | Patricia Osorio: experta en colorimetría, distribuidora exclusiva, conoce Miami desde adentro |
+| brand_id | Medio | Tono | Personalidad |
+|---|---|---|---|
+| `DEFAULT` | copy | Auténtico, directo, humano | Experto que habla como amigo de confianza |
+| `DEFAULT` | image | Visual auténtico. Imperfección deliberada | Fotógrafo de calle, no de estudio |
+| `DEFAULT` | video | Movimiento orgánico. Handheld sobre gimbal | Documentalista, no director de publicidad |
+| `DEFAULT` | voice | Velocidad variable. Micro-hesitaciones naturales | Locutor que piensa mientras habla |
+| `DEFAULT` | web | Conversacional. Segunda persona directa | — |
+| `NeuroneSCF` | copy | Diagnóstico-prescriptivo con cercanía de amistad. Protagonista: tu cabello / your hair. Bilingüe ES/EN es estrategia de canal, no propiedad del tono | **Patricia Osorio** — Técnica en química capilar con 35+ años de trayectoria. Fundadora de Vizos Cosmetics - The Healing Systems, Casa Diseñadora de Belleza Capilar. Diseñadora de los Rituals & Kits de Neurone. Trabajó con las marcas más importantes del sector en 3 continentes entrenando profesionales. Propietaria de Vizos Salón en South Florida. Su voz nunca explica propiedades ni mecanismos — observa el cabello, identifica el problema con autoridad, y presenta la solución directamente como una amiga experta en el salón. No vende el producto. Resuelve el problema. |
 
-### Carga del perfil
+### Anti-patterns NeuroneSCF
 
-```sql
--- Buscar perfil de la marca, fallback a DEFAULT si no existe
-SELECT tone, sentence_style, personality, vocabulary_include,
-       vocabulary_exclude, anti_patterns, authenticity_rules
-FROM public.humanize_profiles
-WHERE (brand_id = '[brand_id]' OR brand_id = 'DEFAULT')
-  AND medium = '[copy|image|video|voice|web]'
-ORDER BY brand_id DESC  -- marca específica tiene precedencia sobre DEFAULT
-LIMIT 1;
-```
+- Iniciar desde el producto en vez del problema observado
+- Explicar mecanismos técnicos sin ancla en la experiencia del cliente
+- Copy genérico de haircare que ignore el contexto climático de Florida
+- Calificativos étnicos o culturales que restrinjan el alcance de la audiencia
+- Tono de vendedora — PO ayuda, no vende
+- Promesas de servicio sin respaldo operativo
+- Traducir ES al EN o viceversa — cada versión nace en su idioma
+
+### Regla de autenticidad NeuroneSCF
+
+Nunca iniciar desde el producto. Siempre desde la observación del problema. La solución se presenta como consecuencia natural del diagnóstico. Estructura canónica: "esto es lo que le pasa a tu cabello... esto es lo que necesita."
 
 ---
 
 ## SECCIÓN 5 — BP_COPY_1.0 (brand_copy_profiles)
 
-BP_COPY_1.0 es la capa más profunda — define la voz de la marca a nivel estructural.
-
 ### Perfiles activos
 
-| ID | brand_id | Status | Tono primario | Writing style | Sentence length | Emojis |
-|---|---|---|---|---|---|---|
-| `copy_diamond` | DiamondDetails | active | authoritative | TECHNICAL_EXPERT | mixed | minimal |
-| `copy_d7herbal` | D7Herbal | active | warm | NATURAL_EXPERT | mixed | minimal |
-| `copy_po_personal` | PatriciaOsorioPersonal | active | authoritative | AUTHORITY_EDU | mixed | moderate |
-| `copy_po_comunidad` | PatriciaOsorioComunidad | active | warm | COMMUNITY_MOTIVATOR | short | moderate |
-| `copy_po_salon` | PatriciaOsorioVizosSalon | active | authoritative | LUXURY_EXPERT | mixed | minimal |
-| `copy_vivose` | VivoseMask | active | warm | SENSORIAL_BEAUTY | short | moderate |
-| `copy_vizos_cosmetics` | VizosCosmetics | active | authoritative | LAB_PREMIUM | mixed | none |
+| ID | brand_id | Tono primario | Writing style |
+|---|---|---|---|
+| `copy_diamond` | DiamondDetails | authoritative | TECHNICAL_EXPERT |
+| `copy_d7herbal` | D7Herbal | warm | NATURAL_EXPERT |
+| `copy_po_personal` | PatriciaOsorioPersonal | authoritative | AUTHORITY_EDU |
+| `copy_po_comunidad` | PatriciaOsorioComunidad | warm | COMMUNITY_MOTIVATOR |
+| `copy_po_salon` | PatriciaOsorioVizosSalon | authoritative | LUXURY_EXPERT |
+| `copy_vivose` | VivoseMask | warm | SENSORIAL_BEAUTY |
+| `copy_vizos_cosmetics` | VizosCosmetics | authoritative | LAB_PREMIUM |
+| `copy_nscf` *(en Supabase)* | NeuroneSCF | diagnostic-prescriptive | Ver humanize_profiles NeuroneSCF |
 
-### Writing styles disponibles
+### NeuroneSCF — estado actualizado en Supabase
 
-| Style | Descripción | Cuándo |
-|---|---|---|
-| `TECHNICAL_EXPERT` | Datos, especificaciones, autoridad técnica | Marcas con diferenciador técnico |
-| `NATURAL_EXPERT` | Saber que suena a experiencia vivida | Herbal, wellness, lifestyle |
-| `AUTHORITY_EDU` | Autoridad que educa, no que vende | Personal brands, thought leadership |
-| `COMMUNITY_MOTIVATOR` | Energía de comunidad, motivación, pertenencia | Marcas sociales, coaches |
-| `LUXURY_EXPERT` | Precisión + exclusividad, nunca masivo | Salones premium, beauty luxury |
-| `SENSORIAL_BEAUTY` | Evocador, sensorial, experiencial | Beauty, skincare, fragrance |
-| `LAB_PREMIUM` | Laboratorio + premium, cero palabrería | Cosméticos clínicos, dermo |
-
-### Marcas SIN BP_COPY_1.0 activo
-
-NeuroneSCF, ForumPHs, UnrealvilleStudio — usan DEFAULT de Humanize hasta que se complete su BP_COPY_1.0.
-
-### Carga de BP_COPY
-
-```sql
-SELECT voice_tone_primary, voice_tone_secondary, voice_writing_style,
-       voice_pov, language_primary, style_sentence_length, style_emoji_usage,
-       style_hooks, style_signature_phrases, style_avoid_phrases,
-       compliance_rules, compliance_prohibited_words
-FROM public.brand_copy_profiles
-WHERE brand_id = '[brand_id]' AND active = true
-LIMIT 1;
-```
+`voice_tone_primary`: diagnostic-prescriptive  
+`voice_tone_secondary`: intimate-expert  
+`language_geo_default`: South & Central Florida, USA  
+`style_hooks`: TU/YOUR + cabello/hair como sujeto siempre. Clima es contexto adversario, nunca protagonista.
 
 ---
 
-## SECCIÓN 6 — KEYWORDS E IDIOMAS
+## SECCIÓN 6 — PERSONAS NSCF B2C (actualizado 2026-05-18)
 
-### Keywords por marca
+7 segmentos activos en `brand_personas` — sin calificador étnico, por tipo de dolor:
 
-```sql
-SELECT keyword, type, intent, canal, language
-FROM public.keywords
-WHERE brand_id = '[brand_id]'
-  AND active = true
-  AND language = '[es|en]'
-ORDER BY prioridad ASC NULLS LAST, type;
-```
+| persona_key | Dolor central | utm_content | Priority |
+|---|---|---|---|
+| `b2c_color_fade` | Color que no dura — calor y humedad destruyen el tono | color-fade | 1 |
+| `b2c_damage_repair` | Cabello seco, quebradizo, sobreprocesado | damage-repair | 1 |
+| `b2c_frizz_humidity` | Frizz crónico por la humedad de Florida | frizz-humidity | 2 |
+| `b2c_chlorine_sun` | Daño por cloro, sol y vida activa | chlorine-sun | 2 |
+| `b2c_fine_fragile` | Cabello fino que se rompe o aplana | fine-fragile | 2 |
+| `b2c_scalp_health` | Cuero cabelludo irritado por calor crónico | scalp-health | 3 |
+| `b2c_default` | Sin señal de pixel — fallback | (sin UTM) | 3 |
 
-### Idiomas por marca
+---
 
-```sql
-SELECT idioma_id, mercado, is_primary
-FROM public.brand_languages
-WHERE brand_id = '[brand_id]' AND active = true
-ORDER BY is_primary DESC;
-```
+## SECCIÓN 7 — KEYWORDS E IDIOMAS
 
-### Idiomas y bilinguismo
+### Idiomas y bilingüismo
 
-- NeuroneSCF: ES (primario) + EN (Miami market) — Spanglish controlado en B2C
-- DiamondDetails: ES (primario) — mercado España
+- NeuroneSCF: ES (primario) + EN (Florida market) — bilingüe es canal, no tono
+- DiamondDetails: ES — mercado España
 - Patricia Osorio: ES (primario) + EN (comunidad Miami)
-- ForumPHs: ES (Panamá)
+- ForumPHs: ES — Panamá
 - UnrealvilleStudio: EN (primario) + ES (LATAM)
 
 ---
 
-## SECCIÓN 7 — CHECKLIST ICR PRE-GENERACIÓN
-
-Antes de generar cualquier copy:
+## SECCIÓN 8 — CHECKLIST ICR PRE-GENERACIÓN
 
 - [ ] `brand_id` identificado
 - [ ] `template_id` seleccionado según objetivo
-- [ ] `canal_block_id` identificado (canal de destino)
-- [ ] Idioma confirmado
-- [ ] BP_COPY_1.0 cargado (o confirmado que usa DEFAULT)
+- [ ] `canal_block_id` identificado
+- [ ] Idioma confirmado — y si es NSCF, confirmar que se genera desde origen (no se traduce)
+- [ ] BP_COPY_1.0 cargado (o confirmado DEFAULT)
 - [ ] Humanize profile cargado para el medio
 - [ ] Keywords relevantes cargadas (si aplica SEO/copy)
 - [ ] Psycho preset seleccionado (si aplica)
+- [ ] Si es email_sequence: piezas anteriores cargadas desde content_sequence_pieces
 - [ ] AGGRO como modo base — sin hedging, sin relleno
 - [ ] Humanize F2.5 aplicado post-generación
 - [ ] AIFE aplicado si el output va público
 
 ---
 
-_SKILL copylab-reference v1.0 · Unreal>ille Studio · CopyLab v8.0_
-_AGGRO = estándar base · Humanize = capa universal · AIFE = filtro público_
+_SKILL copylab-reference v1.1 · Unreal>ille Studio · CopyLab v8.0_  
+_AGGRO = estándar base · Humanize = capa universal · AIFE = filtro público_  
+_PO voice actualizada 2026-05-18 · NeuroneSCF personas actualizadas 2026-05-18_
