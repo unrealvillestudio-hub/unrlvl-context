@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-05-19-v11", "maintained_by": "Claude", "previous": "2026-05-10-v2" },
+  "_meta": { "version": "2026-05-20-v12", "maintained_by": "Claude", "previous": "2026-05-19-v11" },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -165,7 +165,6 @@
     {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
     {"level":"action",   "msg":"DY Fazza: decisión 200ml vs 400ml pendiente (KT-104)"},
     {"level":"warning",  "msg":"~11 productos con traducción EN parcial (title/meta) — no bloqueante"},
-    {"level":"action",   "msg":"PROFESSOR_SECRET pendiente configurar en Supabase Dashboard → Settings → Edge Functions → Secrets"},
     {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
   ]
 }

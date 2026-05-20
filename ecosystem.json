@@ -1,20 +1,19 @@
 {
   "_meta": {
-    "version": "2026-05-19-v11",
+    "version": "2026-05-20-v12",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-18-v10",
+    "previous": "2026-05-19-v11",
     "last_audit": {
-      "date": "2026-05-19",
-      "status": "Voice Genome System + product_description_b2c R4B · SKILL v2.6 · brand_voice_genome tabla creada · po_consumer v0.6 activo",
+      "date": "2026-05-20",
+      "status": "Commits v11 verificados ✅ · PROFESSOR_SECRET configurado ✅ · alerts limpiados",
       "conducted_by": "Claude Sonnet 4.6",
       "key_findings": [
-        "brand_voice_genome: nueva tabla · po_consumer v0.6 activo · L1.5 VOICE_GENOME_INJECTION documentado en skill v2.6",
-        "product_description_b2c: creative_compatibility_rules + output_templates prompt_Product_Description_B2C v1.2 activos",
-        "content-pipeline SKILL v2.6: L1.5 + regla d7h + OUTPUT_SEPARATION + AUTO-CHECK 24 puntos · pendiente commit",
-        "Restore Therapy Plus v4 generado con motor completo (E3+T6+AGGRO_2+po_consumer_v0.6) · pendiente aplicar Shopify",
-        "Auditoría pixels NSCF: TikTok duplicado detectado · GTM+GA4 instalados (verificación pendiente)",
-        "Bug shopify-auto-translate: resuelto 2026-05-15 (descubierto en auditoría 2026-05-19)",
-        "Professor: 8 learnings nuevos insertados (approved_by_sam=false)"
+        "ecosystem.json v11 + AGENDA v7 + SKILL v2.6 + brand.json v11 + INDEX v1.1: todos LIVE en context system ✅",
+        "PROFESSOR_SECRET: configurado en Supabase Dashboard Edge Functions Secrets ✅ — alert eliminado",
+        "brand.json NeuroneSCF: alert PROFESSOR_SECRET eliminado → v12",
+        "Pendiente funcional: verificar que professor-get-context responde con el secret activo",
+        "TikTok Pixel duplicado NSCF: sigue bloqueando ads — próxima prioridad",
+        "GTM + GA4 verificación: pendiente"
       ]
     }
   },
@@ -169,7 +168,7 @@
           "content_iid": {"count": 12, "critical": ["content-dispatcher","content-run-stage","iid-core","iid-ecommerce","aife-filter"]},
           "fphs": {"count": 5, "critical": ["fphs-chat","fphs-formalize"]},
           "klaviyo": {"count": 5, "critical": ["klaviyo-setup","klaviyo-flows","klaviyo-fix-templates","klaviyo-templates-v2","klaviyo-es-templates"]},
-          "professor": {"count": 6, "critical": ["professor-get-context","professor-evaluate-decision","professor-log-case","professor-submit-learning","professor-approve-learning","professor-checkpoint"]},
+          "professor": {"count": 6, "critical": ["professor-get-context","professor-evaluate-decision","professor-log-case","professor-submit-learning","professor-approve-learning","professor-checkpoint"], "secret_status": "✅ CONFIGURADO 2026-05-20"},
           "other": {"count": 5, "critical": ["unrlvl-profiler","unrlvl-crm-api","social-proof-reader","sp-fix-targeted","shopify-translate-batch"]}
         },
         "known_bugs": {
@@ -204,7 +203,7 @@
     "edge_functions": {
       "count": 6,
       "list": ["professor-get-context","professor-evaluate-decision","professor-log-case","professor-submit-learning","professor-approve-learning","professor-checkpoint"],
-      "auth": "PROFESSOR_SECRET env var — configurar en Supabase Dashboard"
+      "auth": "PROFESSOR_SECRET env var — ✅ CONFIGURADO 2026-05-20"
     },
     "cache": {
       "strategy": "professor_cache table con TTL diferenciados",
@@ -229,7 +228,7 @@
       "learnings_pending_approval": 8
     },
     "pending": {
-      "professor_secret": "⏳ Sam configura en Supabase Dashboard → Settings → Edge Functions → Secrets",
+      "professor_secret": "✅ CONFIGURADO 2026-05-20",
       "sprint_3_knowledge": "✅ Completado — knowledge/ con 11 archivos",
       "sprint_4_protocol": "✅ SESSION_PROTOCOL v12 actualizado"
     }
@@ -291,7 +290,6 @@
     "layers": ["L0 AUDIENCE_BRIEF + SEQUENCE_CHECK + VOICE_CHECK","L1 WRITE","L1.5 VOICE_GENOME_INJECTION","L2 H+AIFE","L3 HUMANIZE_EMOTIONAL","L4 PSYCHO","L5 CRO + SEQUENCE_RULE + OUTPUT_SEPARATION","L6 SEO","L7 QA"],
     "creative_engine_layers": ["L14 CREATIVE_VECTOR","L15 TENSION_ARCHITECTURE","L16 AGGRO_DIAL"],
     "auto_check_points": 24,
-    "new_2026_05_19": ["L1.5 VOICE_GENOME_INJECTION","brand_voice_genome system","content_type product_description_b2c","regla d7h","OUTPUT_SEPARATION","AUTO-CHECK puntos 17-24"],
     "content_types_active": ["email_sequence","product_description_b2c"],
     "voice_genome_system": {
       "table": "brand_voice_genome",
@@ -313,7 +311,7 @@
     {"id": "INFRA-BLUEPRINTS", "name": "BluePrints", "url": "https://unrlvl-blueprints.vercel.app", "vercel_id": "prj_AMv0fnyooAW74XcsRc8Od9foaFLy", "status": "LIVE"},
     {"id": "INFRA-FORUMPHS-COM", "name": "forumphs.com", "url": "https://forumphs.com", "vercel_id": "prj_RNfwsWnU7pqQygSLZCSMEXf90JTV", "status": "LIVE — dominio custom activo"},
     {"id": "INFRA-NSCF-KIOSKO", "name": "NSCF Kiosko", "url": "nscf-kiosko.vercel.app", "vercel_id": "prj_XaUhU9Kx82ZxXtwmbXJf8ebKO3VJ", "status": "LIVE", "created": "2026-05-13"},
-    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY", "note": "63 EFs · 76 tablas public · nuevas tablas 2026-05-18+19 (content_sequences, creative_vectors, brand_voice_genome, etc.)"},
+    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY · PROFESSOR_SECRET ✅ 2026-05-20", "note": "63 EFs · 76 tablas public · Professor operational"},
     {"id": "INFRA-SB-FORUMPH", "name": "Supabase ForumPHs", "status": "EXISTE — pendiente migración"},
     {"id": "INFRA-SB-PERSONAL", "name": "Supabase XMMs (personal Sam)", "id_supabase": "puoybldykxqvhvtnwrld", "status": "PERSONAL — pendiente limpieza"},
     {"id": "INFRA-AYRA", "name": "AYRA (repo + Vercel + schema)", "status": "PLANNED · Sprint 0"},
@@ -323,10 +321,10 @@
   "skills_system": {
     "version": "2.6",
     "previous_version": "2.5",
-    "status": "PENDIENTE COMMIT ⏳",
+    "status": "LIVE ✅",
     "total_skills": 15,
     "index_url": "https://unrlvl-context.vercel.app/skills/INDEX.md",
-    "pending_commits": ["skills/content-pipeline/SKILL.md v2.6"]
+    "pending_commits": []
   },
   "protocols": {
     "session_protocol": {"version": "v13", "date": "2026-05-17", "path": "protocols/SESSION_PROTOCOL.md"},
@@ -334,17 +332,16 @@
     "implementation_plan_matrix_professor": {"version": "v1.1", "date": "2026-05-17", "path": "protocols/IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md"}
   },
   "next_session_agenda": [
-    "PRIORIDAD 0 — NSCF: PROFESSOR_SECRET configurar en Supabase Dashboard (2 min) 🔴",
     "PRIORIDAD 1 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
     "PRIORIDAD 2 — NSCF: GTM + GA4 verificación (GTM Preview + GA4 DebugView)",
-    "PRIORIDAD 3 — COMMIT: SKILL v2.6 + brand.json v11 + AGENDA v6 + ecosystem.json v11 + session_log.md → GitHub Desktop unrlvl-context",
-    "PRIORIDAD 4 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
-    "PRIORIDAD 5 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
-    "PRIORIDAD 6 — Ayra Sprint 0: deadline 5 Jun 🔴",
-    "PRIORIDAD 7 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
-    "PRIORIDAD 8 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
-    "PRIORIDAD 9 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
-    "PRIORIDAD 10 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
-    "PRIORIDAD 11 — XMMs: eliminar proyecto muerto + evaluar migración DDMV"
+    "PRIORIDAD 3 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
+    "PRIORIDAD 4 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
+    "PRIORIDAD 5 — Ayra Sprint 0: deadline 5 Jun 🔴",
+    "PRIORIDAD 6 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
+    "PRIORIDAD 7 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
+    "PRIORIDAD 8 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
+    "PRIORIDAD 9 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
+    "PRIORIDAD 10 — XMMs: eliminar proyecto muerto + evaluar migración DDMV",
+    "PRIORIDAD 11 — Professor: revisar 8 learnings pendientes (approved_by_sam=false)"
   ]
 }
