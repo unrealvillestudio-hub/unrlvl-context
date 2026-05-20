@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-05-17-v13 | **Mantenido por:** Claude
+**Versión:** 2026-05-20-v14 | **Mantenido por:** Claude
 
 ---
 
@@ -19,9 +19,32 @@
 | `brands/[Marca]/BP_Brand_Context.md` | ADN permanente de la marca | Solo si cambia algo estructural |
 | `brands/[Marca]/session_log.md` | Hilo vivo entre sesiones | Siempre — se añade al tope |
 | `agents/[nombre]/session_log.md` | Log de sesiones de agentes | El agente genera y Sam commitea |
+| `protocols/HRD_PROTOCOL.md` | **Instrucciones inviolables** — HRDs activas | Cuando se añaden o modifican HRDs |
+| `skills/ecosystem-auditor/SKILL.md` | Protocolo de ecosystem audit | Cuando cambia el alcance del audit |
 
 ### Regla crítica de los `.md`
 `ecosystem.md`, `ecosystem_filemap.md` y `AGENDA.md` **nunca se editan manualmente** — generados por Claude desde `ecosystem.json`.
+
+---
+
+## HRD — INSTRUCCIONES INVIOLABLES
+
+**Documento completo:** `protocols/HRD_PROTOCOL.md`
+`https://unrlvl-context.vercel.app/protocols/HRD_PROTOCOL.md`
+
+Toda HRD se ejecuta paso a paso, con mensaje de verificación obligatorio antes de actuar:
+> "Ok Sam, querés que [objetivo]. Para ello debo [pasos intermedios implícitos, breve]. Correcto? Me faltan: [datos o 'ninguno — procedo']."
+
+### HRDs activas — mapa rápido
+
+| Trigger | HRD | Skill/Protocolo que activa |
+|---|---|---|
+| "protocolo actualización" | `HRD_PROTOCOLO_ACTUALIZACION` | Este protocolo — pasos 1-8 abajo |
+| "Actualiza" | `HRD_ACTUALIZA` | Sección COMANDO "Actualiza" abajo |
+| "ecosystem scan/audit" | `HRD_ECOSYSTEM_AUDIT` | `skills/ecosystem-auditor/SKILL.md` |
+| "Professor" / "learnings" / "checkpoint" | `HRD_PROFESSOR` | Sección COMANDOS PROFESSOR abajo |
+
+**Regla:** si el trigger se detecta, el mensaje de verificación es obligatorio antes de ejecutar cualquier paso.
 
 ---
 
@@ -85,6 +108,7 @@ Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprend
 | "costos / margen / tokens / OPS" | `cost-layer` |
 | "deploy / nueva EF / Supabase" | `security` |
 | "pipeline / IID / Orchestrator" | `content-pipeline` |
+| "ecosystem scan / audit / repos" | `ecosystem-auditor` |
 
 ### Paso 5 — Confirmación
 > *"Contexto cargado — [Marca o Ecosistema] · [fecha] · Skills activos: [lista]. Arrancamos."*
@@ -109,30 +133,42 @@ Solo cuando activa PARAR, DECLARAR gap, o registra un bypass de Sam.
 
 ## COMANDOS PROFESSOR
 
-### Durante la sesión
+### HRD_PROFESSOR — acceso al sistema Professor
+
+**Trigger:** "Professor" / "learnings" / "checkpoint" / "aprobar learnings"
+→ Activar mensaje de verificación HRD antes de ejecutar.
+
+**Arquitectura de acceso:**
+- Proxy: `https://unrlvl-context.vercel.app/api/professor?action=[action]` vía `Vercel:web_fetch_vercel_url`
+- Estado del proxy: **PENDIENTE DE CONSTRUIR** → usar fallback hasta entonces
+- Fallback lectura: `Supabase:execute_sql` proyecto `amlvyycfepwhiindxgzw`
+- Fallback escritura: proporcionar curl exacto para que Sam ejecute desde terminal
+
+**Durante la sesión:**
 
 **`"Professor, anota"`** — captura inmediata del contexto actual.
 Claude formula el aprendizaje, confirma con una línea, y continúa.
 
 **Checkpoint automático cada 10 mensajes** — completamente silencioso.
-Claude llama `professor-checkpoint` EF. Candidatos score ≥ 3 se guardan en `professor_learnings`. Solo score = 5 genera output visible: `[Professor: anotado — título]`.
-
-**Propósito del Professor:** capturar aprendizajes que ambos (Sam y Claude) encontraron juntos en el camino — situaciones donde ninguno tenía claro cómo resolver, y lo descubrieron en sesión. No documenta lo que Claude ya maneja bien de forma consistente. El valor está en los gaps compartidos resueltos juntos.
+Claude llama `professor-checkpoint` EF. Solo score = 5 genera output visible: `[Professor: anotado — título]`.
 
 ### Final de sesión — ver CIERRE DE SESIÓN abajo
 
 ---
 
-## COMANDO "ecosystem scan"
+## HRD_ECOSYSTEM_AUDIT — comando "ecosystem scan"
 
-Cuando Sam escribe **"ecosystem scan"**, Claude pregunta **siempre** antes de ejecutar:
+**Trigger:** "ecosystem scan", "ecosystem audit" o variantes
+→ Activar mensaje de verificación HRD antes de ejecutar.
 
-> *"Sam, lo quieres identificativo o también contextual?"*
+**Skill:** `skills/ecosystem-auditor/SKILL.md` — cargarlo y leerlo antes de ejecutar.
 
-- **Identificativo** — inventario: lista de repos, proyectos Vercel, EFs, tablas. Sin leer contenido.
-- **Contextual** — inventario + lectura de archivos clave para entender propósito, estado y relaciones de cada componente. Incluye session_logs, brand contexts, schema, planes activos.
+**Pregunta obligatoria antes de cualquier paso:**
+> *"¿Lo querés identificativo (qué hay y dónde, sin leer código) o contextual (leer y entender TODO el código, relaciones y estado real)?"*
 
-**No hay excepción a esta pregunta.** Aunque el contexto parezca obvio, Claude siempre pregunta.
+El alcance cubre: Context System · Vercel · GitHub repos · Supabase (tablas, EFs, schemas) · Labs · Marcas · Agents · Skills · Tools.
+
+**Referencia completa de pasos:** `skills/ecosystem-auditor/SKILL.md`
 
 ---
 
@@ -145,7 +181,6 @@ PASO 1 — "Professor"
   → Sam aprueba / rechaza / modifica cada ítem
   → Claude genera archivos Markdown SOLO de los aprobados
   → Claude llama professor-approve-learning por cada aprobado
-  → Solo en este punto Claude sabe qué quedó y qué no
 
 PASO 2 — "Actualiza" (siempre DESPUÉS de Professor)
   → session_log.md incluye SOLO aprendizajes aprobados
@@ -156,7 +191,6 @@ PASO 2 — "Actualiza" (siempre DESPUÉS de Professor)
 
 PASO 3 — Commit único
   → session_log + ecosystem + knowledge updates aprobados
-  → Un solo commit consistente y completo
 ```
 
 **Regla:** `Actualiza` **NUNCA** va antes que `Professor`.
@@ -165,39 +199,31 @@ Si Sam escribe "Actualiza" sin haber hecho Professor, Claude recuerda:
 
 ---
 
-## COMANDO "Actualiza" — detalle de ejecución
+## COMANDO "Actualiza" — HRD_ACTUALIZA
+
+**Trigger:** "Actualiza"
+→ Activar mensaje de verificación HRD antes de ejecutar.
 
 **1. Verifica SMA**
 
-GET de `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url`.
+GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url`.
 
 - ETag igual al registrado → `"Sin novedades del SMA"` · continúa
 - ETag cambió → cargar export completo · procesar · generar `social_media_agent_session_log.md`
-- Sin ETag previo → cargar export completo · anotar ETag en session_log
 
 **2. Genera archivos que cambiaron**
 
-Para chats de marca:
-- `session_log.md` — **siempre** · novedades + aprendizajes Professor aprobados al tope
-- `brand.json` — si cambió estado, proyectos o alertas
-- `ecosystem.json` — si hubo cambio cross-brand o de labs
-- `AGENDA.md` — **siempre**
-
-Para chats de ecosistema:
-- `ecosystem.json` — **siempre**
-- `ecosystem.md` — siempre que `ecosystem.json` cambie
-- `ecosystem_filemap.md` — siempre que `ecosystem.json` cambie
-- `AGENDA.md` — **siempre**
+Para chats de marca: `session_log.md` (siempre) · `brand.json` · `ecosystem.json` · `AGENDA.md` (siempre)
+Para chats de ecosistema: `ecosystem.json` (siempre) · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` (siempre)
 
 **3. REGLA CRÍTICA DE NOMENCLATURA**
 ```
 session_log.md · brand.json · ecosystem.json · ecosystem.md
 ecosystem_filemap.md · AGENDA.md · BP_Brand_Context.md
-SESSION_PROTOCOL.md · SKILL.md · INDEX.md · MANUAL.md
-DECISION_MATRIX.md · PROFESSOR_PROTOCOL.md · CHECKPOINT_RULES.md
+SESSION_PROTOCOL.md · SKILL.md · INDEX.md · HRD_PROTOCOL.md
 ```
 
-**4. Mensaje de commit** listo para pegar con rutas exactas.
+**4.** Mensaje de commit listo para pegar con rutas exactas.
 
 **5. Recuerda a Sam:**
 - Raíz: `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md`
@@ -255,6 +281,9 @@ Un chat = una marca. Si Sam mezcla sin intención:
 | AGENDA | `https://unrlvl-context.vercel.app/AGENDA.md` |
 | Skills INDEX | `https://unrlvl-context.vercel.app/skills/INDEX.md` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
+| **HRD Protocol** | `https://unrlvl-context.vercel.app/protocols/HRD_PROTOCOL.md` |
+| Ecosystem Auditor | `https://unrlvl-context.vercel.app/skills/ecosystem-auditor/SKILL.md` |
 | DECISION_MATRIX | `https://unrlvl-context.vercel.app/knowledge/ecosystem/decision-matrix/DECISION_MATRIX.md` |
 | PROFESSOR_PROTOCOL | `https://unrlvl-context.vercel.app/knowledge/ecosystem/professor/PROFESSOR_PROTOCOL.md` |
 | GitHub Proxy | `https://unrlvl-context.vercel.app/api/gh` |
+| Professor Proxy | `https://unrlvl-context.vercel.app/api/professor` *(pendiente)* |
