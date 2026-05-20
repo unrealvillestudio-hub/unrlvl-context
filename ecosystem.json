@@ -1,19 +1,20 @@
 {
   "_meta": {
-    "version": "2026-05-20-v12",
+    "version": "2026-05-20-v13",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-19-v11",
+    "previous": "2026-05-20-v12",
     "last_audit": {
       "date": "2026-05-20",
-      "status": "Commits v11 verificados ✅ · PROFESSOR_SECRET configurado ✅ · alerts limpiados",
+      "status": "CopyLab v9.3 deployed ✅ · Professor proxy LIVE ✅ · brand_cache_snapshots creada ✅ · SESSION_PROTOCOL v14 ✅ · HRD_PROTOCOL.md ✅ · ecosystem-auditor skill ✅",
       "conducted_by": "Claude Sonnet 4.6",
       "key_findings": [
-        "ecosystem.json v11 + AGENDA v7 + SKILL v2.6 + brand.json v11 + INDEX v1.1: todos LIVE en context system ✅",
-        "PROFESSOR_SECRET: configurado en Supabase Dashboard Edge Functions Secrets ✅ — alert eliminado",
-        "brand.json NeuroneSCF: alert PROFESSOR_SECRET eliminado → v12",
-        "Pendiente funcional: verificar que professor-get-context responde con el secret activo",
-        "TikTok Pixel duplicado NSCF: sigue bloqueando ads — próxima prioridad",
-        "GTM + GA4 verificación: pendiente"
+        "CopyLab v9.3 deployed en verde: promptpack fix + queries #25 voice_genome + buildCopyPrompt v8.1 L1.5 + execute.ts auto-cache + CopyLabComponents + App.tsx DbStatusBadge + CopyPackModule PipelineLayerTracker",
+        "Professor proxy LIVE: api/professor.js deployado en unrlvl-context · get-context operacional · PROFESSOR_SECRET configurado",
+        "brand_cache_snapshots: tabla creada en Supabase · brand-cache.js v2.0 generado (pendiente commit unrlvl-context + deploy)",
+        "brand-cache.js v2.0: modelo proactivo Supabase-first · 22 tablas · TTL 4h · action=build_all · PENDIENTE COMMIT",
+        "SESSION_PROTOCOL v14 LIVE · HRD_PROTOCOL.md LIVE · skills/ecosystem-auditor/SKILL.md LIVE",
+        "Arquitectura cache clarificada: brand-cache = repositorio · lab-invoke = gateway interactivo · job-runner = queue automatizado",
+        "CopyLabComponents.tsx bug fix: @supabase/supabase-js no está en package.json → reemplazado por raw fetch sbGet<T>()"
       ]
     }
   },
@@ -130,7 +131,25 @@
   "labs": {
     "_note": "Todos los labs tienen live:false en Vercel — corren en subdominios vercel.app sin dominio custom",
     "orchestrator": {"url": "orchestrator-unrlvl.vercel.app", "repo": "Orchestrator", "framework": "vite", "ai": "claude", "status": "live", "version": "v2.2", "last_deploy": "2026-05-18", "vercel_id": "prj_93AJfDiY1pcktG7b7fDStBqONYWy"},
-    "copylab": {"url": "unrlvl-copy-lab.vercel.app", "repo": "CopyLab", "framework": "vite", "ai": "claude+gemini", "status": "live", "version": "v9.0", "last_deploy": "2026-05-18", "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe", "pending": "Integrar product_description_b2c como objective en execute.ts"},
+    "copylab": {
+      "url": "unrlvl-copy-lab.vercel.app",
+      "repo": "CopyLab",
+      "framework": "vite",
+      "ai": "claude+gemini",
+      "status": "live",
+      "version": "v9.3",
+      "last_deploy": "2026-05-20",
+      "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
+      "changes_2026_05_20": [
+        "promptpack.ts: fix PROMPT_TYPE_MAP Email_Sequence",
+        "queries.ts: query #25 brand_voice_genome (L1.5)",
+        "buildCopyPrompt.ts v8.1: L1.5 VOICE_GENOME_INJECTION layer",
+        "execute.ts v9.3: auto-cache brand-cache + layers_applied",
+        "CopyLabComponents.tsx: DbStatusBadge + PipelineLayerTracker (raw fetch, no supabase-js)",
+        "App.tsx: DbStatusBadge en header",
+        "CopyPackModule.tsx: PipelineLayerTracker integrado post-generación"
+      ]
+    },
     "imagelab": {"url": "image-lab-unrlvl.vercel.app", "repo": "ImageLab", "framework": "vite", "ai": "gemini", "status": "bug", "blockers": ["gemini_timeout_50s — Vercel 50s limit"], "last_deploy": "2026-04-26", "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb"},
     "sociallab": {"url": "social-lab-flame.vercel.app", "repo": "SocialLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-26", "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT"},
     "weblab": {"url": "web-lab-unrlvl.vercel.app", "repo": "WebLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-04", "vercel_id": "prj_MzQeqiHG9fxCXYf3j84YCgdf5GZS"},
@@ -149,10 +168,11 @@
       "status": "ACTIVE_HEALTHY",
       "schemas": {
         "public": {
-          "tables": 76,
-          "key_tables": ["brands","agents","lab_configs","compliance_rules","humanize_profiles","brand_personas","brand_copy_profiles","output_templates","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules","content_sequences","content_sequence_pieces","brand_voice_genome","ops_costs","ops_renewals","pipeline_skills","product_blueprints","professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache"],
+          "tables": 77,
+          "key_tables": ["brands","agents","lab_configs","compliance_rules","humanize_profiles","brand_personas","brand_copy_profiles","output_templates","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules","content_sequences","content_sequence_pieces","brand_voice_genome","ops_costs","ops_renewals","pipeline_skills","product_blueprints","professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache","brand_cache_snapshots"],
           "new_tables_2026_05_18": ["content_sequences","content_sequence_pieces","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules"],
-          "new_tables_2026_05_19": ["brand_voice_genome"]
+          "new_tables_2026_05_19": ["brand_voice_genome"],
+          "new_tables_2026_05_20": ["brand_cache_snapshots"]
         },
         "content": {"tables": 6, "key_tables": ["orchestrator_jobs","brand_voices","content_pieces"], "active_jobs": 40},
         "crm": {"tables": 13, "key_tables": ["contacts","deals","pipelines","orgs","segments"]},
@@ -196,6 +216,12 @@
     "_plan": "protocols/IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md v1.1",
     "_version": "v1.0",
     "supabase_project": "amlvyycfepwhiindxgzw",
+    "proxy": {
+      "status": "LIVE ✅ 2026-05-20",
+      "url": "https://unrlvl-context.vercel.app/api/professor",
+      "actions": ["ping","get-context","checkpoint","evaluate","log-case","submit-learning","approve-learning"],
+      "auth": "PROFESSOR_SECRET env var — Vercel unrlvl-context"
+    },
     "tables": {
       "count": 10,
       "list": ["professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache"]
@@ -215,9 +241,7 @@
       "root": "knowledge/",
       "structure": ["_templates/","ecosystem/decision-matrix/","ecosystem/professor/","ecosystem/labs/","platforms/klaviyo/","platforms/judge-me/","platforms/agent-browser/","platforms/shopify/","clients/NeuroneSCF/"],
       "manuals_count": 7,
-      "errors_known_count": 10,
-      "new_2026_05_18": ["knowledge/ecosystem/labs/COPYLAB_NOTES.md","knowledge/ecosystem/decision-matrix/CHANGELOG.md"],
-      "pending_2026_05_19": ["knowledge/ecosystem/labs/COPYLAB_NOTES.md — update con voice_genome system"]
+      "errors_known_count": 10
     },
     "seed_data": {
       "criteria": 16,
@@ -226,11 +250,6 @@
       "platform_variables": 9,
       "learnings_total": 28,
       "learnings_pending_approval": 8
-    },
-    "pending": {
-      "professor_secret": "✅ CONFIGURADO 2026-05-20",
-      "sprint_3_knowledge": "✅ Completado — knowledge/ con 11 archivos",
-      "sprint_4_protocol": "✅ SESSION_PROTOCOL v12 actualizado"
     }
   },
   "agents": {
@@ -257,7 +276,7 @@
     ]
   },
   "ayra": {
-    "_status": "PLANNED · Sprint 0 pendiente",
+    "_status": "PLANNED · Sprint 0 pendiente — DEADLINE 5 JUN 🔴",
     "_plan": "protocols/AYRA_MASTER_PLAN.md",
     "_version_plan": "v3.3 · 2026-05-13",
     "_note_2026_05_18": "Los cimientos de Ayra están siendo construidos con cada sesión de infra. content_sequences, lab_configs, sequenceBridge, Creative Engine, Orchestrator v2.2 son nodos que Ayra va a operar. Solo falta conectar el cron y el jobRunner.",
@@ -265,7 +284,7 @@
     "vercel_project": "unrlvl-ayra — POR CREAR",
     "url": "ayra.unrealvillestudio.com — POR CONFIGURAR",
     "sprints": {
-      "sprint_0": "PENDIENTE — antes del 5 Jun",
+      "sprint_0": "PENDIENTE — antes del 5 Jun 🔴",
       "sprint_1": "Jun 5-15 — Foundation: EcosystemGraph + health EP + graph_validate",
       "sprint_2": "Jun 16-30 — Primeros jobs autónomos · content_sequences + email_sequence ya listos",
       "sprint_3": "Jul 1-14 — Daily Digest 7am ET",
@@ -293,7 +312,8 @@
     "content_types_active": ["email_sequence","product_description_b2c"],
     "voice_genome_system": {
       "table": "brand_voice_genome",
-      "active_genomes": [{"brand": "NeuroneSCF", "voice_id": "po_consumer", "version": "0.6"}]
+      "active_genomes": [{"brand": "NeuroneSCF", "voice_id": "po_consumer", "version": "0.6"}],
+      "injected_in": ["buildCopyPrompt.ts v8.1 (L1.5)","execute.ts v9.3 (L1.5)"]
     },
     "iid_pipeline": {
       "schema": "intel (amlvyycfepwhiindxgzw)",
@@ -303,18 +323,19 @@
     }
   },
   "infrastructure": [
-    {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app", "vercel_id": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54", "status": "LIVE"},
-    {"id": "INFRA-BRAND-CACHE", "name": "Brand Cache API", "url": "https://unrlvl-context.vercel.app/api/brand-cache", "status": "LIVE ✅", "note": "?brand_id=X · ?refresh=true · ?debug=true"},
+    {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app", "vercel_id": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54", "status": "LIVE", "apis": ["api/gh.js","api/brand-cache.js (v1.2 LIVE · v2.0 PENDIENTE COMMIT)","api/lab-invoke.js","api/job-runner.js","api/professor.js ✅ LIVE","api/cf.js"]},
+    {"id": "INFRA-BRAND-CACHE", "name": "Brand Cache API", "url": "https://unrlvl-context.vercel.app/api/brand-cache", "status": "v1.2 LIVE · v2.0 PENDIENTE COMMIT", "note": "v2.0: Supabase-first snapshot model · brand_cache_snapshots · 22 tablas · TTL 4h · action=build_all"},
+    {"id": "INFRA-PROFESSOR-PROXY", "name": "Professor Proxy", "url": "https://unrlvl-context.vercel.app/api/professor", "status": "LIVE ✅ 2026-05-20", "note": "Proxy Vercel → Supabase EFs · PROFESSOR_SECRET configurado"},
     {"id": "INFRA-SHOPIFY-MCP", "name": "Shopify MCP", "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp", "vercel_id": "prj_jEiyzkET1fSk5IgHxkaSNVnTLCoB", "status": "ACTIVE", "created": "2026-05-05"},
     {"id": "INFRA-TOOLS", "name": "UNRLVL Tools", "url": "https://unrlvl-tools.vercel.app", "vercel_id": "prj_orYcSynBX5LC3vuZvLY74Wy8zcRK", "status": "LIVE — ShopifyAuditor v3.5 + proxies", "last_deploy": "2026-05-08"},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "url": "https://unrealvillestudio.com", "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN", "status": "LIVE EN+ES"},
     {"id": "INFRA-BLUEPRINTS", "name": "BluePrints", "url": "https://unrlvl-blueprints.vercel.app", "vercel_id": "prj_AMv0fnyooAW74XcsRc8Od9foaFLy", "status": "LIVE"},
-    {"id": "INFRA-FORUMPHS-COM", "name": "forumphs.com", "url": "https://forumphs.com", "vercel_id": "prj_RNfwsWnU7pqQygSLZCSMEXf90JTV", "status": "LIVE — dominio custom activo"},
+    {"id": "INFRA-FORUMPHS-COM", "name": "forumphs.com", "url": "https://forumphs.com", "vercel_id": "prj_RNfwSGssi92lcssFl1MrUQ9pRicd", "status": "LIVE — dominio custom activo"},
     {"id": "INFRA-NSCF-KIOSKO", "name": "NSCF Kiosko", "url": "nscf-kiosko.vercel.app", "vercel_id": "prj_XaUhU9Kx82ZxXtwmbXJf8ebKO3VJ", "status": "LIVE", "created": "2026-05-13"},
-    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY · PROFESSOR_SECRET ✅ 2026-05-20", "note": "63 EFs · 76 tablas public · Professor operational"},
+    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY · PROFESSOR_SECRET ✅ 2026-05-20", "note": "63 EFs · 77 tablas public · Professor operational · brand_cache_snapshots ✅"},
     {"id": "INFRA-SB-FORUMPH", "name": "Supabase ForumPHs", "status": "EXISTE — pendiente migración"},
     {"id": "INFRA-SB-PERSONAL", "name": "Supabase XMMs (personal Sam)", "id_supabase": "puoybldykxqvhvtnwrld", "status": "PERSONAL — pendiente limpieza"},
-    {"id": "INFRA-AYRA", "name": "AYRA (repo + Vercel + schema)", "status": "PLANNED · Sprint 0"},
+    {"id": "INFRA-AYRA", "name": "AYRA (repo + Vercel + schema)", "status": "PLANNED · Sprint 0 — DEADLINE 5 JUN 🔴"},
     {"id": "INFRA-VERCEL-KV", "name": "Vercel KV (Redis)", "status": "PLANNED · Sprint 0 Ayra"},
     {"id": "INFRA-AGENT-TEMPLATE", "name": "unrlvl-agent-template repo", "status": "PLANNED · Sprint 0 Agent"}
   ],
@@ -324,24 +345,27 @@
     "status": "LIVE ✅",
     "total_skills": 15,
     "index_url": "https://unrlvl-context.vercel.app/skills/INDEX.md",
+    "skills_live": ["ads-mcp","agent-browser","agent-builder","content-pipeline","copylab-reference","cost-layer","ecosystem-auditor","github-auditor","higgsfield","image-processing","security","shopify-auditor","shopify-mcp","ui-ux-layer","vercel"],
     "pending_commits": []
   },
   "protocols": {
-    "session_protocol": {"version": "v13", "date": "2026-05-17", "path": "protocols/SESSION_PROTOCOL.md"},
+    "session_protocol": {"version": "v14", "date": "2026-05-20", "path": "protocols/SESSION_PROTOCOL.md"},
+    "hrd_protocol": {"version": "v1.2", "date": "2026-05-20", "path": "protocols/HRD_PROTOCOL.md"},
     "ayra_master_plan": {"version": "v3.3", "date": "2026-05-13", "path": "protocols/AYRA_MASTER_PLAN.md"},
     "implementation_plan_matrix_professor": {"version": "v1.1", "date": "2026-05-17", "path": "protocols/IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md"}
   },
   "next_session_agenda": [
-    "PRIORIDAD 1 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
-    "PRIORIDAD 2 — NSCF: GTM + GA4 verificación (GTM Preview + GA4 DebugView)",
-    "PRIORIDAD 3 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
-    "PRIORIDAD 4 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
-    "PRIORIDAD 5 — Ayra Sprint 0: deadline 5 Jun 🔴",
-    "PRIORIDAD 6 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
-    "PRIORIDAD 7 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
-    "PRIORIDAD 8 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
-    "PRIORIDAD 9 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
-    "PRIORIDAD 10 — XMMs: eliminar proyecto muerto + evaluar migración DDMV",
-    "PRIORIDAD 11 — Professor: revisar 8 learnings pendientes (approved_by_sam=false)"
+    "PRIORIDAD 1 — brand-cache.js v2.0: commit en unrlvl-context + deploy + llamar build_all para poblar brand_cache_snapshots 🔴",
+    "PRIORIDAD 2 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
+    "PRIORIDAD 3 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
+    "PRIORIDAD 4 — NSCF: GTM + GA4 verificación (GTM Preview + GA4 DebugView)",
+    "PRIORIDAD 5 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
+    "PRIORIDAD 6 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
+    "PRIORIDAD 7 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
+    "PRIORIDAD 8 — Professor: revisar 8 learnings pendientes (approved_by_sam=false)",
+    "PRIORIDAD 9 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
+    "PRIORIDAD 10 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
+    "PRIORIDAD 11 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
+    "PRIORIDAD 12 — XMMs: eliminar proyecto muerto + evaluar migración DDMV"
   ]
 }
