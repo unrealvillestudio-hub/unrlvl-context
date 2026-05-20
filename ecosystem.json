@@ -1,19 +1,20 @@
 {
   "_meta": {
-    "version": "2026-05-18-v10",
+    "version": "2026-05-19-v11",
     "maintained_by": "Claude — do not edit manually",
+    "previous": "2026-05-18-v10",
     "last_audit": {
-      "date": "2026-05-18",
-      "status": "Creative Engine + email_sequence R4B · Orchestrator v2.2 · CopyLab v9.0 · content_sequences + creative tables en Supabase · Skills v2.5",
+      "date": "2026-05-19",
+      "status": "Voice Genome System + product_description_b2c R4B · SKILL v2.6 · brand_voice_genome tabla creada · po_consumer v0.6 activo",
       "conducted_by": "Claude Sonnet 4.6",
       "key_findings": [
-        "CopyLab v9.0: Creative Engine layers 14/15/16 — 44 vectores + 10 tensiones + 5 AGGRO · email_sequence packs · motor Claude",
-        "Orchestrator v2.2: email_sequence objective + klaviyo lab + sequenceBridge + types.ts actualizado",
-        "Supabase: content_sequences + content_sequence_pieces + creative_vectors + tension_architectures + aggro_presets + creative_compatibility_rules + klaviyo en lab_configs + prompt_Email_Sequence",
-        "NeuroneSCF brand_personas: 7 segmentos por dolor sin calificador étnico · voz PO actualizada 35yr · Vizos Cosmetics",
-        "Skills: content-pipeline v2.5 + copylab-reference v1.1 — pendiente commit a unrlvl-context",
-        "Flujo Claude→Orchestrator→CopyLab→Klaviyo: R4B · 10 templates NSCF pendientes de deploy vía flujo",
-        "Professor: 20 learnings registrados · 2 aprobados por Sam → knowledge/ generada"
+        "brand_voice_genome: nueva tabla · po_consumer v0.6 activo · L1.5 VOICE_GENOME_INJECTION documentado en skill v2.6",
+        "product_description_b2c: creative_compatibility_rules + output_templates prompt_Product_Description_B2C v1.2 activos",
+        "content-pipeline SKILL v2.6: L1.5 + regla d7h + OUTPUT_SEPARATION + AUTO-CHECK 24 puntos · pendiente commit",
+        "Restore Therapy Plus v4 generado con motor completo (E3+T6+AGGRO_2+po_consumer_v0.6) · pendiente aplicar Shopify",
+        "Auditoría pixels NSCF: TikTok duplicado detectado · GTM+GA4 instalados (verificación pendiente)",
+        "Bug shopify-auto-translate: resuelto 2026-05-15 (descubierto en auditoría 2026-05-19)",
+        "Professor: 8 learnings nuevos insertados (approved_by_sam=false)"
       ]
     }
   },
@@ -70,16 +71,17 @@
           },
           "last_audit_score": 137,
           "last_audit_date": "2026-05-06",
+          "active_products_b2c": 41,
           "tracking": {
             "meta_pixel": "✅ LIVE — Pixel ID: 1348252664025025 · todos los eventos activos",
-            "ga4": "❌ PENDIENTE — Sam tiene Measurement ID, instalar en theme.liquid",
-            "tiktok": "❌ PENDIENTE",
+            "ga4": "✅ INSTALADO VIA GTM — verificación pendiente (GTM Preview / GA4 DebugView)",
+            "tiktok": "⚠️ INSTALADO CON DUPLICADO — D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 · RESOLVER ANTES DE ADS",
             "klaviyo": "✅ LIVE — Public Key: UNF8Ee · 10 templates ES+EN · flows PENDIENTE config manual UI"
           },
           "checkout_cro": "⏳ Bundle instalada sin configurar",
           "unrlvl_signature": "✅ snippets/unrlvl-signature.liquid B2C+B2B",
-          "completed": "OAuth ✅ · Audit v16.1 · Compliance ✅ · SP Pool ✅ · Kits 12/12 ✅ · CRO Layer ✅ · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 42/42 desc ES ✅ · Language switcher ✅ · Contact ✅ · Signature ✅ · Blog LIVE ✅ · 4 arts ES+EN ✅ · Meta Pixel ✅ · Klaviyo ✅ · Judge.me ✅ · Domain verified ✅",
-          "gaps": "NEXT: GA4 → Klaviyo flows UI → 10 templates deploy vía Orchestrator → CRO Checkout → Audit → Ads"
+          "completed": "OAuth ✅ · Audit v16.1 · Compliance ✅ · SP Pool ✅ · Kits 12/12 ✅ · CRO Layer ✅ · About ES+EN ✅ · Policies 4/4 ✅ · Payments ✅ · 41/41 desc ES ✅ · 41/41 EN body ✅ · Language switcher ✅ · Contact ✅ · Signature ✅ · Blog LIVE ✅ · 4 arts ES+EN ✅ · Meta Pixel ✅ · Klaviyo ✅ · Judge.me ✅ · Domain verified ✅ · Instagram-FB linked ✅ · GTM+GA4 installed ✅",
+          "gaps": "NEXT: TikTok pixel fix → GTM+GA4 verify → Klaviyo flows UI → 10 templates deploy vía Orchestrator → CRO Checkout → Ads"
         }
       },
       "klaviyo": {
@@ -110,7 +112,13 @@
           "fine-fragile": "b2c_fine_fragile",
           "scalp-health": "b2c_scalp_health"
         }
-      }
+      },
+      "voice_genome": {
+        "table": "brand_voice_genome",
+        "active": {"voice_id": "po_consumer", "version": "0.6", "maturity": "v0.6"},
+        "pending": ["po_b2b"]
+      },
+      "content_types_active": ["email_sequence", "product_description_b2c"]
     },
     {"id": "DiamondDetails", "name": "Diamond Details", "type": "brand", "market": "Alicante, España", "status": "active"},
     {"id": "VizosCosmetics", "name": "Vizos Cosmetics", "type": "brand", "market": "Miami + España", "status": "active"},
@@ -122,8 +130,8 @@
   ],
   "labs": {
     "_note": "Todos los labs tienen live:false en Vercel — corren en subdominios vercel.app sin dominio custom",
-    "orchestrator": {"url": "orchestrator-unrlvl.vercel.app", "repo": "Orchestrator", "framework": "vite", "ai": "claude", "status": "live", "version": "v2.2", "last_deploy": "2026-05-18", "vercel_id": "prj_93AJfDiY1pcktG7b7fDStBqONYWy", "changes_2026_05_18": "email_sequence objective + klaviyo lab + sequenceBridge + types.ts"},
-    "copylab": {"url": "unrlvl-copy-lab.vercel.app", "repo": "CopyLab", "framework": "vite", "ai": "claude+gemini", "status": "live", "version": "v9.0", "last_deploy": "2026-05-18", "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe", "changes_2026_05_18": "Creative Engine layers 14/15/16 + email_sequence packs + motor Claude para sequences"},
+    "orchestrator": {"url": "orchestrator-unrlvl.vercel.app", "repo": "Orchestrator", "framework": "vite", "ai": "claude", "status": "live", "version": "v2.2", "last_deploy": "2026-05-18", "vercel_id": "prj_93AJfDiY1pcktG7b7fDStBqONYWy"},
+    "copylab": {"url": "unrlvl-copy-lab.vercel.app", "repo": "CopyLab", "framework": "vite", "ai": "claude+gemini", "status": "live", "version": "v9.0", "last_deploy": "2026-05-18", "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe", "pending": "Integrar product_description_b2c como objective en execute.ts"},
     "imagelab": {"url": "image-lab-unrlvl.vercel.app", "repo": "ImageLab", "framework": "vite", "ai": "gemini", "status": "bug", "blockers": ["gemini_timeout_50s — Vercel 50s limit"], "last_deploy": "2026-04-26", "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb"},
     "sociallab": {"url": "social-lab-flame.vercel.app", "repo": "SocialLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-26", "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT"},
     "weblab": {"url": "web-lab-unrlvl.vercel.app", "repo": "WebLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-04", "vercel_id": "prj_MzQeqiHG9fxCXYf3j84YCgdf5GZS"},
@@ -142,9 +150,10 @@
       "status": "ACTIVE_HEALTHY",
       "schemas": {
         "public": {
-          "tables": 75,
-          "key_tables": ["brands","agents","lab_configs","compliance_rules","humanize_profiles","brand_personas","brand_copy_profiles","output_templates","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules","content_sequences","content_sequence_pieces","ops_costs","ops_renewals","pipeline_skills","product_blueprints","professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache"],
-          "new_tables_2026_05_18": ["content_sequences","content_sequence_pieces","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules"]
+          "tables": 76,
+          "key_tables": ["brands","agents","lab_configs","compliance_rules","humanize_profiles","brand_personas","brand_copy_profiles","output_templates","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules","content_sequences","content_sequence_pieces","brand_voice_genome","ops_costs","ops_renewals","pipeline_skills","product_blueprints","professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache"],
+          "new_tables_2026_05_18": ["content_sequences","content_sequence_pieces","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules"],
+          "new_tables_2026_05_19": ["brand_voice_genome"]
         },
         "content": {"tables": 6, "key_tables": ["orchestrator_jobs","brand_voices","content_pieces"], "active_jobs": 40},
         "crm": {"tables": 13, "key_tables": ["contacts","deals","pipelines","orgs","segments"]},
@@ -164,7 +173,7 @@
           "other": {"count": 5, "critical": ["unrlvl-profiler","unrlvl-crm-api","social-proof-reader","sp-fix-targeted","shopify-translate-batch"]}
         },
         "known_bugs": {
-          "shopify-auto-translate": {"status": "BUG", "open_since": "2026-05-06", "blocks": ["EN_descriptions_x42","EN_La_Ciencia_page"]}
+          "shopify-auto-translate": {"status": "RESOLVED", "resolved": "2026-05-15", "discovered_resolved": "2026-05-19", "remaining_debt": "~11 productos con traducción EN parcial (title/meta)"}
         }
       }
     },
@@ -208,14 +217,16 @@
       "structure": ["_templates/","ecosystem/decision-matrix/","ecosystem/professor/","ecosystem/labs/","platforms/klaviyo/","platforms/judge-me/","platforms/agent-browser/","platforms/shopify/","clients/NeuroneSCF/"],
       "manuals_count": 7,
       "errors_known_count": 10,
-      "new_2026_05_18": ["knowledge/ecosystem/labs/COPYLAB_NOTES.md","knowledge/ecosystem/decision-matrix/CHANGELOG.md"]
+      "new_2026_05_18": ["knowledge/ecosystem/labs/COPYLAB_NOTES.md","knowledge/ecosystem/decision-matrix/CHANGELOG.md"],
+      "pending_2026_05_19": ["knowledge/ecosystem/labs/COPYLAB_NOTES.md — update con voice_genome system"]
     },
     "seed_data": {
       "criteria": 16,
       "veto_rules": 4,
       "decision_cases": 2,
       "platform_variables": 9,
-      "learnings_total": 20
+      "learnings_total": 28,
+      "learnings_pending_approval": 8
     },
     "pending": {
       "professor_secret": "⏳ Sam configura en Supabase Dashboard → Settings → Edge Functions → Secrets",
@@ -235,7 +246,7 @@
       "channel_adapters": ["twilio-whatsapp","twilio-sms","web-widget"]
     },
     "existing": [
-      {"id": "social-media-agent", "name": "Social Media Agent", "class": "frontend", "type": "social_ops", "status": "OPERATIONAL", "channel": "internal", "brain": "claude-api", "deploy": "vercel", "url": "unrlvl-social-media-agent.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-social-media-agent", "vercel_id": "prj_woslSsgsi92lcssFl1MrUQ9pRicd", "brands": ["*"], "session_log": "agents/social-media-agent/session_log.md", "sma_etag_last": "W/\"ab5b-8rkoqmKXFHEov+ieOkmB0/CicUU\""},
+      {"id": "social-media-agent", "name": "Social Media Agent", "class": "frontend", "type": "social_ops", "status": "OPERATIONAL", "channel": "internal", "brain": "claude-api", "deploy": "vercel", "url": "unrlvl-social-media-agent.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-social-media-agent", "vercel_id": "prj_woslSsgsi92lcssFl1MrUQ9pRicd", "brands": ["*"], "session_log": "agents/social-media-agent/session_log.md", "sma_etag_last": "W/\"ab5b-hkrbK3pa3XP7FZPxY4Q/qZ2U928\""},
       {"id": "ddmv-assistant", "name": "DDMV Assistant", "class": "frontend", "type": "faq_appointments", "status": "OPERATIONAL · FIX NEEDED", "channel": "whatsapp_twilio", "brain": "claude-api", "deploy": "vercel", "url": "ddmv-assistant.vercel.app", "repo": "unrealvillestudio-hub/DDMV-Assistant", "vercel_id": "prj_9pOxl79ZX6yQ6BLFXJHCI7xAQN1C", "brands": ["personal"], "issues": ["memoria no persiste entre sesiones","tono inconsistente"], "fix_sprint": "Sprint 1 Agent"},
       {"id": "forumph-speaks", "name": "ForumPH Speaks", "class": "frontend", "type": "knowledge_legal", "status": "OPERATIONAL", "channel": "web", "brain": "claude-api", "deploy": "vercel", "url": "forumphs-speaks.vercel.app", "vercel_id": "prj_fhBNQ6b9rd1Jhbe4BqNQP4frYpqn", "brands": ["ForumPHs"]},
       {"id": "forumph-document-factory", "name": "ForumPH Document Factory", "class": "frontend", "type": "document_generation", "status": "OPERATIONAL", "channel": "web", "brain": "claude-api", "deploy": "vercel", "url": "forumphs-document-factory.vercel.app", "vercel_id": "prj_AUHgIP7cuc95dLz7vbj2P4piinlz", "brands": ["ForumPHs"]}
@@ -274,10 +285,18 @@
     "last_deploy": "2026-04-22"
   },
   "content_pipeline": {
-    "version": "2.5",
+    "version": "2.6",
+    "previous_version": "2.5",
     "skill_url": "https://unrlvl-context.vercel.app/skills/content-pipeline/SKILL.md",
-    "layers": ["L0 AUDIENCE_BRIEF + SEQUENCE_CHECK","L1 WRITE","L2 H+AIFE","L3 HUMANIZE_EMOTIONAL","L4 PSYCHO","L5 CRO + SEQUENCE_RULE","L6 SEO","L7 QA"],
-    "new_layers_2026_05_18": ["L14 CREATIVE_VECTOR","L15 TENSION_ARCHITECTURE","L16 AGGRO_DIAL"],
+    "layers": ["L0 AUDIENCE_BRIEF + SEQUENCE_CHECK + VOICE_CHECK","L1 WRITE","L1.5 VOICE_GENOME_INJECTION","L2 H+AIFE","L3 HUMANIZE_EMOTIONAL","L4 PSYCHO","L5 CRO + SEQUENCE_RULE + OUTPUT_SEPARATION","L6 SEO","L7 QA"],
+    "creative_engine_layers": ["L14 CREATIVE_VECTOR","L15 TENSION_ARCHITECTURE","L16 AGGRO_DIAL"],
+    "auto_check_points": 24,
+    "new_2026_05_19": ["L1.5 VOICE_GENOME_INJECTION","brand_voice_genome system","content_type product_description_b2c","regla d7h","OUTPUT_SEPARATION","AUTO-CHECK puntos 17-24"],
+    "content_types_active": ["email_sequence","product_description_b2c"],
+    "voice_genome_system": {
+      "table": "brand_voice_genome",
+      "active_genomes": [{"brand": "NeuroneSCF", "voice_id": "po_consumer", "version": "0.6"}]
+    },
     "iid_pipeline": {
       "schema": "intel (amlvyycfepwhiindxgzw)",
       "queue_items": 117,
@@ -294,7 +313,7 @@
     {"id": "INFRA-BLUEPRINTS", "name": "BluePrints", "url": "https://unrlvl-blueprints.vercel.app", "vercel_id": "prj_AMv0fnyooAW74XcsRc8Od9foaFLy", "status": "LIVE"},
     {"id": "INFRA-FORUMPHS-COM", "name": "forumphs.com", "url": "https://forumphs.com", "vercel_id": "prj_RNfwsWnU7pqQygSLZCSMEXf90JTV", "status": "LIVE — dominio custom activo"},
     {"id": "INFRA-NSCF-KIOSKO", "name": "NSCF Kiosko", "url": "nscf-kiosko.vercel.app", "vercel_id": "prj_XaUhU9Kx82ZxXtwmbXJf8ebKO3VJ", "status": "LIVE", "created": "2026-05-13"},
-    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY", "note": "63 EFs · 75 tablas public · nuevas tablas 2026-05-18 (content_sequences, creative_vectors, etc.)"},
+    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY", "note": "63 EFs · 76 tablas public · nuevas tablas 2026-05-18+19 (content_sequences, creative_vectors, brand_voice_genome, etc.)"},
     {"id": "INFRA-SB-FORUMPH", "name": "Supabase ForumPHs", "status": "EXISTE — pendiente migración"},
     {"id": "INFRA-SB-PERSONAL", "name": "Supabase XMMs (personal Sam)", "id_supabase": "puoybldykxqvhvtnwrld", "status": "PERSONAL — pendiente limpieza"},
     {"id": "INFRA-AYRA", "name": "AYRA (repo + Vercel + schema)", "status": "PLANNED · Sprint 0"},
@@ -302,11 +321,12 @@
     {"id": "INFRA-AGENT-TEMPLATE", "name": "unrlvl-agent-template repo", "status": "PLANNED · Sprint 0 Agent"}
   ],
   "skills_system": {
-    "version": "2.5",
-    "status": "OPERATIVO ✅",
+    "version": "2.6",
+    "previous_version": "2.5",
+    "status": "PENDIENTE COMMIT ⏳",
     "total_skills": 15,
     "index_url": "https://unrlvl-context.vercel.app/skills/INDEX.md",
-    "pending_commit_2026_05_18": ["skills/content-pipeline/SKILL.md v2.5", "skills/copylab-reference/SKILL.md v1.1"]
+    "pending_commits": ["skills/content-pipeline/SKILL.md v2.6"]
   },
   "protocols": {
     "session_protocol": {"version": "v13", "date": "2026-05-17", "path": "protocols/SESSION_PROTOCOL.md"},
@@ -315,14 +335,16 @@
   },
   "next_session_agenda": [
     "PRIORIDAD 0 — NSCF: PROFESSOR_SECRET configurar en Supabase Dashboard (2 min) 🔴",
-    "PRIORIDAD 1 — NSCF: GA4 Measurement ID instalar en theme.liquid (5 min) 🔴",
-    "PRIORIDAD 2 — COMMIT: skills/content-pipeline/SKILL.md v2.5 + skills/copylab-reference/SKILL.md v1.1 + knowledge/ nuevos archivos → GitHub Desktop unrlvl-context",
-    "PRIORIDAD 3 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
-    "PRIORIDAD 4 — Ayra Sprint 0: deadline 5 Jun 🔴",
-    "PRIORIDAD 5 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
-    "PRIORIDAD 6 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
-    "PRIORIDAD 7 — NSCF: Decisión KT-104 DY Fazza 200ml vs 400ml",
-    "PRIORIDAD 8 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
-    "PRIORIDAD 9 — XMMs: eliminar proyecto muerto + evaluar migración DDMV"
+    "PRIORIDAD 1 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
+    "PRIORIDAD 2 — NSCF: GTM + GA4 verificación (GTM Preview + GA4 DebugView)",
+    "PRIORIDAD 3 — COMMIT: SKILL v2.6 + brand.json v11 + AGENDA v6 + ecosystem.json v11 + session_log.md → GitHub Desktop unrlvl-context",
+    "PRIORIDAD 4 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
+    "PRIORIDAD 5 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
+    "PRIORIDAD 6 — Ayra Sprint 0: deadline 5 Jun 🔴",
+    "PRIORIDAD 7 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
+    "PRIORIDAD 8 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
+    "PRIORIDAD 9 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
+    "PRIORIDAD 10 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
+    "PRIORIDAD 11 — XMMs: eliminar proyecto muerto + evaluar migración DDMV"
   ]
 }

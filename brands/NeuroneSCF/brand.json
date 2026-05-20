@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-05-10-v2", "maintained_by": "Claude" },
+  "_meta": { "version": "2026-05-19-v11", "maintained_by": "Claude", "previous": "2026-05-10-v2" },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -21,9 +21,7 @@
       },
       "oauth_scopes": "read_apps + read_locales + write_translations + write_legal_policies (reinstalado 2026-05-09)"
     },
-    "b2b": {
-      "internal_domain": "nj5ybc-n1.myshopify.com"
-    },
+    "b2b": { "internal_domain": "nj5ybc-n1.myshopify.com" },
     "note": "Conector MCP en INFRA-SHOPIFY-MCP (studio). brand_id='NeuroneSCF' para ambas tiendas."
   },
   "addresses": {
@@ -36,8 +34,8 @@
     "instagram_business": "✅ @neuronescflorida — cuenta profesional/empresa",
     "tiktok_for_business": "✅ @neuronescflorida",
     "whatsapp_business_api": "⏳ en progreso — Patricia en Step 1 Meta BM",
-    "instagram_fb_link": "❌ pendiente",
-    "domain_verification_meta": "❌ pendiente — Sam puede hacerlo vía Cloudflare",
+    "instagram_fb_link": "✅ vinculadas 2026-05-17",
+    "domain_verification_meta": "✅ verificado 2026-05-17 vía Cloudflare TXT",
     "logos_assets": "❌ pendiente — solicitar a Neurone Cosmética"
   },
   "pricing_calculator": {
@@ -54,6 +52,7 @@
   },
   "kit_architecture": {
     "total_kits": 12,
+    "active_products_b2c": 41,
     "strategy_doc": "neurone_kits_strategy_v4.html",
     "pricing_decision": "Todos los kits 1-3.3 a precio ÓPTIMO. Kit SOS a precio DESEADO — uso controlado Mes 3+.",
     "kits_base": [
@@ -73,17 +72,100 @@
       {"sku":"NSCF-KT-103VT", "price_po":94.99,  "margin_real":0.490}
     ]
   },
+  "tracking": {
+    "meta_pixel": {
+      "status": "✅ LIVE",
+      "id": "1348252664025025",
+      "events": ["PageView", "ViewContent", "AddToCart", "InitiateCheckout"]
+    },
+    "klaviyo": {
+      "status": "✅ LIVE",
+      "public_key": "UNF8Ee",
+      "templates_count": 10,
+      "flows_pending": ["abandoned_cart", "post_purchase", "review_request", "welcome"]
+    },
+    "gtm": {
+      "status": "✅ INSTALADO",
+      "container_id": "GTM-N2L4CMZH",
+      "verification_pending": "GTM Preview Mode + GA4 DebugView"
+    },
+    "ga4": {
+      "status": "✅ INSTALADO VIA GTM",
+      "verification_pending": true
+    },
+    "tiktok": {
+      "status": "⚠️ INSTALADO CON DUPLICADO",
+      "pixel_id_1": "D866BMBC77UBK82UUH50",
+      "pixel_id_2": "D832THJC77UATASL0OO0",
+      "action_needed": "Identificar cuál es el correcto en TikTok Ads Manager y eliminar el duplicado — BLOQUEA ATRIBUCIÓN LIMPIA PARA ADS"
+    }
+  },
+  "catalog_b2c": {
+    "active_products": 41,
+    "descriptions_es": "41/41 ✅",
+    "translations_en": {
+      "body_html": "41/41 ✅",
+      "title_meta": "~27/41 ⚠️ parcial",
+      "note": "Bug shopify-auto-translate resuelto 2026-05-15. ~11 productos con traducción EN parcial (solo body, falta title/meta). No bloqueante."
+    }
+  },
+  "voice_system": {
+    "expert_voice_person": "Patricia Osorio",
+    "credentials": "Técnica en química capilar 35+ años · Fundadora Vizos Cosmetics - The Healing Systems · Diseñadora Neurone Rituals & Kits · 3 continentes · Propietaria Vizos Salón South Florida",
+    "voice_genome": {
+      "table": "brand_voice_genome",
+      "voice_id": "po_consumer",
+      "active_version": "0.6",
+      "maturity": "v0.6",
+      "consumed_via": "L1.5 VOICE_GENOME_INJECTION (content-pipeline skill v2.6)",
+      "pending_milestone": "v1.0 mature — requiere 3-5 audios PO en contextos variados + 2-3 textos firmados + sesión validación"
+    },
+    "voice_genome_pending": {
+      "po_b2b": "Patricia hablando a estilistas/distribuidoras — pendiente captura"
+    }
+  },
+  "content_system": {
+    "skill_version": "v2.6",
+    "creative_engine_version": "v9.0",
+    "content_types_active": ["email_sequence", "product_description_b2c"],
+    "templates_active": [
+      {"id": "prompt_Email_Sequence", "version": "1.0"},
+      {"id": "prompt_Product_Description_B2C", "version": "1.2"}
+    ],
+    "restore_therapy_plus_v4": {
+      "status": "GENERADO — pendiente aplicar a Shopify",
+      "sku": "NSCF-KT-102P",
+      "seed": "E3_SALON_CONVERSATION + T6_SUSTAINED_LOW_PRESSURE + AGGRO_2_FIRM + po_consumer_v0.6"
+    }
+  },
+  "klaviyo_templates": {
+    "templates_es": ["Tm3JWE", "QVANPy", "UwszQw", "S6ZDHq", "TTrxdT"],
+    "templates_en": ["X57LJu", "Ws6J7R", "SedUug", "U2DMYK", "XBvyZH"],
+    "copy_status": "PENDIENTE deploy — flujo R4B listo · deploy cuando flows UI estén configurados"
+  },
+  "blog": {
+    "id": 126248255815,
+    "handle": "hair-intelligence-1",
+    "articles_count": 4,
+    "status": "LIVE ✅ ES+EN",
+    "pending": "Reescritura 4 artículos con L0+L3 HUMANIZE EMOTIONAL",
+    "articles": [
+      {"id": 613706334535, "pilar": "Color Intelligence", "handle_es": "color-capilar-se-va-rapido-miami", "handle_en": "why-hair-color-fades-faster-miami"},
+      {"id": 613706662215, "pilar": "Hair Science", "handle_es": "cabello-seco-acondicionador-reconstruccion", "handle_en": "conditioner-dry-hair-reconstruction"},
+      {"id": 613706694983, "pilar": "Miami Hair", "handle_es": "sal-cloro-sol-cabello-miami", "handle_en": "salt-chlorine-sun-miami-hair-protocol"},
+      {"id": 613706727751, "pilar": "Rituals", "handle_es": "rutina-capilar-sur-florida-protocolo", "handle_en": "hair-ritual-south-florida"}
+    ]
+  },
   "alerts": [
     {"level":"blocking", "msg":"Autorización marca Neurone US pendiente — bloquea lanzamiento"},
+    {"level":"critical",  "msg":"TikTok Pixel DUPLICADO en theme.liquid — resolver antes de cualquier ads"},
+    {"level":"warning",  "msg":"GTM + GA4: verificación pendiente en GTM Preview / GA4 DebugView"},
     {"level":"warning",  "msg":"WABA pendiente de completar — Patricia en Step 1"},
-    {"level":"warning",  "msg":"Vinculación Instagram → Facebook Page pendiente"},
-    {"level":"action",   "msg":"Sam: verificar dominio neuronescflorida.com en Meta vía Cloudflare TXT record"},
     {"level":"warning",  "msg":"Logos/Assets sin confirmar de Neurone Cosmética"},
     {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
-    {"level":"action",   "msg":"4 kit images punta listas para subir a Shopify (Humit Moisture · Kerasin HB · Total Violet · Hyaloneurine+Dyfensor)"},
-    {"level":"warning",  "msg":"DY Fazza: NLSDYLS-1-1.webp es Dyfensor SF — Sam sube imagen correcta (NSCF-TR-013 + NSCF-BTP-003)"},
-    {"level":"warning",  "msg":"shopify-auto-translate EF bug — 42 productos mostrando ES en locale EN"},
-    {"level":"warning",  "msg":"Tracking 0/10 — Meta + TikTok + Google pixels pendientes"},
+    {"level":"action",   "msg":"DY Fazza: decisión 200ml vs 400ml pendiente (KT-104)"},
+    {"level":"warning",  "msg":"~11 productos con traducción EN parcial (title/meta) — no bloqueante"},
+    {"level":"action",   "msg":"PROFESSOR_SECRET pendiente configurar en Supabase Dashboard → Settings → Edge Functions → Secrets"},
     {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
   ]
 }
