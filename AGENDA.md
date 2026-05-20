@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Versión: 2026-05-19-v6 | Actualizada por: Claude_
+_Versión: 2026-05-19-v7 | Actualizada por: Claude_
 
 ---
 
@@ -8,14 +8,16 @@ _Versión: 2026-05-19-v6 | Actualizada por: Claude_
 | # | Tarea | Estado | Notas |
 |---|-------|--------|-------|
 | 0 | **PROFESSOR_SECRET** — configurar en Supabase Dashboard | ⏳ PENDIENTE SAM | Settings → Edge Functions → Secrets · 2 min |
-| 1 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs distintos: D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 · Identificar cuál es correcto en TikTok Ads Manager y eliminar el otro |
-| 2 | **GTM + GA4 verificación** | ⏳ Sam verifica | GTM Preview Mode + GA4 DebugView · Sam instaló GTM+GA4 vía misma sesión |
+| 1 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs: D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 · Identificar cuál es correcto en TikTok Ads Manager y eliminar el otro |
+| 2 | **GTM + GA4 verificación** | ⏳ Sam verifica | GTM Preview Mode + GA4 DebugView |
 | 3 | **Klaviyo flows** — 4 flows bilingüe ES/EN en UI | ⏳ Config manual UI | API no permite actions · ver session_log |
-| 4 | **COMMIT** — SKILL v2.6 + brand.json v11 + AGENDA v6 + ecosystem.json v11 + session_log.md | ⏳ GitHub Desktop | Archivos listos en commit-pack-2026-05-19 |
+| 4 | **Slogan NSCF — definir el definitivo** | ⚠️ Pendiente Sam | Actualmente en página: "Cuidado Capilar profesional que miami" (incompleto, minúscula) — corregir en Shopify en cuanto esté definido |
+| 5 | **+20 años → corregir a +35 años** | ⚠️ Fix urgente | About page B2C ya tiene 35+ ✅ · localizar en Kiosk / B2B y corregir · dato canónico: 35+ años |
+| 6 | **Kiosk — eliminar texto visible "UNRLVL-AUDITOR"** | ⚠️ Fix urgente | UNRLVL-AUDITOR es herramienta inhouse, no debe aparecer en ningún canal de cara al cliente · ubicar con imagen 2026-05-19 · resolver mañana |
 
 ---
 
-## 🟠 NSCF — CONTENIDO KITS (nueva sección 2026-05-19)
+## 🟠 NSCF — CONTENIDO KITS
 
 | Tarea | Estado | Notas |
 |-------|--------|-------|
@@ -102,7 +104,6 @@ _Versión: 2026-05-19-v6 | Actualizada por: Claude_
 | XMMs: eliminar proyecto muerto + evaluar migración DDMV | ⚠️ |
 | ImageLab fix (Vercel 50s timeout) | ⚠️ |
 | shopify-auditor/SKILL.md actualizar a v3.5 | ⚠️ Dice v2.0 |
-| BP_Brand_Context.md NSCF — crear en unrlvl-context | ⏳ Listado en SESSION_PROTOCOL, no existe |
 | Update COPYLAB_NOTES.md con voice_genome system | ⏳ |
 | Compliance soft pendiente: D7Herbal, DiamondDetails, VivoseMask, VizosCosmetics, PatriciaOsorio | ⏳ |
 | Compliance setup completo: ForumPHs | 🔴 BLOCK |
@@ -119,9 +120,10 @@ _Versión: 2026-05-19-v6 | Actualizada por: Claude_
 
 ## ✅ COMPLETADO RECIENTEMENTE
 
+- **BP_Brand_Context.md NSCF** ✅ — 2026-05-19 · creado en unrlvl-context · incluye paleta dual B2C/B2B, tipografía, voice genome reference, personas, reglas de marca, datos operativos
 - **Voice Genome System** ✅ — 2026-05-19 · tabla brand_voice_genome · po_consumer v0.6 activo · L1.5 VOICE_GENOME_INJECTION en skill
 - **product_description_b2c preset** ✅ — 2026-05-19 · creative_compatibility_rules + output_templates v1.2
-- **content-pipeline SKILL v2.6** ✅ — 2026-05-19 · listo para commit
+- **content-pipeline SKILL v2.6** ✅ — 2026-05-19 · live en unrlvl-context
 - **Restore Therapy Plus v4** ✅ — 2026-05-19 · generado con motor completo · pendiente aplicar a Shopify
 - **Bug shopify-auto-translate** ✅ — resuelto 2026-05-15 (descubierto en auditoría 2026-05-19)
 - **GA4 + GTM instalados** ✅ — 2026-05-19 · verificación pendiente
