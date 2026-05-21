@@ -1,100 +1,68 @@
-# Session Log — ForumPHs
-_Última actualización: 2026-05-20_
+# ForumPHs · Session Log
+_Última actualización: 2026-05-21_
 
 ---
 
-## Estado actual — post sesión 2026-05-20
+## Sesión 2026-05-21 — Schema v3 + BI v2 + Document Factory + Professor Checkpoint 2
 
-### Supabase ForumPHs (tajuoqdbnsnzkhyqvdgs) — tablas activas
-buildings, units, owners, owner_units, residents, profiles,
-payments, arrears, communications, assemblies, assembly_agenda_items,
-assembly_votes, meters, pets, vehicles
+### Estado del sistema
+- **Supabase ForumPHs** (`tajuoqdbnsnzkhyqvdgs`): 36 tablas, schema v3 completo
+- **Document Factory** (`forumphs-document-factory.vercel.app`): Actas v1.5 + BI v2 LIVE
+- **brand_context_full.json**: v5
+- **EFs UNRLVL activos**: fphs-formalize, fphs-bi-report, fphs-bi-data, fphs-bi-status, fphs-bi-html, fphs-chat, fphs-session, brand-context-builder
 
-### Tablas PENDIENTES DE CREAR (próxima sesión)
-- `mora_mensual` — clasificación mensual por unidad (Fase I/II/III)
-- `informes` — informes BI mensuales generados por Document Factory
-- `activos` — equipos e infraestructura por edificio (Sprint 5)
-- `df_jobs` — cola de jobs del Document Factory (va en ForumPHs DB, NO en UNRLVL)
+### Cambios aplicados
 
-### Supabase UNRLVL (amlvyycfepwhiindxgzw) — cambios de esta sesión
-- EF fphs-session v25 activa (OTP + Resend + producción)
-- Secrets activos: FPHS_SERVICE_KEY + FPHS_RESEND_API_KEY
-- speaks_sessions: columnas OTP agregadas
-- speaks_golden_pass: 5 golden passes activos
+#### Supabase ForumPHs — Schema v3 (36 tablas)
+- `buildings`: tier, pricing_model, recargo_enabled, recargo_custom, mora_pct_current, facturacion_mes
+- `arrears` + `mora_mensual`: 4 fases (AL_DIA/FASE_I-IV), Klaviyo tracking, action_history
+- `bank_accounts`, `payment_receipts` (OCR metadata), `bank_reconciliations`
+- `eeff_preliminar`: ciclo borrador→enviado_jd→pendiente_cpa→oficial + CPA disclaimer
+- `klaviyo_flows_log`, `monthly_kpis`
+- OPS: `field_staff`, `staff_buildings`, `incident_categories` (16 seeded), `incidents`, `incident_updates`, `inspection_photos`, `checklist_templates`, `checklist_items`, `inspection_rounds`, `inspection_round_items`, `providers`, `provider_invoices`, `quality_metrics`
+- Funciones: `fphs_calc_mora_fase()`, `fphs_calc_recargo(tier, mora_pct, recargo_enabled, recargo_custom)`, `fphs_calc_fase_edificio()`
+- Trigger `set_incident_due()` — calcula due_at al insertar incidencia
 
----
+#### Modelo de negocio — decisiones cerradas
+- **Clientes actuales = LEGACY**: `pricing_model=legacy`, `recargo_enabled=false`, tarifas congeladas
+- **Recargo mora**: NO aplica a legacy (no estaba en contratos). Solo clientes nuevos `value_based` con `recargo_enabled=true` negociado por IF. `recargo_custom` para override por contrato.
+- **Tier en legacy**: asignado por unidades (tamaño del PH) exclusivamente para referencia, NO define precio
+- **4 fases mora**: FASE_I 1-2m / FASE_II 3-4m carta extrajudicial IF / FASE_III 5-6m JD decide judicial + 10% honorario éxito / FASE_IV 7m+ riesgo estructural planilla
 
-## SPRINT 1 — Foundation (12–23 Mayo)
+#### OPS Architecture — documentado
+- **OPS App campo** (mobile-first): checklists, fotos in-app SOLO, cierre rondas, captura recibos OCR, incidencias
+- **Propietario App** (portal.forumphs.com): tickets live, balance, actas — Sprint S3
+- **Quality Dashboard** (IF + Sam + Irja): SLA compliance, checklist compliance, mora, proveedores — Sprint S5
+- **WA Agent OPS** (Twilio): calificación incidencias → ticket → SLA automático — Sprint S4
+- SLA: URGENTE 2-4h · PRIORITARIO 24-48h · COMUN 3-5 días
 
-| Tarea | Estado | Notas |
-|---|---|---|
-| ForumPHs Speaks — auth OTP + Resend | ✅ Cerrado | v25 en prod, email funcional |
-| Speaks — tab Propietarios + Context Selector | ✅ Cerrado | index.html deployado |
-| Speaks — bienvenida personalizada propietario | ✅ Cerrado | Primera vez larga, siguientes corta |
-| DB — promotoras Los Alamos + Lefevre 75 | ✅ Cerrado | DESARROLLO LA MITRA + LEFEVRE 75 RESIDENCIAL S.A. |
-| DB — usuarios test Sam + Ivette | ✅ Cerrado | TEST-SAM, TEST-IVETTE en Lefevre 75 |
-| Compliance setup ForumPHs en ecosystem | ⏳ 30 min | brand.json, BP_Brand_Context, ecosystem.json |
-| **Document Factory — módulo BI + Informe Mensual** | ❌ **No iniciado** | **RIESGO: deadline Star & Herald 1 Jun** |
+#### Document Factory v2
+- `app/bi/page.tsx`: auto mode (monthly_kpis), 4 fases mora, SVG charts sin deps, eeff_preliminar workflow (4 estados), botón "⬇ Suite HTML"
+- `app/page.tsx`: reconstruido desde componentes del repo — props correctos (PreflightForm, QAReport, ICRReport, ICRResolution)
+- NavTabs: layout.tsx + NavTabs.tsx
+- Nuevas API routes: `app/api/bi/data/`, `app/api/bi/status/`, `app/api/bi/html/`
 
----
+#### EFs nuevos desplegados (UNRLVL)
+- `fphs-bi-data` v1: GET monthly_kpis + mora_detail + eeff_preliminar por building/period
+- `fphs-bi-status` v1: PATCH eeff_preliminar status workflow
+- `fphs-bi-html` v1: genera HTML 5 paneles self-contained (Amatista Carbon, Chart.js CDN, brand_id param)
 
-## SPRINT 2 (26 Mayo – 6 Junio)
-- Tracker V0 — captura ACHs + EF mora
-- Tracker V1 — foto de recibo + Claude Vision
-- Protocolo mora semi-automatizado (cron día 1)
+### Pendientes S2 (26 May - 6 Jun)
+- Tracker captura recibos: foto → Claude Vision OCR → `payment_receipts` → match → `payments` reconciliados
+- Cron mora día 1: `arrears` + `mora_mensual` con 4 fases calculadas
+- Klaviyo flows F-I disparados automáticamente desde trigger Supabase
+- `bank_transactions` tabla (detalle granular para reconciliación)
 
-## SPRINT 3 (9–20 Junio)
-- Supabase Auth — roles propietario/junta/admin_fphs
-- Portal propietarios — Next.js en portal.forumphs.com
-- Template email bienvenida propietarios
+### Pendientes acción IF
+- Aprobar propuesta Star & Herald → Mayra Paredes (deadline 30 Jun 2026)
+- Confirmar tier definitivo Luxor Towers 300 (143 uds, fee legacy $3,100)
+- Reservas laborales $1,014.89/mes — VENCIDO 1 Mayo 2026
+- Pasivo histórico ~$25k — VENCIDO 15 Abril 2026
 
-## SPRINT 4 (23 Jun – 4 Jul)
-- Klaviyo — conexión Supabase via webhook
-- Twilio WhatsApp Business — flows base
-- Biblioteca de Comunicaciones — 12 templates
-
-## SPRINT 5 (7–18 Jul)
-- Calendario de Mantenimientos + cron alertas
-- Runbook onboarding nuevos PHs
-
----
-
-## Document Factory — contexto para próxima sesión
-
-**App existente:** Document Factory v1.5 — deployada en Vercel
-**Key Anthropic:** `forumphs_document_factory` (env var con underscore)
-**Job types existentes:** acta_ordinaria, acta_extraordinaria
-**Job type a agregar:** `informe_mensual`
-
-**Módulo BI — inputs requeridos:**
-1. Datos de mora del mes (de `arrears` en Supabase)
-2. Datos de pagos del mes (de `payments`)
-3. Datos del edificio (de `buildings` + `units`)
-4. Contexto histórico (meses anteriores)
-
-**Tablas a crear ANTES de arrancar el módulo:**
-- `mora_mensual` (clasificación Fase I/II/III por unidad/mes)
-- `informes` (output del módulo BI, con insert post-generación)
-
-**Archivos de referencia en el proyecto:**
-- `/mnt/project/temp_ACTA_PHAS_GOAL_example_01.docx` — Asamblea Ordinaria
-- `/mnt/project/temp_ACTA_PHAS_GOAL_example_02.docx` — Asamblea Extraordinaria
-- Instrucciones completas de generación de actas en el system prompt del proyecto
-
-**Disclaimer CPA requerido en output del informe BI**
-
----
-
-## Secrets y credenciales activas
-
-| Secret | Proyecto | Valor |
-|---|---|---|
-| FPHS_SERVICE_KEY | amlvyycfepwhiindxgzw | service_role key de tajuoqdbnsnzkhyqvdgs |
-| FPHS_RESEND_API_KEY | amlvyycfepwhiindxgzw | re_VGuqYnRh... (sends desde speaks@forumphs.com) |
-
----
-
-## Professor — learnings 2026-05-20
-- 11 aprobados → archivos en knowledge/ (ver outputs/knowledge/)
-- 4 rechazados (fácil de recordar)
-- SKILL_GAPS.md: upgrade ui-ux-layer en AGENDA
+### Professor — Checkpoint 2 (6 learnings guardados)
+- Clientes legacy + recargo model
+- 4 fases mora completo
+- Schema v3 + EFs
+- Props de componentes Next.js: SIEMPRE leer fuente antes de usar
+- TypeScript: `as unknown as T` para tipos incompatibles
+- VS Code Restricted Mode + Next.js pages fuera de app/api/
