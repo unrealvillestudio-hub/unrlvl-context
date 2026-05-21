@@ -1,5 +1,5 @@
 # Session Log — UnrealvilleStudio + NeuroneSCF
-**Updated:** 2026-05-10
+**Updated:** 2026-05-21
 
 ---
 
@@ -16,6 +16,37 @@ Archivos de arquitectura e intención estratégica. No son skills — son docume
 | `LUCIEN_BOOKS_MASTER.md` | `brands/UnrealvilleStudio/` | Arquitectura completa de los 5 libros de Lucien Sael | Sesiones del proyecto editorial |
 
 **Cómo cargar:** `Vercel:web_fetch_vercel_url → https://unrlvl-context.vercel.app/api/gh?action=file&repo=unrlvl-context&path=brands/UnrealvilleStudio/docs/PLAN_MAESTRO_LABS_SKILLS.md`
+
+---
+
+## Session 2026-05-21 — CopyLab Async + unrlvl-supabase-mcp
+
+**Sprint activo NeuroneSCF:** implementar modo async en CopyLab para generar email sequences Cart A+B ES sin bloquear el browser. Sprint bloqueado por incompatibilidad estructural pg_net → Vercel (8h de diagnóstico). Solución definitiva: EF processor + pg_cron.
+
+**NUEVO — unrlvl-supabase-mcp v1.1 LIVE:**
+- URL: `https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp`
+- Repo: `unrealvillestudio-hub/unrlvl-supabase-mcp`
+- Vercel ID: `prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP`
+- Framework: @vercel/node puro (sin Next.js — CVE en 15.3.x)
+- Tools: execute_sql · apply_migration · deploy_edge_function · list_edge_functions · get_edge_function · get_logs · list_tables
+- Scope: proyecto Supabase `amlvyycfepwhiindxgzw`
+- ⚠️ PENDIENTE: `UNRLVL_SB_ACCESS_TOKEN` en Vercel debe ser PAT `sbp_...` (actualmente service_role JWT)
+- Receta documentada en professor_manuals
+
+**CopyLab v9.4.1:**
+- execute.ts: async mode — POST async:true → INSERT copylab_jobs → 202 inmediato
+- copylab_jobs tabla creada (status: queued/processing/done/error)
+- vercel.json: fluid:false + maxDuration:300
+- Fluid Compute desactivado en dashboard
+
+**Pendiente para cerrar sprint:**
+1. Cambiar UNRLVL_SB_ACCESS_TOKEN → PAT real (`sbp_...`) en Vercel → redeploy unrlvl-supabase-mcp
+2. Deploy copylab-processor EF (código completo en `brands/NeuroneSCF/session_log.md`)
+3. Setup pg_cron cada 1 minuto
+4. Generar Cart A + Cart B ES para NeuroneSCF
+
+**Professor — 14 learnings capturados hoy:**
+pg_net→Vercel incompatibilidad · arquitectura async correcta · anti-patrón patch accumulation · PAT vs service_role · Fluid Compute en APIs · receta MCP custom · Railway MCP server · CopyPromptBuilder agéntico · Agent Cache Builders · bandeja entrada/salida · Prompt Builder Agents · Relay Service · Two-Job Pattern · receta MCP manual
 
 ---
 

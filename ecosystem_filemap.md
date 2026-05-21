@@ -1,5 +1,5 @@
 # ECOSYSTEM FILEMAP — Unrealville Studio
-_Generado desde repo real unrlvl-context · 2026-05-20 · 83 archivos_
+_Generado desde repo real unrlvl-context · 2026-05-21 · 91 archivos_
 
 ---
 
@@ -28,7 +28,7 @@ unrlvl-context/
 │   │   ├── BP_Brand_Context.md
 │   │   ├── PO_VOICE_ARTICLES.md
 │   │   ├── SHOPIFY_ARCHITECTURE.md
-│   │   └── session_log.md
+│   │   └── session_log.md                               ← Sprint CopyLab async activo
 │   ├── PatriciaOsorioConectando/
 │   │   ├── BP_Brand_Context.md
 │   │   └── session_log.md
@@ -43,7 +43,7 @@ unrlvl-context/
 │   │   ├── PARTNERSHIP_STRUCTURE_SAM_PO.md
 │   │   ├── UNRLVL_AGENT_INFRASTRUCTURE_PLAN.md
 │   │   ├── partnership_po_presentation.html
-│   │   ├── session_log.md
+│   │   ├── session_log.md                               ← Context/ecosistema session log
 │   │   └── docs/
 │   │       ├── PLAN_MAESTRO_LABS_SKILLS.md
 │   │       └── UNRLVL_Labs_Strategy.html
@@ -72,11 +72,12 @@ unrlvl-context/
 │
 ├── protocols/
 │   ├── SESSION_PROTOCOL.md
+│   ├── HRD_PROTOCOL.md
 │   ├── IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md
 │   ├── AYRA_MASTER_PLAN.md
 │   ├── ECOSYSTEM_AUDIT.md
 │   ├── UNRLVL_Ecosystem_Vision.md
-│   └── session_log.md
+│   └── session_log.md                                   ← UNRLVL-OPS legacy (Mar 2026)
 │
 ├── skills/
 │   ├── INDEX.md
@@ -103,19 +104,27 @@ unrlvl-context/
 │   ├── ecosystem/
 │   │   ├── decision-matrix/
 │   │   │   ├── DECISION_MATRIX.md
+│   │   │   ├── QA_RULES.md
 │   │   │   └── CHANGELOG.md
 │   │   ├── professor/
 │   │   │   ├── PROFESSOR_PROTOCOL.md
-│   │   │   └── CHECKPOINT_RULES.md
+│   │   │   ├── CHECKPOINT_RULES.md
+│   │   │   ├── HRD_REMINDERS.md
+│   │   │   └── SKILL_GAPS.md
 │   │   └── labs/
 │   │       └── COPYLAB_NOTES.md
 │   ├── platforms/
 │   │   ├── agent-browser/MANUAL.md
-│   │   ├── claude/mcp/MANUAL.md            ← MCP multi-cuenta (proxy Vercel)
+│   │   ├── claude/mcp/MANUAL.md            ← MCP custom: receta Vercel sin Next.js
+│   │   ├── html-js/
+│   │   │   ├── ENCODING_PITFALLS.md
+│   │   │   └── MOBILE_CSS_PATTERNS.md
 │   │   ├── judge-me/MANUAL.md
 │   │   ├── klaviyo/MANUAL.md
 │   │   ├── shopify/MANUAL.md
-│   │   └── supabase/MANUAL.md              ← NUEVO 2026-05-20
+│   │   └── supabase/
+│   │       ├── MANUAL.md
+│   │       └── EDGE_FUNCTIONS_PATTERNS.md
 │   └── clients/
 │       └── NeuroneSCF/
 │           └── PLATFORM_NOTES.md
@@ -125,7 +134,8 @@ unrlvl-context/
     ├── brand-cache.js                      ← Brand Cache API
     ├── cf.js
     ├── job-runner.js
-    └── lab-invoke.js
+    ├── lab-invoke.js
+    └── professor.js                        ← Professor proxy ✅ LIVE 2026-05-20
 ```
 
 ---
@@ -147,36 +157,29 @@ unrlvl-context/
 | `ecosystem_filemap.md` | Este archivo | Claude · regenerar cuando cambia estructura |
 | `AGENDA.md` | Tareas activas priorizadas | Claude · comando Actualiza |
 
-### Archivos de agentes (`agents/[agente]/`)
-| Archivo | Contenido | Quién lo actualiza |
-|---|---|---|
-| `session_log.md` | Estado del agente + historial | Claude · comando Actualiza (via export) |
-
-### Archivos de knowledge (`knowledge/`)
-| Carpeta | Contenido |
+### Session logs por contexto
+| Ruta | Propósito |
 |---|---|
-| `_templates/` | Templates universales (MANUAL_TEMPLATE.md, CASE_TEMPLATE.md) |
-| `ecosystem/` | Sistemas internos UNRLVL (Decision Matrix, Professor, Labs) |
-| `platforms/` | Herramientas de terceros — un `MANUAL.md` por plataforma |
-| `clients/` | Variaciones específicas por marca (`PLATFORM_NOTES.md`) |
-| `core-business/` | ⚠️ No existe aún — se crea cuando haya patrones transversales |
+| `brands/UnrealvilleStudio/session_log.md` | **Context/ecosistema** — infra, herramientas, cambios transversales |
+| `brands/[Marca]/session_log.md` | Sprint activo de esa marca |
+| `agents/[agente]/session_log.md` | Estado del agente |
+| `protocols/session_log.md` | UNRLVL-OPS legacy |
 
 ---
 
-## NOTAS DE ESTA VERSIÓN (2026-05-20)
+## NOTAS DE ESTA VERSIÓN (2026-05-21)
 
-**Cambios vs filemap anterior (v8 · 2026-05-13):**
-- `knowledge/platforms/supabase/MANUAL.md` — NUEVO
-- `knowledge/platforms/claude/mcp/MANUAL.md` — existía, no estaba documentado
-- `brands/ForumPHs/` — añadidos `DOCUMENT_FACTORY_PLAN.md` y `FPHSOPS_SPEC.md`
-- `brands/Lucien/` — existía, no estaba en el filemap
-- `brands/PatriciaOsorioConectando/` — existía, no estaba en el filemap
-- `labs/OnboardingApp/session_log.md` — existía, no estaba en el filemap
-- `db/` — carpeta existía completa, no estaba en el filemap
-- `projects/` — existía, no estaba en el filemap
-- `api/` — `cf.js`, `job-runner.js`, `lab-invoke.js` no estaban documentados
-- `protocols/session_log.md` — existía, no estaba en el filemap
-- `knowledge/core-business/` — NO EXISTE en el repo (pendiente de crear)
+**Cambios vs filemap anterior (2026-05-20):**
+- `brands/UnrealvilleStudio/session_log.md` — nueva entrada 2026-05-21 (CopyLab async + MCP)
+- `brands/NeuroneSCF/session_log.md` — sprint CopyLab async activo
+- `knowledge/platforms/claude/mcp/MANUAL.md` — receta MCP custom Vercel documentada
+- Aclaración: `protocols/session_log.md` es UNRLVL-OPS legacy (Mar 2026), no el context log activo
+- knowledge/ecosystem/professor/ — añadidos HRD_REMINDERS.md y SKILL_GAPS.md
+- knowledge/platforms/supabase/ — EDGE_FUNCTIONS_PATTERNS.md añadido
+- knowledge/platforms/html-js/ — carpeta con dos archivos documentada
+
+**Infra nueva 2026-05-21:**
+- `unrlvl-supabase-mcp` (prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP) — MCP custom para amlvyycfepwhiindxgzw
 
 ---
 
@@ -186,21 +189,18 @@ Los outputs se generan con el nombre **EXACTO** del archivo en el repo, sin pref
 - ✅ `session_log.md` · `brand.json` · `ecosystem.json` · `SKILL.md` · `INDEX.md` · `MANUAL.md`
 - ❌ `NeuroneSCF_session_log.md` · `supabase_MANUAL.md`
 
-Si el nombre difiere del canónico, GitHub Desktop crea archivos nuevos en vez de reemplazar.
-
 ### Rutas de commit
 | Tipo | Ruta en repo |
 |---|---|
+| Context/ecosistema session log | `brands/UnrealvilleStudio/session_log.md` |
 | Archivos de marca | `brands/[Marca]/` |
 | Archivos de ecosistema | raíz del repo |
-| Archivos de agente | `agents/[agente]/` |
+| Agentes | `agents/[agente]/` |
 | Protocolos | `protocols/` |
 | Skills | `skills/[nombre]/SKILL.md` |
-| Index de skills | `skills/INDEX.md` |
 | Manuales de plataforma | `knowledge/platforms/[plataforma]/MANUAL.md` |
 | Notes de cliente | `knowledge/clients/[Cliente]/PLATFORM_NOTES.md` |
-| Knowledge ecosystem | `knowledge/ecosystem/[subcarpeta]/` |
 
 ---
 
-_ecosystem_filemap.md · generado desde repo real · 2026-05-20 · 83 archivos_
+_ecosystem_filemap.md · generado desde repo real · 2026-05-21 · 91 archivos_
