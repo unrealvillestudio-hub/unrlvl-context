@@ -66,3 +66,42 @@ _Última actualización: 2026-05-21_
 - Props de componentes Next.js: SIEMPRE leer fuente antes de usar
 - TypeScript: `as unknown as T` para tipos incompatibles
 - VS Code Restricted Mode + Next.js pages fuera de app/api/
+
+---
+
+## Sesión 2026-05-21 · Parte 2 — ui-ux-layer skill v3.0 + Arquitectura de módulos
+
+### ui-ux-layer skill v3.0 — entregado como ZIP
+
+Archivos: `ui-ux-layer.zip` → sustituye `unrlvl-context/skills/ui-ux-layer/`
+
+| Archivo | Líneas | Contenido |
+|---|---|---|
+| `SKILL.md` (CORE) | 580 | 16 secciones + tabla activación módulos |
+| `motion.md` | 455 | Easing curves · Microinteracciones · Gestures · Feedback asíncrono |
+| `3d-spatial.md` | 384 | CSS 3D · Glassmorphism · Three.js heroes |
+| `mobile-ux.md` | 446 | Thumb zone · Touch targets · Safe areas · OPS app patterns |
+| `design-tokens.md` | 457 | Primitive→semantic→component · Dark/light · React Native |
+| `a11y.md` | 419 | WCAG AA · Contraste · Screen readers · Reduced motion |
+
+### Decisiones de arquitectura del skill
+
+- Hub + módulos: CORE siempre carga, extensiones bajo demanda según tabla de activación
+- Markdown para instrucciones/código, JSON/Supabase para datos puros de tokens
+- Tokens.json separados NO necesarios hasta que haya React Native/app nativa
+
+### Nuevas secciones en el CORE
+
+- **Sección 9** — Comunicación publicitaria: 4 preguntas obligatorias antes de diseñar
+- **Sección 10** — Geometría y tensión: proporción áurea, simetría/asimetría, 5 técnicas
+- **Sección 11** — Protocolo anti-genérico: instinto fotográfico, proporciones 80/12/5/3
+- **Sección 13** — VISUAL_PSYCHO: 10 presets psicológicos del content-pipeline → diseño
+- **Sección 14** — VISUAL_TENSION T1-T10: arquitecturas de tensión visual
+- **Sección 15** — VISUAL_GENOME ForumPHs: 6 firmas ejecutables con reglas de MAX uso
+
+### Pendientes próxima sesión
+
+- Aplicar ui-ux-layer v3.0 al Document Factory (globals.css + BI upgrade + Actas)
+- Normalizer + FIE 7 paneles completo (arrancar con protocolo actualización)
+- Upgrade BI module: T3/T4+T9 tension architecture + PSY-TRUST/AUTHORITY
+- globals.css con Visual Genome ForumPHs completo
