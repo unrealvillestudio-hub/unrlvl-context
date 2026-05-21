@@ -1,20 +1,24 @@
 {
   "_meta": {
-    "version": "2026-05-20-v13",
+    "version": "2026-05-21-v14",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-20-v12",
+    "previous": "2026-05-20-v13",
     "last_audit": {
-      "date": "2026-05-20",
-      "status": "CopyLab v9.3 deployed ✅ · Professor proxy LIVE ✅ · brand_cache_snapshots creada ✅ · SESSION_PROTOCOL v14 ✅ · HRD_PROTOCOL.md ✅ · ecosystem-auditor skill ✅",
+      "date": "2026-05-21",
+      "status": "CopyLab async sprint ✅ · unrlvl-supabase-mcp v1.2.1 ✅ · brand_cache_snapshots v2.0 NeuroneSCF ✅ · CopyLab v9.5 ✅ · copylab-processor v1.4 ✅ · brand-cache-builder EF ✅ · 504 cold start 🔴 PENDING",
       "conducted_by": "Claude Sonnet 4.6",
       "key_findings": [
-        "CopyLab v9.3 deployed en verde: promptpack fix + queries #25 voice_genome + buildCopyPrompt v8.1 L1.5 + execute.ts auto-cache + CopyLabComponents + App.tsx DbStatusBadge + CopyPackModule PipelineLayerTracker",
-        "Professor proxy LIVE: api/professor.js deployado en unrlvl-context · get-context operacional · PROFESSOR_SECRET configurado",
-        "brand_cache_snapshots: tabla creada en Supabase · brand-cache.js v2.0 generado (pendiente commit unrlvl-context + deploy)",
-        "brand-cache.js v2.0: modelo proactivo Supabase-first · 22 tablas · TTL 4h · action=build_all · PENDIENTE COMMIT",
-        "SESSION_PROTOCOL v14 LIVE · HRD_PROTOCOL.md LIVE · skills/ecosystem-auditor/SKILL.md LIVE",
-        "Arquitectura cache clarificada: brand-cache = repositorio · lab-invoke = gateway interactivo · job-runner = queue automatizado",
-        "CopyLabComponents.tsx bug fix: @supabase/supabase-js no está en package.json → reemplazado por raw fetch sbGet<T>()"
+        "unrlvl-supabase-mcp v1.2.1: deploy_edge_function corregido — endpoint /functions/deploy?slug=, field 'file', TypeScript raw (no ZIP). Bug anterior enviaba JSON con files array.",
+        "PAT corregido en UNRLVL_SB_ACCESS_TOKEN (sbp_...) — era token incorrecto con caracteres especiales",
+        "copylab_jobs tabla operacional: GRANT + RLS policies aplicadas. Lección: ambas capas necesarias independientemente.",
+        "pg_cron job #30 activo — copylab-processor-1min disparando cada minuto",
+        "brand-cache-builder EF deployada: puebla brand_cache_snapshots con 18 tablas por marca",
+        "brand_cache_snapshots v2.0 NeuroneSCF: built 2026-05-21 17:05 UTC — 18 tablas",
+        "CopyLab v9.5 deployada: zero-query mode — detecta snapshot v2.0 y salta todas las queries de Supabase",
+        "copylab-processor v1.4: lee snapshot de brand_cache_snapshots (1 query) antes de llamar CopyLab",
+        "BLOQUEANTE: CopyLab Vercel 504 cold start en llamadas server-to-server — próxima sesión P1",
+        "Arquitectura clarificada: CopyLab NO puede estar fuera del loop — ICR + pipeline L0-L7 son el diferenciador",
+        "6 learnings registrados en professor_learnings (approved_by_sam=false — pendiente review)"
       ]
     }
   },
@@ -118,7 +122,14 @@
         "active": {"voice_id": "po_consumer", "version": "0.6", "maturity": "v0.6"},
         "pending": ["po_b2b"]
       },
-      "content_types_active": ["email_sequence", "product_description_b2c"]
+      "content_types_active": ["email_sequence", "product_description_b2c"],
+      "brand_cache_snapshot": {
+        "status": "✅ LIVE v2.0",
+        "built_at": "2026-05-21 17:05:28 UTC",
+        "tables": 18,
+        "stale_after": "2026-05-21 21:05:28 UTC",
+        "note": "Rebuild: POST brand-cache-builder EF con action=build&brand_id=NeuroneSCF"
+      }
     },
     {"id": "DiamondDetails", "name": "Diamond Details", "type": "brand", "market": "Alicante, España", "status": "active"},
     {"id": "VizosCosmetics", "name": "Vizos Cosmetics", "type": "brand", "market": "Miami + España", "status": "active"},
@@ -137,25 +148,36 @@
       "framework": "vite",
       "ai": "claude+gemini",
       "status": "live",
-      "version": "v9.3",
-      "last_deploy": "2026-05-20",
+      "version": "v9.5",
+      "last_deploy": "2026-05-21",
       "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
-      "changes_2026_05_20": [
-        "promptpack.ts: fix PROMPT_TYPE_MAP Email_Sequence",
-        "queries.ts: query #25 brand_voice_genome (L1.5)",
-        "buildCopyPrompt.ts v8.1: L1.5 VOICE_GENOME_INJECTION layer",
-        "execute.ts v9.3: auto-cache brand-cache + layers_applied",
-        "CopyLabComponents.tsx: DbStatusBadge + PipelineLayerTracker (raw fetch, no supabase-js)",
-        "App.tsx: DbStatusBadge en header",
-        "CopyPackModule.tsx: PipelineLayerTracker integrado post-generación"
-      ]
+      "last_deploy_id": "dpl_7KrgtyvHD9sRdPDQghXFkTvwNyGY",
+      "changes_2026_05_21": [
+        "execute.ts v9.5: zero-query mode con brand_cache_snapshots v2.0",
+        "fetchBrandCache(): Supabase snapshot (1 query) > HTTP endpoint > 24 queries",
+        "isV2 detection: Array.isArray(bc.creative_vectors)",
+        "selectCreativeComboFromData(): Creative Engine desde snapshot sin Supabase",
+        "assembleVoiceGenomeLayer(): función pura refactorizada",
+        "resolveAppliedLayersFromData(): pipeline_skills desde snapshot",
+        "kwList + ctaList incluidos desde snapshot v2.0",
+        "cache_mode en respuesta: v2.0_zero_query | v1.x_partial | no_cache",
+        "Bug fix: cache_mode shorthand → cache_mode: cacheMode (TS2552)"
+      ],
+      "async_mode": {
+        "status": "IMPLEMENTED — 504 cold start PENDIENTE RESOLVER",
+        "table": "copylab_jobs",
+        "processor_ef": "copylab-processor v1.4",
+        "cron": "pg_cron job #30 — cada 1 min",
+        "snapshot_path": "brand_cache_snapshots → 1 query → inyecta brandContext",
+        "blocker": "CopyLab Vercel 504 en llamadas server-to-server desde Supabase EF"
+      }
     },
     "imagelab": {"url": "image-lab-unrlvl.vercel.app", "repo": "ImageLab", "framework": "vite", "ai": "gemini", "status": "bug", "blockers": ["gemini_timeout_50s — Vercel 50s limit"], "last_deploy": "2026-04-26", "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb"},
     "sociallab": {"url": "social-lab-flame.vercel.app", "repo": "SocialLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-26", "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT"},
     "weblab": {"url": "web-lab-unrlvl.vercel.app", "repo": "WebLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-04", "vercel_id": "prj_MzQeqiHG9fxCXYf3j84YCgdf5GZS"},
     "agentlab": {"url": "agent-lab-unrlvl.vercel.app", "repo": "AgentLab", "framework": "vite", "ai": "claude", "status": "live", "last_deploy": "2026-04-10", "vercel_id": "prj_y1hYcSn2javwg7h6fof3e74uHTne"},
     "blueprintlab": {"url": "unrlvl-blueprint-lab.vercel.app", "repo": "BlueprintLab", "framework": "vite", "ai": "claude", "status": "live", "last_deploy": "2026-04-03", "vercel_id": "prj_gSnU3qy44YnpIcDjenhiEszgWLM5"},
-    "videolab": {"url": "unrlvl-video-lab.vercel.app", "repo": "VideoLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-03", "vercel_id": "prj_R0t1QvEnagCNn71Qq4iBLwgxy1MJ"},
+    "videolab": {"url": "unrlvl-video-lab.vercel.app", "repo": "VideoLab", "framework": "vite", "ai": "gemini", "status": "live", "last_deploy": "2026-04-03", "vercel_id": "prj_R0t1QvEnagCNm71Qq4iBLwgxy1MJ"},
     "voicelab": {"url": "unrlvl-voice-lab.vercel.app", "repo": "VoiceLab", "framework": "vite", "ai": "elevenlabs", "status": "live", "last_deploy": "2026-04-03", "vercel_id": "prj_D62CfommaocFgjJaa83ybxqwmph5"},
     "onboarding": {"url": "unrlvl-onboarding-app.vercel.app", "repo": "OnboardingApp", "framework": "vite", "ai": "claude", "status": "live", "last_deploy": "2026-04-05", "vercel_id": "prj_pQXT2MoCrkp3dGFovNgheYqUnBwy"},
     "signallab": {"url": null, "repo": null, "status": "not_deployed", "note": "Lab externo. Se activa cliente por cliente cuando tengan pixels + 30d datos + ads conectados."}
@@ -168,11 +190,10 @@
       "status": "ACTIVE_HEALTHY",
       "schemas": {
         "public": {
-          "tables": 77,
-          "key_tables": ["brands","agents","lab_configs","compliance_rules","humanize_profiles","brand_personas","brand_copy_profiles","output_templates","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules","content_sequences","content_sequence_pieces","brand_voice_genome","ops_costs","ops_renewals","pipeline_skills","product_blueprints","professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache","brand_cache_snapshots"],
-          "new_tables_2026_05_18": ["content_sequences","content_sequence_pieces","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules"],
-          "new_tables_2026_05_19": ["brand_voice_genome"],
-          "new_tables_2026_05_20": ["brand_cache_snapshots"]
+          "tables": 78,
+          "key_tables": ["brands","agents","lab_configs","compliance_rules","humanize_profiles","brand_personas","brand_copy_profiles","output_templates","creative_vectors","tension_architectures","aggro_presets","creative_compatibility_rules","content_sequences","content_sequence_pieces","brand_voice_genome","ops_costs","ops_renewals","pipeline_skills","product_blueprints","professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache","brand_cache_snapshots","copylab_jobs"],
+          "new_tables_2026_05_21": ["copylab_jobs"],
+          "note": "brand_cache_snapshots existía desde 2026-05-20, ahora operacional con grants + PK"
         },
         "content": {"tables": 6, "key_tables": ["orchestrator_jobs","brand_voices","content_pieces"], "active_jobs": 40},
         "crm": {"tables": 13, "key_tables": ["contacts","deals","pipelines","orgs","segments"]},
@@ -181,7 +202,8 @@
         "shopify": {"tables": 6, "key_tables": ["audit_runs","fix_log","stores"], "audit_runs": 95}
       },
       "edge_functions": {
-        "total_active": 63,
+        "total_active": 66,
+        "new_2026_05_21": ["brand-cache-builder", "cache-builder-trigger", "connectivity-test", "copylab-processor (updated v1.4)"],
         "groups": {
           "shopify_ecosystem": {"count": 22, "critical": ["shopify-audit","shopify-fix","shopify-fix-all","shopify-content-pipeline","shopify-auto-translate"]},
           "nscf_specific": {"count": 17, "critical": ["nscf-seo-gateway","nscf-seo-sprint-b2c","nscf-publish-ritual-kits","nscf-kiosko-data","nscf-attribution"]},
@@ -189,10 +211,13 @@
           "fphs": {"count": 5, "critical": ["fphs-chat","fphs-formalize"]},
           "klaviyo": {"count": 5, "critical": ["klaviyo-setup","klaviyo-flows","klaviyo-fix-templates","klaviyo-templates-v2","klaviyo-es-templates"]},
           "professor": {"count": 6, "critical": ["professor-get-context","professor-evaluate-decision","professor-log-case","professor-submit-learning","professor-approve-learning","professor-checkpoint"], "secret_status": "✅ CONFIGURADO 2026-05-20"},
+          "copylab_async": {"count": 3, "critical": ["copylab-processor (v1.4)","brand-cache-builder","cache-builder-trigger"], "note": "connectivity-test es EF de diagnóstico — puede eliminarse"},
           "other": {"count": 5, "critical": ["unrlvl-profiler","unrlvl-crm-api","social-proof-reader","sp-fix-targeted","shopify-translate-batch"]}
         },
-        "known_bugs": {
-          "shopify-auto-translate": {"status": "RESOLVED", "resolved": "2026-05-15", "discovered_resolved": "2026-05-19", "remaining_debt": "~11 productos con traducción EN parcial (title/meta)"}
+        "pg_cron": {
+          "jobs": [
+            {"jobid": 30, "jobname": "copylab-processor-1min", "schedule": "* * * * *", "active": true, "note": "Dispara copylab-processor EF cada minuto"}
+          ]
         }
       }
     },
@@ -201,7 +226,6 @@
       "owner": "Sam — PERSONAL, no UNRLVL ecosistema",
       "contains": ["DDMV-Assistant DB", "proyecto muerto pendiente eliminar"],
       "misplaced_tables": ["nscf_embajadoras","nscf_salones","nscf_qr_scans"],
-      "edge_functions": ["send-reminders"],
       "action_pending": "eliminar proyecto muerto · evaluar migración DDMV a infra UNRLVL",
       "NOT_a_pattern": true
     },
@@ -222,34 +246,14 @@
       "actions": ["ping","get-context","checkpoint","evaluate","log-case","submit-learning","approve-learning"],
       "auth": "PROFESSOR_SECRET env var — Vercel unrlvl-context"
     },
-    "tables": {
-      "count": 10,
-      "list": ["professor_decision_criteria","professor_veto_rules","professor_decision_cases","professor_weights","professor_manuals","professor_errors_known","professor_learnings","professor_platform_variables","professor_sam_bypasses","professor_cache"]
-    },
-    "edge_functions": {
-      "count": 6,
-      "list": ["professor-get-context","professor-evaluate-decision","professor-log-case","professor-submit-learning","professor-approve-learning","professor-checkpoint"],
-      "auth": "PROFESSOR_SECRET env var — ✅ CONFIGURADO 2026-05-20"
-    },
-    "cache": {
-      "strategy": "professor_cache table con TTL diferenciados",
-      "ttl_24h": ["professor_weights","professor_veto_rules","professor_decision_criteria","professor_platform_variables"],
-      "ttl_1h": ["professor_decision_cases recientes","professor_learnings pendientes count"],
-      "realtime": ["professor_sam_bypasses","escrituras directas"]
-    },
-    "knowledge_base": {
-      "root": "knowledge/",
-      "structure": ["_templates/","ecosystem/decision-matrix/","ecosystem/professor/","ecosystem/labs/","platforms/klaviyo/","platforms/judge-me/","platforms/agent-browser/","platforms/shopify/","clients/NeuroneSCF/"],
-      "manuals_count": 7,
-      "errors_known_count": 10
-    },
     "seed_data": {
       "criteria": 16,
       "veto_rules": 4,
       "decision_cases": 2,
       "platform_variables": 9,
-      "learnings_total": 28,
-      "learnings_pending_approval": 8
+      "learnings_total": 34,
+      "learnings_pending_approval": 14,
+      "new_learnings_2026_05_21": 6
     }
   },
   "agents": {
@@ -264,7 +268,7 @@
       "channel_adapters": ["twilio-whatsapp","twilio-sms","web-widget"]
     },
     "existing": [
-      {"id": "social-media-agent", "name": "Social Media Agent", "class": "frontend", "type": "social_ops", "status": "OPERATIONAL", "channel": "internal", "brain": "claude-api", "deploy": "vercel", "url": "unrlvl-social-media-agent.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-social-media-agent", "vercel_id": "prj_woslSsgsi92lcssFl1MrUQ9pRicd", "brands": ["*"], "session_log": "agents/social-media-agent/session_log.md", "sma_etag_last": "W/\"ab5b-hkrbK3pa3XP7FZPxY4Q/qZ2U928\""},
+      {"id": "social-media-agent", "name": "Social Media Agent", "class": "frontend", "type": "social_ops", "status": "OPERATIONAL", "channel": "internal", "brain": "claude-api", "deploy": "vercel", "url": "unrlvl-social-media-agent.vercel.app", "repo": "unrealvillestudio-hub/unrlvl-social-media-agent", "vercel_id": "prj_woslSsgsi92lcssFl1MrUQ9pRicd", "brands": ["*"], "session_log": "agents/social-media-agent/session_log.md", "sma_etag_last": "W/\"ab5b-to+Og9TkxHIlDqL8VL2VLx7AoxM\""},
       {"id": "ddmv-assistant", "name": "DDMV Assistant", "class": "frontend", "type": "faq_appointments", "status": "OPERATIONAL · FIX NEEDED", "channel": "whatsapp_twilio", "brain": "claude-api", "deploy": "vercel", "url": "ddmv-assistant.vercel.app", "repo": "unrealvillestudio-hub/DDMV-Assistant", "vercel_id": "prj_9pOxl79ZX6yQ6BLFXJHCI7xAQN1C", "brands": ["personal"], "issues": ["memoria no persiste entre sesiones","tono inconsistente"], "fix_sprint": "Sprint 1 Agent"},
       {"id": "forumph-speaks", "name": "ForumPH Speaks", "class": "frontend", "type": "knowledge_legal", "status": "OPERATIONAL", "channel": "web", "brain": "claude-api", "deploy": "vercel", "url": "forumphs-speaks.vercel.app", "vercel_id": "prj_fhBNQ6b9rd1Jhbe4BqNQP4frYpqn", "brands": ["ForumPHs"]},
       {"id": "forumph-document-factory", "name": "ForumPH Document Factory", "class": "frontend", "type": "document_generation", "status": "OPERATIONAL", "channel": "web", "brain": "claude-api", "deploy": "vercel", "url": "forumphs-document-factory.vercel.app", "vercel_id": "prj_AUHgIP7cuc95dLz7vbj2P4piinlz", "brands": ["ForumPHs"]}
@@ -279,7 +283,7 @@
     "_status": "PLANNED · Sprint 0 pendiente — DEADLINE 5 JUN 🔴",
     "_plan": "protocols/AYRA_MASTER_PLAN.md",
     "_version_plan": "v3.3 · 2026-05-13",
-    "_note_2026_05_18": "Los cimientos de Ayra están siendo construidos con cada sesión de infra. content_sequences, lab_configs, sequenceBridge, Creative Engine, Orchestrator v2.2 son nodos que Ayra va a operar. Solo falta conectar el cron y el jobRunner.",
+    "_note_2026_05_21": "El flujo async Ayra path (Claude→copylab_jobs→pg_cron→copylab-processor→CopyLab) está arquitectónicamente completo. Falta resolver 504 cold start. Una vez resuelto, el sprint de Ayra puede arrancar sobre esta infraestructura probada.",
     "repo": "unrealvillestudio-hub/unrlvl-ayra — POR CREAR",
     "vercel_project": "unrlvl-ayra — POR CREAR",
     "url": "ayra.unrealvillestudio.com — POR CONFIGURAR",
@@ -313,40 +317,37 @@
     "voice_genome_system": {
       "table": "brand_voice_genome",
       "active_genomes": [{"brand": "NeuroneSCF", "voice_id": "po_consumer", "version": "0.6"}],
-      "injected_in": ["buildCopyPrompt.ts v8.1 (L1.5)","execute.ts v9.3 (L1.5)"]
+      "injected_in": ["buildCopyPrompt.ts v8.1 (L1.5)","execute.ts v9.5 (L1.5 + snapshot)"]
     },
-    "iid_pipeline": {
-      "schema": "intel (amlvyycfepwhiindxgzw)",
-      "queue_items": 117,
-      "edge_functions": ["iid-core","iid-ecommerce","iid-research","iid-process","iid-brief-generator","iid-ecommerce-research","iid-ecommerce-process"],
-      "status": "ACTIVE — monitorear con Ayra job iid_queue_check"
+    "snapshot_system": {
+      "table": "brand_cache_snapshots",
+      "builder_ef": "brand-cache-builder",
+      "builder_actions": ["build (single brand)","build_all (all brands)","status"],
+      "active_snapshots": [{"brand": "NeuroneSCF", "version": "2.0", "tables": 18, "built": "2026-05-21"}],
+      "copylab_detection": "isV2 = Array.isArray(bc.creative_vectors)",
+      "mode": "v2.0_zero_query | v1.x_partial | no_cache"
     }
   },
   "infrastructure": [
-    {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app", "vercel_id": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54", "status": "LIVE", "apis": ["api/gh.js","api/brand-cache.js (v1.2 LIVE · v2.0 PENDIENTE COMMIT)","api/lab-invoke.js","api/job-runner.js","api/professor.js ✅ LIVE","api/cf.js"]},
-    {"id": "INFRA-BRAND-CACHE", "name": "Brand Cache API", "url": "https://unrlvl-context.vercel.app/api/brand-cache", "status": "v1.2 LIVE · v2.0 PENDIENTE COMMIT", "note": "v2.0: Supabase-first snapshot model · brand_cache_snapshots · 22 tablas · TTL 4h · action=build_all"},
-    {"id": "INFRA-PROFESSOR-PROXY", "name": "Professor Proxy", "url": "https://unrlvl-context.vercel.app/api/professor", "status": "LIVE ✅ 2026-05-20", "note": "Proxy Vercel → Supabase EFs · PROFESSOR_SECRET configurado"},
+    {"id": "INFRA-CTX", "name": "Context System", "url": "https://unrlvl-context.vercel.app", "vercel_id": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54", "status": "LIVE", "apis": ["api/gh.js","api/brand-cache.js (v1.2 LIVE)","api/lab-invoke.js","api/job-runner.js","api/professor.js ✅ LIVE","api/cf.js"]},
+    {"id": "INFRA-BRAND-CACHE", "name": "Brand Cache API", "url": "https://unrlvl-context.vercel.app/api/brand-cache", "status": "v1.2 LIVE · v2.0 snapshot via Supabase brand_cache_snapshots"},
+    {"id": "INFRA-BRAND-CACHE-BUILDER", "name": "Brand Cache Builder EF", "url": "https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/brand-cache-builder", "status": "LIVE ✅ 2026-05-21 · build/build_all/status · NeuroneSCF snapshot v2.0 activo"},
+    {"id": "INFRA-COPYLAB-ASYNC", "name": "CopyLab Async Pipeline", "status": "IMPLEMENTED — 504 cold start PENDIENTE", "components": ["copylab_jobs table","copylab-processor EF v1.4","pg_cron job #30","brand_cache_snapshots v2.0","CopyLab v9.5 zero-query"]},
+    {"id": "INFRA-PROFESSOR-PROXY", "name": "Professor Proxy", "url": "https://unrlvl-context.vercel.app/api/professor", "status": "LIVE ✅ 2026-05-20"},
     {"id": "INFRA-SHOPIFY-MCP", "name": "Shopify MCP", "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp", "vercel_id": "prj_jEiyzkET1fSk5IgHxkaSNVnTLCoB", "status": "ACTIVE", "created": "2026-05-05"},
+    {"id": "INFRA-SB-MCP", "name": "Supabase MCP (unrlvl)", "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp", "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP", "status": "ACTIVE v1.2.1 ✅ · deploy_edge_function corregido", "last_deploy": "2026-05-21", "token": "PAT sbp_... ✅ configurado"},
     {"id": "INFRA-TOOLS", "name": "UNRLVL Tools", "url": "https://unrlvl-tools.vercel.app", "vercel_id": "prj_orYcSynBX5LC3vuZvLY74Wy8zcRK", "status": "LIVE — ShopifyAuditor v3.5 + proxies", "last_deploy": "2026-05-08"},
     {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "url": "https://unrealvillestudio.com", "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN", "status": "LIVE EN+ES"},
-    {"id": "INFRA-BLUEPRINTS", "name": "BluePrints", "url": "https://unrlvl-blueprints.vercel.app", "vercel_id": "prj_AMv0fnyooAW74XcsRc8Od9foaFLy", "status": "LIVE"},
-    {"id": "INFRA-FORUMPHS-COM", "name": "forumphs.com", "url": "https://forumphs.com", "vercel_id": "prj_RNfwSGssi92lcssFl1MrUQ9pRicd", "status": "LIVE — dominio custom activo"},
-    {"id": "INFRA-NSCF-KIOSKO", "name": "NSCF Kiosko", "url": "nscf-kiosko.vercel.app", "vercel_id": "prj_XaUhU9Kx82ZxXtwmbXJf8ebKO3VJ", "status": "LIVE", "created": "2026-05-13"},
-    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY · PROFESSOR_SECRET ✅ 2026-05-20", "note": "63 EFs · 77 tablas public · Professor operational · brand_cache_snapshots ✅"},
-    {"id": "INFRA-SB-FORUMPH", "name": "Supabase ForumPHs", "status": "EXISTE — pendiente migración"},
-    {"id": "INFRA-SB-PERSONAL", "name": "Supabase XMMs (personal Sam)", "id_supabase": "puoybldykxqvhvtnwrld", "status": "PERSONAL — pendiente limpieza"},
+    {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY · 66 EFs · 78 tablas public · Professor ✅ · brand_cache_snapshots ✅ · copylab_jobs ✅ · pg_cron job #30 ✅"},
     {"id": "INFRA-AYRA", "name": "AYRA (repo + Vercel + schema)", "status": "PLANNED · Sprint 0 — DEADLINE 5 JUN 🔴"},
-    {"id": "INFRA-VERCEL-KV", "name": "Vercel KV (Redis)", "status": "PLANNED · Sprint 0 Ayra"},
-    {"id": "INFRA-AGENT-TEMPLATE", "name": "unrlvl-agent-template repo", "status": "PLANNED · Sprint 0 Agent"}
+    {"id": "INFRA-VERCEL-KV", "name": "Vercel KV (Redis)", "status": "PLANNED · Sprint 0 Ayra"}
   ],
   "skills_system": {
     "version": "2.6",
-    "previous_version": "2.5",
     "status": "LIVE ✅",
     "total_skills": 15,
     "index_url": "https://unrlvl-context.vercel.app/skills/INDEX.md",
-    "skills_live": ["ads-mcp","agent-browser","agent-builder","content-pipeline","copylab-reference","cost-layer","ecosystem-auditor","github-auditor","higgsfield","image-processing","security","shopify-auditor","shopify-mcp","ui-ux-layer","vercel"],
-    "pending_commits": []
+    "skills_live": ["ads-mcp","agent-browser","agent-builder","content-pipeline","copylab-reference","cost-layer","ecosystem-auditor","github-auditor","higgsfield","image-processing","security","shopify-auditor","shopify-mcp","ui-ux-layer","vercel"]
   },
   "protocols": {
     "session_protocol": {"version": "v14", "date": "2026-05-20", "path": "protocols/SESSION_PROTOCOL.md"},
@@ -355,17 +356,19 @@
     "implementation_plan_matrix_professor": {"version": "v1.1", "date": "2026-05-17", "path": "protocols/IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md"}
   },
   "next_session_agenda": [
-    "PRIORIDAD 1 — brand-cache.js v2.0: commit en unrlvl-context + deploy + llamar build_all para poblar brand_cache_snapshots 🔴",
-    "PRIORIDAD 2 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
-    "PRIORIDAD 3 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
-    "PRIORIDAD 4 — NSCF: GTM + GA4 verificación (GTM Preview + GA4 DebugView)",
-    "PRIORIDAD 5 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
-    "PRIORIDAD 6 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI · luego deploy 10 templates vía Orchestrator",
-    "PRIORIDAD 7 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
-    "PRIORIDAD 8 — Professor: revisar 8 learnings pendientes (approved_by_sam=false)",
-    "PRIORIDAD 9 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
-    "PRIORIDAD 10 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
-    "PRIORIDAD 11 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
-    "PRIORIDAD 12 — XMMs: eliminar proyecto muerto + evaluar migración DDMV"
+    "PRIORIDAD 1 — CopyLab 504 cold start: resolver server-to-server timeout. Opciones: A) warm-up ping cron, B) fluid:true en vercel.json, C) handler format Node.js nativo, E) endpoint /api/generate separado solo Claude call 🔴",
+    "PRIORIDAD 2 — Job de prueba cd0b168c: resetear a queued y validar end-to-end con el fix del 504",
+    "PRIORIDAD 3 — brand_cache_snapshots: build_all para todas las marcas activas (ahora solo NeuroneSCF)",
+    "PRIORIDAD 4 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
+    "PRIORIDAD 5 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
+    "PRIORIDAD 6 — NSCF: GTM + GA4 verificación",
+    "PRIORIDAD 7 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
+    "PRIORIDAD 8 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI",
+    "PRIORIDAD 9 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
+    "PRIORIDAD 10 — Professor: revisar 14 learnings pendientes (approved_by_sam=false)",
+    "PRIORIDAD 11 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
+    "PRIORIDAD 12 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
+    "PRIORIDAD 13 — connectivity-test EF: eliminar (solo era diagnóstico)",
+    "PRIORIDAD 14 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)"
   ]
 }

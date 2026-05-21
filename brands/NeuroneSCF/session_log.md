@@ -1,192 +1,117 @@
 # SESSION LOG — NeuroneSCF / CopyLab Async Sprint
-_Sesión: 2026-05-21 | Duración: ~8h | Estado: EN CURSO_
+_Sesión: 2026-05-21 | Duración: ~9h | Estado: EN CURSO — pendiente resolver 504 cold start_
 
 ---
 
 ## RESUMEN EJECUTIVO
 
-Sprint para implementar modo async en CopyLab (jobs procesados en background sin bloquear el browser).
-Bloqueado por incompatibilidad estructural pg_net → Vercel. Solución definitiva: EF processor + pg_cron.
-Bonus no planeado: construcción del custom MCP `unrlvl-supabase-mcp` para control total del proyecto Supabase.
+Sprint para implementar modo async en CopyLab (jobs procesados en background sin bloquear browser) + arquitectura de brand cache snapshots v2.0 para eliminar las 24 queries de Supabase en cada generación.
+
+Resultados del día:
+- ✅ `unrlvl-supabase-mcp` v1.2.1: deploy_edge_function funcionando correctamente
+- ✅ `copylab-processor` EF v1.4: pipeline completo Ayra path operacional
+- ✅ `brand-cache-builder` EF: pobla brand_cache_snapshots (18 tablas por marca)
+- ✅ `brand_cache_snapshots` NeuroneSCF v2.0: built 17:05 UTC
+- ✅ `CopyLab` v9.5: zero-query mode con snapshot v2.0
+- ✅ `pg_cron` job #30: activo — dispara cada 1 min
+- ✅ `copylab_jobs` tabla: operacional con grants correctos
+- 🔴 BLOQUEANTE: CopyLab Vercel serverless cold start → 504 en llamadas server-to-server
 
 ---
 
-## ESTADO ACTUAL AL CIERRE DE SESIÓN
+## ESTADO ACTUAL AL CIERRE
 
 ### ✅ COMPLETADO
-- `copylab_jobs` tabla creada en Supabase (`amlvyycfepwhiindxgzw`)
-- `execute.ts` v9.4.1 deployado — async mode con `createJob` + 202 response
-- `vercel.json` con `fluid: false` + `maxDuration: 300`
-- `unrlvl-supabase-mcp` deployado en Vercel y conectado en Claude.ai
-  - URL: `https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp`
-  - Repo: `unrealvillestudio-hub/unrlvl-supabase-mcp`
-  - 7 tools: execute_sql, apply_migration, deploy_edge_function, list_edge_functions, get_edge_function, get_logs, list_tables
-- Professor actualizado: 6 learnings + 1 manual + 5 errores conocidos
 
-### 🔴 PENDIENTE CRÍTICO (próximo chat)
+#### unrlvl-supabase-mcp v1.2.1
+- **Bug encontrado y resuelto:** `deploy_edge_function` enviaba JSON con files array — la API de Supabase requiere `multipart/form-data` con campo `file` (no `body`), endpoint `/functions/deploy?slug={name}` (no `/functions`), contenido TypeScript raw (no ZIP)
+- **Repo:** `unrealvillestudio-hub/unrlvl-supabase-mcp` — commit `5da4bacf`
+- **Proceso de fix:** 3 iteraciones: v1.2.0 (ZIP con fflate, endpoint incorrecto) → v1.2.1 (correcto)
+- **Lección:** Investigar GitHub Discussion #33720 de Supabase fue clave para el endpoint correcto
+- **Estado:** `prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP` READY en Vercel
 
-#### 1. UNRLVL_SB_ACCESS_TOKEN — BLOQUEANTE
-El env var en Vercel contiene un **service_role JWT**, NO un PAT.
-La Management API de Supabase requiere Personal Access Token (`sbp_...`).
-**Fix:** supabase.com/dashboard/account/tokens → Generate new token → pegar en Vercel → `UNRLVL_SB_ACCESS_TOKEN` → Save → Redeploy `unrlvl-supabase-mcp`.
+#### PAT vs service_role token
+- `UNRLVL_SB_ACCESS_TOKEN` en `unrlvl-supabase-mcp` Vercel env vars debe ser PAT (`sbp_...`) de `supabase.com/dashboard/account/tokens`
+- Antes tenía un valor con caracteres especiales que no era PAT — Management API requería PAT, REST API requería service_role JWT separado
+- Fix: PAT correcto + redeploy
 
-#### 2. DEPLOY copylab-processor — BLOQUEADO por punto 1
-Una vez el PAT esté correcto, usar el MCP desde Claude.ai:
-```
-deploy_edge_function(
-  name: "copylab-processor",
-  verify_jwt: false,
-  files: [{ name: "index.ts", content: [ver código abajo] }]
-)
-```
+#### copylab_jobs tabla
+- Tabla existía pero sin GRANT — todos los roles fallaban con 401 aunque hubiera RLS policies
+- Fix: `GRANT SELECT, INSERT, UPDATE ON copylab_jobs TO anon, authenticated; GRANT ALL ON copylab_jobs TO service_role;`
+- Lección crítica: GRANT (table-level) y RLS (row-level) son capas independientes — ambas necesarias
 
-#### 3. PG_CRON setup — DESPUÉS del punto 2
-```sql
-SELECT cron.schedule(
-  'copylab-processor-1min',
-  '* * * * *',
-  $$
-  SELECT net.http_post(
-    url := 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/copylab-processor',
-    headers := '{"Content-Type":"application/json"}'::jsonb,
-    body := '{}'::jsonb,
-    timeout_milliseconds := 145000
-  );
-  $$
-);
-```
+#### copylab-processor EF — evolución
+- v1.0: código del session_log anterior (ya estaba listo)
+- v1.1: agregó recovery de stuck jobs (causó race conditions — revertido)
+- v1.2: eliminó AbortSignal custom (usaba timeout de Deno nativo)
+- v1.3: agregó fetchBrandCache via HTTP antes de llamar CopyLab
+- **v1.4 ACTUAL:** lee snapshot v2.0 de `brand_cache_snapshots` directamente (1 query Supabase) — inyecta en `previousOutputs.brandContext` antes de llamar CopyLab
+- BATCH_SIZE reducido a 1 para evitar race conditions
 
-#### 4. execute.ts — CLEANUP (baja prioridad)
-Remover `'Connection': 'close'` del CORS object — es forbidden header, genera warning en Vercel logs pero no bloquea nada.
+#### pg_cron
+- Job #30: `copylab-processor-1min` — activo, status `succeeded` cada minuto
+- `net._http_response` muestra respuestas del processor correctamente
 
-#### 5. EMAIL SEQUENCES Cart A + Cart B ES — objetivo original del sprint
-Una vez el processor esté activo, generar via browser → CopyLab → async mode.
+#### brand-cache-builder EF
+- **Nueva EF** deployada en `amlvyycfepwhiindxgzw`
+- Actions: `build` (marca específica), `build_all` (todas las marcas), `status`
+- 18 tablas por marca: brands, brand_personas, brand_copy_profiles, humanize_profiles, compliance_rules, brand_goals, geomix, keywords, ctas, brand_voice_genome, creative_compatibility_rules, psycho_presets, channel_prompt_rules, creative_vectors, tension_architectures, aggro_presets, pipeline_skills, output_templates
+- NeuroneSCF snapshot v2.0 built: `2026-05-21 17:05:28 UTC`
+
+#### brand_cache_snapshots v2.0
+- Tabla ya existía (creada 2026-05-20) — vacía hasta hoy
+- Schema: brand_id, cache_data (jsonb), built_at, stale_after (TTL 4h), built_by, version, tables_included
+- Primary key añadida: `brand_id`
+- Grants aplicados: anon/authenticated/service_role
+- NeuroneSCF: 18 tablas, version 2.0
+
+#### CopyLab v9.5
+- **Commit:** `34916fed` en `unrealvillestudio-hub/CopyLab`
+- **Deploy:** `dpl_7KrgtyvHD9sRdPDQghXFkTvwNyGY` — READY
+- **Cambios sobre v9.4:**
+  1. `fetchBrandCache()`: prioridad Supabase snapshot (1 query) > HTTP endpoint > 24 queries directas
+  2. `isV2` detection: `Array.isArray(bc.creative_vectors)` → activa zero-query mode
+  3. `selectCreativeComboFromData()`: Creative Engine desde snapshot (sin Supabase)
+  4. `assembleVoiceGenomeLayer()`: refactorizado como función pura (sin Supabase)
+  5. `buildVoiceGenomeLayer()`: sigue llamando a Supabase cuando no hay snapshot
+  6. `resolveAppliedLayersFromData()`: pipeline_skills desde snapshot
+  7. `isV2` path: output_templates, voice_genome, layers, creative engine — todo desde snapshot
+  8. `kwList` y `ctaList` incluidos desde snapshot v2.0 (antes eran [] en v1.x)
+  9. `cache_mode` en respuesta: `v2.0_zero_query` | `v1.x_partial` | `no_cache`
+  10. Bug fix: `cache_mode,` shorthand → `cache_mode: cacheMode` (TS2552)
+- **Arquitectura explicada a Sam:** dispatcher pre-carga contexto → CopyLab recibe datos listos → solo hace el Claude call → ICR/pipeline completo intacto. CopyLab NO puede estar fuera del loop — ICR + pipeline L0→L7 + AIFE + Humanize son el diferenciador de output.
 
 ---
 
-## CÓDIGO copylab-processor (listo para deploy)
+## 🔴 BLOQUEANTE CRÍTICO — próxima sesión PRIORIDAD 1
 
-```typescript
-/**
- * copylab-processor v1.0
- * Triggered by pg_cron every minute.
- * Reads queued jobs from copylab_jobs → calls CopyLab sync → updates job.
- */
+### CopyLab Vercel 504 en llamadas server-to-server
 
-const SB_URL = Deno.env.get('SUPABASE_URL') ?? '';
-const SB_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-const COPYLAB_URL = 'https://unrlvl-copy-lab.vercel.app';
-const MAX_ATTEMPTS = 3;
-const BATCH_SIZE = 2;
+**Síntoma:** `copylab-processor` v1.4 llama a `https://unrlvl-copy-lab.vercel.app/api/execute`, Vercel devuelve 504 Gateway Timeout antes de que la función responda.
 
-const SB_HEADERS = {
-  apikey: SB_KEY,
-  Authorization: `Bearer ${SB_KEY}`,
-  'Content-Type': 'application/json',
-};
+**Runtime log Vercel:** `WARN: default export return... | 504` — handler `export default async function handler(req: Request): Promise<Response>` en Node.js serverless.
 
-const CORS = {
-  'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*',
-};
+**Intentos fallidos:**
+- v1.3: AbortSignal.timeout(250_000) → "Signal timed out." instantáneo (Deno issue)
+- v1.2: Sin AbortSignal → EF de Supabase espera indefinidamente, wall-clock la mata
+- El snapshot v2.0 reduce CopyLab a Claude-only (no Supabase queries), pero el cold start de Vercel Node.js sigue tomando demasiado
 
-async function patchJob(id: string, patch: Record<string, unknown>) {
-  await fetch(`${SB_URL}/rest/v1/copylab_jobs?id=eq.${id}`, {
-    method: 'PATCH',
-    headers: SB_HEADERS,
-    body: JSON.stringify(patch),
-  });
-}
+**Hipótesis del 504:**
+1. Vercel Node.js cold start con 200MB de deps tarda 60-90s independientemente del código
+2. El 504 ocurre ANTES de que la función ejecute cualquier código
+3. `maxDuration: 300` en `vercel.json` está correctamente configurado pero puede no aplicarse a cold starts
 
-Deno.serve(async (req: Request) => {
-  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
+**Opciones a explorar en próxima sesión:**
+A. **Warm-up automático:** pg_cron adicional que pingue CopyLab cada 5 min para mantenerla caliente
+B. **Fluid Compute:** cambiar `vercel.json` de `fluid: false` a `fluid: true` — Fluid Compute mantiene las funciones calientes en Vercel Pro
+C. **Cambiar handler format:** `export default async function handler(req: VercelRequest, res: VercelResponse)` — formato Node.js nativo en lugar de Web API — puede afectar al timeout behavior
+D. **Llamar `/api/execute` con `keepalive: true`** o headers específicos para evitar timeout proxy
+E. **Separar el Claude call:** nuevo endpoint `/api/generate` que solo hace el Claude call con el prompt pre-construido — el processor construye el prompt (usando snapshot) y llama directamente a este endpoint mínimo
 
-  const startedAt = new Date().toISOString();
-  console.log(`[copylab-processor] invoked at ${startedAt}`);
-
-  const jobsRes = await fetch(
-    `${SB_URL}/rest/v1/copylab_jobs?status=eq.queued&attempt_count=lt.${MAX_ATTEMPTS}&order=created_at.asc&limit=${BATCH_SIZE}`,
-    { headers: SB_HEADERS }
-  );
-
-  if (!jobsRes.ok) {
-    const err = await jobsRes.text();
-    return new Response(JSON.stringify({ error: 'fetch_jobs_failed', detail: err }), { status: 500, headers: CORS });
-  }
-
-  const jobs: any[] = await jobsRes.json();
-  console.log(`[copylab-processor] ${jobs.length} queued job(s) found`);
-
-  if (!jobs.length) {
-    return new Response(JSON.stringify({ status: 'no_jobs', ts: startedAt }), { status: 200, headers: CORS });
-  }
-
-  const results: any[] = [];
-
-  for (const job of jobs) {
-    const jobStart = Date.now();
-    console.log(`[copylab-processor] processing job ${job.id} brand=${job.brand_id} pack=${job.pack} attempt=${job.attempt_count + 1}`);
-
-    await patchJob(job.id, {
-      status: 'processing',
-      started_at: new Date().toISOString(),
-      attempt_count: job.attempt_count + 1,
-    });
-
-    try {
-      const labRes = await fetch(`${COPYLAB_URL}/api/execute`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(job.input),
-        signal: AbortSignal.timeout(140_000),
-      });
-
-      const elapsed = Date.now() - jobStart;
-      console.log(`[copylab-processor] job ${job.id} responded ${labRes.status} in ${elapsed}ms`);
-
-      if (!labRes.ok) {
-        const errText = await labRes.text();
-        await patchJob(job.id, {
-          status: job.attempt_count + 1 >= MAX_ATTEMPTS ? 'error' : 'queued',
-          error: `lab_${labRes.status}: ${errText.slice(0, 400)}`,
-          completed_at: new Date().toISOString(),
-        });
-        results.push({ job_id: job.id, status: 'error', code: labRes.status });
-        continue;
-      }
-
-      const labData = await labRes.json();
-
-      await patchJob(job.id, {
-        status: 'done',
-        output: labData.output ?? null,
-        output_parsed: labData.meta ?? labData,
-        completed_at: new Date().toISOString(),
-        error: null,
-      });
-
-      console.log(`[copylab-processor] job ${job.id} DONE in ${Date.now() - jobStart}ms`);
-      results.push({ job_id: job.id, status: 'done', ms: Date.now() - jobStart });
-
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const isTimeout = msg.includes('timed out') || msg.includes('AbortError');
-      console.error(`[copylab-processor] job ${job.id} exception: ${msg}`);
-      await patchJob(job.id, {
-        status: isTimeout && job.attempt_count + 1 < MAX_ATTEMPTS ? 'queued' : 'error',
-        error: msg.slice(0, 500),
-        completed_at: new Date().toISOString(),
-      });
-      results.push({ job_id: job.id, status: 'error', detail: msg.slice(0, 100) });
-    }
-  }
-
-  return new Response(
-    JSON.stringify({ processed: results.length, results, ts: startedAt }),
-    { status: 200, headers: CORS }
-  );
-});
-```
+**Estado del job de prueba:**
+- ID: `cd0b168c-aa7b-40d0-9076-7f8b15fb9ae6`
+- Status: `processing` desde 17:31:01 UTC (stuck de nuevo)
+- Resetear al inicio de próxima sesión
 
 ---
 
@@ -194,30 +119,54 @@ Deno.serve(async (req: Request) => {
 
 | Decisión | Razón |
 |----------|-------|
-| pg_net NO llama Vercel nunca | Incompatibilidad estructural TCP/HTTP. pg_net espera cierre de conexión, Vercel usa keep-alive. |
-| EF processor llama Vercel sync | Deno fetch maneja HTTP largo sin problema. EF 150s > Claude 30-90s. |
-| pg_cron cada 1 min (no 30s) | Mínimo de pg_cron es 1 minuto. Suficiente para el uso case. |
-| BATCH_SIZE = 2 | EF 150s / ~60s por job = 2 jobs seguros por invocación. |
-| unrlvl-supabase-mcp sin Next.js | Next.js 15.3.x tiene CVE activo. @vercel/node puro = sin problemas. |
-| PAT no service_role | Management API Supabase requiere `sbp_...` token, no JWT. |
+| brand_cache_snapshots en Supabase, no CDN | Query directa más rápida que HTTP desde EF; TTL controlado; se actualiza con triggers |
+| Snapshot incluye raw data (no prompt pre-armado) | El prompt varía por pack/canal/idioma/persona — solo los datos son invariantes por marca |
+| CopyLab NO puede estar fuera del loop async | ICR, pipeline L0→L7, AIFE, Humanize F2.5 son el diferenciador de output. Claude sin pipeline = texto genérico |
+| BATCH_SIZE = 1 en processor | Evita race conditions entre múltiples instancias del EF procesando el mismo job |
+| build_all pobla todas las marcas en una llamada | Escalable — nuevo cliente = un registro en brands + llamar build_all |
+| Invalidación manual por ahora | Triggers automáticos son Sprint 2 — primero validar el flujo end-to-end |
 
 ---
 
-## IDS Y REFERENCIAS CLAVE
+## ARQUITECTURA FINAL DEL FLUJO ASYNC (Ayra Path)
+
+```
+pg_cron (cada 1min)
+  → net.http_post → copylab-processor v1.4 (Supabase EF)
+    → fetch brand_cache_snapshots (1 query, ~10ms)
+    → inyecta brandContext en job.input
+    → POST /api/execute → CopyLab v9.5 (Vercel)
+      → detecta snapshot v2.0 → zero-query mode
+      → buildPrompt() desde snapshot (sin Supabase)
+      → callClaude() → Anthropic API (~15-30s)
+      → ICR + pipeline completo ✅
+    → patchJob(done, output)
+  → job: status=done, output=copy listo
+
+Browser path (dual) — sigue igual via UI:
+  → POST /api/execute directo desde browser → CopyLab v9.5
+  → mismo pipeline, misma calidad
+```
+
+---
+
+## IDs Y REFERENCIAS CLAVE
 
 | Recurso | ID / URL |
 |---------|----------|
 | Supabase proyecto | `amlvyycfepwhiindxgzw` |
-| Vercel team | `team_fEH94Irp6BAI9YGm4btGna5n` |
-| CopyLab Vercel | `prj_5FebBMfTpo4aP5I7iJ98libUkTTe` |
 | unrlvl-supabase-mcp Vercel | `prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP` |
-| CopyLab URL | `https://unrlvl-copy-lab.vercel.app` |
-| MCP URL | `https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp` |
-| CopyLab último deploy | `dpl_4VEtXo2ryavYkZATbtRVvNagFHUz` (Connection:close, fluid:false) |
-| CLAUDE_BRIDGE_SECRET | `3Oll9BRBBXGeR9QGa1iI0uyGDsV1QzeU` |
+| CopyLab Vercel | `prj_5FebBMfTpo4aP5I7iJ98libUkTTe` |
+| CopyLab último deploy | `dpl_7KrgtyvHD9sRdPDQghXFkTvwNyGY` |
+| pg_cron job copylab-processor | jobid: 30 |
+| copylab-processor EF | version: 5 (v1.4) |
+| brand-cache-builder EF | `2c569c1d-61e6-4add-9d02-2261c2645716` |
+| NeuroneSCF snapshot | brand_id: NeuroneSCF, 18 tablas, v2.0 |
+| Job de prueba | `cd0b168c-aa7b-40d0-9076-7f8b15fb9ae6` |
+| Vercel team | `team_fEH94Irp6BAI9YGm4btGna5n` |
 
 ---
 
-## PRIMER MENSAJE DEL PRÓXIMO CHAT
+## PRIMER MENSAJE DE PRÓXIMA SESIÓN
 
-"Protocolo actualización — continuar sprint CopyLab async. Cargar este session_log. Primer paso: verificar UNRLVL_SB_ACCESS_TOKEN en Vercel (debe ser PAT sbp_..., no service_role). Una vez confirmado, deploy copylab-processor + pg_cron."
+"Protocolo actualización — continuar sprint CopyLab async. Cargar este session_log. Primer paso: resetear job cd0b168c a queued. Luego resolver el 504 cold start de CopyLab — explorar opciones A (warm-up ping), B (fluid: true), C (handler format), E (endpoint /api/generate separado). Testear en ese orden."

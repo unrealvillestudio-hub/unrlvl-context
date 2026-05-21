@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Versión: 2026-05-20-v8 | Actualizada por: Claude_
+_Versión: 2026-05-21-v9 | Actualizada por: Claude_
 
 ---
 
@@ -7,12 +7,26 @@ _Versión: 2026-05-20-v8 | Actualizada por: Claude_
 
 | # | Tarea | Estado | Notas |
 |---|-------|--------|-------|
-| 1 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs: D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 · Identificar cuál es correcto en TikTok Ads Manager y eliminar el otro |
-| 2 | **GTM + GA4 verificación** | ⏳ Sam verifica | GTM Preview Mode + GA4 DebugView |
-| 3 | **Klaviyo flows** — 4 flows bilingüe ES/EN en UI | ⏳ Config manual UI | API no permite actions · ver session_log |
-| 4 | **Slogan NSCF — definir el definitivo** | ⚠️ Pendiente Sam | Actualmente en página: "Cuidado Capilar profesional que miami" (incompleto, minúscula) — corregir en Shopify en cuanto esté definido |
-| 5 | **+20 años → corregir a +35 años** | ⚠️ Fix urgente | About page B2C ya tiene 35+ ✅ · localizar en Kiosk / B2B y corregir · dato canónico: 35+ años |
-| 6 | **Kiosk — eliminar texto visible "UNRLVL-AUDITOR"** | ⚠️ Fix urgente | UNRLVL-AUDITOR es herramienta inhouse, no debe aparecer en ningún canal de cara al cliente |
+| 1 | **CopyLab 504 cold start** — resolver server-to-server timeout | 🔴 BLOQUEANTE async | Opciones: A) warm-up ping cron cada 5min, B) fluid:true en vercel.json, C) handler format Node.js nativo `(req,res)`, E) endpoint `/api/generate` separado solo Claude call. Testear en ese orden |
+| 2 | **Job prueba cd0b168c** — resetear y validar end-to-end | ⏳ Post-fix 504 | Una vez resuelto el 504, este job debería completar en <35s |
+| 3 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs: D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 |
+| 4 | **GTM + GA4 verificación** | ⏳ Sam verifica | GTM Preview Mode + GA4 DebugView |
+| 5 | **Klaviyo flows** — 4 flows bilingüe ES/EN en UI | ⏳ Config manual UI | API no permite actions |
+| 6 | **Slogan NSCF — definir el definitivo** | ⚠️ Pendiente Sam | Actualmente incompleto en página |
+
+---
+
+## 🟠 COPYLAB ASYNC — ESTADO SPRINT
+
+| Componente | Estado | Notas |
+|---|---|---|
+| `copylab_jobs` tabla + grants | ✅ OPERACIONAL | GRANT + RLS ambas capas configuradas |
+| `pg_cron` job #30 | ✅ ACTIVO | Cada 1 min, `copylab-processor-1min` |
+| `copylab-processor` EF v1.4 | ✅ DEPLOYADO | Lee snapshot → inyecta brandContext → llama CopyLab |
+| `brand-cache-builder` EF | ✅ DEPLOYADO | build/build_all/status |
+| `brand_cache_snapshots` NeuroneSCF | ✅ v2.0 18 tablas | Built 2026-05-21 17:05 UTC. Rebuild manual cuando cambien tablas |
+| `CopyLab v9.5` | ✅ DEPLOYADO | zero-query mode detecta snapshot v2.0 |
+| **End-to-end async funcional** | 🔴 504 PENDIENTE | Todo el plomería está, falta resolver cold start Vercel |
 
 ---
 
@@ -21,8 +35,8 @@ _Versión: 2026-05-20-v8 | Actualizada por: Claude_
 | Tarea | Estado | Notas |
 |-------|--------|-------|
 | **Aplicar Restore Therapy Plus v4 a Shopify** | ⏳ Pendiente | productUpdate + translationsRegister · ES+EN + how_to_use + SEO |
-| **Validar con Patricia composición técnica** de cada kit | ⏳ Antes de escalar | Para que la regla d7h use datos reales, no inferidos |
-| **Escalar voice + motor a los otros 11 kits** | ⏳ Post-validación | Orden: Restore Therapy → Moisture Recovery + Plus → Perfect Blonde + Plus → Hydra Boost → SOS → Blonde Guard + Plus → Moisture & Shine → Restore & Shield |
+| **Validar con Patricia composición técnica** de cada kit | ⏳ Antes de escalar | Para que la regla d7h use datos reales |
+| **Escalar voice + motor a los otros 11 kits** | ⏳ Post-validación | Orden: Restore Therapy → Moisture Recovery + Plus → Perfect Blonde + Plus → ... |
 
 ---
 
@@ -31,46 +45,45 @@ _Versión: 2026-05-20-v8 | Actualizada por: Claude_
 | Tarea | Estado | Notas |
 |-------|--------|-------|
 | DY Fazza imagen + decisión 200ml vs 400ml | ⚠️ Bloquea bundle | NSCF-TR-013 · KT-104 |
-| ~11 productos con traducción EN parcial (title/meta) | ⚠️ No bloqueante | Re-corrida targeted shopify-auto-translate cuando haya tiempo |
+| ~11 productos con traducción EN parcial (title/meta) | ⚠️ No bloqueante | Re-corrida targeted shopify-auto-translate |
 | SP metafield fix 3 productos | ⚠️ Cosmético | proxy route sp-fix-targeted pendiente |
 | Shipping zones | ⚠️ 3/5 | Admin manual |
 | EN La Ciencia page | ⚠️ fix pendiente | |
 | Klaviyo image_url property | ⚠️ Verificar | Activity Feed → Checkout Started event |
 | Judge.me automations | ⚠️ Activar | Settings → Automations → review request |
 | CRO Checkout Bundle | ⏳ Bundle instalada sin config | Sprint dedicado |
-| Crear metafield how_to_use_es/en + section theme | ⏳ Deuda técnica | Para migrar fallback <details> HTML a metafield dedicado |
-| Re-run audit post-fixes | ⏳ Esperado ~160+/200 | Tras GA4 + flows + Bundle |
-| **Ads — lanzamiento paid media** | ⏳ Post-audit | Meta + TikTok · resolver TikTok duplicado ANTES |
 
 ---
 
-## 🟠 NSCF B2B
+## 🟡 AYRA — Sprint 0 (deadline: 5 Jun 🔴)
 
 | Tarea | Estado |
 |-------|--------|
-| SEO-003 COLOR titles | ⚠️ fix pendiente |
-| Language switcher B2B | ⚠️ pendiente implementar |
+| Crear repo unrlvl-ayra (privado) | ❌ |
+| Crear proyecto Vercel unrlvl-ayra | ❌ |
+| Configurar dominio ayra.unrealvillestudio.com | ❌ |
+| CREATE SCHEMA ayra + 11 tablas en Supabase main | ❌ |
+| Env vars Vercel | ❌ |
+
+_Nota: La infraestructura del flujo async (copylab_jobs + processor + brand_cache_snapshots) ya está lista para Ayra._
 
 ---
 
 ## 🟡 VOICE GENOME — Enrichment
 
-| Tarea | Estado | Notas |
-|-------|--------|-------|
-| Capturar 3-5 audios adicionales de PO (consumer) | ⏳ | Para llevar po_consumer v0.6 → v1.0 mature |
-| Capturar voice genome po_b2b | ⏳ | Patricia hablando con estilistas/distribuidoras — nuevo voice_id |
-| Voice genome Sam (B2B + ejecutivo) | ⏳ | Para outputs en nombre de Unreal>ille |
+| Tarea | Estado |
+|-------|--------|
+| Capturar 3-5 audios adicionales de PO (consumer) | ⏳ → v1.0 mature |
+| Capturar voice genome po_b2b | ⏳ |
+| Voice genome Sam (B2B + ejecutivo) | ⏳ |
 
 ---
 
-## 🟡 PO SOCIAL — Sesión Dedicada (TBD)
+## 🟡 PROFESSOR
 
 | Tarea | Estado |
 |-------|--------|
-| Meta Developer App | ❌ Verificación teléfono bloqueada (Laura) |
-| System User tokens UNRLVL-Orchestrator | ❌ Bloqueado hasta App |
-| TikTok API tokens | ❌ |
-| WABA configuración | ⏳ En progreso |
+| Revisar 14 learnings pendientes (approved_by_sam=false) | ⏳ 6 nuevos de hoy |
 
 ---
 
@@ -83,60 +96,45 @@ _Versión: 2026-05-20-v8 | Actualizada por: Claude_
 
 ---
 
-## 🟡 AYRA — Sprint 0 (deadline: 5 Jun)
-
-| Tarea | Estado |
-|-------|--------|
-| Crear repo unrlvl-ayra (privado) | ❌ |
-| Crear proyecto Vercel unrlvl-ayra | ❌ |
-| Configurar dominio ayra.unrealvillestudio.com | ❌ |
-| CREATE SCHEMA ayra + 11 tablas en Supabase main | ❌ |
-| Env vars Vercel: AYRA_HEALTH_SECRET · ANTHROPIC_API_KEY · SUPABASE_URL · SUPABASE_SERVICE_KEY | ❌ |
-
----
-
 ## 🟡 STUDIO / INFRA
 
 | Tarea | Estado |
 |-------|--------|
-| luciensael.com DNS apuntar al deploy existente | ⏳ 10 min |
+| luciensael.com DNS | ⏳ 10 min |
+| brand_cache_snapshots build_all otras marcas | ⏳ Post-fix 504 |
+| connectivity-test EF — eliminar | ⏳ Era solo diagnóstico |
 | XMMs: eliminar proyecto muerto + evaluar migración DDMV | ⚠️ |
 | ImageLab fix (Vercel 50s timeout) | ⚠️ |
-| shopify-auditor/SKILL.md actualizar a v3.5 | ⚠️ Dice v2.0 |
-| Update COPYLAB_NOTES.md con voice_genome system | ⏳ |
 | Compliance soft pendiente: D7Herbal, DiamondDetails, VivoseMask, VizosCosmetics, PatriciaOsorio | ⏳ |
 | Compliance setup completo: ForumPHs | 🔴 BLOCK |
 
 ---
 
-## 🟢 PROFESSOR
+## ✅ COMPLETADO RECIENTEMENTE (2026-05-21)
 
-| Tarea | Estado |
-|-------|--------|
-| Revisar 8 learnings sesión 2026-05-19 (approved_by_sam = false) | ⏳ |
+- **unrlvl-supabase-mcp v1.2.1** ✅ — deploy_edge_function corregido: endpoint `/functions/deploy?slug=`, field `file`, TypeScript raw
+- **PAT configurado** ✅ — UNRLVL_SB_ACCESS_TOKEN = sbp_... correcto en Vercel
+- **copylab_jobs grants** ✅ — GRANT + RLS ambas capas
+- **copylab-processor v1.4** ✅ — snapshot-aware, 1 query Supabase antes de CopyLab
+- **brand-cache-builder EF** ✅ — 18 tablas por marca, build/build_all/status
+- **brand_cache_snapshots NeuroneSCF v2.0** ✅ — 18 tablas, built 17:05 UTC
+- **CopyLab v9.5** ✅ — zero-query mode, snapshot v2.0 detection, cache_mode en respuesta
+- **pg_cron job #30** ✅ — copylab-processor-1min activo
+- **Professor: 6 learnings** ✅ — PAT, deploy endpoint, GRANT, cold start, snapshot arch, TS2552
 
 ---
 
-## ✅ COMPLETADO RECIENTEMENTE
+## ✅ COMPLETADO ANTERIORMENTE
 
-- **PROFESSOR_SECRET** ✅ — 2026-05-20 · configurado en Supabase Dashboard Edge Functions Secrets
-- **Commits v11** ✅ — 2026-05-20 · ecosystem.json v11 + AGENDA v7 + SKILL v2.6 + brand.json v11 + INDEX v1.1 — todos verificados LIVE en context system
-- **BP_Brand_Context.md NSCF** ✅ — 2026-05-19 · creado en unrlvl-context · incluye paleta dual B2C/B2B, tipografía, voice genome reference, personas, reglas de marca, datos operativos
-- **Voice Genome System** ✅ — 2026-05-19 · tabla brand_voice_genome · po_consumer v0.6 activo · L1.5 VOICE_GENOME_INJECTION en skill
-- **product_description_b2c preset** ✅ — 2026-05-19 · creative_compatibility_rules + output_templates v1.2
-- **content-pipeline SKILL v2.6** ✅ — 2026-05-19 · live en unrlvl-context
-- **Restore Therapy Plus v4** ✅ — 2026-05-19 · generado con motor completo · pendiente aplicar a Shopify
-- **Bug shopify-auto-translate** ✅ — resuelto 2026-05-15 (descubierto en auditoría 2026-05-19)
-- **GA4 + GTM instalados** ✅ — 2026-05-19 · verificación pendiente
+- **PROFESSOR_SECRET** ✅ — 2026-05-20
+- **BP_Brand_Context.md NSCF** ✅ — 2026-05-19
+- **Voice Genome System** ✅ — 2026-05-19
+- **content-pipeline SKILL v2.6** ✅ — 2026-05-19
+- **Meta Pixel NSCF B2C** ✅ — 2026-05-17
+- **Klaviyo NSCF** ✅ — 2026-05-17 · 10 templates ES+EN
+- **Domain verification neuronescflorida.com** ✅ — 2026-05-17
 - **Instagram → Facebook Page vinculadas** ✅ — 2026-05-17
-- **Domain verification neuronescflorida.com** ✅ — 2026-05-17 · Cloudflare TXT
-- **DECISION_MATRIX + Professor System — Sprints 1-4** ✅ — 2026-05-17
-- **Meta Pixel NSCF B2C** ✅ — 2026-05-17 · Pixel ID 1348252664025025 · todos los eventos
-- **Klaviyo NSCF** ✅ — 2026-05-17 · 10 templates ES+EN · dominio verificado
-- **Judge.me NSCF** ✅ — 2026-05-17 · dark theme · badge + widget
-- **Kit Images 12/12** ✅ — 2026-05-10
-- **Skills System v1.1** ✅ — 2026-05-10
-- **SESSION_PROTOCOL v11** ✅ — 2026-05-10
+- **GA4 + GTM instalados** ✅ — 2026-05-19
 
 ---
-_Regenerada: 2026-05-20 · ecosystem.json v12_
+_Regenerada: 2026-05-21 · ecosystem.json v14_
