@@ -2,7 +2,7 @@
   "_meta": {
     "schema": "BRAND_CONTEXT_FULL_v1.0",
     "brand_id": "ForumPHs",
-    "version": "2026-05-21-v2",
+    "version": "2026-05-21-v5",
     "maintained_by": "brand-context-builder agent",
     "sources_read": [
       "unrlvl-context/brands/ForumPHs/BP_Brand_Context.md",
@@ -16,11 +16,11 @@
       "CoreProject/brands/ForumPHs/assets/* (tree)",
       "GitHub/forumphs-document-factory (full repo audit)",
       "ForumPHs_Documento_Decision_Servicios_2026.html (v4 completo)",
-      "Supabase tajuoqdbnsnzkhyqvdgs (schema v2 — 24 tablas + 3 funciones)"
+      "Supabase tajuoqdbnsnzkhyqvdgs (schema v2 — 24 tablas + 3 funciones)",
+      "Supabase tajuoqdbnsnzkhyqvdgs (schema v3 — 36 tablas + OPS completo)"
     ],
     "load_instruction": "Cargar al inicio de TODA sesion ForumPHs. Reemplaza lectura individual de BP_Brand_Context + brand.json + session_log. Fuente unica de verdad."
   },
-
   "brand": {
     "id": "ForumPHs",
     "display_name": "ForumPHs",
@@ -36,38 +36,96 @@
     "domain": "forumphs.com",
     "market": "Panama",
     "legal_framework": "Ley No. 284 de 14 de febrero de 2022 (Propiedad Horizontal, Panama)",
-    "model": ["B2B", "B2G"],
+    "model": [
+      "B2B",
+      "B2G"
+    ],
     "language_primary": "es-PA",
     "founded": 2015,
     "sam_role": "Socio + Director de Sistemas UNRLVL. Co-propiedad, no cliente. Laboratorio donde UNRLVL desarrolla y afina metodologias antes de exportarlas.",
     "unrlvl_role": "ForumPHs es el laboratorio piloto del FIE, Document Factory y FPHs-OPS. Todo lo que se construye aqui se exporta al ecosistema."
   },
-
   "identity": {
     "palette": {
-      "am":       { "hex": "#5C3472", "role": "institutional-primary", "use": "CTAs, botones, KPI numeros" },
-      "am_d":     { "hex": "#3A1F4A", "role": "premium-bg, footer" },
-      "am_l":     { "hex": "#EAD9F5", "role": "KPI-bg, light-bg" },
-      "terra":    { "hex": "#C4622D", "role": "accent, wordmark-PHs, slogan-part2" },
-      "carbon":   { "hex": "#1C2233", "role": "ui-surface" },
-      "carbon_d": { "hex": "#0E1018", "role": "hero-bg" },
-      "ink":      { "hex": "#1A1612", "role": "body-text-on-light" },
-      "stone":    { "hex": "#6B6460", "role": "secondary-text, KPI labels" },
-      "parch":    { "hex": "#F0EDE8", "role": "documentos, actas, contratos" }
+      "am": {
+        "hex": "#5C3472",
+        "role": "institutional-primary",
+        "use": "CTAs, botones, KPI numeros"
+      },
+      "am_d": {
+        "hex": "#3A1F4A",
+        "role": "premium-bg, footer"
+      },
+      "am_l": {
+        "hex": "#EAD9F5",
+        "role": "KPI-bg, light-bg"
+      },
+      "terra": {
+        "hex": "#C4622D",
+        "role": "accent, wordmark-PHs, slogan-part2"
+      },
+      "carbon": {
+        "hex": "#1C2233",
+        "role": "ui-surface"
+      },
+      "carbon_d": {
+        "hex": "#0E1018",
+        "role": "hero-bg"
+      },
+      "ink": {
+        "hex": "#1A1612",
+        "role": "body-text-on-light"
+      },
+      "stone": {
+        "hex": "#6B6460",
+        "role": "secondary-text, KPI labels"
+      },
+      "parch": {
+        "hex": "#F0EDE8",
+        "role": "documentos, actas, contratos"
+      }
     },
     "palette_combos": {
-      "kpis_metricas":    { "bg": "#EAD9F5", "number": "#5C3472", "label": "#6B6460" },
-      "documentos_actas": { "bg": "#F0EDE8", "text": "#1A1612", "accent": "#C4622D" },
-      "hero_portada":     { "bg": "#0E1018", "text": "#ffffff", "accent": "#C4622D" },
-      "ui_app":           { "bg": "#1C2233", "text": "#F0EDE8", "accent": "#5C3472" }
+      "kpis_metricas": {
+        "bg": "#EAD9F5",
+        "number": "#5C3472",
+        "label": "#6B6460"
+      },
+      "documentos_actas": {
+        "bg": "#F0EDE8",
+        "text": "#1A1612",
+        "accent": "#C4622D"
+      },
+      "hero_portada": {
+        "bg": "#0E1018",
+        "text": "#ffffff",
+        "accent": "#C4622D"
+      },
+      "ui_app": {
+        "bg": "#1C2233",
+        "text": "#F0EDE8",
+        "accent": "#5C3472"
+      }
     },
     "palette_css": ":root { --fphs-am:#5C3472; --fphs-am-d:#3A1F4A; --fphs-am-l:#EAD9F5; --fphs-terra:#C4622D; --fphs-carbon:#1C2233; --fphs-carbon-d:#0E1018; --fphs-ink:#1A1612; --fphs-stone:#6B6460; --fphs-parch:#F0EDE8; }",
     "typography": {
       "google_fonts_url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500;600;700&display=swap",
-      "display":   { "family": "EB Garamond",        "role": "Wordmark Forum, slogan, headlines, email subject" },
-      "editorial": { "family": "Cormorant Garamond", "role": "Nombre PH en portadas, eyebrows, texto decorativo" },
-      "utility":   { "family": "Cinzel",             "role": "Section labels, tags, eyebrow caps, FORUMPHS en label" },
-      "body":      { "family": "DM Sans",            "role": "Cuerpo, UI, PHs en wordmark, botones, datos numericos" }
+      "display": {
+        "family": "EB Garamond",
+        "role": "Wordmark Forum, slogan, headlines, email subject"
+      },
+      "editorial": {
+        "family": "Cormorant Garamond",
+        "role": "Nombre PH en portadas, eyebrows, texto decorativo"
+      },
+      "utility": {
+        "family": "Cinzel",
+        "role": "Section labels, tags, eyebrow caps, FORUMPHS en label"
+      },
+      "body": {
+        "family": "DM Sans",
+        "role": "Cuerpo, UI, PHs en wordmark, botones, datos numericos"
+      }
     },
     "wordmark": {
       "rule": "Siempre HTML/CSS — nunca imagen PNG",
@@ -77,13 +135,26 @@
     "voice": {
       "archetype": "TRUSTED_PROFESSIONAL_AUTHORITY",
       "tone": "Profesional-formal · Patrimonial · Sistemico · Cercano-experto",
-      "do": ["Escribir siempre ForumPHs (casing exacto)", "Usar FPHs como sigla", "Slogan completo e invariable", "Terra para enfasis 2da parte slogan", "Tercera persona formal en Actas"],
-      "dont": ["No FORUMPHS excepto Cinzel labels", "No parafrasear el slogan", "No mencionar Roberto Gonzalez como activo", "No colores fuera de Amatista Carbon"]
+      "do": [
+        "Escribir siempre ForumPHs (casing exacto)",
+        "Usar FPHs como sigla",
+        "Slogan completo e invariable",
+        "Terra para enfasis 2da parte slogan",
+        "Tercera persona formal en Actas"
+      ],
+      "dont": [
+        "No FORUMPHS excepto Cinzel labels",
+        "No parafrasear el slogan",
+        "No mencionar Roberto Gonzalez como activo",
+        "No colores fuera de Amatista Carbon"
+      ]
     }
   },
-
   "people": {
-    "sam": { "role": "Socio + Director de Sistemas UNRLVL", "note": "Co-propietario. Tiene capa de decision ('olfato') no documentable que Claude respeta como criterio soberano." },
+    "sam": {
+      "role": "Socio + Director de Sistemas UNRLVL",
+      "note": "Co-propietario. Tiene capa de decision ('olfato') no documentable que Claude respeta como criterio soberano."
+    },
     "ivette_flores": {
       "cedula": "8-368-46",
       "role": "Gerente General · Abogada especialista PH",
@@ -101,28 +172,109 @@
       "role": "Contadora externa — no propietaria de PH",
       "note": "EEFF 2025 tiene linea 172 (reservas laborales) en $0. Entrega con retraso. DF cubre dia 5, Marlene firma despues.",
       "disclaimer_cpa": "Los estados e indicadores financieros presentados son preliminares y estan sujetos a revision y firma por la Contadora Publica Autorizada Marlene Molina, C.P.A. No. 0488-2020."
+    },
+    "irja_saldana": {
+      "name": "Irja Saldana",
+      "role": "Administracion ForumPHs — equipo operaciones",
+      "note": "Aparece en actas como representante de la administracion junto a IF. Acceso al Quality Dashboard junto a IF y Sam."
     }
   },
-
   "business": {
     "portfolio": {
       "total_phs": 8,
-      "monthly_income": 17307.50,
+      "monthly_income": 17307.5,
       "phs": [
-        { "name": "Torres de Castilla",       "fee": 3700.00, "supabase_id": "33560559-1fec-47fc-9086-206817a00153", "units": 305, "tier_est": "ELITE" },
-        { "name": "PH Venezia Tower",          "fee": 3300.00, "supabase_id": "2b61944c-6a14-4177-a870-7bbecea17803", "units": 182, "tier_est": "PROFESIONAL" },
-        { "name": "PH Luxor Towers 300",       "fee": 3100.00, "supabase_id": "4a798598-3b94-438e-9b49-bdc15985d365", "units": 143, "bi_done": true, "tier_est": "PROFESIONAL" },
-        { "name": "PH Lefevre 75 Don Enrique", "fee": 2407.50, "supabase_id": "d30e6888-1fc3-43bc-960c-94a012b753d0", "units": 184, "tier_est": "PROFESIONAL" },
-        { "name": "Los Alamos",                "fee": 2000.00, "supabase_id": "e90da0fd-bb6e-4e4d-9015-50e0c17a1794", "units": 329, "tier_est": "ELITE" },
-        { "name": "PH Firenze Tower",          "fee": 1200.00, "supabase_id": "16a68732-256d-49d6-ae47-adcd72225c1a", "units": 79,  "tier_est": "ESENCIAL" },
-        { "name": "PH Plaza Espana",           "fee": 1000.00, "supabase_id": "3429020f-c002-42c8-97d3-afd5ea2552a2", "units": 71,  "tier_est": "ESENCIAL" },
-        { "name": "PH Parque Central Arraijan","fee": 600.00,  "supabase_id": "7e11008d-89da-4228-8e16-39bb24d0b37f", "units": 81,  "tier_est": "ESENCIAL" }
+        {
+          "name": "Torres de Castilla",
+          "fee": 3700.0,
+          "supabase_id": "33560559-1fec-47fc-9086-206817a00153",
+          "units": 305,
+          "tier_est": "ELITE",
+          "pricing_model": "legacy"
+        },
+        {
+          "name": "PH Venezia Tower",
+          "fee": 3300.0,
+          "supabase_id": "2b61944c-6a14-4177-a870-7bbecea17803",
+          "units": 182,
+          "tier_est": "PROFESIONAL",
+          "pricing_model": "legacy"
+        },
+        {
+          "name": "PH Luxor Towers 300",
+          "fee": 3100.0,
+          "supabase_id": "4a798598-3b94-438e-9b49-bdc15985d365",
+          "units": 143,
+          "bi_done": true,
+          "tier_est": "ESENCIAL",
+          "pricing_model": "legacy",
+          "tier_note": "143 uds → ESENCIAL por tamaño. Fee $3,100 es legacy, no refleja tier."
+        },
+        {
+          "name": "PH Lefevre 75 Don Enrique",
+          "fee": 2407.5,
+          "supabase_id": "d30e6888-1fc3-43bc-960c-94a012b753d0",
+          "units": 184,
+          "tier_est": "PROFESIONAL",
+          "pricing_model": "legacy"
+        },
+        {
+          "name": "Los Alamos",
+          "fee": 2000.0,
+          "supabase_id": "e90da0fd-bb6e-4e4d-9015-50e0c17a1794",
+          "units": 329,
+          "tier_est": "ELITE",
+          "pricing_model": "legacy"
+        },
+        {
+          "name": "PH Firenze Tower",
+          "fee": 1200.0,
+          "supabase_id": "16a68732-256d-49d6-ae47-adcd72225c1a",
+          "units": 79,
+          "tier_est": "ESENCIAL",
+          "pricing_model": "legacy"
+        },
+        {
+          "name": "PH Plaza Espana",
+          "fee": 1000.0,
+          "supabase_id": "3429020f-c002-42c8-97d3-afd5ea2552a2",
+          "units": 71,
+          "tier_est": "ESENCIAL",
+          "pricing_model": "legacy"
+        },
+        {
+          "name": "PH Parque Central Arraijan",
+          "fee": 600.0,
+          "supabase_id": "7e11008d-89da-4228-8e16-39bb24d0b37f",
+          "units": 81,
+          "tier_est": "ESENCIAL",
+          "pricing_model": "legacy"
+        }
       ],
-      "eeff_bi_pending": ["Venezia Tower", "Torres de Castilla", "Lefevre 75 Don Enrique", "Los Alamos", "PH Plaza Espana"]
+      "eeff_bi_pending": [
+        "Venezia Tower",
+        "Torres de Castilla",
+        "Lefevre 75 Don Enrique",
+        "Los Alamos",
+        "PH Plaza Espana"
+      ],
+      "pricing_model_note": "Los 8 PHs actuales son CLIENTES LEGACY — tarifas congeladas, fuera del modelo tier nuevo. El foco de crecimiento es sobre nuevos clientes con modelo value-based. La migracion de legacy a value-based es voluntaria, basada en valor demostrado, nunca impuesta.",
+      "tier_note": "El tier de cada PH legacy refleja su TAMANO (unidades) y se usa exclusivamente para calcular el recargo de mora. NO define su precio comercial.",
+      "recargo_note": "Ninguno de los 8 clientes legacy tiene clausula de recargo por mora en su contrato. recargo_enabled = false para todos. Los recargos aplican solo a contratos nuevos value_based, sujetos a negociacion por IF."
     },
     "financials": {
-      "eeff_2026_ene": { "ingresos": 17307.50, "gastos": 13879.74, "utilidad": 3427.76, "margen": "19.8%" },
-      "eeff_2026_feb": { "ingresos": 17307.50, "gastos": 15458.17, "utilidad": 1849.33, "margen": "10.7%" },
+      "eeff_2026_ene": {
+        "ingresos": 17307.5,
+        "gastos": 13879.74,
+        "utilidad": 3427.76,
+        "margen": "19.8%"
+      },
+      "eeff_2026_feb": {
+        "ingresos": 17307.5,
+        "gastos": 15458.17,
+        "utilidad": 1849.33,
+        "margen": "10.7%"
+      },
       "avg_margin_2026": "15.2%",
       "avg_cost_per_ph": 1834,
       "cost_breakdown_avg": {
@@ -144,25 +296,74 @@
         "cloudflare": "~$5 fijo",
         "nota": "El stack es 1-2% del costo total. El 85%+ son personas."
       },
-      "pasivo_laboral_historico": { "estimado": 25000, "registrado_eeff": 0, "status": "SIN PROVISIONAR — VENCIDO" },
-      "reservas_laborales": { "mensual": 1014.89, "status": "INICIO 1 MAY 2026 — VENCIDO" },
+      "pasivo_laboral_historico": {
+        "estimado": 25000,
+        "registrado_eeff": 0,
+        "status": "SIN PROVISIONAR — VENCIDO"
+      },
+      "reservas_laborales": {
+        "mensual": 1014.89,
+        "status": "INICIO 1 MAY 2026 — VENCIDO"
+      },
       "sustainability_threshold": 20500,
       "gap_to_threshold": 3193
     },
     "scale_scenarios": {
-      "8_phs":  { "costo_ph": 1834, "margen": "15.2%", "costo_unidad": "$9.65" },
-      "10_phs": { "costo_ph": 1486, "margen_est": "~22%", "costo_unidad": "$7.83", "target": "Jun 2026" },
-      "15_phs": { "costo_ph": 1235, "margen_est": "~28%", "target": "Fin 2026" },
-      "20_phs": { "costo_ph": 960,  "margen_est": "~38%", "target": "2027" }
+      "8_phs": {
+        "costo_ph": 1834,
+        "margen": "15.2%",
+        "costo_unidad": "$9.65"
+      },
+      "10_phs": {
+        "costo_ph": 1486,
+        "margen_est": "~22%",
+        "costo_unidad": "$7.83",
+        "target": "Jun 2026"
+      },
+      "15_phs": {
+        "costo_ph": 1235,
+        "margen_est": "~28%",
+        "target": "Fin 2026"
+      },
+      "20_phs": {
+        "costo_ph": 960,
+        "margen_est": "~38%",
+        "target": "2027"
+      }
     },
     "growth_targets": {
       "q2_q3_2026": "+2-3 PHs nuevos antes de sep 2026",
-      "critical_deadline": "Primer cliente nuevo antes del 30 Jun 2026"
+      "critical_deadline": "Primer cliente nuevo antes del 30 Jun 2026",
+      "focus": "NUEVOS CLIENTES — modelo value-based desde el inicio. Los clientes actuales son legacy y no son el objetivo de crecimiento inmediato."
     },
     "services_tiers": {
-      "ESENCIAL":    { "perfil": "50-150 uds · <15,000 m2", "tarifa": "$1,200-$2,500/mes", "horas_if": "~12-16h/mes", "coordinador": "Compartido", "asambleas_ext": "1 virtual/anio", "inscripcion_rp": "Add-on $300/acto" },
-      "PROFESIONAL": { "perfil": "150-280 uds · 15-25k m2", "tarifa": "$2,500-$4,500/mes", "horas_if": "~18-24h/mes", "coordinador": "Dedicado", "asambleas_ext": "2 (1v+1p)/anio", "inscripcion_rp": "Incluida" },
-      "ELITE":       { "perfil": "280+ uds · >25,000 m2",   "tarifa": "$4,500+/mes",       "horas_if": "~28-40h+/mes", "coordinador": "Equipo dedicado", "asambleas_ext": "Ilimitadas", "inscripcion_rp": "Incluida", "rep_legal": "50h/anio incluidas" }
+      "ESENCIAL": {
+        "perfil": "50-150 uds · <15,000 m2",
+        "tarifa": "$1,200-$2,500/mes",
+        "horas_if": "~12-16h/mes",
+        "coordinador": "Compartido",
+        "asambleas_ext": "1 virtual/anio",
+        "inscripcion_rp": "Add-on $300/acto"
+      },
+      "PROFESIONAL": {
+        "perfil": "150-280 uds · 15-25k m2",
+        "tarifa": "$2,500-$4,500/mes",
+        "horas_if": "~18-24h/mes",
+        "coordinador": "Dedicado",
+        "asambleas_ext": "2 (1v+1p)/anio",
+        "inscripcion_rp": "Incluida"
+      },
+      "ELITE": {
+        "perfil": "280+ uds · >25,000 m2",
+        "tarifa": "$4,500+/mes",
+        "horas_if": "~28-40h+/mes",
+        "coordinador": "Equipo dedicado",
+        "asambleas_ext": "Ilimitadas",
+        "inscripcion_rp": "Incluida",
+        "rep_legal": "50h/anio incluidas"
+      },
+      "_scope": "Solo aplica a CLIENTES NUEVOS con modelo value-based",
+      "_legacy": "Clientes actuales: tarifa congelada. Migracion voluntaria cuando IF lo decida."
     },
     "services_base_all_tiers": [
       "Administracion general y supervision operativa",
@@ -176,55 +377,123 @@
       "Portal de Propietarios — disponible primeros 60 dias"
     ],
     "addons": {
-      "inscripcion_rp":              { "ref": "$300/acto", "costo_interno": "$80-120 + $50-80 gastos registrales" },
-      "asamblea_ext_virtual":        { "ref": "$400", "costo_interno": "~$180-260" },
-      "asamblea_ext_presencial":     { "ref": "$550", "costo_interno": "~$240-320" },
-      "proyeccion_financiera_3_5a":  { "ref": "$400/anio", "costo_interno": "DF ~$20 + IF ~$280-350" },
-      "diagnostico_inicial_ph":      { "ref": "$800 one-time", "nota": "Deducible del mes 1 si contratan. Lead magnet de conversion.", "costo_interno": "Sam ~$150 + IF ~$300" },
-      "reglamento_de_uso":           { "ref": "$600 one-time", "costo_interno": "DF ~$20 + IF ~$280-350" }
+      "inscripcion_rp": {
+        "ref": "$300/acto",
+        "costo_interno": "$80-120 + $50-80 gastos registrales"
+      },
+      "asamblea_ext_virtual": {
+        "ref": "$400",
+        "costo_interno": "~$180-260"
+      },
+      "asamblea_ext_presencial": {
+        "ref": "$550",
+        "costo_interno": "~$240-320"
+      },
+      "proyeccion_financiera_3_5a": {
+        "ref": "$400/anio",
+        "costo_interno": "DF ~$20 + IF ~$280-350"
+      },
+      "diagnostico_inicial_ph": {
+        "ref": "$800 one-time",
+        "nota": "Deducible del mes 1 si contratan. Lead magnet de conversion.",
+        "costo_interno": "Sam ~$150 + IF ~$300"
+      },
+      "reglamento_de_uso": {
+        "ref": "$600 one-time",
+        "costo_interno": "DF ~$20 + IF ~$280-350"
+      }
     },
     "mora_protocol": {
       "_note": "4 fases. Fases I-IV del propietario = meses de mora individual. Fase del EDIFICIO = % mora total PH → determina recargo sobre honorarios FPHs.",
       "FASE_I": {
         "trigger_unidad": "1-2 meses mora",
         "trigger_edificio": "0-10% mora total — operacion normal",
-        "recargo_fphs": { "ESENCIAL": 0, "PROFESIONAL": 0, "ELITE": 0 },
+        "recargo_fphs": {
+          "ESENCIAL": 0,
+          "PROFESIONAL": 0,
+          "ELITE": 0
+        },
         "duracion": "4 semanas",
         "costo_unidad": "~$5",
         "automatizada": true,
         "comunicaciones": [
-          { "semana": 1, "from": "ForumPHs", "tono": "informativo — estado de cuenta, recordatorio amigable, opciones de pago", "canal": "email Klaviyo automatico" },
-          { "semana": 2, "from": "Junta Directiva", "tono": "comunidad — par a par, JD solicita directamente", "canal": "email + WA" },
-          { "semana": 3, "from": "ForumPHs", "tono": "escalado — recargos acumulandose, gestion legal posible", "canal": "email Klaviyo" },
-          { "semana": 4, "from": "Junta Directiva", "tono": "ultimo aviso — deadline 7 dias, sin respuesta se procede extrajudicial", "canal": "email + WA" }
+          {
+            "semana": 1,
+            "from": "ForumPHs",
+            "tono": "informativo — estado de cuenta, recordatorio amigable, opciones de pago",
+            "canal": "email Klaviyo automatico"
+          },
+          {
+            "semana": 2,
+            "from": "Junta Directiva",
+            "tono": "comunidad — par a par, JD solicita directamente",
+            "canal": "email + WA"
+          },
+          {
+            "semana": 3,
+            "from": "ForumPHs",
+            "tono": "escalado — recargos acumulandose, gestion legal posible",
+            "canal": "email Klaviyo"
+          },
+          {
+            "semana": 4,
+            "from": "Junta Directiva",
+            "tono": "ultimo aviso — deadline 7 dias, sin respuesta se procede extrajudicial",
+            "canal": "email + WA"
+          }
         ],
         "siguiente": "Sin respuesta 30 dias → FASE_II automatica"
       },
       "FASE_II": {
         "trigger_unidad": "3-4 meses mora",
         "trigger_edificio": "10-20% mora total — F-II activa, ajuste de flujo",
-        "recargo_fphs": { "ESENCIAL": 150, "PROFESIONAL": 200, "ELITE": 300 },
+        "recargo_fphs": {
+          "ESENCIAL": 150,
+          "PROFESIONAL": 200,
+          "ELITE": 300
+        },
         "costo_unidad": "~$28",
         "incluida_en_tarifa": true,
         "comunicaciones": [
-          { "semana": 1, "from": "ForumPHs + JD", "tono": "ultima oportunidad antes carta legal", "canal": "email + WA" },
-          { "semana": 2, "from": "Ivette Flores — Abogada Ley 284", "tono": "carta extrajudicial formal — monto exacto, deadline 7 dias, consecuencias legales Ley 284", "costo_if": "~$25", "canal": "email formal unico" }
+          {
+            "semana": 1,
+            "from": "ForumPHs + JD",
+            "tono": "ultima oportunidad antes carta legal",
+            "canal": "email + WA"
+          },
+          {
+            "semana": 2,
+            "from": "Ivette Flores — Abogada Ley 284",
+            "tono": "carta extrajudicial formal — monto exacto, deadline 7 dias, consecuencias legales Ley 284",
+            "costo_if": "~$25",
+            "canal": "email formal unico"
+          }
         ],
-        "siguiente": "Sin respuesta → FASE_III automatica. Propietario ya sabe lo que sigue."
+        "siguiente": "Sin respuesta → FASE_III automatica. Propietario ya sabe lo que sigue.",
+        "recargo_note": "Solo aplica si recargo_enabled = true en el contrato del PH. IF puede negociar montos distintos al default del tier."
       },
       "FASE_III": {
         "trigger_unidad": "5-6 meses mora",
         "trigger_edificio": "20-35% mora total — critica, riesgo en servicios basicos",
-        "recargo_fphs": { "ESENCIAL": 250, "PROFESIONAL": 350, "ELITE": 500 },
+        "recargo_fphs": {
+          "ESENCIAL": 250,
+          "PROFESIONAL": 350,
+          "ELITE": 500
+        },
         "activacion": "Una sola notificacion — Plan de Recuperacion activo. Email + WA al propietario. La JD ya sabe. No hay mas comunicaciones de FPHs.",
         "honorario_exito": "10% sobre monto recuperado — incluye 50h representacion legal IF",
         "nota": "FPHs entrega expediente completo documentado hasta F-II. La gestion judicial la decide y ejecuta la JD. FPHs no entra al proceso judicial.",
-        "facturacion": "Tarifa regular + recargo fijo mientras mora este en ese nivel"
+        "facturacion": "Tarifa regular + recargo fijo mientras mora este en ese nivel",
+        "recargo_note": "Solo aplica si recargo_enabled = true en el contrato del PH. IF puede negociar montos distintos al default del tier."
       },
       "FASE_IV": {
         "trigger_unidad": "7+ meses mora",
         "trigger_edificio": ">35% mora total — severa, riesgo estructural planilla",
-        "recargo_fphs": { "ESENCIAL": 400, "PROFESIONAL": 550, "ELITE": 750 },
+        "recargo_fphs": {
+          "ESENCIAL": 400,
+          "PROFESIONAL": 550,
+          "ELITE": 750
+        },
         "activacion": "Protocolo estructural — riesgo real para servicios basicos del PH y planilla FPHs",
         "acciones": [
           "Notificacion formal JD con analisis de impacto en servicios basicos y planilla",
@@ -232,30 +501,55 @@
           "Recomendacion formal de acciones legales urgentes",
           "Evaluacion de viabilidad del contrato si el PH no puede sostenerse"
         ],
-        "honorario_exito": "10% sobre monto recuperado — igual que F-III"
+        "honorario_exito": "10% sobre monto recuperado — igual que F-III",
+        "recargo_note": "Solo aplica si recargo_enabled = true en el contrato del PH. IF puede negociar montos distintos al default del tier."
       }
     },
     "recargo_matrix": {
-      "_formula": "facturacion_mes = tarifa_base + fphs_calc_recargo(tier, mora_pct_total_ph)",
-      "_nota": "Recargo fijo por tier y nivel de mora — NO es porcentaje de la cartera morosa. Compensacion por costo operativo adicional real.",
-      "0_10_pct":    { "nivel": "normal",  "ESENCIAL": 0,   "PROFESIONAL": 0,   "ELITE": 0 },
-      "10_20_pct":   { "nivel": "moderada","ESENCIAL": 150, "PROFESIONAL": 200, "ELITE": 300 },
-      "20_35_pct":   { "nivel": "critica", "ESENCIAL": 250, "PROFESIONAL": 350, "ELITE": 500 },
-      "35_plus_pct": { "nivel": "severa",  "ESENCIAL": 400, "PROFESIONAL": 550, "ELITE": 750 }
+      "_status": "REFERENCIA DE NEGOCIACION — no es contrato automático",
+      "_applies_to": "Solo clientes NUEVOS con pricing_model = 'value_based' Y recargo_enabled = true en contrato",
+      "_legacy": "NO aplica a clientes legacy — recargo no estaba en sus contratos",
+      "_negotiation": "IF puede negociar montos distintos por contrato. recargo_custom en buildings overridea los defaults del tier.",
+      "_formula": "fphs_calc_recargo(tier, mora_pct, recargo_enabled, recargo_custom) → $0 si legacy o no en contrato",
+      "defaults_referencia": {
+        "0_10_pct": {
+          "nivel": "normal",
+          "ESENCIAL": 0,
+          "PROFESIONAL": 0,
+          "ELITE": 0
+        },
+        "10_20_pct": {
+          "nivel": "moderada",
+          "ESENCIAL": 150,
+          "PROFESIONAL": 200,
+          "ELITE": 300
+        },
+        "20_35_pct": {
+          "nivel": "critica",
+          "ESENCIAL": 250,
+          "PROFESIONAL": 350,
+          "ELITE": 500
+        },
+        "35_plus_pct": {
+          "nivel": "severa",
+          "ESENCIAL": 400,
+          "PROFESIONAL": 550,
+          "ELITE": 750
+        }
+      }
     },
     "supabase_functions": {
       "fphs_calc_mora_fase": "calcula fase (AL_DIA/FASE_I-IV) de una unidad segun meses_mora",
-      "fphs_calc_recargo":   "calcula recargo mensual segun tier del PH y mora_pct total",
+      "fphs_calc_recargo": "Calcula recargo mora. Retorna $0 si recargo_enabled=false (legacy o sin clausula). Usa recargo_custom si IF negocio montos distintos al default del tier.",
       "fphs_calc_fase_edificio": "determina fase del edificio completo segun mora_pct para recargo"
     }
   },
-
   "financial_intelligence_engine": {
     "_description": "Motor central de BI. Primer caso de uso: ForumPHs. Exportable a otras marcas como filtro de onboarding UNRLVL.",
     "status": "Nivel 1 activo (manual). Nivel 2 pendiente (app semi-automatizada en Document Factory).",
     "stack": "HTML + Chart.js 4.4.0 + vanilla JS — cero dependencias externas",
     "constants_forumphs": {
-      "BASE_INCOME": 17307.50,
+      "BASE_INCOME": 17307.5,
       "BASE_OPS": 14669,
       "COST_PER_NEW_PH": 1300,
       "LABOR_RES_MONTHLY": 1014.89,
@@ -264,12 +558,33 @@
     },
     "simulation_model": {
       "description": "Loop mensual 180 iteraciones. Calcula mes en que se alcanzan hitos financieros.",
-      "inputs_sliders": ["newPHs (0-6)", "phFee ($1k-$5k)", "phMonth (mes 1-12)", "liabMonths (10-36)", "capPct (5-35%)", "invPct (5-30%)"],
-      "outputs": ["mes liquidacion pasivo", "mes capacitaciones", "mes $50k ahorro", "mes $50k inversion", "curvas acumulacion"]
+      "inputs_sliders": [
+        "newPHs (0-6)",
+        "phFee ($1k-$5k)",
+        "phMonth (mes 1-12)",
+        "liabMonths (10-36)",
+        "capPct (5-35%)",
+        "invPct (5-30%)"
+      ],
+      "outputs": [
+        "mes liquidacion pasivo",
+        "mes capacitaciones",
+        "mes $50k ahorro",
+        "mes $50k inversion",
+        "curvas acumulacion"
+      ]
     },
     "key_results": {
-      "conservador_0phs":  { "pasivo": "Feb 2028", "cap50k": "May 2037", "inv50k": "Nov 2034" },
-      "optimo_4phs_mes3":  { "pasivo": "Abr 2027", "cap50k": "Ago 2028", "inv50k": "Jul 2028" }
+      "conservador_0phs": {
+        "pasivo": "Feb 2028",
+        "cap50k": "May 2037",
+        "inv50k": "Nov 2034"
+      },
+      "optimo_4phs_mes3": {
+        "pasivo": "Abr 2027",
+        "cap50k": "Ago 2028",
+        "inv50k": "Jul 2028"
+      }
     },
     "seven_panels": [
       "01 — Comparativa real 2025→2026",
@@ -290,15 +605,43 @@
       "Simulador — 6 sliders + 4 result cards + Chart.js reactivo"
     ],
     "outputs_generados": {
-      "ForumPHs_BI_2026.html":                         { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/", "paneles": 7 },
-      "FPHs_Business_Intelligence_2025.html":           { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/" },
-      "ForumPHs_GestionCartera_Ivette.html":            { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/" },
-      "FPHs_Suite_Financiera_LuxorTowers300_2025.html": { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/clientes/PH_LUXOR_TOWERS_300/EEFF_2025/" }
+      "ForumPHs_BI_2026.html": {
+        "status": "ENTREGADO",
+        "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/",
+        "paneles": 7
+      },
+      "FPHs_Business_Intelligence_2025.html": {
+        "status": "ENTREGADO",
+        "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/"
+      },
+      "ForumPHs_GestionCartera_Ivette.html": {
+        "status": "ENTREGADO",
+        "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/"
+      },
+      "FPHs_Suite_Financiera_LuxorTowers300_2025.html": {
+        "status": "ENTREGADO",
+        "location": "CoreProject/brands/ForumPHs/assets/clientes/PH_LUXOR_TOWERS_300/EEFF_2025/"
+      }
     },
     "evolution_roadmap": [
-      { "level": 1, "name": "Servicio manual", "status": "ACTIVO", "price": "$400-800/analisis" },
-      { "level": 2, "name": "App semi-automatizada en Document Factory", "status": "PENDIENTE", "inputs": "Normalizer .xlsx/pdf → JSON → Claude → HTML 7 paneles + simulador" },
-      { "level": 3, "name": "SaaS ForumPHs → clientes PH", "status": "FUTURO", "revenue": "$4k/anio con 10 PHs x $200 x 2/anio" }
+      {
+        "level": 1,
+        "name": "Servicio manual",
+        "status": "ACTIVO",
+        "price": "$400-800/analisis"
+      },
+      {
+        "level": 2,
+        "name": "App semi-automatizada en Document Factory",
+        "status": "PENDIENTE",
+        "inputs": "Normalizer .xlsx/pdf → JSON → Claude → HTML 7 paneles + simulador"
+      },
+      {
+        "level": 3,
+        "name": "SaaS ForumPHs → clientes PH",
+        "status": "FUTURO",
+        "revenue": "$4k/anio con 10 PHs x $200 x 2/anio"
+      }
     ],
     "dual_context": {
       "forumphs": "Entrega BI a la JD del PH cliente. Diferenciacion y transparencia. ForumPHs cobra como add-on.",
@@ -314,7 +657,6 @@
       "fuente_datos": "ForumPHs-Ops (pagos, mora, recibos) + EEFF (manual o normalizer) → Document Factory BI"
     }
   },
-
   "data_flow": {
     "_description": "Flujo completo: Ops captura → DB → BI consume → Informe genera → IF/CPA revisa → JD recibe",
     "ops_to_bi": [
@@ -337,7 +679,6 @@
       "oficial": "Firmado por Marlene Molina C.P.A. No. 0488-2020. Reemplaza al preliminar. URL del PDF firmado en cpa_doc_url."
     }
   },
-
   "document_factory": {
     "_url": "forumphs-document-factory.vercel.app",
     "_repo": "unrealvillestudio-hub/forumphs-document-factory (public)",
@@ -358,18 +699,32 @@
         "route": "/bi",
         "current_state": "Formulario input manual + EF fphs-bi-report → narrativa Claude → KPI cards → print/PDF",
         "supabase_ef": "fphs-bi-report v1 (amlvyycfepwhiindxgzw)",
-        "supabase_tables": ["mora_mensual", "informes"],
+        "supabase_tables": [
+          "mora_mensual",
+          "informes"
+        ],
         "gap_vs_plan": "El plan es HTML 7 paneles + Chart.js + simulador FIE. El MVP es funcional para dia 5 pero no es el FIE completo.",
         "sprint_upgrade": "Sprint S2 — modo auto desde Supabase cuando payments/arrears tengan datos"
       },
       "eeff_financial": {
         "status": "PENDIENTE — Nivel 2 del FIE",
         "plan": "Normalizer .xlsx/.pdf → JSON schema EEFF → Claude genera HTML 7 paneles completo con Panel 07 simulador",
-        "clients_pending_bi": ["Venezia Tower", "Torres de Castilla", "Lefevre 75 Don Enrique", "Los Alamos", "PH Plaza Espana"]
+        "clients_pending_bi": [
+          "Venezia Tower",
+          "Torres de Castilla",
+          "Lefevre 75 Don Enrique",
+          "Los Alamos",
+          "PH Plaza Espana"
+        ]
       },
       "nav_tabs": {
         "status": "ARCHIVOS GENERADOS — pendiente commit",
-        "files": ["components/NavTabs.tsx", "app/layout.tsx (updated)", "app/bi/page.tsx (top:44)", "app/page.tsx (top:0→44 manual)"]
+        "files": [
+          "components/NavTabs.tsx",
+          "app/layout.tsx (updated)",
+          "app/bi/page.tsx (top:44)",
+          "app/page.tsx (top:0→44 manual)"
+        ]
       }
     },
     "actas_rules": {
@@ -378,42 +733,212 @@
       "percentages": "'cincuenta y uno coma cincuenta y tres por ciento (51.53%)'",
       "no_summaries": "Intervenciones completas y consolidadas — NUNCA resumir",
       "sections": "UPPERCASE + UNDERLINE",
-      "signatories": ["Presidente/a", "Secretario/a"],
+      "signatories": [
+        "Presidente/a",
+        "Secretario/a"
+      ],
       "quorum": "Mas del 50% propietarios (Art. 67 Ley 284)"
     }
   },
-
   "fphsops": {
     "_description": "Sistema operativo de gestion de PHs. Objetivo: desplazar MUNILY. UNRLVL construye, ForumPHs opera.",
     "_relation_to_bi": "FPHs-OPS es el PROVEEDOR DE DATOS del BI. Captura recibos (OCR), registra pagos, calcula mora, dispara Klaviyo. El BI consume esa data para generar informes mensuales y EEFF preliminares.",
     "status": "DISENADO — Sprint S3+ del tech roadmap",
     "modules": {
-      "1_ops_diarias":     { "priority": 2, "description": "Checklists campo, foto in-app forzada, tickets, cierre turno secuencial obligatorio" },
-      "2_cobros":          { "priority": 1, "status": "ARRANCAR PRIMERO — impacto directo en objetivo 12 PHs", "description": "Ciclo cobro dia 1→6→15→mes2. fph_analysis en cada comunicacion. Captura recibos con Claude Vision OCR." },
-      "3_comunicaciones":  { "priority": 2, "description": "100% trazables via Klaviyo. Triggers automaticos por evento en Supabase." },
-      "4_incidencias":     { "priority": 2, "description": "3 niveles SLA via agente WA. Ticket = objeto que conecta propietario WA → admin app → IF → proveedor → informe mensual." },
-      "informe_mensual_360": { "sections": 8, "distribucion": "JD: 8 secciones completas. Propietario: su cuenta + resumen edificio.", "generado": "Dia 5 por Document Factory BI" }
+      "1_ops_diarias": {
+        "priority": 2,
+        "description": "Checklists campo, foto in-app forzada, tickets, cierre turno secuencial obligatorio"
+      },
+      "2_cobros": {
+        "priority": 1,
+        "status": "ARRANCAR PRIMERO — impacto directo en objetivo 12 PHs",
+        "description": "Ciclo cobro dia 1→6→15→mes2. fph_analysis en cada comunicacion. Captura recibos con Claude Vision OCR."
+      },
+      "3_comunicaciones": {
+        "priority": 2,
+        "description": "100% trazables via Klaviyo. Triggers automaticos por evento en Supabase."
+      },
+      "4_incidencias": {
+        "priority": 2,
+        "description": "3 niveles SLA via agente WA. Ticket = objeto que conecta propietario WA → admin app → IF → proveedor → informe mensual."
+      },
+      "informe_mensual_360": {
+        "sections": 8,
+        "distribucion": "JD: 8 secciones completas. Propietario: su cuenta + resumen edificio.",
+        "generado": "Dia 5 por Document Factory BI"
+      }
     },
     "differentiator": "fph_analysis — cada comunicacion de mora o conciliacion lleva analisis Claude del impacto financiero en el edificio. Nadie mas en Panama entrega esto.",
     "klaviyo_integration": {
       "role": "Canal de comunicaciones de mora (F-I a F-IV) + conciliacion + EEFF",
-      "flow_triggers": ["mora_fase_I_semana1", "mora_fase_I_semana2_jd", "mora_fase_I_semana3", "mora_fase_I_semana4_jd", "mora_fase_II_semana1", "mora_fase_II_carta_if", "mora_fase_III_activacion", "mora_fase_IV_protocolo_estructural"],
+      "flow_triggers": [
+        "mora_fase_I_semana1",
+        "mora_fase_I_semana2_jd",
+        "mora_fase_I_semana3",
+        "mora_fase_I_semana4_jd",
+        "mora_fase_II_semana1",
+        "mora_fase_II_carta_if",
+        "mora_fase_III_activacion",
+        "mora_fase_IV_protocolo_estructural"
+      ],
       "fph_analysis_included": "En cada comunicacion de mora y en conciliaciones",
       "log_table": "klaviyo_flows_log (Supabase ForumPHs)"
+    },
+    "sla_matrix": {
+      "URGENTE": {
+        "first_response_h": 2,
+        "resolution_h": 4,
+        "ejemplos": [
+          "Ascensor",
+          "Inundacion activa",
+          "Corte electrico",
+          "Bomba agua",
+          "Seguridad"
+        ]
+      },
+      "PRIORITARIO": {
+        "first_response_h": 8,
+        "resolution_h": 48,
+        "ejemplos": [
+          "Filtracion",
+          "Iluminacion",
+          "Acceso",
+          "Conflicto vecinos",
+          "Plomeria",
+          "Incendios"
+        ]
+      },
+      "COMUN": {
+        "first_response_h": 24,
+        "resolution_h": 120,
+        "ejemplos": [
+          "Mantenimiento preventivo",
+          "Limpieza",
+          "Mejoras",
+          "Consulta admin",
+          "Ruido no urgente"
+        ]
+      }
+    },
+    "schema_v3": {
+      "total_tables": 36,
+      "incident_tables": [
+        "incident_categories — 16 categorias seeded (5 URGENTE, 6 PRIORITARIO, 5 COMUN) con SLA por nivel",
+        "incidents — tickets con due_at calculado por trigger. Visible al propietario, ratable.",
+        "incident_updates — historial completo de cada ticket",
+        "inspection_photos — fotos in-app con GPS, area_label, ai_analysis (Claude Vision)"
+      ],
+      "ops_tables": [
+        "field_staff — admins de campo con PIN para app",
+        "staff_buildings — asignacion staff <-> edificios",
+        "checklist_templates — plantillas de rutina por edificio o globales",
+        "checklist_items — items con requires_photo, is_critical, creates_incident_if_fail",
+        "inspection_rounds — rondas apertura/cierre/dia/noche con status y contadores",
+        "inspection_round_items — ejecucion de cada item con foto, nota, incidencia creada",
+        "providers — proveedores aprobados por categoria",
+        "provider_invoices — facturas vinculadas a incidencias o edificio",
+        "quality_metrics — KPIs pre-calculados para dashboard IF/Sam/Irja"
+      ],
+      "db_triggers": {
+        "set_incident_due": "Calcula due_at = created_at + sla_hours + copia level desde category al insertar",
+        "set_updated_at": "Actualiza updated_at en incidents antes de cada UPDATE"
+      }
+    },
+    "app_architecture": {
+      "ops_app_campo": {
+        "type": "Web app mobile-first (Next.js)",
+        "users": "Administradores de campo, coordinadores",
+        "sprint": "S2-S3",
+        "capabilities": [
+          "Checklists de turno (apertura/cierre/rondas) — flujo secuencial obligatorio sin bypass",
+          "Registro fotografico SOLO in-app — camara desde la app, nunca galeria. GPS + timestamp + admin automaticos.",
+          "Cierre de rondas — sin checklist completo no se puede cerrar turno",
+          "Creacion y actualizacion de tickets de incidencia",
+          "Recepcion de tickets de propietarios via WA o portal",
+          "Captura recibos de pago via foto → Claude Vision OCR (monto, fecha, referencia → payment_receipts)",
+          "Supervision proveedores activos"
+        ],
+        "philosophy": "La app controla que, como y cuando. El admin ejecuta, la app verifica. Sin datos sueltos."
+      },
+      "propietario_app": {
+        "type": "Web app portal.forumphs.com — mobile-first",
+        "users": "Propietarios y residentes",
+        "sprint": "S3 — 9-20 Jun 2026",
+        "capabilities": [
+          "Consulta y seguimiento de sus tickets en tiempo real (live desde Supabase)",
+          "Balance de su cuenta de cuotas de mantenimiento",
+          "Estado de mora si aplica",
+          "Descarga de actas e informes del mes",
+          "Reporte de nueva incidencia (complementa canal WhatsApp)"
+        ],
+        "auth": "Supabase Auth — roles propietario / junta / admin_fphs"
+      },
+      "quality_dashboard": {
+        "type": "Web dashboard interno ForumPHs",
+        "users": [
+          "Ivette Flores (IF)",
+          "Sam",
+          "Irja Saldana"
+        ],
+        "sprint": "S5 — Jul 2026",
+        "kpis": [
+          "SLA compliance: incidents_total, sla_met_pct, avg_resolution_hours por edificio",
+          "Checklist compliance: rounds_completed, checklist_compliance_pct",
+          "Satisfaccion propietarios: avg_owner_rating por edificio",
+          "Actividad proveedores: facturas aprobadas + montos",
+          "Mora por edificio: mora_pct, fase_activa, recargo_mes",
+          "Vista global cartera: todos los PHs en un panel"
+        ],
+        "data_source": "quality_metrics table (cron dia 5) + live queries Supabase"
+      },
+      "whatsapp_agent": {
+        "type": "Agente ForumPHs-OPS via Twilio WA",
+        "users": "Propietarios y residentes",
+        "sprint": "S4 — 23 Jun 2026",
+        "capabilities": [
+          "Identificacion automatica por numero WA (owners.phone)",
+          "Guia calificacion incidencia en 2-3 preguntas → crea ticket con SLA automatico",
+          "Envia numero de caso y tiempo estimado",
+          "Notifica al admin de campo responsable",
+          "Actualizaciones automaticas de estado al propietario"
+        ]
+      }
     }
   },
-
   "tech_stack": {
     "supabase_unrlvl": {
       "id": "amlvyycfepwhiindxgzw",
       "role": "Motor tecnico — EFs, secrets, claude API calls, token logging",
-      "secrets_fphs": ["forumphs_document_factory (Anthropic API key)", "FPHS_SERVICE_KEY (service_role key de tajuoqdbnsnzkhyqvdgs)", "FPHS_RESEND_API_KEY"],
+      "secrets_fphs": [
+        "forumphs_document_factory (Anthropic API key)",
+        "FPHS_SERVICE_KEY (service_role key de tajuoqdbnsnzkhyqvdgs)",
+        "FPHS_RESEND_API_KEY"
+      ],
       "edge_functions_fphs": {
-        "fphs-formalize":        { "version": 20, "status": "ACTIVE", "role": "Formaliza bloques transcripcion en 3ra persona legal" },
-        "fphs-bi-report":        { "version": 1,  "status": "ACTIVE", "role": "Genera narrativa BI mensual + upsert mora_mensual + informes" },
-        "fphs-chat":             { "status": "ACTIVE", "role": "ForumPHs Speaks chat agent" },
-        "fphs-session":          { "version": 25, "status": "ACTIVE", "role": "OTP auth + Resend para Speaks" },
-        "brand-context-builder": { "version": 1,  "status": "ACTIVE", "role": "Genera brand_context_full.json por marca leyendo todas las fuentes" }
+        "fphs-formalize": {
+          "version": 20,
+          "status": "ACTIVE",
+          "role": "Formaliza bloques transcripcion en 3ra persona legal"
+        },
+        "fphs-bi-report": {
+          "version": 1,
+          "status": "ACTIVE",
+          "role": "Genera narrativa BI mensual + upsert mora_mensual + informes"
+        },
+        "fphs-chat": {
+          "status": "ACTIVE",
+          "role": "ForumPHs Speaks chat agent"
+        },
+        "fphs-session": {
+          "version": 25,
+          "status": "ACTIVE",
+          "role": "OTP auth + Resend para Speaks"
+        },
+        "brand-context-builder": {
+          "version": 1,
+          "status": "ACTIVE",
+          "role": "Genera brand_context_full.json por marca leyendo todas las fuentes"
+        }
       }
     },
     "supabase_forumphs": {
@@ -423,45 +948,146 @@
       "status": "ACTIVE — cuenta IF separada de UNRLVL",
       "mcp_connector": "Supabase ForumPHs (fphs-mcp-proxy.vercel.app/api/mcp)",
       "tables_v2": {
-        "core": ["buildings (8)", "units (1560)", "owners (1265)", "owner_units (1278)", "residents", "pets (15)", "vehicles (14)", "meters"],
-        "assemblies": ["assemblies", "assembly_agenda_items", "assembly_votes"],
-        "payments_mora": ["payments", "arrears", "payment_receipts", "bank_accounts", "bank_reconciliations"],
-        "mora_tracking": ["mora_mensual", "klaviyo_flows_log"],
-        "bi_outputs": ["monthly_kpis", "eeff_preliminar", "informes"],
-        "ops": ["communications", "profiles"]
+        "core": [
+          "buildings (8)",
+          "units (1560)",
+          "owners (1265)",
+          "owner_units (1278)",
+          "residents",
+          "pets (15)",
+          "vehicles (14)",
+          "meters"
+        ],
+        "assemblies": [
+          "assemblies",
+          "assembly_agenda_items",
+          "assembly_votes"
+        ],
+        "payments_mora": [
+          "payments",
+          "arrears",
+          "payment_receipts",
+          "bank_accounts",
+          "bank_reconciliations"
+        ],
+        "mora_tracking": [
+          "mora_mensual",
+          "klaviyo_flows_log"
+        ],
+        "bi_outputs": [
+          "monthly_kpis",
+          "eeff_preliminar",
+          "informes"
+        ],
+        "ops": [
+          "communications",
+          "profiles"
+        ]
       },
       "db_functions": {
-        "fphs_calc_mora_fase":    "Calcula fase (AL_DIA/FASE_I-IV) de unidad segun meses_mora",
-        "fphs_calc_recargo":      "Calcula recargo mensual segun tier y mora_pct del edificio",
+        "fphs_calc_mora_fase": "Calcula fase (AL_DIA/FASE_I-IV) de unidad segun meses_mora",
+        "fphs_calc_recargo": "Calcula recargo mensual segun tier y mora_pct del edificio",
         "fphs_calc_fase_edificio": "Determina fase del edificio segun mora_pct para recargo"
       },
       "note_data_separation": "UNRLVL tiene el MOTOR TECNICO (EFs, secrets, Claude API). ForumPHs tiene los DATOS DE NEGOCIO (propietarios, pagos, mora, informes). UNRLVL accede via FPHS_SERVICE_KEY."
     },
     "vercel_projects": {
-      "document_factory": { "id": "prj_AUHgIP7cuc95dLz7vbj2P4piinlz", "url": "forumphs-document-factory.vercel.app" },
-      "speaks":           { "id": "prj_fhBNQ6b9rd1Jhbe4BqNQP4frYpqn", "url": "speaks.forumphs.com" },
-      "forumphs_com":     { "id": "prj_RNfwSGssi92lcssFl1MrUQ9pRicd", "url": "forumphs.com", "status": "LIVE" }
+      "document_factory": {
+        "id": "prj_AUHgIP7cuc95dLz7vbj2P4piinlz",
+        "url": "forumphs-document-factory.vercel.app"
+      },
+      "speaks": {
+        "id": "prj_fhBNQ6b9rd1Jhbe4BqNQP4frYpqn",
+        "url": "speaks.forumphs.com"
+      },
+      "forumphs_com": {
+        "id": "prj_RNfwSGssi92lcssFl1MrUQ9pRicd",
+        "url": "forumphs.com",
+        "status": "LIVE"
+      }
     }
   },
-
   "tech_roadmap": {
-    "S1": { "dates": "12-23 May 2026", "status": "EN CURSO", "done": ["Speaks OTP ✅", "Speaks tabs ✅", "DB promotoras ✅", "BI MVP v1 ✅", "NavTabs generados pendiente commit"] },
-    "S2": { "dates": "26 May - 6 Jun",  "items": ["Tracker captura recibos (ACH + Claude Vision OCR)", "EF mora automatica cron dia 1", "payment_receipts → payments reconciliados", "klaviyo flows F-I disparados"] },
-    "S3": { "dates": "9-20 Jun",        "items": ["Portal Propietarios Next.js + Supabase Auth"] },
-    "S4": { "dates": "23 Jun - 4 Jul",  "items": ["Klaviyo flows F-I a F-IV configurados", "Twilio WA Business", "12 templates biblioteca"] },
-    "S5": { "dates": "7-18 Jul",        "items": ["Calendario mantenimientos + cron alertas", "Piloto S&H completo", "Runbook onboarding"] }
+    "S1": {
+      "dates": "12-23 May 2026",
+      "status": "EN CURSO",
+      "done": [
+        "Speaks OTP ✅",
+        "Speaks tabs ✅",
+        "DB promotoras ✅",
+        "BI MVP v1 ✅",
+        "NavTabs generados pendiente commit"
+      ]
+    },
+    "S2": {
+      "dates": "26 May - 6 Jun",
+      "items": [
+        "Tracker captura recibos (ACH + Claude Vision OCR)",
+        "EF mora automatica cron dia 1",
+        "payment_receipts → payments reconciliados",
+        "klaviyo flows F-I disparados"
+      ]
+    },
+    "S3": {
+      "dates": "9-20 Jun",
+      "items": [
+        "Portal Propietarios Next.js + Supabase Auth"
+      ]
+    },
+    "S4": {
+      "dates": "23 Jun - 4 Jul",
+      "items": [
+        "Klaviyo flows F-I a F-IV configurados",
+        "Twilio WA Business",
+        "12 templates biblioteca"
+      ]
+    },
+    "S5": {
+      "dates": "7-18 Jul",
+      "items": [
+        "Calendario mantenimientos + cron alertas",
+        "Piloto S&H completo",
+        "Runbook onboarding"
+      ]
+    }
   },
-
   "active_projects": [
-    { "id": "FPH-003",  "name": "Document Factory — Actas",               "status": "PRODUCCION v1.5" },
-    { "id": "FPH-003b", "name": "Document Factory — BI Mensual",           "status": "MVP v1.0 LIVE — upgrade a FIE 7 paneles en S2" },
-    { "id": "FPH-003c", "name": "Document Factory — NavTabs",              "status": "ARCHIVOS GENERADOS — pendiente commit" },
-    { "id": "FPH-006",  "name": "ForumPHs Speaks",                         "status": "PRODUCCION — speaks.forumphs.com LIVE · 90% ready" },
-    { "id": "FPH-020",  "name": "Propuesta PH Star & Herald",              "status": "ICR READY — pendiente aprobacion IF" },
-    { "id": "FPH-FIE",  "name": "Financial Intelligence Engine L2",        "status": "PENDIENTE — normalizer + 7 paneles + simulador en DF" },
-    { "id": "FPH-OPS",  "name": "ForumPHs-OPS",                            "status": "DISENADO — arranca Sprint S2 modulo Cobros" }
+    {
+      "id": "FPH-003",
+      "name": "Document Factory — Actas",
+      "status": "PRODUCCION v1.5"
+    },
+    {
+      "id": "FPH-003b",
+      "name": "Document Factory — BI Mensual",
+      "status": "MVP v1.0 LIVE — upgrade a FIE 7 paneles en S2"
+    },
+    {
+      "id": "FPH-003c",
+      "name": "Document Factory — NavTabs",
+      "status": "ARCHIVOS GENERADOS — pendiente commit"
+    },
+    {
+      "id": "FPH-006",
+      "name": "ForumPHs Speaks",
+      "status": "PRODUCCION — speaks.forumphs.com LIVE · 90% ready"
+    },
+    {
+      "id": "FPH-020",
+      "name": "Propuesta PH Star & Herald",
+      "status": "ICR READY — pendiente aprobacion IF"
+    },
+    {
+      "id": "FPH-FIE",
+      "name": "Financial Intelligence Engine L2",
+      "status": "PENDIENTE — normalizer + 7 paneles + simulador en DF"
+    },
+    {
+      "id": "FPH-OPS",
+      "name": "ForumPHs-OPS",
+      "status": "DISENADO — schema v3 completo (36 tablas). Arrancar Sprint S2 modulo Cobros + Captura Recibos."
+    }
   ],
-
   "pending_decisions": [
     "URGENTE: IF aprueba propuesta Star & Herald → pasa a Mayra Paredes",
     "URGENTE: IF responde 5 decisiones del documento de servicios (asambleas obligatorias, recargos, precio $1,200 Esencial)",
@@ -471,16 +1097,37 @@
     "Schema v2: popular buildings con tier + tarifa_base de cada PH",
     "BD PHs completa (propietarios, mora actual, cuotas por unidad) — bloqueante para modo auto BI",
     "Foto IF para FPHs Web Institucional",
-    "Apertura 4 cuentas bancarias ForumPHs"
+    "Apertura 4 cuentas bancarias ForumPHs",
+    "Luxor Towers 300 RESUELTO: legacy · tier ESENCIAL (143 uds) · tarifa congelada $3,100 · recargo mora por tier ESENCIAL"
   ],
-
   "alerts": [
-    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — VENCIDO 1 Mayo 2026 ($1,014.89/mes)" },
-    { "level": "critical", "msg": "Pasivo laboral historico ~$25k sin provisionar — VENCIDO 15 Abr" },
-    { "level": "high",     "msg": "Meta critica: primer cliente nuevo antes del 30 Jun 2026" },
-    { "level": "high",     "msg": "Propuesta Star & Herald lista — IF debe aprobar ASAP" },
-    { "level": "warning",  "msg": "payments, arrears, bank_reconciliations en 0 rows — modo auto BI bloqueado hasta Sprint S2" },
-    { "level": "warning",  "msg": "buildings.tier + tarifa_base sin poblar — recargo_matrix no puede calcular hasta que IF confirme tier de cada PH" },
-    { "level": "info",     "msg": "BI modulo actual es MVP correcto para dia 5 pero no es el FIE 7 paneles del plan" }
+    {
+      "level": "critical",
+      "msg": "Reservas laborales corrientes en $0 — VENCIDO 1 Mayo 2026 ($1,014.89/mes)"
+    },
+    {
+      "level": "critical",
+      "msg": "Pasivo laboral historico ~$25k sin provisionar — VENCIDO 15 Abr"
+    },
+    {
+      "level": "high",
+      "msg": "Meta critica: primer cliente nuevo antes del 30 Jun 2026"
+    },
+    {
+      "level": "high",
+      "msg": "Propuesta Star & Herald lista — IF debe aprobar ASAP"
+    },
+    {
+      "level": "warning",
+      "msg": "payments, arrears, bank_reconciliations en 0 rows — modo auto BI bloqueado hasta Sprint S2"
+    },
+    {
+      "level": "warning",
+      "msg": "buildings.tier + tarifa_base sin poblar — recargo_matrix no puede calcular hasta que IF confirme tier de cada PH"
+    },
+    {
+      "level": "info",
+      "msg": "BI modulo actual es MVP correcto para dia 5 pero no es el FIE 7 paneles del plan"
+    }
   ]
 }
