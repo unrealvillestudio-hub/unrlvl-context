@@ -1,0 +1,409 @@
+{
+  "_meta": {
+    "schema": "BRAND_CONTEXT_FULL_v1.0",
+    "brand_id": "ForumPHs",
+    "version": "2026-05-21-v1",
+    "maintained_by": "brand-context-builder agent",
+    "sources_read": [
+      "unrlvl-context/brands/ForumPHs/BP_Brand_Context.md",
+      "unrlvl-context/brands/ForumPHs/DOCUMENT_FACTORY_PLAN.md",
+      "unrlvl-context/brands/ForumPHs/FPHSOPS_SPEC.md",
+      "unrlvl-context/brands/ForumPHs/brand.json",
+      "unrlvl-context/brands/ForumPHs/session_log.md",
+      "unrlvl-context/projects/FinancialIntelligenceEngine.json",
+      "BluePrints/brands/ForumPHs/BP_BRAND_ForumPHs_v1.0.json",
+      "CoreProject/checkpoints/CHECKPOINT_FinancialIntelligence_Service_v1.md",
+      "CoreProject/brands/ForumPHs/assets/ForumPHs/* (tree)",
+      "CoreProject/brands/ForumPHs/assets/clientes/* (tree)",
+      "GitHub/forumphs-document-factory (full repo audit)",
+      "Supabase tajuoqdbnsnzkhyqvdgs (schema audit)"
+    ],
+    "load_instruction": "Cargar este archivo al inicio de TODA sesión ForumPHs antes de trabajar. Reemplaza la lectura individual de BP_Brand_Context.md + brand.json + session_log.md. Es la fuente única de verdad de contexto de marca."
+  },
+
+  "brand": {
+    "id": "ForumPHs",
+    "display_name": "ForumPHs",
+    "sigla": "FPHs",
+    "former_name": "PHAS",
+    "casing_rule": "ForumPHs — F mayúscula, PH en caps, s minúscula. FORUMPHS solo en contextos Cinzel (labels, tags). FPHs como sigla.",
+    "slogan": "Construiste tu patrimonio. Nosotros le construimos un sistema.",
+    "slogan_rule": "INVARIABLE — no acortar, no parafrasear, nunca. La estructura paralela construiste/construimos es una decisión creativa deliberada.",
+    "tagline": "Administración de Propiedad Horizontal · Panamá · Desde 2015",
+    "positioning": "ForumPHs no vende administración de edificios. Vende gestión patrimonial sistémica. El precio varía por complejidad del PH, nunca por calidad del servicio. No existe un tier bajo.",
+    "territory": "Patrimonio · Confianza · Sistema · Precisión · Transparencia financiera",
+    "avoid": "Lenguaje de conserjería, mantenimiento reactivo, administración genérica, posicionamiento PHAS.",
+    "domain": "forumphs.com",
+    "market": "Panamá",
+    "legal_framework": "Ley No. 284 de 14 de febrero de 2022 (Propiedad Horizontal, Panamá)",
+    "model": ["B2B", "B2G"],
+    "language_primary": "es-PA",
+    "founded": 2015,
+    "status": "active",
+    "sam_role": "Socio + Director de Sistemas (UNRLVL). ForumPHs es co-propiedad, no cliente. Es el laboratorio donde UNRLVL desarrolla y afina metodologías antes de exportarlas.",
+    "unrlvl_role": "ForumPHs es el laboratorio piloto del Financial Intelligence Engine, Document Factory, y FPHs-OPS. Todo lo que se construye aquí se exporta al ecosistema."
+  },
+
+  "identity": {
+    "palette": {
+      "_name": "Amatista Carbon",
+      "_note": "Paleta definitiva — no hay alternativas activas.",
+      "am":       { "hex": "#5C3472", "role": "institutional-primary", "use": "CTAs, botones, KPI números, wordmark-Forum sobre oscuro" },
+      "am_d":     { "hex": "#3A1F4A", "role": "premium-bg, footer", "use": "Fondos premium, footer, email sidebar" },
+      "am_l":     { "hex": "#EAD9F5", "role": "light-bg, KPI-bg", "use": "KPI backgrounds, fondos claros, firma email" },
+      "terra":    { "hex": "#C4622D", "role": "accent, wordmark-PHs, slogan-part2", "use": "Acento, PHs en wordmark, énfasis 2ª parte slogan, reglas decorativas" },
+      "carbon":   { "hex": "#1C2233", "role": "ui-surface", "use": "Cards, email header, superficies UI" },
+      "carbon_d": { "hex": "#0E1018", "role": "hero-bg", "use": "Hero backgrounds, portadas, pantalla principal DF" },
+      "ink":      { "hex": "#1A1612", "role": "body-text-on-light", "use": "Texto sobre parchment y fondos claros" },
+      "stone":    { "hex": "#6B6460", "role": "secondary-text", "use": "Metadatos, labels KPI, texto secundario" },
+      "parch":    { "hex": "#F0EDE8", "role": "documents", "use": "Actas, contratos, informes impresos, cartas" }
+    },
+    "palette_combos": {
+      "kpis_metricas":    { "bg": "#EAD9F5", "number": "#5C3472", "label": "#6B6460" },
+      "documentos_actas": { "bg": "#F0EDE8", "text": "#1A1612", "accent": "#C4622D" },
+      "hero_portada":     { "bg": "#0E1018", "text": "#ffffff", "accent": "#C4622D" },
+      "ui_app":           { "bg": "#1C2233", "text": "#F0EDE8", "accent": "#5C3472" }
+    },
+    "palette_css": ":root { --fphs-am:#5C3472; --fphs-am-d:#3A1F4A; --fphs-am-l:#EAD9F5; --fphs-terra:#C4622D; --fphs-carbon:#1C2233; --fphs-carbon-d:#0E1018; --fphs-ink:#1A1612; --fphs-stone:#6B6460; --fphs-parch:#F0EDE8; }",
+    "typography": {
+      "google_fonts_url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500;600;700&display=swap",
+      "display":   { "family": "EB Garamond",         "role": "Wordmark Forum, slogan, email subject, headlines principales" },
+      "editorial": { "family": "Cormorant Garamond",  "role": "Nombre PH en portadas, eyebrows, texto decorativo" },
+      "utility":   { "family": "Cinzel",              "role": "Section labels, tags, eyebrow caps, FORUMPHS en label" },
+      "body":      { "family": "DM Sans",             "role": "Cuerpo, UI, PHs en wordmark, botones, datos numéricos" }
+    },
+    "wordmark": {
+      "rule": "Siempre HTML/CSS — nunca imagen PNG/SVG independiente",
+      "html_dark": "<span style=\"font-family:'EB Garamond',serif;font-weight:400;\">Forum</span><span style=\"font-family:'DM Sans',sans-serif;font-weight:700;color:#C4622D;letter-spacing:0.06em;\">PH</span><span style=\"font-family:'DM Sans',sans-serif;font-weight:700;color:#C4622D;letter-spacing:0.04em;\">s</span>",
+      "html_light": "<span style=\"font-family:'EB Garamond',serif;font-weight:400;color:#3A1F4A;\">Forum</span><span style=\"font-family:'DM Sans',sans-serif;font-weight:700;color:#C4622D;letter-spacing:0.06em;\">PH</span><span style=\"font-family:'DM Sans',sans-serif;font-weight:700;color:#C4622D;letter-spacing:0.04em;\">s</span>"
+    },
+    "voice": {
+      "archetype": "TRUSTED_PROFESSIONAL_AUTHORITY",
+      "tone": "Profesional-formal · Patrimonial · Sistémico · Cercano-experto",
+      "do": ["Escribir siempre ForumPHs (casing exacto)", "Usar FPHs como sigla", "Slogan completo e invariable", "Terra para énfasis 2ª parte slogan", "Tercera persona formal en Actas"],
+      "dont": ["No FORUMPHS excepto Cinzel labels", "No parafrasear el slogan", "No mencionar a Roberto González como activo", "No colores fuera de Amatista Carbon", "No posicionamiento 'OS of your PH'"]
+    },
+    "assets": {
+      "logo_dark_bg": "BluePrints/brands/ForumPHs/assets/FPHS_logo_wt.png",
+      "logo_light_bg": "BluePrints/brands/ForumPHs/assets/FPHS_logo_deep.png",
+      "favicon": "BluePrints/brands/ForumPHs/assets/FPHS_favicon_deep.png"
+    }
+  },
+
+  "people": {
+    "sam": {
+      "role": "Socio + Director de Sistemas UNRLVL",
+      "note": "No es cliente — es co-propietario. El crecimiento de ForumPHs es interés directo de Sam. Tiene una capa de decisión ('olfato') no documentable que Claude respeta como criterio soberano."
+    },
+    "ivette_flores": {
+      "full_name": "Ivette Flores",
+      "cedula": "8-368-46",
+      "role": "Gerente General · Abogada especialista en Propiedad Horizontal",
+      "email": "ivetteflores@forumphs.com",
+      "initials": "IF",
+      "decision_style": "Legal primero. Rigurosa, necesita tiempo para procesar propuestas complejas — no indecisión, sino minuciosidad. Aprecia documentación formal y transparencia total.",
+      "authority": "Única firmante con autoridad plena en contratos. Cara pública de la empresa.",
+      "honorarios": "$1,200–$1,700/mes (no $4,800 — corrección confirmada sesión 2026-05-09)",
+      "whatsapp": "+50766866775"
+    },
+    "cpa": {
+      "name": "Marlene Molina",
+      "cedula": "PE-11-2157",
+      "cpa_num": "0488-2020",
+      "role": "Contadora externa — no propietaria de PH",
+      "note": "EEFF 2025 tiene línea 172 (reservas laborales) en $0 — pasivo histórico nunca provisionado. Entrega informes con retraso. Informe preliminar DF cubre día 5, Marlene firma después.",
+      "disclaimer_cpa": "Los estados e indicadores financieros presentados en este informe son preliminares y están sujetos a revisión y firma por la Contadora Pública Autorizada Marlene Molina, C.P.A. Nº 0488-2020."
+    },
+    "munily": {
+      "role": "Plataforma de comunicación con propietarios — activa. FPHs-OPS la desplazará eventualmente."
+    }
+  },
+
+  "business": {
+    "portfolio": {
+      "total_phs": 8,
+      "monthly_income": 17307.50,
+      "phs": [
+        { "name": "Torres de Castilla",      "fee": 3700.00, "note": "Impuesto complementario", "supabase_id": "33560559-1fec-47fc-9086-206817a00153", "units": 305 },
+        { "name": "PH Venezia Tower",         "fee": 3300.00, "supabase_id": "2b61944c-6a14-4177-a870-7bbecea17803", "units": 182 },
+        { "name": "PH Luxor Towers 300",      "fee": 3100.00, "note": "Tasa única", "supabase_id": "4a798598-3b94-438e-9b49-bdc15985d365", "units": 143, "bi_done": true },
+        { "name": "PH Lefevre 75 Don Enrique","fee": 2407.50, "note": "Prorrateo pendiente confirmar", "supabase_id": "d30e6888-1fc3-43bc-960c-94a012b753d0", "units": 184 },
+        { "name": "Los Alamos",               "fee": 2000.00, "supabase_id": "e90da0fd-bb6e-4e4d-9015-50e0c17a1794", "units": 329 },
+        { "name": "PH Firenze Tower",         "fee": 1200.00, "supabase_id": "16a68732-256d-49d6-ae47-adcd72225c1a", "units": 79 },
+        { "name": "PH Plaza España",          "fee": 1000.00, "note": "Revisar rentabilidad", "supabase_id": "3429020f-c002-42c8-97d3-afd5ea2552a2", "units": 71 },
+        { "name": "PH Parque Central Arraijan","fee": 600.00, "note": "Revisar rentabilidad", "supabase_id": "7e11008d-89da-4228-8e16-39bb24d0b37f", "units": 81 }
+      ],
+      "eeff_bi_pending": ["Venezia Tower", "Torres de Castilla", "Lefevre 75 Don Enrique", "Los Alamos", "PH Plaza España"]
+    },
+    "financials": {
+      "eeff_2025": { "period": "Nov–Dic 2025", "ingresos": 18207.50, "gastos": 17251.19, "utilidad": 956.31, "margen": "5.25%" },
+      "eeff_2026_ene": { "ingresos": 17307.50, "gastos": 13879.74, "utilidad": 3427.76, "margen": "19.8%" },
+      "eeff_2026_feb": { "ingresos": 17307.50, "gastos": 15458.17, "utilidad": 1849.33, "margen": "10.7%" },
+      "avg_margin_2026": "15.2%",
+      "avg_cost_per_ph": 1834,
+      "cost_breakdown": {
+        "planilla_6p": 5666,
+        "cass": 955,
+        "honorarios_4p_incl_if": 6175,
+        "viaticos": 625,
+        "honorarios_servicios": 1249,
+        "stack_tecnologico": 170
+      },
+      "pasivo_laboral_historico": { "estimado": 25000, "registrado_eeff": 0, "status": "SIN PROVISIONAR — VENCIDO" },
+      "reservas_laborales": { "mensual": 1014.89, "status": "INICIO COMPROMETIDO 1 MAY 2026 — VENCIDO" }
+    },
+    "scale_scenarios": {
+      "8_phs":  { "costo_ph": 1834, "margen": "15.2%" },
+      "10_phs": { "costo_ph": 1486, "margen_est": "~22%" },
+      "15_phs": { "costo_ph": 1211, "margen_est": "~28%" },
+      "20_phs": { "costo_ph": 960,  "margen_est": "~38%" }
+    },
+    "growth_targets": {
+      "q2_q3_2026": "+2–3 PHs nuevos antes de sep 2026",
+      "critical_deadline": "Primer cliente nuevo antes del 30 Jun 2026",
+      "sustainability_threshold": 20500,
+      "gap_to_threshold": 3193,
+      "note": "Brecha = 1 PH mediano nuevo ($3,193/mes)"
+    },
+    "prospect": {
+      "name": "PH Star & Herald",
+      "location": "Casco Viejo, Ciudad de Panamá",
+      "contact": "Mayra Paredes — Presidenta JD",
+      "status": "PROPUESTA ENVIADA — pendiente reunión",
+      "fee_ofrecido": 800,
+      "note": "Excepción estratégica — Mayra preside múltiples JDs"
+    },
+    "services_tiers": {
+      "esencial":      { "perfil": "50–150 uds", "tarifa": "$1,200–$2,500/mes" },
+      "profesional":   { "perfil": "150–280 uds", "tarifa": "$2,500–$4,500/mes" },
+      "elite":         { "perfil": "280+ uds", "tarifa": "$4,500+/mes" }
+    },
+    "mora_protocol": {
+      "fase_I":   { "duracion": "30 días", "comunicaciones": "4 emails escalados + 2 WA", "costo": "~$5/mes/unidad" },
+      "fase_II":  { "comunicaciones": "Email + carta extrajudicial IF deadline 7 días", "costo": "~$28", "incluida_en_tarifa": true },
+      "fase_III": { "activacion": "Automática si F-II sin respuesta", "honorario_exito": "10% sobre monto recuperado" }
+    }
+  },
+
+  "financial_intelligence_engine": {
+    "_description": "Motor central de BI. Primer caso de uso: ForumPHs. Exportable a otras marcas UNRLVL como filtro de onboarding.",
+    "status": "Nivel 1 activo (manual). Nivel 2 pendiente (app semi-automatizada en Document Factory).",
+    "stack": "HTML + Chart.js 4.4.0 + vanilla JS — cero dependencias externas",
+    "fonts_paleta": "EB Garamond + DM Sans + Cormorant Garamond. Paleta Amatista Carbon exacta.",
+    "constants_forumphs": {
+      "BASE_INCOME": 17307.50,
+      "BASE_OPS": 14669,
+      "COST_PER_NEW_PH": 1300,
+      "LABOR_RES_MONTHLY": 1014.89,
+      "CONTINGENCY_MONTHLY": 500,
+      "HISTORIC_LIABILITY": 25000
+    },
+    "simulation_model": {
+      "description": "Loop mensual 180 iteraciones. Calcula mes en que se alcanzan hitos financieros.",
+      "inputs_sliders": ["newPHs (0-6)", "phFee ($1k-$5k)", "phMonth (mes 1-12)", "liabMonths (10-36)", "capPct (5-35%)", "invPct (5-30%)"],
+      "outputs": ["mes liquidación pasivo", "mes capacitaciones", "mes $50k ahorro", "mes $50k inversión", "curvas acumulación"]
+    },
+    "key_results": {
+      "conservador_0phs":   { "pasivo": "Feb 2028", "cap50k": "May 2037", "inv50k": "Nov 2034" },
+      "base_2phs_mes6":     { "pasivo": "Feb 2028", "cap50k": "Ago 2033", "inv50k": "Feb 2032" },
+      "rapido_3phs_mes4":   { "pasivo": "Ago 2027", "cap50k": "Feb 2030", "inv50k": "Sep 2029" },
+      "optimo_4phs_mes3":   { "pasivo": "Abr 2027", "cap50k": "Ago 2028", "inv50k": "Jul 2028" }
+    },
+    "seven_panels": [
+      "01 — Comparativa real 2025→2026",
+      "02 — Estado actual mes a mes",
+      "03 — Estructura de costos",
+      "04 — Los 4 fondos de sostenibilidad (wishlist IF)",
+      "05 — Proyección y escenarios",
+      "06 — Hoja de ruta",
+      "07 — Timing & Metas — SIMULADOR INTERACTIVO (el diferenciador central)"
+    ],
+    "ui_patterns_built": [
+      ".fondo-card — Tarjeta de fondo con borde superior de color",
+      ".hierarchy — Lista jerárquica rank + contenido + monto",
+      ".vs-strip — Tabla comparativa múltiples períodos",
+      ".wf-row — Fila waterfall chart",
+      ".scenario-grid — Grid 3 escenarios con colores",
+      ".ms-row — Fila milestone/roadmap con dot + línea",
+      "Simulador — 6 sliders + 4 result cards + Chart.js reactivo"
+    ],
+    "outputs_generados": {
+      "ForumPHs_BI_2026.html":                      { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/", "paneles": 7 },
+      "FPHs_Business_Intelligence_2025.html":        { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/" },
+      "ForumPHs_GestionCartera_Ivette.html":         { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/ForumPHs/" },
+      "FPHs_Suite_Financiera_LuxorTowers300_2025.html": { "status": "ENTREGADO", "location": "CoreProject/brands/ForumPHs/assets/clientes/PH_LUXOR_TOWERS_300/EEFF_2025/" }
+    },
+    "evolution_roadmap": [
+      { "level": 1, "name": "Servicio manual", "status": "ACTIVO", "price": "$400–800/análisis" },
+      { "level": 2, "name": "App semi-automatizada en Document Factory", "status": "PENDIENTE", "stack": "Normalizer .xlsx → JSON → Claude → HTML 7 paneles + simulador" },
+      { "level": 3, "name": "SaaS ForumPHs → clientes PH", "status": "FUTURO", "revenue": "$4k/año con 10 PHs × $200 × 2/año" }
+    ],
+    "methodology_5_steps": [
+      "Paso 1 — Ingesta: xlsx/pdf → extraer ingresos por línea, gastos por categoría",
+      "Paso 2 — Normalización: ingreso mensual promedio, margen, ratio personal/ingresos, anomalías",
+      "Paso 3 — Modelo fondos: nómina real, pasivo histórico, meta capitalización → jerarquía compromisos",
+      "Paso 4 — Simulación timing: loop 180 meses, variables crecimiento → mes de cada hito",
+      "Paso 5 — Output HTML navegable 7 paneles, Chart.js, tipografía + paleta ForumPHs"
+    ],
+    "dual_context": {
+      "forumphs": "Entrega el BI a la JD del PH cliente. Herramienta de transparencia y diferenciación. ForumPHs cobra como add-on.",
+      "unrlvl": "Uso interno de UNRLVL como filtro de onboarding. NO se entrega al prospecto. Determina si tiene salud financiera para trabajar con UNRLVL.",
+      "note": "Un motor, dos contextos. No hay dos productos."
+    }
+  },
+
+  "document_factory": {
+    "_url": "forumphs-document-factory.vercel.app",
+    "_repo": "unrealvillestudio-hub/forumphs-document-factory",
+    "_vercel_id": "prj_AUHgIP7cuc95dLz7vbj2P4piinlz",
+    "_version": "v1.5",
+    "_framework": "Next.js App Router, Node 24",
+    "_api_key_secret": "forumphs_document_factory (Anthropic key en UNRLVL Supabase secrets)",
+    "architecture_principle": "Claude consume JSON estructurado NUNCA archivos crudos. El normalizer convierte fuentes a JSON con schema fijo. Motor único, múltiples módulos.",
+    "modules_status": {
+      "actas": {
+        "status": "PRODUCCIÓN v1.5",
+        "route": "/",
+        "flow": "ZIP Hypal → parse → preflight → formalizar (fphs-formalize EF) → generar → QA → ICR → DOCX",
+        "job_types": ["acta_ordinaria", "acta_extraordinaria"],
+        "supabase_ef": "fphs-formalize (amlvyycfepwhiindxgzw, verify_jwt:false)",
+        "key_features": ["Paso 0.5 formalización en 3ª persona legal", "ICR auditoría legal", "QA report", "Imágenes de votaciones incluidas"]
+      },
+      "bi_mensual": {
+        "status": "MVP v1.0 — INCOMPLETO según plan original",
+        "route": "/bi",
+        "current_state": "Formulario input manual (mora por fase + datos financieros básicos) → EF fphs-bi-report → narrativa Claude → KPI cards → print/PDF",
+        "supabase_ef": "fphs-bi-report v1 (amlvyycfepwhiindxgzw, verify_jwt:false)",
+        "supabase_tables": ["mora_mensual", "informes"],
+        "gap_vs_plan": "El plan original es suite HTML 7 paneles con Chart.js y simulador de timing, NO un formulario manual. El MVP actual es funcional para el informe día-5 pero no es el FIE completo.",
+        "next_level": "Normalizer .xlsx → JSON schema EEFF → HTML 7 paneles con patrones UI ya construidos + Panel 07 simulador"
+      },
+      "eeff_financial": {
+        "status": "PENDIENTE — es el Nivel 2 del FIE",
+        "plan": "Normalizer en tools/normalizer.html acepta .xlsx/.pdf → JSON schema EEFF v1.0 → Claude genera HTML 7 paneles completo",
+        "clients_pending_bi": ["Venezia Tower", "Torres de Castilla", "Lefevre 75 Don Enrique", "Los Alamos", "PH Plaza España"]
+      },
+      "contratos": { "status": "FUTURO" },
+      "normalizer": { "status": "PENDIENTE", "target_path": "tools/normalizer.html en repo DF", "formats": [".xlsx", ".pdf", ".docx"] }
+    },
+    "actas_rules": {
+      "voice": "Tercera persona formal SIEMPRE",
+      "numbers": "Primero en letras, luego en paréntesis: 'sesenta y siete (67)'",
+      "percentages": "'cincuenta y uno coma cincuenta y tres por ciento (51.53%)'",
+      "no_summaries": "Intervenciones completas y consolidadas — NUNCA resumir",
+      "sections": "UPPERCASE + UNDERLINE",
+      "signatories": ["Presidente/a", "Secretario/a"],
+      "quorum": "Más del 50% propietarios (Art. 67 Ley 284)",
+      "structure": ["Encabezado PH (Finca, Código, Folio Real)", "Convocatoria literal", "JD presente", "Administración presente (ForumPHs aquí)", "Puntos orden del día", "Votaciones (votos a favor/contra/abstenciones + %)", "Cierre con hora", "Firmas"]
+    },
+    "nav_tabs": {
+      "status": "PENDIENTE COMMIT",
+      "files": ["components/NavTabs.tsx", "app/layout.tsx (updated)", "app/bi/page.tsx (top:44)", "app/page.tsx (top:0→44 manual)"]
+    }
+  },
+
+  "fphsops": {
+    "_description": "Sistema operativo de gestión de PHs. Objetivo: desplazar MUNILY. Infraestructura que construye UNRLVL, opera ForumPHs.",
+    "status": "DISEÑADO — Sprint S3+ del tech roadmap",
+    "architecture": {
+      "supabase_forumphs_id": "tajuoqdbnsnzkhyqvdgs",
+      "note": "Cuenta propia de ForumPHs, separada de UNRLVL"
+    },
+    "modules": {
+      "1_ops_diarias":     { "priority": 2, "status": "diseñado", "description": "Checklists campo, foto in-app, tickets, cierre turno forzado" },
+      "2_cobros":          { "priority": 1, "status": "diseñado — arrancar primero", "description": "Ciclo cobro automatizado día 1→6→15→mes2. fph_analysis en cada comunicación." },
+      "3_comunicaciones":  { "priority": 2, "status": "diseñado", "description": "100% trazables, triggers automáticos por evento" },
+      "4_incidencias":     { "priority": 2, "status": "diseñado", "description": "3 niveles SLA: urgente 2-4h, prioritario 24-48h, común 3-5 días. Agente WA." },
+      "informe_mensual_360": { "priority": "transversal", "sections": 8, "description": "El entregable premium. Se genera el día 5. 8 secciones incluyendo análisis FPHs.", "delivery": "JD: 8 secciones completas. Propietario individual: cuenta + resumen edificio." }
+    },
+    "differentiator": "fph_analysis — cada comunicación de mora o conciliación lleva análisis Claude del impacto financiero del edificio. Ninguna administradora en Panamá entrega esto.",
+    "schema_tables": {
+      "supabase_project": "tajuoqdbnsnzkhyqvdgs",
+      "active_tables": ["buildings (8 rows)", "units (1560 rows)", "owners (1265 rows)", "owner_units (1278 rows)", "pets (15 rows)", "vehicles (14 rows)", "assemblies", "assembly_agenda_items", "assembly_votes", "payments (0 rows)", "arrears (0 rows)", "communications (0 rows)", "residents (0 rows)", "mora_mensual (0 rows)", "informes (0 rows)"],
+      "note_empty_tables": "payments y arrears en 0 — datos financieros de PHs aún no cargados. Bloqueante para modo auto del módulo BI. Sprint S2 construye el tracker."
+    }
+  },
+
+  "tech_stack": {
+    "supabase_unrlvl": {
+      "id": "amlvyycfepwhiindxgzw",
+      "secrets_fphs": ["forumphs_document_factory (Anthropic API key)", "FPHS_SERVICE_KEY (service role key de tajuoqdbnsnzkhyqvdgs)", "FPHS_RESEND_API_KEY (re_VGuqYnRh... para speaks@forumphs.com)"],
+      "edge_functions_fphs": {
+        "fphs-formalize":   { "version": 20, "status": "ACTIVE", "role": "Formaliza bloques de transcripción en 3ª persona legal" },
+        "fphs-bi-report":   { "version": 1,  "status": "ACTIVE", "role": "Genera narrativa BI mensual + upsert mora_mensual + informes" },
+        "fphs-chat":        { "status": "ACTIVE", "role": "ForumPHs Speaks chat agent" },
+        "fphs-session":     { "version": 25, "status": "ACTIVE", "role": "OTP auth + Resend para Speaks" },
+        "fphs-formalize":   { "status": "ACTIVE" }
+      }
+    },
+    "supabase_forumphs": {
+      "id": "tajuoqdbnsnzkhyqvdgs",
+      "org": "qybmxrjwrwurdgddgbnx",
+      "status": "ACTIVE — cuenta IF, separada de UNRLVL",
+      "mcp_connector": "Supabase ForumPHs (fphs-mcp-proxy.vercel.app/api/mcp)"
+    },
+    "vercel_projects": {
+      "document_factory": { "id": "prj_AUHgIP7cuc95dLz7vbj2P4piinlz", "url": "forumphs-document-factory.vercel.app" },
+      "speaks":           { "id": "prj_fhBNQ6b9rd1Jhbe4BqNQP4frYpqn", "url": "forumphs-speaks.vercel.app", "custom": "speaks.forumphs.com" },
+      "forumphs_com":     { "id": "prj_RNfwSGssi92lcssFl1MrUQ9pRicd", "url": "forumphs.com", "status": "LIVE" }
+    },
+    "repos": {
+      "document_factory": "unrealvillestudio-hub/forumphs-document-factory (public)",
+      "speaks":           "unrealvillestudio-hub/forumphs-speaks (public)"
+    },
+    "agents": {
+      "forumph_speaks":    { "status": "OPERATIONAL", "url": "forumphs-speaks.vercel.app" },
+      "document_factory":  { "status": "OPERATIONAL", "url": "forumphs-document-factory.vercel.app" }
+    }
+  },
+
+  "tech_roadmap_sprints": {
+    "S1_foundation": {
+      "dates": "12–23 May 2026",
+      "status": "EN CURSO",
+      "items": [
+        "Speaks OTP + Resend ✅ CERRADO",
+        "Speaks tab Propietarios + Context Selector ✅ CERRADO",
+        "DB promotoras Los Alamos + Lefevre 75 ✅ CERRADO",
+        "Document Factory módulo BI v1 MVP ✅ CERRADO (pendiente upgrade a FIE completo)",
+        "NavTabs navegación DF — archivos generados, pendiente commit"
+      ]
+    },
+    "S2_tracker_mora": { "dates": "26 May–6 Jun 2026", "items": ["Tracker V0 ACH", "Tracker V1 Claude Vision foto recibo", "Protocolo mora semi-automatizado cron día 1"] },
+    "S3_portal":       { "dates": "9–20 Jun 2026",    "items": ["Portal Propietarios Next.js + Supabase Auth"] },
+    "S4_comms":        { "dates": "23 Jun–4 Jul 2026", "items": ["Klaviyo flows", "Twilio WA", "Biblioteca 12 templates"] },
+    "S5_ops_piloto":   { "dates": "7–18 Jul 2026",    "items": ["Calendario mantenimientos", "Piloto S&H completo", "Runbook onboarding"] }
+  },
+
+  "active_projects": [
+    { "id": "FPH-003", "name": "Document Factory — Actas",           "status": "PRODUCCIÓN v1.5" },
+    { "id": "FPH-003b","name": "Document Factory — BI Mensual",      "status": "MVP v1.0 LIVE — upgrade a FIE 7 paneles pendiente" },
+    { "id": "FPH-003c","name": "Document Factory — NavTabs",         "status": "ARCHIVOS GENERADOS — pendiente commit" },
+    { "id": "FPH-006", "name": "ForumPHs Speaks",                    "status": "PRODUCCIÓN — speaks.forumphs.com LIVE · 90% ready" },
+    { "id": "FPH-020", "name": "Propuesta PH Star & Herald",         "status": "ICR READY — pendiente aprobación IF" },
+    { "id": "FPH-FIE", "name": "Financial Intelligence Engine L2",   "status": "PENDIENTE — normalizer + 7 paneles + simulador en DF" }
+  ],
+
+  "pending_decisions": [
+    "URGENTE: IF aprueba propuesta Star & Herald → pasa a Mayra Paredes",
+    "URGENTE: IF responde 5 decisiones documento servicios/tarifas",
+    "VENCIDO: Reservas laborales corrientes $1,014.89/mes — inicio 1 Mayo",
+    "VENCIDO: Marlene — mapa pasivo laboral individual",
+    "NavTabs: commitear 3 archivos + cambio top:44 en page.tsx",
+    "BI Módulo: definir si upgrade a FIE 7 paneles es S1 o S2",
+    "Suites financieras pendientes: 5 PHs sin BI (ver eeff_bi_pending)",
+    "BD PHs completa (datos propietarios, mora, cuotas) — bloqueante para modo auto",
+    "Foto IF para FPHs Web Institucional",
+    "Apertura 4 cuentas bancarias ForumPHs"
+  ],
+
+  "alerts": [
+    { "level": "critical", "msg": "Reservas laborales corrientes en $0 — VENCIDO 1 Mayo 2026 ($1,014.89/mes)" },
+    { "level": "critical", "msg": "Pasivo laboral histórico ~$25k sin provisionar — VENCIDO 15 Abr" },
+    { "level": "high",     "msg": "Meta crítica: primer cliente nuevo antes del 30 Jun 2026" },
+    { "level": "high",     "msg": "Propuesta Star & Herald lista — IF debe aprobar ASAP" },
+    { "level": "warning",  "msg": "payments y arrears en Supabase ForumPHs tienen 0 rows — modo auto del BI bloqueado hasta Sprint S2" },
+    { "level": "warning",  "msg": "Speaks: ANTHROPIC_API_KEY pendiente en Supabase Secrets" },
+    { "level": "info",     "msg": "BI módulo actual es MVP correcto pero no es el FIE completo de 7 paneles que el plan define" }
+  ]
+}
