@@ -1,7 +1,7 @@
 # SKILL — ui-ux-layer · CORE
 _UNRLVL Brand Visual Reference · Multimarca · B2C/B2B · Supabase-powered_
-_Versión: 3.0 · 2026-05-21_
-_Capas: Comunicación · Geometría · Psicología Visual · Instinto Fotográfico · Disrupción_
+_Versión: 3.1 · 2026-05-22_
+_Capas: Comunicación · Geometría · Psicología Visual · Instinto Fotográfico · Disrupción · **Vida y Movimiento**_
 
 ---
 
@@ -15,15 +15,15 @@ Al inicio de cualquier sesión que produzca HTML / CSS / JS / React, Claude:
 4. Carga paleta y tipografía desde Supabase (Sección 2)
 5. Responde las 4 preguntas de comunicación (Sección 9) antes de diseñar
 6. Elige la arquitectura de tensión (Sección 14) antes de hacer el layout
+7. **Aplica al menos 3 ítems de SECCIÓN 17 (Vida y Movimiento) — OBLIGATORIO desde v3.1**
 
 **Regla absoluta:** Nunca hardcodear colores ni fuentes sin pasar por este protocolo.
-**Regla nueva v3.0:** Nunca generar un output visual sin definir primero QUÉ comunica y QUÉ reacción busca provocar.
+**Regla v3.0:** Nunca generar un output visual sin definir primero QUÉ comunica y QUÉ reacción busca provocar.
+**Regla v3.1:** Nunca entregar un output visualmente correcto pero plano. Todo output tiene vida propia.
 
 ---
 
 ## TABLA DE ACTIVACIÓN DE MÓDULOS
-
-Cargar extensiones según el tipo de proyecto. El CORE siempre activo.
 
 | Proyecto | motion | 3d-spatial | mobile-ux | design-tokens | a11y |
 |---|---|---|---|---|---|
@@ -44,8 +44,6 @@ Cargar extensiones según el tipo de proyecto. El CORE siempre activo.
 ---
 
 ## SECCIÓN 1 — UNRLVL DEFAULTS (Capa Base)
-
-Aplican siempre. Fallback final para cualquier marca sin datos en Supabase.
 
 ```css
 :root {
@@ -82,18 +80,6 @@ Capa 2: brand_id variante   ('NeuroneSCF_B2C' o 'NeuroneSCF_B2B')
 CSS vars finales del output
 ```
 
-Queries Supabase — herencia completa:
-```sql
--- 1. Paleta variante
-SELECT role, hex FROM brand_palette WHERE brand_id = 'NeuroneSCF_B2C';
--- 2. Completar roles del base que falten en la variante
-SELECT role, hex FROM brand_palette WHERE brand_id = 'NeuroneSCF'
-  AND role NOT IN (SELECT role FROM brand_palette WHERE brand_id = 'NeuroneSCF_B2C');
--- 3. Tipografía (igual lógica)
-SELECT role, font_family, css_import FROM brand_typography
-  WHERE brand_id = 'NeuroneSCF_B2C';
-```
-
 ---
 
 ## SECCIÓN 3 — DATOS REALES POR MARCA
@@ -106,14 +92,13 @@ SELECT role, font_family, css_import FROM brand_typography
 | Amatista | `#5C3472` | `--am` / `--accent` | Primario institucional · CTAs · KPIs |
 | Amatista Dark | `#3A1F4A` | `--am-d` | Headers premium · Footer |
 | Amatista Tint | `#EAD9F5` | `--am-l` | KPI bg · Firma email |
-| Forum Terra | `#C4622D` | `--terra` / `--accent-2` | Acento humano · Wordmark PH+s |
+| Forum Terra | `#C4622D` | `--terra` / `--accent-2` | Acento humano · Wordmark PH+s · **Tabs activos** |
 | Carbon | `#1C2233` | `--carbon` | UI surface · Cards |
 | Carbon Deep | `#0E1018` | `--carbon-d` | App bg · Hero bg |
 | Ink | `#1A1612` | `--ink` | Texto sobre claro |
 | Stone | `#6B6460` | `--stone` | Labels secundarios |
 | Dust | `#B8B0A8` | `--dust` | Texto muy sutil |
 | Parchment | `#F0EDE8` | `--parch` | Documentos · Actas |
-| Email Footer Tint | `#E4D6F0` | `--am-footer` | Footer email |
 
 ```css
 :root {
@@ -130,15 +115,10 @@ SELECT role, font_family, css_import FROM brand_typography
 **Tipografía — 4 voces:**
 | Familia | Peso | Rol |
 |---|---|---|
-| EB Garamond | 400/500/italic | Display institucional · Wordmark "Forum" · Headlines · Subject email |
-| Cormorant Garamond | 300/400/italic | Eyebrows · Nombre PH portadas · Citas · Texto ceremonial |
-| Cinzel | 400/600 | Labels · Tags · Section headers · Caps institucionales |
-| DM Sans | 300–700 | Cuerpo · UI · "PH"+"s" wordmark · Botones · Datos numéricos |
-
-Google Fonts:
-```
-https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500;600;700&display=swap
-```
+| EB Garamond | 400/500/italic | Display institucional · Wordmark "Forum" · Headlines |
+| Cormorant Garamond | 300/400/italic | Eyebrows · Citas · Texto ceremonial |
+| Cinzel | 400/600 | Labels · Tags · Section headers |
+| DM Sans | 300–700 | Cuerpo · UI · "PH"+"s" wordmark · Botones |
 
 **Wordmark (siempre HTML/CSS — nunca imagen):**
 ```html
@@ -149,29 +129,6 @@ https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,40
 </span>
 ```
 
-**Superficies:**
-| Contexto | bg | text |
-|---|---|---|
-| App / UI dark | `--carbon-d` | `--parch` |
-| Cards UI | `--carbon` | `--parch` |
-| Documentos / Actas | `--parch` | `--ink` |
-| Email main | `#F8F5F2` | `--ink` |
-| Email top strip | `--carbon` | `#fff` |
-| Email KPIs | `#F0ECF8` | `--am` |
-| Email firma | `--am-l` | `--am` |
-
----
-
-### NeuroneSCF B2C / B2B
-B2C: `--accent: #0076A8` · PT Sans Narrow + Montserrat
-B2B: `--accent: #003A70`, `--bg-primary: #000000`
-
-### Lucien Sael
-```css
---bg-primary:#0D0D0B; --accent:#D4622A; --accent-2:#B8922A;
---font-display:'Cormorant Garamond',serif; --font-body:'Crimson Pro',serif;
-```
-
 ---
 
 ## SECCIÓN 4 — MAPA DE ROLES → CSS VARS
@@ -179,23 +136,19 @@ B2B: `--accent: #003A70`, `--bg-primary: #000000`
 | Role Supabase | CSS var | Fallback |
 |---|---|---|
 | `bg_primary` | `--bg-primary` | `#080808` |
-| `bg_document` | `--bg-document` | `#F0EDE8` |
 | `accent` / `am` | `--accent` | `#00FFD1` |
 | `accent_2` / `terra` | `--accent-2` | `#FFB800` |
-| `am_d` | `--am-d` | `#3A1F4A` |
-| `am_l` | `--am-l` | `#EAD9F5` |
 | `display` | `--font-display` | `'Bebas Neue'` |
 | `body` | `--font-body` | `'Libre Baskerville'` |
-| `mono` | `--font-mono` | `'Space Mono'` |
 
 ---
 
 ## SECCIÓN 5 — REGLAS INVARIANTES
 
-- Footer: `border-top: 2px solid var(--accent)` — inviolable en todos los outputs del studio
+- Footer: `border-top: 2px solid var(--accent)` — inviolable en todos los outputs
 - Wordmark ForumPHs: siempre HTML/CSS. Nunca PNG.
+- Tabs activos ForumPHs: siempre `color: var(--terra)` — nunca amatista
 - Nunca mezclar paletas de marcas distintas en el mismo output
-- Paleta Lucien Sael aislada del resto del ecosistema
 
 ---
 
@@ -209,23 +162,12 @@ B2B: `--accent: #003A70`, `--bg-primary: #000000`
   transition:filter .15s, transform .1s;
 }
 .btn-primary:hover { filter:brightness(1.1); transform:translateY(-1px); }
-
 .btn-secondary {
-  font-family:var(--font-display); letter-spacing:.08em; text-transform:uppercase;
   color:var(--text-primary); background:transparent;
   border:1px solid rgba(255,255,255,0.2); padding:.75rem 1.5rem; cursor:pointer;
   transition:border-color .15s, color .15s;
 }
 .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
-
-.card { background:var(--bg-secondary); border:var(--border-dim); padding:1.5rem; }
-.card-accent { border-left:2px solid var(--accent); }
-.input {
-  font-family:var(--font-body); color:var(--text-primary);
-  background:var(--bg-secondary); border:1px solid rgba(255,255,255,.1);
-  padding:.75rem 1rem; outline:none; width:100%;
-}
-.input:focus { border-color:var(--accent); }
 footer { border-top:2px solid var(--accent); padding:1.5rem 2rem; }
 ```
 
@@ -237,53 +179,31 @@ footer { border-top:2px solid var(--accent); padding:1.5rem 2rem; }
 |---|---|---|
 | `UnrealvilleStudio` | `#00FFD1` | ✅ |
 | `NeuroneSCF` | `#0076A8` | ✅ |
-| `ForumPHs` | `#5C3472` | ⚠️ pendiente insertar tablas UNRLVL |
+| `ForumPHs` | `#5C3472` | ⚠️ pendiente |
 | `LucienSael` | `#D4622A` | ⚠️ hardcoded |
 
 ---
 
-## SECCIÓN 8 — LOADING STATES Y FEEDBACK DE ESTADO
-
-Todo output interactivo debe tener los 4 estados visualizados. La ausencia de feedback es percibida como error.
+## SECCIÓN 8 — LOADING STATES Y FEEDBACK
 
 ```css
-/* Skeleton shimmer — para carga de datos */
 .skeleton {
   background: linear-gradient(90deg,
-    rgba(92,52,114,0.08) 25%,
-    rgba(92,52,114,0.18) 50%,
-    rgba(92,52,114,0.08) 75%
-  );
+    rgba(92,52,114,0.08) 25%, rgba(92,52,114,0.18) 50%, rgba(92,52,114,0.08) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border-radius: 4px;
 }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-/* Spinner — para operaciones activas */
 .spinner {
-  width: 24px; height: 24px;
-  border: 2px solid rgba(92,52,114,0.2);
-  border-top-color: var(--am);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
+  width:24px; height:24px;
+  border:2px solid rgba(92,52,114,0.2); border-top-color:var(--am);
+  border-radius:50%; animation:spin .8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Progress bar — para uploads / procesos largos */
-.progress-track { height: 3px; background: rgba(92,52,114,0.2); border-radius:2px; overflow:hidden; }
-.progress-fill { height:100%; background: var(--am); border-radius:2px;
-  transition: width .3s ease; }
-
-/* Success state */
-.state-success { color: #4ADE80; border-color: rgba(74,222,128,0.3); }
-/* Error state */
-.state-error { color: #F07A7A; border-color: rgba(240,122,122,0.3); }
-/* Empty state */
+@keyframes spin { to { transform:rotate(360deg); } }
 .state-empty {
-  text-align: center; padding: 64px 32px;
-  color: rgba(240,237,232,0.25);
-  font-family: 'EB Garamond', serif; font-size: 18px; font-style: italic;
+  text-align:center; padding:64px 32px;
+  color:rgba(240,237,232,0.25);
+  font-family:'EB Garamond',serif; font-size:18px; font-style:italic;
 }
 ```
 
@@ -291,40 +211,36 @@ Todo output interactivo debe tener los 4 estados visualizados. La ausencia de fe
 
 ## SECCIÓN 9 — PROTOCOLO DE COMUNICACIÓN PUBLICITARIA
 
-**Principio rector:** Si no comunica, no existe. El diseño es el vehículo — la comunicación es el destino.
-
 ### 9.1 — Preguntas obligatorias antes de diseñar
 
-1. **¿QUÉ mensaje central queda grabado?** (Una frase. Si no cabe en una frase, el concepto no está claro.)
-2. **¿QUÉ reacción busca provocar?** (Confianza · Urgencia · Deseo · Curiosidad · Respeto · Sorpresa)
-3. **¿QUIÉN lo ve y en qué estado emocional llega?** (JD frustrada con mora · Propietario confundido · IF a las 11pm)
-4. **¿QUÉ acción concreta toma después?** (Descargar · Aprobar · Contactar · Seguir leyendo)
+1. **¿QUÉ mensaje central queda grabado?**
+2. **¿QUÉ reacción busca provocar?** (Confianza · Urgencia · Deseo · Curiosidad · Respeto)
+3. **¿QUIÉN lo ve y en qué estado emocional llega?**
+4. **¿QUÉ acción concreta toma después?**
 
 ### 9.2 — Jerarquía de atención
 
 ```
-Nivel 1 — ANCHOR (0.3s)   → UN solo elemento por pantalla. El número grande, el titular.
-Nivel 2 — CONTEXT (1-2s)  → Explica el anchor. Label, período, subtítulo.
-Nivel 3 — DETAIL (5-30s)  → El resto. Mora por fase, narrativa, tablas.
-Nivel 4 — ACTION          → El CTA. Nunca compite con el anchor.
+Nivel 1 — ANCHOR (0.3s)   → UN solo elemento. El número grande, el titular.
+Nivel 2 — CONTEXT (1-2s)  → Explica el anchor.
+Nivel 3 — DETAIL (5-30s)  → El resto.
+Nivel 4 — ACTION          → El CTA.
 ```
 
 ### 9.3 — Triggers emocionales ForumPHs
 
 | Trigger | Expresión visual |
 |---|---|
-| Confianza | Serif · Espacios amplios · Amatista dominante · Datos precisos |
-| Urgencia calibrada | Terra 15-20% · Bordes alerta · DM Sans Bold 700 |
-| Respeto patrimonial | Cormorant display · Carbon Deep · Slogan completo |
-| Claridad | SVG charts limpios · Labels Cinzel · Sin ornamentación |
-| Pertenencia | Nombre del edificio prominente · Datos específicos del PH |
+| Confianza | Serif · Espacios amplios · Amatista dominante |
+| Urgencia calibrada | Terra 15-20% · DM Sans Bold 700 |
+| Respeto patrimonial | Cormorant display · Carbon Deep |
+| Claridad | SVG charts limpios · Labels Cinzel |
 
-### 9.4 — Reglas de copywriting aplicadas al diseño
+### 9.4 — Reglas de copy
 
-- El titular dice el beneficio, no la función. "Su edificio recaudó 94.3%" vs "Informe de Gestión"
-- Un elemento visual = un mensaje. Tres cosas compitiendo = cero cosas comunicando
+- El titular dice el beneficio, no la función
+- Un elemento visual = un mensaje
 - El blanco es silencio que hace que lo importante se oiga
-- Amatista dice "institución seria". Terra dice "hay un humano aquí". Nunca los dos en el mismo elemento
 
 ---
 
@@ -334,247 +250,425 @@ Nivel 4 — ACTION          → El CTA. Nunca compite con el anchor.
 
 ```
 Regla áurea (φ = 1.618):  altura_menor = altura_mayor / 1.618
-Proporción 3:2:            cards, imágenes, thumbnails
-Regla de tercios:          el anchor visual en uno de los 4 puntos de intersección — nunca centrado
-Escala modular (1.25):     base 14px → 11 / 14 / 17.5 / 22 / 27.5 / 34 / 43px
+Escala modular (1.25):     base 14px → 11/14/17.5/22/27.5/34/43px
+Fibonacci spacing:         8 13 21 34 55 89px
 ```
 
 ### 10.2 — Simetría vs Asimetría
 
 ```
-SIMETRÍA → confianza, autoridad, equilibrio
-  Usar en: portadas institucionales, confirmaciones, grids de KPIs del mismo peso
-
-ASIMETRÍA → movimiento, tensión, modernidad
-  Usar en: landings, propuestas, dashboards con jerarquía clara
-  Regla: 38/62 (proporción áurea) — no 50/50 ni 80/20
-
-DESEQUILIBRIO CONTROLADO: diferencia deliberada de ~30-40%
+SIMETRÍA   → confianza, autoridad. Portadas, confirmaciones, grids KPIs.
+ASIMETRÍA  → movimiento, tensión. 38/62 — no 50/50.
 ```
 
 ### 10.3 — Técnicas de tensión geométrica
 
 ```css
-/* 1. Diagonal implícita — 3 elementos en diagonal crean movimiento */
-.diagonal-group { transform: translateY(-8px); }
-
-/* 2. Overlap — elemento que sale de su contenedor */
-.overlap-kpi { margin-top: -24px; position: relative; z-index: 2; }
-
-/* 3. Ángulo — rotación mínima para energía sin caos */
-.badge-rotated { transform: rotate(-2deg); }
-
-/* 4. Fragmentación — algo cortado por el borde implica "hay más" */
-.fragment-container { overflow: hidden; }
-
-/* 5. Ghost number — matemáticas como textura de fondo */
+/* Ghost number — matemáticas como textura */
 .with-ghost::before {
-  content: attr(data-number);
-  position: absolute; font-size: 240px; font-weight: 700;
-  color: rgba(92,52,114,0.04); line-height: 1;
-  top: -40px; right: -20px; pointer-events: none;
-  font-family: 'DM Sans', sans-serif;
+  content: attr(data-number); position:absolute;
+  font-size:240px; font-weight:700; color:rgba(92,52,114,0.04);
+  top:-40px; right:-20px; pointer-events:none;
 }
-```
-
-### 10.4 — Grid systems con propósito
-
-```css
-.layout-golden { display:grid; grid-template-columns:1fr 1.618fr; gap:clamp(24px,3vw,48px); }
-.grid-thirds { display:grid; grid-template-columns:repeat(3,1fr); }
-/* Anchor siempre en grid-column: span 2 para peso visual 2x */
-.grid-fib { grid-template-columns:1fr 1fr 2fr 3fr; }
-/* Fibonacci: 8 13 21 34 55px — spacing con ritmo */
+/* Overlap */
+.overlap-kpi { margin-top:-24px; position:relative; z-index:2; }
+/* Badge rotado */
+.badge-rotated { transform:rotate(-2deg); }
 ```
 
 ---
 
 ## SECCIÓN 11 — PROTOCOLO ANTI-GENÉRICO
 
-**El problema:** AI tiende hacia lo seguro. Layouts de 4 cards iguales, gradientes de arriba a abajo, headers centrados. Todo igual = nada comunica.
-
 ### 11.1 — Checklist (mínimo 3 de estos por output)
 
-- [ ] Escala inesperada — un elemento significativamente más grande o pequeño de lo convencional
-- [ ] Asimetría deliberada — algo conscientemente fuera de la grid perfecta
-- [ ] Color inesperado en lugar inesperado — Terra donde nadie lo esperaría
+- [ ] Escala inesperada
+- [ ] Asimetría deliberada
+- [ ] Color inesperado en lugar inesperado
 - [ ] Tipografía de contraste extremo — Cormorant 72px junto a DM Sans 9px
-- [ ] Espacio vacío agresivo — zona intencionalmente vacía que hace respirar lo importante
-- [ ] Elemento que sangra — algo que sale del contenedor o se corta en el borde
-- [ ] Densidad variable — zona muy densa junto a zona muy sparse
-- [ ] Movimiento implícito — diagonal, progresión, algo que guía el ojo de A a B
+- [ ] Espacio vacío agresivo
+- [ ] Elemento que sangra
+- [ ] Densidad variable
+- [ ] Movimiento implícito
 
 ### 11.2 — Proporciones de uso de color ForumPHs
 
 ```
-80% superficie:   Carbon Deep + Carbon (el silencio que hace resaltar todo)
-12% contenido:    Parchment + Dust (lo legible)
-5%  jerarquía:    Amatista + Amatista Tint (estructura institucional)
-3%  ruptura:      Forum Terra (el ojo va directo ahí — úsalo para lo más importante)
-
-EXCEPCIÓN urgencia (F-III/F-IV): Terra → 15-20%
-EXCEPCIÓN propuesta nuevo cliente: Terra → 10-12%
+80% Carbon Deep + Carbon
+12% Parchment + Dust
+5%  Amatista + Tint
+3%  Forum Terra — el ojo va directo ahí
 ```
 
 ### 11.3 — Instinto fotográfico en UI
 
 ```
-Profundidad de campo: elementos secundarios en opacity 0.35-0.45 — el anchor al 100%
-Luz y sombra:  radial-gradient(circle at 80% 10%, rgba(92,52,114,0.15), transparent 60%)
-Leading lines: border-left de 2px en --terra que recorre la columna → apunta al CTA
-Contraste de textura: Cormorant trazo fino + DM Sans 700 en el mismo bloque
-Encuadre dentro del encuadre: card → número grande → separador interno = 3 capas de profundidad
+Profundidad de campo: elementos secundarios opacity 0.35-0.45
+Luz y sombra: radial-gradient top-right amatista
+Leading lines: border-left terra → apunta al CTA
 ```
 
 ---
 
-## SECCIÓN 12 — CHECKLIST ICR v3.0
+## SECCIÓN 12 — CHECKLIST ICR v3.1
 
-**Comunicación (PRIMERO):**
+**Comunicación:**
 - [ ] Mensaje central en una frase
 - [ ] Reacción objetivo definida
-- [ ] Audiencia y estado emocional mapeados
-- [ ] Acción concreta post-visualización definida
 - [ ] Jerarquía anchor / context / detail / action trazada
 
 **Brand compliance:**
-- [ ] brand_id identificado con variante
+- [ ] brand_id identificado
 - [ ] Google Fonts desde css_import real
-- [ ] Cero hex hardcodeados — todo via var(--)
 - [ ] Footer con border-top: 2px solid var(--accent)
+- [ ] Tabs activos con var(--terra)
 
 **Geometría:**
 - [ ] Proporción del layout definida
-- [ ] Simetría vs asimetría justificada
 - [ ] Al menos un elemento de tensión geométrica
 
 **Psicología + Tensión:**
-- [ ] Presets VISUAL_PSYCHO correctos para este output type
-- [ ] Arquitectura de tensión T1-T10 elegida
-- [ ] Proporciones de color ajustadas según presets
+- [ ] Arquitectura T1-T10 elegida
+- [ ] Proporciones de color 80/12/5/3% respetadas
 
 **Anti-genérico:**
-- [ ] Al menos 3 ítems del checklist 11.1 presentes
-- [ ] Al menos un principio fotográfico aplicado
+- [ ] Al menos 3 ítems del checklist 11.1
+- [ ] Al menos un principio fotográfico
+
+**Vida y Movimiento (v3.1 — NUEVO):**
+- [ ] Al menos 3 ítems de Sección 17
+- [ ] Background no es un color plano
+- [ ] Al menos 1 micro-interacción en elementos interactivos
+- [ ] Al menos 1 animación ambient (glow, shimmer, breathe)
+- [ ] Hover states definidos en TODO elemento clickeable
 
 ---
 
-## SECCIÓN 13 — VISUAL_PSYCHO · 10 Presets Psicológicos
+## SECCIÓN 13 — VISUAL_PSYCHO · 10 Presets
 
-Los triggers operan en arquitectura invisible. Nunca se nombran en el output.
-
-| Preset | Expresión visual | Usar en | Evitar en |
-|---|---|---|---|
-| PSY-TRUST | Serif · espacio amplio · Amatista · datos precisos · layout simétrico | Informes JD · EEFF · Gestión ordinaria | Con Terra como dominante |
-| PSY-URGENCY | Terra 15-20% · bordes `--terra` · DM Sans Bold · densidad alta | Mora F-III/F-IV · Alertas críticas | Informes rutinarios |
-| PSY-AUTHORITY | Cormorant display · Wordmark prominente · Carbon Deep · Cinzel en labels | Propuestas · Portadas · Credenciales | Con colores claros |
-| PSY-SOCIAL-PROOF | Números históricos + actuales · tendencias · comparativas | Dashboards · Comparativas de período | Primeras pantallas sin contexto |
-| PSY-BELONGING | Nombre del edificio prominent · datos específicos del PH · Wordmark visible | Portal propietario · Comunicaciones personalizadas | Outputs genéricos del portfolio |
-| PSY-ASPIRATION | Espacio generoso · verde en números altos · slogan completo visible | Propuestas · Landings · Marketing | Alertas y urgencias |
-| PSY-CURIOSITY | Fragmentación · datos sin label completo · ghost numbers · open loops | Heroes · Dashboards progresivos | Documentos formales |
-| PSY-IDENTITY | "Su edificio" · datos de JD específicos · métricas que reflejan sus decisiones | Informes de logros · Comparativas positivas | Primeras interacciones |
-| PSY-FOMO | Comparativa con/sin ForumPHs · costo de mora sin gestión · portfolio de clientes | Propuestas nuevo cliente | Clientes actuales |
-| PSY-SCARCITY | Oportunidad perdida por tiempo · cada día sin gestión = problema acumulado | Cart abandonment · Propuesta con deadline | Contextos institucionales |
-
-**Combinaciones por output type:**
-| Output | Primarios | Apoyo | Evitar |
-|---|---|---|---|
-| Informe mensual JD | TRUST + AUTHORITY | SOCIAL-PROOF | URGENCY dominante |
-| Alerta mora F-IV | URGENCY | AUTHORITY | BELONGING |
-| Propuesta cliente | AUTHORITY + ASPIRATION | FOMO + SOCIAL-PROOF | TRUST primario |
-| Portal propietario | BELONGING + TRUST | CURIOSITY | URGENCY sin alerta real |
-| Dashboard IF/Sam | AUTHORITY + CURIOSITY | SOCIAL-PROOF | — |
-| Email mora F-I | TRUST + BELONGING | FOMO implícito | URGENCY explícito |
-| Email mora F-IV | URGENCY + AUTHORITY | FOMO | BELONGING |
+| Preset | Expresión visual | Usar en |
+|---|---|---|
+| PSY-TRUST | Serif · espacio amplio · Amatista | Informes JD · EEFF |
+| PSY-URGENCY | Terra 15-20% · DM Sans Bold | Mora F-III/F-IV |
+| PSY-AUTHORITY | Cormorant display · Carbon Deep | Propuestas · Portadas |
+| PSY-SOCIAL-PROOF | Números históricos + comparativas | Dashboards |
+| PSY-BELONGING | Nombre edificio prominente | Portal propietario |
+| PSY-ASPIRATION | Espacio generoso · verde en números altos | Propuestas |
+| PSY-CURIOSITY | Fragmentación · ghost numbers · open loops | Heroes |
+| PSY-IDENTITY | "Su edificio" · métricas personalizadas | Informes logros |
+| PSY-FOMO | Comparativa con/sin ForumPHs | Propuesta nuevo cliente |
+| PSY-SCARCITY | Oportunidad perdida por tiempo | Cart abandonment |
 
 ---
 
 ## SECCIÓN 14 — VISUAL_TENSION_ARCHITECTURE · T1-T10
 
-La arquitectura se elige ANTES de diseñar el layout. Un output tiene UNA arquitectura dominante.
-
-| Código | Nombre | En diseño | Cuándo |
-|---|---|---|---|
-| T1 | INVERTED_PYRAMID | Dato crítico arriba, detalle abajo. KPI grande en hero. | Informes · Dashboards de cobro |
-| T2 | EARLY_SPIKE | Elemento gigante o inesperado en el fold, luego estructura convencional | Propuestas · Portadas de marketing |
-| T3 | ESCALATING_LADDER | Pantalla 1 simple → pantalla 5 rica. Densidad crece con el scroll | Suites HTML 5 paneles · Presentaciones |
-| T4 | MICRO_TENSIONS | Grid de KPIs donde cada card crea/resuelve su propia tensión | Dashboards multi-métrica |
-| T5 | VALLEY_AND_PEAK | Zonas densas alternadas con zonas de respiro generoso | Informes largos · Suites multi-sección |
-| T6 | SUSTAINED_LOW_PRESSURE | Layout limpio, predecible, sin picos. Confianza por coherencia | Portales · Emails gestión ordinaria |
-| T7 | RELEASE_REBUILD | Alta tensión → resolución → nueva tensión mayor | Comunicaciones mora multi-fase |
-| T8 | COLD_OPEN_BURN | El dato crítico sin contexto — el cerebro busca el contexto solo | Covers de reportes de alto rendimiento |
-| T9 | HEARTBEAT | Grid regular con UN elemento que "late" — diferente en escala o color | Grids KPIs con dato crítico del día |
-| T10 | QUIET_KNIFE | Layout casi vacío. Un solo elemento que corta. Silencio + un dato | Alertas F-IV · Situaciones financieras graves |
-
-**Combinaciones ForumPHs:**
-| Contexto | Arquitectura |
-|---|---|
-| Informe mensual | T1 + T4 |
-| Suite HTML 5 paneles | T3 |
-| Alerta mora F-III/IV | T10 |
-| Propuesta nuevo cliente | T2 |
-| Dashboard IF/Sam/Irja | T4 + T9 |
-| Email mora F-I | T6 |
-| Email mora F-IV | T7 → T10 |
+| Código | Nombre | Cuándo |
+|---|---|---|
+| T1 | INVERTED_PYRAMID | Informes · Dashboards |
+| T2 | EARLY_SPIKE | Propuestas · Portadas |
+| T3 | ESCALATING_LADDER | Suites HTML multi-panel |
+| T4 | MICRO_TENSIONS | Dashboards multi-métrica |
+| T5 | VALLEY_AND_PEAK | Informes largos |
+| T6 | SUSTAINED_LOW_PRESSURE | Portales · Emails ordinarios |
+| T7 | RELEASE_REBUILD | Comunicaciones mora multi-fase |
+| T8 | COLD_OPEN_BURN | Covers de alto rendimiento |
+| T9 | HEARTBEAT | Grid KPIs con dato crítico |
+| T10 | QUIET_KNIFE | Alertas F-IV · Situaciones graves |
 
 ---
 
-## SECCIÓN 15 — VISUAL_GENOME · Firmas Ejecutables ForumPHs
+## SECCIÓN 15 — VISUAL_GENOME · 6 Firmas ForumPHs
 
 ```
-FIRMA 1 — Número grande como protagonista
-  EB Garamond 80px+ en KPI principal. El número ES forma visual, no solo dato.
-  MAX: 1 número a esta escala por output.
-
-FIRMA 2 — Radial gradient Amatista (esquina superior derecha)
-  background: radial-gradient(circle at 80% 10%, rgba(92,52,114,0.18), transparent 60%)
-  MAX: 1 por output. Solo en contenedor principal.
-
-FIRMA 3 — Borde izquierdo Terra como marcador de importancia
-  border-left: 3px solid var(--terra)
-  MAX: 2 elementos con esta firma por output.
-
-FIRMA 4 — Divider 3px Amatista (transición Carbon → Parchment)
-  height: 3px; background: var(--am)
-  Usado en emails y outputs con ambas superficies.
-
+FIRMA 1 — Número grande como protagonista · EB Garamond 80px+ · MAX 1 por output
+FIRMA 2 — Radial gradient Amatista top-right · MAX 1 por output
+FIRMA 3 — border-left: 3px solid var(--terra) · MAX 2 por output
+FIRMA 4 — Divider 3px Amatista
 FIRMA 5 — Labels Cinzel 8px / letter-spacing .2em
-  El sello institucional. Solo para labels — nunca en cuerpo de texto.
-
-FIRMA 6 — Cormorant en display como momento editorial
-  font-size: 60px+; font-weight: 300
-  MAX: 1 momento Cormorant por output.
+FIRMA 6 — Cormorant display momento editorial · MAX 1 por output
 ```
 
 **Prohibiciones:**
 ```
-❌ Gradientes en botones — planos, color sólido
-❌ Sombras de colores — solo rgba(0,0,0,x)
+❌ Gradientes en botones
+❌ Sombras de colores (solo rgba negros)
 ❌ border-radius > 12px en cards principales
-❌ Animaciones de entrada llamativas
 ❌ Emojis en contextos institucionales
-❌ Amatista como color de error — Terra es la alerta
-❌ Slogan partido en jerarquías distintas
+❌ Background plano sin textura ni profundidad (v3.1)
+❌ Elementos interactivos sin hover state definido (v3.1)
 ```
 
 ---
 
-## SECCIÓN 16 — ARQUITECTURA DE LAYERS (Referencia Rápida)
+## SECCIÓN 16 — ARQUITECTURA DE LAYERS
 
 ```
-L0  BRIEF VISUAL          → QUÉ comunica · QUÉ reacción · QUIÉN lo ve · QUÉ acción
-L1  BRAND COMPLIANCE      → Paleta Supabase · Tipografía · CSS vars · Herencia
-L2  JERARQUÍA DE ATENCIÓN → Anchor / Context / Detail / Action
-L3  GEOMETRÍA             → Proporción · Simetría/asimetría · Grid · Tensión
-L4  VISUAL_PSYCHO         → Presets psicológicos (Sección 13)
-L5  VISUAL_TENSION        → Arquitectura T1-T10 (Sección 14)
-L6  VISUAL_GENOME         → Firmas ejecutables de marca (Sección 15)
-L7  RIESGO VISUAL         → Checklist anti-genérico (Sección 11)
-L8  LOADING STATES        → Skeleton · Spinner · Progress · Success/Error
-L9  ICR                   → Checklist completo (Sección 12)
+L0  BRIEF VISUAL          → QUÉ comunica · QUÉ reacción · QUIÉN · QUÉ acción
+L1  BRAND COMPLIANCE      → Paleta · Tipografía · CSS vars
+L2  JERARQUÍA             → Anchor / Context / Detail / Action
+L3  GEOMETRÍA             → Proporción · Grid · Tensión
+L4  VISUAL_PSYCHO         → Presets psicológicos
+L5  VISUAL_TENSION        → Arquitectura T1-T10
+L6  VISUAL_GENOME         → 6 Firmas ejecutables
+L7  RIESGO VISUAL         → Checklist anti-genérico
+L8  LOADING STATES        → Skeleton · Spinner · Success/Error
+L9  ICR                   → Checklist completo
+L10 VIDA Y MOVIMIENTO     → Sección 17 — NUEVO v3.1
 ```
 
 ---
 
-_ui-ux-layer CORE v3.0 · Unreal>ille Studio · 2026-05-21_
+## SECCIÓN 17 — VIDA Y MOVIMIENTO (v3.1 — NUEVO)
+
+**Principio rector:** Un output visualmente correcto pero sin vida es un output a medias.
+El diferenciador de marca no está solo en los colores o la tipografía —
+está en los micro-momentos que hacen que el usuario sienta que el producto respira.
+
+### 17.1 — Por qué importa
+
+Un output plano comunica mediocridad aunque el contenido sea excelente.
+Los micro-detalles de movimiento operan en la percepción subconsciente:
+- Grain sutil → textura = profundidad = calidad artesanal
+- Glow ambient → luz viva = el sistema está activo, no estático
+- Dot que respira → feedback de "estoy aquí" sin texto
+- Shimmer en separadores → invitación implícita a moverse, a seguir
+- Hover que responde → señal de que el objeto es interactivo antes del click
+
+### 17.2 — Recursos gráficos de background (mínimo 1 por output UI)
+
+**A. Grain / Noise (textura artesanal)**
+```css
+/* Grain SVG inline — cero dependencias, peso ~0.3kb */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 180px 180px;
+}
+/* Opacidad: 0.03-0.05 oscuro · 0.02-0.04 claro · > 0.07 = visible → reducir */
+```
+
+**B. Vignette (profundidad perimetral)**
+```css
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 120% 80% at 50% 50%,
+    transparent 40%, rgba(8,6,14,0.45) 100%);
+}
+```
+
+**C. Ambient glow (luz que respira)**
+```css
+/* Amatista — profundidad institucional */
+.glow-am {
+  position: fixed; top: -120px; right: -80px;
+  width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(92,52,114,0.12) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  animation: glow-drift 12s ease-in-out infinite alternate;
+}
+/* Terra — calidez humana, siempre más pequeño y sutil que el amatista */
+.glow-terra {
+  position: fixed; bottom: -100px; left: -60px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,98,45,0.07) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  animation: glow-drift 16s ease-in-out infinite alternate-reverse;
+}
+@keyframes glow-drift {
+  0%   { transform: translate(0,0) scale(1); opacity: .8; }
+  100% { transform: translate(20px,30px) scale(1.08); opacity: 1; }
+}
+```
+
+**D. Grid lines (estructura invisible)**
+```css
+.app-grid {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(92,52,114,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(92,52,114,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  /* Fade en los bordes — no cuadrícula abrupta */
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+}
+/* Nota: solo visible si el bg es muy oscuro. En Carbon (#1C2233) no hace falta. */
+```
+
+**E. Scanlines (textura técnica — para dashboards BI)**
+```css
+.scanlines::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(92,52,114,0.015) 2px, rgba(92,52,114,0.015) 4px
+  );
+}
+```
+
+**Reglas de uso:**
+- Grain + Vignette: siempre juntos. Uno sin el otro se ve incompleto.
+- Ambient glow: uno Amatista (grande) + uno Terra (más pequeño, opuesto). Nunca dos del mismo color.
+- Grid lines: solo en dashboards / UI técnica. No en documentos ni emails.
+- Scanlines: solo en panels de datos, nunca en navegación ni formularios.
+- **Todo en `z-index: 0` · Todo el contenido en `z-index: 1`**
+
+### 17.3 — Animaciones de UI (micro-interacciones)
+
+**A. Shimmer en separadores / líneas de acento**
+```css
+/* Top edge del navbar, dividers importantes */
+.shimmer-line {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(196,98,45,0.55) 30%,
+    rgba(92,52,114,0.65) 65%,
+    transparent 100%);
+  animation: shimmer-pan 4s ease-in-out infinite;
+}
+@keyframes shimmer-pan {
+  0%,100% { opacity: .2; } 50% { opacity: .65; }
+}
+```
+
+**B. Dot que respira (indicador de estado activo)**
+```css
+/* En tabs activos, estados live, indicadores de conexión */
+.dot-breathe {
+  animation: dot-breathe 2.5s ease-in-out infinite;
+}
+@keyframes dot-breathe {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(0.65); }
+}
+```
+
+**C. Heartbeat KPI (T9 — el dato crítico late)**
+```css
+/* Solo en UN card por grid. El resto estático. */
+.kpi-heartbeat {
+  animation: hb-pulse 3s ease-in-out infinite;
+}
+@keyframes hb-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(92,52,114,0); }
+  30%     { box-shadow: 0 0 0 6px rgba(92,52,114,0.18); }
+  60%     { box-shadow: 0 0 0 12px rgba(92,52,114,0); }
+}
+```
+
+**D. KPI reveal (entrada de números)**
+```css
+.kpi-reveal {
+  animation: kpi-in 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes kpi-in {
+  from { opacity:0; transform:translateY(10px) scale(0.97); }
+  to   { opacity:1; transform:none; }
+}
+```
+
+**E. Fade-in de contenido**
+```css
+.fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+@keyframes fade-in {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:none; }
+}
+```
+
+**F. Entrada snap (elementos secundarios con resorte)**
+```css
+.snap-in {
+  animation: snap-in 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes snap-in {
+  from { opacity:0; transform:scale(0.92); }
+  to   { opacity:1; transform:none; }
+}
+```
+
+### 17.4 — Hover states (TODOS los elementos interactivos)
+
+Regla: **si es clickeable, tiene hover**. Sin excepción.
+
+```css
+/* Patrón mínimo para cualquier elemento interactivo */
+.interactive {
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+/* Cards */
+.card:hover {
+  border-color: rgba(92,52,114,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+/* Botones — nunca gradiente, siempre brightness */
+.btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+/* Links de nav */
+.nav-link:hover {
+  color: rgba(240,237,232,0.7);
+  background: rgba(196,98,45,0.08);
+  border-color: rgba(196,98,45,0.25);
+}
+/* Rows de tabla */
+.table-row:hover { background: rgba(92,52,114,0.06); }
+/* Tags / badges */
+.badge:hover { filter: brightness(1.1); }
+```
+
+### 17.5 — Reglas de proporción y control
+
+```
+AMBIENT (grain, glow, grid):
+  Siempre en position:fixed · z-index:0
+  Todo contenido en z-index:1 o superior
+  prefers-reduced-motion: grain off · glow animation off
+
+ANIMACIONES:
+  Duración: 150ms (micro) · 250-400ms (transición) · 2-4s (ambient/breathe)
+  Easing: ease-out para entradas · cubic-bezier(0.34,1.56,0.64,1) para snaps
+  Nunca más de 2 animaciones de entrada simultáneas en la misma pantalla
+
+OUTPUTS EXCLUIDOS:
+  ❌ Documentos / Actas (superficie Parchment — sin grain, sin glow)
+  ❌ Emails — sin animaciones CSS
+  ❌ PDFs — sin animaciones
+  ✅ UI apps, dashboards, suites HTML, landings, NavTabs
+
+CHECKLIST MÍNIMO (3 de estos por output UI):
+  [ ] Background con grain o glow (no plano)
+  [ ] Al menos 1 shimmer en separador o línea de acento
+  [ ] Hover states en todos los elementos clickeables
+  [ ] Al menos 1 animación de entrada (fade-in, kpi-reveal, snap-in)
+  [ ] Dot/indicador que respira si hay estado "activo"
+  [ ] Heartbeat en el KPI más crítico (si aplica T9)
+  [ ] Transición definida en todos los cambios de estado
+```
+
+### 17.6 — El "toque especial" — qué es y cómo se aplica
+
+Un output con "toque especial" tiene:
+
+1. **Una textura** — el fondo no es un flat color, respira con grain o glow
+2. **Una luz** — ambient glow en la esquina correcta que da profundidad sin distracción
+3. **Un guiño** — shimmer, dot que respira, o heartbeat que le dice al usuario "esto está vivo"
+4. **Una invitación** — hover states que anticipan antes del click
+5. **Una entrada** — al menos el elemento principal entra con animación (no aparece sin más)
+
+La diferencia entre bonito-y-plano y bonito-con-carácter es exactamente esto:
+el usuario no puede nombrar qué es diferente, pero lo siente. Esa sensación ES la marca.
+
+---
+
+_ui-ux-layer CORE v3.1 · Unreal>ille Studio · 2026-05-22_
 _Extensiones: motion.md · 3d-spatial.md · mobile-ux.md · design-tokens.md · a11y.md_
