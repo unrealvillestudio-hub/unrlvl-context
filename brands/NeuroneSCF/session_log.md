@@ -3,16 +3,14 @@ _Actualizado: 2026-05-22_
 
 ---
 
-## SESIÓN 2026-05-22 — Urgent Tasks Kiosk + Fulfillment + Emails
+## SESIÓN 2026-05-22 — Urgent Tasks NSCF Shopify
 
-### Cambios ejecutados
-
-#### Kiosk — nscf-kiosko-draft
-- **v2:** Shipping forzado a $0 "Kiosk Pickup" — elimina $10 automático de Florida
+### Kiosk — nscf-kiosko-draft
+- **v2:** Shipping $0 "Kiosk Pickup" — elimina $10 automático Florida
 - **v3:** Descuento dos niveles — <3 productos max 15%, ≥3 productos max 40%
-- **Frontend App.jsx:** `maxDiscount` dinámico + `useEffect` clamp deployado en Vercel ✅
+- **Frontend App.jsx:** `maxDiscount` dinámico + `useEffect` clamp — deployado Vercel ✅
 
-#### Embajadoras — DB nscf_embajadoras
+### Embajadoras — DB nscf_embajadoras
 - `vizos-patricia` → email: patriciaosorio@neuronescflorida.com · max_discount: 40%
 - `vizos-laura` → NUEVA · email: ops@neuronescflorida.com · salon: vizos · comisión: 8%
 - `yts-nm-mariana` → email: rodriguezgumariana@gmail.com
@@ -22,56 +20,66 @@ _Actualizado: 2026-05-22_
 - Eliminados: yts-cw-laura · yts-ew-laura · yts-nm-laura · yts-nm-patricia · yts-ew-daniela
 - Todas las embajadoras YTS → max_discount_pct = 0
 
-#### Comisiones — tablas nuevas
-- `nscf_commissions` — registro por venta · ambassador_id · sale_amount · commission_rate · month_key
-- `nscf_salon_pool_config` — 2% pool los 4 salones · split equal
+### Grupos de pool (financieramente independientes)
+- **Vizos:** Patricia (10%) + Laura (8%) — pool 2% ventas Vizos
+- **YTS-NM:** Diana + Mariana + Mónica + Daniela + Odalys — pool 2% ventas NM
+
+### Tablas nuevas
+- `nscf_commissions` — registro por venta
+- `nscf_salon_pool_config` — 2% los 4 salones
 - `nscf_pool_payouts` — liquidación mensual
 
-#### Grupos de pool definidos
-- **Vizos:** Patricia (10%) + Laura (8%) — pool 2% ventas Vizos únicamente
-- **YTS-NM:** Diana + Mariana + Mónica + Daniela + Odalys — pool 2% ventas NM únicamente
-- Los grupos son financieramente independientes — no se cruzan
-
-#### Fulfillment 2toner Express
+### Fulfillment 2toner Express
 - Tabla `nscf_fulfillment_queue` creada
-- EF `nscf-fulfillment-watcher` v2 — webhook orders/paid · kiosk → comisión · web → cola 1h
-- EF `nscf-fulfillment-processor` v1 — pg_cron cada minuto · verifica cancelaciones · llama mailer
-- Webhook Shopify `orders/paid` ID: 2211809558855
-- pg_cron job #31 activo
-- Email a: 2tonerexpress@gmail.com + ops@neuronescflorida.com (copia)
-- Órdenes kiosk (`source: kiosko`) excluidas del fulfillment
+- EF `nscf-fulfillment-watcher` v2 — webhook orders/paid · kiosk→comisión · web→cola 1h
+- EF `nscf-fulfillment-processor` v1 — pg_cron cada minuto
+- Webhook Shopify `orders/paid` ID: 2211809558855 · pg_cron job #31
+- Email a: 2tonerexpress@gmail.com + ops@neuronescflorida.com
+- Órdenes kiosk excluidas del fulfillment 2toner
 
-#### nscf-mailer v13
+### nscf-mailer v13
 - FROM: "Neurone South & Central Florida <noreply@neuronescflorida.com>"
-- Tipos activos: ambassador_sale_confirmation · ambassador_month_end · fulfillment_request · pin_reset · pin_reset_verify
-- Email por venta: productos · total · comisión esta venta · acumulado personal mes — SIN pool
+- Email por venta: productos · total · comisión esta venta · acumulado personal mes
 - Email fin de mes: ventas personales + pool salón + total a percibir
-- Firma Opción A en todos los emails: Patricia Osorio / Neurone South & Central Florida / neuronescflorida.com
-- Resend dominio neuronescflorida.com verificado en Cloudflare ✅
-- Tests enviados y confirmados a ops@neuronescflorida.com ✅
+- Firma Opción A: Patricia Osorio / Neurone South & Central Florida / neuronescflorida.com
+- Resend dominio neuronescflorida.com verificado ✅
+- Tests enviados y confirmados a ops@ ✅
 
-#### Judge.me — snippets/judgeme_widgets.liquid v20
-- Botón Write a Review: `<a>` con `href` directo a judge.me/reviews/new
-- shop= usa `{{ shop.domain }}` (neuronescflorida.com)
-- Parámetros: platform=shopify · product_id · url · title
-- Pendiente: Judge.me dashboard — verificar widget "Active" + "Automatic installation"
+### Shopify tema — Judge.me
+- snippets/judgeme_widgets.liquid v28 — CSS-only overrides, stars naranjas, texto reseña light
+- sections/nc-product-detail.liquid — widget nativo Judge.me, CTA condicional bajo imagen sin card
+- layout/theme.liquid — TikTok pixel duplicado eliminado ✅ (era el problema de ads)
+- Judge.me texto reseña: pendiente configurar colores desde dashboard Judge.me
 
-#### Shopify Payments
-- Payout: daily ✅
-- Cuenta bancaria: Prestige Beauty Global Distribution ✅
+### SEO
+- Páginas de prueba eliminadas: `neurone-cosmetica-collection-page` + `neurone-cosmetica-homepage-tienda-14-3-2026`
+- Search Console: 3 issues de redirección y 2 crawled-not-indexed pendientes de re-indexación manual
 
-### Pendientes sesión
-- [ ] Judge.me dashboard — confirmar widget Active + Automatic
-- [ ] Reembolso $10 órdenes #1008/#1009/#1010 — consultar con PO
-- [ ] TikTok pixel duplicado — sigue 🔴 (bloquea ads)
-- [ ] Fix deprecated API `DiscountAutomaticFreeShipping` — deadline Jul 1 2026
-- [ ] Frontend kiosk — visual feedback slider (server-side ya protege)
-- [ ] Renombrar app → "NSCF Kiosk" en Partners (hecho por Sam ✅)
-- [ ] Emails pendientes: Odalys (yts-nm) · CW · EW ambassadors
-- [ ] Klaviyo flows — 4 pendientes (abandoned cart, post-purchase, review, welcome)
-- [ ] Pool grupal — confirmar detalles con PO antes de activar payout mensual automático
+### Shopify Payments
+- Payout: daily ✅ · Cuenta: Prestige Beauty Global Distribution ✅
 
-### Estado EFs relevantes
+### App kiosk renombrada
+- "NSCF Kiosk" (hecho por Sam en Shopify Partners) ✅
+
+---
+
+## PENDIENTES
+
+| Item | Prioridad |
+|------|-----------|
+| Judge.me: configurar colores texto reseña desde su dashboard | 🟡 |
+| Reembolso $10 órdenes #1008/#1009/#1010 | PO decide |
+| TikTok pixel: verificar que el duplicado eliminado no afecte tracking | 🟡 |
+| Fix deprecated API DiscountAutomaticFreeShipping — deadline Jul 1 | 🔴 |
+| Emails pendientes: Odalys + CW + EW ambassadors | 🟡 |
+| Pool grupal: confirmar detalles con PO | 🟡 |
+| Klaviyo 4 flows: abandoned cart, post-purchase, review, welcome | 🟡 |
+| Search Console: re-indexar URLs correctas | 🟢 |
+
+---
+
+## EFs activas
+
 | EF | Versión | Status |
 |----|---------|--------|
 | nscf-kiosko-draft | v10 | ACTIVE |
