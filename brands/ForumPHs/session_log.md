@@ -1,55 +1,65 @@
 # session_log.md — ForumPHs
-_Última actualización: 2026-05-22 · Claude Sonnet 4.6_
+_Última actualización: 2026-05-22 (sesión 2) · Claude Sonnet 4.6_
 
 ---
 
-## SESIÓN 2026-05-22 — Document Factory v2.0 + Compliance Setup
+## SESIÓN 2026-05-22 — OPS Shell + Tracker V0 + BI/FIE Supabase
 
 ### Completado esta sesión
 
-**Document Factory v2.0:**
-- `app/globals.css` — Visual Genome Amatista Carbon completo (tokens, tipografía, 6 firmas, S17)
-- `app/bi/page.tsx` — BI Module v3.0 · T3+T4+T9 · PSY-AUTHORITY+TRUST · SVG nativo
-- `app/fie/page.tsx` — Normalizer UI · 3 pasos: upload → review/edit → generate
-- `app/api/fie/parse/route.ts` — XLSX/PDF → Claude → JSON schema FIE
-- `app/api/fie/generate/route.ts` — JSON schema → narrativa Claude → HTML 7 paneles
-- `lib/fie/schema.ts` — tipos TypeScript + constantes FPHs + helpers
-- `lib/fie/template.ts` — HTML 7 paneles + simulador 180 iteraciones Chart.js
-- `components/NavTabs.tsx` — terra en tabs activos + S17 ambient layers globales
-- `app/layout.tsx` — NavTabs component + fonts ForumPHs · rm Bebas Neue
-- `app/page.tsx` — Actas page Visual Genome completo · S17 full pass
-- `skills/ui-ux-layer/SKILL.md` v3.1 — Sección 17 Vida y Movimiento
+**ForumPHs OPS — DEPLOYADO ✅**
+- Repo: `unrealvillestudio-hub/forumphs-ops` (privado)
+- Vercel: `forumphs-ops` → READY ✅
+- Shell: Home KPIs · Tracker V0 · OPS placeholder S3 · Comms placeholder S4
+- BottomNav mobile-first (terra en tab activo, dot-breathe)
+- `app/globals.css` — Visual Genome Amatista Carbon mobile-first + S17
+- Arquitectura: todas las rutas → `/api/*` → service_key server-side
+- Env Vars Vercel: `FPHS_SUPABASE_URL` + `FPHS_SERVICE_KEY` (sensitive, server-only)
+- Eliminadas: `NEXT_PUBLIC_FPHS_URL` + `NEXT_PUBLIC_FPHS_ANON_KEY` (innecesarias sin auth)
 
-**Compliance Setup ForumPHs (Supabase UNRLVL main):**
-- `brands` — UPDATE completo: brand_context, brand_story, icp, buyer_persona, problema, beneficio, differentiators, key_messages, todos los campos operativos
-- `brand_palette` — 18 colores Amatista Carbon insertados
-- `brand_typography` — 4 voces con Google Fonts URLs
-- `compliance_rules` — 9 reglas (legal, financial, brand_voice, positioning, confidentiality, advertising, tone, referral, pricing)
-- `brand_personas` — 3 segmentos: jd_presidente, jd_tesorero, propietario_activo
-- `humanize_profiles` — 2 perfiles: copy institucional + report financiero
-- `brand_copy_profiles` — 1 perfil completo con hooks, frases firma, prohibidas, disclaimers
-- `brand_voice_genome` — fphs_institucional v0.5
+**Tracker V0:**
+- Selector de edificio (8 PHs) → carga `units` + `mora_mensual` del período actual
+- KPI strip: % mora (T9 heartbeat), al día, en mora, F-IV
+- Cartera mora total con visual terra
+- Filtros: Todos / En Mora / Al Día + búsqueda
+- Lista unidades con `unit_code`, `tower`, `floor`, `unit_type`, `metraje` (columnas reales)
+- Bottom sheet modal: registrar pago → `payments` via `/api/payments`
+- Métodos: ACH · Transferencia · Depósito · Cheque · Efectivo · Yappy
 
-**Bug fix ecosistema:**
-- `tgfn_invalidate_brand_cache` parcheado — asumía `brand_id` en todas las tablas pero `brands` usa `id`. Fix beneficia a todas las marcas del ecosistema.
+**Document Factory — BI+FIE conectados a Supabase ✅**
+- `app/bi/data/route.ts` — lee `monthly_kpis` + `mora_mensual` + `eeff_preliminar`
+- `app/bi/html/route.ts` — llama EF `fphs-bi-report` + persiste en `informes`
+- `app/bi/status/route.ts` — workflow EEFF borrador→enviado_jd→pendiente_cpa→oficial
+- `app/api/fie/supabase/route.ts` — carga FIESchema desde `eeff_preliminar`
+- `app/fie/page.tsx` v3 — 3 modos: Supabase Realtime · archivo · manual
+- Patrón: fetch REST directo (sin @supabase/supabase-js — no instalado en DF)
 
-**Professor checkpoint 4:** 5 learnings aprobados
+**Professor checkpoint 5:** 7 learnings aprobados
 
-### Estado actual FPH-003 Document Factory
-- **URL:** forumphs-document-factory.vercel.app
-- **Status:** PRODUCCIÓN v2.0
-- **Módulos activos:** Actas (/) · Informe BI (/bi) · Suite FIE (/fie)
-- **Próximo:** npm install xlsx en repo + commit DF v2.0
+### Estado Supabase ForumPHs (tajuoqdbnsnzkhyqvdgs)
+| Tabla | Filas | Estado |
+|---|---|---|
+| `buildings` | 8 | ✅ tier, tarifa, total_units completos |
+| `units` | 1,560 | ✅ unit_code, tower, floor, metraje, maintenance_fee |
+| `mora_mensual` | 0 | ❌ Esperando datos de IF |
+| `payments` | 0 | ❌ Esperando datos de IF |
+| `monthly_kpis` | 0 | ❌ Esperando datos de IF |
+| `eeff_preliminar` | 0 | ❌ Esperando datos de IF |
+
+**Nota importante:** `units` NO tiene `owner_name`/`owner_phone`. Solo `unit_code`, `tower`, `floor`, `unit_type`, `metraje`, `maintenance_fee`.
 
 ### Pendientes ForumPHs
-- Voice genome v1.0 — requiere entrevista estructurada con Ivette Flores
-- Supabase ForumPHs dedicado — migración tablas fph schema (Sprint 3)
-- Propuesta Star & Herald — IF debe aprobar y pasar a Mayra Paredes (URGENTE)
-- Reservas laborales $1,014.89/mes — VENCIDO 1 Mayo 2026
-- Foto IF para FPH-007 Web Institucional
+- Datos Ene–Abr 2025 de IF: mora_mensual + payments + eeff_preliminar
+- Voice genome v1.0 — entrevista estructurada con Ivette Flores
+- Web institucional FPH-007 — foto IF pendiente
+- Propuesta Star & Herald — IF debe aprobar ASAP
+- Speaks: ANTHROPIC_API_KEY en Supabase Secrets (tajuoqdbnsnzkhyqvdgs)
+- OPS S3: Daily Workflow (Jun 2026)
+- OPS S4: Communications + ADM Virtual (Jul 2026)
+- Auth system (Sprint posterior a S4)
 
 ### Alertas activas
-- 🔴 Reservas laborales corrientes en $0 — VENCIDO 1 Mayo ($1,014.89/mes)
+- 🔴 Reservas laborales corrientes $0 — VENCIDO 1 Mayo ($1,014.89/mes)
 - 🔴 Pasivo laboral ~$25k sin provisionar — VENCIDO 15 Abr
 - 🔴 Propuesta Star & Herald lista — IF debe aprobar ASAP
-- 🟡 Speaks: ANTHROPIC_API_KEY pendiente en Supabase Secrets
+- 🟡 Speaks ANTHROPIC_API_KEY pendiente en Supabase Secrets
