@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Versión: 2026-05-21-v9 | Actualizada por: Claude_
+_Versión: 2026-05-21-v10 | Actualizada por: Claude_
 
 ---
 
@@ -7,26 +7,27 @@ _Versión: 2026-05-21-v9 | Actualizada por: Claude_
 
 | # | Tarea | Estado | Notas |
 |---|-------|--------|-------|
-| 1 | **CopyLab 504 cold start** — resolver server-to-server timeout | 🔴 BLOQUEANTE async | Opciones: A) warm-up ping cron cada 5min, B) fluid:true en vercel.json, C) handler format Node.js nativo `(req,res)`, E) endpoint `/api/generate` separado solo Claude call. Testear en ese orden |
-| 2 | **Job prueba cd0b168c** — resetear y validar end-to-end | ⏳ Post-fix 504 | Una vez resuelto el 504, este job debería completar en <35s |
-| 3 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs: D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 |
-| 4 | **GTM + GA4 verificación** | ⏳ Sam verifica | GTM Preview Mode + GA4 DebugView |
-| 5 | **Klaviyo flows** — 4 flows bilingüe ES/EN en UI | ⏳ Config manual UI | API no permite actions |
-| 6 | **Slogan NSCF — definir el definitivo** | ⚠️ Pendiente Sam | Actualmente incompleto en página |
+| 1 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs: D866BMBC77UBK82UUH50 + D832THJC77UATASL0OO0 |
+| 2 | **GTM + GA4 verificación** | ⏳ Sam verifica | GTM Preview Mode + GA4 DebugView |
+| 3 | **Klaviyo flows** — 4 flows bilingüe ES/EN en UI | ⏳ Config manual UI | API no permite actions |
+| 4 | **Slogan NSCF — definir el definitivo** | ⚠️ Pendiente Sam | Actualmente incompleto en página |
 
 ---
 
-## 🟠 COPYLAB ASYNC — ESTADO SPRINT
+## ✅ COPYLAB ASYNC — RESUELTO 2026-05-21
 
 | Componente | Estado | Notas |
 |---|---|---|
-| `copylab_jobs` tabla + grants | ✅ OPERACIONAL | GRANT + RLS ambas capas configuradas |
-| `pg_cron` job #30 | ✅ ACTIVO | Cada 1 min, `copylab-processor-1min` |
+| `copylab_jobs` tabla + grants | ✅ OPERACIONAL | GRANT + RLS ambas capas |
+| `pg_cron` job #30 | ✅ ACTIVO | Cada 1 min |
 | `copylab-processor` EF v1.4 | ✅ DEPLOYADO | Lee snapshot → inyecta brandContext → llama CopyLab |
-| `brand-cache-builder` EF | ✅ DEPLOYADO | build/build_all/status |
-| `brand_cache_snapshots` NeuroneSCF | ✅ v2.0 18 tablas | Built 2026-05-21 17:05 UTC. Rebuild manual cuando cambien tablas |
-| `CopyLab v9.5` | ✅ DEPLOYADO | zero-query mode detecta snapshot v2.0 |
-| **End-to-end async funcional** | 🔴 504 PENDIENTE | Todo el plomería está, falta resolver cold start Vercel |
+| `brand_cache_snapshots` NeuroneSCF | ✅ v2.0 18 tablas | Built 2026-05-21 17:05 UTC |
+| `CopyLab v9.6` | ✅ DEPLOYADO | Node.js native handler — fix 504 cold start |
+| `process-job.ts v1.1` | ✅ DEPLOYADO | Node.js native handler |
+| **End-to-end async** | ✅ OPERACIONAL | 22-24s por job · cache_mode: v2.0_zero_query |
+| **Test S.O.S Rescue System** | ✅ ES+EN completados | wait ~30-90s · exec ~22s · copy pendiente revisión |
+
+**FIX DEFINITIVO:** Web API handler format (`req: Request → Promise<Response>`) ignoraba maxDuration:300. Solución: `VercelRequest/VercelResponse` de `@vercel/node`.
 
 ---
 
@@ -34,9 +35,10 @@ _Versión: 2026-05-21-v9 | Actualizada por: Claude_
 
 | Tarea | Estado | Notas |
 |-------|--------|-------|
+| **creative_seed + voice_genome null** en product_description_pack | 🔴 Pending | compatibility rules no definidas para `product_description_b2c` en snapshot — causa copy genérico |
 | **Aplicar Restore Therapy Plus v4 a Shopify** | ⏳ Pendiente | productUpdate + translationsRegister · ES+EN + how_to_use + SEO |
 | **Validar con Patricia composición técnica** de cada kit | ⏳ Antes de escalar | Para que la regla d7h use datos reales |
-| **Escalar voice + motor a los otros 11 kits** | ⏳ Post-validación | Orden: Restore Therapy → Moisture Recovery + Plus → Perfect Blonde + Plus → ... |
+| **Escalar voice + motor a los otros 11 kits** | ⏳ Post-validación | S.O.S test completado como baseline |
 
 ---
 
@@ -64,8 +66,10 @@ _Versión: 2026-05-21-v9 | Actualizada por: Claude_
 | Configurar dominio ayra.unrealvillestudio.com | ❌ |
 | CREATE SCHEMA ayra + 11 tablas en Supabase main | ❌ |
 | Env vars Vercel | ❌ |
+| **PROFESSOR árbol navegable** (patrón INDEX.md) | ❌ NUEVO | PROFESSOR_CORE + nodos: VERCEL_RUNTIME, ASYNC_LAB_PIPELINE, SUPABASE_PATTERNS, SHOPIFY_PATTERNS, COPYLAB_PIPELINE, AYRA_ARCHITECTURE, GITHUB_OPS |
+| **Migrar copylab_jobs → lab_jobs** con campo lab_id | ❌ NUEVO | EF processor universal con routing por lab_id |
 
-_Nota: La infraestructura del flujo async (copylab_jobs + processor + brand_cache_snapshots) ya está lista para Ayra._
+_Nota: La infraestructura del flujo async (copylab_jobs + processor + brand_cache_snapshots) ya está lista y validada para Ayra._
 
 ---
 
@@ -83,7 +87,9 @@ _Nota: La infraestructura del flujo async (copylab_jobs + processor + brand_cach
 
 | Tarea | Estado |
 |-------|--------|
-| Revisar 14 learnings pendientes (approved_by_sam=false) | ⏳ 6 nuevos de hoy |
+| 29 learnings aprobados ✅ | DONE 2026-05-21 |
+| ASYNC_LAB_PIPELINE manual v1.0 | DONE 2026-05-21 |
+| Construir árbol navegable PROFESSOR_CORE | ❌ Ayra Sprint 0 |
 
 ---
 
@@ -101,28 +107,27 @@ _Nota: La infraestructura del flujo async (copylab_jobs + processor + brand_cach
 | Tarea | Estado |
 |-------|--------|
 | luciensael.com DNS | ⏳ 10 min |
-| brand_cache_snapshots build_all otras marcas | ⏳ Post-fix 504 |
+| brand_cache_snapshots build_all otras marcas | ⏳ Post S.O.S test |
 | connectivity-test EF — eliminar | ⏳ Era solo diagnóstico |
 | XMMs: eliminar proyecto muerto + evaluar migración DDMV | ⚠️ |
-| ImageLab fix (Vercel 50s timeout) | ⚠️ |
+| ImageLab fix (Vercel 50s timeout) | ⚠️ AHORA CON RECETA: usar VercelRequest/VercelResponse + maxDuration |
 | Compliance soft pendiente: D7Herbal, DiamondDetails, VivoseMask, VizosCosmetics, PatriciaOsorio | ⏳ |
 | Compliance setup completo: ForumPHs | 🔴 BLOCK |
 
 ---
 
-## ✅ COMPLETADO RECIENTEMENTE (2026-05-21)
+## ✅ COMPLETADO 2026-05-21
 
-- **unrlvl-supabase-mcp v1.2.1** ✅ — deploy_edge_function corregido: endpoint `/functions/deploy?slug=`, field `file`, TypeScript raw
-- **PAT configurado** ✅ — UNRLVL_SB_ACCESS_TOKEN = sbp_... correcto en Vercel
-- **copylab_jobs grants** ✅ — GRANT + RLS ambas capas
-- **copylab-processor v1.4** ✅ — snapshot-aware, 1 query Supabase antes de CopyLab
-- **brand-cache-builder EF** ✅ — 18 tablas por marca, build/build_all/status
-- **brand_cache_snapshots NeuroneSCF v2.0** ✅ — 18 tablas, built 17:05 UTC
-- **CopyLab v9.5** ✅ — zero-query mode, snapshot v2.0 detection, cache_mode en respuesta
-- **pg_cron job #30** ✅ — copylab-processor-1min activo
-- **Professor: 6 learnings** ✅ — PAT, deploy endpoint, GRANT, cold start, snapshot arch, TS2552
-
----
+- **CopyLab v9.6** ✅ — Node.js native handler, 504 cold start RESUELTO
+- **process-job.ts v1.1** ✅ — mismo fix handler format
+- **Pipeline async end-to-end** ✅ — 22-24s por job · v2.0_zero_query
+- **Test S.O.S Rescue System** ✅ — ES+EN completados en producción
+- **Professor: 29 learnings aprobados** ✅
+- **ASYNC_LAB_PIPELINE manual v1.0** ✅ — receta canónica en professor_manuals
+- **gh-write.js** ✅ — relay POST para archivos grandes en unrlvl-context
+- **GH PAT scope corregido** ✅ — Contents: Read and Write
+- **temp_file_staging** dropeada ✅
+- **copylab-file-writer EF** eliminada ✅
 
 ## ✅ COMPLETADO ANTERIORMENTE
 
@@ -135,6 +140,8 @@ _Nota: La infraestructura del flujo async (copylab_jobs + processor + brand_cach
 - **Domain verification neuronescflorida.com** ✅ — 2026-05-17
 - **Instagram → Facebook Page vinculadas** ✅ — 2026-05-17
 - **GA4 + GTM instalados** ✅ — 2026-05-19
+- **unrlvl-supabase-mcp v1.2.1** ✅ — 2026-05-21
+- **brand_cache_snapshots NeuroneSCF v2.0** ✅ — 2026-05-21
 
 ---
-_Regenerada: 2026-05-21 · ecosystem.json v14_
+_Regenerada: 2026-05-21 · ecosystem.json v15_
