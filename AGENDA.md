@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Versión: 2026-05-22-v12 | Actualizada por: Claude_
+_Versión: 2026-05-22-v13 · Actualizada por: Claude_
 
 ---
 
@@ -7,23 +7,25 @@ _Versión: 2026-05-22-v12 | Actualizada por: Claude_
 
 | # | Tarea | Estado | Notas |
 |---|-------|--------|-------|
-| 1 | **TikTok Pixel DUPLICADO** en theme.liquid NSCF B2C | ⚠️ BLOQUEA ADS | Dos IDs activos |
-| 2 | **FPHs: Propuesta Star & Herald** | 🔴 URGENTE | IF debe aprobar y pasar a Mayra Paredes |
-| 3 | **FPHs: Datos Ene–Abr IF** | 🔴 BLOQUEA BI+Tracker | mora_mensual + payments + eeff_preliminar vacíos |
-| 4 | **FPHs: Speaks ANTHROPIC_API_KEY** | 🔴 Pendiente semanas | Supabase Secrets tajuoqdbnsnzkhyqvdgs |
+| 1 | **FPHs OPS: commit 3 API routes** | 🔴 BLOQUEA HOME | buildings + tracker + payments faltantes en repo |
+| 2 | **TikTok Pixel DUPLICADO NSCF B2C** | 🔴 BLOQUEA ADS | Dos IDs activos en theme.liquid |
+| 3 | **FPHs: Propuesta Star & Herald** | 🔴 URGENTE | IF debe aprobar → pasar a Mayra Paredes |
+| 4 | **FPHs: Datos Ene–Abr IF** | 🔴 BLOQUEA BI+Tracker | mora_mensual + payments + eeff_preliminar = 0 rows |
+| 5 | **FPHs: Speaks ANTHROPIC_API_KEY** | 🔴 Pendiente semanas | Supabase Secrets tajuoqdbnsnzkhyqvdgs |
 
 ---
 
-## ✅ COMPLETADO 2026-05-22 — FPHs Sprint Completo
+## ✅ COMPLETADO 2026-05-22
 
 | Item | Estado |
 |---|---|
-| Document Factory v2.0 — globals + BI + FIE + NavTabs + S17 | ✅ |
-| BI+FIE conectados a Supabase ForumPHs (fetch REST) | ✅ |
-| Compliance setup ForumPHs — 7 tablas Supabase | ✅ |
+| Document Factory v2.0 | ✅ DEPLOYADO |
+| ForumPHs OPS shell + Tracker V0 | ✅ DEPLOYADO |
+| Home: lista PHs + dashboard inline por PH | ✅ listo para commit |
+| Tracker: flujo guiado PH→Torre→Unidad→Acciones | ✅ listo para commit |
+| `/api/units` — nuevo endpoint con tower filter | ✅ en repo |
+| Professor checkpoint 4+5+6 — 17 learnings totales | ✅ |
 | Bug fix tgfn_invalidate_brand_cache ecosistema | ✅ |
-| **ForumPHs OPS — shell + Tracker V0 DEPLOYADO** | ✅ NUEVO |
-| Professor checkpoint 4+5 — 12 learnings totales | ✅ |
 
 ---
 
@@ -31,52 +33,31 @@ _Versión: 2026-05-22-v12 | Actualizada por: Claude_
 
 | Sprint | Contenido | Fecha | Estado |
 |---|---|---|---|
-| **S2 activo** | Tracker V0 ✅ · seed data · pruebas con IF | May-Jun | ⏳ datos pendientes |
-| **S3** | OPS Daily Workflow — checklist diario · GPS · foto verificación | Jun 2026 | placeholder ✅ |
-| **S4** | Communications + ADM Virtual · tickets SLA · auth móvil propietario | Jul 2026 | placeholder ✅ |
-| **Auth** | Supabase Auth admins + OTP propietarios | Sprint posterior S4 | — |
+| **S2 activo** | OPS V2 commit + seed data + pruebas con IF | May-Jun | ⏳ 3 routes pendientes |
+| **S3** | OPS Daily Workflow — checklist · GPS · foto | Jun 2026 | placeholder ✅ |
+| **S4** | Communications + ADM Virtual · tickets · auth móvil | Jul 2026 | placeholder ✅ |
 
 ---
 
-## 🟠 NSCF — CONTENIDO KITS
+## 🟠 NSCF
 
 | Tarea | Estado |
 |-------|--------|
 | TikTok Pixel duplicado — fix urgente | 🔴 BLOQUEA ADS |
-| Aplicar Restore Therapy Plus v4 a Shopify | ⏳ Pendiente |
-| Validar con Patricia composición técnica de cada kit | ⏳ |
-| Escalar voice + motor a los otros 11 kits | ⏳ Post-validación |
+| Restore Therapy Plus v4 en Shopify | ⏳ |
+| Validar composición técnica kits con Patricia | ⏳ |
+| Escalar voice + motor a 11 kits restantes | ⏳ post-validación |
 
 ---
 
-## 🟡 AYRA — Sprint 0 (deadline: 5 Jun 🔴)
+## 🟡 AYRA — Sprint 0 (deadline 5 Jun 🔴)
 
 | Tarea | Estado |
 |-------|--------|
-| Crear repo unrlvl-ayra (privado) | ❌ |
-| Crear proyecto Vercel unrlvl-ayra | ❌ |
-| CREATE SCHEMA ayra + 11 tablas en Supabase main | ❌ |
+| Repo + Vercel unrlvl-ayra | ❌ |
+| Schema ayra + 11 tablas Supabase | ❌ |
 | PROFESSOR árbol navegable | ❌ |
-| Migrar copylab_jobs → lab_jobs con campo lab_id | ❌ |
-
----
-
-## 🟡 VOICE GENOME
-
-| Tarea | Estado |
-|-------|--------|
-| **FPHs: entrevista IF → voice genome v1.0** | ⏳ |
-| Capturar 3-5 audios PO consumer | ⏳ |
-| Voice genome po_b2b | ⏳ |
-
----
-
-## 🟡 LEGAL / ESTRUCTURA
-
-| Tarea | Estado |
-|-------|--------|
-| Stripe Atlas LLC Delaware | ❌ P1 · $500 |
-| Joint venture Patricia Osorio | ⏳ |
+| Migrar copylab_jobs → lab_jobs con lab_id | ❌ |
 
 ---
 
@@ -84,11 +65,10 @@ _Versión: 2026-05-22-v12 | Actualizada por: Claude_
 
 | Tarea | Estado |
 |-------|--------|
+| Stripe Atlas LLC Delaware | ❌ P1 · $500 |
 | luciensael.com DNS | ⏳ 10 min |
-| Compliance soft pendiente: D7Herbal, DiamondDetails, VivoseMask, VizosCosmetics, PatriciaOsorio | ⏳ |
-| brand_cache_snapshots build_all otras marcas | ⏳ |
-| ImageLab fix (Vercel 50s timeout) | ⚠️ Receta conocida |
+| Compliance soft: D7Herbal, DiamondDetails, VivoseMask, VizosCosmetics, PatriciaOsorio | ⏳ |
 
 ---
 
-_Regenerada: 2026-05-22 · v12_
+_Regenerada: 2026-05-22-v13_
