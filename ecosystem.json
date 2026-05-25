@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-05-21-v15",
+    "version": "2026-05-25-v16",
     "maintained_by": "Claude — do not edit manually",
     "previous": "2026-05-21-v14",
     "last_audit": {
@@ -351,7 +351,8 @@
     {"id": "INFRA-SHOPIFY-MCP", "name": "Shopify MCP", "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp", "vercel_id": "prj_jEiyzkET1fSk5IgHxkaSNVnTLCoB", "status": "ACTIVE", "created": "2026-05-05"},
     {"id": "INFRA-SB-MCP", "name": "Supabase MCP (unrlvl)", "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp", "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP", "status": "ACTIVE v1.2.1 ✅ · deploy_edge_function corregido", "last_deploy": "2026-05-21", "token": "PAT sbp_... ✅ configurado"},
     {"id": "INFRA-TOOLS", "name": "UNRLVL Tools", "url": "https://unrlvl-tools.vercel.app", "vercel_id": "prj_orYcSynBX5LC3vuZvLY74Wy8zcRK", "status": "LIVE — ShopifyAuditor v3.5 + proxies", "last_deploy": "2026-05-08"},
-    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "url": "https://unrealvillestudio.com", "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN", "status": "LIVE EN+ES"},
+    {"id": "INFRA-WEB", "name": "unrealvillestudio.com", "url": "https://unrealvillestudio.com", "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN", "status":"LIVE EN+ES · GTM-M2P6SH5V ✅ · GA4 G-BP9NJ91WNJ via GTM ✅"},
+    {"id": "INFRA-META-MCP", "name": "Meta MCP", "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp", "status": "ACTIVE ✅ 2026-05-25 · 23 tools · UNREALville live · NSCF pendiente assets", "created": "2026-05-25"},
     {"id": "INFRA-SB-MAIN", "name": "Supabase unrlvl-db", "id_supabase": "amlvyycfepwhiindxgzw", "status": "ACTIVE_HEALTHY · 67 EFs · 78 tablas public · Professor ✅ · brand_cache_snapshots ✅ · copylab_jobs ✅ · pg_cron job #30 ✅ · lab_jobs migration pendiente"},
     {"id": "INFRA-AYRA", "name": "AYRA (repo + Vercel + schema)", "status": "PLANNED · Sprint 0 — DEADLINE 5 JUN 🔴"},
     {"id": "INFRA-VERCEL-KV", "name": "Vercel KV (Redis)", "status": "PLANNED · Sprint 0 Ayra"},
@@ -372,6 +373,7 @@
     "async_lab_pipeline": {"version": "v1.0", "date": "2026-05-21", "path": "professor_manuals · ID: b0dec52f", "note": "Receta canónica para activar async en cualquier Lab UNRLVL"}
   },
   "next_session_agenda": [
+    "PRIORIDAD 0 — NSCF Meta assets: investigar portfolio NSCF Ad Account → activar en unrlvl-meta-mcp 🔴",
     "PRIORIDAD 1 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
     "PRIORIDAD 2 — PROFESSOR árbol navegable: PROFESSOR_CORE + nodos especializados (parte de Sprint 0)",
     "PRIORIDAD 3 — lab_jobs migration: renombrar copylab_jobs → lab_jobs + campo lab_id (parte de Sprint 0)",
