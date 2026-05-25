@@ -1,28 +1,27 @@
 {
-  "_meta": {
-    "version": "2026-05-25-v17",
-    "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-25-v16",
-    "last_audit": {
-      "date": "2026-05-25",
-      "status": "Meta MCP CORS fix ✅ · audit page deployada ✅ · list_brands RLS blocker identificado · NSCF pendiente en meta_accounts · brandId param TBD",
-      "conducted_by": "Claude Sonnet 4.6",
-      "key_findings": [
-        "Meta MCP CORS fix: middleware.ts deployado en unrlvl-meta-mcp — OPTIONS + CORS headers en todos los responses /api/*",
-        "Audit page deployada: app/page.tsx en unrlvl-meta-mcp — same-origin, zero CORS issues permanentemente",
-        "list_brands falla: permission denied for table meta_accounts — MCP usa anon key, necesita SUPABASE_SERVICE_ROLE_KEY en Vercel env vars",
-        "meta_accounts confirmado: UNREALville (completo) + LucienSael (page only) — NSCF ausente",
-        "brandId parameter name TBD — todos los tools retornan brand: undefined, confirmar via inputSchema en audit page",
-        "Gap arquitectural: Meta MCP tools NO disponibles como deferred tools en Claude chat — solo funciona server-side y desde audit page same-origin",
-        "meta_accounts estructura: brand_id · page_id · ig_user_id · ad_account_id · system_token"
-      ]
-    },
-    "infrastructure_paths": {
-      "meta-mcp": "infrastructure/meta-mcp/",
-      "shopify-mcp": "infrastructure/shopify-mcp/",
-      "supabase-mcp": "infrastructure/supabase-mcp/",
-      "note": "Cada MCP tiene su propia carpeta operativa en infrastructure/ — session_log.md + CONFIG.md futuro"
-    }
+ "_meta": {
+  "version": "2026-05-25-v18",
+  "maintained_by": "Claude — do not edit manually",
+  "previous": "2026-05-25-v17",
+  "last_audit": {
+    "date": "2026-05-25",
+    "status": "Meta MCP FULLY OPERATIONAL ✅ · 22/23 tools OK · GRANT fix ✅ · token 32 scopes ✅ · NSCF pendiente",
+    "conducted_by": "Claude Sonnet 4.6",
+    "key_findings": [
+      "Meta MCP operativo: list_brands ✅ ig_get_media ✅ ads_get_campaigns ✅ ads_get_pixels ✅ ads_get_audiences ✅ ads_get_insights ✅",
+      "Root cause list_brands: meta_accounts sin GRANT para service_role — fix: GRANT ALL ON TABLE public.meta_accounts TO service_role",
+      "lib/meta.ts: SUPABASE_SERVICE_KEY → SUPABASE_SERVICE_ROLE_KEY · page.tsx: brand → brand_id en callTool",
+      "Token UNREALville renovado 32 scopes via Use Cases en Dev App — scopes != Business Manager permisos (capas independientes)",
+      "Gap: fb_get_page_insights falla con métricas deprecadas en Graph API v21 (page_fans) — fix pendiente",
+      "7 learnings aprobados en professor_learnings — categorías META_MCP_INFRA + GITHUB_AUDITOR"
+    ]
+  },
+  "infrastructure_paths": {
+    "meta-mcp": "infrastructure/meta-mcp/",
+    "shopify-mcp": "infrastructure/shopify-mcp/",
+    "supabase-mcp": "infrastructure/supabase-mcp/",
+    "note": "Cada MCP tiene su propia carpeta operativa en infrastructure/ — session_log.md + CONFIG.md futuro"
+  }
   },
   "studio": {
     "name": "Unrealville Studio",
@@ -404,7 +403,7 @@
             "copylab_jobs",
             "meta_accounts"
           ],
-          "note": "copylab_jobs operacional. temp_file_staging dropeada. lab_jobs migration pendiente (Ayra Sprint 0). meta_accounts: UNREALville ✅ LucienSael ✅ NeuroneSCF ❌"
+          "note": "copylab_jobs operacional. temp_file_staging dropeada. lab_jobs migration pendiente (Ayra Sprint 0). meta_accounts: UNREALville ✅ LucienSael ✅ NeuroneSCF ❌. GRANT TO service_role aplicado 2026-05-25 ✅"
         },
         "content": {
           "tables": 6,
@@ -888,31 +887,32 @@
       "status": "LIVE EN+ES · GTM-M2P6SH5V ✅ · GA4 G-BP9NJ91WNJ via GTM ✅"
     },
     {
-      "id": "INFRA-META-MCP",
-      "name": "Meta MCP",
-      "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp",
-      "audit_url": "https://unrlvl-meta-mcp.vercel.app",
-      "vercel_id": "prj_Kyk6FicMFVwmjQUDBxEdJiQqlTPn",
-      "status": "ACTIVE ✅ · 23 tools · middleware CORS ✅ 2026-05-25 · audit page ✅ 2026-05-25",
-      "created": "2026-05-25",
-      "files_deployed": [
-        "middleware.ts — CORS fix permanente",
-        "app/page.tsx — audit UI same-origin"
-      ],
-      "meta_accounts": {
-        "UNREALville": "✅ page + ig + ad_account + token",
-        "LucienSael": "✅ page + token",
-        "NeuroneSCF": "❌ pendiente insertar"
-      },
-      "blockers": [
-        "SUPABASE_SERVICE_ROLE_KEY faltante en Vercel env → list_brands falla con permission denied",
-        "brandId parameter name TBD — confirmar via inputSchema en audit page",
-        "NSCF credentials pendientes: page_id + ig_user_id + ad_account_id + token"
-      ],
-      "gap": "Meta MCP tools NO disponibles como deferred tools en Claude chat — solo funciona server-side y desde audit page",
-      "session_log": "infrastructure/meta-mcp/session_log.md",
-      "config_path": "infrastructure/meta-mcp/"
-    },
+  "id": "INFRA-META-MCP",
+  "name": "Meta MCP",
+  "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp",
+  "audit_url": "https://unrlvl-meta-mcp.vercel.app",
+  "vercel_id": "prj_Kyk6FicMFVwmjQUDBxEdJiQqlTPn",
+  "status": "ACTIVE ✅ OPERATIVO · 22/23 tools OK · CORS ✅ · GRANT fix ✅ · token renovado ✅ 2026-05-25",
+  "created": "2026-05-25",
+  "files_deployed": [
+    "middleware.ts — CORS fix permanente",
+    "app/page.tsx — audit UI same-origin · brand_id fix ✅",
+    "lib/meta.ts — SUPABASE_SERVICE_ROLE_KEY fix ✅"
+  ],
+  "meta_accounts": {
+    "UNREALville": "✅ completo · token renovado 32 scopes 2026-05-25",
+    "LucienSael": "✅ page + token · ig_user_id + ad_account_id pendientes",
+    "NeuroneSCF": "❌ pendiente insertar · page_id + ig_user_id + ad_account_id + token"
+  },
+  "blockers": [
+    "NSCF no está en meta_accounts — pendiente insertar page_id + ig_user_id + ad_account_id + token",
+    "fb_get_page_insights — métricas deprecadas en Graph API v21 (page_fans) — fix en meta.ts pendiente",
+    "Meta Dev App App Review: app icon + privacy URL + data-deletion URL + category"
+  ],
+  "gap": "fb_get_page_insights con métrica deprecada — resto operativo al 100%",
+  "session_log": "infrastructure/meta-mcp/session_log.md",
+  "config_path": "infrastructure/meta-mcp/"
+},
     {
       "id": "INFRA-SB-MAIN",
       "name": "Supabase unrlvl-db",
@@ -988,21 +988,22 @@
     }
   },
   "next_session_agenda": [
-    "PRIORIDAD 0 — Meta MCP completar config: a) SUPABASE_SERVICE_ROLE_KEY en Vercel env de unrlvl-meta-mcp · b) confirmar brandId param via inputSchema en audit page · c) insertar NSCF en meta_accounts (page_id + ig_user_id + ad_account_id + token) · d) verificar token scopes 🔴",
-    "PRIORIDAD 1 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
-    "PRIORIDAD 2 — PROFESSOR árbol navegable: PROFESSOR_CORE + nodos especializados (parte de Sprint 0)",
-    "PRIORIDAD 3 — lab_jobs migration: renombrar copylab_jobs → lab_jobs + campo lab_id (parte de Sprint 0)",
-    "PRIORIDAD 4 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
-    "PRIORIDAD 5 — NSCF: compatibility_rules para product_description_b2c → creative_seed + voice_genome en kits",
-    "PRIORIDAD 6 — NSCF: GTM + GA4 verificación",
-    "PRIORIDAD 7 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
-    "PRIORIDAD 8 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI",
-    "PRIORIDAD 9 — PO Agent: prioridad alta — sin él no se pueden hacer promesas de respuesta en email flows",
-    "PRIORIDAD 10 — Professor: revisar learnings pendientes (actualmente 0 pending)",
-    "PRIORIDAD 11 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
-    "PRIORIDAD 12 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
-    "PRIORIDAD 13 — connectivity-test EF: eliminar (solo era diagnóstico)",
-    "PRIORIDAD 14 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
-    "PRIORIDAD 15 — ImageLab fix: usar VercelRequest/VercelResponse + maxDuration — receta ya documentada en ASYNC_LAB_PIPELINE"
-  ]
+  "PRIORIDAD 0 — NSCF: insertar en meta_accounts (page_id + ig_user_id + ad_account_id + token) 🔴",
+  "PRIORIDAD 1 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
+  "PRIORIDAD 2 — Meta MCP: fix fb_get_page_insights — métricas deprecadas Graph API v21",
+  "PRIORIDAD 3 — unrealvillestudio.com: crear páginas /privacy + /data-deletion para Meta App Review",
+  "PRIORIDAD 4 — PROFESSOR árbol navegable: PROFESSOR_CORE + nodos especializados (Sprint 0)",
+  "PRIORIDAD 5 — lab_jobs migration: renombrar copylab_jobs → lab_jobs + campo lab_id (Sprint 0)",
+  "PRIORIDAD 6 — NSCF: TikTok Pixel duplicado — resolver antes de cualquier ads 🔴",
+  "PRIORIDAD 7 — NSCF: compatibility_rules para product_description_b2c → creative_seed + voice_genome en kits",
+  "PRIORIDAD 8 — NSCF: GTM + GA4 verificación",
+  "PRIORIDAD 9 — NSCF: Aplicar Restore Therapy Plus v4 a Shopify + escalar a otros 11 kits",
+  "PRIORIDAD 10 — NSCF: Klaviyo flows configurar 4 flows bilingüe en UI",
+  "PRIORIDAD 11 — PO Agent: prioridad alta — sin él no se pueden hacer promesas en email flows",
+  "PRIORIDAD 12 — Legal: Iniciar Stripe Atlas LLC Delaware ($500)",
+  "PRIORIDAD 13 — Voice Genome: capturar 3-5 audios PO adicionales → v1.0 mature",
+  "PRIORIDAD 14 — connectivity-test EF: eliminar (solo era diagnóstico)",
+  "PRIORIDAD 15 — Infra: luciensael.com DNS apuntar al deploy existente (10 min)",
+  "PRIORIDAD 16 — ImageLab fix: VercelRequest/VercelResponse + maxDuration"
+]
 }
