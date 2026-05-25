@@ -1,52 +1,51 @@
-# SESSION LOG — 2026-05-25
+# SESSION LOG — 2026-05-25 v2
 
-## Sesión: INFRA_ONBOARDING_PROTOCOL + unrlvl-meta-mcp
-**Fecha:** 2026-05-25  
-**Duración:** ~3h  
-**Tipo:** Infraestructura + Desarrollo MCP  
-
----
-
-## COMPLETADO EN ESTA SESIÓN ✅
-
-### Google Ecosystem — Umbrella UNRLVL
-- ✅ Google Account `ops@unrealvillestudio.com` creada (desde móvil — workaround número límite)
-- ✅ GA4 Account "Unrealville Studio" creada bajo ops@
-- ✅ GTM Account "UNREALville Studio" — container `GTM-M2P6SH5V` para `unrealvillestudio.com`
-- ✅ GTM snippets instalados en CoreProject/index.html (EN) y CoreProject/es/index.html (ES)
-- ✅ GA4 Tag `G-BP9NJ91WNJ` configurado en GTM — publicado como "v1 - GA4 G-BP9NJ91WNJ"
-- ✅ GTM live y verificado en producción
-
-### Meta Ecosystem
-- ✅ System User `unrlvlopssystem` creado — token permanente almacenado en Supabase
-- ✅ Assets UNREALville asignados al System User
-
-### Email Aliases
-- ✅ `ops@unrealvillestudio.com` creado — root Google umbrella
-- ✅ `meta@unrealvillestudio.com` creado — Meta system accounts
-
-### unrlvl-meta-mcp — LIVE ✅
-- ✅ Repo: unrealvillestudio-hub/unrlvl-meta-mcp
-- ✅ URL: https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp
-- ✅ 23 tools activos — IG organic + FB Page + Meta Ads completo
-- ✅ Tabla meta_accounts en Supabase con RLS
-- ✅ Brand UNREALville insertada y verificada
-- ✅ Conectado a Claude MCP registry
-
-### TikTok
-- ✅ Developer App "UNRLVL Publisher" en draft/pending review (2-4 semanas aprobación)
+## Sesión: Meta MCP — LucienSael + UnclaimedBusinessUser investigation
+**Fecha:** 2026-05-25 (continuación)
+**Tipo:** Meta infra + Supabase schema
 
 ---
 
-## PENDIENTES PRÓXIMA SESIÓN
-1. NSCF Meta assets — investigar qué portfolio tiene NSCF Ad Account
-2. NSCF insert en meta_accounts — tras resolver punto 1
-3. GA4 Organization — linkear NSCF al paraguas UNRLVL
-4. MCC Google Ads — crear bajo ops@
-5. TikTok MCP — construir cuando TikTok apruebe app
-6. INFRA_ONBOARDING_PROTOCOL.md — documentar protocolo completo
-7. Ayra Sprint 0 — DEADLINE 5 JUN 🔴
+## COMPLETADO ✅
+
+### LucienSael — meta_accounts
+- ✅ Brand LucienSael insertada en meta_accounts
+- page_id: 1076134175585218 — owned by UNREALville Studio ✅
+- ig_user_id: null — cuota Meta agotada, pendiente
+- ad_account_id: null — cuota Meta agotada, Ad Account propio pendiente. Usar UNRLVL Ads interim.
+- system_token: mismo unrlvlopssystem — correcto (un token para todas las marcas del portfolio)
+
+### Supabase schema fix
+- ✅ meta_accounts: ig_user_id + ad_account_id → nullable
+- Razón: marcas en onboarding pueden no tener IG o AdAcc aún
+- Pendiente: añadir guards en route.ts del MCP para null checks
+
+### UnclaimedBusinessUser FromPool — investigado
+- Es la cuenta @unrealvillestudio IG añadida al portfolio sin completar claim desde el lado IG
+- No es un intruso — es el propio IG de UNRLVL sin propietario humano identificado
+- Riesgo: Full Control sobre portfolio sin claim completado
+- Fix: Instagram → Accounts Center → Connected experiences → aceptar invitación
+- Estado: no encontrado el punto de entrada desde Instagram web. Pendiente resolver.
+- Decisión: NO eliminar — riesgo de romper el vínculo IG↔Portfolio
+
+### Meta portfolio UNREALville Studio — estado verificado
+- Samuel Moreno Mendoza: Full Control · 2 FB Pages + 1 Ad Account + 1 IG + 1 App
+- unrlvlopssystem: Full Control · 2 FB Pages + 1 IG (UNREALville + Lucien Sael)
+- UnclaimedBusinessUser @unrealvillestudio: Full Control (unclaimed — ver arriba)
+- Ad Account: UNRLVL Ads — bajo Samuel Moreno Mendoza Full Control
+- App: UNRLVL Publisher — Full Control
 
 ---
 
-## LEARNINGS: 12 capturados en professor_learnings
+## PENDIENTES
+1. NSCF meta_accounts — investigar portfolio NSCF, resolver assets, insertar brand
+2. LucienSael IG — crear cuando Meta libere cuota
+3. LucienSael Ad Account propio — crear cuando Meta libere cuota
+4. UnclaimedBusinessUser claim — completar desde IG Accounts Center
+5. MCP route.ts — añadir null guards para ig_user_id + ad_account_id
+6. Ayra Sprint 0 — DEADLINE 5 JUN 🔴
+
+---
+
+## LEARNINGS: 1 adicional
+- META_UNCLAIMED_BUSINESS_USER: guardado en professor_learnings
