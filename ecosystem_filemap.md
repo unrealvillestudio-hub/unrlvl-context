@@ -1,206 +1,194 @@
-# ECOSYSTEM FILEMAP — Unrealville Studio
-_Generado desde repo real unrlvl-context · 2026-05-21 · 91 archivos_
+# Ecosystem Filemap — Unrealville Studio
+_Generado desde ecosystem.json v2026-05-25-v17 · No editar manualmente_
 
 ---
 
-## REPO: unrlvl-context
+## Flujos principales
+
+### Copy Pipeline (OPERACIONAL)
+```
+Sam/Claude → CopyLab UI (Orchestrator)
+         → copylab_jobs (Supabase)
+         → pg_cron job #30 (1 min)
+         → copylab-processor EF v1.4
+         → brand_cache_snapshots (contexto)
+         → CopyLab v9.6
+         → output → Shopify / Klaviyo
+```
+
+### Brand Cache (OPERACIONAL)
+```
+brand-cache-builder EF
+  └─ action=build → brand_cache_snapshots (NeuroneSCF v2.0 · 18 tablas)
+  └─ action=build_all → todas las marcas
+  └─ action=status → estado actual
+
+CopyLab detecta: isV2 = Array.isArray(bc.creative_vectors)
+Modos: v2.0_zero_query | v1.x_partial | no_cache
+```
+
+### Meta MCP (LIVE 2026-05-25) 🆕
+```
+Servidor: unrlvl-meta-mcp.vercel.app
+  └─ /api/mcp/mcp (23 tools · JSON-RPC)
+  └─ middleware.ts → CORS headers todos los /api/* ✅
+  └─ app/page.tsx → audit UI same-origin ✅
+
+Datos: Supabase public.meta_accounts
+  └─ brand_id · page_id · ig_user_id · ad_account_id · system_token
+  └─ RLS: service_role_only → blocker list_brands ❌
+  └─ FIX PENDIENTE: SUPABASE_SERVICE_ROLE_KEY en Vercel env
+
+Brands configuradas:
+  └─ UNREALville ✅ · LucienSael ✅ · NeuroneSCF ❌
+
+Invocado por:
+  └─ Orchestrator / Ayra / EFs → server-side, sin CORS ✅
+  └─ audit page same-origin → ✅
+  └─ Claude chat → ❌ no disponible como deferred tool
+
+Documentación operativa:
+  └─ infrastructure/meta-mcp/session_log.md ← log de sesiones
+  └─ infrastructure/meta-mcp/CONFIG.md      ← (futuro) env vars, brandId schema
+  └─ ecosystem.json → infrastructure[] → INFRA-META-MCP ← estado actual
+```
+
+### Shopify MCP
+```
+Servidor: unrlvl-shopify-mcp.vercel.app
+  └─ /api/mcp/mcp
+  └─ Documentación operativa: infrastructure/shopify-mcp/ (futuro)
+  └─ ecosystem.json → infrastructure[] → INFRA-SHOPIFY-MCP
+```
+
+### Supabase MCP (unrlvl)
+```
+Servidor: unrlvl-supabase-mcp.vercel.app
+  └─ /api/mcp/mcp · v1.2.1
+  └─ Documentación operativa: infrastructure/supabase-mcp/ (futuro)
+  └─ ecosystem.json → infrastructure[] → INFRA-SB-MCP
+```
+
+### Professor (OPERACIONAL)
+```
+Proxy: unrlvl-context.vercel.app/api/professor
+  └─ ping · get-context · checkpoint · evaluate
+  └─ log-case · submit-learning · approve-learning
+
+Storage: Supabase amlvyycfepwhiindxgzw
+  └─ professor_decision_criteria (16)
+  └─ professor_veto_rules (4)
+  └─ professor_learnings (29 aprobados + 17 nuevos sesión 2026-05-25)
+  └─ professor_manuals (1: ASYNC_LAB_PIPELINE)
+  └─ professor_platform_variables (9)
+
+Checkpoint: silencioso cada 10 mensajes
+Visible solo si score = 5
+```
+
+### Shopify Audit & Fix
+```
+unrlvl-tools.vercel.app → ShopifyAuditor v3.5
+  └─ Supabase shopify schema
+  └─ audit_runs (95) · fix_log · stores
+  └─ EFs: shopify-audit · shopify-fix · shopify-fix-all
+         shopify-content-pipeline · shopify-auto-translate
+```
+
+### Content IID
+```
+EFs: content-dispatcher · content-run-stage
+     iid-core · iid-ecommerce · aife-filter
+
+Supabase intel schema:
+  └─ iid_content_queue (117 items)
+  └─ iid_findings
+  └─ iid_cron_runs
+```
+
+---
+
+## Repositorios GitHub (unrealvillestudio-hub)
+
+| Repo | Deploy | Estado |
+|---|---|---|
+| Orchestrator | orchestrator-unrlvl.vercel.app | ✅ v2.2 |
+| CopyLab | unrlvl-copy-lab.vercel.app | ✅ v9.6 |
+| unrlvl-context | unrlvl-context.vercel.app | ✅ LIVE |
+| unrlvl-meta-mcp 🆕 | unrlvl-meta-mcp.vercel.app | ✅ LIVE 2026-05-25 |
+| unrlvl-shopify-mcp | unrlvl-shopify-mcp.vercel.app | ✅ LIVE |
+| unrlvl-supabase-mcp | unrlvl-supabase-mcp.vercel.app | ✅ v1.2.1 |
+| unrlvl-social-media-agent | unrlvl-social-media-agent.vercel.app | ✅ LIVE |
+| DDMV-Assistant | ddmv-assistant.vercel.app | ⚠️ FIX NEEDED |
+| unrlvl-ayra | — | ⏳ POR CREAR |
+
+---
+
+## Dependencias críticas
 
 ```
-unrlvl-context/
+NeuroneSCF B2C copy pipeline:
+  brand_voice_genome (po_consumer v0.6)
+  └─ L1.5 VOICE_GENOME_INJECTION en buildCopyPrompt.ts
+
+  brand_cache_snapshots (v2.0)
+  └─ brand-cache-builder EF
+  └─ 0 queries en runtime (zero_query mode)
+
+  creative_compatibility_rules
+  └─ ❌ NO DEFINIDAS para product_description_b2c
+  └─ → creative_seed null en product_description_pack
+
+Meta MCP → meta_accounts → SUPABASE_SERVICE_ROLE_KEY (faltante en Vercel env)
+Ayra Sprint 0 → lab_jobs table (pendiente renombrar copylab_jobs)
+ImageLab → VercelRequest/VercelResponse + maxDuration (fix documentado en ASYNC_LAB_PIPELINE)
+```
+
+---
+
+## Protocolo de archivos — unrlvl-context repo
+
+```
+/
+├── ecosystem.json                    ← fuente de verdad
+├── ecosystem.md                      ← render narrativo (generado)
+├── ecosystem_filemap.md              ← este archivo (generado)
+├── AGENDA.md                         ← agenda visual (generado)
 │
-├── ecosystem.json                                        ← FUENTE DE VERDAD del ecosistema
-├── ecosystem.md                                          ← Vista legible del ecosystem.json
-├── ecosystem_filemap.md                                  ← Este archivo
-├── AGENDA.md                                             ← Tareas activas por prioridad
-├── TIERS.md                                              ← Pricing (cargar con prospectos)
+├── infrastructure/                   ← herramientas de infraestructura
+│   ├── meta-mcp/
+│   │   ├── session_log.md            ← log operativo de sesiones ✅
+│   │   └── CONFIG.md                 ← (futuro) env vars, brandId schema
+│   ├── shopify-mcp/                  ← (futuro)
+│   └── supabase-mcp/                 ← (futuro)
 │
 ├── brands/
-│   ├── ForumPHs/
-│   │   ├── brand.json
-│   │   ├── BP_Brand_Context.md
-│   │   ├── DOCUMENT_FACTORY_PLAN.md
-│   │   ├── FPHSOPS_SPEC.md
-│   │   └── session_log.md
-│   ├── Lucien/
-│   │   └── BP_Brand_Person_id.md
-│   ├── NeuroneSCF/
-│   │   ├── brand.json
-│   │   ├── BP_Brand_Context.md
-│   │   ├── PO_VOICE_ARTICLES.md
-│   │   ├── SHOPIFY_ARCHITECTURE.md
-│   │   └── session_log.md                               ← Sprint CopyLab async activo
-│   ├── PatriciaOsorioConectando/
-│   │   ├── BP_Brand_Context.md
-│   │   └── session_log.md
-│   ├── Unrealville/
-│   │   ├── brand.json
-│   │   └── BP_Brand_Context.md
-│   ├── UnrealvilleStudio/
-│   │   ├── brand.json
-│   │   ├── BP_Brand_Context.md
-│   │   ├── CRM_INTEGRATIONS.md
-│   │   ├── LUCIEN_BOOKS_MASTER.md
-│   │   ├── PARTNERSHIP_STRUCTURE_SAM_PO.md
-│   │   ├── UNRLVL_AGENT_INFRASTRUCTURE_PLAN.md
-│   │   ├── partnership_po_presentation.html
-│   │   ├── session_log.md                               ← Context/ecosistema session log
-│   │   └── docs/
-│   │       ├── PLAN_MAESTRO_LABS_SKILLS.md
-│   │       └── UNRLVL_Labs_Strategy.html
-│   └── VizosCosmetics/
+│   └── [Marca]/
 │       ├── brand.json
+│       ├── BP_Brand_Context.md
 │       └── session_log.md
 │
-├── agents/
+├── agents/                           ← agentes conversacionales únicamente
 │   ├── social-media-agent/
 │   │   └── session_log.md
-│   └── ddmv-assistant/
-│       └── session_log.md
+│   ├── ddmv-assistant/
+│   └── forumphs-speaks/
 │
-├── labs/
-│   └── OnboardingApp/
-│       └── session_log.md
-│
-├── db/
-│   ├── DB_VARIABLES_audit_summary.md
-│   ├── SESSION_HANDOFF.md
-│   ├── UNRLVL_Supabase_Schema.md
-│   └── seed_phase1.sql
-│
-├── projects/
-│   └── FinancialIntelligenceEngine.json
+├── skills/
+│   ├── INDEX.md
+│   └── [nombre]/SKILL.md
 │
 ├── protocols/
 │   ├── SESSION_PROTOCOL.md
 │   ├── HRD_PROTOCOL.md
-│   ├── IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md
-│   ├── AYRA_MASTER_PLAN.md
-│   ├── ECOSYSTEM_AUDIT.md
-│   ├── UNRLVL_Ecosystem_Vision.md
-│   └── session_log.md                                   ← UNRLVL-OPS legacy (Mar 2026)
+│   └── AYRA_MASTER_PLAN.md
 │
-├── skills/
-│   ├── INDEX.md
-│   ├── ads-mcp/SKILL.md
-│   ├── agent-browser/SKILL.md
-│   ├── agent-builder/SKILL.md
-│   ├── content-pipeline/SKILL.md
-│   ├── copylab-reference/SKILL.md
-│   ├── cost-layer/SKILL.md
-│   ├── ecosystem-auditor/SKILL.md
-│   ├── github-auditor/SKILL.md
-│   ├── higgsfield/SKILL.md
-│   ├── image-processing/SKILL.md
-│   ├── security/SKILL.md
-│   ├── shopify-auditor/SKILL.md
-│   ├── shopify-mcp/SKILL.md
-│   ├── ui-ux-layer/SKILL.md
-│   └── vercel/SKILL.md
-│
-├── knowledge/
-│   ├── _templates/
-│   │   ├── MANUAL_TEMPLATE.md
-│   │   └── CASE_TEMPLATE.md
-│   ├── ecosystem/
-│   │   ├── decision-matrix/
-│   │   │   ├── DECISION_MATRIX.md
-│   │   │   ├── QA_RULES.md
-│   │   │   └── CHANGELOG.md
-│   │   ├── professor/
-│   │   │   ├── PROFESSOR_PROTOCOL.md
-│   │   │   ├── CHECKPOINT_RULES.md
-│   │   │   ├── HRD_REMINDERS.md
-│   │   │   └── SKILL_GAPS.md
-│   │   └── labs/
-│   │       └── COPYLAB_NOTES.md
-│   ├── platforms/
-│   │   ├── agent-browser/MANUAL.md
-│   │   ├── claude/mcp/MANUAL.md            ← MCP custom: receta Vercel sin Next.js
-│   │   ├── html-js/
-│   │   │   ├── ENCODING_PITFALLS.md
-│   │   │   └── MOBILE_CSS_PATTERNS.md
-│   │   ├── judge-me/MANUAL.md
-│   │   ├── klaviyo/MANUAL.md
-│   │   ├── shopify/MANUAL.md
-│   │   └── supabase/
-│   │       ├── MANUAL.md
-│   │       └── EDGE_FUNCTIONS_PATTERNS.md
-│   └── clients/
-│       └── NeuroneSCF/
-│           └── PLATFORM_NOTES.md
-│
-└── api/
-    ├── gh.js                               ← GitHub proxy (GH_PAT en env vars)
-    ├── brand-cache.js                      ← Brand Cache API
-    ├── cf.js
-    ├── job-runner.js
-    ├── lab-invoke.js
-    └── professor.js                        ← Professor proxy ✅ LIVE 2026-05-20
+└── knowledge/
+    └── ecosystem/
+        ├── decision-matrix/
+        └── professor/
 ```
 
----
-
-## ARCHIVOS CANÓNICOS POR TIPO
-
-### Archivos de marca (`brands/[Marca]/`)
-| Archivo | Contenido | Quién lo actualiza |
-|---|---|---|
-| `brand.json` | Config: IDs, URLs, estado, metadatos | Claude en sesión |
-| `BP_Brand_Context.md` | Brand Platform completo | Claude en sesión |
-| `session_log.md` | Historial de trabajo por marca | Claude al cierre de sesión |
-
-### Archivos de ecosistema (raíz)
-| Archivo | Contenido | Quién lo actualiza |
-|---|---|---|
-| `ecosystem.json` | Fuente de verdad del ecosistema | Claude · comando Actualiza |
-| `ecosystem.md` | Vista legible del JSON | Claude · regenerar cuando cambia JSON |
-| `ecosystem_filemap.md` | Este archivo | Claude · regenerar cuando cambia estructura |
-| `AGENDA.md` | Tareas activas priorizadas | Claude · comando Actualiza |
-
-### Session logs por contexto
-| Ruta | Propósito |
-|---|---|
-| `brands/UnrealvilleStudio/session_log.md` | **Context/ecosistema** — infra, herramientas, cambios transversales |
-| `brands/[Marca]/session_log.md` | Sprint activo de esa marca |
-| `agents/[agente]/session_log.md` | Estado del agente |
-| `protocols/session_log.md` | UNRLVL-OPS legacy |
-
----
-
-## NOTAS DE ESTA VERSIÓN (2026-05-21)
-
-**Cambios vs filemap anterior (2026-05-20):**
-- `brands/UnrealvilleStudio/session_log.md` — nueva entrada 2026-05-21 (CopyLab async + MCP)
-- `brands/NeuroneSCF/session_log.md` — sprint CopyLab async activo
-- `knowledge/platforms/claude/mcp/MANUAL.md` — receta MCP custom Vercel documentada
-- Aclaración: `protocols/session_log.md` es UNRLVL-OPS legacy (Mar 2026), no el context log activo
-- knowledge/ecosystem/professor/ — añadidos HRD_REMINDERS.md y SKILL_GAPS.md
-- knowledge/platforms/supabase/ — EDGE_FUNCTIONS_PATTERNS.md añadido
-- knowledge/platforms/html-js/ — carpeta con dos archivos documentada
-
-**Infra nueva 2026-05-21:**
-- `unrlvl-supabase-mcp` (prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP) — MCP custom para amlvyycfepwhiindxgzw
-
----
-
-## REGLA CRÍTICA DE NOMENCLATURA
-
-Los outputs se generan con el nombre **EXACTO** del archivo en el repo, sin prefijos de marca:
-- ✅ `session_log.md` · `brand.json` · `ecosystem.json` · `SKILL.md` · `INDEX.md` · `MANUAL.md`
-- ❌ `NeuroneSCF_session_log.md` · `supabase_MANUAL.md`
-
-### Rutas de commit
-| Tipo | Ruta en repo |
-|---|---|
-| Context/ecosistema session log | `brands/UnrealvilleStudio/session_log.md` |
-| Archivos de marca | `brands/[Marca]/` |
-| Archivos de ecosistema | raíz del repo |
-| Agentes | `agents/[agente]/` |
-| Protocolos | `protocols/` |
-| Skills | `skills/[nombre]/SKILL.md` |
-| Manuales de plataforma | `knowledge/platforms/[plataforma]/MANUAL.md` |
-| Notes de cliente | `knowledge/clients/[Cliente]/PLATFORM_NOTES.md` |
-
----
-
-_ecosystem_filemap.md · generado desde repo real · 2026-05-21 · 91 archivos_
+**Regla de separación agents/ vs infrastructure/:**
+- `agents/` → agentes conversacionales con canal (WhatsApp, web, SMS) — DDMV, ForumPH Speaks, PO Agent
+- `infrastructure/` → herramientas de infraestructura técnica — MCPs, proxies, APIs internas
