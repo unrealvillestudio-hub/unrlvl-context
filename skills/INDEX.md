@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.1 · 2026-05-11 · Mantenido por: Claude_
+_Versión: 1.2 · 2026-05-26 · Mantenido por: Claude_
 
 ---
 
@@ -29,6 +29,16 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ads-mcp` | `skills/ads-mcp/SKILL.md` | Campañas Meta Ads, TikTok Ads, reporting, optimización | NeuroneSCF + futuros clientes con ads |
 | `higgsfield` | `skills/higgsfield/SKILL.md` | Generación de imágenes o video vía MCP | UNRLVL + clientes — VideoLab/ImageLab vía MCP |
 | `agent-browser` | `skills/agent-browser/SKILL.md` | Automatización de browser, scraping, testing web | UNRLVL infra — Claude Code principalmente |
+| `ecosystem-auditor` | `skills/ecosystem-auditor/SKILL.md` | Audit profundo del ecosistema — detectar drift entre código real y ecosystem.json | UNRLVL infra — bajo demanda |
+| `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
+
+---
+
+## NOTAS DE VERSIÓN v1.2
+
+**Cambios respecto a v1.1:**
+- `ecosystem-auditor` → añadido a la tabla de decisión (ya existía el skill, faltaba en el INDEX)
+- `ecosystem-updater` → skill nuevo · v1.0 · 2026-05-26 · proceso audit-en-chat + edición-vía-Claude-Code
 
 ---
 
@@ -51,17 +61,20 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 **Se activan por contexto declarado:**
 - Sam dice "Shopify B2C / audit / fix" → `shopify-auditor` + `shopify-mcp`
 - Sam dice "HTML / componente / diseño" → `ui-ux-layer`
-- Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline` (reemplaza aife + copylab como primer skill de texto)
+- Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline`
 - Sam dice "agente / WhatsApp / bot" → `agent-builder` + `security`
 - Sam dice "imagen / video / LoRA" → `image-processing` (+ `higgsfield` si hay MCP activo)
 - Sam dice "ads / campaña / Meta / TikTok" → `ads-mcp`
 - Sam dice "costos / margen / tokens" → `cost-layer`
-- Sam dice "pipeline / IID / Orchestrator" → `content-pipeline` (ya lo incluye todo)
+- Sam dice "pipeline / IID / Orchestrator" → `content-pipeline`
+- Sam dice "actualiza graph / actualiza ecosystem / ecosystem desactualizado" → `ecosystem-auditor` + `ecosystem-updater`
+- Sam dice "ecosystem audit" o "ecosystem scan" → `ecosystem-auditor` (ver también HRD_ECOSYSTEM_AUDIT en userPreferences)
 
 **Nunca se cargan proactivamente sin declaración:**
 - `ads-mcp` — solo si hay campaña activa en esa sesión
 - `higgsfield` — solo si hay generación visual en agenda
 - `agent-browser` — solo si hay tarea de automatización de browser
+- `ecosystem-auditor` / `ecosystem-updater` — solo bajo demanda explícita
 
 ---
 
@@ -88,4 +101,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.1 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.2 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
