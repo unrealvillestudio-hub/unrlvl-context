@@ -1,11 +1,11 @@
 {
  "_meta": {
-  "version": "2026-05-25-v18",
+  "version": "2026-05-26-v19",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-05-25-v17",
+  "previous": "2026-05-25-v18",
   "last_audit": {
-    "date": "2026-05-25",
-    "status": "Meta MCP FULLY OPERATIONAL ✅ · 22/23 tools OK · GRANT fix ✅ · token 32 scopes ✅ · NSCF pendiente",
+    "date": "2026-05-26",
+    "status": "Ecosystem Audit Contextual ✅ · 93 EFs reales (67 doc + 26 undoc) · lab_jobs + lab_configs YA EXISTEN · sistema fulfillment NSCF nuevo",
     "conducted_by": "Claude Sonnet 4.6",
     "key_findings": [
       "Meta MCP operativo: list_brands ✅ ig_get_media ✅ ads_get_campaigns ✅ ads_get_pixels ✅ ads_get_audiences ✅ ads_get_insights ✅",
@@ -13,7 +13,12 @@
       "lib/meta.ts: SUPABASE_SERVICE_KEY → SUPABASE_SERVICE_ROLE_KEY · page.tsx: brand → brand_id en callTool",
       "Token UNREALville renovado 32 scopes via Use Cases en Dev App — scopes != Business Manager permisos (capas independientes)",
       "Gap: fb_get_page_insights falla con métricas deprecadas en Graph API v21 (page_fans) — fix pendiente",
-      "7 learnings aprobados en professor_learnings — categorías META_MCP_INFRA + GITHUB_AUDITOR"
+      "7 learnings aprobados en professor_learnings — categorías META_MCP_INFRA + GITHUB_AUDITOR",
+      "93 EFs activas reales vs 67 documentadas — 26 sin documentar incluyendo lab-worker v11, claude-lab-bridge v6, nscf-mailer v13",
+      "lab_jobs tabla YA EXISTE en producción — ecosystem.json decía 'planned Sprint 0'",
+      "lab_configs tabla UNDOCUMENTED CRÍTICA — Orchestrator la lee para descubrir endpoints de labs dinámicamente",
+      "Sistema fulfillment NSCF nuevo: nscf_fulfillment_queue + nscf-fulfillment-watcher + nscf-fulfillment-processor",
+      "BlueprintLab NO tiene AI backend — solo UI React para person/location blueprints"
     ]
   },
   "infrastructure_paths": {
@@ -403,7 +408,7 @@
             "copylab_jobs",
             "meta_accounts"
           ],
-          "note": "copylab_jobs operacional. temp_file_staging dropeada. lab_jobs migration pendiente (Ayra Sprint 0). meta_accounts: UNREALville ✅ LucienSael ✅ NeuroneSCF ❌. GRANT TO service_role aplicado 2026-05-25 ✅"
+          "note": "copylab_jobs operacional. temp_file_staging dropeada. lab_jobs migration pendiente (Ayra Sprint 0). meta_accounts: UNREALville ✅ LucienSael ✅ NeuroneSCF ❌. GRANT TO service_role aplicado 2026-05-25 ✅ · lab_jobs ✅ YA EXISTE · lab_configs ✅ YA EXISTE (UNDOCUMENTED) · scheduled_posts · imagelab_presets · nscf_fulfillment_queue · speaks_* (4 tablas FPH) — detectadas audit 2026-05-26"
         },
         "content": {
           "tables": 6,
@@ -448,7 +453,7 @@
         }
       },
       "edge_functions": {
-        "total_active": 67,
+        "total_active": 93,
         "groups": {
           "shopify_ecosystem": {
             "count": 22,
@@ -527,6 +532,17 @@
               "sp-fix-targeted",
               "shopify-translate-batch"
             ]
+          },
+          "undocumented_critical": {
+            "count": 5,
+            "critical": [
+              "lab-worker (v11)",
+              "claude-lab-bridge (v6)",
+              "nscf-mailer (v13)",
+              "nscf-fulfillment-watcher (v2)",
+              "brand-context-builder (v1)"
+            ],
+            "note": "Detectadas en audit 2026-05-26 — requieren documentación"
           }
         },
         "pg_cron": {
@@ -728,7 +744,7 @@
     "vercel_project": "unrlvl-ayra — POR CREAR",
     "url": "ayra.unrealvillestudio.com — POR CONFIGURAR",
     "sprints": {
-      "sprint_0": "PENDIENTE — antes del 5 Jun 🔴 · incluye: PROFESSOR árbol + lab_jobs migration",
+      "sprint_0": "PENDIENTE — antes del 5 Jun 🔴 · BUENA NOTICIA: lab_jobs + lab_configs YA EXISTEN en prod — Sprint 0 más simple de lo esperado · pendiente: repo unrlvl-ayra + Vercel + schema + PROFESSOR árbol + env vars",
       "sprint_1": "Jun 5-15 — Foundation: EcosystemGraph + health EP + graph_validate",
       "sprint_2": "Jun 16-30 — Primeros jobs autónomos · content_sequences + email_sequence ya listos",
       "sprint_3": "Jul 1-14 — Daily Digest 7am ET",
@@ -988,6 +1004,10 @@
     }
   },
   "next_session_agenda": [
+  "HALLAZGO AUDIT — lab_configs + lab_jobs ya existen: validar estructura antes de Sprint 0",
+  "HALLAZGO AUDIT — 26 EFs undocumented: documentar lab-worker v11 + claude-lab-bridge v6 en próxima sesión",
+  "HALLAZGO AUDIT — nscf-mailer v13: qué hace exactamente? integrar en doc",
+  "HALLAZGO AUDIT — nscf_fulfillment_queue: documentar sistema de fulfillment NSCF",
   "PRIORIDAD 0 — NSCF: insertar en meta_accounts (page_id + ig_user_id + ad_account_id + token) 🔴",
   "PRIORIDAD 1 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars 🔴",
   "PRIORIDAD 2 — Meta MCP: fix fb_get_page_insights — métricas deprecadas Graph API v21",
