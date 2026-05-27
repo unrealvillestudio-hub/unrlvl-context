@@ -1,88 +1,141 @@
-# Session Log — Meta MCP
+# Session Log — Meta MCP + Pipeline Orgánico
 _infrastructure/meta-mcp/session_log.md_
 _Claude Sonnet 4.6 · UNRLVL Infraestructura_
 
 ---
 
-## 2026-05-25 — Sesión 2 · Fixes completos + Meta API operativo
+## 2026-05-26 — Sesión 3 · Pipeline completo + Arquitectura async Claude↔Ecosistema
 
-### Trabajo realizado
+### Resumen ejecutivo
+Sesión de máxima densidad técnica. Se completó el pipeline organic de publicación, se resolvió la arquitectura de comunicación nativa Claude↔Ecosistema via Supabase bus, y se identificó el bloqueante final (ImageLab timeout en Vercel Node.js serverless).
 
-**Bug 1 resuelto: GRANT faltante en meta_accounts (causa raíz de list_brands)**
-- Root cause: tabla `meta_accounts` creada sin GRANT para `service_role` — solo `postgres` tenía acceso
-- Síntoma: `permission denied for table meta_accounts` aunque RLS y key fueran correctos
-- Fix: `GRANT ALL ON TABLE public.meta_accounts TO service_role;`
-- Verificación: `list_brands` devuelve UNREALville + LucienSael ✅
+---
 
-**Bug 2 resuelto: env var naming mismatch (SUPABASE_SERVICE_KEY → SUPABASE_SERVICE_ROLE_KEY)**
-- Root cause: código usaba `process.env.SUPABASE_SERVICE_KEY` pero env var fue renombrada a `SUPABASE_SERVICE_ROLE_KEY` por error en sesión anterior
-- Fix: actualizado `lib/meta.ts` línea 6 → `process.env.SUPABASE_SERVICE_ROLE_KEY`
-- Nota: error originado en instrucción incorrecta de Claude en sesión 1 — documentado en professor_learnings
+### Meta MCP — Fixes completados
 
-**Bug 3 resuelto: parámetro brand vs brand_id en page.tsx**
-- Root cause: `app/page.tsx` callTool pasaba `{ brand: brand.id }` pero `route.ts` lee `args.brand_id`
-- Fix: cambiado a `{ brand_id: brand.id }` + `args.brand_id ?? args.brand` en display
-- Efecto: audit page ya no devuelve "Meta account not found for brand: undefined"
+**Page Access Token fix (lib/meta.ts):**
+- Root cause: FB operations requieren Page Access Token, no System User Token
+- Fix: función `getPageToken()` → GET /{page_id}?fields=access_token → cachea resultado
+- Resultado: `fb_publish_post` UNREALville funcionando ✅ post_id 122108066852692054
 
-**Meta API: scopes del system token**
-- Problema: token original no tenía scopes ads — error "(#200) Ad account owner has NOT grant ads_management"
-- Causa: Use Cases no configurados en Dev App antes de generar el token
-- Fix: configurar Use Cases en Meta Developers → App → Use Cases → regenerar token con 32 permisos
-- Aprendizaje clave: Business Manager permisos ≠ token scopes — son capas independientes
-- Token actualizado en Supabase via SQL directo (NUNCA pegar en chat)
+**Supabase Storage unrlvl-media:**
+- Bucket público creado con estructura: temp/ (cleanup 48h), published/, ads/, brand/
+- pg_cron job #32 — cleanup temp/ diario 3am UTC
+- Endpoint /api/upload en unrlvl-meta-mcp: acepta base64 o URL → devuelve public_url
 
-**Estado final de tools — UNREALville:**
+**NeuroneSCF conectada:**
+- page_id: 1128233510364834
+- ig_user_id: 17841427409446294
+- ad_account_id: act_917261428011667
+- Token generado desde BM de Patricia con UNRLVL Publisher (32 scopes)
+- IG pendiente hasta que Laura autorice (instagram account assignment)
 
-| Tool | Estado | Nota |
+**LucienSael:**
+- ig_user_id actualizado: 17841433630854316
+- ad_account_id: pendiente
+
+---
+
+### Orchestrator — QWs completados
+
+| QW | Fix | Estado |
 |---|---|---|
-| `list_brands` | ✅ | UNREALville + LucienSael |
-| `ig_get_media` | ✅ | 1 post real — Apr 27 |
-| `ads_get_campaigns` | ✅ | Cuenta sin campañas aún |
-| `ads_get_pixels` | ✅ | Sin pixels en esta ad account |
-| `ads_get_audiences` | ✅ | Sin audiencias |
-| `ads_get_insights` | ✅ | Sin data (sin campañas) |
-| `fb_get_page_insights` | ⚠️ | Métricas `page_fans` deprecadas en v21 |
+| QW1 | SocialLab CORS * | ✅ |
+| QW2 | /api/publish worker → Meta MCP | ✅ |
+| QW3 | meta LabId + publish_organic FlowObjective | ✅ |
+| QW4 | lab_configs entrada meta | ✅ |
+| QW5 | ImageLab maxDuration 300s | ✅ |
 
-**Meta Dev App — pendientes para App Review:**
-- App icon 1024×1024
-- Privacy policy URL → unrealvillestudio.com/privacy (pendiente crear página)
-- User data deletion URL → unrealvillestudio.com/data-deletion (pendiente crear)
-- Category → Business & Pages
-- No bloquean operación actual (solo bloquean si se quiere usar con tokens de usuario real)
+**Fixes adicionales:**
+- HubModule brand selector dropdown (14 marcas desde Supabase)
+- FlowExecutorModule: brandId + previousOutputs entre stages
+- Fail-fast en pipeline si lab devuelve error
+- Brand guardrails en interpret-intent desde Supabase (process.env correcto)
+- Dual-mode /api/trigger-job v3.0 fire-and-forget (responde 202 inmediatamente)
+- interpret-intent: imagelab omitido por defecto, solo si prompt lo pide explícitamente
 
-**Professor learnings registrados:** 7 learnings aprobados categoria META_MCP_INFRA + GITHUB_AUDITOR
+---
 
-### meta_accounts — estado actual
+### Arquitectura Claude↔Ecosistema — RESUELTA
 
-| brand_id | page_id | ig_user_id | ad_account_id | token |
+**El bus nativo:**
+```
+Claude → INSERT lab_jobs → pg_net trigger → lab-worker EF → pipeline → resultado en lab_jobs
+```
+
+**Componentes:**
+- `lab_jobs` tabla extendida: job_type, prompt, platforms, aspect_ratio, auto_publish
+- Trigger `lab_jobs_trigger_worker` vía pg_net.http_post → lab-worker EF
+- `lab-worker` v13 con EdgeRuntime.waitUntil (fire-and-forget para jobs long-running)
+- `lab-worker` dispatcher: job_type=copylab → email pipeline original; job_type=orchestrator → trigger-job
+
+**Validación:**
+- pg_net activo (request_id 8538 confirmado)
+- Trigger funciona: job `processing` en <5 segundos tras INSERT
+- lab-worker recibe job, lo marca `processing`, lanza background task
+
+**Bloqueante pendiente:**
+- Vercel Node.js serverless mata Promise flotante al enviar response
+- trigger-job necesita cambiar de Node.js a Edge Runtime para que ctx.waitUntil() funcione
+- O: mover pipeline completo a lab-worker EF directamente (bypasa Vercel)
+
+---
+
+### Claude Code — Setup establecido
+
+Flujo permanente validado:
+1. Claude Chat genera archivos + instrucciones
+2. Sam abre Claude Code desktop → repo → pega prompt + adjunta archivos
+3. Claude Code edita → commit → push → Vercel deploya automáticamente
+4. Primera sesión: auth issue resuelto con `gh auth login -w` → unrealvillestudio-hub
+
+---
+
+### AGENDA MAÑANA — continuar esta actividad
+
+**PRIORIDAD 0 — CRÍTICO: Resolver Vercel Node.js → Edge Runtime para trigger-job**
+- Cambiar `api/trigger-job.ts`: añadir `export const config = { runtime: 'edge' }` al inicio
+- Con Edge Runtime, `ctx.waitUntil()` funciona y el pipeline corre sin timeout
+- Esto desbloquea el flujo completo sin ImageLab primero, luego con ImageLab
+- Claude Code: 1 línea + `export const config = { runtime: 'edge' }` al top del archivo
+
+**PRIORIDAD 1 — Validar flujo sin ImageLab de punta a punta**
+- Una vez resuelto Edge Runtime en trigger-job, insertar job sin imagen
+- Verificar: INSERT lab_jobs → trigger → lab-worker → trigger-job (Edge) → CopyLab → SocialLab → Meta MCP → post publicado en IG+FB
+- Leer resultado en lab_jobs.output_parsed desde Claude
+
+**PRIORIDAD 2 — ImageLab async architecture**
+- ImageLab no puede ser síncrono en ningún pipeline — tarda 120-300s
+- Patrón: INSERT lab_jobs con job_type=imagelab → lab-worker procesa → escribe image_url en lab_jobs → pipeline continúa
+- Implica: lab-worker needs imagelab handler + trigger-job needs to poll/wait for imagelab job
+- VideoLab mismo patrón
+
+**PRIORIDAD 3 — Test completo con imagen**
+- Una vez ImageLab es async, insertar job con imagen
+- Verificar flujo completo: copy → imagen → encolar → publicar IG+FB
+
+**PRIORIDAD 4 — Privacidad/data-deletion en unrealvillestudio.com**
+- Para Meta Dev App App Review: /privacy + /data-deletion pages
+- Simple HTML estático, no bloquea operación actual pero si escalar a más clientes
+
+**PRIORIDAD 5 — NeuroneSCF IG (Laura) + TikTok Pixel duplicate fix**
+
+---
+
+### Estado meta_accounts al cierre
+
+| brand_id | FB | IG | Ads | Token |
 |---|---|---|---|---|
-| UNREALville | 1050792034789886 | 17841429817593693 | act_1506214917803847 | ✅ renovado |
-| LucienSael | 1076134175585218 | null | null | ✅ (mismo token) |
-| NeuroneSCF | — | — | — | ❌ pendiente |
+| UNREALville | ✅ | ✅ | ✅ | ✅ renovado |
+| LucienSael | ✅ | ✅ | ❌ pending | ✅ |
+| NeuroneSCF | ✅ | ⚠️ (Laura) | ✅ | ✅ |
 
-### Pendiente próxima sesión
+### Estado lab_jobs schema al cierre
 
-1. Insertar NeuroneSCF en `meta_accounts` (page_id + ig_user_id + ad_account_id + token)
-2. Fix `fb_get_page_insights` — remover métricas deprecadas en v21 (`page_fans`)
-3. Crear páginas privacy + data-deletion en unrealvillestudio.com para Meta App Review
-4. LucienSael: completar `ig_user_id` + `ad_account_id` cuando estén disponibles
-
----
-
-## 2026-05-25 — Sesión 1 · Diagnóstico + fixes iniciales
-
-### Trabajo realizado
-
-**CORS fix (deployado ✅)**
-- Root cause: POST responses sin `Access-Control-Allow-Origin` — browser bloqueaba lectura
-- Fix: `middleware.ts` en raíz del repo `unrlvl-meta-mcp`
-- Cobertura: OPTIONS preflight + todos los responses `/api/*`
-
-**Audit page same-origin (deployada ✅)**
-- `app/page.tsx` en `unrlvl-meta-mcp` — reemplaza el existente
-- URL: `https://unrlvl-meta-mcp.vercel.app`
-
-**23 Tools confirmados:**
-`list_brands · ig_create_container · ig_publish_container · ig_get_media · ig_get_media_insights · ig_get_account_insights · fb_publish_post · fb_publish_photo · fb_get_posts · fb_get_page_insights · ads_get_campaigns · ads_create_campaign · ads_update_campaign · ads_get_adsets · ads_create_adset · ads_get_ads · ads_create_ad · ads_create_creative · ads_get_creatives · ads_get_insights · ads_get_audiences · ads_get_pixels · ads_get_delivery_estimate`
+Nuevas columnas: job_type, prompt, platforms, aspect_ratio, auto_publish
+Trigger activo: lab_jobs_trigger_worker (pg_net → lab-worker EF)
+lab-worker: v13 con EdgeRuntime.waitUntil
 
 ---
+
+## 2026-05-25 — Sesiones 1 y 2 (ver versiones anteriores)
