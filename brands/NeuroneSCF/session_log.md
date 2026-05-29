@@ -13,7 +13,7 @@ Sesión de infraestructura intensiva. Dos grandes bloques: (1) correcciones Shop
 
 ### SHOPIFY MCP — DESBLOQUEADO AL 100%
 - **OAuth callback implementado** en `nscf-fulfillment-portal` (antes no existía) — token se auto-guarda en Supabase al instalar app
-- **Token B2C actualizado**: `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` (OAuth real, reemplaza atkn_ inválido)
+- **Token B2C actualizado**: `[token en Supabase — no exponer en repo]` (OAuth real, reemplaza atkn_ inválido)
 - **GRANT fix aplicado**: `public.shopify_stores` VIEW requería permisos explícitos de escritura — CC lo detectó y aplicó migración
 - **`write_orders` scope agregado** a UNRLVL-MCP app en Dev Dashboard (versión nscf-kiosk-8)
 - **Pickup deshabilitado** en Vizos Salón (B2C checkout) — `locationLocalPickupDisable`
