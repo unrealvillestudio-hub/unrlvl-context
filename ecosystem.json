@@ -1,28 +1,32 @@
 {
- "_meta": {
-  "version": "2026-05-29-v21",
-  "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-05-29-v20",
-  "last_session": {
-    "date": "2026-05-29",
-    "duration": "full day",
-    "conducted_by": "Claude Sonnet 4.6 + Claude Code",
-    "status": "🛠️ NSCF ops + Portal fulfillment end-to-end. Primera orden real despachada (#1017).",
-    "key_achievements": [
-      "Shopify MCP B2C desbloqueado: OAuth callback + shpat_7fe59f + write_orders scope",
-      "Pickup deshabilitado en Vizos Salón (B2C checkout) — locationLocalPickupDisable",
-      "Delivery deshabilitado en Vizos Salón (Kiosk) — fulfillsOnlineOrders:false",
-      "Orden #1017 Maria E Thompson: address+nota+tags+fulfillment+UPS carrier corregido",
-      "nscf-fulfillment-portal v2 LIVE: 3 pantallas + 4 emails + tracking + corrección + reporte CSV",
-      "nscf-mailer v17: botón → dispatch.neuronescflorida.com/portal",
-      "nscf_fulfillment_log + archive + cron archivado 3 meses",
-      "nscf-dispatch proxy en GitHub (PENDIENTE: Vercel proyecto + DNS Cloudflare)",
-      "Kiosk: descuento oculto para max_discount_pct=0 — solo Patricia ve slider",
-      "RES-Neurone_Pricing_v16_B2B_B2C.xlsx entregado: B2C+B2B separados con fórmulas vivas",
-      "2tonerexpress registrado como Fulfillment Service en Shopify B2C",
-      "Neurone S&CF location actualizada con datos 2toner (3028 NW 72 Ave Suite 4 Miami)"
-    ]
-  }
+  "_meta": {
+    "version": "2026-05-29-v22",
+    "maintained_by": "Claude — do not edit manually",
+    "previous": "2026-05-29-v21",
+    "last_session": {
+      "date": "2026-05-29",
+      "duration": "full day",
+      "conducted_by": "Claude Sonnet 4.6 + Claude Code",
+      "status": "🛠️ NSCF ops + Portal fulfillment end-to-end. Primera orden real despachada (#1017).",
+      "key_achievements": [
+        "Shopify MCP B2C desbloqueado: OAuth callback + shpat_7fe59f + write_orders scope",
+        "Pickup deshabilitado en Vizos Salón (B2C checkout) — locationLocalPickupDisable",
+        "Delivery deshabilitado en Vizos Salón (Kiosk) — fulfillsOnlineOrders:false",
+        "Orden #1017 Maria E Thompson: address+nota+tags+fulfillment+UPS carrier corregido",
+        "nscf-fulfillment-portal v2 LIVE: 3 pantallas + 4 emails + tracking + corrección + reporte CSV",
+        "nscf-mailer v17: botón → dispatch.neuronescflorida.com/portal",
+        "nscf_fulfillment_log + archive + cron archivado 3 meses",
+        "nscf-dispatch proxy en GitHub (PENDIENTE: Vercel proyecto + DNS Cloudflare)",
+        "Kiosk: descuento oculto para max_discount_pct=0 — solo Patricia ve slider",
+        "RES-Neurone_Pricing_v16_B2B_B2C.xlsx entregado: B2C+B2B separados con fórmulas vivas",
+        "2tonerexpress registrado como Fulfillment Service en Shopify B2C",
+        "Neurone S&CF location actualizada con datos 2toner (3028 NW 72 Ave Suite 4 Miami)",
+        "CLAUDE.md creados y pusheados: ImageLab + CopyLab + Orchestrator + unrlvl-context",
+        "lab_jobs.status CHECK constraint: published agregado",
+        "dispatch.neuronescflorida.com LIVE — proxy Vercel + DNS Cloudflare",
+        "Professor: 8 learnings nuevos submitidos (SHOPIFY_INFRA x5, NSCF_OPS, SUPABASE_INFRA, ECOSYSTEM_INFRA)"
+      ]
+    }
   },
   "studio": {
     "name": "Unrealville Studio",
@@ -102,9 +106,21 @@
           "url_custom": "https://dispatch.neuronescflorida.com/portal",
           "custom_domain_status": "⏳ PENDIENTE — crear proyecto Vercel nscf-dispatch + DNS Cloudflare",
           "mailer": "nscf-mailer v17",
-          "tables": ["nscf_fulfillment_log", "nscf_fulfillment_log_archive"],
-          "features": ["3 pantallas", "4 emails simultáneos", "tracking + corrección", "reporte CSV", "audit trail completo"],
-          "next_sprint": ["Dashboard pendientes", "Integración UPS API directo (developer.ups.com)"]
+          "tables": [
+            "nscf_fulfillment_log",
+            "nscf_fulfillment_log_archive"
+          ],
+          "features": [
+            "3 pantallas",
+            "4 emails simultáneos",
+            "tracking + corrección",
+            "reporte CSV",
+            "audit trail completo"
+          ],
+          "next_sprint": [
+            "Dashboard pendientes",
+            "Integración UPS API directo (developer.ups.com)"
+          ]
         }
       },
       "meta": {
@@ -426,18 +442,15 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
-    "🔴 ACCIÓN INMEDIATA — Crear proyecto nscf-dispatch en Vercel (root: nscf-dispatch) + DNS Cloudflare CNAME dispatch.neuronescflorida.com",
-    "🔴 PRIORIDAD 0 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
-    "PRIORIDAD 1 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
-    "PRIORIDAD 2 — TikTok Pixel duplicado NSCF — resolver antes de ads",
-    "PRIORIDAD 3 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
-    "PRIORIDAD 4 — Portal Iván sprint 2: dashboard pendientes + UPS API (Iván necesita: Client ID + Secret desde developer.ups.com)",
-    "PRIORIDAD 5 — lab_jobs.status CHECK: agregar 'published'",
-    "PRIORIDAD 6 — CLAUDE.md: crear en repos ImageLab + CopyLab + Orchestrator + unrlvl-context",
-    "PRIORIDAD 7 — VideoLab launch: integrar Kling.ai token",
-    "PRIORIDAD 8 — Klaviyo flows NSCF: configurar 4 flows bilingüe",
+    "🔴 PRIORIDAD 1 — IID Jobs review + publicar vigentes + sistema publicaciones orgánicas UnrealvilleStudio + LucienSael via pipeline completo → producción",
+    "🔴 PRIORIDAD 2 — VideoLab launch: integrar Kling.ai token + grabaciones Patricia para voice genome",
+    "PRIORIDAD 3 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
+    "PRIORIDAD 4 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
+    "PRIORIDAD 5 — TikTok Pixel duplicado NSCF — resolver antes de ads",
+    "PRIORIDAD 6 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
+    "PRIORIDAD 7 — Portal Iván sprint 2: dashboard pendientes + UPS API (developer.ups.com)",
+    "PRIORIDAD 8 — Klaviyo flows NSCF: 4 flows bilingüe",
     "PRIORIDAD 9 — Catálogo NSCF: confirmar con PO si Kerasin HB 400ml va en B2B",
-    "PRIORIDAD 10 — Token B2B Kiosk Supabase: investigar si nj5ybc-n1 aplica o deprecar",
-    "PRIORIDAD 11 — luciensael.com DNS deploy (10 min)"
+    "PRIORIDAD 10 — luciensael.com DNS deploy (10 min)"
   ]
 }
