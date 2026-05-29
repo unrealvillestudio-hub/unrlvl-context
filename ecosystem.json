@@ -1,26 +1,26 @@
 {
  "_meta": {
-  "version": "2026-05-29-v20",
+  "version": "2026-05-29-v21",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-05-26-v19",
+  "previous": "2026-05-29-v20",
   "last_session": {
     "date": "2026-05-29",
     "duration": "full day",
     "conducted_by": "Claude Sonnet 4.6 + Claude Code",
-    "status": "🎉 MILESTONE — Pipeline end-to-end operacional. Primer post publicado en IG + FB via pipeline completo.",
+    "status": "🛠️ NSCF ops + Portal fulfillment end-to-end. Primera orden real despachada (#1017).",
     "key_achievements": [
-      "ImageLab OPERACIONAL: Vertex AI + Service Account auth + maxDuration 60s + preset injection v2 + multimodal capability",
-      "Pipeline completo LIVE: Claude→Orchestrator→lab-worker→CopyLab+ImageLab→CDN→Approval→Meta MCP→IG+FB",
-      "Primer post UnrealvilleStudio publicado en Instagram (18079433432212868) + Facebook (122108522354692054)",
-      "Brand context UnrealvilleStudio v1.0: personas, voice_genome, copy_profiles, geomix, imagelab_presets, brand_cache_snapshot",
-      "imagelab_presets UNRLVL-FEED-TEASER v2: chevron void concept — obsidiana + luz surgical dorada",
-      "CopyLab literal mode ahora lee brand context → hashtags de lexicon, no free-association",
-      "normalizeSupabaseUrl aplicado en ImageLab + CopyLab + Orchestrator",
-      "Supabase CDN unrlvl-media operacional: 50MB/file, temp cleanup 60 días",
-      "13 learnings nuevos en Professor (todos aprobados)",
-      "Google Cloud billing activado: $300 trial + Service Account + budget alert $30/mes",
-      "lab-worker v18: aspect ratio mapping + force imagelab para teaser/announcement + preset_used flag",
-      "CLAUDE.md system diseñado para repos CC con contexto persistente"
+      "Shopify MCP B2C desbloqueado: OAuth callback + shpat_7fe59f + write_orders scope",
+      "Pickup deshabilitado en Vizos Salón (B2C checkout) — locationLocalPickupDisable",
+      "Delivery deshabilitado en Vizos Salón (Kiosk) — fulfillsOnlineOrders:false",
+      "Orden #1017 Maria E Thompson: address+nota+tags+fulfillment+UPS carrier corregido",
+      "nscf-fulfillment-portal v2 LIVE: 3 pantallas + 4 emails + tracking + corrección + reporte CSV",
+      "nscf-mailer v17: botón → dispatch.neuronescflorida.com/portal",
+      "nscf_fulfillment_log + archive + cron archivado 3 meses",
+      "nscf-dispatch proxy en GitHub (PENDIENTE: Vercel proyecto + DNS Cloudflare)",
+      "Kiosk: descuento oculto para max_discount_pct=0 — solo Patricia ve slider",
+      "RES-Neurone_Pricing_v16_B2B_B2C.xlsx entregado: B2C+B2B separados con fórmulas vivas",
+      "2tonerexpress registrado como Fulfillment Service en Shopify B2C",
+      "Neurone S&CF location actualizada con datos 2toner (3028 NW 72 Ave Suite 4 Miami)"
     ]
   }
   },
@@ -50,13 +50,14 @@
       "market": "South & Central Florida, USA",
       "domain": "neuronescflorida.com",
       "status": "active",
-      "health": "yellow",
+      "health": "green",
       "shopify": {
         "b2b": {
           "internal_domain": "nj5ybc-n1.myshopify.com",
           "theme_id": "149164392526",
           "last_audit_score": 133,
-          "last_audit_date": "2026-05-02"
+          "last_audit_date": "2026-05-02",
+          "note": "REVISAR: store_type b2b y shop_domain nj5ybc-n1.myshopify.com pendiente verificar — posiblemente obsoleto. Ver sesión 2026-05-29."
         },
         "b2c": {
           "internal_domain": "egdk1n-gt.myshopify.com",
@@ -72,6 +73,14 @@
           "last_audit_score": 137,
           "last_audit_date": "2026-05-06",
           "active_products_b2c": 41,
+          "checkout": {
+            "pickup": "❌ DESHABILITADO — 2026-05-29",
+            "delivery": "✅ activo desde 3PL Neurone S&CF"
+          },
+          "kiosk": {
+            "delivery": "❌ DESHABILITADO en Vizos Salón — 2026-05-29",
+            "pickup": "✅ solo Vizos Salón"
+          },
           "tracking": {
             "meta_pixel": "✅ LIVE — Pixel ID: 1348252664025025",
             "ga4": "✅ INSTALADO VIA GTM — verificación pendiente",
@@ -79,6 +88,23 @@
             "klaviyo": "✅ LIVE — Public Key: UNF8Ee · 10 templates ES+EN · flows PENDIENTE"
           },
           "gaps": "TikTok pixel fix → GTM+GA4 verify → Klaviyo flows UI → Ads"
+        }
+      },
+      "fulfillment": {
+        "provider": "2toner Express",
+        "contact": "Iván",
+        "email": "2tonerexpress@gmail.com",
+        "location": "Neurone South & Central Florida (3028 NW 72 Ave Suite 4 Miami FL 33122)",
+        "portal": {
+          "status": "✅ LIVE — 2026-05-29",
+          "ef": "nscf-fulfillment-portal v2",
+          "url_supabase": "https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/nscf-fulfillment-portal",
+          "url_custom": "https://dispatch.neuronescflorida.com/portal",
+          "custom_domain_status": "⏳ PENDIENTE — crear proyecto Vercel nscf-dispatch + DNS Cloudflare",
+          "mailer": "nscf-mailer v17",
+          "tables": ["nscf_fulfillment_log", "nscf_fulfillment_log_archive"],
+          "features": ["3 pantallas", "4 emails simultáneos", "tracking + corrección", "reporte CSV", "audit trail completo"],
+          "next_sprint": ["Dashboard pendientes", "Integración UPS API directo (developer.ups.com)"]
         }
       },
       "meta": {
@@ -147,8 +173,6 @@
         "icp_secondary": "agency_bridge — In-House Publicist / Agency Bridge, 25-45",
         "voice_genome": "unrlvl_default v1.0 — Defiant precision, EN default, ES mismo tono sin suavizar",
         "visual_identity": "black #050505, gold #FFAB00, precision geometry, no people, no tropical",
-        "tables_updated": ["brand_personas", "brand_voice_genome", "brand_copy_profiles", "geomix", "imagelab_presets", "brand_cache_snapshots"],
-        "geomix": "2 geos: North America (EN) + LATAM+Global Spanish (ES) — sin Spain — internacional",
         "meta_mcp_brand_id": "UNREALville",
         "meta_accounts": {
           "page_id": "1050792034789886",
@@ -158,9 +182,7 @@
         "first_post": {
           "date": "2026-05-29",
           "ig_media_id": "18079433432212868",
-          "fb_post_id": "1050792034789886_122108522354692054",
-          "caption": "Great things coming...soon.\n\n#UnrealvilleStudio #BuildSystems #IndustrialConsistency #ZeroRework #OneSystemInfiniteBrands",
-          "job_id": "b93627b6-4e45-4cef-84fb-bda37621b254"
+          "fb_post_id": "1050792034789886_122108522354692054"
         }
       }
     }
@@ -175,8 +197,7 @@
       "status": "live",
       "version": "v4.1",
       "last_deploy": "2026-05-29",
-      "vercel_id": "prj_93AJfDiY1pcktG7b7fDStBqONYWy",
-      "changes_2026-05-29": "TriggerBody.canal + TriggerBody.language + normalizeSupabaseUrl — commit fe817f2"
+      "vercel_id": "prj_93AJfDiY1pcktG7b7fDStBqONYWy"
     },
     "copylab": {
       "url": "unrlvl-copy-lab.vercel.app",
@@ -186,13 +207,7 @@
       "status": "live",
       "version": "v9.7",
       "last_deploy": "2026-05-29",
-      "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe",
-      "changes_2026-05-29": "literal mode con brand context (voice_genome + copy_profile) + normalizeSupabaseUrl + isV2 check tolerante — commit 8e3c4d4",
-      "async_mode": {
-        "status": "✅ OPERACIONAL",
-        "processor_ef": "copylab-processor v1.4",
-        "performance": "exec: 22-24s · wait: 30-90s"
-      }
+      "vercel_id": "prj_5FebBMfTpo4aP5I7iJ98libUkTTe"
     },
     "imagelab": {
       "url": "image-lab-unrlvl.vercel.app",
@@ -202,24 +217,7 @@
       "status": "✅ OPERACIONAL — 2026-05-29",
       "version": "v6",
       "last_deploy": "2026-05-29",
-      "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb",
-      "head_commit": "a4d11d0",
-      "auth": "Service Account OAuth2 — GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION",
-      "models": {
-        "path1_text_only": "imagen-3.0-fast-generate-001 (~$0.02/img, ~5s)",
-        "path2_multimodal": "imagen-3.0-capability-001 (~$0.04/img, ~10-15s)",
-        "fallback": "gemini-2.5-flash-image"
-      },
-      "preset_injection": "✅ imagelab_presets lookup por brand_id + canal antes de Vertex AI",
-      "env_vars": ["GOOGLE_SERVICE_ACCOUNT_KEY", "GOOGLE_CLOUD_PROJECT", "GOOGLE_CLOUD_LOCATION", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"],
-      "env_vars_removed": ["GEMINI_API_KEY", "VITE_SUPABASE_URL", "VITE_SUPABASE_ANON_KEY"],
-      "google_cloud": {
-        "project_id": "gen-lang-client-0491381650",
-        "billing": "✅ $300 trial activo",
-        "budget_alert": "ImageLab dev cap $30/mes · alerts 50%/90%/100%",
-        "service_account": "imagelab-vercel · rol: Agent Platform User (roles/aiplatform.user)"
-      },
-      "changes_2026-05-29": "maxDuration 60s + Vertex AI migration + preset injection + normalizeSupabaseUrl + multimodal capability"
+      "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb"
     },
     "sociallab": {
       "url": "social-lab-flame.vercel.app",
@@ -228,8 +226,7 @@
       "ai": "gemini",
       "status": "live",
       "last_deploy": "2026-04-26",
-      "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT",
-      "note": "Publicación actual vía Meta MCP directo desde Claude.ai. SocialLab UI separado."
+      "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT"
     },
     "weblab": {
       "url": "web-lab-unrlvl.vercel.app",
@@ -250,16 +247,14 @@
       "repo": "BlueprintLab",
       "status": "live",
       "last_deploy": "2026-04-03",
-      "vercel_id": "prj_gSnU3qy44YnpIcDjenhiEszgWLM5",
-      "note": "Solo UI React — sin AI backend"
+      "vercel_id": "prj_gSnU3qy44YnpIcDjenhiEszgWLM5"
     },
     "videolab": {
       "url": "unrlvl-video-lab.vercel.app",
       "repo": "VideoLab",
-      "status": "live — LAUNCH PENDIENTE 2026-05-30",
+      "status": "live — LAUNCH PENDIENTE",
       "last_deploy": "2026-04-03",
       "vercel_id": "prj_R0t1QvEnagCNm71Qq4iBLwgxy1MJ",
-      "note": "Kling.ai token disponible. Launch planificado sesión siguiente.",
       "ai": "kling.ai"
     },
     "voicelab": {
@@ -289,52 +284,11 @@
     "first_successful_run": "2026-05-29",
     "flow": "Claude.ai → INSERT lab_jobs → pg_net → lab-worker EF → [brand_context + CopyLab + ImageLab] → Supabase CDN → pending_approval → Sam aprueba → Meta MCP → IG + FB",
     "avg_time": "30-45s total",
-    "lab_worker": {
-      "version": "v18 (v3.3)",
-      "ef": "lab-worker",
-      "features": [
-        "brand_context fetch",
-        "prompt_builder",
-        "CopyLab literal mode",
-        "ImageLab preset injection",
-        "Supabase Storage upload → CDN URL",
-        "aspect ratio mapping (4:5→3:4 etc)",
-        "force imagelab para teaser/announcement",
-        "canal propagation"
-      ]
-    },
-    "job_types_supported": ["content", "teaser", "announcement"],
-    "languages_supported": ["EN", "ES", "EN+ES"],
-    "aspect_ratio_mapping": {
-      "4:5": "3:4",
-      "5:4": "4:3",
-      "1:1": "1:1",
-      "9:16": "9:16",
-      "16:9": "16:9",
-      "default": "1:1"
-    },
     "pending_fixes": [
       "lab_jobs.status CHECK constraint: agregar 'published' valor",
       "meta_accounts: insertar UnrealvilleStudio → UNREALville mapping",
       "meta_accounts: insertar NeuroneSCF completo"
     ]
-  },
-  "supabase_storage": {
-    "bucket": "unrlvl-media",
-    "public": true,
-    "cdn": "Supabase Pro CDN",
-    "cdn_base": "https://amlvyycfepwhiindxgzw.supabase.co/storage/v1/object/public/unrlvl-media/",
-    "max_file_size_mb": 50,
-    "allowed_types": ["jpg", "png", "webp", "gif", "mp4", "quicktime"],
-    "capacity": "100GB storage · 200GB bandwidth/mes",
-    "path_pattern": "temp/{brand_id}/{job_id}/{timestamp}.png",
-    "cleanup_job": {
-      "jobid": 32,
-      "jobname": "unrlvl-media-temp-cleanup",
-      "schedule": "0 3 * * *",
-      "retention_days": 60,
-      "note": "temp/* se elimina después de 60 días — ventana para SignalLab analytics"
-    }
   },
   "supabase": {
     "main": {
@@ -344,35 +298,76 @@
       "status": "ACTIVE_HEALTHY",
       "schemas": {
         "public": {
-          "tables": 78,
-          "key_tables_new_2026-05-29": [
-            "imagelab_presets (preset UNRLVL-FEED-TEASER v2 activo)",
-            "brand_voice_genome (unrlvl_default v1.0)",
-            "brand_copy_profiles (UNRLVL-CP-001)",
-            "brand_cache_snapshots (UnrealvilleStudio built 2026-05-29)",
-            "geomix (UnrealvilleStudio: North America + LATAM+Global Spanish)",
-            "lab_jobs (pipeline operacional)"
-          ],
-          "rls_grants_applied": [
-            "imagelab_presets → GRANT SELECT TO service_role (2026-05-29)",
-            "meta_accounts → GRANT ALL TO service_role (2026-05-25)"
-          ],
-          "note": "lab_jobs.status CHECK no incluye 'published' — fix pendiente Sprint 0"
+          "tables": 80,
+          "new_2026-05-29": [
+            "nscf_fulfillment_log — portal Iván tracking + emails + audit trail",
+            "nscf_fulfillment_log_archive — retención 3 meses"
+          ]
         }
       },
       "edge_functions": {
-        "total_active": 93,
+        "total_active": 95,
         "key_changes_2026-05-29": {
-          "lab-worker": "v18 — aspect mapping + force imagelab + CDN upload + preset_used",
-          "brand-cache-builder": "rebuilt snapshot UnrealvilleStudio con voice_genome + copy_profiles"
+          "nscf-fulfillment-portal": "v2 — 3 pantallas HTML + 4 emails + Shopify fulfillment + reporte CSV",
+          "nscf-mailer": "v17 — botón CTA → dispatch.neuronescflorida.com/portal",
+          "shopify-oauth": "OAuth callback activo — auto-guarda shpat_ en shopify.stores"
         },
-        "pg_cron": {
-          "job_30": "copylab-processor-1min — cada 1 min",
-          "job_32": "unrlvl-media-temp-cleanup — 3am diario · 60 días retención"
+        "pg_cron_new": {
+          "archive-fulfillment-log": "2am UTC diario — archiva nscf_fulfillment_log > 3 meses"
         }
       }
     }
   },
+  "infrastructure": [
+    {
+      "id": "INFRA-CTX",
+      "name": "Context System",
+      "url": "https://unrlvl-context.vercel.app",
+      "vercel_id": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54",
+      "status": "LIVE"
+    },
+    {
+      "id": "INFRA-META-MCP",
+      "name": "Meta MCP",
+      "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp",
+      "vercel_id": "prj_Kyk6FicMFVwmjQUDBxEdJiQqlTPn",
+      "status": "ACTIVE ✅ — UNREALville token · NeuroneSCF ❌ pendiente",
+      "blockers": [
+        "NeuroneSCF no en meta_accounts — pendiente",
+        "fb_get_page_insights métricas deprecadas Graph API v21"
+      ]
+    },
+    {
+      "id": "INFRA-SHOPIFY-MCP",
+      "name": "Shopify MCP",
+      "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp",
+      "vercel_id": "prj_jEiyzkET1fSk5IgHxkaSNVnTLCoB",
+      "status": "ACTIVE ✅ — B2C token real shpat_ · OAuth callback live · write_orders ✅"
+    },
+    {
+      "id": "INFRA-NSCF-DISPATCH",
+      "name": "NSCF Dispatch Portal Proxy",
+      "url": "https://dispatch.neuronescflorida.com/portal",
+      "repo": "NeuroneSCF/nscf-dispatch",
+      "status": "⏳ PENDIENTE — código en GitHub, crear proyecto Vercel + DNS Cloudflare CNAME",
+      "vercel_project_name": "nscf-dispatch",
+      "vercel_root_dir": "nscf-dispatch"
+    },
+    {
+      "id": "INFRA-SB-MCP",
+      "name": "Supabase MCP (unrlvl)",
+      "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp",
+      "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP",
+      "status": "ACTIVE v1.2.1 ✅"
+    },
+    {
+      "id": "INFRA-WEB",
+      "name": "unrealvillestudio.com",
+      "url": "https://unrealvillestudio.com",
+      "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN",
+      "status": "LIVE EN+ES"
+    }
+  ],
   "professor": {
     "_status": "OPERATIONAL",
     "_version": "v1.0",
@@ -381,20 +376,15 @@
       "url": "https://unrlvl-context.vercel.app/api/professor"
     },
     "seed_data": {
-      "learnings_total": 54,
+      "learnings_total": 60,
       "learnings_approved": 42,
-      "learnings_pending_approval": 0,
-      "new_categories_2026-05-29": [
-        "GOOGLE_CLOUD_AUTH (8 learnings)",
-        "IMAGELAB_INFRA (5 learnings)",
-        "PIPELINE_ARCHITECTURE (3 learnings)",
-        "BRAND_CONTEXT (1 learning)",
-        "COPYLAB_INFRA (1 learning)",
-        "SUPABASE_INFRA (2 learnings)",
-        "SOCIALLAB_INFRA (1 learning)",
-        "ECOSYSTEM_INFRA (1 learning)"
-      ],
-      "manuals_total": 1
+      "learnings_pending_approval": 6,
+      "pending_categories_2026-05-29": [
+        "SHOPIFY_INFRA (3 learnings: atkn_ inválido, VIEW GRANT, content-type proxy)",
+        "NSCF_OPS (1 learning: UPS prefix 1Z)",
+        "SUPABASE_INFRA (1 learning: pg_cron idempotente)",
+        "SHOPIFY_INFRA (1 learning: locationEdit fulfillsOnlineOrders)"
+      ]
     }
   },
   "agents": {
@@ -425,9 +415,8 @@
   },
   "ayra": {
     "_status": "PLANNED · Sprint 0 pendiente — DEADLINE 5 JUN 🔴",
-    "_note": "Pipeline async validado en producción. Sprint 0 simplificado: lab_jobs + lab_configs YA EXISTEN.",
     "sprints": {
-      "sprint_0": "PENDIENTE — antes del 5 Jun 🔴 · repo unrlvl-ayra + Vercel + schema + PROFESSOR árbol + env vars",
+      "sprint_0": "PENDIENTE — antes del 5 Jun 🔴",
       "sprint_1": "Jun 5-15",
       "sprint_2": "Jun 16-30",
       "sprint_3": "Jul 1-14",
@@ -436,88 +425,19 @@
     },
     "milestone_v1": "31 Agosto 2026"
   },
-  "claude_md_system": {
-    "status": "DISEÑADO — 2026-05-29",
-    "description": "Archivos CLAUDE.md en raíz de cada repo para dar contexto persistente a Claude Code entre sesiones",
-    "structure": ["Qué es", "Stack técnico", "Conexiones ecosistema", "Reglas de trabajo", "Estado actual"],
-    "repos_priority": ["ImageLab", "CopyLab", "Orchestrator", "unrlvl-context"],
-    "repos_pending_creation": ["ImageLab", "CopyLab", "Orchestrator", "unrlvl-context"],
-    "note": "CC no necesita Actualiza ni Professor — su trail es GitHub commits. Claude.ai dirige, CC ejecuta."
-  },
-  "infrastructure": [
-    {
-      "id": "INFRA-CTX",
-      "name": "Context System",
-      "url": "https://unrlvl-context.vercel.app",
-      "vercel_id": "prj_AmE4qTy4WoLAdreRQtXyzXLQHl54",
-      "status": "LIVE"
-    },
-    {
-      "id": "INFRA-META-MCP",
-      "name": "Meta MCP",
-      "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp",
-      "vercel_id": "prj_Kyk6FicMFVwmjQUDBxEdJiQqlTPn",
-      "status": "ACTIVE ✅ — UNREALville token 32 scopes · LucienSael ✅ · NeuroneSCF ❌ pendiente",
-      "blockers": [
-        "NeuroneSCF no en meta_accounts — pendiente",
-        "fb_get_page_insights métricas deprecadas Graph API v21"
-      ]
-    },
-    {
-      "id": "INFRA-SHOPIFY-MCP",
-      "name": "Shopify MCP",
-      "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp",
-      "vercel_id": "prj_jEiyzkET1fSk5IgHxkaSNVnTLCoB",
-      "status": "ACTIVE"
-    },
-    {
-      "id": "INFRA-SB-MCP",
-      "name": "Supabase MCP (unrlvl)",
-      "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp",
-      "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP",
-      "status": "ACTIVE v1.2.1 ✅"
-    },
-    {
-      "id": "INFRA-WEB",
-      "name": "unrealvillestudio.com",
-      "url": "https://unrealvillestudio.com",
-      "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN",
-      "status": "LIVE EN+ES"
-    }
-  ],
-  "content_pipeline": {
-    "version": "2.6",
-    "snapshot_system": {
-      "active_snapshots": [
-        {
-          "brand": "NeuroneSCF",
-          "version": "2.0",
-          "built": "2026-05-21"
-        },
-        {
-          "brand": "UnrealvilleStudio",
-          "version": "1.0",
-          "built": "2026-05-29",
-          "includes": ["brand_voice_genome", "brand_copy_profiles", "brand_personas", "geomix", "imagelab_presets"]
-        }
-      ]
-    }
-  },
   "next_session_agenda": [
-    "🔴 PRIORIDAD 0 — VideoLab launch: integrar Kling.ai token, configurar pipeline video",
-    "🔴 PRIORIDAD 1 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
-    "PRIORIDAD 2 — lab_jobs.status: agregar 'published' al CHECK constraint",
-    "PRIORIDAD 3 — meta_accounts: insertar UnrealvilleStudio (brand_id mapping UNREALville) + NeuroneSCF completo",
-    "PRIORIDAD 4 — CLAUDE.md: crear archivos en repos ImageLab + CopyLab + Orchestrator + unrlvl-context",
-    "PRIORIDAD 5 — NSCF: TikTok Pixel duplicado — resolver antes de ads",
-    "PRIORIDAD 6 — Meta MCP: fix fb_get_page_insights — métricas deprecadas Graph API v21",
-    "PRIORIDAD 7 — NSCF: insertar en meta_accounts completo",
-    "PRIORIDAD 8 — Klaviyo flows: configurar 4 flows bilingüe en UI",
-    "PRIORIDAD 9 — unrealvillestudio.com: crear /privacy + /data-deletion para Meta App Review",
-    "PRIORIDAD 10 — NSCF: compatibility_rules para product_description_b2c → creative_seed en kits",
-    "PRIORIDAD 11 — Ayra: PROFESSOR árbol navegable",
-    "PRIORIDAD 12 — Legal: Stripe Atlas LLC Delaware ($500)",
-    "PRIORIDAD 13 — luciensael.com DNS → deploy existente (10 min)",
-    "PRIORIDAD 14 — connectivity-test EF: eliminar"
+    "🔴 ACCIÓN INMEDIATA — Crear proyecto nscf-dispatch en Vercel (root: nscf-dispatch) + DNS Cloudflare CNAME dispatch.neuronescflorida.com",
+    "🔴 PRIORIDAD 0 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
+    "PRIORIDAD 1 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
+    "PRIORIDAD 2 — TikTok Pixel duplicado NSCF — resolver antes de ads",
+    "PRIORIDAD 3 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
+    "PRIORIDAD 4 — Portal Iván sprint 2: dashboard pendientes + UPS API (Iván necesita: Client ID + Secret desde developer.ups.com)",
+    "PRIORIDAD 5 — lab_jobs.status CHECK: agregar 'published'",
+    "PRIORIDAD 6 — CLAUDE.md: crear en repos ImageLab + CopyLab + Orchestrator + unrlvl-context",
+    "PRIORIDAD 7 — VideoLab launch: integrar Kling.ai token",
+    "PRIORIDAD 8 — Klaviyo flows NSCF: configurar 4 flows bilingüe",
+    "PRIORIDAD 9 — Catálogo NSCF: confirmar con PO si Kerasin HB 400ml va en B2B",
+    "PRIORIDAD 10 — Token B2B Kiosk Supabase: investigar si nj5ybc-n1 aplica o deprecar",
+    "PRIORIDAD 11 — luciensael.com DNS deploy (10 min)"
   ]
 }

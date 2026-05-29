@@ -1,113 +1,100 @@
-# Session Log — NeuroneSCF
-_Actualizado: 2026-05-27_
+# Session Log — 2026-05-29
+_NeuroneSCF + UNRLVL Ecosystem · Claude Sonnet 4.6 + Claude Code_
 
 ---
 
-## SESIÓN 2026-05-27 — Fulfillment emails + Taxes + B2B audit
+## RESUMEN EJECUTIVO
 
-### nscf-mailer v15 — fulfillment email final
-- Precios eliminados del email de despacho (Ivan no necesita ver lo que paga el cliente)
-- Destinatarios fulfillment: TONER + OPS + SAM + PO (4 permanentes)
-  - 2tonerexpress@gmail.com
-  - ops@neuronescflorida.com
-  - sam@unrealvillestudio.com
-  - patriciaosorio@neuronescflorida.com
-- Email muestra: número orden · nombre+dirección+teléfono cliente · productos+SKU+cantidad · nota · link Shopify
-- Test real enviado y confirmado ✅
-
-### Taxes NSCF B2C — completado
-- Shopify Tax: Active ✅
-- Florida registrada con certificate 16-8020110037-9 (Prestige Beauty Global Distribution Inc) ✅
-- 41 productos ya tenían taxonomía correcta — no requirió acción ✅
-- Shopify Tax maneja rates por condado automáticamente
-- **Pendiente PO:** enrollarse en e-Services Florida DOR (floridarevenue.com/taxes/eservices)
-
-### B2B — PRO store audit (pro.neuronescflorida.com)
-- 73 productos activos · 5 colecciones · tema custom v1 deployado
-- Plan Basic · 2 clientes · 0 órdenes históricas
-- Inventario: ~60% en placeholder "11 unidades" · algunos en 0
-- **Decisión pendiente PO:** split de inventario B2C vs B2B
-- **Shipping recomendado:** Free shipping +$300 · flat $20 por debajo
-- **Bloqueantes para vender:**
-  - Inventario real no sincronizado
-  - Clientes B2B no registrados
-  - Verificar si tienda está protegida con contraseña
-  - Payment methods B2B (net terms, etc.) sin verificar
-  - Shipping zones no configuradas
+Sesión de infraestructura intensiva. Dos grandes bloques: (1) correcciones Shopify MCP + operaciones tienda NSCF, (2) construcción completa del portal de fulfillment para Iván/2toner Express. Primera orden real procesada y despachada (Maria E Thompson #1017).
 
 ---
 
-## SESIÓN 2026-05-25 — Taxes + Judge.me
+## LOGROS DE LA SESIÓN
 
-### Taxes completado (ver arriba)
+### SHOPIFY MCP — DESBLOQUEADO AL 100%
+- **OAuth callback implementado** en `nscf-fulfillment-portal` (antes no existía) — token se auto-guarda en Supabase al instalar app
+- **Token B2C actualizado**: `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` (OAuth real, reemplaza atkn_ inválido)
+- **GRANT fix aplicado**: `public.shopify_stores` VIEW requería permisos explícitos de escritura — CC lo detectó y aplicó migración
+- **`write_orders` scope agregado** a UNRLVL-MCP app en Dev Dashboard (versión nscf-kiosk-8)
+- **Pickup deshabilitado** en Vizos Salón (B2C checkout) — `locationLocalPickupDisable`
+- **Delivery deshabilitado** en Vizos Salón (Kiosk) — `fulfillsOnlineOrders: false`
 
-### Judge.me v28
-- CSS-only overrides (sin MutationObserver)
-- **Pendiente:** configurar colores texto reseña desde Judge.me dashboard
+### ORDEN #1017 — MARIA E THOMPSON
+- Shipping address corregida: 20438 59TH LN N, Loxahatchee FL 33470
+- Tags aplicados: `delivery-corrected`, `free-shipping-applied`
+- Nota de corrección agregada en Shopify
+- Fulfillment creado y despachado
+- **Carrier corregido**: USPS → **UPS** (tracking `1Z98Y4W70394794994`)
+- Cliente notificada con link de tracking UPS correcto
 
----
+### PORTAL DE FULFILLMENT IVÁN (nscf-fulfillment-portal)
+**Construido desde cero. End-to-end verificado.**
 
-## SESIÓN 2026-05-22 — Urgent Tasks
+| Componente | Estado |
+|---|---|
+| `nscf-fulfillment-portal` v2 | ✅ ACTIVE — Supabase EF |
+| `nscf-mailer` v17 | ✅ ACTIVE — botón → dispatch.neuronescflorida.com/portal |
+| `nscf_fulfillment_log` | ✅ tabla + archivo con cron 3 meses |
+| `nscf_fulfillment_log_archive` | ✅ tabla |
+| Cron archivado | ✅ 2am UTC diario |
+| Proxy Vercel `nscf-dispatch` | ✅ pusheado a GitHub — PENDIENTE conectar en Vercel dashboard |
+| DNS Cloudflare | ⏳ PENDIENTE — `dispatch.neuronescflorida.com` CNAME |
 
-### Kiosk nscf-kiosko-draft v10
-- Shipping $0 Kiosk Pickup · descuento <3 items: 15%, ≥3: 40%
-- Frontend App.jsx deployado ✅
+**Flujo completo verificado:**
+1. Pantalla 1 (Nueva orden) → Confirmar recibido ✅
+2. Pantalla 2 (Tracking) → Enviar + 4 emails simultáneos ✅
+3. Pantalla 3 (Todo listo) → corrección tracking + solicitar reporte ✅
+4. Shopify fulfillment actualizado automáticamente ✅
+5. CSV reporte por email ✅
 
-### Embajadoras
-| ID | Salón | Email | Comisión |
-|----|-------|-------|----------|
-| vizos-patricia | vizos | patriciaosorio@neuronescflorida.com | 10% |
-| vizos-laura | vizos | ops@neuronescflorida.com | 8% |
-| yts-nm-diana | yts-nm | dianaespinosa_8709@icloud.com | 8% |
-| yts-nm-mariana | yts-nm | rodriguezgumariana@gmail.com | 8% |
-| yts-nm-monica | yts-nm | monica.gu0822@gmail.com | 8% |
-| yts-nm-daniela | yts-nm | daniglowvibes@gmail.com | 8% |
-| yts-nm-odalys | yts-nm | pendiente | 8% |
+**4 destinatarios en cada despacho:** Iván + Ops + Patricia + Cliente
+**Audit trail completo:** `emails_sent` + `tracking_history` en Supabase
 
-Pools: Vizos (PO+Laura) · YTS-NM (resto) — independientes
+### KIOSK — FIX DESCUENTO
+- Bloque de descuento **oculto** para todos los ambassadors con `max_discount_pct = 0`
+- Solo Patricia (Vizos, `max_discount_pct = 40`) ve el selector de descuento
+- Controlado por Supabase — sin cambios de código para ajustes futuros
+- Deploy en `nscf-kiosko.vercel.app` vía GitHub push
 
-### Fulfillment 2toner
-- EF watcher v2 + processor v1 · pg_cron #31 · webhook ID 2211809558855
-- Órdenes kiosk excluidas
-
-### nscf-mailer v15
-- FROM: "Neurone South & Central Florida"
-- Firma: Patricia Osorio · Neurone South & Central Florida · neuronescflorida.com
-- Resend verificado ✅
-
-### Shopify tema
-- TikTok pixel duplicado eliminado ✅
-- Judge.me widget nativo integrado
-- Kiosk app renombrada "NSCF Kiosk" ✅
-- Shopify Payments: daily · Prestige Beauty ✅
-- SEO: páginas prueba eliminadas ✅
-
----
-
-## PENDIENTES
-
-| Item | Prioridad |
-|------|-----------|
-| B2B: inventario real + shipping zones + clientes | 🔴 |
-| B2B: verificar protección contraseña | 🔴 |
-| Florida e-Services DOR (PO) | 🟡 |
-| Judge.me: colores texto desde dashboard | 🟡 |
-| Fix deprecated API DiscountAutomaticFreeShipping — Jul 1 | 🔴 |
-| Reembolso $10 órdenes kiosk — PO decide | 🟡 |
-| Emails: Odalys + CW + EW ambassadors | 🟡 |
-| Pool grupal: confirmar con PO | 🟡 |
-| Klaviyo 4 flows | 🟡 |
-| WABA setup (Laura/Patricia pendiente) | 🟡 |
-| Meta domain verification | 🟡 |
-| Search Console: re-indexar URLs | 🟢 |
+### CATÁLOGO NEURONE (Excel)
+- `RES-Neurone_Pricing_v16_B2B_B2C.xlsx` generado
+- B2C separado limpio (34 activos + 12 inactivos) con fórmulas vivas
+- Nueva pestaña `CATALOGO B2B` (38 productos, 4 categorías, sin tachado)
+- Fórmulas diferenciadas: B2C incluye LOGISTICA+MARKETING, B2B no
 
 ---
 
-## EFs activas
+## PENDIENTES INMEDIATOS
 
-| EF | Versión |
-|----|---------|
-| nscf-kiosko-draft | v10 |
-| nscf-fulfillment-watcher | v2 |
-| nscf-fulfillment-processor | v1 |
-| nscf-mailer | v15 |
+### 🔴 HOY (antes de próxima orden)
+- [ ] Crear proyecto `nscf-dispatch` en Vercel (root dir: `nscf-dispatch`)
+- [ ] Agregar `dispatch.neuronescflorida.com` en Vercel → Settings → Domains
+- [ ] Agregar CNAME en Cloudflare (DNS only — nube gris)
+- [ ] Verificar renderizado HTML en `dispatch.neuronescflorida.com/portal?order=...&token=...`
+
+### 🟡 PRÓXIMO SPRINT
+- [ ] Dashboard pendientes en portal Iván (lista órdenes sin despachar)
+- [ ] Integración UPS API directo (developer.ups.com — gratis)
+  - Iván necesita: Client ID + Client Secret + Account Number desde ups.com/developer
+- [ ] Token B2B Kiosk en Supabase (store `nj5ybc-n1` — investigar si aplica)
+- [ ] Shampoo Kerasin HB 400ml en CATALOGO B2B — confirmar con PO
+
+---
+
+## LEARNINGS PARA PROFESSOR
+
+1. **SHOPIFY_INFRA**: Token `atkn_` (App automation) no sirve para Admin API — es CI/CD only. Solo `shpat_` funciona. Generación correcta: OAuth callback en EF o Dev Dashboard → Install app (legacy).
+2. **SHOPIFY_INFRA**: `public.shopify_stores` es una VIEW. PostgreSQL no hereda privilegios de tabla base a view — requiere GRANT explícito de INSERT/UPDATE/DELETE sobre la view.
+3. **SHOPIFY_INFRA**: Supabase Edge Runtime fuerza `Content-Type: text/plain` + `CSP: default-src 'none'; sandbox` en todas las respuestas desde `*.supabase.co/functions/v1/`. No anulable desde dentro de la EF. Solución: proxy Vercel que sobrescribe headers.
+4. **SHOPIFY_INFRA**: Para deshabilitar delivery en location, usar `locationEdit(fulfillsOnlineOrders: false)` — no existe `locationLocalDeliveryDisable` en GraphQL API.
+5. **NSCF_OPS**: UPS tracking siempre empieza con `1Z`. USPS empieza con `9400`, `9205`, etc. Validación de carrier por prefijo evita errores de entrada.
+6. **SUPABASE_INFRA**: `pg_cron.schedule()` es idempotente por job name — upserts si el nombre ya existe.
+
+---
+
+## SMA — Sin novedades relevantes al ecosistema principal
+Actividad solo de Laura/Patricia en redes sociales NSCF.
+
+---
+
+_Sesión cerrada: 2026-05-29 · 21:30 UTC_
