@@ -1,30 +1,26 @@
 {
   "_meta": {
-    "version": "2026-05-29-v22",
+    "version": "2026-05-30-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-29-v21",
+    "previous": "2026-05-29-v22",
     "last_session": {
-      "date": "2026-05-29",
+      "date": "2026-05-30",
       "duration": "full day",
-      "conducted_by": "Claude Sonnet 4.6 + Claude Code",
-      "status": "🛠️ NSCF ops + Portal fulfillment end-to-end. Primera orden real despachada (#1017).",
+      "conducted_by": "Claude Sonnet 4.6 + Claude Code (Opus 4.8)",
+      "status": "🛠️ ForumPHs DF pipeline fixes + Ecosystem staging workflow establecido.",
       "key_achievements": [
-        "Shopify MCP B2C desbloqueado: OAuth callback + shpat_7fe59f + write_orders scope",
-        "Pickup deshabilitado en Vizos Salón (B2C checkout) — locationLocalPickupDisable",
-        "Delivery deshabilitado en Vizos Salón (Kiosk) — fulfillsOnlineOrders:false",
-        "Orden #1017 Maria E Thompson: address+nota+tags+fulfillment+UPS carrier corregido",
-        "nscf-fulfillment-portal v2 LIVE: 3 pantallas + 4 emails + tracking + corrección + reporte CSV",
-        "nscf-mailer v17: botón → dispatch.neuronescflorida.com/portal",
-        "nscf_fulfillment_log + archive + cron archivado 3 meses",
-        "nscf-dispatch proxy en GitHub (PENDIENTE: Vercel proyecto + DNS Cloudflare)",
-        "Kiosk: descuento oculto para max_discount_pct=0 — solo Patricia ve slider",
-        "RES-Neurone_Pricing_v16_B2B_B2C.xlsx entregado: B2C+B2B separados con fórmulas vivas",
-        "2tonerexpress registrado como Fulfillment Service en Shopify B2C",
-        "Neurone S&CF location actualizada con datos 2toner (3028 NW 72 Ave Suite 4 Miami)",
-        "CLAUDE.md creados y pusheados: ImageLab + CopyLab + Orchestrator + unrlvl-context",
-        "lab_jobs.status CHECK constraint: published agregado",
-        "dispatch.neuronescflorida.com LIVE — proxy Vercel + DNS Cloudflare",
-        "Professor: 8 learnings nuevos submitidos (SHOPIFY_INFRA x5, NSCF_OPS, SUPABASE_INFRA, ECOSYSTEM_INFRA)"
+        "DF zipExtractor: extractLooseFiles() + smart fallback + isTranscripcion keyword acta",
+        "DF UploadZone: acepta ZIP cualquier origen + archivos sueltos",
+        "DF parseAsistencia: aliases columnas Luxor (Número, Estado, Resultado) + multi-sheet votaciones",
+        "DF parseResumen: extractAssemblyType default ORDINARIA + convocatoria parsing",
+        "DF parseTranscripcion: speaker_unit tower-first T3 29D + admin/entidad classifiers",
+        "DF PreflightForm: overrides confirmed_total_units, confirmed_date_str, confirmed_time_start",
+        "DF QA re-run progresivo restaurado: MAX_SWEEPS=4, tolerancia creciente en ambos levers",
+        "DF page.tsx rewired: pipeline completo upload→parse→preflight→formalize→generate→QA→ICR→download",
+        "Acta Luxor 300 generada manualmente con datos correctos (ACTA_No1-2026_PH_LUXOR_300.docx)",
+        "Documentos ForumPHs para Ivette: Informe + Contrato Bullet-proof v2 (21 cláusulas, 12 gaps)",
+        "Staging workflow: branch protection + PR template + WORKFLOW.md + CLAUDE.md en 15 repos",
+        "Commits DF: 0a7ea8c · 6afc6a8 · 3889092 · 5cd7d76 · 89b093c — todos READY Vercel"
       ]
     }
   },
@@ -104,23 +100,11 @@
           "ef": "nscf-fulfillment-portal v2",
           "url_supabase": "https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/nscf-fulfillment-portal",
           "url_custom": "https://dispatch.neuronescflorida.com/portal",
-          "custom_domain_status": "⏳ PENDIENTE — crear proyecto Vercel nscf-dispatch + DNS Cloudflare",
+          "custom_domain_status": "⏳ PENDIENTE — crear proyecto Vercel nscf-dispatch + DNS Cloudflare CNAME",
           "mailer": "nscf-mailer v17",
-          "tables": [
-            "nscf_fulfillment_log",
-            "nscf_fulfillment_log_archive"
-          ],
-          "features": [
-            "3 pantallas",
-            "4 emails simultáneos",
-            "tracking + corrección",
-            "reporte CSV",
-            "audit trail completo"
-          ],
-          "next_sprint": [
-            "Dashboard pendientes",
-            "Integración UPS API directo (developer.ups.com)"
-          ]
+          "tables": ["nscf_fulfillment_log", "nscf_fulfillment_log_archive"],
+          "features": ["3 pantallas", "4 emails simultáneos", "tracking + corrección", "reporte CSV", "audit trail completo"],
+          "next_sprint": ["Dashboard pendientes", "Integración UPS API directo (developer.ups.com)"]
         }
       },
       "meta": {
@@ -348,6 +332,7 @@
       "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp",
       "vercel_id": "prj_Kyk6FicMFVwmjQUDBxEdJiQqlTPn",
       "status": "ACTIVE ✅ — UNREALville token · NeuroneSCF ❌ pendiente",
+      "github_protection": "⚠️ branch protection bloqueada — repo privado en GitHub Free",
       "blockers": [
         "NeuroneSCF no en meta_accounts — pendiente",
         "fb_get_page_insights métricas deprecadas Graph API v21"
@@ -374,7 +359,8 @@
       "name": "Supabase MCP (unrlvl)",
       "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp",
       "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP",
-      "status": "ACTIVE v1.2.1 ✅"
+      "status": "ACTIVE v1.2.1 ✅",
+      "github_protection": "⚠️ branch protection bloqueada — repo privado en GitHub Free"
     },
     {
       "id": "INFRA-WEB",
@@ -384,6 +370,16 @@
       "status": "LIVE EN+ES"
     }
   ],
+  "staging_workflow": {
+    "status": "✅ ESTABLECIDO — 2026-05-30",
+    "repos_configured": 15,
+    "branch_protection_active": 13,
+    "branch_protection_blocked": 2,
+    "blocked_repos": ["unrlvl-supabase-mcp", "unrlvl-meta-mcp"],
+    "blocked_reason": "Repos privados en GitHub Free — requiere GitHub Pro o hacer repos públicos",
+    "files_deployed": [".github/pull_request_template.md", "docs/WORKFLOW.md", ".github/CLAUDE.md"],
+    "rule": "Nunca pushear directo a main. Todo cambio por PR con Vercel Preview URL verificada."
+  },
   "professor": {
     "_status": "OPERATIONAL",
     "_version": "v1.0",
@@ -405,12 +401,15 @@
   },
   "agents": {
     "_standard": "UNRLVL Agent Infrastructure Standard v1.0",
+    "_note": "Ecosystem Tools (MCPs + Skills + Agents + AgentLab) — sesiones analíticas dedicadas pendientes. NO mezclar con sprints de producto.",
     "existing": [
       {
         "id": "social-media-agent",
         "name": "Social Media Agent",
         "status": "OPERATIONAL",
-        "url": "unrlvl-social-media-agent.vercel.app"
+        "url": "unrlvl-social-media-agent.vercel.app",
+        "repo": null,
+        "repo_note": "Corre como Edge Function en Supabase — no tiene repo en GitHub org. NO incluir en staging workflow de repos."
       },
       {
         "id": "ddmv-assistant",
@@ -425,7 +424,13 @@
       {
         "id": "forumph-document-factory",
         "name": "ForumPH Document Factory",
-        "status": "OPERATIONAL"
+        "status": "OPERATIONAL",
+        "pending": [
+          "3 votaciones faltantes en QA (opciones cuál aprueba, personas a quién esco, tiempo aprueba pago)",
+          "13 errores primera persona en Edge Function fphs-formalize",
+          "Imágenes incorrectas en acta (screenshots Hypal vs gráficos votaciones)",
+          "ICRResolution: tema light/dark theme — sprint separado"
+        ]
       }
     ]
   },
@@ -442,15 +447,17 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
-    "🔴 PRIORIDAD 1 — IID Jobs review + publicar vigentes + sistema publicaciones orgánicas UnrealvilleStudio + LucienSael via pipeline completo → producción",
-    "🔴 PRIORIDAD 2 — VideoLab launch: integrar Kling.ai token + grabaciones Patricia para voice genome",
-    "PRIORIDAD 3 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
-    "PRIORIDAD 4 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
-    "PRIORIDAD 5 — TikTok Pixel duplicado NSCF — resolver antes de ads",
-    "PRIORIDAD 6 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
-    "PRIORIDAD 7 — Portal Iván sprint 2: dashboard pendientes + UPS API (developer.ups.com)",
-    "PRIORIDAD 8 — Klaviyo flows NSCF: 4 flows bilingüe",
-    "PRIORIDAD 9 — Catálogo NSCF: confirmar con PO si Kerasin HB 400ml va en B2B",
-    "PRIORIDAD 10 — luciensael.com DNS deploy (10 min)"
+    "🔴 PRIORIDAD 1 — DF: 3 votaciones faltantes + 13 errores primera persona (prompt CC pendiente)",
+    "🔴 PRIORIDAD 2 — IID Jobs review + publicar vigentes + sistema publicaciones orgánicas UnrealvilleStudio + LucienSael via pipeline completo → producción",
+    "🔴 PRIORIDAD 3 — VideoLab launch: integrar Kling.ai token + grabaciones Patricia para voice genome",
+    "🔴 PRIORIDAD 4 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
+    "PRIORIDAD 5 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
+    "PRIORIDAD 6 — TikTok Pixel duplicado NSCF — resolver antes de ads",
+    "PRIORIDAD 7 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
+    "PRIORIDAD 8 — Portal Iván sprint 2: dashboard pendientes + UPS API (developer.ups.com)",
+    "PRIORIDAD 9 — Klaviyo flows NSCF: 4 flows bilingüe",
+    "PRIORIDAD 10 — luciensael.com DNS deploy (10 min)",
+    "PRIORIDAD 11 — GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp (hacer públicos o GitHub Pro para branch protection)",
+    "PENDIENTE SESIONES — Ecosystem Tools: MCPs + Skills + Agents + AgentLab orquestación multimarca"
   ]
 }
