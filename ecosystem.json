@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-05-30-v1",
+    "version": "2026-05-30-v2",
     "maintained_by": "Claude — do not edit manually",
     "previous": "2026-05-29-v22",
     "last_session": {
@@ -102,9 +102,21 @@
           "url_custom": "https://dispatch.neuronescflorida.com/portal",
           "custom_domain_status": "⏳ PENDIENTE — crear proyecto Vercel nscf-dispatch + DNS Cloudflare CNAME",
           "mailer": "nscf-mailer v17",
-          "tables": ["nscf_fulfillment_log", "nscf_fulfillment_log_archive"],
-          "features": ["3 pantallas", "4 emails simultáneos", "tracking + corrección", "reporte CSV", "audit trail completo"],
-          "next_sprint": ["Dashboard pendientes", "Integración UPS API directo (developer.ups.com)"]
+          "tables": [
+            "nscf_fulfillment_log",
+            "nscf_fulfillment_log_archive"
+          ],
+          "features": [
+            "3 pantallas",
+            "4 emails simultáneos",
+            "tracking + corrección",
+            "reporte CSV",
+            "audit trail completo"
+          ],
+          "next_sprint": [
+            "Dashboard pendientes",
+            "Integración UPS API directo (developer.ups.com)"
+          ]
         }
       },
       "meta": {
@@ -375,9 +387,16 @@
     "repos_configured": 15,
     "branch_protection_active": 13,
     "branch_protection_blocked": 2,
-    "blocked_repos": ["unrlvl-supabase-mcp", "unrlvl-meta-mcp"],
+    "blocked_repos": [
+      "unrlvl-supabase-mcp",
+      "unrlvl-meta-mcp"
+    ],
     "blocked_reason": "Repos privados en GitHub Free — requiere GitHub Pro o hacer repos públicos",
-    "files_deployed": [".github/pull_request_template.md", "docs/WORKFLOW.md", ".github/CLAUDE.md"],
+    "files_deployed": [
+      ".github/pull_request_template.md",
+      "docs/WORKFLOW.md",
+      ".github/CLAUDE.md"
+    ],
     "rule": "Nunca pushear directo a main. Todo cambio por PR con Vercel Preview URL verificada."
   },
   "professor": {
@@ -430,7 +449,20 @@
           "13 errores primera persona en Edge Function fphs-formalize",
           "Imágenes incorrectas en acta (screenshots Hypal vs gráficos votaciones)",
           "ICRResolution: tema light/dark theme — sprint separado"
-        ]
+        ],
+        "next_sprint": {
+          "name": "fphs-formalize quality sprint",
+          "objective": "Replicar calidad acta manual (98% Ivette) en DF",
+          "reference_acta": "ACTA_No1-2026_PH_LUXOR_300.docx",
+          "df_acta": "ACTA_OR_1-2026_PH_LUXOR_300_df_v1.docx",
+          "focus": [
+            "Intervenciones consolidadas (DF fragmenta)",
+            "Números en letras + dígitos consistente",
+            "Clasificación administradora/entidades/roles",
+            "Tono tercera persona legal"
+          ],
+          "how_to_start": "Chat nuevo → protocolo actualización → ForumPHs, fphs-formalize sprint"
+        }
       }
     ]
   },
@@ -447,17 +479,19 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
-    "🔴 PRIORIDAD 1 — DF: 3 votaciones faltantes + 13 errores primera persona (prompt CC pendiente)",
-    "🔴 PRIORIDAD 2 — IID Jobs review + publicar vigentes + sistema publicaciones orgánicas UnrealvilleStudio + LucienSael via pipeline completo → producción",
-    "🔴 PRIORIDAD 3 — VideoLab launch: integrar Kling.ai token + grabaciones Patricia para voice genome",
-    "🔴 PRIORIDAD 4 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
-    "PRIORIDAD 5 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
-    "PRIORIDAD 6 — TikTok Pixel duplicado NSCF — resolver antes de ads",
-    "PRIORIDAD 7 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
-    "PRIORIDAD 8 — Portal Iván sprint 2: dashboard pendientes + UPS API (developer.ups.com)",
-    "PRIORIDAD 9 — Klaviyo flows NSCF: 4 flows bilingüe",
-    "PRIORIDAD 10 — luciensael.com DNS deploy (10 min)",
-    "PRIORIDAD 11 — GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp (hacer públicos o GitHub Pro para branch protection)",
+    "🔴 PRIORIDAD 1 — fphs-formalize sprint: replicar calidad acta manual (98% Ivette) en DF. Comparar ACTA_No1-2026 vs ACTA_OR_1-2026. Ajustar EF Supabase.",
+    "🔴 PRIORIDAD 2 — Verificar 129 unidades habilitadas Luxor 300 → si ≤127, regenerar acta con % correcto",
+    "🔴 PRIORIDAD 3 — DF: 3 votaciones faltantes en QA + 13 errores primera persona",
+    "🔴 PRIORIDAD 4 — IID Jobs review + publicar vigentes + sistema publicaciones orgánicas UnrealvilleStudio + LucienSael via pipeline completo",
+    "🔴 PRIORIDAD 5 — VideoLab launch: integrar Kling.ai token + grabaciones Patricia para voice genome",
+    "🔴 PRIORIDAD 6 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
+    "PRIORIDAD 7 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
+    "PRIORIDAD 8 — TikTok Pixel duplicado NSCF — resolver antes de ads",
+    "PRIORIDAD 9 — Meta MCP: fix fb_get_page_insights métricas deprecadas",
+    "PRIORIDAD 10 — Portal Iván sprint 2: dashboard pendientes + UPS API",
+    "PRIORIDAD 11 — Klaviyo flows NSCF: 4 flows bilingüe",
+    "PRIORIDAD 12 — GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp (público o GitHub Pro)",
+    "PRIORIDAD 13 — luciensael.com DNS deploy (10 min)",
     "PENDIENTE SESIONES — Ecosystem Tools: MCPs + Skills + Agents + AgentLab orquestación multimarca"
   ]
 }
