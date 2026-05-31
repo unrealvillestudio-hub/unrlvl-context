@@ -2,55 +2,37 @@
 
 ---
 
+## 2026-05-31 — Gap de Voice Genome detectado + Fase 5 diseñada · Sam + Claude
+
+### Contexto
+Durante el diagnóstico de por qué el contenido IID de Lucien salía off-brand, se identificó que la OnboardingApp v1.0 — aunque funcional y completa — **no captura `brand_voice_genome`** (la capa de voz editorial ejecutable que el content-pipeline consume en L0/L1.5).
+
+### Hallazgo
+Las 5 tablas que puebla la app (brands, humanize_profiles, compliance_rules, brand_palette, brand_typography) cubren identidad operativa, visual y compliance — pero NO la voz editorial. Resultado: marcas onboarded sin voice_genome → el IID cae al fallback genérico (caso Lucien).
+
+### Entregable
+`VOICE_GENOME_PHASE_SPEC.md` — especificación completa de una **Fase 5: Voice Genome** para implementar (Claude Code):
+- 2 ramas: Voz Extraída (persona real + material fuente) vs Voz Diseñada (personaje/marca, maturity v0.5 máx).
+- Captura las 9 dimensiones JSONB de brand_voice_genome.
+- Valida application_constraints.platforms contra cuentas reales (previene generar para plataformas sin cuenta).
+- BrandGapView debe marcar amarillo las marcas sin genoma.
+- Piloto inmediato post-implementación: LucienSael / lucien_editorial.
+
+### Pendiente
+- [ ] Implementar Fase 5 Voice Genome (Claude Code, desde la spec)
+- [ ] Ejecutar piloto Lucien
+- [ ] (v1.1 previa, aún abierta) BrandGapView para poblar campos vacíos; geomix table; edit existing brand mode
+
+---
+
 ## 2026-03-29 — v1.0 PASSED · Sam + Claude
 
 ### Resumen
-Construcción completa del UNRLVL Onboarding App desde cero en una sola sesión. App interna AI-powered para onboardear marcas y poblar Supabase. Deployed en `unrlvl-onboarding-app.vercel.app`. Funcionalidad completa PASSED.
+Construcción completa del UNRLVL Onboarding App desde cero. App interna AI-powered para onboardear marcas y poblar Supabase. Deployed en `unrlvl-onboarding-app.vercel.app`. PASSED.
 
-### Entregables construidos
+Stack: Vite + React 18 + TS + Tailwind. Supabase fetch nativo. Claude Sonnet 4 vía /api/claude.
+Módulos: Phase1Input, Phase2Enrichment, Phase3Gaps, Phase4Summary, BrandGapView.
+Puebla: brands, humanize_profiles, compliance_rules, brand_palette, brand_typography.
 
-**Arquitectura base**
-- Stack: Vite + React 18 + TypeScript + Tailwind CSS
-- Supabase: fetch nativo, sin SDK (patrón CopyLab)
-- Claude Sonnet 4 via `/api/claude` proxy Vercel serverless
-- `api/package.json` con `{"type":"commonjs"}` — fix crítico para ESM root + serverless Vercel
-- `vercel.json`: rewrite `/api/(.*)` eliminado (auto-routing nativo Vercel)
-
-**Módulos implementados**
-- `Phase1Input` — editor libre con word count, progress bar, auto-resize, dispara Claude en "Analizar"
-- `Phase2Enrichment` — side-by-side brief / contexto enriquecido, editable por campo, regen con instrucción adicional, razonamiento de Claude visible
-- `Phase3Gaps` — chat interface, `[GAP_DATA_JSON]` tag para captura automática, data tracker lateral
-- `Phase4Summary` — checklist pre-write, UPSERT a 5 tablas, result view por tabla
-- `BrandGapView` — vista para marcas existentes: completeness dashboard + campos faltantes legibles + resumen narrativo de validación Claude + flujo generate → Phase 2
-
-**Sistema de prompts**
-- `PHASE2_SYSTEM_PROMPT`: schema Supabase completo, compliance por industria (FDA/FTC/EU/INVIMA/COFEPRIS/Legal_PA), humanize_profiles, `claude_reasoning` por campo
-- `BRAND_SUMMARY_PROMPT`: resumen crítico de validación — detecta inconsistencias, termina con ⚠ o ✓
-- `STUDIO_CONTEXT`: brand_id `UnrealvilleStudio` inyectado en todos los prompts
-
-**UI / Branding**
-- `UNREAL>ILLE` con chevron `>` blinking (`animate-pulse-accent`) en sidebar, WelcomeScreen
-- Favicon SVG transparente (chevron cyan `#00FFD1` sin fondo negro)
-- Botón `← Dashboard` en todas las vistas, resetea estado completo
-- Sidebar con 10 marcas, completeness bar (verde/amarillo/rojo), collapsed mode
-
-**Tablas Supabase pobladas por la app**
-- `brands` (UPSERT on `id`)
-- `humanize_profiles` (UPSERT on `brand_id, medium`)
-- `compliance_rules` (UPSERT on `brand_id, rule_type`)
-- `brand_palette` (UPSERT on `brand_id, role`)
-- `brand_typography` (UPSERT on `brand_id, role`)
-
-### Issues resueltos durante la sesión
-1. TS errors build: `@vercel/node` faltante, `vite-env.d.ts` faltante, `Dispatch` type mismatch → resueltos
-2. Vercel Install Command tenía `npm run dev` → corregido a `npm install` en dashboard
-3. `"type": "module"` en root `package.json` conflicto con serverless → `api/package.json` con `"type":"commonjs"`
-4. Rewrite `/api/(.*)` en `vercel.json` interfería con auto-routing → eliminado
-5. `ANTHROPIC_API_KEY` scope solo Preview → activado Production
-6. `LogoMark` component eliminado pero referencia pendiente en WelcomeScreen → resuelto
-
-### Próximos pasos (v1.1)
-- Usar BrandGapView con todas las marcas para poblar campos vacíos en Supabase
-- `geomix` table population via Onboarding App
-- Edit existing brand mode: cargar datos actuales de DB en Phase 2 al editar
-- WebLab refactor `webEngine.ts` para consumir brands/humanize de Supabase (ahora disponibles via Onboarding App)
+---
+*Session log · OnboardingApp · actualizado 2026-05-31*
