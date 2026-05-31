@@ -1,26 +1,23 @@
 {
   "_meta": {
-    "version": "2026-05-30-v2",
+    "version": "2026-05-31-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-29-v22",
+    "previous": "2026-05-30-v2",
     "last_session": {
-      "date": "2026-05-30",
+      "date": "2026-05-31",
       "duration": "full day",
-      "conducted_by": "Claude Sonnet 4.6 + Claude Code (Opus 4.8)",
-      "status": "🛠️ ForumPHs DF pipeline fixes + Ecosystem staging workflow establecido.",
+      "conducted_by": "Claude Opus 4.8",
+      "status": "🛠️ Blogs UNRLVL+Lucien construidos · fix publicación v22 (brand_id mismatch) · diagnóstico IID completo · diseño Fase Voice Genome · limpieza queue IID.",
       "key_achievements": [
-        "DF zipExtractor: extractLooseFiles() + smart fallback + isTranscripcion keyword acta",
-        "DF UploadZone: acepta ZIP cualquier origen + archivos sueltos",
-        "DF parseAsistencia: aliases columnas Luxor (Número, Estado, Resultado) + multi-sheet votaciones",
-        "DF parseResumen: extractAssemblyType default ORDINARIA + convocatoria parsing",
-        "DF parseTranscripcion: speaker_unit tower-first T3 29D + admin/entidad classifiers",
-        "DF PreflightForm: overrides confirmed_total_units, confirmed_date_str, confirmed_time_start",
-        "DF QA re-run progresivo restaurado: MAX_SWEEPS=4, tolerancia creciente en ambos levers",
-        "DF page.tsx rewired: pipeline completo upload→parse→preflight→formalize→generate→QA→ICR→download",
-        "Acta Luxor 300 generada manualmente con datos correctos (ACTA_No1-2026_PH_LUXOR_300.docx)",
-        "Documentos ForumPHs para Ivette: Informe + Contrato Bullet-proof v2 (21 cláusulas, 12 gaps)",
-        "Staging workflow: branch protection + PR template + WORKFLOW.md + CLAUDE.md en 15 repos",
-        "Commits DF: 0a7ea8c · 6afc6a8 · 3889092 · 5cd7d76 · 89b093c — todos READY Vercel"
+        "luciensael.com blog construido (home+índice+artículo molde bilingüe) — GREENFIELD, paquete listo para Claude Code (repo+Vercel+DNS)",
+        "UNRLVL Field Notes construido (índice + artículo molde, estética terminal) — pendiente push a CoreProject",
+        "FIX publicación v22: insertada fila meta_accounts brand_id=UnrealvilleStudio (mapeo a UNREALville) — causa del test b93627b6 que no publicó",
+        "Constraint lab_jobs.status YA incluye 'published' (pending_fix obsoleto)",
+        "Diagnóstico IID: vive en schema intel; research vivo, ejecución congelada desde 26-abr (.limit(1) debug + content-run-stage); failed son de arquitectura vieja",
+        "Limpieza queue IID: 37 lucien/mathematical rejected (off-brand), 19 unrlvl/expertise con brand_id, 11 lab_jobs teaser borrados",
+        "HALLAZGO RAÍZ: LucienSael NO tiene brand_voice_genome → IID cayó a fallback genérico (voz growth-marketer)",
+        "VOICE_GENOME_PHASE_SPEC.md: diseño de Fase 5 para OnboardingApp (2 ramas: Voz Extraída / Voz Diseñada)",
+        "Decisión arquitectónica: brand_adn = mother brief (artefacto-fuente), NO campo/tabla nuevo"
       ]
     }
   },
@@ -40,7 +37,9 @@
     "tagline": "I build worlds. Some of them survive.",
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
-    "web_status": "GENERATED v3 — PENDING DEPLOY + domain DNS"
+    "web_status": "BLOG v1.0 BUILT (home+blog+1 artículo molde) — GREENFIELD: no repo/Vercel/DNS. Paquete listo para Claude Code.",
+    "voice_genome": "❌ NO CREADO — causa raíz del contenido IID off-brand. Pendiente: lucien_editorial v0.5 (rama Voz Diseñada)",
+    "platforms": "Meta (FB+IG) con token OK. LinkedIn+X pendientes de crear (Sam, en horas)."
   },
   "brands": [
     {
@@ -123,7 +122,7 @@
         "pixel_id": "1348252664025025",
         "domain_verified": true,
         "ig_fb_linked": true,
-        "meta_mcp_status": "❌ NSCF no está en meta_accounts — pendiente insertar page_id + ig_user_id + ad_account_id + token"
+        "meta_mcp_status": "✅ NSCF en meta_accounts con token OK (verificado 2026-05-31). El blocker anterior era fantasma — ya estaba resuelto."
       },
       "brand_cache_snapshot": {
         "status": "✅ LIVE v2.0",
@@ -195,7 +194,8 @@
           "date": "2026-05-29",
           "ig_media_id": "18079433432212868",
           "fb_post_id": "1050792034789886_122108522354692054"
-        }
+        },
+        "meta_mcp_brand_id_note": "Existen 2 filas en meta_accounts: UNREALville (original) y UnrealvilleStudio (añadida 2026-05-31 para resolver mismatch del pipeline). DEUDA: normalizar convención de nombres."
       }
     }
   ],
@@ -238,7 +238,8 @@
       "ai": "gemini",
       "status": "live",
       "last_deploy": "2026-04-26",
-      "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT"
+      "vercel_id": "prj_AyV22kS0NqRkqH5MeOlaLSWJwOGT",
+      "role_note": "Vía de publicación ÚNICA al público. Debe operar dual-mode (sync vía UI + async vía Orchestrator) igual que CopyLab e ImageLab. Orchestrator = canal de disparo de jobs a labs de generación; SocialLab = salida a redes."
     },
     "weblab": {
       "url": "web-lab-unrlvl.vercel.app",
@@ -282,7 +283,8 @@
       "repo": "OnboardingApp",
       "status": "live",
       "last_deploy": "2026-04-05",
-      "vercel_id": "prj_pQXT2MoCrkp3dGFovNgheYqUnBwy"
+      "vercel_id": "prj_pQXT2MoCrkp3dGFovNgheYqUnBwy",
+      "voice_genome_gap": "v1.0 puebla 5 tablas (brands, humanize_profiles, compliance_rules, brand_palette, brand_typography) pero NO captura brand_voice_genome (capa editorial). Spec de Fase 5 lista: VOICE_GENOME_PHASE_SPEC.md. Implementar vía Claude Code."
     },
     "signallab": {
       "url": null,
@@ -297,9 +299,11 @@
     "flow": "Claude.ai → INSERT lab_jobs → pg_net → lab-worker EF → [brand_context + CopyLab + ImageLab] → Supabase CDN → pending_approval → Sam aprueba → Meta MCP → IG + FB",
     "avg_time": "30-45s total",
     "pending_fixes": [
-      "lab_jobs.status CHECK constraint: agregar 'published' valor",
-      "meta_accounts: insertar UnrealvilleStudio → UNREALville mapping",
-      "meta_accounts: insertar NeuroneSCF completo"
+      "✅ RESUELTO lab_jobs.status constraint ya incluye 'published'",
+      "✅ RESUELTO meta_accounts: UnrealvilleStudio insertado (2026-05-31)",
+      "✅ RESUELTO NeuroneSCF ya estaba en meta_accounts",
+      "⏳ SocialLab: confirmar que es la vía de publicación dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. El test b93627b6 no publicó por brand_id mismatch (ya resuelto), re-test pendiente.",
+      "⏳ Normalizar convención de nombres UnrealvilleStudio vs UNREALville"
     ]
   },
   "supabase": {
@@ -418,6 +422,24 @@
       ]
     }
   },
+  "iid_subsystem": {
+    "_status": "RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26",
+    "schema": "intel (NO public)",
+    "tables": {
+      "iid_agents": "14 — por dominio de conocimiento, dual voice (default_voice + lucien_angle_affinity)",
+      "iid_content_queue": "~150 tras limpieza 2026-05-31 (eran 204)",
+      "iid_findings": 218,
+      "iid_research_raw": 54,
+      "iid_cron_runs": "137 — research corre diario",
+      "iid_briefs": 1,
+      "iid_scheduler_config": "5 (config conexión, no schedule)"
+    },
+    "edge_functions": ["content-dispatcher (.limit(1) debug)", "content-run-stage v22 (timeout 65s)", "iid-core", "iid-ecommerce", "aife-filter"],
+    "diagnosis_2026-05-31": "Research funciona y alimenta queue. Ejecución/publicación congelada: content-run-stage failed del 26-abr son cadáveres de arquitectura vieja (timeout 30s + CopyLab externo). v22 ya reescrita (pipeline portado, timeout 65s) pero nunca re-corrida en limpio. .limit(1) de debugging sigue puesto.",
+    "brand_id_model_agreed": "Research de plataforma compartido + intérprete por marca vía context-cache. Fuentes por vertical temático: caso por caso.",
+    "quarantine": "37 lucien/mathematical + (revisar) lucien/psychological marcados rejected/pending como dataset diagnóstico. NO purgar hasta validar voz nueva.",
+    "seeds": "Semillas rescatables de lucien/psychological: #7, #8, #14 — regenerar con voz correcta tras crear genoma."
+  },
   "agents": {
     "_standard": "UNRLVL Agent Infrastructure Standard v1.0",
     "_note": "Ecosystem Tools (MCPs + Skills + Agents + AgentLab) — sesiones analíticas dedicadas pendientes. NO mezclar con sprints de producto.",
@@ -479,10 +501,15 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
+    "🟢 LISTO PARA DEPLOY — luciensael.com (repo+Vercel+DNS) + UNRLVL Field Notes (push CoreProject) vía Claude Code",
+    "🔴 IID FIX — crear brand_voice_genome lucien_editorial v0.5 → regenerar semillas #7/#8/#14 → re-test pipeline publicación",
+    "🔴 Implementar Fase Voice Genome en OnboardingApp (spec lista) vía Claude Code",
+    "🟡 SocialLab dual-mode — confirmar/implementar sync+async, re-test publicación post brand_id fix",
+    "🟡 Crear cuentas LinkedIn + X para Lucien (Sam)",
+    "🟡 SESIÓN DEDICADA — Context System refactor (adelgazar ecosystem.json + crear CAPABILITIES.md). Plan completo en protocols/CONTEXT_SYSTEM_REFACTOR_PLAN.md. Arrancar con 'ecosystem audit' identificativo. RIESGO ALTO: toca fuente de verdad y arranque de sesiones — hacer con foco.",
     "🔴 PRIORIDAD 1 — fphs-formalize sprint: replicar calidad acta manual (98% Ivette) en DF. Comparar ACTA_No1-2026 vs ACTA_OR_1-2026. Ajustar EF Supabase.",
     "🔴 PRIORIDAD 2 — Verificar 129 unidades habilitadas Luxor 300 → si ≤127, regenerar acta con % correcto",
     "🔴 PRIORIDAD 3 — DF: 3 votaciones faltantes en QA + 13 errores primera persona",
-    "🔴 PRIORIDAD 4 — IID Jobs review + publicar vigentes + sistema publicaciones orgánicas UnrealvilleStudio + LucienSael via pipeline completo",
     "🔴 PRIORIDAD 5 — VideoLab launch: integrar Kling.ai token + grabaciones Patricia para voice genome",
     "🔴 PRIORIDAD 6 — Ayra Sprint 0: deadline 5 Jun — crear repo + Vercel + schema + env vars",
     "PRIORIDAD 7 — NSCF meta_accounts: insertar page_id + ig_user_id + ad_account_id + token",
@@ -491,7 +518,7 @@
     "PRIORIDAD 10 — Portal Iván sprint 2: dashboard pendientes + UPS API",
     "PRIORIDAD 11 — Klaviyo flows NSCF: 4 flows bilingüe",
     "PRIORIDAD 12 — GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp (público o GitHub Pro)",
-    "PRIORIDAD 13 — luciensael.com DNS deploy (10 min)",
+    "✅ RESUELTO PRIORIDAD 13 — luciensael.com: blog GREENFIELD construido, deploy pendiente (ya como tarea LISTO PARA DEPLOY arriba)",
     "PENDIENTE SESIONES — Ecosystem Tools: MCPs + Skills + Agents + AgentLab orquestación multimarca"
   ]
 }

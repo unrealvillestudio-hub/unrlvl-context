@@ -1,24 +1,26 @@
 {
   "_meta": {
-    "version": "2026-05-26-v3",
-    "type": "CONTEXTUAL — ground truth from code audit",
-    "previous_version": "2026-05-26-v2",
+    "version": "2026-05-31-v1",
+    "type": "CONTEXTUAL — ground truth from code audit + session patches",
+    "previous_version": "2026-05-26-v3",
     "maintained_by": "Claude — generated via ecosystem audit, do not edit manually",
     "audit_date": "2026-05-26",
+    "patch_date": "2026-05-31",
     "audit_sources": [
       "GitHub unrealvillestudio-hub — repos: Orchestrator, CopyLab, ImageLab, SocialLab, VoiceLab, VideoLab, BlueprintLab (App.tsx 83KB + blueprintLabLoader.ts), WebLab",
       "Supabase unrlvl-db — list_edge_functions (93 real vs 67 documented)",
       "Supabase unrlvl-db — full table list across all schemas"
     ],
-    "v3_corrections_vs_v2": [
-      "BlueprintLab: corregido completamente. Es la capa de autoría de identidades para los labs AI — NO solo UI de datos. Define Person/Location/Product/Copy blueprints que los labs AI consumen como parámetros de identidad.",
-      "Nuevos edges: TBL-BLUEPRINT-DATA → IMAGELAB, VIDEOLAB, VOICELAB (provides identity params)",
-      "Nuevo edge: TBL-BLUEPRINT-DATA → COPYLAB via brand_copy_profiles (brand_copy_profiles = BP_COPY_1.0)",
-      "BlueprintLab node: descripción actualizada con los 4 schemas y su función arquitectónica",
-      "Professor learning bd720832 submitido con corrección completa"
+    "v4_changes_vs_v3": [
+      "NSCF meta_accounts: era blocker fantasma — ya estaba resuelto. TBL-META-ACCOUNTS actualizado, BRAND-NSCF gap removido.",
+      "UnrealvilleStudio: 2 filas en meta_accounts (UNREALville + UnrealvilleStudio) — deuda de normalización.",
+      "IID Subsystem: nuevo nodo IID-SUBSYSTEM + tablas intel schema + EF content-run-stage v22.",
+      "SocialLab: añadido role_note dual-mode. Pipeline flujo v22 documentado.",
+      "brand_voice_genome: nuevo nodo TBL-VOICE-GENOME como dependencia crítica IID+CopyLab.",
+      "OnboardingApp: voice_genome_gap documentado — Fase 5 pendiente."
     ],
     "schema_version": "2.0",
-    "node_types": ["lab", "edge_function", "db_table", "brand", "agent", "infra", "mcp", "ai_service", "service", "cron", "planned"],
+    "node_types": ["lab", "edge_function", "db_table", "brand", "agent", "infra", "mcp", "ai_service", "service", "cron", "planned", "subsystem"],
     "edge_rel_types": ["triggers", "reads_from", "writes_to", "depends_on", "serves", "routes_to", "connects_to", "owned_by", "blocks", "part_of", "manages", "planned_depends_on", "replaces", "missing_in", "exports_to", "hosts", "discovers_via", "calls_api", "publishes_via", "provides_params_to"]
   },
 
@@ -36,7 +38,8 @@
 
     { "id": "MCP-META",      "type": "mcp",         "name": "Meta MCP",                 "url": "https://unrlvl-meta-mcp.vercel.app/api/mcp/mcp", "status": "live",
       "operational_tools": 22, "total_tools": 23,
-      "blockers": ["NSCF not in meta_accounts", "fb_get_page_insights métricas deprecadas v21"] },
+      "blockers": ["fb_get_page_insights métricas deprecadas v21"],
+      "brands_active": ["UNREALville", "UnrealvilleStudio", "LucienSael", "NeuroneSCF"] },
     { "id": "MCP-SHOPIFY",   "type": "mcp",         "name": "Shopify MCP",              "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp", "status": "live" },
     { "id": "MCP-SB",        "type": "mcp",         "name": "Supabase MCP",             "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp", "status": "live" },
 
@@ -106,8 +109,8 @@
       "note": "Async pipeline jobs. → migrar a lab_jobs." },
     { "id": "TBL-BRAND-CACHE",    "type": "db_table", "name": "public.brand_cache_snapshots","status": "live", "critical": true,
       "note": "NSCF v2.0. Incluye brand_copy_profiles snapshot → CopyLab zero-query mode." },
-    { "id": "TBL-META-ACCOUNTS",  "type": "db_table", "name": "public.meta_accounts",        "status": "blocker",
-      "note": "NSCF row MISSING — blocker Meta Ads NSCF." },
+    { "id": "TBL-META-ACCOUNTS",  "type": "db_table", "name": "public.meta_accounts",        "status": "live",
+      "note": "4 filas: UNREALville ✅ · UnrealvilleStudio ✅ (2026-05-31) · LucienSael ✅ · NeuroneSCF ✅. DEUDA: normalizar UNREALville vs UnrealvilleStudio." },
     { "id": "TBL-BLUEPRINT-DATA", "type": "db_table", "name": "blueprint tables (4)",         "status": "live",
       "tables": ["person_blueprints (BP_PERSON_1.0)", "location_blueprints (BP_LOCATION_1.0)", "product_blueprints (BP_PRODUCT_1.0)", "brand_copy_profiles (BP_COPY_1.0)"],
       "note": "Source of identity for AI labs. BlueprintLab authora, labs AI consumen. brand_copy_profiles = BP_COPY_1.0 = también leída por CopyLab directamente." },
@@ -124,7 +127,7 @@
     { "id": "TBL-ORCH-JOBS",      "type": "db_table", "name": "content.orchestrator_jobs",   "status": "live" },
 
     { "id": "BRAND-NSCF",    "type": "brand",  "name": "NeuroneSCF",          "market": "South & Central Florida", "status": "live", "health": "yellow",
-      "gaps": ["NSCF not in meta_accounts", "TikTok pixel duplicate", "GTM+GA4 pending verify", "Klaviyo 4 flows pending"] },
+      "gaps": ["TikTok pixel duplicate", "GTM+GA4 pending verify", "Klaviyo 4 flows pending"] },
     { "id": "BRAND-UNRLVL",  "type": "brand",  "name": "Unrealville Studio",  "market": "Florida + LATAM",         "status": "live" },
     { "id": "BRAND-FPH",     "type": "brand",  "name": "ForumPHs",            "market": "Panama",                  "status": "live" },
 
@@ -140,7 +143,31 @@
 
     { "id": "AYRA",          "type": "planned","name": "AYRA",                "status": "planned",
       "deadline": "2026-06-05 HARD",
-      "sprint_0_note": "lab_jobs + lab_configs YA EXISTEN — scope más pequeño de lo esperado" }
+      "sprint_0_note": "lab_jobs + lab_configs YA EXISTEN — scope más pequeño de lo esperado" },
+
+    { "id": "IID-SUBSYSTEM", "type": "subsystem", "name": "IID Subsystem",    "schema": "intel", "status": "research_live_execution_frozen",
+      "note": "Research corre diario (iid_cron_runs 137). Ejecución congelada desde 2026-04-26. Causa raíz: LucienSael SIN brand_voice_genome → fallback genérico.",
+      "frozen_since": "2026-04-26" },
+
+    { "id": "EF-CONTENT-RUN-STAGE", "type": "edge_function", "name": "content-run-stage v22", "version": 22, "status": "deployed_not_run",
+      "note": "v22 reescrita: pipeline portado + timeout 65s. Nunca re-corrida en limpio. .limit(1) debug en content-dispatcher bloquea ejecución real." },
+
+    { "id": "EF-IID-CORE",     "type": "edge_function", "name": "iid-core",            "status": "live" },
+    { "id": "EF-IID-ECOMMERCE","type": "edge_function", "name": "iid-ecommerce",       "status": "live" },
+    { "id": "EF-AIFE-FILTER",  "type": "edge_function", "name": "aife-filter",         "status": "live" },
+    { "id": "EF-CONTENT-DISP", "type": "edge_function", "name": "content-dispatcher",  "status": "debug_blocked",
+      "note": ".limit(1) hardcoded — bloquea ejecución real del pipeline IID." },
+
+    { "id": "TBL-IID-QUEUE",   "type": "db_table", "name": "intel.iid_content_queue",  "status": "live",
+      "count": "~150 tras limpieza 2026-05-31",
+      "quarantine": "37 lucien/mathematical rejected + lucien/psychological pending — NO purgar. Seeds rescatables: #7/#8/#14" },
+    { "id": "TBL-IID-AGENTS",  "type": "db_table", "name": "intel.iid_agents",         "status": "live", "count": 14 },
+    { "id": "TBL-IID-FINDINGS","type": "db_table", "name": "intel.iid_findings",        "status": "live", "count": 218 },
+    { "id": "TBL-IID-RAW",     "type": "db_table", "name": "intel.iid_research_raw",    "status": "live", "count": 54 },
+    { "id": "TBL-IID-CRON",    "type": "db_table", "name": "intel.iid_cron_runs",       "status": "live", "count": 137 },
+
+    { "id": "TBL-VOICE-GENOME","type": "db_table", "name": "public.brand_voice_genome", "status": "live",
+      "note": "Tabla YA EXISTE. NeuroneSCF po_consumer v0.6 OK. LucienSael: ❌ NO CREADO — causa raíz IID off-brand. UnrealvilleStudio: unrlvl_default v1.0 OK. OnboardingApp Fase 5 pendiente poblarlo." }
   ],
 
   "edges": [
@@ -188,7 +215,7 @@
     { "from": "MCP-META",            "to": "SVC-META-API",        "rel": "connects_to" },
     { "from": "MCP-SB",             "to": "SB-MAIN",             "rel": "connects_to" },
     { "from": "MCP-SHOPIFY",         "to": "SVC-SHOPIFY",         "rel": "connects_to" },
-    { "from": "BRAND-NSCF",          "to": "TBL-META-ACCOUNTS",  "rel": "missing_in",        "blocker": true },
+    { "from": "BRAND-NSCF",          "to": "TBL-META-ACCOUNTS",  "rel": "connects_to",       "status": "resolved_2026-05-31" },
     { "from": "BRAND-NSCF",          "to": "SVC-SHOPIFY",         "rel": "owned_by" },
     { "from": "BRAND-NSCF",          "to": "SVC-KLAVIYO",         "rel": "connects_to" },
     { "from": "BRAND-NSCF",          "to": "SVC-TIKTOK",          "rel": "connects_to",       "blocker": true },
@@ -213,7 +240,36 @@
     { "from": "AYRA",                "to": "TBL-COPYLAB-JOBS",   "rel": "planned_depends_on" },
     { "from": "AYRA",                "to": "TBL-LAB-JOBS",       "rel": "planned_depends_on", "note": "Ya existe — solo migration script" },
     { "from": "AYRA",                "to": "PROFESSOR",          "rel": "planned_depends_on" },
-    { "from": "AYRA",                "to": "EF-LAB-WORKER",      "rel": "planned_depends_on", "note": "EF ya activa v11 — posible reutilizar" }
+    { "from": "AYRA",                "to": "EF-LAB-WORKER",      "rel": "planned_depends_on", "note": "EF ya activa v11 — posible reutilizar" },
+
+    { "from": "SB-MAIN",             "to": "IID-SUBSYSTEM",      "rel": "hosts",             "note": "Schema intel — separado de public" },
+    { "from": "SB-MAIN",             "to": "TBL-IID-QUEUE",      "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "TBL-IID-AGENTS",     "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "TBL-IID-FINDINGS",   "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "TBL-IID-RAW",        "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "TBL-IID-CRON",       "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "TBL-VOICE-GENOME",   "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "EF-CONTENT-DISP",    "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "EF-CONTENT-RUN-STAGE","rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "EF-IID-CORE",        "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "EF-IID-ECOMMERCE",   "rel": "hosts" },
+    { "from": "SB-MAIN",             "to": "EF-AIFE-FILTER",     "rel": "hosts" },
+
+    { "from": "EF-CONTENT-DISP",    "to": "TBL-IID-QUEUE",      "rel": "reads_from",        "blocker": ".limit(1) debug activo" },
+    { "from": "EF-CONTENT-DISP",    "to": "EF-CONTENT-RUN-STAGE","rel": "routes_to" },
+    { "from": "EF-CONTENT-RUN-STAGE","to": "COPYLAB",            "rel": "calls_api",         "note": "v22 pipeline portado — nunca re-corrido" },
+    { "from": "EF-CONTENT-RUN-STAGE","to": "SOCIALLAB",          "rel": "routes_to",         "note": "publicación final vía SocialLab" },
+    { "from": "EF-IID-CORE",        "to": "TBL-IID-FINDINGS",   "rel": "writes_to" },
+    { "from": "EF-IID-CORE",        "to": "TBL-IID-RAW",        "rel": "writes_to" },
+    { "from": "EF-IID-CORE",        "to": "TBL-IID-QUEUE",      "rel": "writes_to" },
+    { "from": "EF-IID-CORE",        "to": "TBL-IID-CRON",       "rel": "writes_to" },
+    { "from": "EF-AIFE-FILTER",     "to": "TBL-IID-QUEUE",      "rel": "reads_from" },
+    { "from": "EF-AIFE-FILTER",     "to": "TBL-IID-QUEUE",      "rel": "writes_to",         "note": "filtra off-brand content" },
+
+    { "from": "IID-SUBSYSTEM",      "to": "TBL-VOICE-GENOME",   "rel": "depends_on",        "blocker": true, "note": "LucienSael SIN voice genome → voz genérica" },
+    { "from": "TBL-VOICE-GENOME",   "to": "COPYLAB",            "rel": "provides_params_to","note": "brand_voice_genome → prompt injection en CopyLab" },
+
+    { "from": "ONBOARDING",         "to": "TBL-VOICE-GENOME",   "rel": "planned_depends_on","note": "Fase 5 pendiente — spec VOICE_GENOME_PHASE_SPEC.md lista" }
   ],
 
   "impact_analysis": {
@@ -222,8 +278,11 @@
     "if_TBL-BLUEPRINT-DATA_corrupted": ["ImageLab sin identity params → imágenes genéricas", "VoiceLab sin voice_id → no puede sintetizar", "CopyLab sin brand_copy_profiles → sin perfil de escritura"],
     "if_CTX_down": ["PROFESSOR inaccesible", "AGENT-SMA export falla", "brand-cache fallback falla"],
     "if_SB-MAIN_down": ["TODO el pipeline async muerto", "PROFESSOR muerto", "BlueprintLab sin datos"],
-    "nscf_meta_blocker_chain": ["NSCF missing meta_accounts → Meta MCP no opera para NSCF → no Meta Ads → no revenue optimización"],
+    "nscf_meta_status": "✅ RESUELTO 2026-05-31 — NSCF ya estaba en meta_accounts (era blocker fantasma)",
+    "iid_unblock_chain": ["crear brand_voice_genome lucien_editorial v0.5 → remover .limit(1) en content-dispatcher → re-correr content-run-stage v22 → publicación IID operacional"],
+    "lucien_brand_voice_gap": "LucienSael SIN brand_voice_genome → IID genera contenido off-brand (voz growth-marketer genérica). Afecta todos los temas: mathematical + psychological + otros.",
     "blueprint_lab_chain": ["BlueprintLab authora → TBL-BLUEPRINT-DATA → ImageLab/VideoLab/VoiceLab/CopyLab consumen → producción de contenido con identidad correcta"],
+    "onboarding_voice_gap": "OnboardingApp v1.0 puebla 5 tablas base pero no brand_voice_genome. Fase 5 pending (spec lista).",
     "ayra_sprint0_note": "lab_jobs + lab_configs YA EXISTEN — Sprint 0 más simple. Solo: repo + Vercel + schema ayra + PROFESSOR árbol + env vars"
   },
 
