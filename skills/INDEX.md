@@ -5,7 +5,7 @@ _Versión: 1.2 · 2026-05-26 · Mantenido por: Claude_
 
 ## INSTRUCCIÓN DE CARGA
 
-Este archivo se carga **siempre**, inmediatamente después de `ecosystem.json` y `AGENDA.md`, antes de preguntar con qué marca/proyecto vamos a trabajar.
+Este archivo se carga siempre, inmediatamente después de ecosystem.json y AGENDA.md. Inmediatamente después se carga CAPABILITIES.md (catálogo de herramientas/MCPs/flujos/auditores). Ambos antes de preguntar con qué marca/proyecto trabajar.
 
 Es liviano — solo la tabla de decisión. Los skills individuales se cargan bajo demanda según el trabajo declarado.
 

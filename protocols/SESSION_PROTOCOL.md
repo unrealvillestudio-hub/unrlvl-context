@@ -72,7 +72,8 @@ El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
 1. https://unrlvl-context.vercel.app/ecosystem.json
 2. https://unrlvl-context.vercel.app/AGENDA.md
 3. https://unrlvl-context.vercel.app/skills/INDEX.md
-4. professor-get-context EF → carga pesos + variables activas + aprendizajes pendientes
+4. https://unrlvl-context.vercel.app/CAPABILITIES.md
+5. professor-get-context EF → carga pesos + variables activas + aprendizajes pendientes
 ```
 
 Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprendizajes pendientes de aprobación."`
@@ -111,7 +112,8 @@ Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprend
 | "ecosystem scan / audit / repos" | `ecosystem-auditor` |
 
 ### Paso 5 — Confirmación
-> *"Contexto cargado — [Marca o Ecosistema] · [fecha] · Skills activos: [lista]. Arrancamos."*
+> *"Contexto cargado — [Marca o Ecosistema] · [fecha] · Skills activos: [lista]. Contexto operativo cargado. Catálogo de capacidades disponible. [N] variables de plataforma. [N] aprendizajes pendientes.  Arrancamos."*
+
 
 ---
 
