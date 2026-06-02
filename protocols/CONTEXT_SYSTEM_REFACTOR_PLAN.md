@@ -149,4 +149,86 @@ Cuando un paquete de "Actualiza" tiene varios `session_log.md` en subcarpetas di
 
 ## Por qué importa
 El sistema no debe depender de que Claude "tenga un buen día" con el mapeo. La nomenclatura prefijada + tabla de mapeo hace el destino inequívoco y el error estructuralmente difícil.
+
+
+ESTA PARTE COMPLEMENTA ESTE PLAN
+
+# REFACTOR — MEJORA 4 · Rediseño del modelo de entidades, tipos y relaciones
+
+**Añadir a:** `protocols/CONTEXT_SYSTEM_REFACTOR_PLAN.md` (es la 4ª mejora del refactor)
+**Riesgo:** MUY ALTO — toca brand_id (de los que cuelgan genomas, EFs, queue, meta_accounts, session_logs) y el campo type.
+**Regla absoluta:** lienzo en blanco + AUDIT REAL primero. NO ejecutar nada sin mapear dependencias.
+
+---
+
+## ORIGEN
+Sesión 2026-06-01: al crear SamPublisher salieron a la luz inconsistencias en el
+modelo de entidades que estaban latentes. NO se resolvieron en caliente (decisión
+correcta de Sam) — se elevan al refactor para hacerse bien, desde cero, con audit.
+
+## PROBLEMAS DETECTADOS (no resueltos — para el refactor)
+
+### 1. El tipo `type='person'` es engañoso
+- `LucienSael` está como `type='person'`, pero Lucien NO es persona — es personaje
+  sintético. La etiqueta sugiere humano real (lo contrario de lo que es).
+- `SamPublisher` (marca personal de una persona real) quedó como `personal_brand`.
+- Resultado: la etiqueta "person" está sobre lo NO-persona (Lucien), y la persona
+  real (Sam) bajo "personal_brand". Está invertido respecto a lo intuitivo.
+- Propuesta a evaluar: eliminar `person`; unificar bajo `personal_brand` toda voz
+  de individuo (real o sintético) gestionada como marca (Lucien, facetas de
+  Patricia, SamPublisher). PERO verificar antes qué depende de type='person'
+  (¿algún lab/EF/pipeline filtra por type?). Cambiar a ciegas puede alterar
+  comportamiento en producción.
+
+### 2. Tipos repartidos sin criterio escrito
+- Facetas de Patricia: 3 como `personal_brand`, 1 (Conectando) como `brand`. Misma
+  persona, criterio dispar. Hay lógica intuible (Conectando = negocio; las otras =
+  facetas personales) pero no está escrita → se aplicó despareja.
+- Definir criterio EXPLÍCITO: personal_brand (voz de individuo) vs brand (entidad
+  comercial sin rostro individual) vs studio vs ecommerce vs system.
+
+### 3. Nomenclatura de identificadores
+- Sam DESCARTÓ su propia propuesta de esquema de relaciones [persona]+[marca]+
+  [comunidad] (peligroso, asimétrico, codificaba falsedades).
+- Sam PREFIERE la nomenclatura identificativa actual (PatriciaOsorioVizosSalon,
+  PatriciaOsorioConectando) — el prefijo codifica pertenencia y es legible.
+- DECISIÓN: mantener nomenclatura con prefijo. NO renombrar a VizosSalon suelto
+  (perdería la señal de pertenencia y obligaría a un modelo de relaciones que Sam
+  descartó). Si algún día se modela pertenencia, será con campo explícito, no
+  renombrando (renombrar brand_id rompe todas las referencias en otras tablas).
+
+## MODELO CONCEPTUAL REAL (aclarado por Sam 2026-06-01 — para diseñar bien el refactor)
+
+- **UnrealvilleStudio** = la agencia/estudio. Es a la vez entidad Y marca. Será
+  negocio legalizado en Florida. Es el PARAGUAS.
+- Bajo el paraguas, ACTIVOS PROPIOS de UnrealvilleStudio: SamPublisher,
+  LucienSael, futuras tiendas, etc. (marcas/canales/assets propios).
+- UnrealvilleStudio también tiene CLIENTES: Patricia Osorio (persona) con sus
+  propias marcas (VizosSalon, Conectando, Comunidad, Personal).
+- **Neurone es de Patricia** (NO de UNRLVL). Sam en proceso de entrar como socio;
+  Patricia en proceso de entrar a UNRLVL. Laura = operaria/asistente de Patricia,
+  nada más. (Corrige el ecosystem si dice otra cosa.)
+- Cada marca (propia o de cliente) tiene sus particularidades, assets, genomas.
+- El humano "Sam" NO es entidad en brands; es el operador. SamPublisher (su marca
+  personal) sí es entidad.
+
+Implicación: el modelo NO es persona→marcas→comunidad (descartado). Es más bien:
+STUDIO (paraguas) → { activos propios } + { clientes (personas) → sus marcas }.
+Pero esto es PROPUESTA INICIAL a validar en el refactor, no diseño final.
+
+## PRIMER PASO OBLIGATORIO DEL REFACTOR (entidades)
+1. `ecosystem audit` identificativo → mapear qué consume brand_id y type:
+   ¿qué EFs, labs, pipeline, joins, tablas (genomas, queue, meta_accounts,
+   session_logs, humanize_profiles, etc.) referencian cada brand_id y filtran por type?
+2. SOLO con ese mapa, diseñar: criterio de types, si se elimina 'person', cómo se
+   modela la relación studio→activos→clientes (campo nuevo, no renombrado).
+3. Plan de migración con referencias (nunca cambiar un id/type sin migrar lo que cuelga).
+
+## DEFINITION OF DONE (Mejora 4)
+- [ ] Audit de dependencias de brand_id y type completo.
+- [ ] Criterio de types escrito y aplicado consistente.
+- [ ] Decisión sobre type='person' (mantener/eliminar) tomada CON datos del audit.
+- [ ] Modelo studio→activos→clientes definido (si se implementa, con campo de relación).
+- [ ] Nomenclatura con prefijo confirmada como estándar.
+- [ ] Cero referencias huérfanas tras cualquier cambio.
 ```
