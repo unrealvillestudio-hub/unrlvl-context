@@ -2,6 +2,79 @@
 
 ---
 
+## 2026-06-02 — Genoma social (lucien_social v0.5) · Sam + Claude
+
+### Resumen
+Creación manual del segundo `brand_voice_genome` de Lucien Sael — `voice_id = lucien_social`, v0.5. Piloto Sam + Claude (NO vía OnboardingApp). Voz hermana de `lucien_editorial`: **mismo carácter, distinta respiración.** El editorial es un ensayo; el social es un cuchillo. Gobierna los posts cortos reactivos de Lucien en su propio terreno.
+
+### Principio rector
+El social COMPARTE TEMPERAMENTO con el editorial (filo 9/10, übermensch como motor interno nunca citado, la cerilla quema la manta de paja no al lector, revelación no agresión, divide lectores a propósito, nunca grosero) y DIFIERE EN RESPIRACIÓN:
+- **Editorial respira largo:** contemplativo, arquitectónico, párrafos que se sostienen entre sí, cierra frío sin reconciliar.
+- **Social muerde corto:** reactivo, punzante, una estocada de ≤280 caracteres. No construye arquitectura — asesta. La estocada ES el argumento completo.
+
+### Diferencias clave codificadas vs editorial
+- **syntactic_signatures:** entra `the_unit_is_the_blow` (la unidad es el golpe, no el párrafo) y `length_discipline` (≤280 como ancla de IDENTIDAD, no de plataforma). Salen `paragraph_as_architecture` y la tríada de corrección extendida → comprimida a `the_one_line_correction`.
+- **argumentative_architecture:** entra `the_strike_is_the_whole_argument` y `no_thread_building` (prohibición de serializar un cuchillo). Sale la estructura encadenada del editorial.
+- **emotional_register:** entra `reactive_not_contemplative` como eje. Misma frialdad, modo feed en vez de escritorio.
+- **relational_stance:** entra `no_audience_maintenance` (no gestiona comentarios, no construye comunidad — la ausencia es la postura).
+- **prohibited_registers:** +5 nativos de redes — `no_broetry`, `no_threads`, `no_reply_guy`, `no_trend_chasing`, `no_emoji`.
+
+### Alcance de plataformas (decisión de esta sesión)
+La voz gobierna el terreno PROPIO de Lucien en formato corto de texto:
+- **X** — terreno social primario. Cuenta en apertura escalonada (anti-baneo). Publicación manual, sin API.
+- **Meta FB + IG** — captions + texto; narración de video excluida.
+- **TikTok** — SOLO capa de texto (caption/on-screen/copy). Guion hablado/voz EXCLUIDO → reservado a un futuro `lucien_video` (la cadencia hablada lenta del `BP_Brand_Person_id`, 0.88 barítono, contradice el ritmo cortado del social escrito).
+- **luciensael.com EXCLUIDO** — eso es editorial.
+- **LinkedIn NO es plataforma de publicación de Lucien** — no tiene cuenta ahí (riesgo de suspensión + por diseño).
+
+### Regla de cita-por-destino (corrección a un approach previo)
+Lucien llega a LinkedIn solo **citado** por voceros (Sam / UNRLVL). El genoma del fragmento citado lo elige el **destino del redireccionamiento**, no un default:
+- Redirige a X / Meta / TikTok → cita `lucien_social` (el cuchillo promete más cuchillos).
+- Redirige a luciensael.com, o post nativo de LinkedIn sin redirección → cita `lucien_editorial` (la idea respira, el aterrizaje entrega el ensayo).
+- Principio: el fragmento citado debe sonar igual que el lugar adonde aterriza el lector — la voz es una promesa que el destino debe cumplir.
+- La voz que presenta (Sam / UNRLVL) es su propio genoma (sesiones futuras).
+
+### INSERT ejecutado y verificado
+- Tabla: `brand_voice_genome`
+- id: `5b571b08-61bc-45f9-966a-3121eef126f0`
+- `brand_id`: LucienSael · `voice_id`: lucien_social · `version`: 0.5 · `maturity`: v0.5 · `active`: true
+- 9 dimensiones JSONB verificadas íntegras (tipos: 7 object + 2 array). `application_constraints.platforms` confirmado con las 4 plataformas reales.
+- `lucien_editorial` (919e3707) INTACTO — sigue gobernando solo blog. Sin colisión: unique (brand_id, voice_id, version) respetado porque los voice_id difieren. Ambas voces activas a la vez.
+
+### Estado de cuentas (dato exacto de Sam)
+Meta + TikTok publican vía Orchestrator **probado para UNREALville**, pero **LucienSael NO se ha probado en ninguna plataforma**. Codificado como manual-until-verified. RIESGO (~80%): el primer publish de LucienSael por Orchestrator probablemente toca el mismo blocker de `brand_id` mapping visto en el test b93627b6 (UNREALville) — verificar/insertar fila LucienSael en `meta_accounts` antes del primer publish por pipeline.
+
+### Maturity
+v0.5 — voz DISEÑADA, no extraída (no había posts reales al crear, 2026-06-02). El social madura mejor con uso real. Promover a v1.0 tras validar contra posts reales publicados. Riesgo de diseño reconocido (~70% probabilidad de aflorar con uso): la voz-cuchillo es la más fácil de confundir con el reply-guy ingenioso que el propio genoma prohíbe; `edge_safety_rail` endurecido para eso.
+
+### Professor
+5 learnings capturados en `professor_learnings` (approved_by_sam=false, esperan aprobación). Nota: la escala real de `relevance_score` es 1–5 (no 1–10) — constraint confirmado.
+1. Voces hermanas que comparten temperamento y difieren en respiración (VOICE_GENOME, 5)
+2. Regla de cita-por-destino para vocería (VOICE_GENOME, 5)
+3. Cadencia hablada vs escrita es frontera de genoma → TikTok solo texto, video aparte (VOICE_GENOME, 4)
+4. Presencia de plataforma es dato por canal, no se hereda de marca hermana (OPS, 4)
+5. PREDICTIVO: primer publish LucienSael por Orchestrator → probable blocker meta_accounts (PIPELINE, 4)
+
+### SMA (Social Media Agent)
+Verificado en este "Actualiza": export histórico de NeuroneSCF (setup de redes, abril-mayo, Laura/Sam/Paty). Sin novedades relevantes a LucienSael.
+
+### Pendientes Lucien (actualizado)
+- [ ] **IID:** regenerar semillas #7/#8/#14 con `lucien_editorial` v0.5 (desbloqueado desde 06-01)
+- [ ] **IID:** remover `.limit(1)` de content-dispatcher + re-correr content-run-stage v22 en limpio
+- [ ] Antes del primer publish social de Lucien: verificar/insertar fila LucienSael en `meta_accounts` (pre-empt del blocker brand_id)
+- [ ] Corregir `brand_voice_genome.notes` de `lucien_editorial` (quitar mención falsa de brands table — pendiente desde 06-01)
+- [ ] Deploy luciensael.com vía Claude Code (repo + Vercel + DNS) — greenfield
+- [ ] Crear cuentas LinkedIn + X (apertura escalonada anti-baneo, en curso)
+- [ ] Validar outputs reales → promover ambos genomas v0.5 a v1.0
+- [ ] **Sesión futura:** genoma de Sam — DEBE incluir un "modo vocería" que referencie `lucien_editorial` + `lucien_social` por destino (es la pieza que sostiene el device "He recibido un mensaje de Lucien")
+- [ ] **Sesión futura:** genoma de UNRLVL social (mismo modo vocería)
+- [ ] **Sesión futura:** `lucien_video` (cuando VideoLab/Kling.ai) — gobierna guion hablado de TikTok/Reels
+
+### Aprendizaje para OnboardingApp (Fase Voice Genome)
+Una persona puede necesitar MÚLTIPLES voces hermanas (editorial + social + video) que comparten un temperamento pero difieren en respiración por formato. La Fase Voice Genome debería permitir derivar una voz social de una editorial existente preguntando solo por la DIFERENCIA DE RESPIRACIÓN (largo/contemplativo vs corto/reactivo) en vez de re-destilar el carácter desde cero. Y para personas-vocero, capturar un "modo cita" que apunta a la voz de otro por destino.
+
+---
+
 ## 2026-06-01 — Genoma editorial (lucien_editorial v0.5) · Sam + Claude
 
 ### Resumen
@@ -95,4 +168,4 @@ Sesión de construcción web + diagnóstico profundo de por qué el contenido II
 LucienSael en `meta_accounts` con token OK (FB + IG). LinkedIn/X pendientes de creación.
 
 ---
-*Session log · LucienSael · 2026-06-01*
+*Session log · LucienSael · 2026-06-02*

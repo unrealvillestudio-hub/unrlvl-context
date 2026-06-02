@@ -1,23 +1,21 @@
 {
   "_meta": {
-    "version": "2026-05-31-v1",
+    "version": "2026-06-02-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-30-v2",
+    "previous": "2026-05-31-v1",
     "last_session": {
-      "date": "2026-05-31",
-      "duration": "full day",
+      "date": "2026-06-02",
+      "duration": "focused",
       "conducted_by": "Claude Opus 4.8",
-      "status": "🛠️ Blogs UNRLVL+Lucien construidos · fix publicación v22 (brand_id mismatch) · diagnóstico IID completo · diseño Fase Voice Genome · limpieza queue IID.",
+      "status": "🎯 brand_voice_genome lucien_social v0.5 creado (voz hermana de lucien_editorial: mismo carácter, distinta respiración — el cuchillo, no el ensayo). Piloto manual Sam + Claude.",
       "key_achievements": [
-        "luciensael.com blog construido (home+índice+artículo molde bilingüe) — GREENFIELD, paquete listo para Claude Code (repo+Vercel+DNS)",
-        "UNRLVL Field Notes construido (índice + artículo molde, estética terminal) — pendiente push a CoreProject",
-        "FIX publicación v22: insertada fila meta_accounts brand_id=UnrealvilleStudio (mapeo a UNREALville) — causa del test b93627b6 que no publicó",
-        "Constraint lab_jobs.status YA incluye 'published' (pending_fix obsoleto)",
-        "Diagnóstico IID: vive en schema intel; research vivo, ejecución congelada desde 26-abr (.limit(1) debug + content-run-stage); failed son de arquitectura vieja",
-        "Limpieza queue IID: 37 lucien/mathematical rejected (off-brand), 19 unrlvl/expertise con brand_id, 11 lab_jobs teaser borrados",
-        "HALLAZGO RAÍZ: LucienSael NO tiene brand_voice_genome → IID cayó a fallback genérico (voz growth-marketer)",
-        "VOICE_GENOME_PHASE_SPEC.md: diseño de Fase 5 para OnboardingApp (2 ramas: Voz Extraída / Voz Diseñada)",
-        "Decisión arquitectónica: brand_adn = mother brief (artefacto-fuente), NO campo/tabla nuevo"
+        "lucien_social v0.5 INSERTADO en brand_voice_genome (id 5b571b08-61bc-45f9-966a-3121eef126f0) — 9 dimensiones verificadas, activo",
+        "Voz hermana de lucien_editorial: comparte temperamento (filo 9/10, übermensch motor interno nunca citado, cerilla quema la manta no al lector, revelación no agresión) y difiere en respiración (social muerde corto ≤280, editorial respira largo)",
+        "Alcance social: terreno PROPIO de Lucien — Meta FB/IG + TikTok (solo texto) + X. luciensael.com excluido (editorial). Video/voz de TikTok excluido (futuro lucien_video, evita choque de cadencia hablada lenta vs escrita cortada)",
+        "Regla cita-por-destino: Lucien no publica en LinkedIn (sin cuenta, por diseño); llega solo citado por voceros Sam/UNRLVL; el genoma de la cita lo elige el destino del redirect (X/Meta/TikTok → social; .com o nativo sin redirect → editorial)",
+        "Estado real de cuentas Lucien: Orchestrator probado para UNREALville en Meta+TikTok; LucienSael NO probado en ninguna plataforma → manual-until-verified",
+        "lucien_editorial (919e3707) INTACTO — sin colisión, ambas voces activas (unique brand_id+voice_id+version respetado)",
+        "5 learnings capturados en Professor (escala relevance_score confirmada 1–5, no 1–10)"
       ]
     }
   },
@@ -38,8 +36,8 @@
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
     "web_status": "BLOG v1.0 BUILT (home+blog+1 artículo molde) — GREENFIELD: no repo/Vercel/DNS. Paquete listo para Claude Code.",
-    "voice_genome": "❌ NO CREADO — causa raíz del contenido IID off-brand. Pendiente: lucien_editorial v0.5 (rama Voz Diseñada)",
-    "platforms": "Meta (FB+IG) con token OK. LinkedIn+X pendientes de crear (Sam, en horas)."
+    "voice_genome": "✅ 2 VOCES ACTIVAS en brand_voice_genome v0.5 — lucien_editorial (919e3707, blog/ensayo/long-form) + lucien_social (5b571b08, Meta FB/IG + TikTok texto + X, short reactive). Mismo temperamento, distinta respiración. DEUDA menor: corregir nota falsa de brands table en lucien_editorial.notes. Pendiente futuro: lucien_video (guion hablado TikTok/Reels) cuando VideoLab.",
+    "platforms": "Meta (FB+IG) con token a nivel ecosystem, pero canal LucienSael NO probado en pipeline (manual-until-verified). TikTok solo texto. X en apertura escalonada anti-baneo, manual sin API. LinkedIn NO es plataforma de Lucien (solo cita vía voceros Sam/UNRLVL). RIESGO ~80%: primer publish LucienSael por Orchestrator tocará blocker brand_id mapping (tipo test b93627b6) — verificar/insertar fila LucienSael en meta_accounts antes del primer publish."
   },
   "brands": [
     {
@@ -284,7 +282,7 @@
       "status": "live",
       "last_deploy": "2026-04-05",
       "vercel_id": "prj_pQXT2MoCrkp3dGFovNgheYqUnBwy",
-      "voice_genome_gap": "v1.0 puebla 5 tablas (brands, humanize_profiles, compliance_rules, brand_palette, brand_typography) pero NO captura brand_voice_genome (capa editorial). Spec de Fase 5 lista: VOICE_GENOME_PHASE_SPEC.md. Implementar vía Claude Code."
+      "voice_genome_gap": "v1.0 puebla 5 tablas (brands, humanize_profiles, compliance_rules, brand_palette, brand_typography) pero NO captura brand_voice_genome (capa editorial). Spec de Fase 5 lista: VOICE_GENOME_PHASE_SPEC.md. Implementar vía Claude Code. APRENDIZAJE 2026-06-02: una persona puede tener múltiples voces hermanas (editorial+social+video) que comparten temperamento y difieren en respiración; la Fase debería permitir DERIVAR una voz social de una editorial existente preguntando solo por la diferencia de respiración + capturar 'modo cita' para voceros."
     },
     "signallab": {
       "url": null,
@@ -303,7 +301,8 @@
       "✅ RESUELTO meta_accounts: UnrealvilleStudio insertado (2026-05-31)",
       "✅ RESUELTO NeuroneSCF ya estaba en meta_accounts",
       "⏳ SocialLab: confirmar que es la vía de publicación dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. El test b93627b6 no publicó por brand_id mismatch (ya resuelto), re-test pendiente.",
-      "⏳ Normalizar convención de nombres UnrealvilleStudio vs UNREALville"
+      "⏳ Normalizar convención de nombres UnrealvilleStudio vs UNREALville",
+      "⏳ LucienSael NO probado en pipeline en ninguna plataforma — antes del primer publish verificar/insertar fila LucienSael en meta_accounts (riesgo ~80% mismo blocker brand_id mapping que b93627b6)"
     ]
   },
   "supabase": {
@@ -331,6 +330,16 @@
         "pg_cron_new": {
           "archive-fulfillment-log": "2am UTC diario — archiva nscf_fulfillment_log > 3 meses"
         }
+      },
+      "brand_voice_genome": {
+        "_note": "Tabla de voces de marca. Una marca puede tener varias voces hermanas (distinto voice_id) que comparten temperamento y difieren en respiración. Unique (brand_id, voice_id, version).",
+        "rows_LucienSael": [
+          "lucien_editorial v0.5 (919e3707-d0be-41df-9cc1-ad145915991f) — blog/ensayo/long-form — active",
+          "lucien_social v0.5 (5b571b08-61bc-45f9-966a-3121eef126f0) — Meta FB/IG + TikTok texto + X, short reactive — active (creado 2026-06-02)"
+        ],
+        "rows_UnrealvilleStudio": [
+          "unrlvl_default v1.0 — Defiant precision"
+        ]
       }
     }
   },
@@ -411,9 +420,16 @@
       "url": "https://unrlvl-context.vercel.app/api/professor"
     },
     "seed_data": {
-      "learnings_total": 60,
+      "learnings_total": 65,
       "learnings_approved": 42,
-      "learnings_pending_approval": 6,
+      "learnings_pending_approval": 11,
+      "relevance_score_scale": "1–5 (constraint confirmado 2026-06-02)",
+      "pending_categories_2026-06-02": [
+        "VOICE_GENOME (2 nuevos: voces hermanas temperamento/respiración; cita-por-destino para vocería)",
+        "VOICE_GENOME (1 nuevo: cadencia hablada vs escrita = frontera de genoma)",
+        "OPS (1 nuevo: presencia de plataforma es dato por canal, no se hereda de marca hermana)",
+        "PIPELINE (1 nuevo: predictivo blocker meta_accounts en primer publish LucienSael)"
+      ],
       "pending_categories_2026-05-29": [
         "SHOPIFY_INFRA (3 learnings: atkn_ inválido, VIEW GRANT, content-type proxy)",
         "NSCF_OPS (1 learning: UPS prefix 1Z)",
@@ -423,7 +439,7 @@
     }
   },
   "iid_subsystem": {
-    "_status": "RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26",
+    "_status": "RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26 · DESBLOQUEADO PARA FIX (ambas voces Lucien ya existen)",
     "schema": "intel (NO public)",
     "tables": {
       "iid_agents": "14 — por dominio de conocimiento, dual voice (default_voice + lucien_angle_affinity)",
@@ -436,9 +452,10 @@
     },
     "edge_functions": ["content-dispatcher (.limit(1) debug)", "content-run-stage v22 (timeout 65s)", "iid-core", "iid-ecommerce", "aife-filter"],
     "diagnosis_2026-05-31": "Research funciona y alimenta queue. Ejecución/publicación congelada: content-run-stage failed del 26-abr son cadáveres de arquitectura vieja (timeout 30s + CopyLab externo). v22 ya reescrita (pipeline portado, timeout 65s) pero nunca re-corrida en limpio. .limit(1) de debugging sigue puesto.",
+    "voice_unblock_2026-06-02": "Causa raíz del off-brand (sin brand_voice_genome) RESUELTA: lucien_editorial (06-01) + lucien_social (06-02) activos. Siguiente: regenerar semillas #7/#8/#14 con la voz correcta según formato (editorial para long-form, social para corto), remover .limit(1), re-correr content-run-stage v22 en limpio.",
     "brand_id_model_agreed": "Research de plataforma compartido + intérprete por marca vía context-cache. Fuentes por vertical temático: caso por caso.",
     "quarantine": "37 lucien/mathematical + (revisar) lucien/psychological marcados rejected/pending como dataset diagnóstico. NO purgar hasta validar voz nueva.",
-    "seeds": "Semillas rescatables de lucien/psychological: #7, #8, #14 — regenerar con voz correcta tras crear genoma."
+    "seeds": "Semillas rescatables de lucien/psychological: #7, #8, #14 — regenerar con voz correcta tras crear genoma (ya creado)."
   },
   "agents": {
     "_standard": "UNRLVL Agent Infrastructure Standard v1.0",
@@ -502,11 +519,15 @@
   },
   "next_session_agenda": [
     "🟢 LISTO PARA DEPLOY — luciensael.com (repo+Vercel+DNS) + UNRLVL Field Notes (push CoreProject) vía Claude Code",
-    "🔴 IID FIX — crear brand_voice_genome lucien_editorial v0.5 → regenerar semillas #7/#8/#14 → re-test pipeline publicación",
-    "🔴 Implementar Fase Voice Genome en OnboardingApp (spec lista) vía Claude Code",
+    "🔴 IID FIX — ambas voces Lucien ya existen (editorial+social). Regenerar semillas #7/#8/#14 con la voz correcta por formato → remover .limit(1) → re-correr content-run-stage v22 en limpio",
+    "🔴 Implementar Fase Voice Genome en OnboardingApp (spec lista) vía Claude Code — incluir derivación de voz social desde editorial + modo cita para voceros",
     "🟡 SocialLab dual-mode — confirmar/implementar sync+async, re-test publicación post brand_id fix",
-    "🟡 Crear cuentas LinkedIn + X para Lucien (Sam)",
-    "🟡 SESIÓN DEDICADA — Context System refactor (adelgazar ecosystem.json + crear CAPABILITIES.md). Plan completo en protocols/CONTEXT_SYSTEM_REFACTOR_PLAN.md. Arrancar con 'ecosystem audit' identificativo. RIESGO ALTO: toca fuente de verdad y arranque de sesiones — hacer con foco.",
+    "🟡 Crear cuentas LinkedIn + X para Lucien (apertura escalonada anti-baneo, en curso). Nota: LinkedIn NO es plataforma de publicación de Lucien — solo cita vía voceros Sam/UNRLVL",
+    "🟡 GENOMA DE SAM (sesión futura) — voz personal Sam para Meta FB + LinkedIn + X. DEBE incluir 'modo vocería' que referencie lucien_editorial + lucien_social por destino (sostiene el device 'He recibido un mensaje de Lucien')",
+    "🟡 GENOMA SOCIAL DE UNRLVL (sesión futura) — Meta FB/IG + TikTok + LinkedIn + .com, mismo modo vocería",
+    "🟡 lucien_video (sesión futura) — guion hablado TikTok/Reels cuando VideoLab/Kling.ai; cadencia hablada lenta (0.88 barítono) separada del social escrito",
+    "🟡 Corregir lucien_editorial.notes (quitar mención falsa 'brands table did not return a row' — deuda desde 06-01)",
+    "🟡 SESIÓN DEDICADA — Context System refactor (adelgazar ecosystem.json + crear CAPABILITIES.md — CAPABILITIES.md ya creado). Plan en protocols/CONTEXT_SYSTEM_REFACTOR_PLAN.md. Arrancar con 'ecosystem audit' identificativo. RIESGO ALTO: toca fuente de verdad y arranque de sesiones — hacer con foco.",
     "🔴 PRIORIDAD 1 — fphs-formalize sprint: replicar calidad acta manual (98% Ivette) en DF. Comparar ACTA_No1-2026 vs ACTA_OR_1-2026. Ajustar EF Supabase.",
     "🔴 PRIORIDAD 2 — Verificar 129 unidades habilitadas Luxor 300 → si ≤127, regenerar acta con % correcto",
     "🔴 PRIORIDAD 3 — DF: 3 votaciones faltantes en QA + 13 errores primera persona",
@@ -518,7 +539,6 @@
     "PRIORIDAD 10 — Portal Iván sprint 2: dashboard pendientes + UPS API",
     "PRIORIDAD 11 — Klaviyo flows NSCF: 4 flows bilingüe",
     "PRIORIDAD 12 — GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp (público o GitHub Pro)",
-    "✅ RESUELTO PRIORIDAD 13 — luciensael.com: blog GREENFIELD construido, deploy pendiente (ya como tarea LISTO PARA DEPLOY arriba)",
     "PENDIENTE SESIONES — Ecosystem Tools: MCPs + Skills + Agents + AgentLab orquestación multimarca"
   ]
 }

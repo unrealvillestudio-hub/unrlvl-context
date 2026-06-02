@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-05-31-v1 · No editar manualmente_
+_Generado desde ecosystem.json v2026-06-02-v1 · No editar manualmente_
 
 ---
 
@@ -50,16 +50,17 @@ Servidor: unrlvl-meta-mcp.vercel.app
 
 Datos: Supabase public.meta_accounts
   └─ brand_id · page_id · ig_user_id · ad_account_id · system_token
-  └─ UNREALville ✅ · UnrealvilleStudio ✅ (2026-05-31) · LucienSael ✅ · NeuroneSCF ✅
+  └─ UNREALville ✅ · UnrealvilleStudio ✅ (2026-05-31) · NeuroneSCF ✅
 
 Brands con acceso Meta:
   └─ UNREALville / UnrealvilleStudio ✅
-  └─ LucienSael ✅
   └─ NeuroneSCF ✅ (verificado 2026-05-31)
+  └─ LucienSael ⏳ NO probado en pipeline — verificar/insertar fila antes del 1er publish
+       (riesgo ~80% mismo blocker brand_id mapping que test b93627b6)
   └─ DEUDA: normalizar UnrealvilleStudio vs UNREALville (2 filas)
 ```
 
-### IID Subsystem (RESEARCH VIVO · EJECUCIÓN CONGELADA)
+### IID Subsystem (RESEARCH VIVO · EJECUCIÓN CONGELADA · DESBLOQUEADO PARA FIX)
 ```
 Schema: intel (NO public)
 
@@ -80,8 +81,10 @@ Edge Functions:
   └─ aife-filter
 
 Diagnóstico: Research OK. Publicación congelada.
-Causa raíz: LucienSael SIN brand_voice_genome → fallback genérico.
-Fix: crear lucien_editorial v0.5 → remover .limit(1) → re-test content-run-stage v22
+Causa raíz RESUELTA 2026-06-02: LucienSael ya tiene brand_voice_genome.
+  └─ lucien_editorial v0.5 (06-01) — long-form
+  └─ lucien_social v0.5 (06-02) — short reactive
+Fix restante: regenerar seeds #7/#8/#14 por formato → remover .limit(1) → re-test content-run-stage v22 en limpio
 ```
 
 ### Professor (OPERACIONAL)
@@ -93,7 +96,7 @@ Proxy: unrlvl-context.vercel.app/api/professor
 Storage: Supabase amlvyycfepwhiindxgzw
   └─ professor_decision_criteria
   └─ professor_veto_rules
-  └─ professor_learnings (60 total · 42 aprobados · 6 pending)
+  └─ professor_learnings (65 total · 42 aprobados · 11 pending · relevance_score 1–5)
   └─ professor_manuals
   └─ professor_platform_variables
 
@@ -112,6 +115,23 @@ Servidor: unrlvl-supabase-mcp.vercel.app
   └─ /api/mcp/mcp · v1.2.1
 ```
 
+### Voces de marca (brand_voice_genome)
+```
+Una marca → varias voces hermanas (mismo temperamento, distinta respiración)
+Unique (brand_id, voice_id, version)
+
+LucienSael:
+  └─ lucien_editorial v0.5 (919e3707) — blog/ensayo/long-form — respira largo
+  └─ lucien_social   v0.5 (5b571b08) — Meta FB/IG + TikTok texto + X — muerde corto ≤280
+       Exclusiones: luciensael.com (=editorial) · LinkedIn publish (no cuenta) · video/voz (=futuro lucien_video)
+       Cita-por-destino en LinkedIn (vía voceros): redirect X/Meta/TikTok → social; .com o nativo → editorial
+
+UnrealvilleStudio:
+  └─ unrlvl_default v1.0 — Defiant precision
+
+Futuros: genoma de Sam (con modo vocería) · genoma social UNRLVL · lucien_video
+```
+
 ### OnboardingApp — Voice Genome Gap
 ```
 v1.0 puebla 5 tablas:
@@ -124,6 +144,8 @@ v1.0 puebla 5 tablas:
 NO captura: brand_voice_genome (capa editorial)
 Fix: Fase 5 — spec lista en VOICE_GENOME_PHASE_SPEC.md
      2 ramas: Voz Extraída / Voz Diseñada
+     Aprendizaje 2026-06-02: permitir derivar voz social desde editorial existente
+     (preguntar solo diferencia de respiración) + capturar modo cita para voceros
 ```
 
 ---
@@ -157,11 +179,14 @@ Branch protection activa en 13. Bloqueada en 2 (privados GitHub Free): unrlvl-su
 ```
 brands · humanize_profiles · compliance_rules · brand_palette · brand_typography
 brand_voice_genome ← clave para pipeline IID + CopyLab
+   └─ LucienSael: lucien_editorial (919e3707) + lucien_social (5b571b08) — ambas v0.5 active
+   └─ UnrealvilleStudio: unrlvl_default v1.0
 brand_cache_snapshots ← zero-query mode
 lab_jobs · lab_configs · copylab_jobs (→ migrar a lab_jobs)
 meta_accounts · scheduled_posts
 professor_decision_criteria · professor_veto_rules · professor_learnings
-professor_manuals · professor_platform_variables
+professor_manuals · professor_platform_variables · professor_cache
+professor_decision_cases · professor_errors_known · professor_sam_bypasses · professor_weights
 nscf_fulfillment_log · nscf_fulfillment_log_archive
 imagelab_presets · person_blueprints · location_blueprints
 product_blueprints · brand_copy_profiles
@@ -195,6 +220,7 @@ stores · audit_runs · fix_log + otras
 ├── ecosystem_filemap.md              ← este archivo (generado)
 ├── ecosystem_graph.json              ← grafo nodos+edges (generado via audit)
 ├── AGENDA.md                         ← agenda visual (generado)
+├── CAPABILITIES.md                   ← catálogo de capacidades (carga en arranque)
 │
 ├── infrastructure/
 │   ├── meta-mcp/
@@ -204,6 +230,9 @@ stores · audit_runs · fix_log + otras
 │   └── supabase-mcp/ (futuro)
 │
 ├── brands/
+│   ├── LucienSael/
+│   │   ├── BP_Brand_Person_id.md
+│   │   └── session_log.md            ← actualizado 2026-06-02 (lucien_social)
 │   └── [Marca]/
 │       ├── brand.json
 │       ├── BP_Brand_Context.md
@@ -222,6 +251,7 @@ stores · audit_runs · fix_log + otras
 │   ├── SESSION_PROTOCOL.md
 │   ├── HRD_PROTOCOL.md
 │   ├── AYRA_MASTER_PLAN.md
+│   ├── VOICE_GENOME_PHASE_SPEC.md
 │   └── CONTEXT_SYSTEM_REFACTOR_PLAN.md ← (pendiente crear)
 │
 └── knowledge/
@@ -239,9 +269,9 @@ stores · audit_runs · fix_log + otras
 ## Dependencias críticas
 
 ```
-IID pipeline (congelado):
-  brand_voice_genome (lucien_editorial) ← NO CREADO → causa raíz del congelamiento
-  └─ iid_content_queue (lucien/psychological seeds #7/#8/#14)
+IID pipeline (congelado · DESBLOQUEADO para fix):
+  brand_voice_genome (lucien_editorial + lucien_social) ← ✅ AMBAS CREADAS (causa raíz resuelta)
+  └─ iid_content_queue (lucien/psychological seeds #7/#8/#14 — regenerar por formato)
   └─ content-run-stage v22 (timeout 65s — necesita re-test limpio)
   └─ content-dispatcher (.limit(1) debe removerse)
 
@@ -249,11 +279,13 @@ Pipeline end-to-end (operacional):
   brand_cache_snapshots ← zero-query mode
   lab_jobs ← async jobs
   lab-worker EF ← disparo
-  Meta MCP → meta_accounts ← todos con token ✅
+  Meta MCP → meta_accounts ← UNREALville/UnrealvilleStudio/NeuroneSCF con token ✅
+  └─ LucienSael ⏳ verificar fila antes del 1er publish (riesgo blocker brand_id)
 
 OnboardingApp Fase 5:
   brand_voice_genome ← tabla existe, onboarding no la puebla aún
   spec: VOICE_GENOME_PHASE_SPEC.md (lista)
+  └─ extender: derivar voz social desde editorial + modo cita voceros
 
 luciensael.com deploy:
   repo GREENFIELD ← no existe aún en GitHub org

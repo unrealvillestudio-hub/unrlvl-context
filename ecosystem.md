@@ -1,5 +1,5 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-05-31-v1 · No editar manualmente_
+_Generado desde ecosystem.json v2026-06-02-v1 · No editar manualmente_
 
 ---
 
@@ -13,8 +13,10 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 **Lucien Sael** — Seudónimo profesional público de Sam
 - web: luciensael.com — BLOG v1.0 BUILT (home+blog+1 artículo molde) · GREENFIELD: sin repo/Vercel/DNS · Paquete listo para Claude Code
-- voice_genome: ❌ NO CREADO — causa raíz del contenido IID off-brand. Pendiente: lucien_editorial v0.5 (rama Voz Diseñada)
-- platforms: Meta (FB+IG) con token OK · LinkedIn+X pendientes de crear (Sam)
+- voice_genome: ✅ **2 VOCES ACTIVAS** en brand_voice_genome v0.5 — `lucien_editorial` (919e3707 · blog/ensayo/long-form) + `lucien_social` (5b571b08 · Meta FB/IG + TikTok texto + X · short reactive). Mismo temperamento (filo 9/10, übermensch motor interno nunca citado), distinta respiración (editorial respira largo / social muerde corto ≤280). DEUDA menor: corregir nota falsa de brands table en lucien_editorial.notes.
+- platforms: Meta (FB+IG) token a nivel ecosystem pero canal LucienSael NO probado en pipeline (manual-until-verified) · TikTok solo texto · X apertura escalonada anti-baneo (manual, sin API) · LinkedIn NO es plataforma de Lucien (solo cita vía voceros Sam/UNRLVL)
+- ⚠️ RIESGO ~80%: primer publish LucienSael por Orchestrator tocará blocker brand_id mapping (tipo b93627b6) — verificar/insertar fila LucienSael en meta_accounts antes
+- Pendiente futuro: `lucien_video` (guion hablado TikTok/Reels) cuando VideoLab
 
 ---
 
@@ -38,7 +40,7 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 **Shopify B2C** `egdk1n-gt.myshopify.com` → `neuronescflorida.com`
 - 41 productos activos · Theme 192983662919
 - Blog LIVE: 4 artículos ES+EN · Hair Intelligence — pendiente reescritura L0+L3 HUMANIZE EMOTIONAL
-- Pixel Meta ✅ (1348252664025025) · GTM+GA4 instalado ✅ · Klaviyo ✅ · Judge.me ✅
+- Pixel Meta ✅ (1348252664025025) · GTM+GA4 instalado ✅ · Klaviyo ✅
 - ⚠️ TikTok Pixel DUPLICADO — bloquea ads
 - ⚠️ Klaviyo flows pendiente configurar en UI
 - ✅ Meta MCP: NSCF en meta_accounts con token OK (verificado 2026-05-31)
@@ -63,6 +65,20 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 ---
 
+## Voces de marca (brand_voice_genome)
+
+Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que comparten temperamento y difieren en respiración. Unique `(brand_id, voice_id, version)`.
+
+| brand_id | voice_id | versión | scope | estado |
+|---|---|---|---|---|
+| LucienSael | `lucien_editorial` | v0.5 | blog / ensayo / long-form | ✅ active (919e3707) |
+| LucienSael | `lucien_social` | v0.5 | Meta FB/IG + TikTok (texto) + X · short reactive | ✅ active (5b571b08 · 2026-06-02) |
+| UnrealvilleStudio | `unrlvl_default` | v1.0 | infra / B2B | ✅ active |
+
+**Lucien — regla cita-por-destino (vocería en LinkedIn):** Lucien no publica en LinkedIn (sin cuenta, por diseño). Llega solo citado por voceros (Sam / UNRLVL). El genoma del fragmento citado lo elige el **destino del redirect**: a X/Meta/TikTok → `lucien_social`; a luciensael.com o post nativo sin redirect → `lucien_editorial`. La voz que presenta es su propio genoma (sesiones futuras).
+
+---
+
 ## Labs
 
 | Lab | URL | Estado |
@@ -81,7 +97,7 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 **SocialLab:** Vía de publicación ÚNICA al público. Debe operar dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. Re-test publicación pendiente tras fix brand_id.
 
-**OnboardingApp:** v1.0 puebla 5 tablas pero NO captura brand_voice_genome. Spec Fase 5 lista: VOICE_GENOME_PHASE_SPEC.md.
+**OnboardingApp:** v1.0 puebla 5 tablas pero NO captura brand_voice_genome. Spec Fase 5 lista: VOICE_GENOME_PHASE_SPEC.md. Aprendizaje 2026-06-02: permitir derivar voz social desde editorial (solo preguntar diferencia de respiración) + capturar modo cita para voceros.
 
 ---
 
@@ -97,12 +113,13 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 - ✅ RESUELTO — NeuroneSCF ya estaba en meta_accounts
 - ⏳ SocialLab dual-mode — re-test publicación pendiente (brand_id mismatch ya resuelto)
 - ⏳ Normalizar convención UnrealvilleStudio vs UNREALville
+- ⏳ LucienSael NO probado en pipeline en ninguna plataforma — antes del primer publish verificar/insertar fila LucienSael en meta_accounts (riesgo ~80% mismo blocker brand_id que b93627b6)
 
 ---
 
 ## IID Subsystem
 
-**Status:** RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26
+**Status:** RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26 · **DESBLOQUEADO PARA FIX** (ambas voces Lucien ya existen)
 **Schema:** `intel` (NO public)
 
 | Tabla | Conteo |
@@ -119,10 +136,10 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 **Diagnóstico 2026-05-31:** Research funciona. Ejecución congelada: failed del 26-abr son cadáveres de arquitectura vieja (timeout 30s + CopyLab externo). v22 ya reescrita pero nunca re-corrida en limpio. .limit(1) de debugging sigue puesto.
 
-**Hallazgo raíz:** LucienSael NO tiene brand_voice_genome → IID cayó a fallback genérico (voz growth-marketer).
+**Desbloqueo de voz 2026-06-02:** Causa raíz del off-brand (sin brand_voice_genome) RESUELTA — `lucien_editorial` (06-01) + `lucien_social` (06-02) activos. Siguiente: regenerar seeds #7/#8/#14 con la voz correcta por formato (editorial para long-form, social para corto), remover .limit(1), re-correr v22 en limpio.
 
 **Cuarentena:** 37 lucien/mathematical + lucien/psychological marcados rejected/pending — NO purgar hasta validar voz nueva.
-**Seeds rescatables:** lucien/psychological #7, #8, #14 — regenerar con voz correcta tras crear genoma.
+**Seeds rescatables:** lucien/psychological #7, #8, #14 — regenerar con voz correcta (genoma ya creado).
 
 ---
 
@@ -134,10 +151,14 @@ ACTIVE_HEALTHY · us-east-1
 - **content:** orchestrator_jobs · (copylab_jobs → lab_jobs migration pendiente)
 - **shopify:** stores, audit_runs, fix_log + otras
 
+**brand_voice_genome (LucienSael):**
+- `lucien_editorial` v0.5 (919e3707) — blog/ensayo/long-form — active
+- `lucien_social` v0.5 (5b571b08) — Meta FB/IG + TikTok texto + X, short reactive — active (2026-06-02)
+
 **meta_accounts:**
 - `UNREALville` ✅ completo (page + ig + ad_account + token)
 - `UnrealvilleStudio` ✅ añadida 2026-05-31 (mapeo a UNREALville)
-- `LucienSael` ✅ page + token
+- `LucienSael` ⏳ verificar antes del primer publish por pipeline (riesgo blocker brand_id)
 - `NeuroneSCF` ✅ token OK (verificado 2026-05-31)
 
 ---
@@ -174,7 +195,7 @@ Milestone v1.0: 31 Agosto 2026
 
 OPERATIONAL v1.0
 Proxy: `https://unrlvl-context.vercel.app/api/professor` ✅ LIVE
-Learnings: 60 total · 42 aprobados · 6 pending approval
+Learnings: 65 total · 42 aprobados · 11 pending approval (escala relevance_score 1–5)
 
 ---
 
@@ -199,5 +220,5 @@ Ver [AGENDA.md](AGENDA.md) para prioridades completas.
 
 Top 3 inmediatos:
 1. 🟢 Deploy luciensael.com (repo+Vercel+DNS) + UNRLVL Field Notes (push CoreProject)
-2. 🔴 IID FIX — crear brand_voice_genome lucien_editorial v0.5 → regenerar seeds → re-test pipeline
-3. 🔴 Voice Genome Fase 5 en OnboardingApp (spec lista)
+2. 🔴 IID FIX — ambas voces Lucien ya existen; regenerar seeds #7/#8/#14 por formato → remover .limit(1) → re-correr v22 en limpio
+3. 🔴 Voice Genome Fase 5 en OnboardingApp (spec lista) — incluir derivación social-desde-editorial + modo cita voceros
