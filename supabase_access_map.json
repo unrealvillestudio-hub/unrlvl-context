@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-06-03-v1",
-    "previous": null,
+    "version": "2026-06-03-v2",
+    "previous": "2026-06-03-v1",
     "maintained_by": "Claude (supabase-auditor)",
     "purpose": "Mapa de acceso a Supabase: para cada objeto (tabla/función/vista) registra qué app del ecosistema lo consume, con qué credencial (anon/service_role/PUBLIC), en qué operación, y si ese acceso es intencional. Es la fuente de verdad para interpretar los Security Advisors de Supabase: distingue un WARN de diseño (intencional) de un agujero real.",
     "linked_to": {
@@ -10,7 +10,7 @@
       "join_key": "caller.repo coincide con los nodos LAB-* / APP-* del ecosystem_graph"
     },
     "coverage": "partial",
-    "coverage_note": "SOLO contiene el subsistema verificado en la sesión de seguridad del 2026-06-03: pipeline de contenido (CopyLab, ImageLab, Orchestrator), NSCF (kiosk), unrlvl-ops (cost dashboard) y Shopify. NO cubre los 29 repos. La primera corrida completa del supabase-auditor debe poblar el resto y cambiar coverage a 'full'.",
+    "coverage_note": "Bloque 1 del primer run completo cerrado (flujo protagonista): Orchestrator, CopyLab, ImageLab, SocialLab, VideoLab verificados en codigo. Pendiente bloque 2: WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject, MCPs, forumphs-*, DDMV-Assistant, XMMs. coverage sigue 'partial'.",
     "project": {
       "name": "unrlvl-db",
       "id": "amlvyycfepwhiindxgzw"
@@ -26,20 +26,26 @@
       "debatable": "funciona y es usado, pero el patrón es discutible y merece revisión de diseño (no urgencia de seguridad)."
     }
   },
-
   "design_principles": {
     "dual_mode_sync": "Los labs (CopyLab, ImageLab, Orchestrator) operan en modo dual sync/async. El modo sync escribe a Supabase directamente desde el browser con la ANON key. Por diseño, ciertas funciones SECURITY DEFINER y policies permisivas con anon son NECESARIAS y aparecerán perpetuamente como WARN en el advisor. Este mapa las marca intentional=true para que no se revoquen por error.",
     "service_role_bypass": "Las Edge Functions y los endpoints serverless server-side usan service_role, que bypasea RLS. Por eso habilitar RLS y revocar anon/PUBLIC en objetos server-side-only tiene impacto operativo nulo.",
     "advisor_interpretation": "Un WARN 'anon can execute SECURITY DEFINER' o 'permissive RLS policy' NO es automáticamente un bug. Se cruza contra este mapa: si intentional=true, es ruido de diseño; si la función/tabla no tiene caller anon registrado, es vestigial y se cierra."
   },
-
   "access_entries": [
     {
       "object": "public.shopify_stores",
       "object_type": "view",
       "credential": "service_role",
-      "operations": ["select", "insert", "update", "delete"],
-      "caller": { "repo": "unrlvl-supabase-mcp / shopify-oauth EF", "file": "shopify-oauth (Edge Function)" },
+      "operations": [
+        "select",
+        "insert",
+        "update",
+        "delete"
+      ],
+      "caller": {
+        "repo": "unrlvl-supabase-mcp / shopify-oauth EF",
+        "file": "shopify-oauth (Edge Function)"
+      },
       "intentional": true,
       "verified_in": "Edge Function shopify-oauth usa SUPABASE_SERVICE_ROLE_KEY",
       "security_note": "RIESGO HISTÓRICO CERRADO 2026-06-03. La vista exponía access_token (shpat_) de shopify.stores y anon tenía SELECT con SECURITY DEFINER -> fuga de tokens. Fix: ALTER VIEW SET (security_invoker=on) + REVOKE SELECT FROM anon, authenticated.",
@@ -49,8 +55,13 @@
       "object": "public.upsert_brand_cache",
       "object_type": "function_security_definer",
       "credential": "anon",
-      "operations": ["execute"],
-      "caller": { "repo": "CopyLab", "file": "src/lib/queries.ts (writeBrandCache)" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "CopyLab",
+        "file": "src/lib/queries.ts (writeBrandCache)"
+      },
       "intentional": true,
       "verified_in": "CopyLab/src/lib/queries.ts — llama rpc/upsert_brand_cache con VITE_SUPABASE_ANON_KEY. Comentario en código: 'Usar RPC SECURITY DEFINER para escribir con privilegios elevados desde el browser'.",
       "security_note": "Aparecerá perpetuamente como WARN 'anon can execute SECURITY DEFINER'. ES INTENCIONAL (dual-mode sync). NO revocar. Nota: falta grant explícito a service_role; si alguna vez se revoca PUBLIC, otorgar antes a service_role.",
@@ -60,8 +71,13 @@
       "object": "public.rotate_sequence_current",
       "object_type": "function_security_definer",
       "credential": "anon",
-      "operations": ["execute"],
-      "caller": { "repo": "Orchestrator", "file": "src/services/sequenceBridge.ts (initSequenceRun)" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "Orchestrator",
+        "file": "src/services/sequenceBridge.ts (initSequenceRun)"
+      },
       "intentional": true,
       "verified_in": "Orchestrator/src/services/sequenceBridge.ts — llama rpc/rotate_sequence_current con VITE_SUPABASE_ANON_KEY desde el dispatcher de recogida. También la usa lab-worker con service_role.",
       "security_note": "Aparecerá perpetuamente como WARN. ES INTENCIONAL (dispatcher de recogida del Orchestrator + lab-worker). NO revocar de anon. En la sesión 2026-06-03 se revocó por error y se restauró el GRANT a anon, authenticated.",
@@ -71,8 +87,15 @@
       "object": "public.copylab_jobs",
       "object_type": "table",
       "credential": "anon",
-      "operations": ["insert", "select", "update"],
-      "caller": { "repo": "CopyLab", "file": "api/process-job.ts + front (dual-mode async/sync)" },
+      "operations": [
+        "insert",
+        "select",
+        "update"
+      ],
+      "caller": {
+        "repo": "CopyLab",
+        "file": "api/process-job.ts + front (dual-mode async/sync)"
+      },
       "intentional": true,
       "verified_in": "CopyLab/api/process-job.ts — usa SUPABASE_ANON_KEY para PATCH/SELECT sobre copylab_jobs. Policies anon_write_jobs/anon_read_own/anon_update_jobs con USING/WITH CHECK true.",
       "security_note": "Policies permisivas (USING true) aparecerán como WARN 'rls_policy_always_true'. SON INTENCIONALES (encolado dual-mode). NO restringir sin rediseñar el flujo de jobs. Mejora opcional futura: acotar SELECT a jobs propios.",
@@ -82,8 +105,15 @@
       "object": "public.content_sequence_pieces",
       "object_type": "table",
       "credential": "anon",
-      "operations": ["insert", "select", "update"],
-      "caller": { "repo": "Orchestrator", "file": "src/services/sequenceBridge.ts (writeSequencePiece, getPreviousMechanism, markPieceDeployed)" },
+      "operations": [
+        "insert",
+        "select",
+        "update"
+      ],
+      "caller": {
+        "repo": "Orchestrator",
+        "file": "src/services/sequenceBridge.ts (writeSequencePiece, getPreviousMechanism, markPieceDeployed)"
+      },
       "intentional": true,
       "verified_in": "Orchestrator/src/services/sequenceBridge.ts — escribe/lee piezas con anon key como parte del flujo de recogida hacia Klaviyo/SocialLab.",
       "security_note": "Acceso anon de escritura. Funciona y es de diseño (dual-mode). Marcar para revisión de policies en la primera corrida completa del auditor: confirmar que las policies de esta tabla no son USING(true) demasiado amplias.",
@@ -93,8 +123,13 @@
       "object": "public.content_sequences",
       "object_type": "table",
       "credential": "anon",
-      "operations": ["update"],
-      "caller": { "repo": "Orchestrator", "file": "src/services/sequenceBridge.ts (markSequenceDeployed)" },
+      "operations": [
+        "update"
+      ],
+      "caller": {
+        "repo": "Orchestrator",
+        "file": "src/services/sequenceBridge.ts (markSequenceDeployed)"
+      },
       "intentional": true,
       "verified_in": "Orchestrator/src/services/sequenceBridge.ts — PATCH status='deployed' con anon key.",
       "last_verified_sha": "session-2026-06-03"
@@ -103,8 +138,15 @@
       "object": "public.lab_jobs",
       "object_type": "table",
       "credential": "service_role",
-      "operations": ["insert", "select", "update"],
-      "caller": { "repo": "Orchestrator", "file": "api/approve-job.ts + api/trigger-job.ts (Node, SUPABASE_SERVICE_ROLE_KEY)" },
+      "operations": [
+        "insert",
+        "select",
+        "update"
+      ],
+      "caller": {
+        "repo": "Orchestrator",
+        "file": "api/approve-job.ts + api/trigger-job.ts (Node, SUPABASE_SERVICE_ROLE_KEY)"
+      },
       "intentional": true,
       "verified_in": "Orchestrator/api/approve-job.ts — usa SUPABASE_SERVICE_ROLE_KEY. El pipeline corre por INSERT lab_jobs -> trigger lab_jobs_trigger_worker -> trigger_lab_worker() -> pg_net -> lab-worker. RLS habilitada sin policies (correcto: solo service_role accede).",
       "last_verified_sha": "session-2026-06-03"
@@ -113,8 +155,15 @@
       "object": "public.nscf_draft_orders",
       "object_type": "table",
       "credential": "service_role",
-      "operations": ["insert", "select", "update"],
-      "caller": { "repo": "NeuroneSCF", "file": "Edge Function nscf-kiosko-draft (SUPABASE_SERVICE_ROLE_KEY)" },
+      "operations": [
+        "insert",
+        "select",
+        "update"
+      ],
+      "caller": {
+        "repo": "NeuroneSCF",
+        "file": "Edge Function nscf-kiosko-draft (SUPABASE_SERVICE_ROLE_KEY)"
+      },
       "intentional": true,
       "verified_in": "NeuroneSCF/kiosko/src/App.jsx — el front NO toca Supabase directo; llama EFs nscf-kiosko-draft/data sin apikey. Las EFs usan service_role.",
       "security_note": "CERRADO 2026-06-03. Tenía policies anon 'anon insert draft_orders' y 'anon read own draft_orders' con SELECT USING(true) -> lectura pública de datos de clientas. Eran VESTIGIALES (el kiosk usa service_role vía EF). DROP de ambas policies aplicado. Solo queda service_role full access.",
@@ -124,8 +173,15 @@
       "object": "public.ops_costs",
       "object_type": "table",
       "credential": "anon",
-      "operations": ["select", "insert", "delete"],
-      "caller": { "repo": "unrlvl-ops", "file": "unrlvl-ops/src/lib/supabase.ts + components/CostForm.tsx + hooks/useData.ts" },
+      "operations": [
+        "select",
+        "insert",
+        "delete"
+      ],
+      "caller": {
+        "repo": "unrlvl-ops",
+        "file": "unrlvl-ops/src/lib/supabase.ts + components/CostForm.tsx + hooks/useData.ts"
+      },
       "intentional": "debatable",
       "verified_in": "unrlvl-ops/src/lib/supabase.ts usa VITE_SUPABASE_ANON_KEY con dbGet/dbPost/dbDelete REST directo. CostForm.tsx hace dbPost('ops_costs', ...). useData.ts hace dbGet('ops_costs', ...).",
       "security_note": "La app interna de costos (dashboard Vercel) escribe/borra costos con ANON. El skill security v1.0 listaba esto como 'CRÍTICO: anon puede DELETE/INSERT' — pero es el mecanismo real de la app interna, no un agujero desconocido. DEBATABLE: un DELETE/INSERT anon en tabla financiera es discutible; idealmente la app debería tener una capa de auth o usar un endpoint serverless con service_role. NO romper sin coordinar con Sam (rompería el dashboard de costos). Decisión de diseño pendiente, no fix de seguridad urgente.",
@@ -135,8 +191,13 @@
       "object": "public.ops_services",
       "object_type": "table",
       "credential": "anon",
-      "operations": ["select"],
-      "caller": { "repo": "unrlvl-ops", "file": "unrlvl-ops/src/hooks/useData.ts" },
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "unrlvl-ops",
+        "file": "unrlvl-ops/src/hooks/useData.ts"
+      },
       "intentional": true,
       "verified_in": "unrlvl-ops/src/hooks/useData.ts — dbGet('ops_services', 'active=eq.true').",
       "last_verified_sha": "session-2026-06-03"
@@ -145,8 +206,13 @@
       "object": "public.ops_thresholds",
       "object_type": "table",
       "credential": "anon",
-      "operations": ["select"],
-      "caller": { "repo": "unrlvl-ops", "file": "unrlvl-ops/src/hooks/useData.ts" },
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "unrlvl-ops",
+        "file": "unrlvl-ops/src/hooks/useData.ts"
+      },
       "intentional": true,
       "verified_in": "unrlvl-ops/src/hooks/useData.ts — dbGet('ops_thresholds', 'active=eq.true').",
       "last_verified_sha": "session-2026-06-03"
@@ -155,8 +221,13 @@
       "object": "public.ops_compute_cost",
       "object_type": "function_security_definer",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "lab-worker (EF)", "file": "lab-worker Edge Function" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "lab-worker (EF)",
+        "file": "lab-worker Edge Function"
+      },
       "intentional": true,
       "verified_in": "Confirmado en sesión previa: lab-worker llama ops_compute_cost con service_role. unrlvl-ops NO la usa (escribe la tabla ops_costs directo). REVOKE PUBLIC/anon aplicado 2026-06-03.",
       "last_verified_sha": "session-2026-06-03"
@@ -165,8 +236,13 @@
       "object": "public.ops_log_generation",
       "object_type": "function_security_definer",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "lab-worker (EF)", "file": "lab-worker Edge Function" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "lab-worker (EF)",
+        "file": "lab-worker Edge Function"
+      },
       "intentional": true,
       "verified_in": "lab-worker llama ops_log_generation con service_role. REVOKE PUBLIC/anon aplicado 2026-06-03.",
       "last_verified_sha": "session-2026-06-03"
@@ -175,8 +251,14 @@
       "object": "public.ops_generation_ledger",
       "object_type": "table",
       "credential": "service_role",
-      "operations": ["insert", "select"],
-      "caller": { "repo": "lab-worker (EF)", "file": "lab-worker Edge Function" },
+      "operations": [
+        "insert",
+        "select"
+      ],
+      "caller": {
+        "repo": "lab-worker (EF)",
+        "file": "lab-worker Edge Function"
+      },
       "intentional": true,
       "verified_in": "Tabla de ledger del pipeline. Policy 'service_role_all_ledger' mal nombrada (rol=public en vez de service_role) pero anon no tiene grants de tabla, así que no es explotable hoy.",
       "security_note": "WARN cosmético: policy con USING(true) y nombre engañoso. anon sin grants de tabla -> no explotable. Renombrar/recrear policy como limpieza futura. NO confundir con ops_costs (tabla de la app interna).",
@@ -186,8 +268,13 @@
       "object": "public.fire_stage",
       "object_type": "function_security_definer",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "pipeline interno", "file": "uso server-side" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "pipeline interno",
+        "file": "uso server-side"
+      },
       "intentional": true,
       "verified_in": "Hace net.http_post a URL arbitraria (p_url) — riesgo SSRF si fuera anon. REVOKE PUBLIC/anon aplicado 2026-06-03. service_role conservado.",
       "last_verified_sha": "session-2026-06-03"
@@ -196,8 +283,13 @@
       "object": "public.dispatch_lab_job",
       "object_type": "function_security_definer",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "ruta RPC manual (alternativa al trigger)", "file": "no en pipeline activo (trigger_lab_worker es la vía real)" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "ruta RPC manual (alternativa al trigger)",
+        "file": "no en pipeline activo (trigger_lab_worker es la vía real)"
+      },
       "intentional": true,
       "verified_in": "El pipeline activo va por trigger lab_jobs_trigger_worker, NO por dispatch_lab_job. Es ruta alternativa. REVOKE PUBLIC/anon aplicado 2026-06-03; GRANT a service_role restaurado.",
       "last_verified_sha": "session-2026-06-03"
@@ -206,8 +298,13 @@
       "object": "public.upsert_shopify_store",
       "object_type": "function_security_definer",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "shopify-oauth (EF)", "file": "shopify-oauth Edge Function" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "shopify-oauth (EF)",
+        "file": "shopify-oauth Edge Function"
+      },
       "intentional": true,
       "verified_in": "shopify-oauth llama rpc/upsert_shopify_store con service_role. Escribe access tokens sin validación interna -> peligrosa si fuera anon. REVOKE PUBLIC/anon aplicado 2026-06-03.",
       "last_verified_sha": "session-2026-06-03"
@@ -216,8 +313,13 @@
       "object": "public.get_shopify_store / get_shopify_store_by_domain / get_shopify_store_full / list_connected_stores / save_theme_snapshot / save_audit_run_v9 / save_shopify_audit_run / get_latest_audit",
       "object_type": "function_security_definer_group",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "unrlvl-shopify-mcp + shopify-audit EFs", "file": "MCP de Shopify y Edge Functions de auditoría" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "unrlvl-shopify-mcp + shopify-audit EFs",
+        "file": "MCP de Shopify y Edge Functions de auditoría"
+      },
       "intentional": true,
       "verified_in": "Consumidas por el MCP de Shopify y las EFs shopify-audit, todas service_role. REVOKE PUBLIC/anon aplicado 2026-06-03 al grupo.",
       "last_verified_sha": "session-2026-06-03"
@@ -226,8 +328,13 @@
       "object": "public.invalidate_brand_cache / invalidate_all_brand_caches / professor_cache_cleanup / content.compile_brand_context",
       "object_type": "function_security_definer_group",
       "credential": "service_role",
-      "operations": ["execute"],
-      "caller": { "repo": "admin/cron server-side", "file": "no llamadas por front anon" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "admin/cron server-side",
+        "file": "no llamadas por front anon"
+      },
       "intentional": true,
       "verified_in": "CopyLab/queries.ts solo hace SELECTs + upsert_brand_cache; no llama invalidate_*. Administrativas/cron. REVOKE PUBLIC/anon aplicado 2026-06-03.",
       "last_verified_sha": "session-2026-06-03"
@@ -236,8 +343,13 @@
       "object": "trigger functions (tgfn_invalidate_brand_cache, tgfn_invalidate_all_brand_caches, trigger_lab_worker, update_df_jobs_updated_at, sync_profiler_to_crm, content.invalidate_cache_brand_root, content.invalidate_cache_child_table)",
       "object_type": "function_trigger_group",
       "credential": "n/a (owner)",
-      "operations": ["execute"],
-      "caller": { "repo": "Postgres (triggers)", "file": "disparadas internamente por triggers" },
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "Postgres (triggers)",
+        "file": "disparadas internamente por triggers"
+      },
       "intentional": true,
       "verified_in": "Funciones de trigger — corren como owner, nunca por RPC. REVOKE PUBLIC/anon aplicado 2026-06-03 sin impacto (no necesitan grant a service_role).",
       "last_verified_sha": "session-2026-06-03"
@@ -246,19 +358,122 @@
       "object": "ImageLab front (read-only)",
       "object_type": "note",
       "credential": "anon",
-      "operations": ["select"],
-      "caller": { "repo": "ImageLab", "file": "src/lib/supabaseClient.ts (sbSelect only)" },
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "ImageLab",
+        "file": "src/lib/supabaseClient.ts (sbSelect only)"
+      },
       "intentional": true,
       "verified_in": "ImageLab/src/lib/supabaseClient.ts expone solo sbSelect (GET). api/execute.ts usa SUPABASE_SERVICE_ROLE_KEY. No llama ninguna función del lote. VideoLab seguirá el mismo patrón.",
       "last_verified_sha": "session-2026-06-03"
+    },
+    {
+      "object": "public.humanize_profiles",
+      "object_type": "table",
+      "credential": "anon",
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "SocialLab",
+        "file": "src/services/socialLabLoader.ts (loadSocialLabData) + VideoLab/ImageLab loaders"
+      },
+      "intentional": true,
+      "verified_in": "SocialLab/src/services/socialLabLoader.ts — sbFetch('humanize_profiles', 'select=...&active=eq.true') con VITE_SUPABASE_ANON_KEY. Read-only con fallback hardcodeado.",
+      "security_note": "Lectura anon de tabla de configuracion de marca (no datos sensibles). Patron brand-content estandar. OK.",
+      "last_verified_sha": "session-2026-06-03"
+    },
+    {
+      "object": "public.brand_social_accounts",
+      "object_type": "table",
+      "credential": "anon",
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "SocialLab",
+        "file": "src/services/copyLabBridge.ts (loadBrandSocialAccounts)"
+      },
+      "intentional": "debatable",
+      "verified_in": "SocialLab/src/services/copyLabBridge.ts — fetch /rest/v1/brand_social_accounts?brand_id=eq... con VITE_SUPABASE_ANON_KEY. Read-only.",
+      "security_note": "TABLA NUEVA no en map v1. Lectura anon de handles/cuentas sociales por marca (is_connected, is_primary, status). Revisar en bloque 2 si esta tabla guarda tokens/secretos de plataforma — si asi fuera, NO debe ser anon-readable. Por ahora los campos leidos son no-sensibles (handle, name, status).",
+      "last_verified_sha": "session-2026-06-03",
+      "db_cross_check": "RLS on. anon SIN grant de tabla pero con 2 policies SELECT anon DUPLICADAS (anon_read + brand_social_accounts_read_anon). Como falta el grant de tabla, las policies son inertes via PostgREST -> el bridge (que lee con anon y tiene catch->[]) probablemente degrada silenciosamente a array vacio. POSIBLE BUG LATENTE: el codigo espera leer con anon pero no hay grant. Confirmar si el feature de cuentas sociales funciona en prod. NO tocado."
+    },
+    {
+      "object": "public.scheduled_posts",
+      "object_type": "table",
+      "credential": "service_role",
+      "operations": [
+        "insert",
+        "select",
+        "update"
+      ],
+      "caller": {
+        "repo": "SocialLab",
+        "file": "api/execute.ts (insert pending_publish) + api/publish.ts (select/update -> published/failed)"
+      },
+      "intentional": true,
+      "verified_in": "SocialLab/api/execute.ts y api/publish.ts — ambos usan SUPABASE_SERVICE_ROLE_KEY (nota explicita: VITE_ no existe en runtime serverless). execute inserta status='pending_publish'; publish lee pending y actualiza a published/failed tras publicar via Meta MCP.",
+      "security_note": "TABLA NUEVA no en map v1. Cola de publicacion. service_role server-side. Verificar en bloque 2 que scheduled_posts tiene RLS habilitada (es server-side-only, no deberia tener policies anon).",
+      "last_verified_sha": "session-2026-06-03",
+      "db_cross_check": "RLS on. anon SIN grant de tabla. Tiene policy 'scheduled_posts_read_anon[anon:SELECT]' (inerte sin grant) y 'service_only_insert_posts' con rol=public en vez de service_role (mal-nombrada, mismo patron que ops_generation_ledger). Funciona porque publish/execute usan service_role (bypasea RLS). No es agujero (anon sin grant), pero policies cosmeticas a limpiar."
+    },
+    {
+      "object": "Meta MCP (ig_create_container, ig_publish_container, fb_publish_post)",
+      "object_type": "external_mcp",
+      "credential": "n/a (MCP)",
+      "operations": [
+        "publish"
+      ],
+      "caller": {
+        "repo": "SocialLab",
+        "file": "api/publish.ts (mcpCall a META_MCP_URL)"
+      },
+      "intentional": true,
+      "verified_in": "SocialLab/api/publish.ts — POST jsonrpc a unrlvl-meta-mcp.vercel.app. Publica IG (container 2 pasos) y FB. TikTok/LinkedIn aun no soportados.",
+      "last_verified_sha": "session-2026-06-03"
+    },
+    {
+      "object": "VideoLab front (read-only): brands, person_blueprints, location_blueprints",
+      "object_type": "note",
+      "credential": "anon",
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "VideoLab",
+        "file": "src/services/videoLabLoader.ts (loadVideoLabData, 3 queries paralelas)"
+      },
+      "intentional": true,
+      "verified_in": "VideoLab/src/services/videoLabLoader.ts — sbFetch con VITE_SUPABASE_ANON_KEY sobre brands/person_blueprints/location_blueprints, todas SELECT con active=eq.true y fallback hardcodeado. Mismo patron read-only que ImageLab.",
+      "last_verified_sha": "session-2026-06-03"
+    },
+    {
+      "object": "VideoLab api/execute.ts — NO toca Supabase",
+      "object_type": "note",
+      "credential": "n/a",
+      "operations": [],
+      "caller": {
+        "repo": "VideoLab",
+        "file": "api/execute.ts"
+      },
+      "intentional": true,
+      "verified_in": "VideoLab/api/execute.ts — worker puro de Kling AI (text2video submit/poll, JWT HS256 con KLING_ACCESS_KEY/SECRET_KEY). No usa Supabase. Output fluye via Orchestrador. VideoLab confirma el patron: front anon read-only + serverless que llama al motor IA sin escribir DB directo.",
+      "last_verified_sha": "session-2026-06-03"
     }
   ],
-
   "open_items_for_full_audit": [
-    "Poblar los repos no cubiertos: SocialLab, WebLab, VoiceLab, VideoLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject, los MCP, forumphs-*, DDMV-Assistant, XMMs.",
-    "Confirmar policies exactas de content_sequence_pieces y content_sequences (¿USING(true)?).",
-    "Decisión de diseño sobre ops_costs: ¿mantener anon write/delete o mover a endpoint serverless con service_role?",
+    "BLOQUE 2 (pendiente): WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject, los MCP (shopify/supabase/meta), forumphs-*, DDMV-Assistant, XMMs.",
+    "Confirmar policies/RLS exactas de las tablas nuevas: scheduled_posts (debe ser service_role-only), brand_social_accounts (verificar que NO exponga tokens de plataforma a anon), humanize_profiles.",
+    "Confirmar policies de content_sequence_pieces y content_sequences (de v1).",
+    "Decision de diseno sobre ops_costs: mantener anon write/delete o mover a serverless con service_role.",
     "Renombrar policy service_role_all_ledger en ops_generation_ledger.",
-    "Regenerar db/UNRLVL_Supabase_Schema.md desde la DB real (list_tables) o deprecarlo."
+    "Regenerar db/UNRLVL_Supabase_Schema.md desde la DB real (list_tables) o deprecarlo.",
+    "Verificar en DB que existen las columnas videolab_* en brands (el loader las asume; si no existen, el SELECT las ignora pero conviene confirmar).",
+    "LIMPIEZA: brand_social_accounts tiene 2 policies SELECT anon duplicadas + posible falta de grant anon (bug latente del bridge). Resolver: o anadir grant si el feature debe funcionar con anon, o quitar policies si es server-side.",
+    "LIMPIEZA: scheduled_posts policy 'service_only_insert_posts' tiene rol=public en vez de service_role; y policy anon SELECT inerte. Renombrar/recrear."
   ]
 }
