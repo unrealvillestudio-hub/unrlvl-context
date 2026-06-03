@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.2 · 2026-05-26 · Mantenido por: Claude_
+_Versión: 1.3 · 2026-06-03 · Mantenido por: Claude_
 
 ---
 
@@ -31,6 +31,15 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `agent-browser` | `skills/agent-browser/SKILL.md` | Automatización de browser, scraping, testing web | UNRLVL infra — Claude Code principalmente |
 | `ecosystem-auditor` | `skills/ecosystem-auditor/SKILL.md` | Audit profundo del ecosistema — detectar drift entre código real y ecosystem.json | UNRLVL infra — bajo demanda |
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
+| `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
+
+---
+
+## NOTAS DE VERSIÓN v1.3
+
+**Cambios respecto a v1.2:**
+- `supabase-auditor` → nuevo skill v1.0 · 2026-06-03 · cruce código↔DB, mantiene supabase_access_map.json
+- `security` → actualizado a v1.1 (corrige drift ops_costs + tokens Shopify; delega fuente de verdad de acceso a supabase_access_map.json)
 
 ---
 
@@ -75,6 +84,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - `higgsfield` — solo si hay generación visual en agenda
 - `agent-browser` — solo si hay tarea de automatización de browser
 - `ecosystem-auditor` / `ecosystem-updater` — solo bajo demanda explícita
+- `supabase-auditor` — solo bajo demanda del protocolo auditor (el cruce código↔DB es caro)
 
 ---
 
