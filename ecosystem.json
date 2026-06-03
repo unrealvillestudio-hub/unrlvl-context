@@ -1,21 +1,19 @@
 {
   "_meta": {
-    "version": "2026-06-02-v1",
+    "version": "2026-06-02-v2",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-05-31-v1",
+    "previous": "2026-06-02-v1",
     "last_session": {
       "date": "2026-06-02",
       "duration": "focused",
-      "conducted_by": "Claude Opus 4.8",
-      "status": "🎯 brand_voice_genome lucien_social v0.5 creado (voz hermana de lucien_editorial: mismo carácter, distinta respiración — el cuchillo, no el ensayo). Piloto manual Sam + Claude.",
+      "conducted_by": "Claude Sonnet 4.6",
+      "status": "🎯 brand_voice_genome sam_personal v0.5 creado — SamPublisher health yellow→green. Nota fantasma lucien_editorial eliminada. 4 genomas activos en el ecosistema.",
       "key_achievements": [
-        "lucien_social v0.5 INSERTADO en brand_voice_genome (id 5b571b08-61bc-45f9-966a-3121eef126f0) — 9 dimensiones verificadas, activo",
-        "Voz hermana de lucien_editorial: comparte temperamento (filo 9/10, übermensch motor interno nunca citado, cerilla quema la manta no al lector, revelación no agresión) y difiere en respiración (social muerde corto ≤280, editorial respira largo)",
-        "Alcance social: terreno PROPIO de Lucien — Meta FB/IG + TikTok (solo texto) + X. luciensael.com excluido (editorial). Video/voz de TikTok excluido (futuro lucien_video, evita choque de cadencia hablada lenta vs escrita cortada)",
-        "Regla cita-por-destino: Lucien no publica en LinkedIn (sin cuenta, por diseño); llega solo citado por voceros Sam/UNRLVL; el genoma de la cita lo elige el destino del redirect (X/Meta/TikTok → social; .com o nativo sin redirect → editorial)",
-        "Estado real de cuentas Lucien: Orchestrator probado para UNREALville en Meta+TikTok; LucienSael NO probado en ninguna plataforma → manual-until-verified",
-        "lucien_editorial (919e3707) INTACTO — sin colisión, ambas voces activas (unique brand_id+voice_id+version respetado)",
-        "5 learnings capturados en Professor (escala relevance_score confirmada 1–5, no 1–10)"
+        "sam_personal v0.5 INSERTADO en brand_voice_genome — SamPublisher health yellow→green (condición cumplida: genoma existe)",
+        "SamPublisher = 4to genoma del ecosistema propio: sam_personal + lucien_editorial + lucien_social + unrlvl_default",
+        "Nota fantasma 'brands table did not return a row for id=LucienSael' eliminada de lucien_editorial.notes en DB (deuda desde 06-01, cerrada)",
+        "brands/SamPublisher/ creado en repo (brand.json + session_log.md)",
+        "5 learnings capturados en Professor (sam/voz: filo-por-función, evidencia vs autopercepción, vocero doble-fuente, anti-canibalización por eje, veto estratégico)"
       ]
     }
   },
@@ -36,7 +34,7 @@
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
     "web_status": "BLOG v1.0 BUILT (home+blog+1 artículo molde) — GREENFIELD: no repo/Vercel/DNS. Paquete listo para Claude Code.",
-    "voice_genome": "✅ 2 VOCES ACTIVAS en brand_voice_genome v0.5 — lucien_editorial (919e3707, blog/ensayo/long-form) + lucien_social (5b571b08, Meta FB/IG + TikTok texto + X, short reactive). Mismo temperamento, distinta respiración. DEUDA menor: corregir nota falsa de brands table en lucien_editorial.notes. Pendiente futuro: lucien_video (guion hablado TikTok/Reels) cuando VideoLab.",
+    "voice_genome": "✅ 2 VOCES ACTIVAS en brand_voice_genome v0.5 — lucien_editorial (919e3707, blog/ensayo/long-form) + lucien_social (5b571b08, Meta FB/IG + TikTok texto + X, short reactive). Mismo temperamento, distinta respiración. Pendiente futuro: lucien_video (guion hablado TikTok/Reels) cuando VideoLab.",
     "platforms": "Meta (FB+IG) con token a nivel ecosystem, pero canal LucienSael NO probado en pipeline (manual-until-verified). TikTok solo texto. X en apertura escalonada anti-baneo, manual sin API. LinkedIn NO es plataforma de Lucien (solo cita vía voceros Sam/UNRLVL). RIESGO ~80%: primer publish LucienSael por Orchestrator tocará blocker brand_id mapping (tipo test b93627b6) — verificar/insertar fila LucienSael en meta_accounts antes del primer publish."
   },
   "brands": [
@@ -168,6 +166,22 @@
       "type": "brand",
       "market": "Panama",
       "status": "active"
+    },
+    {
+      "id": "SamPublisher",
+      "name": "SamPublisher",
+      "type": "personal_brand",
+      "market": "Global — Meta(FB) + LinkedIn",
+      "status": "active",
+      "health": "green",
+      "voice_genome": {
+        "voice_id": "sam_personal",
+        "version": "0.5",
+        "maturity": "v0.5",
+        "active": true,
+        "channels": "Meta(FB) + LinkedIn",
+        "role": "Personal public voice + vocero Lucien/UNRLVL"
+      }
     },
     {
       "id": "UnrealvilleStudio",
@@ -339,6 +353,9 @@
         ],
         "rows_UnrealvilleStudio": [
           "unrlvl_default v1.0 — Defiant precision"
+        ],
+        "rows_SamPublisher": [
+          "sam_personal v0.5 — Meta(FB) + LinkedIn — personal public voice + vocero Lucien/UNRLVL — active (creado 2026-06-02)"
         ]
       }
     }
@@ -523,10 +540,9 @@
     "🔴 Implementar Fase Voice Genome en OnboardingApp (spec lista) vía Claude Code — incluir derivación de voz social desde editorial + modo cita para voceros",
     "🟡 SocialLab dual-mode — confirmar/implementar sync+async, re-test publicación post brand_id fix",
     "🟡 Crear cuentas LinkedIn + X para Lucien (apertura escalonada anti-baneo, en curso). Nota: LinkedIn NO es plataforma de publicación de Lucien — solo cita vía voceros Sam/UNRLVL",
-    "🟡 GENOMA DE SAM (sesión futura) — voz personal Sam para Meta FB + LinkedIn + X. DEBE incluir 'modo vocería' que referencie lucien_editorial + lucien_social por destino (sostiene el device 'He recibido un mensaje de Lucien')",
+    "✅ GENOMA DE SAM COMPLETO — sam_personal v0.5 activo (2026-06-02). Meta(FB) + LinkedIn. Modo vocería codificado. Promover a v1.0 tras validar contra 8-10 posts reales.",
     "🟡 GENOMA SOCIAL DE UNRLVL (sesión futura) — Meta FB/IG + TikTok + LinkedIn + .com, mismo modo vocería",
     "🟡 lucien_video (sesión futura) — guion hablado TikTok/Reels cuando VideoLab/Kling.ai; cadencia hablada lenta (0.88 barítono) separada del social escrito",
-    "🟡 Corregir lucien_editorial.notes (quitar mención falsa 'brands table did not return a row' — deuda desde 06-01)",
     "🟡 SESIÓN DEDICADA — Context System refactor (adelgazar ecosystem.json + crear CAPABILITIES.md — CAPABILITIES.md ya creado). Plan en protocols/CONTEXT_SYSTEM_REFACTOR_PLAN.md. Arrancar con 'ecosystem audit' identificativo. RIESGO ALTO: toca fuente de verdad y arranque de sesiones — hacer con foco.",
     "🔴 PRIORIDAD 1 — fphs-formalize sprint: replicar calidad acta manual (98% Ivette) en DF. Comparar ACTA_No1-2026 vs ACTA_OR_1-2026. Ajustar EF Supabase.",
     "🔴 PRIORIDAD 2 — Verificar 129 unidades habilitadas Luxor 300 → si ≤127, regenerar acta con % correcto",
