@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-06-05-v3",
-    "previous": "2026-06-03-v2",
+    "version": "2026-06-05-v4",
+    "previous": "2026-06-05-v3",
     "maintained_by": "Claude (supabase-auditor)",
     "purpose": "Mapa de acceso a Supabase: para cada objeto (tabla/función/vista) registra qué app del ecosistema lo consume, con qué credencial (anon/service_role/PUBLIC), en qué operación, y si ese acceso es intencional. Es la fuente de verdad para interpretar los Security Advisors de Supabase: distingue un WARN de diseño (intencional) de un agujero real.",
     "linked_to": {
@@ -9,8 +9,8 @@
       "relationship": "referencia, no merge. ecosystem_graph modela topología de negocio (qué lab alimenta a cuál). Este mapa modela topología de acceso (credencial -> objeto -> operación). Se enlazan por nombre de nodo (repo/lab) pero se versionan por separado.",
       "join_key": "caller.repo coincide con los nodos LAB-* / APP-* del ecosystem_graph"
     },
-    "coverage": "partial",
-    "coverage_note": "Bloque 2 sub-tanda A cerrada (2026-06-05): labs/apps restantes. Procesado total: [bloque1] Orchestrator, CopyLab, ImageLab, SocialLab, VideoLab; [bloque2-A] WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject. PENDIENTE sub-tanda B: MCPs (shopify/supabase/meta), forumphs-*, DDMV-Assistant, XMMs. coverage->full al cerrar B.",
+    "coverage": "substantial",
+    "coverage_note": "v4 (2026-06-05): NUCLEO del ecosistema mapeado. Cubierto: bloque1 (Orchestrator, CopyLab, ImageLab, SocialLab, VideoLab) + bloque2-A (WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject) + bloque2-B (4 MCPs: supabase/meta/shopify/fphs-proxy, forumphs-document-factory, DDMV-Assistant=XMMs). Solo 2 proyectos Supabase: unrlvl-db (amlvyycfepwhiindxgzw) y XMMs (puoybldykxqvhvtnwrld). NO abiertos (secundarios, cobertura pendiente): forumphs-ops, forumphs-speaks, forumphs-com, luciensael, lanzadera-cv, gimnasio-mental, Shopify. coverage='substantial': el nucleo operativo esta completo; faltan apps secundarias ForumPHs y sitios sueltos.",
     "project": {
       "name": "unrlvl-db",
       "id": "amlvyycfepwhiindxgzw"
@@ -23,8 +23,10 @@
     "intentional_legend": {
       "true": "el acceso es parte del diseño (ej. dual-mode sync de los labs con anon). NO revocar aunque el advisor lo marque WARN.",
       "false": "vestigial o erróneo. Candidato a revocar/cerrar.",
-      "debatable": "funciona y es usado, pero el patrón es discutible y merece revisión de diseño (no urgencia de seguridad)."
-    }
+      "debatable": "funciona y es usado, pero el patrón es discutible y merece revisión de diseño (no urgencia de seguridad).",
+      "aspirational": "el codigo intenta este acceso pero la DB no lo concede todavia, y la via nunca se ha ejercido en prod. No es bug ni agujero; es una intencion de diseno pendiente de activar. Revisar solo si se activa el flujo."
+    },
+    "critical_alert": "HALLAZGO CRITICO sub-tanda B (2026-06-05): CUATRO MCPs (supabase, meta, shopify, fphs-proxy) estan SIN AUTENTICACION (mismo defecto de diseno). El de Supabase es el peor: execute_sql/apply_migration/deploy_edge_function con un token de Management API, abierto sin auth -> lectura/escritura total de la DB y ANULA todo el trabajo RLS. Meta: gasto en ads + publicaciones. Shopify: Admin API completa (pedidos, productos, precios). Ver non_supabase_findings. PRIORIDAD MAXIMA."
   },
   "design_principles": {
     "dual_mode_sync": "Los labs (CopyLab, ImageLab, Orchestrator) operan en modo dual sync/async. El modo sync escribe a Supabase directamente desde el browser con la ANON key. Por diseño, ciertas funciones SECURITY DEFINER y policies permisivas con anon son NECESARIAS y aparecerán perpetuamente como WARN en el advisor. Este mapa las marca intentional=true para que no se revoquen por error.",
@@ -281,7 +283,7 @@
       "caller": { "repo": "SocialLab", "file": "api/execute.ts (insert pending_publish) + api/publish.ts (select/update -> published/failed)" },
       "intentional": true,
       "verified_in": "SocialLab/api/execute.ts y api/publish.ts — ambos usan SUPABASE_SERVICE_ROLE_KEY (nota explicita: VITE_ no existe en runtime serverless). execute inserta status='pending_publish'; publish lee pending y actualiza a published/failed tras publicar via Meta MCP.",
-      "security_note": "TABLA NUEVA no en map v1. Cola de publicacion. service_role server-side. Verificar en bloque 2 que scheduled_posts tiene RLS habilitada (es server-side-only, no deberia tener policies anon).",
+      "security_note": "TABLA NUEVA no en map v1. Cola de publicacion. service_role server-side.",
       "last_verified_sha": "session-2026-06-03",
       "db_cross_check": "RLS on. anon SIN grant de tabla. Tiene policy 'scheduled_posts_read_anon[anon:SELECT]' (inerte sin grant) y 'service_only_insert_posts' con rol=public en vez de service_role (mal-nombrada, mismo patron que ops_generation_ledger). Funciona porque publish/execute usan service_role (bypasea RLS). No es agujero (anon sin grant), pero policies cosmeticas a limpiar."
     },
@@ -356,7 +358,7 @@
       "caller": { "repo": "AgentLab", "file": "api/webhooks/whatsapp/[agentId].ts (getAgentConfig)" },
       "intentional": true,
       "verified_in": "AgentLab/api/webhooks/whatsapp/[agentId].ts usa SUPABASE_SERVICE_KEY, lee agents (system_prompt, brand_id, name) para responder via Claude+WhatsApp. Webhook verifica token Meta per-agent (WA_VERIFY_TOKEN_[AGENTID]). WA access tokens en env per-agent (WA_ACCESS_TOKEN_[AGENTID]).",
-      "security_note": "TABLA NUEVA. service_role server-side. agents.system_prompt podria contener info de marca — verificar que la tabla agents tiene RLS y NO es anon-readable (contiene prompts y brand config). Pendiente cross-check DB.",
+      "security_note": "TABLA NUEVA. service_role server-side. system_prompts protegidos (ver db_cross_check).",
       "last_verified_sha": "session-2026-06-05",
       "db_cross_check": "RLS on, anon SIN grant de tabla, policy 'anon read agents[anon:SELECT:U_TRUE]' (inerte sin grant) + 'service write agents'. agents NO es anon-readable en la practica (sin grant). Correcto: el webhook usa service_role. system_prompts protegidos."
     },
@@ -379,7 +381,7 @@
       "caller": { "repo": "AgentLab", "file": "apps/assistant/api/chat.js, export.js, history.js, migrate.js" },
       "intentional": true,
       "verified_in": "AgentLab/apps/assistant/api/chat.js — persiste en @vercel/kv (claves chat:, raw_log:, agent_log:SOCIAL-MEDIA-AGENT, log_registry:). Auth por ACCESS_TOKENS env (formato TOKEN:nombre:rol:expiry, roles admin/po/ops). Es el SMA que asiste a Patricia Osorio (Neurone SCF). Su /api/export (con secret) es el que consume el protocolo Actualiza.",
-      "security_note": "NO toca Supabase — subsistema KV aparte. Relevante para ecosystem_graph (no para access_map de Supabase). Auth es por tokens custom en env, no por Supabase Auth. El system prompt incluye toda la doc de infraestructura digital de Neurone SCF (no secretos, pero si IP operativa).",
+      "security_note": "NO toca Supabase — subsistema KV aparte. Auth es por tokens custom en env, no por Supabase Auth.",
       "last_verified_sha": "session-2026-06-05"
     },
     {
@@ -390,7 +392,7 @@
       "caller": { "repo": "BlueprintLab", "file": "src/services/blueprintLabLoader.ts (sbUpsertRaw POST, sbDelete DELETE, sbGet) — el ESCRITOR de blueprints. Resto de labs son lectores." },
       "intentional": "debatable",
       "verified_in": "BlueprintLab/src/services/blueprintLabLoader.ts usa VITE_SUPABASE_ANON_KEY con POST (merge-duplicates) y DELETE sobre las 4 tablas. brand_copy_profiles es TABLA NUEVA.",
-      "db_cross_check": "CONTRADICCION CODIGO<>DB (hallazgo alto valor): las 4 tablas tienen anon SOLO con SELECT (grant + policies). El codigo de BlueprintLab hace INSERT/UPDATE/DELETE con anon -> esos upsert/delete FALLAN en produccion (401/403). Implicacion: o BlueprintLab esta ROTO para guardar/borrar desde la UI (y los blueprints se crean por otra via: Claude Code/SQL directo), o falta agregar grants. NO es agujero de seguridad: el DELETE anon esta correctamente bloqueado (sin grant). Es bug FUNCIONAL. brand_copy_profiles y product_blueprints tienen SELECT USING(true) -> lectura publica de blueprints (config marca, no sensible, aceptable). person/location_blueprints: policy copylab_read[public:SELECT].",
+      "db_cross_check": "CONTRADICCION CODIGO<>DB (hallazgo alto valor): las 4 tablas tienen anon SOLO con SELECT (grant + policies). El codigo de BlueprintLab hace INSERT/UPDATE/DELETE con anon -> esos upsert/delete FALLAN en produccion (401/403). NO es agujero de seguridad: el DELETE anon esta correctamente bloqueado (sin grant). Es bug FUNCIONAL o codigo aspiracional.",
       "security_note": "Sin riesgo de escritura/borrado anon (DB lo bloquea). Decision para Sam: BlueprintLab guarda desde la UI? Si si, falta grant; si no, el guardado va por otra via y el codigo REST es vestigial.",
       "last_verified_sha": "session-2026-06-05"
     },
@@ -400,9 +402,9 @@
       "credential": "anon",
       "operations": ["select (DB permite)", "upsert/update (CODIGO intenta, DB NO permite)"],
       "caller": { "repo": "OnboardingApp", "file": "src/lib/brandWriter.ts (writeBrandToSupabase) + supabaseClient.ts (sbUpsert/sbUpdate)" },
-      "intentional": "debatable",
+      "intentional": "aspirational",
       "verified_in": "OnboardingApp/src/lib/brandWriter.ts hace sbUpsert con VITE_SUPABASE_ANON_KEY a 8 tablas al crear marca nueva. brand_goals, brand_personas, geomix son TABLAS NUEVAS.",
-      "db_cross_check": "MISMO PATRON QUE BlueprintLab: las 8 tablas tienen anon SOLO SELECT. Los 8 UPSERT con anon FALLAN (DB no concede INSERT/UPDATE anon). En 'brands' hay policy admin_write[public:ALL] PERO anon solo tiene grant SELECT de tabla -> el grant es el techo, anula la policy: anon NO puede escribir brands. Implicacion: OnboardingApp no puede crear marcas con anon desde la UI -> o el alta real va por Claude Code/SQL, o el writer es vestigial, o esta roto. SEGURIDAD: tranquilizador — NO hay escritura anon a la tabla maestra brands ni a tablas de marca.",
+      "db_cross_check": "MISMO PATRON QUE BlueprintLab: las 8 tablas tienen anon SOLO SELECT. Los 8 UPSERT con anon FALLAN (DB no concede INSERT/UPDATE anon). En 'brands' hay policy admin_write[public:ALL] PERO anon solo tiene grant SELECT de tabla -> el grant es el techo, anula la policy: anon NO puede escribir brands. SEGURIDAD: tranquilizador — NO hay escritura anon a la tabla maestra brands ni a tablas de marca. [ACLARADO 2026-06-05 por Sam: OnboardingApp NUNCA se ha usado via UI; el alta de marcas la hace Sam directamente. => writeBrandToSupabase con anon es ASPIRACIONAL, NO roto. Mismo trato que BlueprintLab.]",
       "security_note": "Sin riesgo de escritura anon (DB bloquea). Decision para Sam: el onboarding de marcas nuevas escribe desde la UI o por otra via? Mismo dilema funcional que BlueprintLab.",
       "last_verified_sha": "session-2026-06-05"
     },
@@ -416,22 +418,151 @@
       "verified_in": "CoreProject tree: index.html/es/index.html (landing), legal/, protocols/clients/, brands/ForumPHs/assets/, .github/workflows (deploy Vercel/WP, Cloudflare WAF via cf_apply_waf.py). Sin src/, sin cliente Supabase, sin api/.",
       "security_note": "FLAG menor (no-Supabase): brands/ForumPHs/assets/clientes/PH_*/EEFF_2025/*.html contienen inteligencia financiera de comunidades de propietarios (datos sensibles de clientes ForumPHs) como estaticos en el repo. Si CoreProject se sirve publico en Vercel, verificar que /brands/ForumPHs/assets/clientes/ NO sea accesible por URL. Workflows Cloudflare usan secrets de GitHub Actions (no Supabase).",
       "last_verified_sha": "session-2026-06-05"
+    },
+    {
+      "object": "unrlvl-shopify-mcp: shopify_stores (view)",
+      "object_type": "mcp_server",
+      "credential": "service_role",
+      "operations": ["select", "update"],
+      "caller": { "repo": "unrlvl-shopify-mcp", "file": "lib/shopify.ts (getStore/listBrands SELECT), app/callback/route.ts (UPDATE access_token)" },
+      "intentional": true,
+      "verified_in": "unrlvl-shopify-mcp/lib/shopify.ts usa @supabase/supabase-js con SUPABASE_SERVICE_ROLE_KEY; lee shopify_stores (access_token, brand_context) para operar Shopify Admin API. app/callback/route.ts verifica HMAC con SHOPIFY_CLIENT_SECRET y hace UPDATE shopify_stores SET access_token (service_role) por shop_domain.",
+      "security_note": "Consumidor legitimo de la vista shopify_stores que aseguramos en P1 (sesion 2026-06-03). Usa service_role -> el security_invoker aplicado NO lo afecta. OAuth callback bien disenado (HMAC validado). NOTA: hay DOS caminos de escritura de tokens: este MCP usa UPDATE directo sobre la vista; la EF shopify-oauth usa rpc/upsert_shopify_store. Ambos service_role. VER non_supabase_findings: el endpoint MCP no tiene auth.",
+      "last_verified_sha": "session-2026-06-05"
+    },
+    {
+      "object": "unrlvl-meta-mcp: meta_accounts",
+      "object_type": "mcp_server",
+      "credential": "service_role",
+      "operations": ["select"],
+      "caller": { "repo": "unrlvl-meta-mcp", "file": "lib/meta.ts (getBrand/listBrands), app/api/mcp/[transport]/route.ts" },
+      "intentional": true,
+      "verified_in": "unrlvl-meta-mcp/lib/meta.ts usa SUPABASE_SERVICE_ROLE_KEY; lee meta_accounts (system_token, page_id, ig_user_id, ad_account_id) para operar Graph API. Es el MCP que SocialLab/publish.ts consume.",
+      "db_cross_check": "meta_accounts: RLS on, anon/authenticated SIN grant de tabla, policy service_role_only. system_token NO accesible por anon. Bien protegida (no es fuga de tokens como shopify_stores).",
+      "security_note": "Tabla Supabase OK. PERO ver hallazgo critico de auth del MCP en non_supabase_findings.",
+      "last_verified_sha": "session-2026-06-05"
+    },
+    {
+      "object": "unrlvl-supabase-mcp: TODA la DB (Management API)",
+      "object_type": "mcp_server",
+      "credential": "supabase_management_token (UNRLVL_SB_ACCESS_TOKEN)",
+      "operations": ["execute_sql", "apply_migration", "deploy_edge_function", "list_tables", "get_edge_function", "get_logs"],
+      "caller": { "repo": "unrlvl-supabase-mcp", "file": "api/mcp/[transport].ts" },
+      "intentional": true,
+      "verified_in": "unrlvl-supabase-mcp/api/mcp/[transport].ts usa UNRLVL_SB_ACCESS_TOKEN contra api.supabase.com/v1/projects/amlvyycfepwhiindxgzw. Expone execute_sql (SQL arbitrario), apply_migration (DDL), deploy_edge_function. Es el MCP que Claude usa para auditar/migrar.",
+      "db_cross_check": "N/A — opera por Management API (un nivel por ENCIMA de service_role). Ignora RLS por completo.",
+      "security_note": "VER non_supabase_findings: severidad MAXIMA. Sin auth. Anula todo el trabajo RLS.",
+      "last_verified_sha": "session-2026-06-05"
+    },
+    {
+      "object": "fphs-mcp-proxy: proxy al MCP oficial de Supabase (proyecto ForumPHs puoybldykxqvhvtnwrld)",
+      "object_type": "mcp_server",
+      "credential": "SUPABASE_FPHS_TOKEN",
+      "operations": ["proxy_all"],
+      "caller": { "repo": "fphs-mcp-proxy", "file": "api/mcp.js" },
+      "intentional": true,
+      "verified_in": "fphs-mcp-proxy/api/mcp.js (edge): reenvia TODO request entrante a mcp.supabase.com/mcp inyectando Authorization: Bearer SUPABASE_FPHS_TOKEN. Es el connector 'Supabase ForumPHs'.",
+      "security_note": "VER non_supabase_findings: mismo defecto, 4o MCP. Proxy sin auth que inyecta token al MCP oficial de Supabase -> acceso no autenticado a la DB de ForumPHs.",
+      "last_verified_sha": "session-2026-06-05"
+    },
+    {
+      "object": "public.df_jobs (forumphs-document-factory)",
+      "object_type": "table",
+      "credential": "anon",
+      "operations": ["select/insert/update (CODIGO intenta, DB NO permite)"],
+      "caller": { "repo": "forumphs-document-factory", "file": "lib/supabaseSession.ts (createJob POST, updateJob PATCH, loadJob GET)" },
+      "intentional": "debatable",
+      "verified_in": "forumphs-document-factory/lib/supabaseSession.ts apunta a amlvyycfepwhiindxgzw (unrlvl-db, NO el proyecto ForumPHs) con brand_id='ForumPHs', anon key, CRUD sobre df_jobs. Genera actas de comunidades de propietarios.",
+      "db_cross_check": "TRIPLE DESALINEACION: (1) codigo escribe df_jobs con anon; (2) comentario del propio archivo dice que debe ser 'service_role_only USING(false)'; (3) DB real tiene policies forumphs_insert/select/update para rol PUBLIC pero anon SIN grant de tabla -> policies inertes, escritura anon FALLA. Mismo patron BlueprintLab/OnboardingApp: codigo de escritura anon que la DB no concede. NO agujero (sin grant). Config inconsistente a limpiar.",
+      "security_note": "df_jobs guarda parsed/preflight/qa de actas de comunidades (datos de clientes ForumPHs) en unrlvl-db. Sin escritura/lectura anon efectiva (sin grant). Si se quisiera que document-factory funcione con anon, habria que dar grants — pero al ser datos de clientes, mejor moverlo a service_role via endpoint serverless.",
+      "last_verified_sha": "session-2026-06-05"
+    },
+    {
+      "object": "DDMV-Assistant: conversations, medications, appointments, reminders, conversation_flows, proactive_checks, reminder_log",
+      "object_type": "table_group",
+      "credential": "service_role",
+      "operations": ["select", "insert", "update", "upsert"],
+      "caller": { "repo": "DDMV-Assistant", "file": "lib/db.js (webhook Twilio + cron)" },
+      "intentional": "debatable",
+      "verified_in": "DDMV-Assistant/lib/db.js usa @supabase/supabase-js con SUPABASE_SERVICE_KEY. Asistente WhatsApp para 'Damaris' (TZ Panama): recordatorios de medicamentos/citas medicas, flujos conversacionales, checks proactivos. Server-side via webhook.",
+      "db_cross_check": "RESUELTO: solo existen 2 proyectos Supabase (unrlvl-db amlvyycfepwhiindxgzw y XMMs puoybldykxqvhvtnwrld). DDMV-Assistant ES la app del proyecto XMMs (asistente WhatsApp de la madre de Sam). Las tablas conversation_flows/reminders/proactive_checks a las que se habilito RLS el 2026-06-03 en XMMs son las de DDMV. ESTADO RLS XMMs: las 7 tablas con RLS ON. conversation_flows/reminders/proactive_checks: RLS on + 0 policies = bloqueadas a anon (solo service_role). conversations/medications/appointments/reminder_log: policy 'whitelist_madre_sam' que limita acceso anon a phone IN ('+507...','+34...') para cmd ALL.",
+      "security_note": "DATOS DE SALUD de persona mayor (medicamentos, citas, conversaciones). DDMV/webhook usa SERVICE_ROLE (no necesita grants anon). RIESGO RESIDUAL: anon+authenticated tienen TODOS los grants de tabla (incl. DELETE) en conversations/medications/appointments/reminder_log, acotados por la policy whitelist a 2 telefonos. Cualquiera con la anon key de XMMs + los numeros (ahora en texto plano en la policy) podria leer/modificar/borrar datos medicos. Riesgo bajo-medio, sensibilidad maxima. RECOMENDACION: si ningun front usa anon (el webhook es service_role), REVOCAR grants anon/authenticated en estas tablas -> elimina el riesgo residual sin afectar la operacion.",
+      "last_verified_sha": "session-2026-06-05"
     }
   ],
   "open_items_for_full_audit": [
-    "SUB-TANDA B (pendiente -> coverage:full): MCPs (unrlvl-shopify-mcp, unrlvl-supabase-mcp, unrlvl-meta-mcp), forumphs-*, DDMV-Assistant, XMMs.",
-    "Confirmar policies/RLS exactas de las tablas nuevas: scheduled_posts (debe ser service_role-only), brand_social_accounts (verificar que NO exponga tokens de plataforma a anon), humanize_profiles.",
-    "Confirmar policies de content_sequence_pieces y content_sequences (de v1).",
+    "PENDIENTE SECUNDARIOS (-> coverage:full): forumphs-ops, forumphs-speaks, forumphs-com, luciensael, lanzadera-cv, gimnasio-mental, Shopify (repos secundarios).",
+    "Confirmar policies exactas de content_sequence_pieces y content_sequences (de v1) — ¿USING(true)?",
     "Decision de diseno sobre ops_costs: mantener anon write/delete o mover a serverless con service_role.",
     "Renombrar policy service_role_all_ledger en ops_generation_ledger.",
     "Regenerar db/UNRLVL_Supabase_Schema.md desde la DB real (list_tables) o deprecarlo.",
-    "Verificar en DB que existen las columnas videolab_* en brands (el loader las asume; si no existen, el SELECT las ignora pero conviene confirmar).",
-    "LIMPIEZA: brand_social_accounts tiene 2 policies SELECT anon duplicadas + posible falta de grant anon (bug latente del bridge). Resolver: o anadir grant si el feature debe funcionar con anon, o quitar policies si es server-side.",
+    "Verificar en DB que existen las columnas videolab_* en brands.",
+    "LIMPIEZA: brand_social_accounts — 2 policies SELECT anon duplicadas + falta de grant anon (bug latente). Resolver: o dar grant si el feature debe funcionar con anon, o quitar policies si es server-side.",
     "LIMPIEZA: scheduled_posts policy 'service_only_insert_posts' tiene rol=public en vez de service_role; y policy anon SELECT inerte. Renombrar/recrear.",
-    "Cross-check DB: tabla 'agents' debe tener RLS y NO ser anon-readable (contiene system_prompts + brand config). RESUELTO en v3: RLS on, anon sin grant, system_prompts protegidos.",
-    "CRITICO FUNCIONAL: BlueprintLab (blueprintLabLoader.ts) intenta INSERT/UPDATE/DELETE con anon sobre person/location/product_blueprints + brand_copy_profiles, pero anon solo tiene SELECT. Confirmar con Sam si el guardado de blueprints desde la UI funciona. Si debe funcionar -> faltan grants/policies anon de escritura; si no -> el codigo REST de escritura es vestigial (se crea por Claude Code/SQL).",
-    "PATRON CONSOLIDADO: OnboardingApp + BlueprintLab son apps 'escritoras' cuyo codigo REST asume INSERT/UPDATE/DELETE anon que la DB NO concede (anon=SELECT only en todas las tablas de marca/blueprint). Decidir con Sam: completar el dual-mode (agregar grants/policies de escritura anon, con cuidado) o documentar que el alta/edicion va por Claude Code y el codigo REST de escritura es vestigial.",
+    "PATRON CONSOLIDADO [ACLARADO]: BlueprintLab + OnboardingApp tienen codigo REST que escribe con anon (INSERT/UPDATE/DELETE) pero anon=SELECT only en la DB. Sam confirmo (2026-06-05) que esas UIs NUNCA se han usado para escribir — el alta/edicion la hace el mismo via Claude Code/SQL. VEREDICTO: codigo de escritura ASPIRACIONAL, NO roto, NO agujero. ACCION FUTURA (solo si se activa la UI de escritura): agregar grants/policies anon de escritura con cuidado, tabla por tabla.",
     "FLAG no-Supabase: CoreProject sirve datos financieros de clientes ForumPHs (PH_*/EEFF_2025/*.html) como estaticos. Verificar que no sean accesibles por URL publica si el repo se despliega.",
+    "df_jobs (forumphs-document-factory): triple desalineacion codigo/comentario/DB. Datos de clientes ForumPHs en unrlvl-db. Decidir: serverless+service_role (recomendado) o grants anon. Limpiar las 3 policies public mal configuradas.",
+    "PRIVACIDAD (XMMs/DDMV): conversations/medications/appointments/reminder_log tienen grants anon completos (incl DELETE) acotados por policy whitelist_madre_sam a 2 telefonos. El webhook usa service_role, asi que anon probablemente no se necesita. RECOMENDADO revocar grants anon/authenticated en estas 4 tablas (datos de salud). Confirmar con Sam que ningun front las consume con anon.",
     "FLAG no-Supabase: WebLab draftService.ts + blueprintPush.ts reciben token GitHub — verificar que NO sea VITE_* (expuesto en bundle cliente). Si es client-side, fuga de credencial GitHub."
+  ],
+  "non_supabase_findings": [
+    {
+      "severity": "CRITICAL",
+      "component": "unrlvl-supabase-mcp",
+      "type": "missing_authentication",
+      "finding": "EL MAS GRAVE. unrlvl-supabase-mcp.vercel.app/api/mcp/mcp NO tiene auth: CORS '*', handler procesa tools/call directo sin verificar token/secreto. Expone execute_sql (SQL ARBITRARIO), apply_migration (DDL), deploy_edge_function (desplegar EFs con verify_jwt:false). Usa UNRLVL_SB_ACCESS_TOKEN = token de la Management API de Supabase (api.supabase.com), un nivel POR ENCIMA de service_role: control administrativo del proyecto entero.",
+      "impact": "Cualquiera con la URL puede: leer TODA la DB via execute_sql (incl. meta_accounts.system_token y shopify.stores.access_token -> TODOS los tokens que las RLS protegian quedan accesibles por esta via), borrar/alterar tablas, exfiltrar todo, desplegar Edge Functions maliciosas. ANULA todo el trabajo de RLS de la sesion 2026-06-03: el MCP ejecuta SQL con token de administracion que ignora RLS y esta abierto sin auth. Es el riesgo mas alto de toda la auditoria.",
+      "recommendation": "URGENTISIMO. Agregar auth obligatoria en el handler POST antes de procesar tools/call (bearer/secreto fuerte via env, enviado solo por Claude/clientes legitimos). Considerar ADEMAS: Vercel Deployment Protection (password/SSO) sobre los 3 MCPs como capa extra; rotar UNRLVL_SB_ACCESS_TOKEN despues de cerrar el agujero (pudo estar expuesto). Evaluar si estas URLs han sido accedidas (logs de Vercel).",
+      "verified_in": "unrlvl-supabase-mcp/api/mcp/[transport].ts (handler sin auth check)",
+      "found": "session-2026-06-05"
+    },
+    {
+      "severity": "CRITICAL",
+      "component": "fphs-mcp-proxy",
+      "type": "missing_authentication",
+      "finding": "4o MCP afectado. fphs-mcp-proxy/api/mcp.js reenvia CUALQUIER request entrante al MCP oficial de Supabase (mcp.supabase.com/mcp) inyectando SUPABASE_FPHS_TOKEN como Bearer, SIN verificar quien llama. Inyecta el token a ciegas a todo el que golpee el endpoint.",
+      "impact": "Acceso no autenticado al MCP oficial de Supabase del proyecto ForumPHs (puoybldykxqvhvtnwrld) con el token que tenga SUPABASE_FPHS_TOKEN. Mismo nivel de riesgo que unrlvl-supabase-mcp pero sobre la DB de ForumPHs.",
+      "recommendation": "Auth obligatoria en el proxy antes de reenviar. Rotar SUPABASE_FPHS_TOKEN. Mismo fix-pattern que los otros MCPs.",
+      "verified_in": "fphs-mcp-proxy/api/mcp.js",
+      "found": "session-2026-06-05"
+    },
+    {
+      "severity": "HIGH",
+      "component": "unrlvl-meta-mcp",
+      "type": "missing_authentication",
+      "finding": "El endpoint del Meta MCP (unrlvl-meta-mcp.vercel.app/api/mcp/mcp) NO tiene autenticacion. middleware.ts solo aplica CORS '*' (comentario explicito: 'cualquier cliente sin restricciones'). route.ts procesa tools/call sin verificar token/bearer/secreto. Cualquiera con la URL (no secreta: esta en config MCP, codigo SocialLab, ecosystem.json) puede ejecutar: ig/fb publish (postear en redes de cualquier marca), ads_create_campaign con daily_budget (GASTAR PRESUPUESTO), leer audiencias/pixels/insights. list_brands enumera todas las marcas sin brand_id. El servidor actua de proxy autenticado con el system_token de meta_accounts -> el atacante no necesita el token, el server lo aporta.",
+      "impact": "Riesgo financiero (gasto en ads) y reputacional (publicaciones no autorizadas) en todas las marcas con meta_accounts. No expone tokens directamente.",
+      "recommendation": "Agregar auth al MCP: verificar un secreto/bearer en route.ts (POST) antes de handleRpc, via env (p.ej. MCP_AUTH_TOKEN) que los clientes legitimos (SocialLab, Claude) envien en header Authorization. Revisar si Vercel deployment protection esta activa. Confirmar URGENTE con Sam.",
+      "verified_in": "unrlvl-meta-mcp/middleware.ts (solo CORS) + app/api/mcp/[transport]/route.ts (handleRpc sin auth check)",
+      "found": "session-2026-06-05"
+    },
+    {
+      "severity": "HIGH",
+      "component": "unrlvl-shopify-mcp",
+      "type": "missing_authentication",
+      "finding": "CONFIRMADO: el Shopify MCP route.ts NO verifica auth (igual que Meta MCP). handleRpc procesa tools/call directo. Expone shopify_get (leer orders.json = datos de clientes), shopify_post/put/delete (modificar/borrar productos, precios, colecciones) y shopify_graphql (cualquier mutation) con path/body ARBITRARIOS, usando el shpat_ token que el server saca de shopify_stores. Sin auth + URL conocida = acceso TOTAL a la Admin API de todas las tiendas (incluida NeuroneSCF, canal de ventas principal). app/auth/route.ts es el OAuth de instalacion, NO un guard del MCP.",
+      "impact": "Lectura de datos de clientes (pedidos), modificacion/borrado de catalogo y precios, cualquier mutation GraphQL en todas las tiendas Shopify. El mas grave de la auditoria.",
+      "recommendation": "MISMO fix que Meta MCP: auth obligatoria en route.ts POST antes de handleRpc (bearer/secreto via env, enviado por clientes legitimos). URGENTE.",
+      "verified_in": "unrlvl-shopify-mcp/app/api/mcp/[transport]/route.ts (handleRpc sin auth) + middleware ausente",
+      "found": "session-2026-06-05"
+    },
+    {
+      "severity": "MEDIUM",
+      "component": "WebLab",
+      "type": "github_token_clientside",
+      "finding": "blueprintPush.ts y draftService.ts reciben 'token' GitHub para escribir a repos Drafts/BluePrints. Verificar si viene de VITE_* (expuesto en bundle) o de endpoint serverless.",
+      "recommendation": "Rastrear origen del token en WebLab (componente que llama saveDraft/pushEnhancedDescription).",
+      "verified_in": "WebLab/src/services/{blueprintPush,draftService}.ts",
+      "found": "session-2026-06-05"
+    },
+    {
+      "severity": "MEDIUM-TBD",
+      "component": "CoreProject",
+      "type": "client_data_static_hosting",
+      "finding": "Datos financieros de clientes ForumPHs (PH_*/EEFF_2025/*.html) como estaticos en el repo. Si el deploy es publico, verificar que /brands/ForumPHs/assets/clientes/ no sea accesible por URL.",
+      "recommendation": "Verificar vercel.json / reglas de acceso del deploy de CoreProject.",
+      "verified_in": "CoreProject tree",
+      "found": "session-2026-06-05"
+    }
   ]
 }
