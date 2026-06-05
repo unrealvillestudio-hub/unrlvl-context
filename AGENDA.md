@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-06-02 · v2026-06-02-v1 · Generada desde ecosystem.json_
+_Actualizada: 2026-06-05 · v2026-06-05-v1_
 
 ---
 
@@ -9,7 +9,6 @@ _Actualizada: 2026-06-02 · v2026-06-02-v1 · Generada desde ecosystem.json_
 |---|---|---|---|
 | 1 | **luciensael.com** — repo GREENFIELD + Vercel + DNS | Lucien Sael | `claudecode: repo + deploy + DNS` |
 | 2 | **UNRLVL Field Notes** — push a CoreProject | UNRLVL | `claudecode: push blog` |
-| 3 | **brands/SamPublisher/** — crear carpeta + push brand.json + session_log.md | SamPublisher | `claudecode: mkdir + push 2 archivos` |
 
 ---
 
@@ -23,7 +22,7 @@ _Actualizada: 2026-06-02 · v2026-06-02-v1 · Generada desde ecosystem.json_
 | 7 | **fphs-formalize sprint** — replicar calidad acta manual (98% Ivette). Comparar ACTA_No1-2026 vs ACTA_OR_1-2026 | ForumPHs | DF fragmenta intervenciones, 13 errores primera persona |
 | 8 | **Verificar unidades Luxor 300** — si ≤127 unidades, regenerar acta con % correcto | ForumPHs | Acta actual usa 129 |
 | 9 | **DF QA** — 3 votaciones faltantes + 13 errores primera persona | ForumPHs | Calidad acta |
-| 10 | **Ayra Sprint 0** — deadline 5 Jun — crear repo + Vercel + schema + env vars | UNRLVL | Deadline duro 5 Jun |
+| 10 | **Ayra Sprint 0** — ⚠️ VENCIDO (deadline 5 Jun) — crear repo + Vercel + schema + env vars | UNRLVL | Reprogramar urgente |
 
 ---
 
@@ -60,6 +59,9 @@ _Actualizada: 2026-06-02 · v2026-06-02-v1 · Generada desde ecosystem.json_
 
 ## ✅ Resuelto recientemente
 
+- ✅ **Skill `voice-reference-extractor` v1.0** creado e integrado — pipeline local TikTok → Whisper + OCR → consolidado .md/.json, PR #2 mergeado — 2026-06-05
+- ✅ **brands/SamPublisher/** carpeta creada + brand.json + session_log.md pushed (PR #1) — 2026-06-05
+- ✅ **INDEX.md v1.4** — voice-reference-extractor + supabase-auditor — 2026-06-05
 - ✅ **Genoma SamPublisher** (sam_personal v0.5) creado — voz pública + modo vocero, 4º genoma del ecosistema propio — 2026-06-02
 - ✅ **SamPublisher health** yellow → green (genoma existe) — 2026-06-02
 - ✅ **Deuda Lucien** — nota fantasma "brands table did not return a row" eliminada de lucien_editorial.notes — 2026-06-02

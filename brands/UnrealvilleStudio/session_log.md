@@ -1,5 +1,35 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-06-05 · Skill voice-reference-extractor + cierre de previews pendientes
+
+**Conducido por:** Claude Opus 4.8 (chat) + Claude Code (ejecución)
+**Foco:** validación de pipeline de extracción de voz · merge de previews Vercel pendientes · integración de skill huérfano
+
+**SMA check:** Sin novedades del agente — export retornó contenido NSCF de sesiones anteriores (última actividad 2026-05-11), sin entradas nuevas desde el último Actualiza.
+
+### Key achievements
+
+- **Skill `voice-reference-extractor` v1.0 creado e integrado a `skills/` (PR #2 → merge `3b65596`).**
+  Pipeline determinístico local: videos TikTok descargados → ffmpeg (audio) → Whisper (transcripción) → Tesseract (OCR on-screen) → consolidado `.md` + `.json` por cuenta. NO hace análisis de voice (eso es trabajo de chat). Idempotente por hash SHA-256. Limitación documentada: descargas TikTok ~18-20s → transcripción parcial, OCR compensa.
+- **INDEX.md `v1.2 → v1.3 → v1.4` en la jornada.** v1.3 (supabase-auditor + security v1.1) entró con el merge de SamPublisher; v1.4 (voice-reference-extractor) reconcilió limpio sin pisar supabase-auditor.
+- **PR #1 SamPublisher mergeado a producción (`585d447`).** Genoma `sam_personal v0.5` health green, coherente en `brands[]` + `brand_voice_genome.rows_SamPublisher` + `_meta 2026-06-02-v2`. Nota fantasma de lucien_editorial confirmada eliminada en producción.
+- **Ensayo de pipeline validado end-to-end en CC (Windows).** Entorno completo instalado: ffmpeg 8.1.1, tesseract 5.4.0 + tessdata spa/eng (vía AppData sin admin), openai-whisper. 2 videos de prueba transcritos + OCR correcto.
+
+### Decisiones
+
+- **Proyecto "registro BTS de tono/disciplina" → DESCARTADO (decisión Sam).** Evaluado y matado por tibio: "mostrar las horas/rigor" pide permiso a la audiencia y roza el género grindset que UNRLVL no es. Principio retenido: operar a un nivel donde el rigor es obvio en el output, no narrarlo. NOT FOR EVERYONE no explica. El skill de extracción sobrevive como herramienta reusable; el caso de uso original murió.
+- **División de trabajo voice-research formalizada:** CC = extracción determinística (audio + OCR, batch, local). Chat = análisis de voice iterativo contra brand. No automatizar el análisis en un skill rígido.
+
+### Hallazgos técnicos (→ Professor)
+
+- **CC crea skills en worktrees aislados** (`.claude/worktrees/<random>/`) que NO llegan a main — riesgo de skill huérfano si no se rastrea. El skill de esta sesión quedó atrapado ahí; recuperado e integrado por PR. Mitigación estándar: integrar siempre por PR a `skills/`.
+- **Entorno de Claude.ai no descarga modelos ML** (Whisper desde Azure/HuggingFace = fuera de allowlist, 403). Transcripción de audio va sí o sí por CC local.
+
+### Pendientes / housekeeping
+
+- **Worktree huérfano** `.claude/worktrees/quirky-jones-aad3e8/` — desregistrado de git y branch borrada, pero el directorio físico persiste (handle de sesión CC). Borrar con `rmdir /s /q` desde terminal nueva al cerrar CC.
+- **🔴 Ayra Sprint 0 — VENCIDO (deadline 5 jun).** No tocado esta sesión.
+
 ---
 
 ## 2026-05-31 — Field Notes + fix pipeline v22 + diseño Voice Genome · Sam + Claude
