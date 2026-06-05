@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.0 · 2026-06-01 · Mantenido por: Claude_
+_Versión: 1.1 · 2026-06-03 · Mantenido por: Claude_
 
 ---
 
@@ -38,6 +38,7 @@ https://unrlvl-context.vercel.app/api/gh?action=[tree|file|repos]&repo=[REPO]&pa
 | `gh-auditor` | "revisa repo / archivos / código de X" | **"¿identificativo o contextual?"** (identificativo = qué hay y dónde; contextual = leer y entender TODO el código) | `skills/github-auditor/SKILL.md` |
 | `ecosystem-auditor` | "ecosystem scan/audit" | **"¿identificativo o contextual?"** | `skills/ecosystem-auditor/SKILL.md` |
 | `shopify-auditor` | "audita tienda / Shopify audit" | (severo — corre completo, sin modo) | `skills/shopify-auditor/SKILL.md` |
+| `supabase-auditor` | "auditor", "supabase audit", "audita la db", "cruza código y db" | **"¿identificativo o contextual?"** (identificativo = qué objects anon sin caller conocido; contextual = leer código + eval intencionalidad + map completo) | `skills/supabase-auditor/SKILL.md` |
 
 Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · Supabase (tablas, EFs, schemas) · Labs · Marcas · Agents · Skills · Tools.
 
@@ -63,9 +64,21 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 
 ---
 
+## ARTEFACTOS CONSULTABLES (fuentes de verdad — leer antes de asumir estado)
+
+| Artefacto | Ruta | Qué contiene | Actualizado por |
+|---|---|---|---|
+| `supabase_access_map.json` | `supabase_access_map.json` (raíz) | Topología de acceso: credencial → objeto → operación → intencional. Fuente de verdad para interpretar WARN del Security Advisor. | `supabase-auditor` bajo demanda |
+| `ecosystem_graph.json` | `ecosystem_graph.json` (raíz) | Topología de negocio: nodos LAB/APP/EF y edges de dependencia. | `ecosystem-updater` post-audit |
+| `ecosystem.json` | `ecosystem.json` (raíz) | Estado estructural completo del ecosistema. | HRD_ACTUALIZA |
+
+> `supabase_access_map.json` y `ecosystem_graph.json` se enlazan por `caller.repo` ↔ nodos del graph. Se versionan por separado — no fusionar.
+
+---
+
 ## SKILLS (catálogo completo en `skills/INDEX.md` — aquí solo los nombres)
 
-`content-pipeline` · `ui-ux-layer` · `shopify-auditor` · `shopify-mcp` · `agent-builder` · `copylab-reference` · `image-processing` · `cost-layer` · `security` · `github-auditor` · `vercel` · `ads-mcp` · `higgsfield` · `agent-browser` · `ecosystem-auditor` · `ecosystem-updater`
+`content-pipeline` · `ui-ux-layer` · `shopify-auditor` · `shopify-mcp` · `agent-builder` · `copylab-reference` · `image-processing` · `cost-layer` · `security` · `github-auditor` · `vercel` · `ads-mcp` · `higgsfield` · `agent-browser` · `ecosystem-auditor` · `ecosystem-updater` · `supabase-auditor`
 
 Reglas de carga (qué skill con qué disparador): `skills/INDEX.md`. Siempre activos sin declaración: `vercel`, `github-auditor`, `security`.
 

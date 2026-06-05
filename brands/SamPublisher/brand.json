@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "schema": "unrlvl-brand-v1.2",
+    "brand_id": "SamPublisher",
+    "brand_slug": "SamPublisher",
+    "type": "personal_brand",
+    "version": "1.0",
+    "last_updated": "2026-06-02",
+    "managed_by": "Claude / Unreal>ille Context System",
+    "context_path": "brands/SamPublisher/",
+    "note": "Marca personal publicadora de Sam. NO es el humano Sam (operador que valida y decide, sin fila en brands). Es la ENTIDAD con voz publica, genoma y canales. Rol VOCERO: publica contenido propio y presenta a LucienSael y UnrealvilleStudio."
+  },
+
+  "identity": {
+    "name": "SamPublisher",
+    "name_display": "Sam",
+    "role": "Personal public voice / spokesperson of the ecosystem",
+    "positioning": "The practitioner who reflects — communicator by trade, 30+ years. Owner of UNREAL>ille. Spokesperson who presents LucienSael and UnrealvilleStudio.",
+    "persona_vs_entity": "Sam (human) = operator who validates and decides, not a row in brands. SamPublisher = the publishing entity with genome and channels.",
+    "language_default": "en",
+    "languages_supported": ["en", "es"],
+    "language_rule": "Social default EN with platform translation enabled. If publishing in ES, rewrite from origin — never translate. Bilingual dual layout only in blog format.",
+    "signature": ">SMM"
+  },
+
+  "channels": {
+    "active": ["Meta-FB", "LinkedIn"],
+    "status": "accounts pending creation",
+    "excluded": ["Instagram", "TikTok", "X", "owned .com"],
+    "matrix_note": "Sam = Meta(FB) + LinkedIn. UNRLVL = Meta(FB/IG) + TikTok + LinkedIn + .com. Lucien = Meta(FB/IG) + TikTok + X + .com."
+  },
+
+  "voice_genome": {
+    "table": "brand_voice_genome",
+    "brand_id": "SamPublisher",
+    "voice_id": "sam_personal",
+    "version": "0.5",
+    "maturity": "v0.5",
+    "active": true,
+    "label": "Sam — Personal Public Voice",
+    "summary": "Wide accumulative swell + dry close. Edge that cuts by clarity, not cruelty (vs Lucien who wounds by design). Binary, demanding, loyal, energetic. Fluid depth, prosaic<->editorial. Does not court audience.",
+    "promote_to_v1_when": "Validated against 8-10 real SamPublisher posts.",
+    "single_voice": true,
+    "session_log_ref": "brands/SamPublisher/session_log.md (2026-06-02)"
+  },
+
+  "spokesperson_role": {
+    "stance": "Reflective first person, never a doorman. Reflects on Lucien, opines in favor, opens to the audience.",
+    "lucien_in_public": "External referent he admires and spreads — open card, never softened.",
+    "unrlvl_in_public": "His own, speaks as owner.",
+    "versatility": "Mandatory rotation of approach (direct quote / excerpt / topic framing / reaction) so the distribution strategy is not transparent.",
+    "sourcing_rule": "Sam supplies the FRAME; the quoted fragment comes from lucien_editorial or lucien_social by link DESTINATION (X/Meta/TikTok -> social; luciensael.com or long native LinkedIn post -> editorial). The fragment must sound like where the reader lands.",
+    "signature_rule": "Signs >SMM when the last element is Sam; never when the last element is the quoted Lucien voice."
+  },
+
+  "content_types": {
+    "own_craft": "Craft reflection — the art of communication, the full cycle.",
+    "own_thesis": "AI-as-the-most-real, as a practitioner conviction in 'I'.",
+    "own_trajectory": "30+ years lessons in the abstract — patterns, not anecdotes.",
+    "spokesperson": "Presents Lucien and UNRLVL per the spokesperson_role rules."
+  },
+
+  "red_lines": {
+    "never": ["partisan politics", "clients by name", "business figures", "family/partners", "personal life"],
+    "only_personal_allowed": "His way of thinking — the publishable material is the thought, not the biography.",
+    "religion": "Strategic veto, not incapacity. If religious fire must be touched, Lucien channels it, not Sam.",
+    "never_sells": "Sam thinks; if selling is needed, UNRLVL speaks."
+  },
+
+  "territory_separation": {
+    "vs_unrlvl": "By axis not topic: grammatical person (I/we), posture (practitioner who reflects / infrastructure that affirms), what it proves (judgment/result).",
+    "vs_lucien": "By the edge: Sam cuts by courteous clarity; Lucien wounds by design."
+  },
+
+  "repo": {
+    "context_repo": "unrealvillestudio-hub/unrlvl-context",
+    "context_path": "brands/SamPublisher/",
+    "files": ["brand.json", "session_log.md"],
+    "note": "Carpeta creada 2026-06-02 (genoma de voz). Sin BluePrints visuales propios: SamPublisher es persona publicadora, hereda solo la firma >SMM del operador de UNREAL>ille."
+  }
+}

@@ -232,3 +232,83 @@ Pero esto es PROPUESTA INICIAL a validar en el refactor, no diseño final.
 - [ ] Nomenclatura con prefijo confirmada como estándar.
 - [ ] Cero referencias huérfanas tras cualquier cambio.
 ```
+
+---
+
+# ANEXO — Capa de Seguridad & Auditoría Supabase
+_Añadido: 2026-06-03 · Origen: sesión de remediación de seguridad Supabase_
+
+---
+
+## A. WARNINGS COSMÉTICOS PENDIENTES (Supabase unrlvl-db)
+
+Sin riesgo de explotación hoy; limpieza de prolijidad. Aplicar en una migración dedicada (no urgente):
+
+1. **`function_search_path_mutable`** — ~22 funciones sin `search_path` fijo. Riesgo teórico de search_path injection. Fix: `ALTER FUNCTION public.[fn]([args]) SET search_path = public;` (ajustar schemas por función — las de `content` necesitan `public, content`).
+2. **`pg_net` en schema `public`** — debería moverse a otro schema. CUIDADO: pg_net es usada por el pipeline (lab_jobs trigger -> lab-worker). Mover requiere actualizar referencias. Bajo riesgo, alto cuidado.
+3. **Bucket `unrlvl-media`** — tiene una SELECT policy amplia (`public-read-unrlvl-media`) que permite listar todos los archivos. Los buckets públicos no necesitan esto para servir URLs. Acotar.
+4. **`ops_generation_ledger`** — policy `service_role_all_ledger` mal nombrada (rol = public en vez de service_role). anon sin grants de tabla -> no explotable hoy, solo cosmético. Renombrar/recrear.
+
+## B. DEUDA DE DISEÑO (requiere decisión de Sam, no es fix de seguridad)
+
+- **`ops_costs` anon write/delete** — la app interna de costos (`unrlvl-ops`, Vercel) escribe y borra costos con anon key. Funciona pero es discutible para una tabla financiera. Opciones: (a) migrar a un endpoint serverless con service_role; (b) añadir auth a la app; (c) aceptar el riesgo (es interna). Decisión pendiente.
+- **Cifrado en reposo de tokens Shopify** — `shopify.stores.access_token` está en texto plano. La fuga vía vista anon se cerró, pero el cifrado en columna sigue pendiente.
+
+## C. ESTADO POST-SESIÓN 2026-06-03 (resuelto, para registro)
+
+- Vista `shopify_stores`: fuga de tokens anon cerrada (security_invoker + revoke).
+- ~20 funciones SECURITY DEFINER: EXECUTE de PUBLIC revocado, service_role conservado.
+- `nscf_draft_orders`: policies anon (lectura pública de datos de clientas) eliminadas.
+- 8 tablas cubeta A: RLS habilitada.
+- Confirmados INTENCIONALES (dual-mode, no tocar): `upsert_brand_cache`, `rotate_sequence_current`, `copylab_jobs`.
+
+---
+
+## D. PROPUESTA — PROTOCOLO AUDITOR + supabase_access_map
+
+### D.1 supabase_access_map.json (CREADO 2026-06-03)
+Mapa de topología de acceso a Supabase: para cada objeto (tabla/función/vista), qué app lo llama, con qué credencial, en qué operación, y si es intencional. Generado y mantenido por el `supabase-auditor`. Estado inicial: `coverage: partial` (solo subsistema auditado el 2026-06-03). Ruta: `supabase_access_map.json` (raíz del repo).
+
+**Link con ecosystem_graph (referencia, NO merge):**
+- `ecosystem_graph.json` = topología de negocio (qué lab alimenta a cuál).
+- `supabase_access_map.json` = topología de acceso (credencial -> objeto -> operación).
+- Se enlazan por `caller.repo` ↔ nodos LAB-*/APP-* del graph. Se versionan por separado porque tienen ciclos de vida distintos.
+
+### D.2 Skill supabase-auditor (CREADO 2026-06-03)
+Cruza DB real (MCP) contra código real (gh-auditor), produce/actualiza el map, detecta vestigiales/bugs latentes/agujeros. Dos modos: identificativo (rápido) y contextual (profundo). Hereda patrón de ecosystem-updater (síntesis en Chat, commit vía Claude Code). Ubicación: `skills/supabase-auditor/SKILL.md`.
+
+### D.3 Protocolo AUDITOR (formalizar en userPreferences)
+Análogo a PROFESSOR y ACTUALIZA. Invocable bajo demanda — NO en cada Actualiza (el cruce código↔DB es caro: consume rate limit del PAT leyendo múltiples repos).
+
+**Decisión tomada (2026-06-03):** el cruce código↔DB corre SOLO bajo demanda del protocolo auditor. El `Actualiza` diario NO lo ejecuta.
+
+**Diseño de detección retroactiva (clave):** el auditor NO depende de "¿hubo sesión de arquitectura?" como memoria. Compara el estado real contra el último `supabase_access_map.json` guardado; el diff revela todo lo cambiado desde la última corrida. El protocolo es el gatillo de EJECUCIÓN; el map versionado es la MEMORIA. (Patrón git.)
+
+**Gatillos sugeridos:**
+- Comando explícito de Sam ("auditor", "supabase audit").
+- Recomendación del `ecosystem-auditor` cuando detecte cambio en un repo que toca Supabase.
+- Tras cualquier sesión de arquitectura que tocó tablas/funciones/policies/EFs.
+
+**Borrador de texto para userPreferences (cuando se formalice):**
+```
+Cuando Sam escriba "auditor" o "supabase audit" → HRD_SUPABASE_AUDIT:
+1. Cargar skills/supabase-auditor/SKILL.md vía Vercel:web_fetch_vercel_url
+2. Preguntar: "¿Lo querés identificativo o contextual?"
+3. Cargar supabase_access_map.json como baseline para el diff
+4. Ejecutar el modo indicado; reportar diff + acciones propuestas (HRD antes de aplicar)
+```
+
+## E. NOTA SOBRE LA CARPETA unrlvl-context/db/
+
+`db/UNRLVL_Supabase_Schema.md` (2026-03-25) está DESACTUALIZADO. Es un documento de diseño previo a la implementación: describe 23 tablas y brand_ids canónicos (`DiamondDetails`, `NeuroneCosmetics`, `MASTER`) que no coinciden con la DB real. No es la realidad y no contiene la dimensión de acceso.
+
+**Recomendación:** o marcarlo como histórico/deprecated, o que el `supabase-auditor` lo regenere desde la DB real (`list_tables`) en su primera corrida completa — opción preferida. El INDEX no lista `db/`; drift menor, no requiere cirugía.
+
+---
+
+## F. PENDIENTE OPERATIVO NO-SUPABASE
+
+- **GH_PAT expira ~2026-06-09.** Regenerar en github.com/settings/tokens?type=beta y actualizar en Vercel env (donde vive para el proxy /api/gh) y en cualquier MCP que lo use. Sin esto, el github-auditor (y por tanto el supabase-auditor en modo contextual) deja de funcionar.
+
+---
+_Anexo de seguridad · Unreal>ille Studio · 2026-06-03_

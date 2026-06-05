@@ -1,6 +1,6 @@
-# SKILL — security v1.0
+# SKILL — security v1.1
 _UNRLVL Security Standards · Supabase · Vercel · Deployments_
-_Versión: 1.0 · 2026-04-24_
+_Versión: 1.1 · 2026-06-03 (actualiza v1.0 del 2026-04-24)_
 
 ---
 
@@ -15,73 +15,55 @@ Este skill se activa en cualquier sesión que involucre:
 
 **Regla:** Este skill se lee ANTES de escribir cualquier código que toque seguridad. No después.
 
+**Nuevo en v1.1:** la fuente de verdad sobre QUÉ acceso anon es intencional vs agujero ya no vive en este skill (que se desactualiza), sino en `supabase_access_map.json`, generado por el `supabase-auditor`. Antes de marcar cualquier grant anon como "vulnerabilidad", cruzar contra ese mapa.
+
 ---
 
-## ⚠️ ISSUES ACTIVOS EN EL PROYECTO (al 2026-04-24)
+## ⚠️ CAMBIOS v1.1 — CORRECCIÓN DE DRIFT
 
-Detectados vía Supabase Security Advisors. Requieren atención de Sam.
+La sesión de seguridad del 2026-06-03 reveló que la sección "ISSUES ACTIVOS" del v1.0 contenía dos afirmaciones que NO coincidían con la realidad del código:
 
-### CRÍTICOS — RLS permissivo para anon
+1. **`ops_costs` anon DELETE/INSERT NO es un "crítico desconocido".** El v1.0 lo marcaba como agujero crítico. La auditoría de código confirmó que es el mecanismo real de la app interna de costos (`unrlvl-ops`, dashboard Vercel) que escribe con anon key. Es **intencional aunque debatible** — no un agujero. Reclasificado abajo.
+2. **Los tokens Shopify NO están en `ops.shopify_stores` cifrados.** Están en `shopify.stores` en texto plano, y hasta el 2026-06-03 estaban expuestos a anon vía la vista `public.shopify_stores` (SECURITY DEFINER). Esa fuga se cerró. Corregido en la Sección 4.
 
-Estas políticas permiten que cualquier usuario anónimo (sin autenticación) ejecute operaciones destructivas o de escritura sin restricción:
+Moraleja que justifica el `supabase-auditor`: la documentación manual de seguridad divergió de la realidad en dos puntos en seis semanas. El estado de seguridad debe leerse del código + DB en vivo, no de un doc estático.
 
-| Tabla | Problema | Política |
-|---|---|---|
-| `public.ops_costs` | anon puede DELETE cualquier fila | `anon_delete_costs` |
-| `public.ops_costs` | anon puede INSERT sin restricción | `anon_insert_costs` |
-| `public.ops_insights` | anon puede UPDATE cualquier fila | `anon_update_insights` |
-| `public.scheduled_posts` | anon puede INSERT sin restricción | `scheduled_posts_write_anon` |
+---
 
-**Fix recomendado:**
+## ESTADO DE ISSUES (al 2026-06-03)
+
+### RESUELTOS en la sesión 2026-06-03
+- ✅ Fuga de access tokens Shopify vía vista `shopify_stores` — cerrada (security_invoker + revoke anon).
+- ✅ ~20 funciones SECURITY DEFINER con EXECUTE a PUBLIC — restringidas a service_role (triggers, fire_stage, upsert_shopify_store, dispatch_lab_job, get_shopify_store*, save_*audit*, ops_compute_cost, ops_log_generation, invalidate_*, etc.).
+- ✅ `nscf_draft_orders` lectura pública de datos de clientas (SELECT USING true) — policies anon eliminadas.
+- ✅ 8 tablas sin RLS (cubeta A) — RLS habilitada.
+
+### INTENCIONALES — NO tocar (dual-mode sync; ver supabase_access_map.json)
+- `upsert_brand_cache` (anon) — CopyLab escribe cache desde el browser.
+- `rotate_sequence_current` (anon) — dispatcher de recogida del Orchestrator.
+- `copylab_jobs` policies permisivas (anon) — encolado dual-mode async/sync.
+- Estos aparecerán SIEMPRE como WARN en el advisor. Es ruido de diseño, no bug.
+
+### DEBATABLE — revisión de diseño pendiente (no urgencia)
+- `ops_costs` anon INSERT/DELETE — la app interna `unrlvl-ops` lo usa así. Funciona. Discutible que una tabla financiera permita escritura/borrado anon; idealmente migrar a endpoint serverless con service_role o añadir auth a la app. **Coordinar con Sam antes de tocar — rompería el dashboard de costos.**
+
+### WARN COSMÉTICOS PENDIENTES (sin riesgo de explotación hoy)
+- `function_search_path_mutable` en ~22 funciones — fijar `search_path`. Fix abajo.
+- `pg_net` instalada en schema `public` — mover de schema (requiere cuidado, pg_net es usada por el pipeline).
+- Bucket `unrlvl-media` con SELECT policy amplia que permite listar archivos.
+- `ops_generation_ledger` policy `service_role_all_ledger` mal nombrada (rol=public; anon sin grants de tabla -> no explotable). Renombrar/recrear.
+
+**Fix estándar search_path (aplicar por función, con el schema correcto):**
 ```sql
--- ops_costs: restringir DELETE a service_role únicamente
-DROP POLICY IF EXISTS anon_delete_costs ON public.ops_costs;
-CREATE POLICY "service_only_delete_costs" ON public.ops_costs
-  FOR DELETE USING (auth.role() = 'service_role');
-
--- ops_costs: restringir INSERT a service_role
-DROP POLICY IF EXISTS anon_insert_costs ON public.ops_costs;
-CREATE POLICY "service_only_insert_costs" ON public.ops_costs
-  FOR INSERT WITH CHECK (auth.role() = 'service_role');
-
--- ops_insights: restringir UPDATE
-DROP POLICY IF EXISTS anon_update_insights ON public.ops_insights;
-CREATE POLICY "service_only_update_insights" ON public.ops_insights
-  FOR UPDATE USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
--- scheduled_posts: restringir INSERT (solo labs internos deben poder escribir)
-DROP POLICY IF EXISTS scheduled_posts_write_anon ON public.scheduled_posts;
-CREATE POLICY "service_only_insert_posts" ON public.scheduled_posts
-  FOR INSERT WITH CHECK (auth.role() = 'service_role');
+ALTER FUNCTION public.[fn]([args]) SET search_path = public;
+-- para funciones que tocan otros schemas, listarlos: SET search_path = public, content;
 ```
-
-### WARNINGS — Functions con search_path mutable
-
-9 funciones sin `search_path` fijo — riesgo de search_path injection:
-
-**Afectadas:** `public.set_updated_at`, `public.update_lab_configs_updated_at`, `public.sync_profiler_to_crm`, `crm.set_updated_at`, `crm.update_contact_activity`, `crm.sync_profiler_lead`, `fph.set_updated_at`, `fph.calc_days_late`, `fph.set_incident_due`
-
-**Fix estándar para cada función:**
-```sql
-ALTER FUNCTION public.set_updated_at() SET search_path = public;
-ALTER FUNCTION public.update_lab_configs_updated_at() SET search_path = public;
-ALTER FUNCTION public.sync_profiler_to_crm() SET search_path = public, crm;
-ALTER FUNCTION crm.set_updated_at() SET search_path = crm;
-ALTER FUNCTION crm.update_contact_activity() SET search_path = crm;
-ALTER FUNCTION crm.sync_profiler_lead() SET search_path = crm, public;
-ALTER FUNCTION fph.set_updated_at() SET search_path = fph;
-ALTER FUNCTION fph.calc_days_late() SET search_path = fph;
-ALTER FUNCTION fph.set_incident_due() SET search_path = fph;
-```
-
-Referencia: https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable
 
 ---
 
 ## SECCIÓN 1 — KEYS Y ROLES DE SUPABASE
 
-### Las tres keys y cuándo usa cada una
+### Las tres keys y cuándo se usa cada una
 
 | Key | Scope | Dónde va | Dónde NUNCA va |
 |---|---|---|---|
@@ -91,13 +73,16 @@ Referencia: https://supabase.com/docs/guides/database/database-linter?lint=0011_
 
 **Regla crítica:** `service_role` nunca sale del servidor. Si aparece en un artifact HTML, en un output de Claude, o en código de frontend — es un error grave.
 
+**Nota dual-mode (v1.1):** los labs (CopyLab, ImageLab, Orchestrator) usan anon key desde el browser para el modo sync. Esto es por diseño. La anon key está sujeta a RLS, así que la protección real vive en las policies y grants, no en ocultar la anon key.
+
 ### Dónde viven las keys en el stack UNRLVL
 
 ```
-Vercel Edge Functions → SUPABASE_SERVICE_ROLE_KEY (env var Vercel)
-Supabase Edge Functions → SUPABASE_SERVICE_ROLE_KEY (Supabase secrets)
-Artifacts HTML públicos → SUPABASE_ANON_KEY únicamente
-Agentes web (widget) → SUPABASE_ANON_KEY únicamente
+Vercel Edge/Node Functions → SUPABASE_SERVICE_ROLE_KEY (env var Vercel)
+Supabase Edge Functions    → SUPABASE_SERVICE_ROLE_KEY (Supabase secrets)
+Labs front (sync dual-mode)→ VITE_SUPABASE_ANON_KEY
+Artifacts HTML públicos    → SUPABASE_ANON_KEY únicamente
+Agentes web (widget)       → SUPABASE_ANON_KEY únicamente
 ```
 
 ---
@@ -105,245 +90,135 @@ Agentes web (widget) → SUPABASE_ANON_KEY únicamente
 ## SECCIÓN 2 — RLS: ESTÁNDARES POR TIPO DE TABLA
 
 Row Level Security debe estar activo en TODAS las tablas. Sin excepciones.
+(El `supabase-auditor` verifica que la realidad cumpla estos estándares; cuando una desviación es intencional/dual-mode, la registra en el access_map en vez de marcarla violación.)
 
 ### Tabla de datos de marca (brand content)
-
 ```sql
--- SELECT: todos pueden leer (datos no sensibles)
-CREATE POLICY "public_read" ON public.[tabla]
-  FOR SELECT USING (true);
-
--- INSERT/UPDATE/DELETE: solo service_role
+CREATE POLICY "public_read" ON public.[tabla] FOR SELECT USING (true);
 CREATE POLICY "service_write" ON public.[tabla]
-  FOR ALL USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
+  FOR ALL USING (auth.role() = 'service_role') WITH CHECK (auth.role() = 'service_role');
 ```
 
 ### Tabla de datos de cliente/CRM (sensibles)
-
 ```sql
--- Sin acceso anon en ninguna operación
 CREATE POLICY "no_anon_access" ON public.[tabla]
   FOR ALL USING (auth.role() = 'service_role');
 ```
+> Lección 2026-06-03: `nscf_draft_orders` (datos de clientas del kiosk) tenía SELECT USING(true) para anon. Las tablas con datos de cliente NUNCA deben ser legibles por anon. El kiosk accede vía Edge Function con service_role, no directo.
 
-### Tabla de agentes (conversaciones, sessions)
-
+### Tabla de jobs dual-mode (labs async/sync)
 ```sql
--- INSERT permitido para anon (el usuario del chat escribe)
-CREATE POLICY "anon_insert_session" ON public.[tabla]
-  FOR INSERT WITH CHECK (true);
-
--- SELECT: solo su propia sesión (cuando hay auth)
--- UPDATE/DELETE: solo service_role
-CREATE POLICY "service_write" ON public.[tabla]
-  FOR UPDATE USING (auth.role() = 'service_role');
+-- Patrón legítimo: el front encola/actualiza jobs con anon.
+-- copylab_jobs sigue este patrón. Documentar en supabase_access_map.json como intentional.
+CREATE POLICY "anon_write_jobs"  ON public.[tabla] FOR INSERT WITH CHECK (true);
+CREATE POLICY "anon_read_own"    ON public.[tabla] FOR SELECT USING (true);
+CREATE POLICY "anon_update_jobs" ON public.[tabla] FOR UPDATE USING (true) WITH CHECK (true);
+CREATE POLICY "service_role_all" ON public.[tabla] FOR ALL USING (auth.role() = 'service_role');
 ```
+> Mejora opcional: acotar el SELECT a jobs propios en vez de USING(true) si se introduce un identificador de sesión.
 
 ### Tabla de ops/costos/financiero
-
 ```sql
--- Sin acceso anon en ninguna operación — todo via service_role
+-- Estándar ideal: solo service_role.
 CREATE POLICY "service_only" ON public.[tabla]
-  FOR ALL USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
+  FOR ALL USING (auth.role() = 'service_role') WITH CHECK (auth.role() = 'service_role');
 ```
-
-### Tabla de scheduled posts / content queue
-
-```sql
--- Solo labs internos (service_role) pueden escribir
--- Lectura pública del estado si aplica
-CREATE POLICY "public_read_status" ON public.scheduled_posts
-  FOR SELECT USING (true);
-CREATE POLICY "service_write" ON public.scheduled_posts
-  FOR ALL USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-```
+> Realidad 2026-06-03: `ops_costs` permite anon write/delete porque la app interna lo usa así. Es deuda de diseño, no se ajusta al estándar. Migrar a endpoint serverside cuando se priorice.
 
 ---
 
 ## SECCIÓN 3 — EDGE FUNCTIONS: AUTENTICACIÓN
 
-### Patrón de verificación de requests
-
-Toda Edge Function que no sea pública debe verificar el origen:
+(sin cambios respecto a v1.0 — patrón de verificación de requests, webhooks Meta/WhatsApp/Shopify con HMAC)
 
 ```typescript
-// Verificar que el request viene de un origen autorizado
 function verifyRequest(req: Request): boolean {
   const authHeader = req.headers.get('Authorization');
-
-  // Opción A: Bearer token (SUPABASE_ANON_KEY o service_role)
   if (authHeader?.startsWith('Bearer ')) {
     const token = authHeader.slice(7);
-    // Verificar contra keys conocidas
     return token === Deno.env.get('SUPABASE_ANON_KEY') ||
            token === Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   }
-
-  // Opción B: Secret compartido para webhooks internos
   const secret = req.headers.get('x-unrlvl-secret');
   return secret === Deno.env.get('INTERNAL_WEBHOOK_SECRET');
 }
 ```
 
-### Para webhooks externos (Meta, WhatsApp, Shopify)
-
-Cada plataforma tiene su propio mecanismo de verificación:
-
-```typescript
-// Meta/WhatsApp webhook verification
-if (req.method === 'GET') {
-  const token = new URL(req.url).searchParams.get('hub.verify_token');
-  if (token === Deno.env.get('WA_VERIFY_TOKEN')) {
-    return new Response(new URL(req.url).searchParams.get('hub.challenge'));
-  }
-  return new Response('Forbidden', { status: 403 });
-}
-
-// Shopify webhook HMAC verification
-function verifyShopifyWebhook(body: string, hmacHeader: string): boolean {
-  const secret = Deno.env.get('SHOPIFY_WEBHOOK_SECRET')!;
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey('raw', encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-  // ... comparar HMAC
-}
-```
+> Nota 2026-06-03: `fire_stage` y `dispatch_lab_job` reciben parámetros (p_url, p_service_key) que NO validan internamente. Su seguridad depende de que solo service_role pueda ejecutarlas. Toda función SECURITY DEFINER que haga `net.http_post` a URL parametrizada debe estar cerrada a anon (riesgo SSRF).
 
 ---
 
 ## SECCIÓN 4 — SECRETS: LO QUE NUNCA VA HARDCODEADO
 
 ### Lista negra de hardcoding
+`SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, Shopify Admin tokens (`shpat_`), WhatsApp credentials, Fal.ai/ElevenLabs/HeyGen/Kling keys, Resend, Twilio, cualquier JWT.
 
-Estos valores NUNCA van en código, archivos commiteados, outputs de Claude, ni documentación:
-
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `ANTHROPIC_API_KEY`
-- Shopify Admin API access tokens
-- WhatsApp `wa_business_account_id` + `wa_phone_number_id` + verify token
-- API keys de Fal.ai, ElevenLabs, HeyGen, Kling
-- Resend API key
-- Twilio credentials
-- Cualquier JWT o token de sesión
-
-### Dónde viven los secrets
+### Dónde viven los secrets (CORREGIDO v1.1)
 
 | Secret | Dónde | Cómo acceder |
 |---|---|---|
 | Supabase service_role | Supabase Dashboard → Settings → API | `Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')` |
 | Anthropic API key | Vercel + Supabase env vars | `process.env.ANTHROPIC_API_KEY` |
-| Shopify tokens | `ops.shopify_stores` (en Supabase, columna cifrada) | Query con service_role |
+| **Shopify tokens** | **`shopify.stores.access_token` (texto plano). Acceso SOLO service_role vía rpc/get_shopify_store* o la EF.** | Query/RPC con service_role |
 | WA credentials | Vercel env vars + `agents` table | Env vars + Supabase |
-| Fal.ai key | Supabase secrets | `Deno.env.get('FAL_API_KEY')` |
-| ElevenLabs key | Supabase secrets | `Deno.env.get('ELEVENLABS_API_KEY')` |
+
+> **Corrección v1.1:** el v1.0 decía que los tokens Shopify estaban en `ops.shopify_stores` "columna cifrada". Falso: están en `shopify.stores`, texto plano. La vista `public.shopify_stores` los exponía a anon (SECURITY DEFINER) — fuga cerrada el 2026-06-03 con `security_invoker=on` + revoke anon. **Pendiente real:** evaluar cifrado en reposo de `access_token` (hoy no está cifrado).
 
 ### Verificación pre-commit
-
-Antes de cualquier commit, Claude verifica que el código no contiene:
 ```bash
-# Patterns to never commit
 grep -r "sk-ant-" .          # Anthropic keys
 grep -r "shpat_" .           # Shopify admin tokens
-grep -r "service_role" .     # Supabase service role
+grep -r "service_role" .     # Supabase service role en cliente
 grep -r "eyJhbGciOiJIUzI" .  # JWT tokens
 ```
 
 ---
 
 ## SECCIÓN 5 — VARIABLES DE ENTORNO POR PLATAFORMA
-
-### Vercel (para Edge Functions y Next.js)
-
-```
-# Supabase
-SUPABASE_URL=https://amlvyycfepwhiindxgzw.supabase.co
-SUPABASE_ANON_KEY=[anon key — semi-pública]
-SUPABASE_SERVICE_ROLE_KEY=[secret — NUNCA en frontend]
-
-# AI
-ANTHROPIC_API_KEY=[secret]
-
-# Comunicaciones
-RESEND_API_KEY=[secret]
-
-# WhatsApp (por agente)
-WA_VERIFY_TOKEN=[secret por agente]
-WA_ACCESS_TOKEN=[secret]
-```
-
-### Supabase Edge Functions
-
-```
-# Mismas keys que Vercel, más las de terceros que solo usan Edge Functions:
-FAL_API_KEY=[secret]
-ELEVENLABS_API_KEY=[secret]
-INTERNAL_WEBHOOK_SECRET=[secret compartido con Vercel]
-```
+(sin cambios respecto a v1.0)
 
 ---
 
 ## SECCIÓN 6 — CORS
-
-Para Edge Functions expuestas públicamente:
-
-```typescript
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',           // Para APIs públicas
-  // o restringir a dominio específico:
-  'Access-Control-Allow-Origin': 'https://unrealvillestudio.com',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
-};
-
-// Siempre manejar OPTIONS preflight:
-if (req.method === 'OPTIONS') {
-  return new Response('ok', { headers: corsHeaders });
-}
-```
+(sin cambios respecto a v1.0)
 
 ---
 
 ## SECCIÓN 7 — CHECKLIST PRE-DEPLOYMENT
 
-Antes de deployar cualquier cosa a producción:
-
 ### Supabase
-- [ ] RLS habilitado en la tabla nueva (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`)
-- [ ] Políticas RLS creadas — no solo `USING (true)` para operaciones de escritura
-- [ ] Funciones nuevas tienen `SET search_path = [schema]`
+- [ ] RLS habilitado en la tabla nueva
+- [ ] Políticas RLS creadas — no `USING (true)` para escritura salvo patrón dual-mode documentado en el access_map
+- [ ] Datos de cliente/financieros: NUNCA legibles por anon
+- [ ] Funciones nuevas tienen `SET search_path`
+- [ ] Funciones SECURITY DEFINER nuevas: revocar EXECUTE de PUBLIC, otorgar solo a quien la necesite (service_role, o anon si es dual-mode documentado)
+- [ ] Funciones que hacen net.http_post a URL parametrizada: cerradas a anon (SSRF)
 - [ ] No hay `service_role` key en código de cliente
-- [ ] Columnas con datos sensibles (tokens, passwords) marcadas o cifradas
+- [ ] Si el objeto se accede con anon, registrar la entrada en `supabase_access_map.json` con `intentional` y `verified_in`
 
 ### Vercel / Edge Functions
-- [ ] Todas las keys vienen de `process.env` / `Deno.env.get()` — nunca hardcodeadas
-- [ ] CORS configurado apropiadamente para el tipo de endpoint
-- [ ] Webhook endpoints verifican la firma/token del origen
-- [ ] No hay secrets en código commiteado (verificar con grep)
-- [ ] Variables de entorno configuradas en Vercel dashboard antes del deploy
+- [ ] Keys desde `process.env`/`Deno.env.get()` — nunca hardcodeadas
+- [ ] CORS apropiado al tipo de endpoint
+- [ ] Webhooks verifican firma/token del origen
+- [ ] No secrets en código commiteado (grep)
 
 ### General
-- [ ] `.env.local` está en `.gitignore`
-- [ ] No hay tokens o keys en comentarios del código
-- [ ] Logs de producción no imprimen valores sensibles
+- [ ] `.env.local` en `.gitignore`
+- [ ] No tokens en comentarios
+- [ ] Logs no imprimen valores sensibles
 
 ---
 
-## SECCIÓN 8 — ADVISORS: EJECUTAR REGULARMENTE
+## SECCIÓN 8 — ADVISORS + AUDITOR
 
-Después de cada sesión con cambios de DDL, ejecutar:
-
+Después de cada sesión con DDL:
 ```
-Supabase Dashboard → Database → Database Linter
+Supabase:get_advisors (type=security)
 ```
 
-O via este skill — Claude ejecuta `Supabase:get_advisors` y reporta nuevos issues.
-
-Issues actuales a resolver (ver inicio de este skill): 4 RLS permissivos + 9 funciones con search_path mutable.
+**Pero (v1.1):** el advisor solo ve la DB. Para interpretar correctamente sus WARN (intencional vs agujero), correr el **supabase-auditor** (protocolo auditor), que cruza con el código y mantiene `supabase_access_map.json`. Un WARN sobre un objeto con `intentional: true` en el map es ruido de diseño esperado.
 
 ---
 
-_SKILL security v1.0 · Unreal>ille Studio · Supabase + Vercel_
-_Issues activos documentados al 2026-04-24 — resolver antes del próximo deployment productivo_
+_SKILL security v1.1 · Unreal>ille Studio · Supabase + Vercel_
+_v1.1 corrige drift detectado en sesión de seguridad 2026-06-03. Fuente de verdad de acceso: supabase_access_map.json_

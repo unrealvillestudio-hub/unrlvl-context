@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-02-v1 · No editar manualmente_
+_Generado desde ecosystem.json v2026-06-02-v2 · No editar manualmente_
 
 ---
 
@@ -126,10 +126,13 @@ LucienSael:
        Exclusiones: luciensael.com (=editorial) · LinkedIn publish (no cuenta) · video/voz (=futuro lucien_video)
        Cita-por-destino en LinkedIn (vía voceros): redirect X/Meta/TikTok → social; .com o nativo → editorial
 
+SamPublisher:
+  └─ sam_personal v0.5 — Meta(FB) + LinkedIn — personal public voice + vocero Lucien/UNRLVL (creado 2026-06-02)
+
 UnrealvilleStudio:
   └─ unrlvl_default v1.0 — Defiant precision
 
-Futuros: genoma de Sam (con modo vocería) · genoma social UNRLVL · lucien_video
+Futuros: genoma social UNRLVL · lucien_video
 ```
 
 ### OnboardingApp — Voice Genome Gap
@@ -233,6 +236,9 @@ stores · audit_runs · fix_log + otras
 │   ├── LucienSael/
 │   │   ├── BP_Brand_Person_id.md
 │   │   └── session_log.md            ← actualizado 2026-06-02 (lucien_social)
+│   ├── SamPublisher/
+│   │   ├── brand.json                ← creado 2026-06-02 (genoma de voz)
+│   │   └── session_log.md            ← creado 2026-06-02 (sam_personal v0.5)
 │   └── [Marca]/
 │       ├── brand.json
 │       ├── BP_Brand_Context.md
