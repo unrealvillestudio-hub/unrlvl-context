@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-05-20-v14 | **Mantenido por:** Claude
+**Versión:** 2026-06-06-v15 | **Mantenido por:** Claude
 
 ---
 
@@ -20,10 +20,14 @@
 | `brands/[Marca]/session_log.md` | Hilo vivo entre sesiones | Siempre — se añade al tope |
 | `agents/[nombre]/session_log.md` | Log de sesiones de agentes | El agente genera y Sam commitea |
 | `protocols/HRD_PROTOCOL.md` | **Instrucciones inviolables** — HRDs activas | Cuando se añaden o modifican HRDs |
+| `protocols/CC_PROTOCOL.md` | **Protocolo de Claude Code** — gobierna a CC en todos los repos | Cuando cambian las reglas de CC |
 | `skills/ecosystem-auditor/SKILL.md` | Protocolo de ecosystem audit | Cuando cambia el alcance del audit |
 
 ### Regla crítica de los `.md`
 `ecosystem.md`, `ecosystem_filemap.md` y `AGENDA.md` **nunca se editan manualmente** — generados por Claude desde `ecosystem.json`.
+
+### Regla crítica de context files (aplica a Claude y a CC)
+Los context files **nunca se reemplazan** — se actualizan preservando historia: lo nuevo al tope, lo anterior archivado debajo, nunca borrado. Detalle completo para Claude Code en `protocols/CC_PROTOCOL.md`.
 
 ---
 
@@ -110,6 +114,7 @@ Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprend
 | "deploy / nueva EF / Supabase" | `security` |
 | "pipeline / IID / Orchestrator" | `content-pipeline` |
 | "ecosystem scan / audit / repos" | `ecosystem-auditor` |
+| "CC / Claude Code / repo / branch" | `protocols/CC_PROTOCOL.md` |
 
 ### Paso 5 — Confirmación
 > *"Contexto cargado — [Marca o Ecosistema] · [fecha] · Skills activos: [lista]. Contexto operativo cargado. Catálogo de capacidades disponible. [N] variables de plataforma. [N] aprendizajes pendientes.  Arrancamos."*
@@ -188,7 +193,7 @@ PASO 2 — "Actualiza" (siempre DESPUÉS de Professor)
   → session_log.md incluye SOLO aprendizajes aprobados
   → Genera todos los archivos que cambiaron
   → ecosystem.json + AGENDA.md siempre
-  → SMA check (ETag)
+  → (SMA NO se consulta por defecto — solo si Sam lo pide explícitamente)
   → Mensaje de commit listo con TODO incluido
 
 PASO 3 — Commit único
@@ -206,23 +211,31 @@ Si Sam escribe "Actualiza" sin haber hecho Professor, Claude recuerda:
 **Trigger:** "Actualiza"
 → Activar mensaje de verificación HRD antes de ejecutar.
 
-**1. Verifica SMA**
+**1. SMA — NO se consulta por defecto**
 
-GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url`.
+A partir de v15, `Actualiza` **NO** recoge datos de sesiones del Social Media Agent automáticamente.
+El SMA solo se consulta cuando **Sam lo pide explícitamente** en la misma instrucción, por ejemplo:
+> "Actualiza con SMA" · "Actualiza incluyendo el SMA" · "revisá el SMA y Actualiza"
 
+Cuando Sam lo pida explícitamente:
+- GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=[SECRET]` vía `Vercel:web_fetch_vercel_url`.
 - ETag igual al registrado → `"Sin novedades del SMA"` · continúa
-- ETag cambió → cargar export completo · procesar · generar `social_media_agent_session_log.md`
+- ETag cambió → cargar export completo · procesar · actualizar `agents/social-media-agent/session_log.md` **preservando historia** (lo nuevo al tope, lo anterior archivado debajo — nunca reemplazar)
+
+Si Sam NO lo menciona, `Actualiza` ignora por completo el SMA. No se llama el endpoint, no se genera ni toca el session_log del agente.
 
 **2. Genera archivos que cambiaron**
 
 Para chats de marca: `session_log.md` (siempre) · `brand.json` · `ecosystem.json` · `AGENDA.md` (siempre)
 Para chats de ecosistema: `ecosystem.json` (siempre) · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md` (siempre)
 
+Todos los context files se actualizan **preservando historia**, nunca se reemplazan.
+
 **3. REGLA CRÍTICA DE NOMENCLATURA**
 ```
 session_log.md · brand.json · ecosystem.json · ecosystem.md
 ecosystem_filemap.md · AGENDA.md · BP_Brand_Context.md
-SESSION_PROTOCOL.md · SKILL.md · INDEX.md · HRD_PROTOCOL.md
+SESSION_PROTOCOL.md · SKILL.md · INDEX.md · HRD_PROTOCOL.md · CC_PROTOCOL.md
 ```
 
 **4.** Mensaje de commit listo para pegar con rutas exactas.
@@ -251,6 +264,8 @@ git add [archivos] && git commit -m "[mensaje]"
 git push https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git main
 ```
 
+**Nota:** esto aplica a Claude (claude.ai). Para Claude Code (CC), las reglas de push están en `protocols/CC_PROTOCOL.md` — CC nunca pushea a `unrlvl-context` ni mergea PRs por su cuenta.
+
 ---
 
 ## ACTUALIZACIÓN DIARIA
@@ -261,10 +276,10 @@ git push https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git main
 
 ## AGENTES AUTÓNOMOS
 
-| Agente | URL | Export endpoint |
-|---|---|---|
-| Social Media Agent | `unrlvl-social-media-agent.vercel.app` | `/api/export?secret=[SECRET]` |
-| ForumPHs Speaks | `forumphs-speaks.vercel.app` | `/api/export` |
+| Agente | URL | Export endpoint | Se consulta en Actualiza |
+|---|---|---|---|
+| Social Media Agent | `unrlvl-social-media-agent.vercel.app` | `/api/export?secret=[SECRET]` | **Solo si Sam lo pide explícitamente** |
+| ForumPHs Speaks | `forumphs-speaks.vercel.app` | `/api/export` | Solo si Sam lo pide explícitamente |
 
 ---
 
@@ -284,6 +299,7 @@ Un chat = una marca. Si Sam mezcla sin intención:
 | Skills INDEX | `https://unrlvl-context.vercel.app/skills/INDEX.md` |
 | Protocolo | `https://unrlvl-context.vercel.app/protocols/SESSION_PROTOCOL.md` |
 | **HRD Protocol** | `https://unrlvl-context.vercel.app/protocols/HRD_PROTOCOL.md` |
+| **CC Protocol** | `https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md` |
 | Ecosystem Auditor | `https://unrlvl-context.vercel.app/skills/ecosystem-auditor/SKILL.md` |
 | DECISION_MATRIX | `https://unrlvl-context.vercel.app/knowledge/ecosystem/decision-matrix/DECISION_MATRIX.md` |
 | PROFESSOR_PROTOCOL | `https://unrlvl-context.vercel.app/knowledge/ecosystem/professor/PROFESSOR_PROTOCOL.md` |
