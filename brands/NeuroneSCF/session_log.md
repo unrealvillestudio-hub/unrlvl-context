@@ -1,9 +1,62 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-05-30_
+_Actualizado: 2026-06-06_
 
 ---
 
-## NOVEDADES ESTA SESIÓN
+## NOVEDADES ESTA SESIÓN (2026-06-06) — Fulfillment Infra Fix + QR
+
+### ✅ COMPLETADO
+
+#### 🔴 FIX CRÍTICO — Cron del Fulfillment Processor estaba muerto
+- **Causa raíz:** `pg_cron` job 31 (`nscf-fulfillment-processor-1min`) usaba `current_setting('app.supabase_url')` y `current_setting('app.service_role_key')` — ambos parámetros **NULL/inexistentes** en la DB → el job fallaba **cada minuto** desde su creación con `ERROR: unrecognized configuration parameter "app.supabase_url"`.
+- **Impacto:** `nscf_fulfillment_queue` nunca se procesaba. Las órdenes web entraban (watcher OK) pero **nunca salían a Iván**. Ninguna orden web había llegado a 2toner automáticamente.
+- **Fix definitivo:** reescrito el comando del job 31 vía `cron.alter_job` con **URL hardcodeada** (`https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/nscf-fulfillment-processor`) y **sin Authorization header** (el processor tiene `verify_jwt=false`). Patrón idéntico al job 30 (copylab-processor) que sí funcionaba. **No es parche** — es el patrón correcto.
+- **Verificado:** primer tick post-fix (21:54 UTC) pasó de `failed` → `succeeded`. Cola vaciada.
+
+#### Reconciliación de órdenes atascadas
+| Orden | Cliente | Tipo | Acción |
+|---|---|---|---|
+| #1017 | Maria E Thompson | Web (enviada/entregada 29-may) | Fila de cola marcada `dispatched` con nota de auditoría — no reprocesar. Log ya existía. |
+| #1020 | Suzanne Lansky | **Web/shipping real** | Recuperada automáticamente por el cron revivido (21:54:01). Fila en `nscf_fulfillment_log` creada con token → Iván notificado. Pendiente que Iván confirme + meta tracking. |
+| #1021 | Krystal Stringer | **Kiosk Pickup** | NO requiere a Iván. No se tocó. Sam la había devuelto a unfulfilled; no es necesario. |
+| #1022, #1023 | — | Kiosk Pickup | No aplican a flujo de despacho. |
+
+#### QR dorado neuronescflorida.com (para Patricia)
+- Generado con color de marca exacto **#AD9614** (extraído de los QR de reviews ya impresos), no dorados aproximados.
+- `ERROR_CORRECT_H` (30%), 984×984 px. Verificado con `cv2.QRCodeDetector` → decodifica a `https://neuronescflorida.com`.
+- File: `NSCF_QR_neuronescflorida_dorado.png`
+
+---
+
+## MODELO DE FULFILLMENT NSCF (documentado — referencia permanente)
+
+**Flujo 100% automático. Sam NO marca fulfilled manualmente en Shopify nunca.**
+
+1. Cliente web paga → webhook `orders/paid` (`nscf-fulfillment-watcher`) encola la orden con **delay de 1h** (`DELAY_MS=3600000`). Este es el "tiempo de espera" — ocurre ANTES de avisar a Iván, automáticamente.
+2. Pasada 1h → `nscf-fulfillment-processor` (cron 1min) toma la cola, crea fila en `nscf_fulfillment_log` con token y avisa a Iván vía `nscf-mailer`.
+3. Iván abre su portal (`nscf-fulfillment-portal`): confirma recibido → mete carrier + tracking.
+4. Al meter tracking, el portal dispara **4 notificaciones** (Iván / Ops / PO / cliente) + crea el **fulfillment en Shopify** (`pushShopify`).
+
+- **El fulfillment es el ÚLTIMO paso (lo hace Iván), no el primero.**
+- **Kiosk Pickup** (`source='kiosko'`) NO entra a este flujo — va por rama de comisión embajadora. En Shopify se distingue: web = "Fulfill by: [fecha] - Florida"; kiosk = "Kiosk Pickup".
+
+---
+
+## DECISIONES ARCHIVADAS (sesión 2026-06-06)
+- Cron pg_cron: **nunca** usar `current_setting()` sin verificar que el setting existe. Preferir URL hardcodeada. Revisar siempre `cron.job_run_details` tras editar un job.
+- QR NSCF: dorado de marca = **#AD9614**. Verificar escaneo con `cv2` antes de entregar.
+- SMA `/api/export`: el secret va por header `x-export-secret`, no por query param.
+
+---
+
+## DEUDA TÉCNICA NUEVA (no urgente)
+- [ ] `nscf-mailer`: campo `carrier` en `emails_sent` guardó "USPS" hardcodeado cuando el envío real de #1017 fue UPS. Bug cosmético de auditoría, no afecta entregas.
+- [ ] Verificar formalmente que el webhook `orders/paid` esté registrado y sano en Shopify (la #1021 no entró a cola — posible fallo puntual del webhook o era kiosk; confirmar).
+- [ ] SMA export endpoint: documentar header `x-export-secret` en CAPABILITIES.
+
+---
+
+## NOVEDADES SESIÓN ANTERIOR (2026-05-30) — Pricing v17 + Kits B2B
 
 ### ✅ COMPLETADO
 
@@ -53,7 +106,7 @@ _Actualizado: 2026-05-30_
 
 ---
 
-## DECISIONES ARCHIVADAS
+## DECISIONES ARCHIVADAS (previas)
 
 - **Cyan #2A8CC4** = accent secundario NSCF (del logotype) — Kit A, Kit C, elementos entry/tech
 - **Gold #B8892A** = accent primario — flagship, precios premium, Dyfensor
@@ -78,8 +131,8 @@ _Actualizado: 2026-05-30_
 ---
 
 ## SMA — Sin novedades
-Último export no muestra actividad nueva de Laura/Paty desde 2026-05-11.
+Export endpoint requiere header `x-export-secret` (no query param). Sin actividad nueva de Laura/Paty que registrar — sesión 2026-06-06 fue 100% infraestructura.
 Pendiente Patricia: vinculación Instagram→Facebook Page + tokens de API para orchestrator.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-05-30_
+_Unreal>ille · NeuroneSCF · 2026-06-06_
