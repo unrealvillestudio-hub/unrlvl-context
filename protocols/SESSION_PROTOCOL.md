@@ -1,5 +1,5 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-06-06-v15 | **Mantenido por:** Claude
+**Versión:** 2026-06-07-v16 | **Mantenido por:** Claude
 
 ---
 
@@ -231,23 +231,47 @@ Para chats de ecosistema: `ecosystem.json` (siempre) · `ecosystem.md` · `ecosy
 
 Todos los context files se actualizan **preservando historia**, nunca se reemplazan.
 
-**3. REGLA CRÍTICA DE NOMENCLATURA**
+**3. POLÍTICA DE ENTREGA POR TAMAÑO — quién toca cada archivo** *(nuevo en v16)*
+
+El tamaño del archivo decide quién lo actualiza. El criterio es objetivo: depende de si Claude puede manejar el archivo completo en el chat sin riesgo de truncar u omitir contenido.
+
+**RUTA A — Claude lo entrega listo (archivo manejable):**
+Aplica cuando Claude puede (1) leer el archivo completo vía el proxy `web_fetch_vercel_url` Y (2) re-emitirlo entero en su respuesta sin truncar, preservando el 100% del contenido previo.
+- Claude carga el archivo actual, lo actualiza (nuevo al tope, historia preservada), y entrega el archivo COMPLETO listo para push.
+- **Nomenclatura de entrega:** Claude entrega el archivo con prefijo de carpeta `[carpeta]_nombre.ext` para evitar colisiones en la carpeta de descargas. Ejemplos:
+  - `brands/ForumPHs/session_log.md` → se entrega como **`ForumPHs_session_log.md`**
+  - `agents/social-media-agent/session_log.md` → se entrega como **`social-media-agent_session_log.md`**
+  - `AGENDA.md` (raíz) → se entrega como **`AGENDA.md`** (sin prefijo, está en raíz)
+- Sam descarga, **renombra al nombre canónico** (`session_log.md`) al colocarlo en su carpeta, y pushea por GitHub Desktop.
+- En la práctica caen en Ruta A: `session_log.md`, `brand.json`, `AGENDA.md`, `BP_Brand_Context.md`, y la mayoría de los context files de tamaño medio.
+
+**RUTA B — CC hace UPDATE in-place (archivo demasiado extenso):**
+Aplica cuando el archivo es tan grande que reproducirlo entero en el chat arriesga que Claude trunque, resuma u omita contenido — exactamente el error que se quiere evitar.
+- Claude NO intenta reproducir el archivo entero. En su lugar, genera instrucciones precisas para CC de un UPDATE quirúrgico: qué bloque insertar, en qué posición (al tope, bajo qué encabezado), preservando todo lo demás.
+- CC ejecuta el UPDATE **modificando el archivo existente, nunca reemplazándolo por uno nuevo** (regla del CC_PROTOCOL).
+- **Control:** CC informa que lo hizo de forma exitosa y presenta el mensaje de commit para que Sam lo confirme antes de subir. (No se exige diff previo; CC reporta éxito + commit, Sam confirma.)
+- En la práctica caen en Ruta B: `ecosystem.json` completo y cualquier archivo que crezca mucho — hasta que el refactor pendiente los estructure en piezas más chicas (cuanto más modular el sistema, más archivos pasan a Ruta A).
+
+**Regla de decisión:** ante la duda sobre si un archivo es manejable, Claude prefiere Ruta B (CC) antes que arriesgar truncar un context file. La integridad del archivo manda sobre la comodidad de entregarlo directo.
+
+**4. REGLA CRÍTICA DE NOMENCLATURA (nombres canónicos finales en el repo)**
 ```
 session_log.md · brand.json · ecosystem.json · ecosystem.md
 ecosystem_filemap.md · AGENDA.md · BP_Brand_Context.md
 SESSION_PROTOCOL.md · SKILL.md · INDEX.md · HRD_PROTOCOL.md · CC_PROTOCOL.md
 ```
+(En Ruta A, Claude entrega con prefijo `[carpeta]_`; Sam renombra al nombre canónico al colocarlo. Ver punto 3.)
 
-**4.** Mensaje de commit listo para pegar con rutas exactas.
+**5.** Mensaje de commit listo para pegar con rutas exactas — SIEMPRE, con cada archivo entregado (Ruta A) o con cada UPDATE de CC (Ruta B).
 
-**5. Recuerda a Sam:**
+**6. Recuerda a Sam:**
 - Raíz: `ecosystem.json` · `ecosystem.md` · `ecosystem_filemap.md` · `AGENDA.md`
 - Skills: `skills/[nombre]/SKILL.md` · Index: `skills/INDEX.md`
 - Marcas: `brands/[Marca]/` · Agentes: `agents/[nombre]/`
 - Protocolos: `protocols/` · Knowledge: `knowledge/`
 - GitHub Desktop debe mostrar **modificaciones**, no archivos nuevos
 
-**6. Verifica** post-deploy:
+**7. Verifica** post-deploy:
 > *"Listo Sam. Sistema actualizado."*
 
 ---
