@@ -5,6 +5,60 @@
 
 ---
 
+## 2026-06-06 — SMA reapuntado a ForumPHs · creación de cuentas RRSS (Ivette + Jesús)
+
+**Objetivo de la sesión:** reconfigurar el Social Media Agent (antes de NeuroneSCF) para que guíe la **creación de las cuentas de RRSS de ForumPHs**, ejecutada por Jesús (operador del armado) + Ivette Flores (clienta titular). Manejo continuo posterior: UNRLVL vía dev apps + flujos/labs. **SMA terminado y operativo en producción.**
+
+### Decisiones de plataformas (aprobadas)
+- **Mezcla:** Facebook (Página + grupos) + Instagram + LinkedIn (perfil de Ivette + Company Page) + Meta dev app + verificación de negocio. **WhatsApp Business EN PAUSA** hasta número móvil panameño dedicado. **TikTok fuera** (no encaja con servicio legal-administrativo).
+- **LinkedIn doble activo:** perfil personal de Ivette (autoridad, ~70-80% del esfuerzo, alcance algorítmico) + Company Page (legitimidad institucional, permanencia). Patrón "persona al frente, marca detrás".
+- **Autoridad alimentada por:** blog en forumphs.com + LinkedIn vía Agentes IID; orgánico + ads vía Orchestrator.
+
+### Arquitectura de identidad (crítica)
+- Persona real detrás de todas las cuentas: **Ivette Flores** (clienta titular). Desde su perfil personal de Facebook se crea el Business Manager; todo cuelga de ahí.
+- **sam@unrealvillestudio.com** = admin de UNRLVL en el BM (control sin titularidad).
+- Jesús ejecuta el armado junto a Ivette; los activos son siempre de ForumPHs.
+
+### Orden de creación (10 pasos, BM primero, verificación como prerrequisito)
+Correos → número (pausado, solo WhatsApp) → Facebook de Ivette → Business Manager → verificación de negocio Meta → Facebook Page → Instagram → WhatsApp (pausado) → Meta dev app → LinkedIn.
+
+### Correos — aliases reales YA creados (forumphs.com → forumphs507@gmail.com)
+- Plataforma: `fb@`, `ig@`, `linkedin@`, `wa@` (reservado). Funcionales: `forumphs@`, `ivetteflores@`, `contacto@`, `info@`, `admin@`, `irja@`.
+- **Prerrequisito bloqueante:** Ivette debe tener `forumphs507@gmail.com` agregado y funcionando en teléfono Y compu antes de crear cuentas (las verificaciones llegan ahí).
+
+### Política de seguridad de acceso (empujada por el agente)
+- **Passkeys primero** en compu y móvil. **Evitar 2FA opcional** por ahora (hasta estabilizar acceso remoto; solo si la plataforma lo obliga). **Bitwarden** con mini-tutorial para contraseñas que existan.
+- Número personal de Ivette aceptable provisional para FB/IG/LinkedIn/BM (teléfono editable); solo WhatsApp exige el dedicado (en WhatsApp el número ES la identidad de la cuenta).
+
+### Roles del SMA (tokens)
+- `admin` (Sam/UNRLVL), `client` (Ivette, clienta titular — antes `po`), `ops` (Jesús). Tokens en Vercel: SAMDEV/IVETTE/JESUS.
+
+### Saludo con agenda por rol — funciona
+- Al escribir "hola", el agente saluda y despliega la agenda filtrada por rol (verificado: Ivette ve segunda persona "tu cuenta", Sam ve vista admin). La portada de bienvenida es estática (front); la agenda real aparece en la primera respuesta del modelo.
+
+### Estado técnico
+- PR #1 (reapuntado) + PR #2 (ajustes: aliases, prerrequisito Gmail, saludo con agenda, endpoint reset) — ambos mergeados a main de AgentLab, desplegados en producción.
+- **Historial KV reseteado a cero** vía `/api/reset` (12 keys borradas: 5 chats, 5 raw logs, registry, agent_log). Todos los tokens arrancan limpios.
+- **EXPORT_SECRET rotado** por Sam (quedó expuesto en chat durante el reset). Pendiente: actualizarlo en el protocolo Actualiza y userPreferences (ver AGENDA).
+- `reset.js` quedó en el repo como herramienta reutilizable (decisión pendiente: dejarlo o quitarlo tras uso).
+
+### Email marketing (decisión tomada)
+- FPHs usa **stack nativo Resend + Supabase + Orchestrator** (servicios), NO Klaviyo (que es para e-commerce, NSCF). Diseñar el email de FPHs "CRM-ready" desde el inicio para que el futuro unrlvl-CRM multimarca se enchufe sin reescribir.
+
+### Próximos pasos ForumPHs (cuando Sam decida)
+- [ ] Pulido SMA opcional: actualizar los 4 hints viejos (Google Voice/WABA) por hints de FPHs; opción de agenda en portada sin escribir "hola".
+- [ ] Conseguir número panameño dedicado → activar WhatsApp Business → integrar ForumPHs Speaks.
+- [ ] Ivette + Jesús ejecutan la creación de cuentas siguiendo el SMA.
+- [ ] (Pendiente del sprint anterior) fphs-formalize quality sprint 90→98 — sin arrancar.
+
+### SMA (comando Actualiza)
+- A partir de v15 del protocolo, el SMA NO se consulta por defecto en Actualiza. Solo si Sam lo pide explícitamente.
+
+---
+*ForumPHs · SMA reapuntado + creación de cuentas RRSS · 2026-06-06*
+
+---
+
 ## 2026-06-01 — fphs-formalize quality sprint · DIAGNÓSTICO + DISEÑO (sin construir aún)
 
 **Sprint:** llevar el Document Factory del 90% (efectividad Ivette) al 98% (nivel alcanzado manualmente por Claude en el acta del Luxor 300). Sam pidió diagnóstico completo y diseño antes de tocar código. **No se construyó nada todavía** — esta sesión es plano + decisión de arquitectura.
