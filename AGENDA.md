@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-06-07 · v2026-06-07-v1_
+_Actualizada: 2026-06-08 · v2026-06-08-v1_
 
 ---
 
@@ -9,7 +9,6 @@ _Actualizada: 2026-06-07 · v2026-06-07-v1_
 |---|---|---|---|
 | 1 | **luciensael.com** — repo GREENFIELD + Vercel + DNS | Lucien Sael | `claudecode: repo + deploy + DNS` |
 | 2 | **UNRLVL Field Notes** — push a CoreProject | UNRLVL | `claudecode: push blog` |
-| 3 | **CLAUDE.md — consolidación de gobernanza** — inyectar bloque de gobernanza en cada CLAUDE.md por repo PRESERVANDO contenido existente. 3 niveles: crítico (unrlvl-context), alta-complejidad (AgentLab, Orchestrator, CopyLab, ImageLab, labs pipeline), estándar (resto + MCP con nota no-tokens). Estrategia diseñada 06-06, lista para paquete CC. | UNRLVL | `claudecode: inyección por niveles` |
 
 ---
 
@@ -24,8 +23,6 @@ _Actualizada: 2026-06-07 · v2026-06-07-v1_
 | 8 | **Verificar unidades Luxor 300** — si ≤127 unidades, regenerar acta con % correcto | ForumPHs | Acta actual usa 129 |
 | 9 | **DF QA** — 3 votaciones faltantes + 13 errores primera persona | ForumPHs | Calidad acta |
 | 10 | **Ayra Sprint 0** — ⚠️ VENCIDO (deadline 5 Jun) — crear repo + Vercel + schema + env vars | UNRLVL | Reprogramar urgente |
-| 11 | **Protocolos en custom instructions** — alinear userPreferences de Sam con SESSION_PROTOCOL v16 (SMA no por defecto en Actualiza, CC_PROTOCOL existe, política de entrega por tamaño) | UNRLVL | userPreferences tienen versión vieja |
-| 12 | **EXPORT_SECRET — limpieza post-rotación** — quitar el valor viejo (texto plano) de SESSION_PROTOCOL y userPreferences → reemplazar por `[EXPORT_SECRET — valor en Vercel]`. NO hardcodear el nuevo. Sam ya rotó en Vercel. | UNRLVL | Secret viejo aún en docs versionados |
 
 ---
 
@@ -45,6 +42,7 @@ _Actualizada: 2026-06-07 · v2026-06-07-v1_
 | 22 | **SMA pulido (opcional)** — actualizar 4 hints viejos del front (App.tsx: Google Voice/WABA) por hints FPHs; opción agenda en portada sin escribir "hola"; decidir si reset.js queda permanente o se quita tras uso | ForumPHs |
 | 23 | **Email marketing FPHs** — construir stack Resend + Supabase + Orchestrator (decisión tomada: NO Klaviyo para servicios). Diseñar disparo vía capa (endpoint/tabla eventos), NO hardcodeado, para que el CRM futuro se enchufe | ForumPHs |
 | 24 | **ForumPHs — ejecución creación cuentas** — Ivette + Jesús siguen el SMA. Conseguir número panameño dedicado → activar WhatsApp Business → integrar ForumPHs Speaks | ForumPHs |
+| 35 | **CLAUDE.md — completar repos restantes** — leyendo código real (un repo grande por tanda). Pendientes: AgentLab src/ orquestador completo, forumphs-speaks (index.html 284KB monolítico), WebLab, VoiceLab, VideoLab, SocialLab, BlueprintLab, OnboardingApp, CoreProject, DDMV-Assistant, unrlvl-ops, XMMs. Listos: unrlvl-context, Orchestrator, CopyLab, ImageLab, 4 MCP, AgentLab (parcial). | UNRLVL |
 
 ---
 
@@ -62,15 +60,22 @@ _Actualizada: 2026-06-07 · v2026-06-07-v1_
 | 32 | Validar genomas v0.5 contra outputs reales → promover a v1.0 (lucien_editorial, lucien_social, sam_personal) | Lucien / SamPublisher |
 | 33 | **unrlvl-CRM multimarca** (ESTRATÉGICO) — capa de orquestación de relaciones que delega al motor de email correcto por marca (Klaviyo NSCF / Resend FPHs) sin fricción. NO construir hasta tener FPHs con leads reales por Resend + NSCF con flujo Klaviyo mapeado. El CRM sabe de clientes/estados/disparadores; los motores saben de envío. | UNRLVL |
 | 34 | **unrlvl-SMA multimarca** (ESTRATÉGICO) — SMA lee contexto de marca desde Supabase (tabla `agents`, hoy vacía), reconoce marca por token, sin reescribir prompt. FPHs + NSCF como primeras marcas de prueba, una vez FPHs probado como molde. | UNRLVL |
+| 36 | **Drift detector** (ESTRATÉGICO) — skill del ecosystem-auditor que lee el código real de cada repo vía gh-proxy, extrae campos objetivos (versión, modelo IA, env vars, endpoint, status) y los compara contra ecosystem_graph.json, reportando SOLO las discrepancias. Convierte la auditoría de "leer todo a mano" a "revisar lista de diferencias". Principio: cuando fuente derivada discrepa del código, gana el código y la fuente se corrige. Evolución futura: campos auto-extraídos (regenerados desde código, no a mano) → repos auto-documentados (/api/_meta por repo). | UNRLVL |
+| 37 | **Reconciliación completa ecosystem_graph** — ecosystem audit contextual dedicado: leer código de TODOS los nodos y reconciliar vs grafo. Hoy (06-08) solo se parchearon 4 discrepancias puntuales (ImageLab, Orchestrator, CopyLab). Idealmente se ejecuta CON el drift detector (#36) ya construido. | UNRLVL |
+| 38 | **Revisar `.github/CLAUDE.md` repetido** — template de 608 bytes (sha idéntico) en Orchestrator, CopyLab, AgentLab, fphs-speaks. Decidir si alinear con gobernanza nueva o eliminar. Limpiar `desktop.ini` en forumphs-speaks. | UNRLVL |
 
 ---
 
 ## ✅ Resuelto recientemente
 
+- ✅ **CLAUDE.md críticos + pipeline consolidados** — gobernanza inyectada preservando contexto, verificado leyendo código real: unrlvl-context (crítico), Orchestrator (v4.1, approve-job corregido), CopyLab (v9.7, motor de capas), ImageLab (Vertex+SA corregido), 4 MCP (shopify/supabase/meta/fphs-proxy), AgentLab (parcial). Pusheados — 2026-06-08
+- ✅ **ecosystem_graph.json corregido** — 4 discrepancias código-vs-grafo parcheadas vía CC UPDATE in-place: ImageLab auth/modelo (Vertex+SA, no GEMINI_API_KEY) + status live, Orchestrator v4.1, CopyLab v9.7 — 2026-06-08
+- ✅ **Protocolos en custom instructions** (#11) — userPreferences de Sam alineadas con SESSION_PROTOCOL v16 (SMA fuera de Actualiza por defecto, política de entrega por tamaño, gobernanza CC) — 2026-06-08
+- ✅ **EXPORT_SECRET limpieza** (#12) — secret viejo removido de custom instructions; v16 ya lo trae como placeholder. Sam rotó en Vercel — 2026-06-08
+- ✅ **Professor** — 13 learnings (06-06/08) + 5 nuevos (consolidación CLAUDE.md) registrados y aprobados — 2026-06-08
 - ✅ **SMA reapuntado a ForumPHs** — operativo en producción. Roles client/ops/admin; aliases de correo reales; prerrequisito Gmail; saludo con agenda por rol (funciona, personaliza); historial KV reseteado a cero (12 keys); PRs #1 y #2 mergeados — 2026-06-06
 - ✅ **Gobernanza CC creada** — CC_PROTOCOL.md + SESSION_PROTOCOL v15→v16 (política de entrega por tamaño: Ruta A Claude / Ruta B CC). Regla suprema: context files nunca se reemplazan — 2026-06-06/07
 - ✅ **session_log NSCF restaurado** — historial recuperado de git y archivado tras incidente de reemplazo por CC — 2026-06-06
-- ✅ **Professor** — 8 learnings de la sesión registrados y aprobados — 2026-06-06
 - ✅ **Skill `voice-reference-extractor` v1.0** creado e integrado — pipeline local TikTok → Whisper + OCR → consolidado .md/.json, PR #2 mergeado — 2026-06-05
 - ✅ **brands/SamPublisher/** carpeta creada + brand.json + session_log.md pushed (PR #1) — 2026-06-05
 - ✅ **INDEX.md v1.4** — voice-reference-extractor + supabase-auditor — 2026-06-05
@@ -90,9 +95,13 @@ _Actualizada: 2026-06-07 · v2026-06-07-v1_
 
 ## Notas de contexto
 
+**CLAUDE.md por repo (estado 2026-06-08):** estándar de dos capas — bloque de gobernanza CC arriba (3 niveles: crítico=unrlvl-context CC nunca escribe; alta-complejidad=labs pipeline verificación reforzada; estándar+MCP=no commitear tokens) + contexto propio del repo abajo (extraído del código real). Verificados contra código: unrlvl-context, Orchestrator, CopyLab, ImageLab, unrlvl-shopify-mcp, unrlvl-supabase-mcp, unrlvl-meta-mcp, fphs-mcp-proxy, AgentLab (parcial — falta src/ orquestador). Método: leer código real + triangular con ecosystem_graph y supabase_access_map; ante conflicto, gana el código. Pendientes de hacer: ítem #35.
+
+**Fuentes de verdad — método (estado 2026-06-08):** ecosystem_graph.json y supabase_access_map.json son apoyo de triangulación pero DERIVAN del código y pueden quedar desactualizadas (deriva). Hoy se parchearon 4 campos a mano. El método confiable es el drift detector (#36): comparar código-vs-grafo automáticamente y reportar discrepancias. Reconciliación completa = #37.
+
 **SMA ForumPHs (estado 2026-06-06):** operativo en producción. Mezcla: FB + IG + LinkedIn (perfil Ivette + Company Page) + Meta dev app + verificación negocio. WhatsApp EN PAUSA hasta número panameño dedicado. TikTok fuera. Identidad: Ivette clienta titular, Jesús operador del armado, sam@unrealvillestudio.com admin del BM. Aliases reales bajo forumphs.com → forumphs507@gmail.com (fb@, ig@, linkedin@, wa@ reservado, + funcionales). Email marketing FPHs = Resend+Supabase+Orchestrator (no Klaviyo).
 
-**Gobernanza CC (estado 2026-06-07):** CC_PROTOCOL.md gobierna a CC en todos los repos. Regla suprema: context files nunca se reemplazan (UPDATE preservando historia). CC nunca pushea a unrlvl-context (solo Sam por GitHub Desktop) ni mergea PRs por su cuenta. CC limpia sus worktrees al cerrar PR. SESSION_PROTOCOL v16 define política de entrega por tamaño: Ruta A (Claude entrega listo con prefijo [carpeta]_, Sam renombra) / Ruta B (CC hace UPDATE in-place, informa éxito + commit para confirmar). Pendiente: inyectar gobernanza en CLAUDE.md por repo (ítem #3).
+**Gobernanza CC (estado 2026-06-07):** CC_PROTOCOL.md gobierna a CC en todos los repos. Regla suprema: context files nunca se reemplazan (UPDATE preservando historia). CC nunca pushea a unrlvl-context (solo Sam por GitHub Desktop) ni mergea PRs por su cuenta. CC limpia sus worktrees al cerrar PR. SESSION_PROTOCOL v16 define política de entrega por tamaño: Ruta A (Claude entrega listo con prefijo [carpeta]_, Sam renombra) / Ruta B (CC hace UPDATE in-place, informa éxito + commit para confirmar).
 
 **Genomas del ecosistema propio (estado 2026-06-02):** 4 genomas activos en `brand_voice_genome` — `unrlvl_default` v1.0 (we/infraestructura), `lucien_editorial` v0.5 (ensayo/filo que respira), `lucien_social` v0.5 (golpe corto ≤280), `sam_personal` v0.5 (practicante que reflexiona + vocero). Modo vocería de Sam cita a Lucien por destino del enlace (social vs editorial). Pendiente: genoma UNRLVL social (mismo modo vocería, voz "we").
 
