@@ -1,6 +1,25 @@
 # CLAUDE.md — unrlvl-context
 _Contexto persistente para Claude Code. No editar manualmente._
 
+---
+
+## ⛔ GOBERNANZA CC — NIVEL CRÍTICO (leer ANTES de tocar nada)
+
+Antes de cualquier acción en este repositorio, Claude Code DEBE cargar y obedecer el protocolo central:
+**`https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md`** (cargar con `Vercel:web_fetch_vercel_url` o `curl`).
+
+**Este repo es CRÍTICO — el sistema nervioso del ecosistema. Reglas reforzadas:**
+
+1. **CC NUNCA escribe en este repo. Ni push directo, ni vía PR, ni con `api/gh-write`.** Este repo se actualiza EXCLUSIVAMENTE por Sam vía GitHub Desktop. CC prepara archivos y los entrega para que Sam los suba; CC nunca los commitea ni pushea aquí. Si CC cree que necesita escribir acá, se DETIENE y se lo plantea a Sam.
+
+2. **CONTEXT FILES NUNCA SE REEMPLAZAN.** Se actualizan preservando historia: lo nuevo al tope, lo anterior archivado debajo bajo `## ARCHIVO HISTÓRICO`, nunca borrado. Aplica a TODO `.json`/`.md` de este repo (ecosystem.json, brand.json, session_log, AGENDA, protocolos, etc.). Antes de proponer cualquier cambio: verificar que el diff solo AÑADE, no BORRA historia.
+
+3. **VERIFICAR ANTES DE ACTUAR:** mensaje corto a Sam con objetivo, pasos, archivos y repos afectados antes de cualquier acción. Reportar al final con el formato de CC_PROTOCOL (incluida la sección PRESERVACIÓN DE CONTEXTO).
+
+Ante cualquier duda → preguntar a Sam, no asumir. Un error aquí rompe Professor, brand-cache y gh-proxy de todo el ecosistema.
+
+---
+
 ## Qué es este repo
 `unrlvl-context` es el **sistema nervioso central** del ecosistema UNRLVL. Es el repo que mantiene el estado completo del ecosistema, sirve como proxy seguro a GitHub, aloja el sistema Professor, y provee el brand-cache API. Todo el ecosistema depende de él.
 
@@ -111,6 +130,7 @@ skills/
 protocols/
   SESSION_PROTOCOL.md       ← Protocolo de sesión (HRD_PROTOCOLO_ACTUALIZACION, etc.)
   HRD_PROTOCOL.md           ← Protocolo HRD completo
+  CC_PROTOCOL.md            ← Protocolo de Claude Code (gobernanza CC)
   ECOSYSTEM_AUDIT.md        ← Protocolo de auditoría
   AYRA_MASTER_PLAN.md       ← Plan maestro Ayra
   ...
