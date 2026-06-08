@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "2026-05-31-v1",
+    "version": "2026-06-08-v2",
     "type": "CONTEXTUAL — ground truth from code audit + session patches",
     "previous_version": "2026-05-26-v3",
     "maintained_by": "Claude — generated via ecosystem audit, do not edit manually",
@@ -9,7 +9,8 @@
     "audit_sources": [
       "GitHub unrealvillestudio-hub — repos: Orchestrator, CopyLab, ImageLab, SocialLab, VoiceLab, VideoLab, BlueprintLab (App.tsx 83KB + blueprintLabLoader.ts), WebLab",
       "Supabase unrlvl-db — list_edge_functions (93 real vs 67 documented)",
-      "Supabase unrlvl-db — full table list across all schemas"
+      "Supabase unrlvl-db — full table list across all schemas",
+      "patch 2026-06-08: ImageLab auth/modelo corregido (Vertex+SA, no GEMINI_API_KEY) + status live; Orchestrator v4.1; CopyLab v9.7 — verificado leyendo código real durante consolidación CLAUDE.md."
     ],
     "v4_changes_vs_v3": [
       "NSCF meta_accounts: era blocker fantasma — ya estaba resuelto. TBL-META-ACCOUNTS actualizado, BRAND-NSCF gap removido.",
@@ -49,21 +50,21 @@
     { "id": "AI-GEMINI",     "type": "ai_service",  "name": "Google Gemini API",        "status": "live",
       "consumers": ["SocialLab (generate-post)", "VideoLab", "WebLab", "VoiceLab"] },
     { "id": "AI-IMAGEN",     "type": "ai_service",  "name": "Google Imagen 3.0",        "status": "live",
-      "note": "imagen-3.0-generate-002 via GEMINI_API_KEY. Exclusivamente ImageLab.",
+      "note": "Vertex AI Imagen 3.0 via Service Account (GOOGLE_SERVICE_ACCOUNT_KEY + google-auth-library OAuth2). Modelos: imagen-3.0-fast-generate-001 (text-to-image) + imagen-3.0-capability-001 (subject/style refs). NO es AI Studio/GEMINI_API_KEY. Verificado en api/execute.ts v6 (2026-06-08). Exclusivamente ImageLab.",
       "consumers": ["ImageLab only"] },
     { "id": "AI-ELEVENLABS", "type": "ai_service",  "name": "ElevenLabs API",           "status": "live",
       "note": "VoiceLab. Sin SDK en package.json — posiblemente fetch REST directo. Voice IDs PO pendientes.",
       "consumers": ["VoiceLab"] },
 
-    { "id": "ORCHESTRATOR",  "type": "lab",         "name": "Orchestrator",             "url": "https://orchestrator-unrlvl.vercel.app",        "status": "live", "version": "v2.2",
+    { "id": "ORCHESTRATOR",  "type": "lab",         "name": "Orchestrator",             "url": "https://orchestrator-unrlvl.vercel.app",        "status": "live", "version": "v4.1",
       "real_behavior": "Lee lab_configs para descubrir endpoints dinámicamente. Intent via Claude API haiku. Jobs en content.orchestrator_jobs.",
       "api_routes": ["POST /api/trigger-job", "POST /api/interpret-intent", "POST /api/approve-job"] },
-    { "id": "COPYLAB",       "type": "lab",         "name": "CopyLab",                  "url": "https://unrlvl-copy-lab.vercel.app",            "status": "live", "critical": true, "version": "v9.6",
+    { "id": "COPYLAB",       "type": "lab",         "name": "CopyLab",                  "url": "https://unrlvl-copy-lab.vercel.app",            "status": "live", "critical": true, "version": "v9.7",
       "real_behavior": "v9.6 Node.js native. Async mode: inserta copylab_jobs. Sync: Claude API sonnet-4 directo. Zero-query via brand_cache_snapshots v2.0. Lee brand_copy_profiles (= BP_COPY_1.0 de BlueprintLab).",
       "sb_tables_read": ["brand_cache_snapshots", "copylab_jobs", "brands", "humanize_profiles", "brand_goals", "brand_personas", "compliance_rules", "keywords", "ctas", "brand_copy_profiles", "creative_vectors", "tension_architectures", "aggro_presets", "creative_compatibility_rules", "pipeline_skills", "output_templates", "brand_voice_genome", "content_sequence_pieces"] },
-    { "id": "IMAGELAB",      "type": "lab",         "name": "ImageLab",                 "url": "https://image-lab-unrlvl.vercel.app",           "status": "bug",
-      "real_behavior": "Llama Google Imagen 3.0 REST. Lee imagelab_presets + psycho_presets. También lee person_blueprints/location_blueprints para identity params. Retorna base64 data URL.",
-      "blocker": "Vercel 50s timeout. Fix: VercelRequest/VercelResponse + maxDuration" },
+    { "id": "IMAGELAB",      "type": "lab",         "name": "ImageLab",                 "url": "https://image-lab-unrlvl.vercel.app",           "status": "live",
+      "real_behavior": "Llama Vertex AI Imagen 3.0 (fast-generate-001 text-to-image + capability-001 multimodal) via Service Account OAuth2. Preset injection v6 desde imagelab_presets por (brand_id,canal); fallback a brands.imagelab_* + psycho_presets. Front anon read-only; api/execute.ts service_role. Retorna base64 data URL. maxDuration 60.",
+      "blocker": null },
     { "id": "SOCIALLAB",     "type": "lab",         "name": "SocialLab",                "url": "https://social-lab-flame.vercel.app",           "status": "live",
       "real_behavior": "Escribe scheduled_posts. /api/publish → Meta MCP directo (ig_create_container + ig_publish_container + fb_publish_post). TikTok: not yet supported." },
     { "id": "AGENTLAB",      "type": "lab",         "name": "AgentLab",                 "url": "https://agent-lab-unrlvl.vercel.app",           "status": "live",
