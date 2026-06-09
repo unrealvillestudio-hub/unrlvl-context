@@ -1,5 +1,59 @@
 # ForumPHs — Session Log
 
+## 2026-06-08 — Fincas Castilla + ledger de costos + warning ICR (mapeo para próximo chat)
+
+### EN PRODUCCIÓN (aplicado y verificado)
+- **Fix finca Torres de Castilla** — VALIDADO live por Sam: 237 fincas pobladas, solo
+  los 6 locales no cargados quedan [FINCA PENDIENTE] (correcto). Causa raíz: la única
+  regla era `explicit` esperando "5-E" con torre aparte, pero Hypal trae torre embebida
+  sin columna ("TA 05E"=Torre A) y cero a la izquierda en el piso, mientras canonical_key
+  es "A|5-E" sin cero. Fix = DATA: dos reglas `embedded_prefix` priority 90 (piso 0[1-9])
+  y 95 (piso [1-9][0-9]) en `building_normalization` FPHS. Sin deploy.
+- **Tarifa Sonnet registrada** en `ops_lab_rates` (UNRLVL): lab='document-factory',
+  model_id='claude-sonnet-4-6', input $3/1M, output $15/1M. Base lista para el ledger.
+
+### DECISIONES DE ARQUITECTURA
+- **Rechazada la regla de normalización universal**: los formatos de PHs son mutuamente
+  ambiguos ("TA 05E" Castilla vs "T3 44A" Luxor); una regla que adivine haría matches de
+  finca incorrectos (peor que un hueco visible). Se mantiene formato-como-DATA por PH
+  (1-2 INSERT sin deploy). Mejora futura: que el ICR DETECTE formato no contemplado y
+  SUGIERA el patrón (alta de PH = un clic).
+- **Ledger de costos del DF — Opción 1**: una fila agregada por acta (no por llamada),
+  en `ops_token_sessions` (UNRLVL), cost_usd = (in/1M*3)+(out/1M*15).
+
+### PENDIENTE — PRÓXIMO CHAT (lo primero que haga Claude)
+> **Un solo PR de CC, toca solo `/api/generate`** (instrucciones ya entregadas a Sam:
+> `CC_INSTRUCCIONES_ledger_costos_DF.md`, actualizado con los dos cambios):
+> 1. **Ledger de costos del DF**: acumular usage de todas las llamadas Anthropic del job
+>    (formalize + QA + ICR Mano A + Vision Mano B) → una fila en `ops_token_sessions`
+>    con cost_usd calculado, escrita por `/api/generate` al cerrar el job. La EF
+>    fphs-formalize debe DEVOLVER sus tokens (hoy solo los loguea) y dejar de escribir
+>    por su cuenta (evitar doble conteo). **CC debe verificar que ICR/Vision devuelvan
+>    bloque `usage`.**
+> 2. **Warning ICR de fincas faltantes**: si `fincaPendientes.length>0`, push ICRFinding
+>    MEDIUM / DATA_MISMATCH (campo `suggestion`), no bloqueante. Usa el `fincaPendientes[]`
+>    que el lookup ya recolecta.
+>
+> Estado al cerrar: Sam le pasa las instrucciones a CC. Claude del próximo chat debe
+> (a) verificar si el PR ya se abrió/mergeó (revisar main del repo + ops_token_sessions),
+> (b) si está mergeado, validar una fila de costo real en ops_token_sessions tras un acta,
+> (c) registrar cierre en Professor.
+
+### OTROS PENDIENTES (no urgentes)
+- Mejora ICR "sugerir patrón de normalización" para PH nuevo (sesión Agente Experto).
+- 6 locales L01–L06 de Castilla no están en `units` (deuda de datos — cargar fincas).
+- Re-smoke completo de Vision en Luxor (el 413 ya está resuelto; falta confirmar Mano B
+  clasificando con un ZIP image-heavy en producción).
+
+### REGLAS DB APLICADAS ESTA SESIÓN (registro — la DB es la fuente de verdad)
+- FPHS `building_normalization`: +2 reglas Torres de Castilla (priority 90, 95).
+- UNRLVL `ops_lab_rates`: +2 filas tarifa Sonnet document-factory (input/output).
+
+---
+[⬇ historial anterior preservado: sesiones 2026-06-04, 2026-06-01 ...]
+
+# ForumPHs — Session Log
+
 > Repo: `unrlvl-context/brands/ForumPHs/session_log.md`
 > Las novedades más recientes van al tope.
 
