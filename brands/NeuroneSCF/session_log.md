@@ -1,18 +1,71 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-06-13 (sesión 3)_
+_Actualizado: 2026-06-13 (sesión 4)_
 
 ---
 
 ## ⏸️ RETOMAR EN PRÓXIMO CHAT (prioridad)
 
-1. **NSCF-Console — Fases 2 y 3 (pendientes del proyecto PRO).**
-   - **Fase 2 = Módulo de aprobación de PO.** PO revisa solicitudes `pending` en `nscf_b2b_salones`, abre el doc de licencia (vía signed URL del bucket privado), aprueba/rechaza. Al aprobar → crea/etiqueta el customer en Shopify PRO vía API (tag `salon-aprobado`) + email de bienvenida. Incluye botón "registro asistido" (PO crea cuenta manual para salón ya tocado).
-   - **Fase 3 = Elevar el kiosk a "NSCF Console" superuser.** Misma app, roles separados por nivel de auth: **embajadora (PIN)** = B2C venta actual, sin cambios; **PO/superuser (login fuerte, no PIN)** = desbloquea aprobaciones de salones + vista B2B + inventarios de ambas tiendas (B2C y PRO vía Shopify MCP/API). Las funciones sensibles NUNCA detrás del PIN de 4 dígitos.
-2. **Mergear PR #2** (pro-gateway) a main + cleanup worktree (sigue pendiente de sesión 2).
+Orden sugerido (ver razonamiento en novedades sesión 4):
+1. **Resend hardening** (corto, seguridad) — mover key Resend de hardcoded a secret `RESEND_API_KEY` en Supabase + **rotar la key** + versionar `nscf-mailer` en el repo (hoy es deploy-only sin trazabilidad git). No depende de nada. Hacer antes de Fase 3.
+2. **Sesión Shopify infra** — app dedicada de commerce (`UNRLVL Commerce` o similar) con `write_customers`/`write_draft_orders`/`write_orders` + decidir cómo `shopify.stores` maneja múltiples tokens por tienda (hoy: 1 token por (brand_id, store_type)). Desbloquea Fase 2.5 (automatizar creación del customer al aprobar). NO mezclar con sprint de producto.
+3. **NSCF-Console Fase 3** — elevar a superuser console: roles por nivel de auth (embajadora PIN = B2C sin cambios; PO/superuser login fuerte = aprobaciones + vista B2B + inventarios de ambas tiendas vía Shopify MCP/API). Funciones sensibles NUNCA tras el PIN. NO depende de Shopify infra (puede ir antes), pero la automatización del customer (Fase 2.5) sí.
+
+**Pendiente manual inmediato (cierre Fase 2):** ~~crear el proyecto Vercel de `nscf-console`~~ HECHO — deploy LIVE `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars), probado OK. Mergear PR #3 (HECHO). Borrar PNGs huérfanos del bucket (HECHO). **Fase 2 100% completa y en producción.**
 
 ---
 
-## NOVEDADES ESTA SESIÓN (2026-06-13 sesión 3) — Sales Pager Salones v18: cierre y entrega
+## NOVEDADES ESTA SESIÓN (2026-06-13 sesión 4) — NSCF-Console Fase 2: Módulo de Aprobación de PO
+
+### COMPLETADO Y VERIFICADO EN VIVO (E2E 10/10)
+
+#### Qué se entregó
+- **EF nueva `nscf-b2b-approve` v1** (verify_jwt=false, auth propia): acciones `login` / `list_pending` / `get_license_url` / `approve` / `reject` / `needs_info` / `assisted_register`. Inerte hasta cargar secrets (responde 503 sin ellos). Replica patrón de `nscf-b2b-register` (CORS, service_role, helpers, fetch a `nscf-mailer`). Auth = bcryptjs@2.4.3 compareSync + djwt HS256, sesión 8h.
+- **`nscf-mailer` v18 → v19** (deploy-only, NO versionada por key Resend hardcodeada): +3 types bilingües `b2b_approved` / `b2b_rejected` / `b2b_needs_info` con `notes` escapado (HTML). Verificado **byte-idéntico** a v18 (CC trajo el código desplegado de vuelta y comparó: acentos, emoji y los 6 templates previos intactos) → sin regresión en emails B2C/embajadoras/despacho.
+- **Frontend `nscf-console/`** (nuevo subdir en repo NeuroneSCF, Vite+React espejo de `pro-gateway`): login PO, lista de pendientes, "Ver licencia" (signed URL fresca ≤300s), aprobar con confirmación + **bloque copia-pega** (email/nombre/teléfono/tag `salon-aprobado` + enlace a Customers→Add de la tienda PRO), rechazar/pedir info con `notes`, registro asistido. Build `vite build` → `dist/` OK. **Sin env vars** (endpoint EF hardcodeado en `App.jsx:5`, a propósito: toda la auth es server-side).
+- **Migración** `supabase/migrations/20260613140000_nscf_b2b_pending_index.sql` — índice parcial propuesto.
+
+#### Decisiones de diseño (DEFINITIVAS)
+- **Fase 2 sin Shopify automático.** El token actual (app `UNRLVL Auditor`) solo tiene `read_customers`, no `write_customers`. La creación del customer en Shopify PRO la hace **PO a mano**, asistida por el bloque copia-pega. Punto de inserción del automático marcado en código `// TODO FASE-2.5 [write_customers]`.
+- **La Console solo consulta `status=pending`.** No lee histórico. Tras aprobar, la fila desaparece de la vista (se conserva en DB + bucket como respaldo de due diligence, NO se borra). Superficie de datos mínima — riesgo de exposición controlado (los datos los provee el propio cliente con consentimiento, para revisión).
+- **Datos del customer = los del registro** (ya en `nscf_b2b_salones` desde Fase 1). Sin segundo formulario.
+- **Auth de PO:** password fuerte hasheado server-side (no el PIN del kiosko). Diseñado para evolucionar a roles en Fase 3 sin reescribir. Secrets: `PO_CONSOLE_PASSWORD_HASH` + `PO_CONSOLE_JWT_SECRET` (cargados por Sam).
+- **Verificación humana obligatoria:** aprobar exige que PO abra el doc de licencia primero. Es el único control real del sistema B2B.
+
+#### DB — aplicado vía MCP esta sesión (autorizado por Sam)
+- `CREATE POLICY "service_only"` sobre `nscf_b2b_salones` (FOR ALL, `auth.role()='service_role'` en USING+CHECK). Hace explícito lo que era implícito (RLS on + 0 policies) → elimina el WARN `rls_enabled_no_policy`. Comportamiento idéntico (anon ya bloqueado).
+- `CREATE INDEX idx_nscf_b2b_salones_pending` (parcial: `created_at DESC WHERE status='pending'`).
+- Verificado: columnas Fase 2 ya existían, CHECK con los 4 status OK, GRANTs service_role OK (del fix de Fase 1).
+
+#### Verificación E2E (10/10 en vivo)
+login ✅ · list_pending+signed URL ✅ · approve ✅ · reject ✅ · needs_info ✅ · registro asistido ✅ · re-aprobar resuelta → 409 sin doble email ✅ · kiosko B2C intacto ✅ · anon NO lee la tabla (401 permission denied) ✅ · advisors sin nuevos críticos ✅. Los 3 emails recibidos por Sam con enlaces funcionando ✅. Datos de prueba limpiados (tabla en 0; 4 carpetas PNG huérfanas del bucket borradas por Sam).
+
+#### Gobernanza
+- **PR #3** (rama feat → main): **mergeado por Sam** (GitHub Desktop). Worktree de sesión `blissful-agnesi-20e2cf` se limpia al cerrar PR.
+- Hash bcrypt de PO generado por CC con misma lib que la EF, self-test ✅, devuelto sin persistir.
+
+### PATRÓN ACEPTADO — CC preview/live (registrado en Professor)
+CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando que son inertes hasta cargar secrets y señalándolo conscientemente. 2ª ocurrencia; ambas resueltas y no negligentes. **Sam lo acepta como modo de trabajo válido de CC** mientras sea consciente y solutivo. No es bug.
+
+### DRIFTS DETECTADOS (registrados en Professor, pendientes de corregir en fuente de verdad)
+- `shopify.stores` documentado como VIEW en un learning previo; al 2026-06-13 es **BASE TABLE**.
+- `HRD_PROFESSOR` marca `/api/professor` como "PENDIENTE DE CONSTRUIR" pero el proxy **ya existe y responde** (action=checkpoint → 200). El learning del ecosystem que decía que el proxy no existía quedó obsoleto.
+
+---
+
+## DEUDA TÉCNICA / PENDIENTES (acumulada)
+- [ ] **Resend hardening** (ver prioridad 1 arriba): key → secret + rotación + versionar `nscf-mailer`.
+- [x] **Proyecto Vercel `nscf-console`** — HECHO, LIVE en `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars).
+- [ ] **Confirmar URL real de login passwordless PRO** — el mailer usa `nj5ybc-n1.myshopify.com/account` por defecto; Sam confirmó que la URL funciona.
+- [ ] **Corregir drift `shopify.stores` VIEW→BASE TABLE** y drift `/api/professor` en fuente de verdad (ecosystem learnings / HRD_PROTOCOL).
+- [ ] Config Vercel Parte C: "Include files outside root" → OFF en kiosko y dispatch (de s2).
+- [ ] **Cutover de dominio** `pro.neuronescflorida.com` → landing (de s2).
+- [ ] **Política de privacidad B2B** — `PRIVACY_URL` apunta a la de B2C; crear la B2B (de s2).
+- [ ] **`NeuroneSCF_B2B` sin paleta en Supabase** (de sesiones previas).
+- [ ] **Imágenes de producto Neurone defectuosas** (de sesiones previas).
+
+---
+
+## NOVEDADES SESIÓN ANTERIOR (2026-06-13 sesión 3) — Sales Pager Salones v18: cierre y entrega
 
 ### COMPLETADO — One-pager B2B salones (el "pendiente" de sesión 2, RESUELTO)
 
@@ -42,7 +95,7 @@ _Actualizado: 2026-06-13 (sesión 3)_
 
 ---
 
-## NOVEDADES ESTA SESIÓN (2026-06-12 sesión 2) — NSCF PRO Fase 1: Registro de Salones B2B
+## NOVEDADES SESIÓN (2026-06-12 sesión 2) — NSCF PRO Fase 1: Registro de Salones B2B
 
 ### COMPLETADO Y EN PRODUCCIÓN
 
@@ -66,7 +119,7 @@ _Actualizado: 2026-06-13 (sesión 3)_
 Registro real "BlackOut Salon" → "Solicitud recibida" + email bilingüe recibido → fila `pending` con consentimientos sellados + doc en bucket privado (`licenses/b2bsalon_*/...`). Datos de prueba limpiados.
 
 #### Gobernanza
-- PR #2 (`worktree-nscf-pro-gateway` → main): "Ready to merge", 3 commits (86cde2f, dfab9a4, 6fe9952). **Pendiente: Sam mergea por GitHub Desktop + CC limpia worktree.**
+- PR #2 (`worktree-nscf-pro-gateway` → main): **MERGEADO** (Sam confirmó en sesión 4). 3 commits (86cde2f, dfab9a4, 6fe9952).
 
 ### BUG RESUELTO — 500 en el registro (causa: GRANT faltante, NO el código)
 - Síntoma: form devolvía 500, tabla vacía, INSERT manual funcionaba.
@@ -80,19 +133,19 @@ Registro real "BlackOut Salon" → "Solicitud recibida" + email bilingüe recibi
 
 ---
 
-## DEUDA TÉCNICA / PENDIENTES (2026-06-12 s2)
-- [ ] **Mergear PR #2** a main (Sam, GitHub Desktop) + cleanup worktree (CC).
+## DEUDA TÉCNICA / PENDIENTES (2026-06-12 s2 — histórico, ver lista acumulada arriba)
+- [x] **Mergear PR #2** a main — HECHO (sesión 4).
 - [ ] Config Vercel Parte C: "Include files outside root" → OFF en kiosko y dispatch.
-- [ ] **Cutover de dominio** `pro.neuronescflorida.com` → apuntar a la landing (hoy va a la tienda Shopify). Decisión + ejecución de Sam, cuando todo esté validado. El día del switch, la entrada del portal cambia en producción.
-- [ ] **Política de privacidad B2B:** hoy `PRIVACY_URL` apunta a la de B2C (`neuronescflorida.com/policies/privacy-policy`). Crear la de B2B y actualizar el link (1 línea hardcodeada en App.jsx). Verificar que la página actual tenga contenido real (cobertura del checkbox de consentimiento).
-- [ ] Objeto(s) de prueba huérfano(s) en bucket `nscf-licenses` (PNGs de prueba) — borrar desde Storage UI o dejar (bucket privado, sin riesgo).
-- [ ] Avisar a PO: ignorar emails de prueba B2B ("PRUEBA CC — ignorar" + "BlackOut Salon").
-- [ ] **`NeuroneSCF_B2B` sin paleta en Supabase** (de sesión anterior, sigue): identidad B2B vive solo en portal deployado. Cargar a Supabase.
-- [ ] **Imágenes de producto Neurone defectuosas** (de sesión anterior): PNGs del laboratorio con bloques negros/blancos. Las 2 `_alpha` (Humit) sí están bien. Para landing/uso ampliado, set de PNGs transparentes limpios.
+- [ ] **Cutover de dominio** `pro.neuronescflorida.com` → apuntar a la landing.
+- [ ] **Política de privacidad B2B.**
+- [x] Objetos de prueba huérfanos en bucket `nscf-licenses` — borrados (sesión 4).
+- [ ] Avisar a PO: ignorar emails de prueba B2B.
+- [ ] **`NeuroneSCF_B2B` sin paleta en Supabase.**
+- [ ] **Imágenes de producto Neurone defectuosas.**
 
 ---
 
-## NOVEDADES SESIÓN ANTERIOR (2026-06-12 sesión 1) — Kiosk: Cobro en Efectivo + Sales Pager
+## NOVEDADES SESIÓN (2026-06-12 sesión 1) — Kiosk: Cobro en Efectivo + Sales Pager
 
 ### COMPLETADO
 
@@ -135,4 +188,4 @@ Registro real "BlackOut Salon" → "Solicitud recibida" + email bilingüe recibi
 - Marketing B2B = $0 ads en fase lanzamiento presencial.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-06-13 sesión 3_
+_Unreal>ille · NeuroneSCF · 2026-06-13 sesión 4_
