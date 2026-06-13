@@ -1,14 +1,44 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-06-12 (sesión 2)_
+_Actualizado: 2026-06-13 (sesión 3)_
 
 ---
 
 ## ⏸️ RETOMAR EN PRÓXIMO CHAT (prioridad)
 
-1. **One-pager — PAUSA con trabajo pendiente.** Hay más que resolver sobre el one-pager (Sam lo flaggeó al cierre de esta sesión). Retomar como primer tema del próximo chat. _Contexto: existen versiones previas (PRINT Legal 8.5×14 y DARK 680px) en sesión 2026-05-30; y el Sales Pager Salones de hoy. Falta definir qué exactamente queda abierto — preguntarle a Sam al retomar._
-2. **NSCF-Console — Fases 2 y 3 (pendientes del proyecto PRO).**
+1. **NSCF-Console — Fases 2 y 3 (pendientes del proyecto PRO).**
    - **Fase 2 = Módulo de aprobación de PO.** PO revisa solicitudes `pending` en `nscf_b2b_salones`, abre el doc de licencia (vía signed URL del bucket privado), aprueba/rechaza. Al aprobar → crea/etiqueta el customer en Shopify PRO vía API (tag `salon-aprobado`) + email de bienvenida. Incluye botón "registro asistido" (PO crea cuenta manual para salón ya tocado).
    - **Fase 3 = Elevar el kiosk a "NSCF Console" superuser.** Misma app, roles separados por nivel de auth: **embajadora (PIN)** = B2C venta actual, sin cambios; **PO/superuser (login fuerte, no PIN)** = desbloquea aprobaciones de salones + vista B2B + inventarios de ambas tiendas (B2C y PRO vía Shopify MCP/API). Las funciones sensibles NUNCA detrás del PIN de 4 dígitos.
+2. **Mergear PR #2** (pro-gateway) a main + cleanup worktree (sigue pendiente de sesión 2).
+
+---
+
+## NOVEDADES ESTA SESIÓN (2026-06-13 sesión 3) — Sales Pager Salones v18: cierre y entrega
+
+### COMPLETADO — One-pager B2B salones (el "pendiente" de sesión 2, RESUELTO)
+
+#### Entregables
+- **`NSCF_SalesPager_Salones.html` (v18)** — pager completo, todas las imágenes reales incrustadas (base64, archivo autónomo): hero, Packs de tinte 24/36, sección Solo Color, sección Alizzanti (Dúo/Trío), grid "Tú eliges", CTA WhatsApp, footer.
+- **`NSCF_SalesPager_Alizzanti_general.html`** — versión derivada solo-Alizzanti (hero "Lanza tu promo de alisado", sin tintes/peróxidos/cartilla). NOTA: resultó redundante — los kits Alizzanti del pager completo ya estaban separados de tintes y peróxidos desde el inicio (ver learning 6). Queda como pieza independiente por si PO la quiere para presentar a otros salones (ej. Johanna).
+
+#### Framework de venta de salón (DEFINITIVO — referencia permanente)
+- El salón vende el **SERVICIO** (color, alisado, tratamiento) con producto incluido en la aplicación; **NO revende producto**.
+- Matiz: presentaciones **400ml** a veces SÍ se revenden al cliente final (retail); las **1L** son uso en cabina. En este pager los 400ml van solo listados, sin pitch.
+- **Único producto con argumento de venta = Alizzanti** (facturación por servicio). Tinte/shampoo/mask solo se listan.
+- Decisión Sam: NO mencionar formato 1L de shampoo/mask (no hay en inventario), NO decir "quiero que lo pruebes" (lo hace PO en persona), NO llamar "insumo de cabina" al shampoo/mask (lo decide cada salón).
+
+#### Pricing (confirmado)
+- **Kits tinte:** Pack 24 ~~$340~~→$289 + 2 peróxidos GRATIS (ahorro $73, margen 47.8%); Pack 36 ~~$460~~→$395 + 3 peróxidos GRATIS (ahorro $98, margen 44.7%). Redondeo hacia arriba a número limpio.
+- **Kits Alizzanti (Opción B — anchor B2B ~$74.99/Alizzanti, NO sobre PVP $99.99):** Dúo ~~$310~~→$259 (+Shine $289); Trío ~~$640~~→$545 (+Shine $589). Márgenes 59–61%. Opción A (anchor PVP) RECHAZADA por thin/alta para B2B.
+- **Dato campo PO:** 1 botella Alizzanti ≈ 5 alisados; salón cobra $200–350/servicio → factura $1,000–1,750/botella. Pager usa piso conservador ($200 → "$1,000+").
+
+#### Cambios de copy y assets aplicados
+- Voz neutra (ES/EN internacional): eliminado voseo "elevá"→"eleva".
+- "sin costo"→"GRATIS" (x4); "a precio especial"→"con la promoción de este mes"; "el peróxido va incluido"→"Peróxido GRATIS".
+- Shampoos/masks con "400 ml" (solo el formato); eliminado todo "1 L"/"1 Litro" de shampoo/mask (no hay en inventario). Conservados: tinte 90ml, peróxido 2/3 L, Alizzanti 1 L.
+- **CTA → WhatsApp** `wa.me/13057489101` (PO +1 305 748-9101) con mensaje pre-cargado; email `hello-pro@neuronescflorida.com` como respaldo. `mailto:` descartado (frágil, ver learning 4).
+- Footer: eliminados menús "Catálogo" e "Información"; conservado solo "Contacto" (email).
+- Imágenes incrustadas: Alizzanti (NEALIZZ-2), tinte caja azul (NCOLOR), peróxidos (NCNEU-6), Resplander Shine (NERESPSH, en add-on), icon PRO en cartilla + favicon.
+- **Icon PRO transparente:** subió flateado a JPEG con fondo negro; recuperado con flood-fill desde bordes (preserva la N negra interior) + recorte bbox + PNG RGBA (ver learning 5).
 
 ---
 
@@ -105,4 +135,4 @@ Registro real "BlackOut Salon" → "Solicitud recibida" + email bilingüe recibi
 - Marketing B2B = $0 ads en fase lanzamiento presencial.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-06-12 sesión 2_
+_Unreal>ille · NeuroneSCF · 2026-06-13 sesión 3_
