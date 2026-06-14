@@ -1,16 +1,58 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-06-13 (sesión 4)_
+_Actualizado: 2026-06-13 (sesión 5)_
 
 ---
 
 ## ⏸️ RETOMAR EN PRÓXIMO CHAT (prioridad)
 
-Orden sugerido (ver razonamiento en novedades sesión 4):
-1. **Resend hardening** (corto, seguridad) — mover key Resend de hardcoded a secret `RESEND_API_KEY` en Supabase + **rotar la key** + versionar `nscf-mailer` en el repo (hoy es deploy-only sin trazabilidad git). No depende de nada. Hacer antes de Fase 3.
-2. **Sesión Shopify infra** — app dedicada de commerce (`UNRLVL Commerce` o similar) con `write_customers`/`write_draft_orders`/`write_orders` + decidir cómo `shopify.stores` maneja múltiples tokens por tienda (hoy: 1 token por (brand_id, store_type)). Desbloquea Fase 2.5 (automatizar creación del customer al aprobar). NO mezclar con sprint de producto.
-3. **NSCF-Console Fase 3** — elevar a superuser console: roles por nivel de auth (embajadora PIN = B2C sin cambios; PO/superuser login fuerte = aprobaciones + vista B2B + inventarios de ambas tiendas vía Shopify MCP/API). Funciones sensibles NUNCA tras el PIN. NO depende de Shopify infra (puede ir antes), pero la automatización del customer (Fase 2.5) sí.
+**De sesión 5 (pricing + assets):**
+1. **Custom Kit de prueba (Orlando)** — armar kit real con `nscf-pricing` y las 3 vistas, como validación del skill en uso.
+2. **Mini-proyecto CC: poblar `product-assets`** — brief listo (`CC_BRIEF_poblar_product-assets.md`). Fuente: repo blueprints `brands/NeuroneSCF/assets/products/`. Vía correcta = raw.githubusercontent (NO el proxy). Subir + conectar `brand_assets` + corregir flateados/fondos.
+3. **ui-ux-layer — completar resolución de assets (multimarca, Sam+Claude)** — documentar patrón raw.githubusercontent por `brand_id`, genérico. NO hardcodear ninguna marca. Es mejora del core UNRLVL, beneficia a todas.
 
-**Pendiente manual inmediato (cierre Fase 2):** ~~crear el proyecto Vercel de `nscf-console`~~ HECHO — deploy LIVE `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars), probado OK. Mergear PR #3 (HECHO). Borrar PNGs huérfanos del bucket (HECHO). **Fase 2 100% completa y en producción.**
+**De sesión 4 (NSCF-Console) — vigente:**
+4. **Resend hardening** (corto, seguridad) — key Resend hardcoded → secret `RESEND_API_KEY` + rotar + versionar `nscf-mailer`. Antes de Fase 3.
+5. **Sesión Shopify infra** — app dedicada commerce con `write_customers`/`write_draft_orders`/`write_orders`; decidir multi-token por tienda en `shopify.stores`. Desbloquea Fase 2.5.
+6. **NSCF-Console Fase 3** — superuser console, roles por nivel de auth.
+
+---
+
+## NOVEDADES SESIÓN (2026-06-13 sesión 5) — Skill NSCF-PRICING + hallazgo de assets
+
+### COMPLETADO
+
+#### Skill NSCF-PRICING v1 (nuevo)
+- Archivos: `skills/nscf-pricing/SKILL.md` + `nscf_pricing.py` (motor) + calculadora `.xlsx`. Registrado en `skills/INDEX.md` **v1.5**.
+- **Naturaleza:** lógica pura de pricing. NO renderiza — delega output HTML a `ui-ux-layer` (multimarca de UNRLVL) con brand_id NeuroneSCF_B2B. NSCF-PRICING es exclusivo NSCF (de ahí el nombre); cuidar de NO meter nada de NSCF dentro de ui-ux-layer.
+- **Fórmulas verificadas contra el xlsx:** B2C = compra×1.20 + LOG+TR+MK+OP (overhead $23.5951) · B2B = compra×1.20 + TR+OP (overhead $2.5987) · MÍN /0.6 (40%) · DES /0.5 (50%) · ÓPT /0.4 (60%).
+- **Columna O = precio de lista PO+Sam. Ancla intocable.**
+- **Caso central:** productos B2C (400ml, kits) → kits B2B. Recalcular con overhead B2B (9× menor), NUNCA descontar sobre PVP B2C.
+- **Custom Kits = 3 vistas:** suma de ítems @ margen · margen de kit completo · descuento sobre PVP (estilo Alizzanti).
+- Fuente de precios: xlsx que Sam sube por sesión (no vive en repo). Versión vigente: **v18**.
+
+#### Re-write v17→v18 del xlsx de pricing (autorizado por Sam)
+- Col O: 17 tonos tinte $8.99→$9.99; Alizzanti $74.99→$99.99. 1492 fórmulas recalc, 0 errores. Costos/márgenes intactos (col O no alimenta fórmulas).
+- Efecto: tinte $9.99 ya supera su MÍN ($8.51); Alizzanti $99.99 ≈ 55% margen real.
+
+#### Pedido Orlando (PO) — prueba del motor
+- 10 tintes + 3 peróxidos (vol 10/20/30) + Humit Mask + Green 100 + Dyfensor SF + Hyaloneurine + Humit Shampoo.
+- Costo real $131.90 · DESEADO (50%) $263.80 · ÓPTIMO (60%) $329.75.
+- Cliente estratégico: candidato a distribuidor/educador en Orlando con pared exclusiva Neurone.
+
+### HALLAZGO CRÍTICO — por qué ui-ux-layer nunca trajo imágenes (RESUELTO)
+- Bucket Supabase `product-assets` y tabla `brand_assets`: **VACÍOS**. (brand_palette NSCF: 11 OK; product_blueprints: 51 productos, 39 con image_filename, + kit_components/kit_value/kit_savings.)
+- El proxy `/api/gh?action=file` **NO sirve para imágenes** (base64 en JSON → timeout en binarios). Solo texto.
+- **Vía correcta (verificada E2E, multimarca):** `raw.githubusercontent.com/unrealvillestudio-hub/blueprints/main/brands/<Marca>/assets/products/<archivo>`. Probado: imagen real de Neurone Color incrustada en output sin subirla a mano.
+- Imágenes fuente en repo `blueprints`: `brands/NeuroneSCF/assets/products/` (~40 light + `dark_versions/` + `alpha_dark/` 6 + logos en `assets/brand/NeuroneSCF/`).
+
+### FLAG ANALÍTICO ESTRUCTURAL (decisión pendiente)
+Overhead B2B fijo ($2.60/ud) aplasta productos de bajo costo (tinte, peróxido). Opción: prorratear overhead por valor en vez de fijo.
+
+### DEUDA s5
+- [ ] Subir skill nscf-pricing al repo + INDEX v1.5 (Sam, GitHub Desktop).
+- [ ] Poblar product-assets (brief CC).
+- [ ] Completar ui-ux-layer patrón raw multimarca (Sam+Claude).
+- [ ] Custom Kit Orlando de prueba.
 
 ---
 
@@ -53,7 +95,7 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 ---
 
 ## DEUDA TÉCNICA / PENDIENTES (acumulada)
-- [ ] **Resend hardening** (ver prioridad 1 arriba): key → secret + rotación + versionar `nscf-mailer`.
+- [ ] **Resend hardening** (ver prioridad arriba): key → secret + rotación + versionar `nscf-mailer`.
 - [x] **Proyecto Vercel `nscf-console`** — HECHO, LIVE en `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars).
 - [ ] **Confirmar URL real de login passwordless PRO** — el mailer usa `nj5ybc-n1.myshopify.com/account` por defecto; Sam confirmó que la URL funciona.
 - [ ] **Corregir drift `shopify.stores` VIEW→BASE TABLE** y drift `/api/professor` en fuente de verdad (ecosystem learnings / HRD_PROTOCOL).
@@ -61,7 +103,7 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 - [ ] **Cutover de dominio** `pro.neuronescflorida.com` → landing (de s2).
 - [ ] **Política de privacidad B2B** — `PRIVACY_URL` apunta a la de B2C; crear la B2B (de s2).
 - [ ] **`NeuroneSCF_B2B` sin paleta en Supabase** (de sesiones previas).
-- [ ] **Imágenes de producto Neurone defectuosas** (de sesiones previas).
+- [ ] **Imágenes de producto Neurone defectuosas** (de sesiones previas — relacionado con poblar product-assets, s5).
 
 ---
 
@@ -71,121 +113,69 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 
 #### Entregables
 - **`NSCF_SalesPager_Salones.html` (v18)** — pager completo, todas las imágenes reales incrustadas (base64, archivo autónomo): hero, Packs de tinte 24/36, sección Solo Color, sección Alizzanti (Dúo/Trío), grid "Tú eliges", CTA WhatsApp, footer.
-- **`NSCF_SalesPager_Alizzanti_general.html`** — versión derivada solo-Alizzanti (hero "Lanza tu promo de alisado", sin tintes/peróxidos/cartilla). NOTA: resultó redundante — los kits Alizzanti del pager completo ya estaban separados de tintes y peróxidos desde el inicio (ver learning 6). Queda como pieza independiente por si PO la quiere para presentar a otros salones (ej. Johanna).
+- **`NSCF_SalesPager_Alizzanti_general.html`** — versión derivada solo-Alizzanti. Queda como pieza independiente por si PO la quiere para presentar a otros salones (ej. Johanna).
 
 #### Framework de venta de salón (DEFINITIVO — referencia permanente)
-- El salón vende el **SERVICIO** (color, alisado, tratamiento) con producto incluido en la aplicación; **NO revende producto**.
-- Matiz: presentaciones **400ml** a veces SÍ se revenden al cliente final (retail); las **1L** son uso en cabina. En este pager los 400ml van solo listados, sin pitch.
-- **Único producto con argumento de venta = Alizzanti** (facturación por servicio). Tinte/shampoo/mask solo se listan.
-- Decisión Sam: NO mencionar formato 1L de shampoo/mask (no hay en inventario), NO decir "quiero que lo pruebes" (lo hace PO en persona), NO llamar "insumo de cabina" al shampoo/mask (lo decide cada salón).
+- El salón vende el **SERVICIO** con producto incluido; **NO revende producto**.
+- Matiz: 400ml a veces SÍ se revenden retail; 1L es uso en cabina. En el pager los 400ml van solo listados.
+- **Único producto con pitch = Alizzanti** (facturación por servicio). Tinte/shampoo/mask solo se listan.
 
 #### Pricing (confirmado)
-- **Kits tinte:** Pack 24 ~~$340~~→$289 + 2 peróxidos GRATIS (ahorro $73, margen 47.8%); Pack 36 ~~$460~~→$395 + 3 peróxidos GRATIS (ahorro $98, margen 44.7%). Redondeo hacia arriba a número limpio.
-- **Kits Alizzanti (Opción B — anchor B2B ~$74.99/Alizzanti, NO sobre PVP $99.99):** Dúo ~~$310~~→$259 (+Shine $289); Trío ~~$640~~→$545 (+Shine $589). Márgenes 59–61%. Opción A (anchor PVP) RECHAZADA por thin/alta para B2B.
-- **Dato campo PO:** 1 botella Alizzanti ≈ 5 alisados; salón cobra $200–350/servicio → factura $1,000–1,750/botella. Pager usa piso conservador ($200 → "$1,000+").
+- **Kits tinte:** Pack 24 ~~$340~~→$289 + 2 peróxidos GRATIS; Pack 36 ~~$460~~→$395 + 3 peróxidos GRATIS.
+- **Kits Alizzanti (Opción B):** Dúo ~~$310~~→$259 (+Shine $289); Trío ~~$640~~→$545 (+Shine $589). Márgenes 59–61%.
+- **Dato campo PO:** 1 botella Alizzanti ≈ 5 alisados; cobra $200–350/servicio → factura $1,000–1,750/botella.
 
-#### Cambios de copy y assets aplicados
-- Voz neutra (ES/EN internacional): eliminado voseo "elevá"→"eleva".
-- "sin costo"→"GRATIS" (x4); "a precio especial"→"con la promoción de este mes"; "el peróxido va incluido"→"Peróxido GRATIS".
-- Shampoos/masks con "400 ml" (solo el formato); eliminado todo "1 L"/"1 Litro" de shampoo/mask (no hay en inventario). Conservados: tinte 90ml, peróxido 2/3 L, Alizzanti 1 L.
-- **CTA → WhatsApp** `wa.me/13057489101` (PO +1 305 748-9101) con mensaje pre-cargado; email `hello-pro@neuronescflorida.com` como respaldo. `mailto:` descartado (frágil, ver learning 4).
-- Footer: eliminados menús "Catálogo" e "Información"; conservado solo "Contacto" (email).
-- Imágenes incrustadas: Alizzanti (NEALIZZ-2), tinte caja azul (NCOLOR), peróxidos (NCNEU-6), Resplander Shine (NERESPSH, en add-on), icon PRO en cartilla + favicon.
-- **Icon PRO transparente:** subió flateado a JPEG con fondo negro; recuperado con flood-fill desde bordes (preserva la N negra interior) + recorte bbox + PNG RGBA (ver learning 5).
+#### Cambios de copy y assets
+- Voz neutra: "elevá"→"eleva". "sin costo"→"GRATIS"; "a precio especial"→"con la promoción de este mes"; "el peróxido va incluido"→"Peróxido GRATIS".
+- Shampoos/masks con "400 ml"; eliminado "1 L"/"1 Litro" de shampoo/mask. Conservados: tinte 90ml, peróxido 2/3 L, Alizzanti 1 L.
+- **CTA → WhatsApp** `wa.me/13057489101` con mensaje pre-cargado; email respaldo. `mailto:` descartado (frágil).
+- Footer: eliminados menús Catálogo e Información; solo Contacto.
+- **Icon PRO transparente:** flateado a JPEG fondo negro → recuperado con flood-fill desde bordes + PNG RGBA.
 
 ---
 
 ## NOVEDADES SESIÓN (2026-06-12 sesión 2) — NSCF PRO Fase 1: Registro de Salones B2B
 
 ### COMPLETADO Y EN PRODUCCIÓN
+- **Gate total** del portal PRO; registro = declaración voluntaria; aprobación manual de PO.
+- **Tabla `nscf_b2b_salones`** (B2B pura, separada de `nscf_salones`). RLS service_role.
+- **Bucket privado `nscf-licenses`** (public=false). Los buckets product-assets y unrlvl-media son PÚBLICOS — licencias NO van ahí.
+- **EF `nscf-b2b-register` v3** + **`nscf-mailer` v18** (type `b2b_registration_received`).
+- **Landing `pro-gateway/`** (React+Vite). Paleta B2B (near-black + gold #C9A227 + terracota).
+- PR #2 MERGEADO (sesión 4).
 
-#### Estrategia del gate (plan de PO, validado)
-- **Gate total** del portal PRO: visitante ve preview de marca **sin precios** + banner casi pantalla-completa "Sitio exclusivo para profesionales / ¿Eres profesional? Regístrate". Nota "hasta 24 horas" para aprobación.
-- El gate total **elimina el problema de bloqueo de pasarela de pago** — Shopify queda simple, solo entran customers ya aprobados. Login passwordless (New Customer Accounts ya activo en tienda PRO).
-- Registro = **declaración voluntaria**: el usuario declara datos reales + autoriza verificación; Sam/NSCF no son autoridad. Esfuerzo real de PO = leer el documento adjunto y ver si parece una licencia legítima.
-- **Campos requeridos:** email, móvil, nº de licencia, upload del documento de licencia, dirección física. **NO se pide Tax ID.**
-- 2 checkboxes obligatorios: (1) declaración jurada de veracidad + autorización a verificar; (2) consentimiento de tratamiento de datos (link a política de privacidad).
-- **Aprobación manual de PO** al inicio (Fase 2). Automatización de verificación documental = futuro, solo si el volumen lo pide.
-
-#### Arquitectura (Opción A — landing custom, NO la tienda Shopify directa)
-- `pro.neuronescflorida.com` será una **landing propia** (Vercel), no la tienda. "Acceder" → login passwordless real de Shopify PRO (`https://shopify.com/73329803342/account`). Registro → form custom → Supabase.
-- **Tabla `nscf_b2b_salones`** (NUEVA, B2B pura, SEPARADA de `nscf_salones` que es B2C/embajadoras/kiosko/comisiones). Cols: id (`b2bsalon_*`), salon_name, contact_email, mobile, license_number, license_doc_path, physical_address, status (pending/approved/rejected/needs_info), declaration_accepted+_at, data_consent_accepted+_at, linked_salon_id (FK→nscf_salones, para Fase 2), shopify_customer_id, reviewed_at/_by, notes, created_at. RLS habilitado (solo service_role). Índices status+email.
-- **Bucket privado `nscf-licenses`** (`public=false`, 10MB, jpg/png/pdf). Uploads server-side con service role; acceso futuro vía signed URL. **Los buckets existentes (product-assets, unrlvl-media) son PÚBLICOS — las licencias NO van ahí.**
-- **EF `nscf-b2b-register` v3** (verify_jwt=false): valida campos + ambos checkboxes; honeypot anti-bot (`company_website`); rate-limit 3/email; sube licencia a `licenses/<id>/<file>`; INSERT `pending` sellando consentimientos con `now()`; dispara email vía `nscf-mailer`.
-- **EF `nscf-mailer` v18** (deploy-only, no versionada por Resend key): nuevo type `b2b_registration_received` (confirmación bilingüe ES/EN al solicitante + aviso a ops/PO).
-- **Landing `pro-gateway/`** (React+Vite, repo NeuroneSCF): 3 pantallas (gateway / formulario / confirmación). Paleta B2B real (near-black + gold #C9A227 + terracota). Logo blanco-alpha con swirl terracota. Sin env vars (todo hardcodeado: API_REGISTER, SHOPIFY_LOGIN, PRIVACY_URL).
-
-#### Verificado E2E (Preview)
-Registro real "BlackOut Salon" → "Solicitud recibida" + email bilingüe recibido → fila `pending` con consentimientos sellados + doc en bucket privado (`licenses/b2bsalon_*/...`). Datos de prueba limpiados.
-
-#### Gobernanza
-- PR #2 (`worktree-nscf-pro-gateway` → main): **MERGEADO** (Sam confirmó en sesión 4). 3 commits (86cde2f, dfab9a4, 6fe9952).
-
-### BUG RESUELTO — 500 en el registro (causa: GRANT faltante, NO el código)
-- Síntoma: form devolvía 500, tabla vacía, INSERT manual funcionaba.
-- **Causa real: `code 42501 permission denied for table nscf_b2b_salones`** — `service_role` sin GRANT sobre la tabla nueva. (RLS sin policies bloquea anon pero NO concede service_role.)
-- Fix: `GRANT SELECT, INSERT, UPDATE, DELETE ON public.nscf_b2b_salones TO service_role` — aplicado + versionado en migración separada. EF restaurada a v3.
-- **REINCIDENTE:** ya pasó en el kiosko. Toda tabla NSCF nueva con RLS necesita GRANT explícito a service_role. → Professor (rel 5).
-
-### Config Vercel (drift de routing — parcialmente resuelto)
-- Creado proyecto `nscf-pro-gateway` (root `pro-gateway`, Vite, sin env vars). Production Branch fijada a `main`. "Include files outside root" → OFF.
-- **PENDIENTE manual de Sam (no bloquea merge):** en `nscf-kiosko` y `nscf-dispatch` → apagar "Include files outside the root directory" (siguen ON → rebuildean PRs ajenos). "Skip deployments" ya activado en ambos.
-
----
-
-## DEUDA TÉCNICA / PENDIENTES (2026-06-12 s2 — histórico, ver lista acumulada arriba)
-- [x] **Mergear PR #2** a main — HECHO (sesión 4).
-- [ ] Config Vercel Parte C: "Include files outside root" → OFF en kiosko y dispatch.
-- [ ] **Cutover de dominio** `pro.neuronescflorida.com` → apuntar a la landing.
-- [ ] **Política de privacidad B2B.**
-- [x] Objetos de prueba huérfanos en bucket `nscf-licenses` — borrados (sesión 4).
-- [ ] Avisar a PO: ignorar emails de prueba B2B.
-- [ ] **`NeuroneSCF_B2B` sin paleta en Supabase.**
-- [ ] **Imágenes de producto Neurone defectuosas.**
+### BUG RESUELTO — 500 (GRANT faltante, NO el código)
+- `code 42501 permission denied` — service_role sin GRANT sobre tabla nueva. RLS sin policies bloquea anon pero NO concede service_role. **Toda tabla NSCF nueva con RLS necesita GRANT explícito a service_role.**
 
 ---
 
 ## NOVEDADES SESIÓN (2026-06-12 sesión 1) — Kiosk: Cobro en Efectivo + Sales Pager
 
 ### COMPLETADO
-
-#### Kiosk — Camino de cobro en EFECTIVO (Opción 2: confirmación + spinner)
-**Dos caminos de cobro (referencia permanente):**
-- **EFECTIVO** → embajadora toca "Cobrar en efectivo" → modal "¿Recibiste el pago en efectivo? $XX" → la EF completa el draft order como **Paid** vía `draftOrderComplete(paymentPending:false)`. **NO genera QR.** El efectivo lo cierra la embajadora presencialmente; nunca toca el checkout web público.
-- **TARJETA / DIGITAL** → "Crear checkout QR" → EF crea draft + `invoice_url` → **QR** → clienta paga desde su móvil.
-
-**EF `nscf-kiosko-draft` v10 → v13:**
-- v11: campo `payment_method` (default `"qr"`, backward-compatible). Path cash completa draft + tags `efectivo,cash,kiosko` + nota de atribución + `display_name` en SELECT.
-- v12: fix race condition `"This order has not finished calculating"` — retry backoff 1500ms ×3, reintenta solo si message incluye `"calculat"`.
-- v13: fix `.catch is not a function` — query builder supabase-js no es Promise; `await` + `{ error }`. Update a DB best-effort, nunca bloquea la respuesta de éxito.
-
-**Front `kiosko/src/App.jsx`:** botón "Cobrar en efectivo" + modal confirmación + spinner "Procesando pago…" + nueva `PaidScreen`. Descuento two-tier (hasta 40% Patricia/Vizos) aplica igual en cash.
-
-**Verificado E2E:** orden #1027 Paid, tags + nota correctos. PR #1 mergeado. Órdenes de prueba canceladas.
-**Deuda cerrada:** EF `nscf-kiosko-draft` ahora versionada en `NeuroneSCF/supabase/functions/`.
-
-#### Sales Pager Salones (venta directa PO)
-- One-pager comercial: Pack Completo (3) $289/$389 + Solo Color (1B) $240/$360, peróxido gratis + cartilla 1ª compra como "GRAN NOTICIA". Shampoo+mask a elegir. Paleta B2B real. Footer pro + CTA → `hello-pro@neuronescflorida.com`. File: `NSCF_SalesPager_Salones.html`
+#### Kiosk — cobro EFECTIVO (referencia permanente)
+- **EFECTIVO** → modal confirmación → EF completa draft como Paid (`paymentPending:false`), tags `efectivo,cash,kiosko`. NO genera QR.
+- **TARJETA/DIGITAL** → draft + `invoice_url` → QR.
+- EF `nscf-kiosko-draft` v10→v13 (payment_method, fix race "calculating", fix `.catch`). PR #1 mergeado.
 
 ---
 
 ## MODELO DE FULFILLMENT NSCF (referencia permanente)
 **Flujo 100% automático. Sam NO marca fulfilled manualmente.**
-1. Cliente web paga → webhook `orders/paid` (`nscf-fulfillment-watcher`) encola con delay 1h.
-2. Pasada 1h → `nscf-fulfillment-processor` (cron 1min) toma cola, crea fila en `nscf_fulfillment_log` + avisa a Iván vía `nscf-mailer`.
-3. Iván (portal `nscf-fulfillment-portal`): confirma recibido + carrier + tracking.
-4. Al meter tracking → 4 notificaciones (Iván/Ops/PO/cliente) + crea fulfillment en Shopify.
-- Kiosk Pickup (`source='kiosko'`) NO entra a este flujo — va por comisión embajadora.
+1. Cliente paga → webhook `orders/paid` (`nscf-fulfillment-watcher`) encola delay 1h.
+2. Pasada 1h → `nscf-fulfillment-processor` (cron 1min) → fila en `nscf_fulfillment_log` + avisa a Iván.
+3. Iván (portal `nscf-fulfillment-portal`): confirma + carrier + tracking.
+4. Tracking → 4 notificaciones + crea fulfillment en Shopify.
+- Kiosk Pickup (`source='kiosko'`) NO entra — va por comisión embajadora.
 
 ---
 
 ## DECISIONES ARCHIVADAS (previas)
-- Cron pg_cron: nunca `current_setting()` sin verificar; preferir URL hardcodeada. (Fix crítico job 31 fulfillment-processor — 2026-06-06.)
-- QR NSCF dorado de marca = #AD9614. Verificar escaneo con cv2.
-- SMA `/api/export`: secret por header `x-export-secret`, no query param.
-- Pricing v17 (2026-05-30): shampoos $28.99 (48-50% margen), peróxidos $13.99-15.99, masks $34.99-39.99, Dyfensor SF $33.99. Kits A $99 / B $169 / C $229 + Dyfensor add-on. Cyan #2A8CC4 = accent secundario, Gold #B8892A = primario.
+- Cron pg_cron: nunca `current_setting()` sin verificar; preferir URL hardcodeada.
+- QR NSCF dorado de marca = #AD9614.
+- SMA `/api/export`: secret por header `x-export-secret`.
+- Pricing v17 (2026-05-30): shampoos $28.99, peróxidos $13.99-15.99, masks $34.99-39.99, Dyfensor SF $33.99.
 - Peróxido no se vende standalone — solo en kits/promos.
 - Marketing B2B = $0 ads en fase lanzamiento presencial.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-06-13 sesión 4_
+_Unreal>ille · NeuroneSCF · 2026-06-13 sesión 5_

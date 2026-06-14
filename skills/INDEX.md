@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.4 · 2026-06-05 · Mantenido por: Claude_
+_Versión: 1.5 · 2026-06-13 · Mantenido por: Claude_
 
 ---
 
@@ -19,6 +19,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `shopify-mcp` | `skills/shopify-mcp/SKILL.md` | Trabajo directo en Shopify via conector MCP | Interno — NeuroneSCF (activo), futuras marcas |
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
+| `nscf-pricing` | `skills/nscf-pricing/SKILL.md` | Pricing B2B/B2C NSCF, cotizaciones, Custom Kits, márgenes, rentabilidad de producto | Exclusivo NeuroneSCF |
 | `agent-builder` | `skills/agent-builder/SKILL.md` | Crear, configurar o deployar agentes | UNRLVL + clientes |
 | `copylab-reference` | `skills/copylab-reference/SKILL.md` | Sesiones con CopyLab, plantillas, contenido por canal | UNRLVL + clientes |
 | `image-processing` | `skills/image-processing/SKILL.md` | Imágenes, LoRA prep, pipeline visual | UNRLVL + clientes |
@@ -33,6 +34,13 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.5
+
+**Cambios respecto a v1.4:**
+- `nscf-pricing` → skill nuevo · v1.0 · 2026-06-13 · pricing B2B/B2C NSCF, Custom Kits (3 vistas), rentabilidad, análisis. Lógica pura — delega render a `ui-ux-layer`. Fuente de verdad: xlsx que Sam sube por sesión (v18). Exclusivo NeuroneSCF.
 
 ---
 
@@ -79,6 +87,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "Shopify B2C / audit / fix" → `shopify-auditor` + `shopify-mcp`
 - Sam dice "HTML / componente / diseño" → `ui-ux-layer`
 - Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline`
+- Sam dice "pricing / cotización / kit B2B / margen / rentabilidad NSCF" → `nscf-pricing` + `ui-ux-layer` (para output visual)
 - Sam dice "agente / WhatsApp / bot" → `agent-builder` + `security`
 - Sam dice "imagen / video / LoRA" → `image-processing` (+ `higgsfield` si hay MCP activo)
 - Sam dice "ads / campaña / Meta / TikTok" → `ads-mcp`
@@ -121,4 +130,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.4 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.5 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
