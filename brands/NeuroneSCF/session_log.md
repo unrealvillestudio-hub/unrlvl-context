@@ -1,5 +1,5 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-06-13 (sesión 5)_
+_Actualizado: 2026-06-16 (sesión 6)_
 
 ---
 
@@ -10,10 +10,44 @@ _Actualizado: 2026-06-13 (sesión 5)_
 2. **Mini-proyecto CC: poblar `product-assets`** — brief listo (`CC_BRIEF_poblar_product-assets.md`). Fuente: repo blueprints `brands/NeuroneSCF/assets/products/`. Vía correcta = raw.githubusercontent (NO el proxy). Subir + conectar `brand_assets` + corregir flateados/fondos.
 3. **ui-ux-layer — completar resolución de assets (multimarca, Sam+Claude)** — documentar patrón raw.githubusercontent por `brand_id`, genérico. NO hardcodear ninguna marca. Es mejora del core UNRLVL, beneficia a todas.
 
-**De sesión 4 (NSCF-Console) — vigente:**
-4. **Resend hardening** (corto, seguridad) — key Resend hardcoded → secret `RESEND_API_KEY` + rotar + versionar `nscf-mailer`. Antes de Fase 3.
-5. **Sesión Shopify infra** — app dedicada commerce con `write_customers`/`write_draft_orders`/`write_orders`; decidir multi-token por tienda en `shopify.stores`. Desbloquea Fase 2.5.
-6. **NSCF-Console Fase 3** — superuser console, roles por nivel de auth.
+**De sesión 6 (NSCF-Console — próximo foco):**
+4. **NSCF-Console Fase 3** — superuser console, roles por nivel de auth. Embajadora: PIN=B2C kiosko sin cambios. PO/superuser: login fuerte = aprobaciones + vista B2B + inventarios de ambas tiendas. Regla dura: funciones sensibles NUNCA detrás de PIN. NO depende de Shopify infra → se puede atacar ya. **Al arrancar: leer `nscf-console/src/App.jsx` y `nscf-b2b-approve` para ubicar el hook de auth que Fase 2 dejó preparado.**
+5. **Backlog seguridad** (de s6): Klaviyo key hardcodeada + verificar exposición de keys Resend FPHS. Agrupar en una "sesión de seguridad" para barrer todas las keys hardcodeadas.
+
+**De sesión 4 — diferido (NO bloquea Fase 3):**
+6. **Sesión Shopify infra** — app dedicada commerce con `write_customers`/`write_draft_orders`/`write_orders`; multi-token por tienda en `shopify.stores`. ~~Desbloquea Fase 2.5~~ → **Fase 2.5 PARQUEADA (s6): el volumen no la amerita, sigue manual.**
+
+---
+
+## NOVEDADES ESTA SESIÓN (2026-06-16 sesión 6) — Resend Hardening + nscf-mailer versionada
+
+### COMPLETADO Y VERIFICADO E2E (envío real al Inbox)
+
+#### Resend hardening (deuda #4 de s4 — CERRADA)
+- **`nscf-mailer` v21 → v23.** Key Resend hardcodeada (`re_bYa36…`) eliminada del código → ahora lee `const RESEND = Deno.env.get('RESEND_API_KEY')`. Añadida **guarda inerte** al inicio del handler: si falta el secret → 503 `Mailer no configurado: falta RESEND_API_KEY` (patrón de `nscf-b2b-approve`). Resto byte-equivalente (9 message types, todos los templates HTML, constantes). Limpiado el `// TODO Sam` de `PRO_LOGIN`. Catch final ya no loguea "v19" → neutro `nscf-mailer error`.
+- **`nscf-mailer` por fin VERSIONADA en GitHub** (`NeuroneSCF/supabase/functions/nscf-mailer/index.ts`). Antes era deploy-only justamente por la key hardcodeada; cerrada la deuda de raíz.
+- **Rotación de key:** nueva key `nscf-mailer-prod` en Resend (token `re_UFmLRB9r…`) → cargada en secret `RESEND_API_KEY` de Supabase (sobrescribió el valor; el secret estaba huérfano). Key vieja `re_bYa36…` **revocada/eliminada** en Resend.
+- **Deploy v23 hecho por Claude** vía MCP `deploy_edge_function` (verify_jwt=false). Verificado: lee env ✅, key vieja ausente ✅, guarda presente ✅.
+- **Prueba E2E:** envío `b2b_approved` a `sam@unrealvillestudio.com` → **llegó al Inbox** (no spam), desde `noreply@neuronescflorida.com`, template correcto. Cadena completa confirmada: código → secret → Resend → dominio verificado → entrega.
+
+#### Decisión de scope
+- **Fase 2.5 (creación automática de customer Shopify) PARQUEADA** — el volumen no la amerita; se sigue manual (bloque copia-pega de PO) hasta que el volumen lo justifique, si llega. El `// TODO FASE-2.5 [write_customers]` queda en código como marcador.
+
+### INCIDENTE OPERATIVO (resuelto, con lección)
+- Sam revocó la key vieja **antes** de que la EF nueva estuviera desplegada → el mailer quedó **caído unos minutos** (la v22 activa aún usaba la key hardcodeada que ya no existía). Se resolvió desplegando v23 de inmediato. **Lección fijada (Professor): el push a GitHub NO despliega la EF a Supabase — son acciones separadas. Orden seguro de rotación: generar nueva → cargar secret → deploy EF → PROBAR → recién entonces revocar la vieja.**
+
+### ACLARACIÓN DE ARQUITECTURA (registrada)
+- **Dos secrets `RESEND_API_KEY` homónimos pero independientes:**
+  - **Vercel / `forumphs-com`** → lo lee `api/contact.js` (CTA de contacto de forumphs.com, `from: noreply@forumphs.com` → `info@forumphs.com`). **Intocable; no se tocó.**
+  - **Supabase `amlvyycfepwhiindxgzw`** → lo lee `nscf-mailer`. Es el que se actualizó.
+  - Mismo nombre de env var, **keys físicas de Resend distintas.** Documentar para no volver a confundirlas.
+- **`fphs-session`** usa una variable **distinta**: `FPHS_RESEND_API_KEY` (`from: speaks@forumphs.com`), apunta al proyecto Supabase propio de FPHS para datos. No toca `RESEND_API_KEY`.
+- **Arquitectura FPHS confirmada:** FPHS tiene DB propia (datos sensibles de propietarios) pero **apps/EFs/secrets viven en infra UNRLVL** (Supabase `amlvyycfepwhiindxgzw`). Por eso se ven EFs/secrets `fphs-*` y `forumphs_*` en el proyecto de UNRLVL.
+- **Punto único de envío NSCF:** `nscf-mailer` es el ÚNICO que envía vía Resend directo. `nscf-b2b-approve`, `nscf-b2b-register`, `nscf-fulfillment-watcher`/`-processor` **delegan** en él (fetch a `functions/v1/nscf-mailer`).
+
+### DEUDAS NUEVAS DETECTADAS (no resueltas — backlog seguridad)
+- [ ] **Klaviyo key hardcodeada** (`pk_UNF8Ee…`) en `klaviyo-setup` y probablemente las otras `klaviyo-*`. Mismo patrón de hardening pendiente (aplicar lección: deploy antes de revocar). Klaviyo usa su propia API (no Resend).
+- [ ] **Verificar exposición** de `FPHS_RESEND_API_KEY` y de la key Vercel/forumphs-com — confirmar que ninguna esté en claro en repos/logs. Va con sesión ForumPHs.
 
 ---
 
@@ -95,7 +129,7 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 ---
 
 ## DEUDA TÉCNICA / PENDIENTES (acumulada)
-- [ ] **Resend hardening** (ver prioridad arriba): key → secret + rotación + versionar `nscf-mailer`.
+- [x] **Resend hardening** (s6 RESUELTO): key vieja revocada, `RESEND_API_KEY` secret con key nueva, `nscf-mailer` v23 lee env + guarda 503, versionada en GitHub. Verificado E2E (Inbox).
 - [x] **Proyecto Vercel `nscf-console`** — HECHO, LIVE en `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars).
 - [ ] **Confirmar URL real de login passwordless PRO** — el mailer usa `nj5ybc-n1.myshopify.com/account` por defecto; Sam confirmó que la URL funciona.
 - [ ] **Corregir drift `shopify.stores` VIEW→BASE TABLE** y drift `/api/professor` en fuente de verdad (ecosystem learnings / HRD_PROTOCOL).
@@ -178,4 +212,4 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 - Marketing B2B = $0 ads en fase lanzamiento presencial.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-06-13 sesión 5_
+_Unreal>ille · NeuroneSCF · 2026-06-16 sesión 6_

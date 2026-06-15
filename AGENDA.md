@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-06-13 · v2026-06-13-v1_
+_Actualizada: 2026-06-16 · v2026-06-16-v1_
 
 ---
 
@@ -23,7 +23,6 @@ _Actualizada: 2026-06-13 · v2026-06-13-v1_
 | 8 | **Verificar unidades Luxor 300** — si ≤127 unidades, regenerar acta con % correcto | ForumPHs | Acta actual usa 129 |
 | 9 | **DF QA** — 3 votaciones faltantes + 13 errores primera persona | ForumPHs | Calidad acta |
 | 10 | **Ayra Sprint 0** — ⚠️ VENCIDO (deadline 5 Jun) — crear repo + Vercel + schema + env vars | UNRLVL | Reprogramar urgente. Ver enfoque staging-loop abajo (Notas). |
-| 11 | **NSCF Resend hardening** — key Resend de hardcoded → secret `RESEND_API_KEY` + ROTAR key + versionar `nscf-mailer` en repo (hoy deploy-only) | NeuroneSCF | Seguridad. No depende de nada. Hacer antes de Fase 3. |
 
 ---
 
@@ -31,8 +30,8 @@ _Actualizada: 2026-06-13 · v2026-06-13-v1_
 
 | # | Item | Marca |
 |---|---|---|
-| 12 | **NSCF-Console Fase 3** — superuser console: roles por auth (embajadora PIN=B2C sin cambios; PO/superuser login fuerte=aprobaciones+vista B2B+inventarios ambas tiendas). Funciones sensibles nunca tras PIN. Auth Fase 2 ya diseñada para evolucionar a roles. NO depende de Shopify infra. | NeuroneSCF |
-| 13 | **NSCF Sesión Shopify infra** — app dedicada de commerce (`write_customers`/`write_draft_orders`/`write_orders`) separada de `UNRLVL Auditor` + modelo multi-token en `shopify.stores` (hoy 1 token/(brand,store)). Desbloquea Fase 2.5 (automatizar creación customer al aprobar). SESIÓN DEDICADA — no mezclar con producto. | NeuroneSCF |
+| 12 | **NSCF-Console Fase 3** — superuser console: roles por auth (embajadora PIN=B2C sin cambios; PO/superuser login fuerte=aprobaciones+vista B2B+inventarios ambas tiendas). Funciones sensibles nunca tras PIN. Auth Fase 2 ya diseñada para evolucionar a roles. NO depende de Shopify infra. **Prerrequisito Resend hardening YA hecho (06-16). PRÓXIMO FOCO NSCF.** Al arrancar: leer `nscf-console/src/App.jsx` + `nscf-b2b-approve` para ubicar hook de auth. | NeuroneSCF |
+| 13 | **NSCF Sesión Shopify infra** — app dedicada de commerce (`write_customers`/`write_draft_orders`/`write_orders`) separada de `UNRLVL Auditor` + modelo multi-token en `shopify.stores` (hoy 1 token/(brand,store)). ~~Desbloquea Fase 2.5~~ → **Fase 2.5 PARQUEADA (06-16): volumen no la amerita, customer manual hasta nuevo aviso.** SESIÓN DEDICADA — no mezclar con producto. | NeuroneSCF |
 | 14 | **SocialLab dual-mode** — confirmar/implementar sync+async, re-test publicación post brand_id fix | UNRLVL |
 | 15 | **Crear cuentas LinkedIn + X para Lucien** + **Meta(FB) + LinkedIn para SamPublisher** | Lucien Sael / SamPublisher |
 | 16 | **Context System refactor** — SESIÓN DEDICADA (plan en protocols/CONTEXT_SYSTEM_REFACTOR_PLAN.md). Adelgazar ecosystem.json + crear CAPABILITIES.md. RIESGO ALTO — hacer con foco. Modulariza archivos extensos → más caen en Ruta A del Actualiza. | UNRLVL |
@@ -41,6 +40,8 @@ _Actualizada: 2026-06-13 · v2026-06-13-v1_
 | 19 | **Meta MCP** — fix fb_get_page_insights métricas deprecadas Graph API v21 | UNRLVL |
 | 20 | **Portal Iván sprint 2** — dashboard pendientes + UPS API (developer.ups.com) | NeuroneSCF |
 | 21 | **Klaviyo flows NSCF** — configurar 4 flows bilingüe en UI | NeuroneSCF |
+| 40 | **Klaviyo key hardcodeada** — `pk_UNF8Ee…` en `klaviyo-setup` (y prob. otras `klaviyo-*`) → mover a secret + rotar. Mismo patrón que Resend hardening (06-16). Aplicar lección: deploy ANTES de revocar. | NeuroneSCF |
+| 41 | **Verificar exposición keys Resend** — confirmar que `FPHS_RESEND_API_KEY` (Supabase) y `RESEND_API_KEY` de Vercel/forumphs-com no estén en claro en repos/logs. Va con sesión ForumPHs. | ForumPHs/UNRLVL |
 | 22 | **Genoma UNRLVL social** — voz "we" con mismo modo vocería que sam_personal | UNRLVL |
 | 23 | **SMA pulido (opcional)** — actualizar 4 hints viejos del front (App.tsx: Google Voice/WABA) por hints FPHs; opción agenda en portada sin escribir "hola"; decidir si reset.js queda permanente o se quita tras uso | ForumPHs |
 | 24 | **Email marketing FPHs** — construir stack Resend + Supabase + Orchestrator (decisión tomada: NO Klaviyo para servicios). Diseñar disparo vía capa (endpoint/tabla eventos), NO hardcodeado, para que el CRM futuro se enchufe | ForumPHs |
@@ -71,6 +72,7 @@ _Actualizada: 2026-06-13 · v2026-06-13-v1_
 
 ## ✅ Resuelto recientemente
 
+- ✅ **NSCF Resend hardening** (#11) — key Resend hardcodeada (`re_bYa36…`) → secret `RESEND_API_KEY`; key rotada (nueva `nscf-mailer-prod`), vieja revocada; `nscf-mailer` v23 lee env + guarda 503 + por fin VERSIONADA en GitHub. Verificado E2E (correo al Inbox). Aclarada arquitectura de los 2 `RESEND_API_KEY` homónimos (Vercel-forumphs vs Supabase-NSCF). Fase 2.5 parqueada. Lección: push≠deploy; revocar key vieja SIEMPRE post-deploy+prueba. — 2026-06-16
 - ✅ **NSCF-Console Fase 2 (Módulo aprobación PO)** — EF `nscf-b2b-approve` v1 + `nscf-mailer` v19 (3 types b2b) + frontend `nscf-console/` + índice parcial + policy RLS explícita. E2E 10/10 en vivo. Auth password hasheado (bcryptjs, server-side). Shopify manual (sin write_customers, bloque copia-pega). PR #3 mergeado. Deploy Vercel LIVE: `console-pro-neuronescf.vercel.app` (probado OK). 7 learnings en Professor — 2026-06-13
 - ✅ **NSCF PR #2 (pro-gateway Fase 1)** mergeado a main — 2026-06-13
 - ✅ **NSCF Sales Pager Salones v18** — pager B2B completo con imágenes reales incrustadas + versión Alizzanti — 2026-06-13
@@ -101,7 +103,7 @@ _Actualizada: 2026-06-13 · v2026-06-13-v1_
 
 ## Notas de contexto
 
-**NSCF-Console (estado 2026-06-13):** Fase 1 (registro pro-gateway) + Fase 2 (aprobación PO) completas y en producción. Deploy LIVE: `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars). Fase 2 entregó EF `nscf-b2b-approve` (login/list_pending/approve/reject/needs_info/assisted_register), frontend `nscf-console/`, `nscf-mailer` v19. Shopify customer creation es MANUAL hasta tener `write_customers` (Fase 2.5, depende de #13 Shopify infra). Auth PO = password hasheado server-side, evoluciona a roles en Fase 3 (#12). La Console solo consulta `status=pending`. Secrets en Supabase: `PO_CONSOLE_PASSWORD_HASH`, `PO_CONSOLE_JWT_SECRET`. Endpoint EF hardcodeado en App.jsx:5 (sin env vars, a propósito).
+**NSCF-Console (estado 2026-06-13):** Fase 1 (registro pro-gateway) + Fase 2 (aprobación PO) completas y en producción. Deploy LIVE: `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars). Fase 2 entregó EF `nscf-b2b-approve` (login/list_pending/approve/reject/needs_info/assisted_register), frontend `nscf-console/`, `nscf-mailer` v19. Shopify customer creation es MANUAL — **Fase 2.5 PARQUEADA (06-16): el volumen no la amerita**. `nscf-mailer` ahora v23 (Resend hardening 06-16: lee `RESEND_API_KEY` secret, versionada). Auth PO = password hasheado server-side, evoluciona a roles en Fase 3 (#12). La Console solo consulta `status=pending`. Secrets en Supabase: `PO_CONSOLE_PASSWORD_HASH`, `PO_CONSOLE_JWT_SECRET`. Endpoint EF hardcodeado en App.jsx:5 (sin env vars, a propósito).
 
 **Patrón CC preview/live (aceptado 2026-06-13):** CC despliega EFs al proyecto Supabase vivo (no rama aislada) cuando son inertes hasta cargar secrets, señalándolo. Sam lo acepta como válido mientras sea consciente y solutivo. Registrado en Professor.
 
