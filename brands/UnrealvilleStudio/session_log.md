@@ -1,5 +1,52 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-06-15 · Replanteamiento IID + brand_topics + 14 IID UNRLVL + anti-spam contract
+
+**Conducido por:** Claude Opus 4.8 (chat) + DB directa (gobernanza ajustada: cambios de DB ejecutados por Claude, no CC)
+**Foco:** corregir el modelo del IID de raíz · diseñar la capa marca↔temas · replantear qué investiga UNRLVL · blindar anti-baneo multimarca
+
+### El giro conceptual (lo más importante)
+
+- **MODELO CORREGIDO:** la **marca declara qué temas consume y con qué voz por destino**; el IID investiga temas **neutros** (sin marca, sin voz). Antes el agente cargaba `default_voice` y decidía la voz — esa era la causa raíz del off-brand (junto a `brand_id=null` en jobs y al builder que ignoraba `brand_voice_genome`). Si una marca necesita un tema que ningún IID cubre → se crea el IID.
+- **3 sistemas de voz aclarados (no duplicados):** `brand_voice_genome` (editorial ejecutable), `content.brand_voices` (editorial viejo IID con ICR/AIFE), `voicelab_params` (sonora ElevenLabs, independiente). El recuerdo de "brand_voices = ElevenLabs" era incorrecto; la sonora es otra tabla.
+
+### Key achievements
+
+- **`intel.brand_topics` creada y extendida.** m:n marca↔tema. Campos: core (brand_id, domain, voice_by_destination, platforms, hard_rules, auto_approve, active, priority) + añadidos (rollout_phase, purpose, cadence crescendo, angle, sibling_stagger).
+- **14 IID nuevos `UNRLVL-*` creados desde cero.** Tier1 (5, método/CÓMO industrial), Tier2 (3, deep-stack superuser), Tier3 (6, mercado con números). hard_rule: principio numérico + desarrollo. Los 14 viejos `IID-*` intactos (destino pendiente).
+- **Naming normalizado.** `UNREALville` eliminado de `meta_accounts` (era dup exacto de `UnrealvilleStudio` — mismo page_id/token; confirmado por imagen Meta que Lucien y Studio son marcas distintas con page_id propio). `content.brand_voices.brand_id` corregido: lucien→LucienSael, unrlvl→UnrealvilleStudio.
+- **Suscripciones poblpadas.** Lucien: 3 temas activos con confidencialidades como hard_rules. UNRLVL: 5 Tier1 fase 1 (publish+internal, crescendo). Caso multimarca: `ai-cognition` compartido Lucien↔UNRLVL con `sibling_stagger=true`.
+- **Anti-spam contract v1.0** (`protocols/ANTISPAM_CONTRACT.md`) con **Watcher** (6 gates) como prerequisito de publicación.
+
+### Enfoque UNRLVL (replanteado)
+
+- Los IID de UNRLVL investigan el **CÓMO industrial del mercado**, no releases ("hablar de la nueva función de un modelo" está saturado). Cada dominio espejo de una capacidad propia (context-engineering↔sistema de contexto, signal-learning-loops↔SignalLab, etc.).
+- **Todo parte de profundidad matemática/numérica/de desarrollo. Nada filosófico ni opinión sin números.** Filtro marca: numérico→UNRLVL, condición humana→Lucien (opuestos complementarios).
+- Stance: que el cliente se pregunte si SU agencia opera a este nivel (reclutamiento por contraste).
+- Correcciones de Sam: fuera LATAM/comunidad latina; Shopify sube a stack técnico propio; Florida general (no latino); SignalLab (no el loop de Professor).
+
+### Anti-baneo (verificado y blindado)
+
+- **Las 3 marcas publican con el mismo token/Business Portfolio Meta** (prefijo token idéntico). Riesgo real ≠ volumen → es publicar *lo mismo en sincronía* desde cuentas que Meta sabe que son la misma mano (spam coordinado puede arrastrar varias cuentas).
+- Blindaje 3 capas: divergencia por ángulo (builder), jitter + desfase de hermanas (scheduler), **Watcher** gate final de 6 checks antes de aprobación.
+- Cadencia cuentas nuevas: crescendo gradual (LI 2→3→4-5/sem, X 3→5→1día, Meta 2→3→4-5/sem). El patrón importa más que el número.
+
+### Pendientes (→ próxima sesión)
+
+- [ ] 🔴 CC: Builder convergido que lea `brand_topics` + inyecte genoma (mata default_voice + callClaudeDirect)
+- [ ] 🔴 CC: Watcher (6 gates) — prerequisito del primer publish
+- [ ] 🟢 Primera corrida real piloto Lucien (caso multimarca ai-cognition)
+- [ ] 🟡 Crear IID propios de Lucien (materia filosófica — hoy inexistentes)
+- [ ] 🟡 Decidir destino de los 14 IID-* viejos
+- [ ] 🟡 Scheduler R4B (jitter + desfase + crescendo)
+
+### Confidenciales Lucien (reglas duras registradas)
+
+- Frame Nietzsche/übermensch = motor interno, **NUNCA** manifestado en output.
+- Los libros de LucienSael **no existen públicamente** hasta lanzamiento; `human-essence` recluta lectores sin revelarlos.
+
+---
+
 ## 2026-06-05 · Skill voice-reference-extractor + cierre de previews pendientes
 
 **Conducido por:** Claude Opus 4.8 (chat) + Claude Code (ejecución)
