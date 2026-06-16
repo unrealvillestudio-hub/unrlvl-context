@@ -1,5 +1,62 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-06-16 · IID Builder Convergido + Watcher LIVE · causa raíz del freeze identificada
+
+**Conducido por:** Claude Opus 4.8 (chat, diseño + decisiones + DB directa) + Claude Code (ejecución de EFs)
+**Foco:** ejecutar los pendientes 🔴 de ayer — Builder convergido + Watcher — y dejar el motor IID produciendo on-brand y anti-spam antes de la corrida real.
+
+### Lo más importante: el freeze de abril tenía una cuarta causa que nunca diagnosticamos
+
+El pipeline IID no estaba solo "off-brand desde abril" — estaba **muerto en seco**. El model ID `claude-sonnet-4-20250514` hardcodeado en `content-run-stage` se retiró (deprecación 15-jun-2026) → la llamada a Claude daba 404 → el pipeline moría en stage 1 (copylab). Los 3 bugs de brand/voice/genoma eran reales pero **secundarios**: aunque se arreglaran, sin modelo vivo no salía nada. Reemplazo verificado con ping HTTP 200 real (no inferido): `claude-sonnet-4-6`. Lección: un model ID hardcodeado es deuda con fecha de caducidad; pipeline congelado sin error visible → revisar model ID antes que la lógica.
+
+### Key achievements
+
+- **Builder Convergido LIVE** (`content-run-stage` v25→v31, cirugía in-place A1). `callClaudeDirect` → `buildFromGenome`: lee `intel.brand_topics` + `brand_voice_genome`, resuelve marca + voz **híbrida** (format manda: article/long→editorial, short/post→social; plataforma desempata solo si format ambiguo), inyecta genoma + ángulo + hard_rules, **mató el fallback silencioso `?? "UnrealvilleStudio"`** (bug #1), persiste `voice_id` real en `content_pieces.voice` + `assets.builder_meta`. Resto de stages (aife/imagelab/sociallab/email) intacto.
+- **Watcher LIVE** (stage 5 de `content-run-stage`, decisión C1). 6 gates modulares `(piece, ctx)→{pass, detail}`, gate previo a `awaiting_approval`: (1) similarity semántico vía Claude >0.80→REJECT, (2) sibling-window 48-72h INFORMATIVO en piloto, (3) cadence INFORMATIVO, (4) evidence (UNRLVL sin números / Lucien viola hard_rules → REJECT), (5) duplication semántico, (6) hard-rules catch-all. Tabla `intel.watcher_log` auditable (una fila por paso). El bloque INSERT `content_pieces` + email Resend ahora corre SOLO si Watcher=PASS.
+- **Guard dry-run** (`assets.builder_input.dry_run=true`) — corta tras copylab sin cascada/INSERT/email/publish. Necesario: UnrealvilleStudio está en `meta_accounts`, un click accidental en PUBLICAR habría publicado prueba en la página Meta real. El "fue dry-run" se registra en `builder_meta.dry_run_stopped=true` (metadata), no en `status` (máquina de estados).
+- **`intel.brand_topics.angle` de LucienSael/ai-cognition poblado** (era null — blocker del caso multimarca). Par divergente completo.
+
+### Divergencia multimarca VALIDADA objetivamente (corazón del piloto)
+
+Mismo tema `ai-cognition`, dos marcas hermanas:
+- **Lucien** (`lucien_editorial` v0.5, editorial): ensayo filosófico/cultural, ~5400 chars, cero cifras, übermensch no manifiesto, sin mención de libros.
+- **UNRLVL** (`unrlvl_default` v1.0, social): técnico-operativo, ~450 chars, +18%/3x/30-40%, "Forward".
+- **Similitud semántica medida: 0.07** (umbral REJECT 0.80). Duplicado forzado: **1.0** → rechazado. Gates 4/6 cazan UNRLVL-sin-números y Lucien-tease-de-libro con razón textual. El motor anti-autobaneo funciona y es medible.
+
+### Limpieza + cuarentena
+
+- **293 cadáveres** de `intel.iid_content_queue` (274 brand_id=null + 19 brand_id hardcoded del test viejo b93627b6) → `failed` + tag `ARCHIVED_LEGACY_20260616`. Decisión Sam: quemar todo lo viejo (incluido lo que tenía brand_id) — regenerar limpio cuesta menos que reparar tokens ya gastados mal. El cron `content-dispatcher-poll` (cada 30 min) deja de morder basura. `.limit(1)` INTACTO (se quita solo tras corrida real).
+- **Migraciones tracked aplicadas:** GRANT SELECT a roles PostgREST en `brand_topics` + `brand_voice_genome` (eran tablas nuevas sin grants → PostgREST 404 → "sin suscripción" engañoso); DROP de `content_pieces_voice_check` obsoleto (enumeraba {unrlvl,lucien} a mano, rechazaba voice_id del genoma en silencio); DDL `intel.watcher_log` con grants.
+- **EF efímera `model-ping`** (usada para verificar model IDs sin exponer la key, vía pg_net) borrada del dashboard por Sam.
+
+### Tensión arquitectónica ABIERTA (a resolver en corrida real)
+
+`proof_mode` ↔ UNRLVL: una pieza UNRLVL divergente y con números (pasó gate1=0.07 y gate4) fue RECHAZADA por gate6 hard_rule `proof_mode` ("describe capacidad en teoría, nunca muestra el sistema ejecutándose ahora"). Builder y Watcher discrepan sobre qué es on-brand para UNRLVL. Hipótesis: artefacto del test (finding sembrado sin producto real). Si en producción sigue bloqueando UNRLVL conceptual → decidir entre ajustar genoma UNRLVL o reclasificar `proof_mode` de bloqueante a advertencia. NO resuelto.
+
+### Patrón confirmado 3x en la sesión (→ Professor)
+
+"Artefacto nuevo sin permisos = fallo silencioso": tabla nueva con RLS sin GRANT → supabase-js devuelve null (no excepción); CHECK obsoleto → INSERT falla en silencio. Regla reforzada: tabla nueva = GRANT explícito + reload cache PostgREST en la misma migración; INSERT crítico chequea su error; antes de ampliar enum/CHECK estático preguntar si debería existir (si hay tabla canónica, el CHECK estático es deuda).
+
+### Estado de EFs (verificado)
+
+`content-dispatcher` v21 (`.limit(1)` intacto). `content-run-stage` v31 (Builder+Watcher, modelo `claude-sonnet-4-6`). Comentario de cabecera dice v1.11 — drift cosmético, runtime es 31 (anotado para drift detector).
+
+### Pendientes (→ próxima sesión)
+
+- [ ] 🔴 Corrida real semi-manual piloto `Sam→Claude→IID→Watcher→aprobación` (caso ai-cognition). Validar gate2 sibling-window en vivo + resolver tensión proof_mode.
+- [ ] 🟡 Crear IID propios de Lucien (materia filosófica — hoy inexistentes)
+- [ ] 🟡 Decidir destino de los 14 IID-* viejos
+- [ ] 🟡 Scheduler R4B (jitter + desfase + crescendo; consume brand_topics; migra gate1/5 a pgvector; gates 2/3 a bloqueantes; extrae Watcher a EF C2)
+- [ ] 🟡 Quitar `.limit(1)` de content-dispatcher (solo tras corrida real; cadáveres ya cuarentenados)
+- [ ] 🟡 Promover `domain` a columna en orchestrator_jobs + content_pieces (R4B)
+- [ ] 🟡 Deuda: model ID hardcodeado en content-run-stage (considerar leerlo de config/secret)
+
+### Drifts detectados (→ #37 drift detector)
+
+`api/professor.js` ya existe (HRD lo marca pendiente); `content-run-stage` comentario v1.11 vs runtime v31; `fphs_institucional` v0.5 genoma activo no listado en ecosystem.json (5 genomas propios, no 4); `nscf-b2b-approve` v5 actualizada hoy (fuera de alcance, verificar si se retoma NSCF).
+
+---
+
 ## 2026-06-15 · Replanteamiento IID + brand_topics + 14 IID UNRLVL + anti-spam contract
 
 **Conducido por:** Claude Opus 4.8 (chat) + DB directa (gobernanza ajustada: cambios de DB ejecutados por Claude, no CC)
