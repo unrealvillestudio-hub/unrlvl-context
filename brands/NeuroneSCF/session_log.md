@@ -1,25 +1,144 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-06-16 (sesión 6)_
+_Actualizado: 2026-06-16 (sesión 7)_
 
 ---
 
 ## ⏸️ RETOMAR EN PRÓXIMO CHAT (prioridad)
 
-**De sesión 5 (pricing + assets):**
-1. **Custom Kit de prueba (Orlando)** — armar kit real con `nscf-pricing` y las 3 vistas, como validación del skill en uso.
-2. **Mini-proyecto CC: poblar `product-assets`** — brief listo (`CC_BRIEF_poblar_product-assets.md`). Fuente: repo blueprints `brands/NeuroneSCF/assets/products/`. Vía correcta = raw.githubusercontent (NO el proxy). Subir + conectar `brand_assets` + corregir flateados/fondos.
-3. **ui-ux-layer — completar resolución de assets (multimarca, Sam+Claude)** — documentar patrón raw.githubusercontent por `brand_id`, genérico. NO hardcodear ninguna marca. Es mejora del core UNRLVL, beneficia a todas.
+**De sesión 7 (NSCF-Console Fase 3 — capas pendientes):**
+1. **Capa 5 — Cron de reconciliación (EL IMPORTANTE).** Tapa la causa raíz: el kiosko escribe el draft una vez y nunca reconcilia. Un `pg_cron` + EF que corra el MISMO cruce de `ambassadors_report` cada X horas y **detecte y avise** (NO repare dinero automáticamente): comisión sobre orden cancelada, `ambassador_id` inexistente en maestro, venta completed sin comisión, `amount_mismatch`. Las correcciones que tocan dinero quedan como **acción asistida en consola** para que admin (Patricia) apruebe con clic. Webhook `orders/cancelled` como mejora de latencia posterior. **La lógica del cruce YA existe** en la acción `ambassadors_report` de `nscf-b2b-approve` v5 — reusarla.
+2. **Capa 3 — Reporte por Resend.** Tipo `ambassador_report` en `nscf-mailer` (v24). **Body HTML enriquecido, sin adjunto.** Destinatarios: **Sam + Patricia + Diana** (`sam@unrealvillestudio.com`, `patriciaosorio@neuronescflorida.com`, `dianaespinosa_8709@icloud.com`). El botón "Enviarme el reporte" de la consola (hoy stubbeado/deshabilitado) lo dispara. Reusa el cruce de `ambassadors_report`.
+3. **Capa 4 — Inventario Shopify (dos tiendas).** Acción `inventory_view` (`['admin','ops']`). **DESBLOQUEADA:** verificado que ambas tiendas (B2C `egdk1n-gt` y B2B `nj5ybc-n1`) tienen token activo vía RPC `get_shopify_store`. Activa el tile "Inventario" que hoy está deshabilitado/"próximamente".
+4. **Console — próximo update (a dimensionar, pedido de Sam s7):**
+   - **Tabla de precios** — vista de precios en la consola (definir si editable o solo consulta).
+   - **Informe de ventas y profit** con selector **"este mes" / "mes anterior"**. NOTA: "profit" exige conocer **costos** (no solo ventas) → arrastra una fuente de datos de costos que hoy quizá no está estructurada en consola. Dimensionar al llegar (como se hizo con ambassadors).
+   - **Toggle de "ojo" en el password** del login de consola — EN CURSO (spec dada a CC fin de s7).
 
-**De sesión 6 (NSCF-Console — próximo foco):**
-4. **NSCF-Console Fase 3** — superuser console, roles por nivel de auth. Embajadora: PIN=B2C kiosko sin cambios. PO/superuser: login fuerte = aprobaciones + vista B2B + inventarios de ambas tiendas. Regla dura: funciones sensibles NUNCA detrás de PIN. NO depende de Shopify infra → se puede atacar ya. **Al arrancar: leer `nscf-console/src/App.jsx` y `nscf-b2b-approve` para ubicar el hook de auth que Fase 2 dejó preparado.**
-5. **Backlog seguridad** (de s6): Klaviyo key hardcodeada + verificar exposición de keys Resend FPHS. Agrupar en una "sesión de seguridad" para barrer todas las keys hardcodeadas.
+**De sesión 5 (pricing + assets) — sigue pendiente:**
+5. **Custom Kit de prueba (Orlando)** — armar kit real con `nscf-pricing` y las 3 vistas.
+6. **Mini-proyecto CC: poblar `product-assets`** — brief listo. Fuente: repo blueprints. Vía = raw.githubusercontent (NO el proxy).
+7. **ui-ux-layer — completar resolución de assets** (multimarca, patrón raw.githubusercontent por `brand_id`, genérico, NO hardcodear marca).
 
-**De sesión 4 — diferido (NO bloquea Fase 3):**
-6. **Sesión Shopify infra** — app dedicada commerce con `write_customers`/`write_draft_orders`/`write_orders`; multi-token por tienda en `shopify.stores`. ~~Desbloquea Fase 2.5~~ → **Fase 2.5 PARQUEADA (s6): el volumen no la amerita, sigue manual.**
+**De sesión 6 — backlog seguridad:**
+8. **Klaviyo key hardcodeada** + verificar exposición keys Resend FPHS. Agrupar en "sesión de seguridad" (aplicar lección: deploy ANTES de revocar).
+
+**De sesión 4 — diferido (NO bloquea):**
+9. **Sesión Shopify infra** — app dedicada commerce, multi-token por tienda. Fase 2.5 PARQUEADA (volumen no la amerita).
 
 ---
 
-## NOVEDADES ESTA SESIÓN (2026-06-16 sesión 6) — Resend Hardening + nscf-mailer versionada
+## NOVEDADES ESTA SESIÓN (2026-06-16 sesión 7) — NSCF-Console Fase 3 (Capas 1+2) + Limpieza de comisiones + botón Console en kiosko
+
+### BLOQUE A — Limpieza y reconciliación de comisiones de embajadoras (May–Jun 2026)
+
+**Disparador:** Sam pidió el reporte de ventas de embajadoras May + lo que va de Jun. Auditando Shopify ↔ Supabase aparecieron errores reales que afectaban el cobro.
+
+#### Auditoría manual completa (21 órdenes #1008–#1028, Shopify = fuente de verdad)
+Se leyó cada orden por sus `customAttributes` (cliente/embajadora viven en Notes/atributos, NO en campos estándar). Hallazgos y correcciones (7 escrituras a `nscf_commissions`/`nscf_draft_orders`):
+
+- **#1026, #1027** — comisiones de Patricia sobre órdenes **canceladas en Shopify** (mismo producto 2 veces, doble intento). → `status='cancelled'` (no borradas, preservan auditoría). −$22.00 comisión que no correspondía.
+- **#1008** (Patricia), **#1009, #1010** (Diana) — **ventas completed SIN comisión** (un mes sin registrarse). → comisiones creadas.
+- **#1028** — atributo Shopify corrupto `vizos-Diana` (id inexistente). La vendió **Diana** con el user de Patricia (porque aplicó descuento 40% que solo Patricia puede). → draft reasignado a `yts-nm-diana`/`yts-nm`; comisión creada para Diana. **Había además una comisión DUPLICADA** de Patricia ($8.40) creada por el kiosko el 13-jun → **eliminada** (error de diagnóstico de Claude detectado y corregido en verificación: #1028 SÍ tenía comisión, mal asignada).
+
+#### Base de cálculo unificada (DECISIÓN PERMANENTE de Sam)
+- **Comisión = SUBTOTAL de producto en Shopify** (sin tax ni shipping). Confirmado por Sam: "Shopify es la fuente sobre subtotal porque perdemos rastro de comisiones y gastos/costos."
+- **La diferencia Shopify-vs-Supabase era el SALES TAX.** Verificado orden por orden: `subtotalPrice` Shopify = monto guardado en Supabase; `totalPrice` = subtotal + tax. Las comisiones VIEJAS estaban bien (sobre subtotal); las 4 que Claude creó al inicio estaban infladas (usó `totalPrice`) → **recalculadas a subtotal**. Sistema quedó consistente.
+
+#### Resultado final (cuadrado contra DB)
+- **Patricia:** 8 ventas pendientes, comisión **$95.92** (10%); 2 canceladas excluidas. *(Nota: tras eliminar la duplicada de #1028, el detalle por venta y los totales quedaron consistentes; cifra final verificada en DB.)*
+- **Diana:** 10 ventas, comisión sobre subtotal (8%).
+- **Laura:** sin ventas en el período (activa como embajadora, sin órdenes).
+- Reporte xlsx entregado (Resumen / Detalle / Canceladas / Correcciones).
+
+#### Corte de salón de Diana (yts-nm → vizos) — punto y seguido
+- Diana dejó de trabajar en Yodi (yts-nm) y pasó a **Vizos** con Patricia; tendrá rol más amplio (ampliación de embajadoras a **Orlando**, apoyo al educador NSCF).
+- **Opción A aplicada:** `UPDATE nscf_embajadoras SET salon_id='vizos' WHERE id='yts-nm-diana'`. Histórico de comisiones **intacto** (cada fila conserva su `salon_id='yts-nm'` real). El maestro mira al futuro (vizos).
+- **Regla nueva (reporte):** agrupar comisiones por `ambassador_id` (identidad), NO por `salon_id`. Mostrar salón actual del maestro en summary, salón histórico en detalle.
+- **Deuda anotada:** el `id` sigue siendo `yts-nm-diana` aunque trabaje en vizos (cosmético). Rediseño futuro: tabla `nscf_embajadora_salon` (embajadora_id, salon_id, desde, hasta) para modelar movimientos sin perder rastro. Hacer cuando el volumen de movimientos lo pida.
+
+### BLOQUE B — NSCF-Console Fase 3, Capas 1+2 (DESPLEGADO Y VERIFICADO EN VIVO)
+
+#### Modelo de roles (confirmado por Sam)
+- **2 roles, hash por persona, sin tabla de usuarios** (config en secret). ADMIN = Patricia (Sam usa su login cuando hace falta). OPS = Laura + Diana.
+- ADMIN: único que aprueba salones; ve todo. OPS: NO aprueba salones; ve comisiones (+ inventario futuro). Vista de ambassadors muestra TODAS las embajadoras para ambos roles (el rol habilita el acceso, no recorta filas).
+- **Regla dura preservada:** funciones sensibles (aprobar, B2B, inventario) NUNCA detrás del PIN del kiosko. Consola = password fuerte. PIN = solo POS del kiosko.
+
+#### EF `nscf-b2b-approve` v1 → v5 (desplegada a prod, verify_jwt=false)
+- `loadUsers()` lee secret **`NSCF_CONSOLE_USERS`** (JSON: sub/role/hash por persona). Fallback a `PO_CONSOLE_PASSWORD_HASH` SOLO si el secret no está (deploy sin outage). **Sin centinela** (Sam pegó el hash real de Patricia en el JSON; enfoque de centinela descartado por seguridad). Filtro: descarta entradas con hash que no empiece por `$2`. Rechazo de password vacío ANTES de `compareSync` (doble cinturón).
+- `issueToken(sub, role)` — el claim `role` (que Fase 2 dejó plantado siempre = 'po') ahora se decide en login.
+- Matriz `PERMISSIONS` **fail-closed**: salones=['admin']; `ambassadors_report`=['admin','ops']. Guarda por acción → 403 si el rol no aplica.
+- Acción nueva **`ambassadors_report`** (read-only): cruce `nscf_commissions` × `nscf_embajadoras` × Shopify B2C (vía RPC `get_shopify_store`). 4 clases de discrepancia: `commission_on_cancelled`, `orphan_ambassador`, `sale_without_commission`, `amount_mismatch`. Degradación elegante si Shopify falla (devuelve resumen Supabase con `shopify_checked:false`).
+- Tokens viejos Fase 2 (`role:'po'`) → mapeados a admin (no rompe sesiones).
+
+#### Secret `NSCF_CONSOLE_USERS` — cargado por Sam (Supabase EF secrets, NO en repo)
+- Patricia (admin, hash real) + Laura `ops@neuronescflorida.com` (ops) + Diana `dianaespinosa_8709@icloud.com` (ops). Hashes Diana/Laura generados por CC (bcrypt cost 10, prefijo `$2b$` — compatible con `$2a$` de Patricia vía compareSync).
+
+#### Front `nscf-console/src/App.jsx`
+- Login pasa `role`; routing por rol (admin ve Salones+Comisiones; ops solo Comisiones). NavBar+Workspace. `AmbassadorsScreen` nueva (resumen + banner de discrepancias en rojo, read-only). ListScreen `embedded`. Textos de login neutros ("Console · Uso interno").
+- Botón "Enviarme el reporte" (Resend) presente pero **stubbeado/deshabilitado** hasta Capa 3.
+
+#### Verificación E2E en vivo (HRD-style, pasó completa)
+login Diana/Laura → 200 ops ✅ · password vacío → 400 ✅ · password incorrecto → 401 ✅ · ops→approve forzado → **403** ✅ · `ambassadors_report` (ops) → 200 ✅ · token viejo → admin ✅. **Login de Patricia probado por Sam → entra como admin, ve Salones+Comisiones ✅.** Las 3 usuarias probadas en la consola live.
+
+#### Capas pendientes (ver "RETOMAR"): 3 (Resend), 4 (inventario), 5 (cron). Capa 6 (salones gated a admin) = resuelta gratis por la matriz.
+
+### BLOQUE C — Infra Vercel: un proyecto por app + botón Console en kiosko
+
+#### Lío de despliegue resuelto (causa raíz: root directory)
+- El repo `NeuroneSCF` tiene varias apps en subcarpetas (`kiosko/`, `nscf-console/`, `pro-gateway/`, `nscf-dispatch/`, `supabase/`). **Cada app necesita su propio proyecto Vercel con su Root Directory.**
+- El commit de Fase 3 no se veía porque el proyecto que existía apuntaba a la carpeta del kiosko, no a `nscf-console`. Se creó/configuró el proyecto **`nscf-kiosk-console`** (root `nscf-console`, Vite).
+- **Duplicado eliminado:** había DOS proyectos sirviendo la consola desde el mismo repo/rama/commit — `neurone-scf` (dominio `console-pro-neuronescf.vercel.app`) y `nscf-kiosk-console`. Sam **borró `neurone-scf`** (sin env vars, nada único que perder; el historial de código vive en GitHub, no en Vercel).
+- **Dominio oficial de la consola: `nscf-kiosk-console.vercel.app`** (Sam descartó "console-pro-neuronescf" porque "pro" es engañoso — la consola no es solo de PRO; y porque se abre desde el kiosko).
+
+#### Botón "CONSOLE" en el kiosko (`kiosko/src/App.jsx`)
+- Enlace de navegación a `https://nscf-kiosk-console.vercel.app`, **pestaña nueva** (`target="_blank"` + `rel="noreferrer"`).
+- Reubicado: de la pantalla de selección de salón → a la pantalla de **selección de embajadora SOLO de Vizos** (`salon.id === 'vizos'`), debajo de Diana/Laura/Patricia. NO aparece en los salones Yodi.
+- Estilo: botón sólido **naranja `--nc-orange`** (visible, no el tenue `--nc-dim` inicial). Texto "CONSOLE ↗".
+- **Regla dura intacta:** `<a>` puro, pre-PIN (el paso 'ambassador' es anterior al 'pin'), no pasa PIN ni token; la consola pide su password fuerte.
+
+#### Incidente evitado: `.gitignore` faltante en kiosko
+- Al validar el build, el clon del kiosko generó `node_modules/` y `dist/` → GitHub Desktop iba a commitear **2.295 archivos**. Sam frenó a tiempo. CC creó `kiosko/.gitignore` (excluye `node_modules/`, `dist/`, etc.) en commit `4ff07df`. Diffs siguientes verificados = 1 archivo.
+
+### Gobernanza (toda la sesión)
+- CC preparó archivos en el clon local; **Sam commitea/pushea/mergea por GitHub Desktop.** CC no pushea.
+- Deploy de la EF v5 a prod: autorizado explícitamente por Sam, ejecutado por CC vía MCP.
+- Escrituras a `nscf_commissions`/`nscf_draft_orders`/`nscf_embajadoras`: verificadas con Sam antes de ejecutar (HRD-style), una a una.
+
+---
+
+## PROFESSOR — LEARNINGS FIJADOS (sesión 7)
+
+1. **CAUSA RAÍZ del kiosko: escritura sin reconciliación.** El kiosko escribe el draft→Supabase UNA vez y nunca vuelve: no propaga cancelaciones de Shopify, no valida `ambassador_id` contra `nscf_embajadoras`, y el paso draft→comisión falla en silencio. Produjo comisiones fantasma sobre canceladas, ventas sin comisión, id corrupto (`vizos-Diana`) y una duplicada. **Sigue vivo — el cron de reconciliación (Capa 5) es el antídoto.** Hasta entonces, se depende de mirar la vista de discrepancias a mano.
+2. **Base de comisión = SUBTOTAL de producto (Shopify), sin tax/shipping.** Fuente de verdad. La discrepancia con Supabase era el sales tax.
+3. **Corte de embajadora entre salones = punto y seguido.** Cambiar `salon_id` en el maestro; NUNCA tocar el `salon_id` de las comisiones históricas (es su realidad). Agrupar reportes por identidad (`ambassador_id`), no por salón.
+4. **Un proyecto Vercel por app, cada uno con su Root Directory.** Un repo monorepo con varias apps en subcarpetas necesita un proyecto Vercel por subcarpeta. Síntoma de root mal apuntado: el commit se sube pero "no se ve" el cambio. "Skip deployments" por carpeta evita builds cruzados.
+5. **Trampa `node_modules`/`dist` sin `.gitignore`** al validar builds en clones nuevos. Verificar SIEMPRE el conteo de archivos del diff antes de commitear; debe ser el nº de archivos realmente tocados.
+6. **El hash de un secret de Supabase es opaco** (no se puede leer vía MCP). Para JSON de usuarios: Sam pega el hash real al cargar el secret; nada de centinelas con hash vacío (riesgo en `compareSync`).
+
+---
+
+## DEUDA TÉCNICA / PENDIENTES (acumulada)
+- [ ] **Capa 5 cron de reconciliación** (s7) — EL importante; tapa la causa raíz.
+- [ ] **Capa 3 Resend** `ambassador_report` (s7) — body HTML, a Sam+Patricia+Diana.
+- [ ] **Capa 4 inventario Shopify** (s7) — desbloqueada (ambas tiendas con token).
+- [ ] **Toggle ojo en password de consola** (s7) — spec dada a CC, en curso.
+- [ ] **Rediseño identidad/salón** `nscf_embajadora_salon` (s7) — cuando haya más movimientos; resuelve el `id` cosmético de Diana.
+- [ ] **Rate-limit de login de consola** sigue in-memory (endurecer si el volumen lo pide).
+- [ ] **Fallback `PO_CONSOLE_PASSWORD_HASH`** = código muerto una vez cargado `NSCF_CONSOLE_USERS`; retirar en limpieza.
+- [x] **Resend hardening** (s6): key rotada, secret, v23 versionada, E2E Inbox.
+- [x] **Proyecto Vercel consola** (s7): consolidado en `nscf-kiosk-console`, duplicado `neurone-scf` borrado.
+- [ ] **Klaviyo key hardcodeada** + verificar keys Resend FPHS (backlog seguridad, s6).
+- [ ] **Confirmar URL login passwordless PRO** (s6).
+- [ ] **Corregir drift `shopify.stores` VIEW→BASE TABLE** y drift `/api/professor` en fuente de verdad.
+- [ ] Config Vercel: "Include files outside root" → OFF en kiosko y dispatch (de s2).
+- [ ] **Cutover dominio** `pro.neuronescflorida.com` → landing (de s2).
+- [ ] **Política de privacidad B2B** (de s2).
+- [ ] **`NeuroneSCF_B2B` sin paleta en Supabase.**
+- [ ] **Imágenes de producto Neurone defectuosas** (relacionado poblar product-assets, s5).
+
+---
+
+## NOVEDADES SESIÓN (2026-06-16 sesión 6) — Resend Hardening + nscf-mailer versionada
 
 ### COMPLETADO Y VERIFICADO E2E (envío real al Inbox)
 
@@ -128,19 +247,6 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 
 ---
 
-## DEUDA TÉCNICA / PENDIENTES (acumulada)
-- [x] **Resend hardening** (s6 RESUELTO): key vieja revocada, `RESEND_API_KEY` secret con key nueva, `nscf-mailer` v23 lee env + guarda 503, versionada en GitHub. Verificado E2E (Inbox).
-- [x] **Proyecto Vercel `nscf-console`** — HECHO, LIVE en `console-pro-neuronescf.vercel.app` (root `nscf-console`, Vite, sin env vars).
-- [ ] **Confirmar URL real de login passwordless PRO** — el mailer usa `nj5ybc-n1.myshopify.com/account` por defecto; Sam confirmó que la URL funciona.
-- [ ] **Corregir drift `shopify.stores` VIEW→BASE TABLE** y drift `/api/professor` en fuente de verdad (ecosystem learnings / HRD_PROTOCOL).
-- [ ] Config Vercel Parte C: "Include files outside root" → OFF en kiosko y dispatch (de s2).
-- [ ] **Cutover de dominio** `pro.neuronescflorida.com` → landing (de s2).
-- [ ] **Política de privacidad B2B** — `PRIVACY_URL` apunta a la de B2C; crear la B2B (de s2).
-- [ ] **`NeuroneSCF_B2B` sin paleta en Supabase** (de sesiones previas).
-- [ ] **Imágenes de producto Neurone defectuosas** (de sesiones previas — relacionado con poblar product-assets, s5).
-
----
-
 ## NOVEDADES SESIÓN ANTERIOR (2026-06-13 sesión 3) — Sales Pager Salones v18: cierre y entrega
 
 ### COMPLETADO — One-pager B2B salones (el "pendiente" de sesión 2, RESUELTO)
@@ -212,4 +318,4 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 - Marketing B2B = $0 ads en fase lanzamiento presencial.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-06-16 sesión 6_
+_Unreal>ille · NeuroneSCF · 2026-06-16 sesión 7_
