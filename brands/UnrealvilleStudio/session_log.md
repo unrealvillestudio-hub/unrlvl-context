@@ -1,183 +1,188 @@
 # Session Log — UnrealvilleStudio
 
-## 2026-06-16 · IID Builder Convergido + Watcher LIVE · causa raíz del freeze identificada
+## 2026-06-17 · #5b VALIDADO end-to-end · contrato de voice afinado · pendientes de calidad de output
 
 **Conducido por:** Claude Opus 4.8 (chat, diseño + decisiones + DB directa) + Claude Code (ejecución de EFs)
-**Foco:** ejecutar los pendientes 🔴 de ayer — Builder convergido + Watcher — y dejar el motor IID produciendo on-brand y anti-spam antes de la corrida real.
+**Foco:** correr la corrida real del piloto IID (#5b) hasta el final, destapar y arreglar lo que la cadena completa revelara, afinar el contrato de voice de las marcas, y dejar el motor validado hasta R4B.
 
-### Lo más importante: el freeze de abril tenía una cuarta causa que nunca diagnosticamos
+### Lo más importante: la cadena completa funciona end-to-end, con 2 piezas en aprobación
 
-El pipeline IID no estaba solo "off-brand desde abril" — estaba **muerto en seco**. El model ID `claude-sonnet-4-20250514` hardcodeado en `content-run-stage` se retiró (deprecación 15-jun-2026) → la llamada a Claude daba 404 → el pipeline moría en stage 1 (copylab). Los 3 bugs de brand/voice/genoma eran reales pero **secundarios**: aunque se arreglaran, sin modelo vivo no salía nada. Reemplazo verificado con ping HTTP 200 real (no inferido): `claude-sonnet-4-6`. Lección: un model ID hardcodeado es deuda con fecha de caducidad; pipeline congelado sin error visible → revisar model ID antes que la lógica.
+RUN4 (final): Lucien (editorial) y UNRLVL (social) sobre el mismo finding real de reasoning **atravesaron los 5 stages** (copylab → aife → imagelab Vertex → sociallab → Watcher), **ambas PASS**, ambas a `awaiting_approval`, y **ambas dispararon email real a content-approval@unrealvillestudio.com**. Sam recibió y revisó los dos emails con botones PUBLICAR/RECHAZAR. Modo c2 respetado: NO se publicó a Meta (la publicación real es fase siguiente, en chat dedicado). El motor IID completo (Builder convergido + 5 stages + Watcher de 6 gates + imagen Vertex + email de aprobación) está validado.
 
-### Key achievements
+### El piloto destapó 5 fallos ocultos que el dry-run jamás habría encontrado
 
-- **Builder Convergido LIVE** (`content-run-stage` v25→v31, cirugía in-place A1). `callClaudeDirect` → `buildFromGenome`: lee `intel.brand_topics` + `brand_voice_genome`, resuelve marca + voz **híbrida** (format manda: article/long→editorial, short/post→social; plataforma desempata solo si format ambiguo), inyecta genoma + ángulo + hard_rules, **mató el fallback silencioso `?? "UnrealvilleStudio"`** (bug #1), persiste `voice_id` real en `content_pieces.voice` + `assets.builder_meta`. Resto de stages (aife/imagelab/sociallab/email) intacto.
-- **Watcher LIVE** (stage 5 de `content-run-stage`, decisión C1). 6 gates modulares `(piece, ctx)→{pass, detail}`, gate previo a `awaiting_approval`: (1) similarity semántico vía Claude >0.80→REJECT, (2) sibling-window 48-72h INFORMATIVO en piloto, (3) cadence INFORMATIVO, (4) evidence (UNRLVL sin números / Lucien viola hard_rules → REJECT), (5) duplication semántico, (6) hard-rules catch-all. Tabla `intel.watcher_log` auditable (una fila por paso). El bloque INSERT `content_pieces` + email Resend ahora corre SOLO si Watcher=PASS.
-- **Guard dry-run** (`assets.builder_input.dry_run=true`) — corta tras copylab sin cascada/INSERT/email/publish. Necesario: UnrealvilleStudio está en `meta_accounts`, un click accidental en PUBLICAR habría publicado prueba en la página Meta real. El "fue dry-run" se registra en `builder_meta.dry_run_stopped=true` (metadata), no en `status` (máquina de estados).
-- **`intel.brand_topics.angle` de LucienSael/ai-cognition poblado** (era null — blocker del caso multimarca). Par divergente completo.
+El dry-run siempre cortaba tras copylab, así que aife/imagelab/sociallab/email nunca se ejercitaban. La corrida real los rompió uno por uno, y los arreglamos en cascada:
 
-### Divergencia multimarca VALIDADA objetivamente (corazón del piloto)
+1. **Model ID retirado = patrón de ecosistema (24 EFs).** `claude-sonnet-4-20250514` (retirado 15-jun) estaba en `aife-filter` + 9 EFs de flujo vivo (6 iid-*, fphs-chat, brand-context-builder, unrlvl-profiler — todas arregladas a `claude-sonnet-4-6` + hardening labelClaudeError) + 13 one-off (shopify/seo/nscf, en AGENDA). Era la causa del freeze de abril en realidad: el pipeline moría en seco con 404, no solo off-brand.
+2. **imagelab apuntaba a fal.ai, no al crédito Google.** El stage estaba hardcodeado a `fal.run/fal-ai/imagen3` salteándose `lab_configs`. CC lo redirigió a `image-lab-unrlvl.vercel.app` (Vertex AI / imagen-3.0 / crédito GCP de Sam). Ahora usa el crédito correcto.
+3. **Gate evidence caricaturizado.** Usaba `has_numbers:true/false` para UNRLVL — una caricatura. Reescrito a check semántico vía Claude que evalúa comprensión de la maquinaria, leyendo `proof_mode`.
+4. **Email mudo por key cruzada.** `RESEND_API_KEY` era de la cuenta Resend de NeuroneSCF (sin unrealvillestudio.com verificado) → Resend 403 → sin try/catch, fallo mudo. Fix: secret dedicado `RESEND_UNRLVL_KEY` + envío en try/catch. Sam seteó la key. Validado: email llega.
+5. **Builder UNRLVL alucina métricas.** Generó "2048 veces/s" (inventado) → REJECT correcto del gate. Fix de procedencia de cifras (3 niveles). RUN4: generó "512 tokens / 96 capas de atención" + "geometría del espacio de embeddings" → PASS.
 
-Mismo tema `ai-cognition`, dos marcas hermanas:
-- **Lucien** (`lucien_editorial` v0.5, editorial): ensayo filosófico/cultural, ~5400 chars, cero cifras, übermensch no manifiesto, sin mención de libros.
-- **UNRLVL** (`unrlvl_default` v1.0, social): técnico-operativo, ~450 chars, +18%/3x/30-40%, "Forward".
-- **Similitud semántica medida: 0.07** (umbral REJECT 0.80). Duplicado forzado: **1.0** → rechazado. Gates 4/6 cazan UNRLVL-sin-números y Lucien-tease-de-libro con razón textual. El motor anti-autobaneo funciona y es medible.
+### Contrato de voice afinado (sin tocar genomas — estaban sanos)
 
-### Limpieza + cuarentena
+La caricatura "UNRLVL=números / Lucien=sin cifras" vivía en 3 capas encima de un genoma sano. Corregidas en `intel.brand_topics`:
+- **proof_mode UNRLVL**: de "show the system doing it now" → "Depth of comprehension IS the proof. Numbers welcome when real, never required, never invented."
+- **angle UNRLVL**: técnico-estructural / blueprint, no estadística. La matemática y arquitectura aplicada detrás de lo que el usuario común da por sentado.
+- **angle Lucien**: la geometría del pensamiento — qué le exige a un humano trasladar su mente a un sistema sintético; el malnombrar que revela algo sobre nosotros (anclado a su core_move real).
+- **Genomas: intactos** (la caricatura nunca estuvo ahí; el genoma UNRLVL pide "specific and verifiable" + léxico de arquitectura).
 
-- **293 cadáveres** de `intel.iid_content_queue` (274 brand_id=null + 19 brand_id hardcoded del test viejo b93627b6) → `failed` + tag `ARCHIVED_LEGACY_20260616`. Decisión Sam: quemar todo lo viejo (incluido lo que tenía brand_id) — regenerar limpio cuesta menos que reparar tokens ya gastados mal. El cron `content-dispatcher-poll` (cada 30 min) deja de morder basura. `.limit(1)` INTACTO (se quita solo tras corrida real).
-- **Migraciones tracked aplicadas:** GRANT SELECT a roles PostgREST en `brand_topics` + `brand_voice_genome` (eran tablas nuevas sin grants → PostgREST 404 → "sin suscripción" engañoso); DROP de `content_pieces_voice_check` obsoleto (enumeraba {unrlvl,lucien} a mano, rechazaba voice_id del genoma en silencio); DDL `intel.watcher_log` con grants.
-- **EF efímera `model-ping`** (usada para verificar model IDs sin exponer la key, vía pg_net) borrada del dashboard por Sam.
+### Divergencia multimarca confirmada visualmente
 
-### Tensión arquitectónica ABIERTA (a resolver en corrida real)
-
-`proof_mode` ↔ UNRLVL: una pieza UNRLVL divergente y con números (pasó gate1=0.07 y gate4) fue RECHAZADA por gate6 hard_rule `proof_mode` ("describe capacidad en teoría, nunca muestra el sistema ejecutándose ahora"). Builder y Watcher discrepan sobre qué es on-brand para UNRLVL. Hipótesis: artefacto del test (finding sembrado sin producto real). Si en producción sigue bloqueando UNRLVL conceptual → decidir entre ajustar genoma UNRLVL o reclasificar `proof_mode` de bloqueante a advertencia. NO resuelto.
-
-### Patrón confirmado 3x en la sesión (→ Professor)
-
-"Artefacto nuevo sin permisos = fallo silencioso": tabla nueva con RLS sin GRANT → supabase-js devuelve null (no excepción); CHECK obsoleto → INSERT falla en silencio. Regla reforzada: tabla nueva = GRANT explícito + reload cache PostgREST en la misma migración; INSERT crítico chequea su error; antes de ampliar enum/CHECK estático preguntar si debería existir (si hay tabla canónica, el CHECK estático es deuda).
+Mismo finding (Reasoning Models). UNRLVL: *"calcula la distribución de probabilidad sobre el siguiente token, 512 veces, geometría del espacio de embeddings, 96 capas de atención"* (la maquinaria). Lucien: *"hay una palabra que todos usan y nadie examina... el lugar exacto donde el pensamiento se detiene... confundir el parecido del resultado con la identidad del proceso"* (la geometría del pensamiento). Similitud de cuerpo 0.07. Un humano no los relaciona por el cuerpo.
 
 ### Estado de EFs (verificado)
 
-`content-dispatcher` v21 (`.limit(1)` intacto). `content-run-stage` v31 (Builder+Watcher, modelo `claude-sonnet-4-6`). Comentario de cabecera dice v1.11 — drift cosmético, runtime es 31 (anotado para drift detector).
+`content-run-stage` v33 (Builder convergido + Watcher + 6 fixes + imagelab Vertex + RESEND_UNRLVL_KEY). `content-dispatcher` v21 (`.limit(1)` intacto). `aife-filter` v15. 9 EFs de flujo vivo en `claude-sonnet-4-6`.
 
-### Pendientes (→ próxima sesión)
+### PENDIENTE — Calidad de output (capa distinta del flujo, que ya funciona)
 
-- [ ] 🔴 Corrida real semi-manual piloto `Sam→Claude→IID→Watcher→aprobación` (caso ai-cognition). Validar gate2 sibling-window en vivo + resolver tensión proof_mode.
-- [ ] 🟡 Crear IID propios de Lucien (materia filosófica — hoy inexistentes)
-- [ ] 🟡 Decidir destino de los 14 IID-* viejos
-- [ ] 🟡 Scheduler R4B (jitter + desfase + crescendo; consume brand_topics; migra gate1/5 a pgvector; gates 2/3 a bloqueantes; extrae Watcher a EF C2)
-- [ ] 🟡 Quitar `.limit(1)` de content-dispatcher (solo tras corrida real; cadáveres ya cuarentenados)
-- [ ] 🟡 Promover `domain` a columna en orchestrator_jobs + content_pieces (R4B)
-- [ ] 🟡 Deuda: model ID hardcodeado en content-run-stage (considerar leerlo de config/secret)
+Sam identificó que el flujo está resuelto pero los outputs necesitan trabajo. A resolver en sesión(es) dedicada(s), NO en este sprint:
 
-### Drifts detectados (→ #37 drift detector)
+- [ ] 🔴 **Title compartido delata a las hermanas.** Ambas piezas usan el title del finding crudo ("Reasoning Models Fundamentally Shift..."). El cuerpo diverge (0.07) pero el title las relaciona — anti-autobaneo comprometido. El Builder debe generar title propio por marca. PRIORIDAD ALTA.
+- [ ] 🔴 **Angle de Lucien sobre-especificado = fórmula.** "Geometría del pensamiento" + "malnombrar" se volvió regla dura: Lucien SIEMPRE sale igual, no se ve `psychological` u otras facetas. El angle por-dominio + core_move del genoma se refuerzan en exceso. Rebalancear angle vs genoma para dar rango a Lucien. (Origen: el angle lo escribimos Sam+Claude muy específico; se convirtió en molde.)
+- [ ] 🟡 **Email no muestra imagen** (base64 inline stripeado por Gmail) **ni copy completo** (truncado en buildEmail). Fix template: subir imagen a Storage + mostrar copy completo o link.
+- [ ] 🟡 **Markdown crudo visible** en outputs (`**> Forward.**` con asteriscos). El render no procesa markdown.
+- [ ] 🟡 **resend_id null en la pieza** aunque email_sent=true (se guarda en job, no en pieza). Capturar id de Resend en content_pieces.
+- [ ] 🟢 **"> Forward."** confirmado como cierre de marca UNRLVL correcto (chevron = dirección del genoma); solo el formato markdown crudo es el bug.
 
-`api/professor.js` ya existe (HRD lo marca pendiente); `content-run-stage` comentario v1.11 vs runtime v31; `fphs_institucional` v0.5 genoma activo no listado en ecosystem.json (5 genomas propios, no 4); `nscf-b2b-approve` v5 actualizada hoy (fuera de alcance, verificar si se retoma NSCF).
+### PENDIENTE — Infraestructura/limpieza
+
+- [ ] Borrar del dashboard Supabase las EFs efímeras: `model-ping`, `env-probe`, `resend-test` (neutralizadas como stubs 410, falta borrarlas).
+- [ ] Barrer `to: sam@unrealvillestudio.com` hardcodeado en otras EFs (SMA FPHs, nscf-mailer, etc.) y decidir cuáles migran a `content-approval@` u otro alias por función.
+- [ ] 13 EFs one-off con model ID retirado (shopify/seo/nscf) — deuda de mantenimiento, arreglar cuando se use cada una.
+- [ ] **Publicación real (push a Meta)** — fase siguiente, CHAT DEDICADO. Verificar cuentas Meta de Lucien/SamPublisher (no probadas E2E) antes del primer push de cada marca.
+
+### Deuda R4B (Scheduler)
+
+- base64 inline de imagen → subir a Supabase Storage y guardar URL (Gmail stripea; Meta necesita URL hospedada).
+- Editorial largo (~8000 chars) recorre stages lento (~90s total) — vigilar timeouts en modo autónomo.
+- Gates 2/3 (sibling-window, cadence) pasan de informativos a bloqueantes; gate 1/5 a pgvector; extraer Watcher a EF C2.
+
+### Pendientes IID (orden post-piloto, sin cambios)
+
+- [ ] 🟡 IID propios de Lucien (materia filosófica — hoy inexistentes)
+- [ ] 🟡 Destino de los 14 IID-* viejos
+- [ ] 🟡 Scheduler R4B
+- [ ] 🟡 Quitar `.limit(1)` (cadáveres ya cuarentenados; solo tras publicación validada)
+
+---
+
+## 2026-06-16 · IID Builder Convergido + Watcher LIVE · causa raíz del freeze identificada
+
+**Conducido por:** Claude Opus 4.8 (chat, diseño + decisiones + DB directa) + Claude Code (ejecución de EFs)
+**Foco:** ejecutar los pendientes 🔴 — Builder convergido + Watcher — y dejar el motor IID produciendo on-brand y anti-spam antes de la corrida real.
+
+### Lo más importante: el freeze de abril tenía una cuarta causa que nunca diagnosticamos
+
+El pipeline IID no estaba solo "off-brand desde abril" — estaba **muerto en seco**. El model ID `claude-sonnet-4-20250514` hardcodeado en `content-run-stage` se retiró (deprecación 15-jun-2026) → la llamada a Claude daba 404 → el pipeline moría en stage 1 (copylab). Los 3 bugs de brand/voice/genoma eran reales pero **secundarios**. Reemplazo verificado con ping HTTP 200 real: `claude-sonnet-4-6`.
+
+### Key achievements
+
+- **Builder Convergido LIVE** (`content-run-stage` v25→v31, cirugía in-place A1). `callClaudeDirect` → `buildFromGenome`: lee `intel.brand_topics` + `brand_voice_genome`, resuelve marca + voz **híbrida** (format manda, plataforma desempata), inyecta genoma + ángulo + hard_rules, **mató el fallback silencioso `?? "UnrealvilleStudio"`**, persiste `voice_id` real.
+- **Watcher LIVE** (stage 5, decisión C1). 6 gates modulares, gate previo a `awaiting_approval`, tabla `intel.watcher_log` auditable.
+- **Guard dry-run** (`assets.builder_input.dry_run`) — corta tras copylab sin cascada/email/publish.
+- **`intel.brand_topics.angle` de LucienSael/ai-cognition poblado** (era null — blocker del caso multimarca).
+
+### Divergencia multimarca VALIDADA objetivamente
+
+Mismo tema `ai-cognition`: Lucien (editorial, filosófico) vs UNRLVL (social, técnico). **Similitud semántica: 0.07** (umbral REJECT 0.80). Duplicado forzado: **1.0** → rechazado. Gates 4/6 cazan UNRLVL-sin-números y Lucien-tease-de-libro.
+
+### Limpieza + cuarentena
+
+- **293 cadáveres** de `intel.iid_content_queue` (274 brand_id=null + 19 brand_id hardcoded) → `failed` + tag `ARCHIVED_LEGACY_20260616`. Decisión Sam: quemar todo lo viejo.
+- **Migraciones tracked:** GRANT SELECT a roles PostgREST en `brand_topics` + `brand_voice_genome`; DROP de `content_pieces_voice_check` obsoleto; DDL `intel.watcher_log` con grants.
+
+### Patrón confirmado 3x
+
+"Artefacto nuevo sin permisos = fallo silencioso": tabla nueva con RLS sin GRANT → supabase-js null; CHECK obsoleto → INSERT mudo. Regla: tabla nueva = GRANT + reload cache en la misma migración; INSERT crítico chequea error; antes de ampliar enum/CHECK estático preguntar si debería existir.
+
+### Pendientes (resueltos en sesión 06-17)
+
+- [x] CC: Builder convergido — HECHO
+- [x] CC: Watcher 6 gates — HECHO
+- [x] Corrida real piloto — HECHO (#5b validado 06-17)
 
 ---
 
 ## 2026-06-15 · Replanteamiento IID + brand_topics + 14 IID UNRLVL + anti-spam contract
 
-**Conducido por:** Claude Opus 4.8 (chat) + DB directa (gobernanza ajustada: cambios de DB ejecutados por Claude, no CC)
+**Conducido por:** Claude Opus 4.8 (chat) + DB directa
 **Foco:** corregir el modelo del IID de raíz · diseñar la capa marca↔temas · replantear qué investiga UNRLVL · blindar anti-baneo multimarca
 
-### El giro conceptual (lo más importante)
+### El giro conceptual
 
-- **MODELO CORREGIDO:** la **marca declara qué temas consume y con qué voz por destino**; el IID investiga temas **neutros** (sin marca, sin voz). Antes el agente cargaba `default_voice` y decidía la voz — esa era la causa raíz del off-brand (junto a `brand_id=null` en jobs y al builder que ignoraba `brand_voice_genome`). Si una marca necesita un tema que ningún IID cubre → se crea el IID.
-- **3 sistemas de voz aclarados (no duplicados):** `brand_voice_genome` (editorial ejecutable), `content.brand_voices` (editorial viejo IID con ICR/AIFE), `voicelab_params` (sonora ElevenLabs, independiente). El recuerdo de "brand_voices = ElevenLabs" era incorrecto; la sonora es otra tabla.
+- **MODELO CORREGIDO:** la **marca declara qué temas consume y con qué voz por destino**; el IID investiga temas **neutros**. Antes el agente cargaba `default_voice` y decidía la voz — esa era la causa raíz del off-brand.
+- **3 sistemas de voz aclarados:** `brand_voice_genome` (editorial ejecutable), `content.brand_voices` (editorial viejo IID con ICR/AIFE), `voicelab_params` (sonora ElevenLabs, independiente).
 
 ### Key achievements
 
-- **`intel.brand_topics` creada y extendida.** m:n marca↔tema. Campos: core (brand_id, domain, voice_by_destination, platforms, hard_rules, auto_approve, active, priority) + añadidos (rollout_phase, purpose, cadence crescendo, angle, sibling_stagger).
-- **14 IID nuevos `UNRLVL-*` creados desde cero.** Tier1 (5, método/CÓMO industrial), Tier2 (3, deep-stack superuser), Tier3 (6, mercado con números). hard_rule: principio numérico + desarrollo. Los 14 viejos `IID-*` intactos (destino pendiente).
-- **Naming normalizado.** `UNREALville` eliminado de `meta_accounts` (era dup exacto de `UnrealvilleStudio` — mismo page_id/token; confirmado por imagen Meta que Lucien y Studio son marcas distintas con page_id propio). `content.brand_voices.brand_id` corregido: lucien→LucienSael, unrlvl→UnrealvilleStudio.
-- **Suscripciones poblpadas.** Lucien: 3 temas activos con confidencialidades como hard_rules. UNRLVL: 5 Tier1 fase 1 (publish+internal, crescendo). Caso multimarca: `ai-cognition` compartido Lucien↔UNRLVL con `sibling_stagger=true`.
-- **Anti-spam contract v1.0** (`protocols/ANTISPAM_CONTRACT.md`) con **Watcher** (6 gates) como prerequisito de publicación.
+- **`intel.brand_topics` creada y extendida** (m:n marca↔tema; 5 ejes: rollout_phase, purpose, cadence, angle, sibling_stagger).
+- **14 IID nuevos `UNRLVL-*`** en 3 tiers. hard_rule: numérico + desarrollo. Los 14 viejos `IID-*` intactos.
+- **Naming normalizado.** `UNREALville` eliminado de `meta_accounts` (dup de `UnrealvilleStudio`).
+- **Anti-spam contract v1.0** con **Watcher** (6 gates) como prerequisito de publicación.
 
-### Enfoque UNRLVL (replanteado)
+### Enfoque UNRLVL
 
-- Los IID de UNRLVL investigan el **CÓMO industrial del mercado**, no releases ("hablar de la nueva función de un modelo" está saturado). Cada dominio espejo de una capacidad propia (context-engineering↔sistema de contexto, signal-learning-loops↔SignalLab, etc.).
-- **Todo parte de profundidad matemática/numérica/de desarrollo. Nada filosófico ni opinión sin números.** Filtro marca: numérico→UNRLVL, condición humana→Lucien (opuestos complementarios).
-- Stance: que el cliente se pregunte si SU agencia opera a este nivel (reclutamiento por contraste).
-- Correcciones de Sam: fuera LATAM/comunidad latina; Shopify sube a stack técnico propio; Florida general (no latino); SignalLab (no el loop de Professor).
+- Los IID investigan el **CÓMO industrial del mercado**, no releases. Todo parte de profundidad matemática/de desarrollo. (NOTA 06-17: "matemático" se redefinió como profundidad de comprensión de la maquinaria, NO dígitos obligatorios.)
 
-### Anti-baneo (verificado y blindado)
+### Anti-baneo
 
-- **Las 3 marcas publican con el mismo token/Business Portfolio Meta** (prefijo token idéntico). Riesgo real ≠ volumen → es publicar *lo mismo en sincronía* desde cuentas que Meta sabe que son la misma mano (spam coordinado puede arrastrar varias cuentas).
-- Blindaje 3 capas: divergencia por ángulo (builder), jitter + desfase de hermanas (scheduler), **Watcher** gate final de 6 checks antes de aprobación.
-- Cadencia cuentas nuevas: crescendo gradual (LI 2→3→4-5/sem, X 3→5→1día, Meta 2→3→4-5/sem). El patrón importa más que el número.
+- Las 3 marcas publican con el mismo token/Business Portfolio Meta. Blindaje 3 capas: divergencia por ángulo (builder), jitter + desfase (scheduler), Watcher gate final.
 
-### Pendientes (→ próxima sesión)
+### Confidenciales Lucien
 
-- [ ] 🔴 CC: Builder convergido que lea `brand_topics` + inyecte genoma (mata default_voice + callClaudeDirect)
-- [ ] 🔴 CC: Watcher (6 gates) — prerequisito del primer publish
-- [ ] 🟢 Primera corrida real piloto Lucien (caso multimarca ai-cognition)
-- [ ] 🟡 Crear IID propios de Lucien (materia filosófica — hoy inexistentes)
-- [ ] 🟡 Decidir destino de los 14 IID-* viejos
-- [ ] 🟡 Scheduler R4B (jitter + desfase + crescendo)
-
-### Confidenciales Lucien (reglas duras registradas)
-
-- Frame Nietzsche/übermensch = motor interno, **NUNCA** manifestado en output.
-- Los libros de LucienSael **no existen públicamente** hasta lanzamiento; `human-essence` recluta lectores sin revelarlos.
+- Frame Nietzsche/übermensch = motor interno, NUNCA en output. Libros NO existen públicamente hasta lanzamiento.
 
 ---
 
 ## 2026-06-05 · Skill voice-reference-extractor + cierre de previews pendientes
 
-**Conducido por:** Claude Opus 4.8 (chat) + Claude Code (ejecución)
-**Foco:** validación de pipeline de extracción de voz · merge de previews Vercel pendientes · integración de skill huérfano
-
-**SMA check:** Sin novedades del agente — export retornó contenido NSCF de sesiones anteriores (última actividad 2026-05-11), sin entradas nuevas desde el último Actualiza.
+**Conducido por:** Claude Opus 4.8 (chat) + Claude Code
+**Foco:** validación de pipeline de extracción de voz · merge de previews Vercel · integración de skill huérfano
 
 ### Key achievements
 
-- **Skill `voice-reference-extractor` v1.0 creado e integrado a `skills/` (PR #2 → merge `3b65596`).**
-  Pipeline determinístico local: videos TikTok descargados → ffmpeg (audio) → Whisper (transcripción) → Tesseract (OCR on-screen) → consolidado `.md` + `.json` por cuenta. NO hace análisis de voice (eso es trabajo de chat). Idempotente por hash SHA-256. Limitación documentada: descargas TikTok ~18-20s → transcripción parcial, OCR compensa.
-- **INDEX.md `v1.2 → v1.3 → v1.4` en la jornada.** v1.3 (supabase-auditor + security v1.1) entró con el merge de SamPublisher; v1.4 (voice-reference-extractor) reconcilió limpio sin pisar supabase-auditor.
-- **PR #1 SamPublisher mergeado a producción (`585d447`).** Genoma `sam_personal v0.5` health green, coherente en `brands[]` + `brand_voice_genome.rows_SamPublisher` + `_meta 2026-06-02-v2`. Nota fantasma de lucien_editorial confirmada eliminada en producción.
-- **Ensayo de pipeline validado end-to-end en CC (Windows).** Entorno completo instalado: ffmpeg 8.1.1, tesseract 5.4.0 + tessdata spa/eng (vía AppData sin admin), openai-whisper. 2 videos de prueba transcritos + OCR correcto.
+- **Skill `voice-reference-extractor` v1.0** integrado a `skills/` (PR #2 → `3b65596`). Pipeline determinístico: TikTok → ffmpeg → Whisper → Tesseract → consolidado. NO hace análisis de voice. Idempotente por SHA-256.
+- **INDEX.md v1.2 → v1.4** en la jornada.
+- **PR #1 SamPublisher mergeado** (`585d447`). Genoma `sam_personal v0.5` health green.
+- **Ensayo de pipeline validado E2E en CC (Windows).**
 
 ### Decisiones
 
-- **Proyecto "registro BTS de tono/disciplina" → DESCARTADO (decisión Sam).** Evaluado y matado por tibio: "mostrar las horas/rigor" pide permiso a la audiencia y roza el género grindset que UNRLVL no es. Principio retenido: operar a un nivel donde el rigor es obvio en el output, no narrarlo. NOT FOR EVERYONE no explica. El skill de extracción sobrevive como herramienta reusable; el caso de uso original murió.
-- **División de trabajo voice-research formalizada:** CC = extracción determinística (audio + OCR, batch, local). Chat = análisis de voice iterativo contra brand. No automatizar el análisis en un skill rígido.
+- **Proyecto "registro BTS de tono/disciplina" → DESCARTADO** (Sam). Tibio, roza grindset. El skill sobrevive como herramienta; el caso de uso murió.
+- **División voice-research:** CC = extracción determinística; Chat = análisis iterativo.
 
-### Hallazgos técnicos (→ Professor)
+### Hallazgos técnicos
 
-- **CC crea skills en worktrees aislados** (`.claude/worktrees/<random>/`) que NO llegan a main — riesgo de skill huérfano si no se rastrea. El skill de esta sesión quedó atrapado ahí; recuperado e integrado por PR. Mitigación estándar: integrar siempre por PR a `skills/`.
-- **Entorno de Claude.ai no descarga modelos ML** (Whisper desde Azure/HuggingFace = fuera de allowlist, 403). Transcripción de audio va sí o sí por CC local.
+- CC crea skills en worktrees aislados que NO llegan a main — integrar siempre por PR.
+- Entorno Claude.ai no descarga modelos ML (Whisper 403) → CC local.
 
 ### Pendientes / housekeeping
 
-- **Worktree huérfano** `.claude/worktrees/quirky-jones-aad3e8/` — desregistrado de git y branch borrada, pero el directorio físico persiste (handle de sesión CC). Borrar con `rmdir /s /q` desde terminal nueva al cerrar CC.
-- **🔴 Ayra Sprint 0 — VENCIDO (deadline 5 jun).** No tocado esta sesión.
+- Worktree huérfano `quirky-jones-aad3e8/` — borrar físicamente.
+- 🔴 Ayra Sprint 0 — VENCIDO (5 jun).
 
 ---
 
 ## 2026-05-31 — Field Notes + fix pipeline v22 + diseño Voice Genome · Sam + Claude
 
 ### Resumen
-Sesión densa: blog "Field Notes" para UNRLVL, fix del bug de publicación del flujo v22, diagnóstico completo del subsistema IID, y diseño de la Fase Voice Genome para la OnboardingApp.
+Blog "Field Notes" para UNRLVL, fix del bug de publicación v22, diagnóstico IID, diseño Fase Voice Genome.
 
-### Web — Field Notes (pendiente deploy a CoreProject)
-- `blog/index.html` — índice "Field Notes", estética terminal/tech (void/cyan/amber, Bebas+Space Mono, crosshair, code-rain).
-- `blog/brand-intelligence-infrastructure.html` — artículo 01, molde canónico.
-- Pendiente: añadir `<a href="/blog/" class="nav-link">Field Notes</a>` al nav en `/index.html` y `/es/index.html`.
-- **Posicionamiento:** UNRLVL es escaparate reservado ("not for everyone"). AIID en goteo bajo de autoridad, NO motor SEO. Lucien es el activo prioritario para posicionamiento orgánico.
+### Fix de publicación v22
+**Bug:** brand_id mismatch (pipeline "UnrealvilleStudio" vs meta_accounts "UNREALville"). FIX: insertada fila meta_accounts brand_id=UnrealvilleStudio. DEUDA: normalizar nombres (resuelto 06-15).
 
-### Fix de publicación — flujo v22
-**Bug:** el test b93627b6 (29-may) generó copy+imagen+aprobación pero no publicó. Causa raíz = **brand_id mismatch**: pipeline usa "UnrealvilleStudio", `meta_accounts` solo tenía "UNREALville".
-**FIX APLICADO:** insertada fila `meta_accounts` brand_id=`UnrealvilleStudio` duplicando assets/token de UNREALville.
-**Nota:** el constraint `lab_jobs_status_check` YA incluye `published` (el learning del 29-may que lo reportaba faltante está obsoleto).
-**DEUDA:** dos convenciones de nombres conviven (UnrealvilleStudio vs UNREALville). Normalizar a futuro o tabla de alias.
+### Diagnóstico IID
+- Schema `intel`. Research funciona; ejecución congelada desde 26-abr. (NOTA 06-16: la causa real era el model ID retirado.)
 
-### Limpieza DB
-- 11 `lab_jobs` en `pending_approval` (teasers "Great things coming") → borrados.
-- 19 piezas `unrlvl/expertise` del queue IID → brand_id seteado a `UnrealvilleStudio`, siguen pending (on-brand, rescatables).
-- Preservados: 40 `unrlvl/trend_signal` + 6 `tool_review` pending (triar después).
-- Basura no urgente en lab_jobs: 21 failed, 6 pending, 2 processing (27-28 may).
-
-### Diagnóstico IID (subsistema completo)
-- Vive en schema `intel` (NO public). 14 agentes por dominio de conocimiento, dual voice.
-- Research funciona y corre diario. Ejecución (content-dispatcher `.limit(1)` debug + content-run-stage) congelada desde 26-abr. Failed = cadáveres de arquitectura vieja (timeout 30s), no de v22 (65s).
-- Modelo brand_id acordado: research de plataforma compartido + intérprete por marca vía context-cache. Fuentes por vertical temático caso por caso.
-
-### Diseño Voice Genome (entregable)
-- `VOICE_GENOME_PHASE_SPEC.md` — spec de Fase 5 para la OnboardingApp existente.
-- 2 ramas: Voz Extraída (persona real + material) vs Voz Diseñada (personaje, maturity v0.5 máx).
-- Captura las 9 dimensiones de `brand_voice_genome`. Valida plataformas vs cuentas reales.
-- **Decisión:** brand_adn = mother brief (artefacto-fuente), NO campo/tabla nuevo. Proyecta a tablas que los labs ya consumen.
+### Diseño Voice Genome
+- `VOICE_GENOME_PHASE_SPEC.md` — Fase 5 para OnboardingApp. 2 ramas: Voz Extraída vs Diseñada.
 
 ### Pendientes UNRLVL
-- [ ] Deploy Field Notes a CoreProject (2 archivos + nav en 2 index)
-- [ ] Implementar Fase Voice Genome en OnboardingApp (Claude Code, desde la spec)
-- [ ] Triar 40 trend_signal + 6 tool_review del queue
-- [ ] Normalizar convención de nombres UnrealvilleStudio/UNREALville
-
-### Estado genoma
-UNRLVL tiene `brand_voice_genome` `unrlvl_default` v1.0 activo y completo (por eso su contenido sale on-brand). Es el ejemplo de oro para los prompts de la Fase Voice Genome.
+- [ ] Deploy Field Notes a CoreProject
+- [ ] Implementar Fase Voice Genome en OnboardingApp
+- [ ] Normalizar nombres (HECHO 06-15)
 
 ---
-*Session log · UnrealvilleStudio · 2026-05-31*
+*Session log · UnrealvilleStudio*
