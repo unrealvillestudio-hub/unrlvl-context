@@ -186,3 +186,35 @@ Sam aprueba en <7 días siempre; 12 da margen. Las piezas publicadas (reutilizab
 - NO renderiza markdown en destinos (el markdown crudo en cuerpo, más allá de la firma, es problema de render por-destino, fuera de alcance del piloto de aprobación por email).
 
 _FIN — IID Output Quality Lote A Spec v1.0_
+
+
+---
+
+## 10. ADDENDUM — CORRECCIONES DE REALIDAD (post-ejecución, 2026-06-18)
+
+_Añadido tras la ejecución de CC. El spec original (§0–§9) se escribió sin acceso a la fuente de la EF; CC leyó el código deployado y encontró dos suposiciones erróneas. Se preservan §0–§9 como histórico; estas correcciones MANDAN sobre ellas._
+
+### 10.1 `get_edge_function` SÍ fue legible (corrige §0)
+§0 afirma "ESZIP binario ilegible → reproducir por comportamiento". En la ejecución real, `get_edge_function` devolvió el `index.ts` completo y legible de `content-run-stage` v34 y de `approve-piece`. CC trabajó sobre la fuente exacta, no por reproducción. **El aprendizaje histórico de ESZIP-ilegible debe revisarse — pudo cambiar.** Anotado como drift (#37).
+
+### 10.2 `piece_id` NO existe en el stage imagelab (corrige §2.2 — Decisión D1)
+§2.2 asume `piece_id = content_pieces.id` disponible en imagelab. **Falso.** Orden real de stages: `audience_brief(0) → copylab(1) → aife(2) → imagelab(3) → sociallab(4)`, y `content_pieces` se INSERTA recién en `finalizePiece` (tras sociallab). En imagelab (stage 3) el piece_id aún no existe.
+**Resolución implementada (D1):** pre-generar `crypto.randomUUID()` en copylab (stage 1), stashearlo en `builder_meta`, usarlo en el path `temp/{brand}/{piece_id}/{ts}.png`, e insertarlo como **PK explícito** en `content_pieces` en `finalizePiece`. No es DDL (solo fija el PK). Da la trazabilidad 1:1 storage↔pieza que §2.2/§5 piden. Verificado: pieza `24c5c795` con path conteniendo su propio id.
+
+### 10.3 El publish a Meta vive en `approve-piece`, NO en Orchestrator (corrige §5.2 — Decisión D2)
+§5.2 dice "NO en `approve-piece`" asumiendo que aprobar ≠ publicar. **Falso.** El flujo real: link de email → `approve-job` (Orchestrator, proxy delgado) → **`approve-piece` (EF Supabase)** → llama a SocialLab (stage 4) que postea a Meta → si `publishOk===true`, flip a `status='published'`. Aprobar-con-publish-OK **es** publicar.
+**Resolución implementada (D2):** move-to-permanent en `approve-piece`, branch `if(publishOk)`, con guard `startsWith('temp/')` para saltar piezas viejas con base64. `approve-piece` v13→v14. Cumple la decisión de Sam (move al publicar) porque en este código publicar ocurre ahí.
+
+### 10.4 El id de Resend es UUID, no `re_…` (corrige §6.3)
+§6.3 espera `resend_id` "formato `re_...`". El id de un **email enviado** vía Resend es un UUID (ej. `a6784688-241e-456a-adfe-5e33c80a0bfb`), no el prefijo `re_…` (que aplica a otros recursos). Criterio cumplido: `resend_id` poblado == `assets.email.id`. Verificado en pieza `87a181ba`.
+
+### 10.5 Estampado de firma: determinístico en finalizePiece, no en prompt (refina §4.3)
+§4.3 sugiere inyectar la `.rule` al prompt. CC detectó que **AIFE (stage 2) reescribe el cuerpo después del Builder** y puede alterar el glifo exacto. **Implementación real:** la firma se estampa determinísticamente en `finalizePiece`, tras el PASS del Watcher, idempotente (no duplica si el LLM ya la emitió), garantizando la última línea exacta. La `.rule` se sigue inyectando al prompt como guía, pero el match exacto lo garantiza el estampado por código.
+
+### 10.6 Estado de verificación al cierre
+- #5j ✅ live · #5h ✅ live · #5k ✅ live · #5l ✅ live · cron ✅ live.
+- §5.4 (move-to-permanent) 🟡 verificado-por-deploy (byte-idéntico); gatillo live diferido al primer publish real a Meta (sesión #5b, cuentas Meta verificadas) por disciplina de fases de Sam.
+- Artefactos de test: 3 piezas marcadas `status=failed` + `assets.test_marker='IID_LOTE_A_TEST_2026-06-18'` (`24c5c795`, `46bdfa71`, `87a181ba`). Email de test inerte (token null) en `content-approval@`. Imagen Lucien huérfana en `temp/` → la limpia el cron.
+
+_FIN ADDENDUM v1.0 — 2026-06-18_
+
