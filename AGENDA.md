@@ -1,5 +1,23 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-06-18 · v2026-06-18-v1 (#5h-#5l RESUELTOS · Lote A IID Output Quality cerrado · §5.4 verificado-por-deploy, gatillo en #5b · #5i abierto para sesión nanométrica)_
+_Actualizada: 2026-06-18 · v2026-06-18-v2 (#5h-#5l RESUELTOS · 3 ítems nuevos observabilidad/calidad · R4B = FOCO PRÓXIMOS 2-3 DÍAS)_
+
+---
+
+## 🔴🔴 FOCO INMEDIATO — R4B (deadline 2-3 días, fijado 2026-06-18)
+
+**R4B = Scheduler + endurecimiento del Watcher + deuda de flujo.** NO confundir con calidad de output (Lote A, cerrado) ni con los 3 ítems nuevos (observabilidad). R4B es infraestructura de orquestación.
+
+| # | Item | Detalle | Estado |
+|---|---|---|---|
+| 5e-1 | **Scheduler R4B core** | jitter + desfase hermanas (sibling_stagger) + crescendo leyendo `cadence`/`rollout_phase` de `intel.brand_topics`. Cerebro que decide QUÉ se dispara CUÁNDO sin que las hermanas colisionen. | 🔴 por construir |
+| 5e-2 | **Watcher → pgvector** | migrar gate1 (similarity) y gate5 (duplication) a pgvector (hoy en memoria). | 🔴 |
+| 5e-3 | **Gates 2/3 bloqueantes** | sibling-window y cadence de informativos a BLOQUEANTES. | 🔴 |
+| 5e-4 | **Extraer Watcher a EF `content-watcher`** | hoy embebido en content-run-stage stage 5. Sacarlo a EF propia (C2). | 🔴 |
+| 5e-5 | **Promover `domain` a columna** (era #5g) | en orchestrator_jobs + content_pieces (hoy en assets.builder_input.domain). R4B lo necesita como fuente de verdad. | 🔴 |
+| 5e-6 | **Instrumentación de tokens (NUEVO 06-18)** | capturar usage.input_tokens/output_tokens de cada llamada Claude (Builder + AIFE) en builder_meta. **DENTRO de R4B** (flujo se toca igual; SignalLab necesita costo/pieza). Patrón = resend_id. Sin esto no hay costeo real. | 🔴 incluir en R4B |
+| 5e-7 | **Timeouts editorial largo (~90s)** | piezas editoriales largas pueden tocar timeout. | 🟡 |
+
+**Nota R4B:** base64→Storage YA resuelto (Lote A #5j). El `.limit(1)` del dispatcher se quita SOLO tras publicación real validada (#5f) — NO en R4B salvo decisión explícita.
 
 ---
 
@@ -12,26 +30,29 @@ _Actualizada: 2026-06-18 · v2026-06-18-v1 (#5h-#5l RESUELTOS · Lote A IID Outp
 
 ---
 
-## 🔴 CRÍTICO — Esta semana
+## 🟡 IID — Calidad de output (3 ítems NUEVOS 06-18, post-Lote A · NO son R4B)
 
-### IID — Calidad de output
-
-El motor end-to-end está validado (#5b ✅). **Lote A (#5h, #5j, #5k, #5l) cerrado 2026-06-18.** Queda #5i (rango de Lucien) como sesión dedicada nanométrica.
+Detectados al revisar el primer output renderizado en la Content Queue (06-18).
 
 | # | Item | Marca | Prioridad |
 |---|---|---|---|
-| 5i | **Angle de Lucien sobre-especificado = fórmula.** "Geometría del pensamiento" + "malnombrar" se volvió regla dura: Lucien SIEMPRE sale igual, no se ve `psychological` u otras facetas. Rebalancear angle (por-dominio) vs genoma (core_move) para dar **rango** a Lucien sin perder identidad. **SESIÓN DEDICADA NANOMÉTRICA — base de aprendizaje de creación de genomas multimarca. Tuning completo a Professor sin dejar nada fuera.** Liga con 5c (IID propios de Lucien). | Lucien Sael | 🔴 ALTA |
+| 5o | **Title viejo en el render de la cola.** `assets.copy.title` correcto existe en DB (#5h OK en dato), pero la Content Queue renderiza el title del FINDING crudo (inglés). El fix llegó al dato, no al render. Localizar de dónde lee el title la pantalla de aprobación → apuntar a `assets.copy.title`. | UNRLVL/Lucien | 🟡 ALTA (cosmético, confunde) |
+| 5p | **Imagen desconectada del contenido.** imagelab produce imagen (CDN OK) pero el PROMPT de imagen no está anclado al contenido → genérica (atril de laptop para post de reasoning models). Anclar prompt al copy/título/dominio. | UNRLVL/Lucien | 🟡 |
+| 5q | **Idioma title vs cuerpo.** Title render inglés (finding) vs cuerpo español. Se resuelve al arreglar 5o; verificar que el title generado no tenga mismatch de idioma. | UNRLVL/Lucien | 🟢 (liga 5o) |
 
-### Resto crítico
+---
+
+## 🔴 CRÍTICO — Esta semana (resto)
 
 | # | Item | Marca | Blocker |
 |---|---|---|---|
-| 5b | **IID — Publicación real (push a Meta)** — FASE SIGUIENTE, CHAT DEDICADO. Verificar cuentas Meta de Lucien/SamPublisher (no probadas E2E) antes del primer push de cada marca. **Aquí se gatilla y valida §5.4 (move-to-permanent temp/→permanent/), cuyo código ya está live (approve-piece v14).** Modo c2 respetado en piloto (no se publicó). | Lucien/UNRLVL | Cuentas Meta sin verificar E2E |
-| 6 | **Voice Genome Fase 5** — implementar en OnboardingApp (spec lista: VOICE_GENOME_PHASE_SPEC.md). **Considerar capturar `signature_closer` por voz en la Fase (hoy se escribe a mano en application_constraints).** | UNRLVL | Sin esto nuevas marcas no capturan voz editorial |
-| 7 | **fphs-formalize sprint** — replicar calidad acta manual (98% Ivette) | ForumPHs | DF fragmenta intervenciones, 13 errores primera persona |
-| 8 | **Verificar unidades Luxor 300** — si ≤127, regenerar acta con % correcto | ForumPHs | Acta usa 129 |
-| 9 | **DF QA** — 3 votaciones faltantes + 13 errores primera persona | ForumPHs | Calidad acta |
-| 10 | **Ayra Sprint 0** — ⚠️ VENCIDO (5 Jun) — repo + Vercel + schema + env vars | UNRLVL | Reprogramar. Enfoque staging-loop (Notas). |
+| 5i | **IID — Angle de Lucien sobre-especificado = fórmula.** Rebalancear angle (por-dominio) vs genoma (core_move) para dar RANGO a Lucien. **SESIÓN DEDICADA NANOMÉTRICA — base de aprendizaje de genomas multimarca. Tuning completo a Professor.** Liga 5c. | Lucien Sael | 🔴 (post-R4B) |
+| 5b | **IID — Publicación real (push a Meta)** — CHAT DEDICADO. Verificar cuentas Meta Lucien/SamPublisher (no E2E) antes del primer push. **Gatilla §5.4 (move-to-permanent), código ya live (approve-piece v14).** | Lucien/UNRLVL | Cuentas Meta sin verificar E2E |
+| 6 | **Voice Genome Fase 5** — OnboardingApp (VOICE_GENOME_PHASE_SPEC.md). Considerar capturar signature_closer por voz. | UNRLVL | Nuevas marcas no capturan voz editorial |
+| 7 | **fphs-formalize sprint** — calidad acta manual (98% Ivette) | ForumPHs | DF fragmenta, 13 errores 1ª persona |
+| 8 | **Verificar unidades Luxor 300** — si ≤127, regenerar acta | ForumPHs | Acta usa 129 |
+| 9 | **DF QA** — 3 votaciones faltantes + 13 errores 1ª persona | ForumPHs | Calidad acta |
+| 10 | **Ayra Sprint 0** — ⚠️ VENCIDO (5 Jun) | UNRLVL | Reprogramar. Staging-loop. |
 
 ---
 
@@ -39,30 +60,28 @@ El motor end-to-end está validado (#5b ✅). **Lote A (#5h, #5j, #5k, #5l) cerr
 
 | # | Item | Marca |
 |---|---|---|
-| 5c | **IID — IID propios de Lucien** — materia filosófica (ai-cognition/ai-identity/human-essence) hoy SIN agentes IID dedicados. Sesión de diseño. Liga con 5i (rango de Lucien). | Lucien Sael |
-| 5d | **IID — Destino de los 14 IID-* viejos** — reasignar a UNRLVL/Sam o descartar. | UNRLVL |
-| 5e | **IID — Scheduler R4B** — jitter + desfase + crescendo (lee cadence/rollout_phase). Migra gate1/5 del Watcher a pgvector; gates 2/3 de informativos a bloqueantes; extrae los 6 gates a EF `content-watcher` (C2). **Deuda R4B asociada: timeouts para editorial largo (~90s). [base64→Storage YA resuelto en Lote A #5j.]** | UNRLVL |
-| 5f | **IID — Quitar `.limit(1)` de content-dispatcher** — SOLO tras publicación real validada. Cadáveres cuarentenados (06-16). | UNRLVL |
-| 5g | **IID — Promover `domain` a columna** en orchestrator_jobs + content_pieces (hoy viaja en assets.builder_input.domain). R4B. | UNRLVL |
-| 5m | **IID — Borrar EFs efímeras** del dashboard Supabase: `model-ping`, `env-probe`, `resend-test` (neutralizadas como stubs 410, falta borrarlas). | UNRLVL |
-| 5n | **IID — Barrer `to: sam@` hardcodeado** en otras EFs (SMA FPHs, nscf-mailer, etc.) y decidir cuáles migran a alias por función (`content-approval@` u otros). | UNRLVL/multi |
-| 12 | **NSCF-Console Fase 3** — superuser console con roles por auth. Prerrequisito Resend hardening hecho. PRÓXIMO FOCO NSCF. | NeuroneSCF |
-| 13 | **NSCF Sesión Shopify infra** — app commerce dedicada (`write_customers`...). Fase 2.5 PARQUEADA. SESIÓN DEDICADA. | NeuroneSCF |
-| 14 | **SocialLab dual-mode** — confirmar sync+async, re-test post brand_id fix | UNRLVL |
-| 15 | **Crear cuentas LinkedIn + X (Lucien) + Meta(FB) + LinkedIn (SamPublisher)** | Lucien/SamPublisher |
-| 16 | **Context System refactor** — SESIÓN DEDICADA (CONTEXT_SYSTEM_REFACTOR_PLAN.md). RIESGO ALTO. | UNRLVL |
+| 5c | **IID — IID propios de Lucien** — materia filosófica sin agentes. Liga 5i. | Lucien Sael |
+| 5d | **IID — Destino de los 14 IID-* viejos** — reasignar o descartar. | UNRLVL |
+| 5f | **IID — Quitar `.limit(1)`** — SOLO tras publicación real validada. | UNRLVL |
+| 5m | **IID — Borrar EFs efímeras** — model-ping, env-probe, resend-test. | UNRLVL |
+| 5n | **IID — Barrer `to: sam@` hardcodeado** + alias por función. | UNRLVL/multi |
+| 12 | **NSCF-Console Fase 3** — superuser console con roles. PRÓXIMO FOCO NSCF. | NeuroneSCF |
+| 13 | **NSCF Sesión Shopify infra** — app commerce dedicada. SESIÓN DEDICADA. | NeuroneSCF |
+| 14 | **SocialLab dual-mode** — sync+async, re-test. | UNRLVL |
+| 15 | **Cuentas LinkedIn + X (Lucien) + Meta(FB) + LinkedIn (SamPublisher)** | Lucien/SamPublisher |
+| 16 | **Context System refactor** — SESIÓN DEDICADA. RIESGO ALTO. | UNRLVL |
 | 17 | **VideoLab launch** — Kling.ai token + grabaciones Patricia | UNRLVL |
 | 18 | **TikTok Pixel duplicado NSCF** | NeuroneSCF |
-| 19 | **Meta MCP** — fix fb_get_page_insights métricas deprecadas v21 | UNRLVL |
+| 19 | **Meta MCP** — fix fb_get_page_insights v21 | UNRLVL |
 | 20 | **Portal Iván sprint 2** — dashboard + UPS API | NeuroneSCF |
 | 21 | **Klaviyo flows NSCF** — 4 flows bilingüe | NeuroneSCF |
-| 40 | **Klaviyo key hardcodeada** — `pk_UNF8Ee…` en klaviyo-setup → secret + rotar. | NeuroneSCF |
-| 41 | **Verificar exposición keys Resend** — FPHS_RESEND_API_KEY + RESEND_API_KEY no en claro. | ForumPHs/UNRLVL |
-| 42 | **IID — model ID hardcodeado (deuda latente)** — content-run-stage usa `claude-sonnet-4-6` hardcodeado. Considerar leerlo de config/secret. **13 EFs one-off (shopify/seo/nscf) aún en modelo retirado — arreglar cuando se use cada una.** | UNRLVL/NeuroneSCF |
-| 22 | **Genoma UNRLVL social** — voz "we" con modo vocería de sam_personal | UNRLVL |
-| 23 | **SMA pulido (opcional)** — hints viejos del front | ForumPHs |
-| 24 | **Email marketing FPHs** — stack Resend + Supabase + Orchestrator. **NOTA: cada marca su propia key Resend dedicada (lección 06-17, key cruzada NSCF/UNRLVL causó 403).** | ForumPHs |
-| 25 | **ForumPHs — creación cuentas** — número panameño → WhatsApp Business | ForumPHs |
+| 40 | **Klaviyo key hardcodeada** → secret + rotar. | NeuroneSCF |
+| 41 | **Verificar exposición keys Resend** | ForumPHs/UNRLVL |
+| 42 | **IID — model ID hardcodeado** + 13 EFs one-off en modelo retirado. | UNRLVL/NeuroneSCF |
+| 22 | **Genoma UNRLVL social** — voz "we" con vocería de sam_personal | UNRLVL |
+| 23 | **SMA pulido (opcional)** | ForumPHs |
+| 24 | **Email marketing FPHs** — cada marca su key dedicada. | ForumPHs |
+| 25 | **ForumPHs — creación cuentas** — número panameño | ForumPHs |
 | 35 | **CLAUDE.md — completar repos restantes** | UNRLVL |
 
 ---
@@ -73,67 +92,65 @@ El motor end-to-end está validado (#5b ✅). **Lote A (#5h, #5j, #5k, #5l) cerr
 |---|---|---|
 | 26 | GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp | UNRLVL |
 | 28 | NSCF blog — Reescritura 4 artículos L0+L3 | NeuroneSCF |
-| 29 | NSCF Dispatch Portal — proyecto Vercel + DNS | NeuroneSCF |
+| 29 | NSCF Dispatch Portal — Vercel + DNS | NeuroneSCF |
 | 30 | Ecosystem Tools SESIÓN DEDICADA | UNRLVL |
-| 31 | **GRAN BLOQUE SocialLab/IID** — canales/calendario/clientes (el motor de generación ya está resuelto: Builder+Watcher+output-quality). Integrar NSCF/FPHs tras calidad de output cerrada. | UNRLVL |
+| 31 | **GRAN BLOQUE SocialLab/IID** — canales/calendario/clientes. Integrar NSCF/FPHs tras calidad cerrada. | UNRLVL |
 | 32 | **lucien_video** (cuando VideoLab) | Lucien Sael |
-| 33 | Validar genomas v0.5 → v1.0. **lucien_editorial v0.5 y unrlvl_default v1.0 ya produjeron output real validado (#5b + Lote A).** | Lucien/SamPublisher |
+| 33 | Validar genomas v0.5 → v1.0. lucien_editorial + unrlvl_default ya validados. | Lucien/SamPublisher |
 | 34 | **unrlvl-CRM multimarca** (ESTRATÉGICO) | UNRLVL |
 | 36 | **unrlvl-SMA multimarca** (ESTRATÉGICO) | UNRLVL |
-| 37 | **Drift detector** (ESTRATÉGICO) — skill ecosystem-auditor. **Drifts conocidos: shopify.stores VIEW→BASE TABLE; /api/professor ya existe; content-run-stage comentario vs runtime (ahora v35); fphs_institucional v0.5 no listado en ecosystem.json; cron unrlvl-media documentado-7 vs runtime-60→12 (06-18); `get_edge_function` resultó LEGIBLE (no ESZIP) — revisar aprendizaje histórico.** | UNRLVL |
-| 38 | **Reconciliación ecosystem_graph** — audit contextual dedicado | UNRLVL |
-| 39 | **Revisar `.github/CLAUDE.md` repetido** + limpiar desktop.ini en forumphs-speaks | UNRLVL |
+| 37 | **Drift detector** (ESTRATÉGICO). Drifts: shopify.stores VIEW→BASE TABLE; /api/professor existe; content-run-stage v35; fphs_institucional v0.5 no en ecosystem.json; cron unrlvl-media doc-7 vs runtime-60→12; get_edge_function LEGIBLE (no ESZIP). | UNRLVL |
+| 38 | **Reconciliación ecosystem_graph** | UNRLVL |
+| 39 | **`.github/CLAUDE.md` repetido** + desktop.ini forumphs-speaks | UNRLVL |
 
 ---
 
 ## ✅ Resuelto recientemente
 
-- ✅ **IID OUTPUT QUALITY LOTE A CERRADO** (06-18). #5h #5j #5k #5l + cron resueltos end-to-end con verificación live. `content-run-stage` v34→v35, `approve-piece` v13→v14 (ambos in-place, re-fetch byte-idéntico, Ruta B, sin auto-merge, `.limit(1)` intacto). Detalle: (a) **#5j** imagen Vertex → `unrlvl-media/temp/{brand}/{piece_id}/{ts}.png` URL pública CDN + `storage_path`, sin base64 (causa raíz: la reescritura v25→v34 desconectó el upload que ya existía desde mayo); (b) **#5h** `assets.copy.title` separado, 3 títulos distintos para el mismo finding, similarity UNRLVL↔Lucien 0.31; (c) **#5k** firma leída del genoma (`signature_closer`) y estampada determinística tras Watcher PASS (no por prompt, porque AIFE reescribe el cuerpo) — `❯ Unrealville Studio` / `--- LucienSael: Builder, Thinker, Operator`; (d) **#5l** `resend_id` (UUID, no `re_…`) persistido en pieza Y job, email real a `content-approval@`; (e) **cron 32** 60→12 días; (f) **D1** piece_id pre-generado = PK explícito (trazabilidad 1:1 con storage). **§5.4 (move-to-permanent) verificado-por-deploy; gatillo live diferido a #5b.** Spec: `protocols/IID_OUTPUT_QUALITY_LOTE_A_SPEC.md` (+ addendum de correcciones de realidad). 2 errores del spec corregidos por CC al leer la fuente: §2.2 (piece_id no existe en imagelab → pre-gen UUID) y §5.2 (publish vive en `approve-piece`, no Orchestrator). Firmas escritas al genoma por Claude (chat) la misma sesión. — 2026-06-18
-- ✅ **IID #5b VALIDADO end-to-end** (06-17). RUN4: Lucien + UNRLVL atravesaron los 5 stages (incl. imagelab Vertex) + Watcher PASS + email real a `content-approval@`. Modo c2 (sin push a Meta). El piloto destapó y se arreglaron 5 fallos ocultos: (1) model ID retirado en 24 EFs — 9 de flujo vivo arregladas a claude-sonnet-4-6; (2) imagelab redirigido de fal.ai → Vertex/crédito Google; (3) gate evidence de has_numbers → semántico; (4) email mudo por key cruzada NSCF/UNRLVL → RESEND_UNRLVL_KEY dedicada + try/catch; (5) Builder UNRLVL alucinaba métricas → regla de procedencia de cifras. `content-run-stage` v25→v33. Contrato de voice afinado en brand_topics (proof_mode + 2 angles) sin tocar genomas. Quedan pendientes de CALIDAD de output (#5h-5l). — 2026-06-17
-- ✅ **IID Builder Convergido + Watcher LIVE** (06-16). `content-run-stage` v25→v31: Builder `buildFromGenome` (lee brand_topics + genoma, voz híbrida, mató fallback silencioso) + Watcher 6 gates + `intel.watcher_log`. Divergencia 0.07 validada. Causa raíz del freeze de abril: model ID retirado. — 2026-06-16
-- ✅ **IID — Cuarentena 293 cadáveres** de iid_content_queue → failed + ARCHIVED_LEGACY_20260616. — 2026-06-16
-- ✅ **IID — angle Lucien/ai-cognition poblado**, luego afinado a "geometría del pensamiento" (06-17). — 2026-06-16/17
-- ✅ **NSCF Resend hardening** (key → secret, rotada, nscf-mailer v23 versionada). — 2026-06-16
-- ✅ **NSCF-Console Fase 2** (EF nscf-b2b-approve + nscf-mailer v19 + frontend + RLS). LIVE console-pro-neuronescf.vercel.app. — 2026-06-13
-- ✅ **NSCF PR #2 (pro-gateway Fase 1)** + **Sales Pager Salones v18**. — 2026-06-13
-- ✅ **CLAUDE.md críticos + ecosystem_graph corregido + protocolos en custom instructions + EXPORT_SECRET limpieza + Professor 18 learnings**. — 2026-06-08
-- ✅ **SMA reapuntado a ForumPHs** (operativo, roles, PRs #1/#2). — 2026-06-06
-- ✅ **Gobernanza CC** (CC_PROTOCOL + SESSION_PROTOCOL v16) + **session_log NSCF restaurado**. — 2026-06-06/07
-- ✅ **Skill voice-reference-extractor v1.0** + **brands/SamPublisher/** + **INDEX v1.4**. — 2026-06-05
-- ✅ **Genomas:** sam_personal v0.5, lucien_social v0.5, lucien_editorial v0.5. — 2026-06-01/02
-- ✅ **luciensael.com blog + UNRLVL Field Notes construidos + FIX publicación v22 + IID diagnóstico + Meta MCP LIVE + Pipeline E2E primer post**. — 2026-05-29/31
+- ✅ **IID OUTPUT QUALITY LOTE A CERRADO** (06-18). #5h #5j #5k #5l + cron end-to-end con verificación live. content-run-stage v34→v35, approve-piece v13→v14 (in-place, byte-idéntico, Ruta B, sin auto-merge, `.limit(1)` intacto). (a) #5j imagen→unrlvl-media CDN sin base64 (causa: reescritura v25→v34 desconectó upload de mayo); (b) #5h title separado, 3 títulos distintos mismo finding, similarity 0.31; (c) #5k firma del genoma estampada tras Watcher PASS; (d) #5l resend_id (UUID) en pieza+job; (e) cron 32→12 días; (f) D1 piece_id pre-gen PK. §5.4 verificado-por-deploy, gatillo en #5b. Spec+addendum en protocols/. 2 errores de spec corregidos por CC (§2.2, §5.2). Professor: 6 learnings aprobados. — 2026-06-18
+- ✅ **IID #5b VALIDADO end-to-end** (06-17). RUN4: 5 stages + Watcher PASS + email. 5 fallos arreglados. v25→v33. — 2026-06-17
+- ✅ **IID Builder Convergido + Watcher LIVE** (06-16). v25→v31. Divergencia 0.07. — 2026-06-16
+- ✅ **IID — Cuarentena 293 cadáveres**. — 2026-06-16
+- ✅ **NSCF Resend hardening** (nscf-mailer v23). — 2026-06-16
+- ✅ **NSCF-Console Fase 2** LIVE. — 2026-06-13
+- ✅ **NSCF PR #2 + Sales Pager v18**. — 2026-06-13
+- ✅ **CLAUDE.md + ecosystem_graph + protocolos + Professor 18 learnings**. — 2026-06-08
+- ✅ **SMA reapuntado a ForumPHs**. — 2026-06-06
+- ✅ **Gobernanza CC** (CC_PROTOCOL + SESSION_PROTOCOL v16). — 2026-06-06/07
+- ✅ **Genomas:** sam_personal, lucien_social, lucien_editorial v0.5. — 2026-06-01/02
 
 ---
 
 ## Notas de contexto
 
-**IID — estado 2026-06-18 (motor validado, Lote A de calidad cerrado, #5i pendiente):**
-Pipeline vivo en 3 EFs: `content-dispatcher` v22 (`.limit(1)` intacto) → `content-run-stage` **v35** (Builder convergido stage 1 + aife/imagelab-Vertex→Storage CDN/sociallab + Watcher stage 5 + firma determinística + title separado) → `approve-piece` **v14** (publish a Meta + move-to-permanent en branch publishOk). Modelo `claude-sonnet-4-6`. Email vía `RESEND_UNRLVL_KEY` a `content-approval@unrealvillestudio.com`. Imagen ahora en `unrlvl-media` CDN (no base64). `domain` en assets.builder_input. **FLUJO + CALIDAD de output cerrados. Pendiente: #5i (rango de Lucien) y el primer publish real a Meta (#5b) que gatilla §5.4.** Specs: protocols/BUILDER_CONVERGED_SPEC.md, WATCHER_SPEC.md, IID_OUTPUT_QUALITY_LOTE_A_SPEC.md, DRYRUN_PLAN_IID_PILOT.md.
+**R4B — arranque (06-18):** foco próximos 2-3 días. Insumo principal: `intel.brand_topics` (ya tiene cadence, rollout_phase, sibling_stagger, angle, purpose). El Scheduler lee de ahí. El Watcher ya existe (6 gates en content-run-stage stage 5) — R4B lo endurece (pgvector, gates bloqueantes) y lo extrae a EF propia. NO tocar genomas ni Lote A. Specs: WATCHER_SPEC.md, BUILDER_CONVERGED_SPEC.md, ANTISPAM_CONTRACT.md. **Antes de R4B: leer brand_topics vivo + código del Watcher actual + ANTISPAM_CONTRACT (contrato de los 6 gates).**
 
-**Firmas de cierre (06-18):** viven en `brand_voice_genome.application_constraints.signature_closer {text, rule}` — una sola fuente de verdad, leída por `loadVoiceGenome`, estampada determinísticamente en finalizePiece tras Watcher PASS (no por prompt: AIFE reescribe el cuerpo). `unrlvl_default` → `❯ Unrealville Studio` (glifo U+276F, NO ASCII `>`). `lucien_editorial` + `lucien_social` → `--- LucienSael: Builder, Thinker, Operator` (idéntica en ambas: firma la persona, no el registro). Constante por marca, divergente entre hermanas (refuerza #5h anti-autobaneo).
+**R4B — reconocimiento previo hecho (06-18, leer ANTES de construir el Scheduler):**
+- 🔴 **HUECO BLOQUEANTE: `cadence` está NULL en las 3 filas de Lucien** (ai-cognition, ai-identity, human-essence). Solo UNRLVL tiene cadence poblado (2x→3x→4x/sem crescendo por plataforma). El Scheduler R4B lee `cadence` → con Lucien en null no sabrá frecuencia. **Decidir y poblar la cadencia de Lucien ANTES de construir el Scheduler** (decisión de Sam, no fontanería). Plataformas Lucien: x, meta_fb, meta_ig, tiktok, blog (NO linkedin).
+- 🟡 `angle` NULL en LucienSael/ai-identity y /human-essence (solo ai-cognition tiene angle). Liga con #5i: Lucien sin angle por dominio. Resolver en la sesión #5i nanométrica, no en R4B.
+- **Estado actual del Watcher (intel.watcher_log):** 5 PASS · 4 REJECT por gate `evidence` · 1 REJECT por gate `duplication`. El gate `evidence` es el que más rechaza (cruces incoherentes brief×dominio). `result` ∈ {PASS, REJECT}; columnas: job_id, queue_id, brand_id, domain, voice_id, result, failed_gate, gate_detail(jsonb).
+- **brand_topics rollout_phase=1 activos:** Lucien×3 (ai-cognition sibling_stagger=true), UNRLVL×6 (ai-cognition sibling_stagger=true + 5 Tier1). UNRLVL/system-proof en phase 2 (active=false). El par sibling_stagger es ai-cognition (Lucien↔UNRLVL) — el caso de prueba del desfase de hermanas.
 
-**Storage IID (06-18):** imagen nace en `unrlvl-media/temp/{brand}/{piece_id}/{ts}.png` (URL pública CDN, plan Pro 100GB). Cron jobid 32 (`unrlvl-media-temp-cleanup`, 3am UTC) borra `temp/%` >12 días. Al publicar a Meta (publishOk) → move a `permanent/{brand}/{piece_id}/{ts}.png` (no lo toca el cron) para reutilización/SignalLab. Decisión: move al PUBLICAR, no al aprobar ("funcionó"="se publicó").
+**Costeo IID (06-18, ESTIMADO — falta instrumentación 5e-6):** sin tokens en builder_meta, costo es estimación. Precios verificados jun-2026: Sonnet 4.6 $3/$15 MTok; Imagen 4 Fast ~$0.02/img, Standard ~$0.04. Por pieza (Builder+AIFE+imagen+Watcher): SOCIAL ~$0.05-0.07; EDITORIAL ~$0.11-0.13. Volumen 4/sem × 6 marcas ≈ $5-8/mes. El compute NO es el cuello de botella. SignalLab necesita costo real/pieza → urgencia de 5e-6.
 
-**Correcciones de spec por fuente real (06-18, GOVERNANCE):** un spec escrito sin acceso al código produjo 2 suposiciones que CC corrigió al leer la EF deployada: (1) piece_id no existe en stage imagelab → pre-generar UUID en copylab como PK explícito; (2) el publish a Meta vive en `approve-piece` (no Orchestrator). Además `get_edge_function` resultó LEGIBLE (no ESZIP como decía el aprendizaje histórico) — revisar vigencia. Principio: el ejecutor con fuente real tiene licencia para corregir el spec.
+**IID — estado 06-18:** content-dispatcher v22 (.limit(1) intacto) → content-run-stage v35 → approve-piece v14. Modelo claude-sonnet-4-6. Email RESEND_UNRLVL_KEY a content-approval@. Imagen en unrlvl-media CDN. FLUJO + CALIDAD cerrados. Pendiente: R4B, #5i, #5b (gatilla §5.4), 3 ítems observabilidad (5o/5p/5q).
 
-**Contrato de voice (afinado 06-17):** "matemático" en UNRLVL = profundidad de comprensión de la maquinaria, NO dígitos obligatorios. Regla de procedencia de cifras: cifra real (preferir las del finding) > mecánica exacta sin número > nunca inventar, sin hedge. Lucien = geometría del pensamiento / el malnombrar (OJO #5i: se volvió fórmula, falta rango). Gate evidence = semántico, lee proof_mode. Genomas intactos.
+**Firmas de cierre (06-18):** en brand_voice_genome.application_constraints.signature_closer {text, rule}, leídas por loadVoiceGenome, estampadas en finalizePiece tras Watcher PASS. unrlvl_default → ❯ Unrealville Studio. lucien_editorial+lucien_social → --- LucienSael: Builder, Thinker, Operator.
 
-**Secrets Resend (lección 06-17):** cada marca su propia cuenta/key. `RESEND_API_KEY` = NeuroneSCF. `RESEND_UNRLVL_KEY` = UNRLVL (operativa, email enviado 06-18). FPHs tendrá la suya. Nunca compartir secret entre marcas.
+**Storage IID (06-18):** imagen nace en unrlvl-media/temp/{brand}/{piece_id}/{ts}.png (CDN, Pro 100GB). Cron jobid 32 borra temp/% >12 días. Al publicar (publishOk) → move a permanent/. Move al PUBLICAR, no al aprobar.
 
-**Patrón "reescritura de EF no hereda side-effects del flujo viejo" (06-18):** la reescritura v25→v34 desconectó el upload a Storage que existía desde mayo. Tras reescribir una EF, auditar explícitamente que TODOS los side-effects (uploads, moves, persistencias) se portaron — no asumir herencia. Suma a "artefacto nuevo sin permisos = fallo silencioso" + "I/O externo sin try/catch = fallo mudo".
+**Render de la Content Queue (06-18, ojo 5o):** la pantalla de aprobación renderiza el title del FINDING crudo, no assets.copy.title. El dato #5h es correcto; el render apunta al campo viejo.
 
-**Patrón "match-exacto se estampa por código, no por prompt" (06-18):** glifos/firmas/tokens que requieren output exacto y pasan por una capa de reescritura intermedia (AIFE) se estampan determinísticamente en el chokepoint final, idempotente. Confiar en el prompt del LLM no garantiza el match.
+**Correcciones de spec por fuente real (06-18, GOVERNANCE):** spec sin fuente → 2 suposiciones corregidas por CC. (1) piece_id no existe en imagelab → pre-gen UUID en copylab; (2) publish vive en approve-piece, no Orchestrator. get_edge_function resultó LEGIBLE. El ejecutor con fuente tiene licencia para corregir el spec.
 
-**Model IDs (lección 06-16/17):** se retiran durante el año. `claude-sonnet-4-20250514` retirado 15-jun congeló 24 EFs. Patrón: cuando uno se retira, barrer TODO el ecosistema. 13 one-off pendientes (#42).
+**Secrets Resend (06-17):** cada marca su key. RESEND_API_KEY=NeuroneSCF. RESEND_UNRLVL_KEY=UNRLVL. Nunca compartir.
 
-**NSCF-Console (06-13):** Fase 1+2 LIVE. Shopify customer manual (Fase 2.5 parqueada). nscf-mailer v27.
+**Patrones de infra (06-16/18):** "reescritura de EF no hereda side-effects del flujo viejo" (causa #5j); "match-exacto se estampa por código, no por prompt" (firma vs AIFE); "artefacto nuevo sin permisos = fallo silencioso"; "I/O externo sin try/catch = fallo mudo".
 
-**Ayra — staging-loop (06-13):** CC construye en staging, criterios objetivos por fase, Claude audita.
+**Model IDs (06-16/17):** se retiran durante el año. Barrer TODO al retirarse uno. 13 one-off pendientes (#42).
 
-**Genomas del ecosistema (06-18):** unrlvl_default v1.0, lucien_editorial v0.5, lucien_social v0.5, sam_personal v0.5, fphs_institucional v0.5 (drift: no listado en ecosystem.json). Todos con `signature_closer` salvo sam_personal/fphs (poblar cuando se usen). lucien_editorial + unrlvl_default con output real validado.
+**Genomas (06-18):** unrlvl_default v1.0, lucien_editorial v0.5, lucien_social v0.5, sam_personal v0.5, fphs_institucional v0.5 (drift: no en ecosystem.json). signature_closer poblado salvo sam_personal/fphs.
 
-**SamPublisher:** persona publicadora. Canales Meta(FB)+LinkedIn (pendientes). No vende, no toca religión.
-
-**Estado publicación:** UNREALville probado E2E. LucienSael y SamPublisher NO probados E2E — verificar meta_accounts antes del primer publish de cada uno (liga #5b publicación real, que gatilla §5.4 move-to-permanent).
+**Estado publicación:** UNREALville probado E2E. LucienSael y SamPublisher NO E2E — verificar meta_accounts antes del primer publish (liga #5b, gatilla §5.4).
 
 **Ayra Sprint 0 🔴 VENCIDO (5 Jun).**

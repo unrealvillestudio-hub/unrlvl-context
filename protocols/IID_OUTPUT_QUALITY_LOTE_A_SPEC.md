@@ -190,6 +190,9 @@ _FIN — IID Output Quality Lote A Spec v1.0_
 
 ---
 
+
+---
+
 ## 10. ADDENDUM — CORRECCIONES DE REALIDAD (post-ejecución, 2026-06-18)
 
 _Añadido tras la ejecución de CC. El spec original (§0–§9) se escribió sin acceso a la fuente de la EF; CC leyó el código deployado y encontró dos suposiciones erróneas. Se preservan §0–§9 como histórico; estas correcciones MANDAN sobre ellas._
@@ -217,4 +220,3 @@ _Añadido tras la ejecución de CC. El spec original (§0–§9) se escribió si
 - Artefactos de test: 3 piezas marcadas `status=failed` + `assets.test_marker='IID_LOTE_A_TEST_2026-06-18'` (`24c5c795`, `46bdfa71`, `87a181ba`). Email de test inerte (token null) en `content-approval@`. Imagen Lucien huérfana en `temp/` → la limpia el cron.
 
 _FIN ADDENDUM v1.0 — 2026-06-18_
-
