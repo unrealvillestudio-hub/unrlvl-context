@@ -48,13 +48,14 @@ _Ruta canónica destino: `protocols/R4B_SPECS_CC.md` (Sam renombra al colocar)_
 ALTER TABLE content.orchestrator_jobs ADD COLUMN IF NOT EXISTS domain text;
 ALTER TABLE content.content_pieces   ADD COLUMN IF NOT EXISTS domain text;
 
--- 2. backfill desde el jsonb (ruta verificada)
+-- 2. backfill desde el jsonb (AMBAS rutas verificadas pobladas: builder_input.domain Y builder_meta.domain).
+--    COALESCE de las dos por robustez (hallazgo CC 2026-06-20).
 UPDATE content.orchestrator_jobs
-   SET domain = assets->'builder_input'->>'domain'
- WHERE domain IS NULL AND assets ? 'builder_input';
+   SET domain = COALESCE(assets->'builder_input'->>'domain', assets->'builder_meta'->>'domain')
+ WHERE domain IS NULL;
 UPDATE content.content_pieces
-   SET domain = assets->'builder_input'->>'domain'
- WHERE domain IS NULL AND assets ? 'builder_input';
+   SET domain = COALESCE(assets->'builder_meta'->>'domain', assets->'builder_input'->>'domain')
+ WHERE domain IS NULL;
 
 -- 3. pgvector (NO habilitado hoy)
 CREATE EXTENSION IF NOT EXISTS vector;
