@@ -1,20 +1,18 @@
 {
   "_meta": {
-    "version": "2026-06-15-v1",
+    "version": "2026-06-20-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-06-02-v2",
+    "previous": "2026-06-15-v1",
     "last_session": {
-      "date": "2026-06-15",
-      "conducted_by": "Claude Opus 4.8 (chat) + DB directa",
-      "status": "🎯 Replanteamiento IID completo: marca declara temas (no el IID). intel.brand_topics creada+extendida. 14 IID nuevos UNRLVL (CÓMO industrial, numérico+dev). Naming normalizado (UNREALville eliminado). Anti-spam contract con Watcher definido.",
+      "date": "2026-06-20",
+      "conducted_by": "Claude Opus 4.8 (chat) + MCP (Shopify/Supabase) + CC (deploy)",
+      "status": "NSCF-Console Fase 3 mejoras LIVE (mailer v27, approve v8/cod-v4, App.jsx toggle+inventario 3col). Comisiones huerfanas reconciliadas contra Shopify (fuente de verdad): 4 reales insertadas, 2 fantasma de modo prueba descartadas. 2 ventas cash backfilled con flujo real (orden Shopify->webhook->comision). 8 learnings Professor.",
       "key_achievements": [
-        "MODELO CORREGIDO: la marca declara qué temas consume y con qué voz por destino; el IID investiga temas neutros (antes el agente decidía voz vía default_voice — causa raíz del off-brand)",
-        "intel.brand_topics creada (m:n marca↔tema) y extendida con rollout_phase, purpose, cadence, angle, sibling_stagger",
-        "14 IID nuevos UNRLVL-* creados (Tier1:5 método, Tier2:3 deep-stack, Tier3:6 mercado) — enfoque CÓMO industrial, hard_rule numérico+desarrollo",
-        "Naming normalizado: UNREALville eliminado de meta_accounts (dup de UnrealvilleStudio); content.brand_voices brand_id corregido (lucien→LucienSael, unrlvl→UnrealvilleStudio)",
-        "Lucien suscrito a 3 temas (ai-cognition, ai-identity, human-essence) con confidencialidades como hard_rules",
-        "UNRLVL Tier1 (5 temas) suscrito fase 1, doble propósito, cadencia crescendo. Caso multimarca montado: ai-cognition compartido Lucien↔UNRLVL con sibling_stagger",
-        "Anti-spam contract v1.0 + Watcher (6 gates) definidos como prerequisito de publicación"
+        "NSCF-Console Fase 3 COMPLETA y LIVE (Capas 1-4 + 4 mejoras): auth multi-rol, reporte comisiones con detalle venta-a-venta en email, toggle ventana este-mes/mes-anterior/ambos, inventario 3 columnas (B2C bodega1 | B2C bodega2 Vizos | B2B Vizos) golden terra. Verificado web+mobile.",
+        "Shopify = fuente de verdad para comisiones: de 6 huerfanas, 2 no existian en Shopify (drafts modo prueba) y 4 reales -> insertadas pending ($31.22)",
+        "2 ventas cash historicas creadas con flujo real (draftOrderCreate+appliedDiscount+customAttributes -> webhook nscf-attribution crea comision sola): #1031 $113.98, #1032 $99.99",
+        "nscf-attribution v14 confirmado = webhook Shopify orders/paid (no kiosko); calcula sobre order.subtotal_price con .toFixed(2)",
+        "8 learnings Professor aprobados (governance/data/infra/business)"
       ]
     }
   },
@@ -124,6 +122,35 @@
       "brand_cache_snapshot": {
         "status": "✅ LIVE v2.0",
         "built_at": "2026-05-21 17:05:28 UTC"
+      },
+      "console": {
+        "name": "NSCF-Console (superuser interno)",
+        "repo": "nscf-console (Vercel front)",
+        "status": "✅ FASE 3 LIVE — 2026-06-20",
+        "auth": "multi-rol ADMIN/OPS via NSCF_CONSOLE_USERS (bcrypt+JWT, secret runtime). NO usa PIN (el PIN es del kiosko).",
+        "edge_functions": {
+          "nscf-b2b-approve": "v8 (codigo v4) — acciones: ambassadors_report, ambassadors_report_email (admin, +rows detalle), inventory_view (3 columnas por location_id). verify_jwt:false",
+          "nscf-mailer": "v27 — tipo commissions_report con detalle venta-a-venta (estado de cuenta por embajadora). verify_jwt:false"
+        },
+        "features": [
+          "Reporte comisiones: per-embajadora con detalle venta-a-venta, calculado sobre Shopify subtotal (sin tax/shipping), redondeo half-up .toFixed(2)",
+          "Toggle ventana: Este mes (default) / Mes anterior / Ambos",
+          "Email reporte admin-only a session.sub (Patricia)",
+          "Inventario 3 columnas: B2C Bodega1 (110732378439 · 3PL Ivan) | B2C Bodega2 Vizos (110733263175) | B2B Vizos (83554795598). Match por SKU, sin sumar total B2C. Titulos golden terra #C4622D.",
+          "Comisiones entran como pending; Patricia aprueba (aprobadora unica)"
+        ],
+        "infra_notes": {
+          "shopify_b2c_token": "egdk1n-gt — con read_locations",
+          "shopify_b2b_token": "nj5ybc-n1 — SIN read_locations (queries inventario B2B no piden location.name)",
+          "webhook_atribucion": "nscf-attribution v14 = webhook orders/paid. Lee note_attributes (ambassador_id, salon_id, discount_pct, draft_order_id). Comision = order.subtotal_price * base_commission_rate, .toFixed(2). Marca draft completed + dispara mailer.",
+          "embajadoras": "tabla nscf_embajadoras (pin texto plano = deuda seguridad). Patricia vizos-patricia 10% max_discount 40%. Diana yts-nm-diana 8%. Martha yts-cw 8%."
+        },
+        "deferred": [
+          "Lista de precios admin-only + profit por venta (depende de price loader)",
+          "read_locations al token B2B",
+          "PIN texto plano en nscf_embajadoras (deuda seguridad)",
+          "Capa 4 inventario para Diana/Laura — explicitamente NO (Patricia es quien paga; ellas tienen lo que operan)"
+        ]
       }
     },
     {
@@ -341,6 +368,11 @@
           "nscf-fulfillment-portal": "v2 — 3 pantallas HTML + 4 emails + Shopify fulfillment + reporte CSV",
           "nscf-mailer": "v17 — botón CTA → dispatch.neuronescflorida.com/portal",
           "shopify-oauth": "OAuth callback activo — auto-guarda shpat_ en shopify.stores"
+        },
+        "key_changes_2026-06-20": {
+          "nscf-mailer": "v27 — tipo commissions_report con detalle venta-a-venta (estado de cuenta por embajadora). verify_jwt:false",
+          "nscf-b2b-approve": "v8 (codigo v4) — ambassadors_report_email (+rows), inventory_view 3 columnas por location_id. verify_jwt:false",
+          "nscf-attribution": "v14 — webhook orders/paid: comision = order.subtotal_price * base_commission_rate (.toFixed(2)), marca draft completed, dispara mailer"
         },
         "pg_cron_new": {
           "archive-fulfillment-log": "2am UTC diario — archiva nscf_fulfillment_log > 3 meses"

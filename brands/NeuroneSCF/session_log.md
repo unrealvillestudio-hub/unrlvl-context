@@ -3,6 +3,53 @@ _Actualizado: 2026-06-16 (sesión 7)_
 
 ---
 
+## 2026-06-20 · NSCF — Console Fase 3 mejoras LIVE + sincronización comisiones con Shopify (fuente de verdad)
+
+**Conducido por:** Claude Opus 4.8 (chat) + MCP (Shopify, Supabase) + CC (deploy EFs)
+**Marca:** NeuroneSCF
+**Estado:** ✅ CERRADO — 3 archivos deployados, 6 comisiones reconciliadas contra Shopify, 2 ventas cash creadas con flujo real, 8 learnings Professor aprobados.
+
+### A. NSCF-Console Fase 3 — 4 mejoras deployadas (LIVE, verificadas web+mobile por Sam)
+- **nscf-mailer v26→v27** (prod version 27, verify_jwt:false): `commissionsReportHTML` ahora pinta detalle venta-a-venta como estado de cuenta secuencial (por embajadora: fila totalizada + tabla de sus ventas del período). Recibe `rows` en el payload.
+- **nscf-b2b-approve v3→v4** (prod version 8, verify_jwt:false): (1) `ambassadors_report_email` añade `rows` al payload del mailer; (2) `inventory_view` REFACTORIZADO a 3 columnas — separa B2C por location_id en `b2c_bodega1`/`b2c_bodega2` + `b2b`, sin sumar total B2C. Constantes B2C_BODEGA1_ID=110732378439, B2C_BODEGA2_ID=110733263175.
+- **nscf-console/src/App.jsx**: (1) toggle de ventana en AmbassadorsScreen — "Este mes" (default) / "Mes anterior" / "Ambos", total recalcula; (2) InventoryScreen 3 columnas con títulos golden terra (#C4622D/--pro-gold) y fondos diferenciados. El toggle usa el `month_key` que la EF ya aceptaba (sin cambio de motor).
+- **Deploy:** vía CC con SUPABASE_ACCESS_TOKEN, orden mailer→approve, `--no-verify-jwt` preservado. Front por GitHub Desktop (auto-deploy Vercel). Token venció naturalmente (~50 min), sin acción de rotación necesaria.
+
+### B. Reconciliación de comisiones huérfanas contra Shopify (fuente de verdad)
+Se detectaron 6 drafts `completed` en Supabase con comisión nunca creada. **Regla aplicada: Shopify es la fuente de verdad — comparar antes de insertar.**
+- **2 NO EXISTEN en Shopify** (#1003 Martha, #1007 Patricia) → drafts de "modo prueba" del checkout que quedaron en Supabase. NO se pagan. DESCARTADAS. → Identifican el caso de uso REAL del cron de integridad (ver AGENDA).
+- **4 REALES confirmadas en Shopify** → insertadas en `nscf_commissions` como `pending`:
+  - #1008 Patricia/vizos $85.00 → $8.50 (may)
+  - #1009 Diana/yts-nm $99.99 → $8.00 (may, cliente Nora, línea HUMIT)
+  - #1010 Diana/yts-nm $99.99 → $8.00 (may, cliente Xiomara, línea KERASIN) — NO duplicado de #1009 (distinto cliente/producto/minuto)
+  - #1028 Diana/yts-nm $83.99 → $6.72 (jun, custom kit 40% autorizado por PO)
+- Total recuperado: $31.22.
+
+### C. 3 ventas cash sin registrar (Patricia) — backfill con flujo real
+PO reportó 3 ventas cash de cuando no sabían registrarlas. Creadas como órdenes Shopify B2C reales (draftOrderCreate + appliedDiscount FIXED_AMOUNT + customAttributes kiosko + draftOrderComplete). El webhook nscf-attribution creó las comisiones solo.
+- **#1031** Kit cash Patricia: Capissen Shampoo + Capissen Lotion + DY Fazza Color 200ml + Total Violet Mask. Lista $189.96, 40% off → $113.98. Comisión $11.40.
+- **#1032** Kit Kerasin Patricia: Shampoo Kerasin HB + Kerasin HB Mask + DY Fazza Color 200ml. Lista $144.97, 31% off → $99.99. Comisión $10.00.
+- **Venta 3 (Controller) NO creada**: "Control Gel" = CONTROLLER 300gr NSCF-ST-001, producto solo-Vizos que NUNCA estuvo en Shopify por diseño (gel styling caro, baja rotación online). No se puede crear orden real para un producto inexistente en catálogo. Si se quiere pagar la comisión de Patricia ($6.90 sobre $69.00), requeriría inserción manual sin orden — queda anotado, sin resolver.
+- Nota: órdenes salieron con fecha de hoy (20-jun), no del 1-10 jun (draftOrderComplete no permite backdatear vía API). Irrelevante para comisión (month_key=junio).
+
+### D. Aclaraciones de Sam (capturadas como learnings)
+- Redondeo de comisiones = half-up a 2 decimales (`.toFixed(2)` del webhook ya lo hace). No es decisión de negocio, es "se paga en centavos". El centavo de #1024 era subtotal_price Shopify ≠ discounted_total draft.
+- Las fantasma #1003/#1007 nacieron en modo prueba del checkout. → justifica cron de integridad Shopify↔Supabase (NO recalcular comisiones).
+- #1028: Diana no tiene rol para 40%; la venta se hizo desde perfil de Patricia (autoriza, max_discount_pct=40) pero atribuida a Diana (la generó). El ~40% = beneficio de compra por kit, vía PO only.
+
+### E. Hallazgos de infra verificados
+- **nscf-attribution v14** = webhook Shopify `orders/paid` (NO flujo kiosko). Lee note_attributes, calcula sobre `order.subtotal_price × base_commission_rate` con `.toFixed(2)`, marca draft completed, dispara mailer. El flujo de junio (#1021+) crea comisiones en tiempo real — el agujero histórico ya no sangra.
+- Catálogo B2C: kits custom se arman line-item por SKU + descuento de orden. DY Fazza Color 200ml NSCF-TR-015 $44.99 (vs 400ml NSCF-BTP-004 $49.99).
+
+### Professor: 8 learnings aprobados (governance/data/infra/business). Ver professor_learnings 2026-06-20.
+
+### Pendientes a AGENDA (no construidos):
+- Cron de integridad Shopify↔Supabase (detecta drafts completed sin orden real — las fantasma de modo prueba).
+- Limpieza de las 2 fantasma (#1003/#1007) en nscf_draft_orders (borrar o marcar test/voided).
+- Decisión sobre comisión del Controller (venta cash #2, $6.90).
+
+---
+
 ## ⏸️ RETOMAR EN PRÓXIMO CHAT (prioridad)
 
 **De sesión 7 (NSCF-Console Fase 3 — capas pendientes):**
