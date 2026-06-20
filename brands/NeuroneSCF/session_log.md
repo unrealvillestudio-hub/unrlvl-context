@@ -3,6 +3,32 @@ _Actualizado: 2026-06-16 (sesión 7)_
 
 ---
 
+## 2026-06-20 (cont.) · NSCF — Cron de integridad Shopify↔Supabase + limpieza fantasmas
+
+**Conducido por:** Claude Opus 4.8 (chat) + MCP (Supabase) + CC (deploy EF + cleanup repo)
+**Marca:** NeuroneSCF
+**Estado:** ✅ CERRADO — EF integridad LIVE, cron activo, 2 fantasmas limpiadas. (Decisión cron = caso de uso real identificado en sesión previa de hoy.)
+
+### Limpieza de drafts fantasma
+- #1003 (Martha, yts-cw-martha) y #1007 (Patricia, vizos-patricia): drafts status=completed con shopify_order_id que NO existe en Shopify (verificado: order(id) → null en B2C y B2B). Origen: modo prueba del checkout.
+- Marcados `status='voided_test'` en nscf_draft_orders (de 'completed'). Dejan de aparecer como huérfanos. Verificado: 0 huérfanas reales restantes.
+- NO se borran del disco/tabla — quedan como registro auditado.
+
+### Cron de integridad (Capa 5, alcance correcto = integridad de datos, NO recálculo de comisiones)
+- **Tabla nueva `public.nscf_integrity_log`**: id, draft_id, shopify_order_id, shopify_order_number, ambassador_id, issue_type ('phantom_no_shopify_order'), detail, resolved, detected_at. GRANT ALL a service_role + postgres.
+- **EF `nscf-integrity-check` v1** (verify_jwt:false, deployada por CC con token fresco, fuente=disco byte-exacto): lee token Shopify B2C de shopify.stores.access_token en runtime; por cada draft completed con shopify_order_id sin comisión, hace GET orders/{id}.json contra Shopify (API 2024-10); si 404 → marca voided_test + inserta en nscf_integrity_log. Status ≠200/404 → no concluye (no marca). NO toca nscf_commissions.
+- **Cron pg_cron job 34 `nscf-integrity-check-weekly`**: '0 4 * * 0' (domingos 04:00 UTC) → net.http_post a la EF (patrón jobs 30/31, timeout 120s). Activo. Sin duplicados.
+- Primera corrida real: domingo (no se invocó manualmente; las 2 fantasmas actuales ya estaban limpiadas a mano).
+
+### Repo NeuroneSCF (cleanup, vía CC — pusheado por Sam GitHub Desktop)
+- supabase/functions/nscf-integrity-check/index.ts (EF, nuevo).
+- supabase/.gitignore creado (.temp, .branches, .env*).
+- supabase/.temp/{cli-latest, linked-project.json} des-trackeados (git rm --cached, siguen en disco) — metadata CLI que había entrado por error.
+
+### Pendiente: rotar SUPABASE_ACCESS_TOKEN usado en el deploy (sbp_1547…, queda en chat; expira ~1h por sí solo).
+
+---
+
 ## 2026-06-20 · NSCF — Console Fase 3 mejoras LIVE + sincronización comisiones con Shopify (fuente de verdad)
 
 **Conducido por:** Claude Opus 4.8 (chat) + MCP (Shopify, Supabase) + CC (deploy EFs)

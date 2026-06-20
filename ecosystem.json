@@ -143,7 +143,8 @@
           "shopify_b2c_token": "egdk1n-gt — con read_locations",
           "shopify_b2b_token": "nj5ybc-n1 — SIN read_locations (queries inventario B2B no piden location.name)",
           "webhook_atribucion": "nscf-attribution v14 = webhook orders/paid. Lee note_attributes (ambassador_id, salon_id, discount_pct, draft_order_id). Comision = order.subtotal_price * base_commission_rate, .toFixed(2). Marca draft completed + dispara mailer.",
-          "embajadoras": "tabla nscf_embajadoras (pin texto plano = deuda seguridad). Patricia vizos-patricia 10% max_discount 40%. Diana yts-nm-diana 8%. Martha yts-cw 8%."
+          "embajadoras": "tabla nscf_embajadoras (pin texto plano = deuda seguridad). Patricia vizos-patricia 10% max_discount 40%. Diana yts-nm-diana 8%. Martha yts-cw 8%.",
+          "integrity_cron": "nscf-integrity-check v1 (verify_jwt:false) + pg_cron job 34 'nscf-integrity-check-weekly' (dom 04:00 UTC). Detecta drafts completed con shopify_order_id inexistente en Shopify (fantasmas modo prueba) -> marca voided_test + log en nscf_integrity_log. NO toca comisiones. Tabla nscf_integrity_log nueva (GRANT service_role)."
         },
         "deferred": [
           "Lista de precios admin-only + profit por venta (depende de price loader)",
@@ -359,6 +360,9 @@
           "new_2026-05-29": [
             "nscf_fulfillment_log — portal Iván tracking + emails + audit trail",
             "nscf_fulfillment_log_archive — retención 3 meses"
+          ],
+          "new_2026-06-20": [
+            "nscf_integrity_log — log de integridad (drafts fantasma marcados voided_test, GRANT service_role)"
           ]
         }
       },
@@ -372,10 +376,12 @@
         "key_changes_2026-06-20": {
           "nscf-mailer": "v27 — tipo commissions_report con detalle venta-a-venta (estado de cuenta por embajadora). verify_jwt:false",
           "nscf-b2b-approve": "v8 (codigo v4) — ambassadors_report_email (+rows), inventory_view 3 columnas por location_id. verify_jwt:false",
-          "nscf-attribution": "v14 — webhook orders/paid: comision = order.subtotal_price * base_commission_rate (.toFixed(2)), marca draft completed, dispara mailer"
+          "nscf-attribution": "v14 — webhook orders/paid: comision = order.subtotal_price * base_commission_rate (.toFixed(2)), marca draft completed, dispara mailer",
+          "nscf-integrity-check": "v1 (verify_jwt:false) — cron integridad: drafts completed sin orden Shopify real -> voided_test + nscf_integrity_log. No toca comisiones."
         },
         "pg_cron_new": {
-          "archive-fulfillment-log": "2am UTC diario — archiva nscf_fulfillment_log > 3 meses"
+          "archive-fulfillment-log": "2am UTC diario — archiva nscf_fulfillment_log > 3 meses",
+          "nscf-integrity-check-weekly": "job 34 — dom 04:00 UTC, net.http_post a nscf-integrity-check (integridad drafts fantasma)"
         }
       },
       "brand_voice_genome": {

@@ -82,8 +82,6 @@ Detectados al revisar el primer output renderizado en la Content Queue (06-18).
 | 24 | **Email marketing FPHs** — cada marca su key dedicada. | ForumPHs |
 | 25 | **ForumPHs — creación cuentas** — número panameño | ForumPHs |
 | 35 | **CLAUDE.md — completar repos restantes** | UNRLVL |
-| 43 | **Cron integridad Shopify↔Supabase (NSCF)** — detecta drafts `nscf_draft_orders` completed sin orden real en Shopify (fantasmas de modo prueba checkout). NO recalcula comisiones, solo integridad de datos. Caso identificado 06-20 (#1003/#1007). | NeuroneSCF |
-| 44 | **Limpieza 2 drafts fantasma NSCF** (#1003 Martha, #1007 Patricia) — borrar de `nscf_draft_orders` o marcar test/voided para que dejen de aparecer como huérfanas. Liga con #43. | NeuroneSCF |
 | 45 | **Comisión Controller venta cash (NSCF)** — venta cash #2 Patricia (Menthol Ice + Controller NSCF-ST-001, $69.00 → comisión $6.90). Producto solo-Vizos, sin orden Shopify posible. Decidir si se inserta comisión suelta. Prioridad baja. | NeuroneSCF |
 
 ---
@@ -109,6 +107,7 @@ Detectados al revisar el primer output renderizado en la Content Queue (06-18).
 
 ## ✅ Resuelto recientemente
 
+- ✅ **NSCF cron integridad Shopify↔Supabase LIVE** (06-20). EF nscf-integrity-check v1 + pg_cron job 34 (dom 04:00). Detecta drafts fantasma (completed sin orden Shopify real) → voided_test + nscf_integrity_log. Fantasmas #1003/#1007 limpiadas. Primera corrida real: domingo. — 2026-06-20
 - ✅ **NSCF-Console Fase 3 LIVE** (06-20). Capas 1-4 + 4 mejoras: auth multi-rol, detalle venta-a-venta en email, toggle ventana, inventario 3col golden terra. mailer v27, approve v8. Verificado web+mobile. — 2026-06-20
 - ✅ **IID OUTPUT QUALITY LOTE A CERRADO** (06-18). #5h #5j #5k #5l + cron end-to-end con verificación live. content-run-stage v34→v35, approve-piece v13→v14 (in-place, byte-idéntico, Ruta B, sin auto-merge, `.limit(1)` intacto). (a) #5j imagen→unrlvl-media CDN sin base64 (causa: reescritura v25→v34 desconectó upload de mayo); (b) #5h title separado, 3 títulos distintos mismo finding, similarity 0.31; (c) #5k firma del genoma estampada tras Watcher PASS; (d) #5l resend_id (UUID) en pieza+job; (e) cron 32→12 días; (f) D1 piece_id pre-gen PK. §5.4 verificado-por-deploy, gatillo en #5b. Spec+addendum en protocols/. 2 errores de spec corregidos por CC (§2.2, §5.2). Professor: 6 learnings aprobados. — 2026-06-18
 - ✅ **IID #5b VALIDADO end-to-end** (06-17). RUN4: 5 stages + Watcher PASS + email. 5 fallos arreglados. v25→v33. — 2026-06-17
