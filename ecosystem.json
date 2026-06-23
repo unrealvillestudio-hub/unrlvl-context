@@ -1,21 +1,22 @@
 {
   "_meta": {
-    "version": "2026-06-20-v1",
-    "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-06-15-v1",
-    "last_session": {
-      "date": "2026-06-20",
-      "conducted_by": "Claude Opus 4.8 (chat) + MCP (Shopify/Supabase) + CC (deploy)",
-      "status": "NSCF-Console Fase 3 mejoras LIVE (mailer v27, approve v8/cod-v4, App.jsx toggle+inventario 3col). Comisiones huerfanas reconciliadas contra Shopify (fuente de verdad): 4 reales insertadas, 2 fantasma de modo prueba descartadas. 2 ventas cash backfilled con flujo real (orden Shopify->webhook->comision). 8 learnings Professor.",
-      "key_achievements": [
-        "NSCF-Console Fase 3 COMPLETA y LIVE (Capas 1-4 + 4 mejoras): auth multi-rol, reporte comisiones con detalle venta-a-venta en email, toggle ventana este-mes/mes-anterior/ambos, inventario 3 columnas (B2C bodega1 | B2C bodega2 Vizos | B2B Vizos) golden terra. Verificado web+mobile.",
-        "Shopify = fuente de verdad para comisiones: de 6 huerfanas, 2 no existian en Shopify (drafts modo prueba) y 4 reales -> insertadas pending ($31.22)",
-        "2 ventas cash historicas creadas con flujo real (draftOrderCreate+appliedDiscount+customAttributes -> webhook nscf-attribution crea comision sola): #1031 $113.98, #1032 $99.99",
-        "nscf-attribution v14 confirmado = webhook Shopify orders/paid (no kiosko); calcula sobre order.subtotal_price con .toFixed(2)",
-        "8 learnings Professor aprobados (governance/data/infra/business)"
-      ]
-    }
-  },
+  "version": "2026-06-22-v1",
+  "maintained_by": "Claude — do not edit manually",
+  "previous": "2026-06-20-v1",
+  "last_session": {
+    "date": "2026-06-22",
+    "conducted_by": "Claude Opus 4.8 (Chat 1) + MCP (Supabase) + Chat 2 + CC",
+    "status": "IID: genoma v1.0 Lucien (muestreo) + R4B parcial (content-run-stage v37, content-watcher v1, arquitectura híbrida queue) + Vertex desbloqueado + repo IID/ fundado + nombre canónico fijado (Intelligence Insights Developers).",
+    "key_achievements": [
+      "Nombre canónico IID = Intelligence Insights Developers (variantes previas eran deriva de reinterpretación al reducir a siglas). UNRLVL-IID = los IID de UNRLVL.",
+      "Genoma v1.0 Lucien destilado por muestreo (8/10 piezas): core_move reactivo/léxico → generativo/constructor; 8 campos nuevos; lucien_editorial + lucien_social v0.5→v1.0.",
+      "R4B Chat 2: content-run-stage v35→v37, content-watcher v1 (6 gates extraídos), DDL domain + pgvector v0.8.0. Arquitectura híbrida queue (Chat 1).",
+      "Vertex desbloqueado: GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION en Supabase Secrets → 5e-2/5e-3 listos.",
+      "Repo IID/ fundado en unrlvl-context (session_log.md de 0 a 100).",
+      "29 agentes IID activos (1 core + 13 legacy corriendo + 14 UNRLVL-* sin ejecutar aún)."
+    ]
+  }
+},
   "studio": {
     "name": "Unrealville Studio",
     "owner": "Sam",
@@ -33,7 +34,7 @@
     "email": "iam@luciensael.com",
     "web": "luciensael.com",
     "web_status": "BLOG v1.0 BUILT (home+blog+1 artículo molde) — GREENFIELD: no repo/Vercel/DNS. Paquete listo para Claude Code.",
-    "voice_genome": "✅ 2 VOCES ACTIVAS en brand_voice_genome v0.5 — lucien_editorial (919e3707, blog/ensayo/long-form) + lucien_social (5b571b08, Meta FB/IG + TikTok texto + X, short reactive). Mismo temperamento, distinta respiración. Pendiente futuro: lucien_video (guion hablado TikTok/Reels) cuando VideoLab.",
+    "voice_genome": "✅ 2 VOCES ACTIVAS en brand_voice_genome v1.0 (subido de v0.5 el 2026-06-19) — lucien_editorial (919e3707, blog/ensayo/long-form) + lucien_social (5b571b08, Meta FB/IG + TikTok texto + X, golpe ≤280). core_move generativo/constructor (parte de su mirada, aporta, construye — NO reactivo/léxico). 8 campos destilados por muestreo (#5i): closing_repositions, purpose_and_audience, restraint_as_power, the_edge_lands_in, compression_over_explanation, the_accusing_question, elegance_is_the_blade, thematic_gravity. Pendiente: validar v1.0 con IID real; lucien_video futuro (VideoLab).",
     "platforms": "Meta (FB+IG) con token a nivel ecosystem, pero canal LucienSael NO probado en pipeline (manual-until-verified). TikTok solo texto. X en apertura escalonada anti-baneo, manual sin API. LinkedIn NO es plataforma de Lucien (solo cita vía voceros Sam/UNRLVL). RIESGO ~80%: primer publish LucienSael por Orchestrator tocará blocker brand_id mapping (tipo test b93627b6) — verificar/insertar fila LucienSael en meta_accounts antes del primer publish."
   },
   "brands": [
@@ -495,67 +496,64 @@
     }
   },
   "iid_subsystem": {
-    "_status": "REPLANTEADO 2026-06-15 · Research vivo · Ejecución pendiente de Builder+Watcher (CC)",
-    "schema": "intel",
-    "model": {
-      "principle": "La MARCA declara qué temas consume y con qué voz por destino. El IID investiga temas NEUTROS (sin marca, sin voz). Relación m:n vía intel.brand_topics. Si una marca necesita un tema que ningún IID cubre → se crea el IID.",
-      "correction": "Antes: el agente cargaba default_voice y decidía la voz (causa raíz del off-brand + brand_id=null). default_voice queda VESTIGIAL hasta que el builder lea brand_topics; se limpiará después.",
-      "voice_systems_clarified": "3 sistemas distintos NO duplicados: brand_voice_genome (editorial ejecutable, el bueno), content.brand_voices (editorial viejo IID con ICR/AIFE), public.voicelab_params (sonora ElevenLabs, independiente)."
-    },
-    "agents": {
-      "unrlvl_new_2026-06-15": {
-        "_note": "14 IID nuevos UNRLVL-*. Enfoque: el CÓMO industrial del mercado (no releases). Cada dominio espejo de una capacidad propia. hard_rule: principio numérico (toda afirmación con cifras) + principio de desarrollo (gestión por código, profundidad dev/superuser). Nada filosófico (territorio Lucien). default_voice=unrlvl (vestigial).",
-        "tier1_method": [
-          "UNRLVL-CONTEXT-ENGINEERING (context-engineering) — espejo del sistema de contexto",
-          "UNRLVL-BRAND-VOICE-SYSTEMS (brand-voice-systems) — espejo de brand_voice_genome",
-          "UNRLVL-AI-INDUSTRIALIZATION (ai-industrialization) — espejo de Industrial Consistency",
-          "UNRLVL-CRO-PSYCHOLOGY (cro-psychology) — psico SOLO con data de conversión",
-          "UNRLVL-SIGNAL-LEARNING-LOOPS (signal-learning-loops) — espejo de SignalLab"
-        ],
-        "tier2_deepstack": [
-          "UNRLVL-META-DEEP-STACK (meta-deep-stack) — Graph API, CAPI, dev tools",
-          "UNRLVL-GOOGLE-DEEP-STACK (google-deep-stack) — GTM server-side, GA4, Merchant, Ads API",
-          "UNRLVL-ALGORITHM-MECHANICS (algorithm-mechanics) — ranking cross-platform; absorbe TikTok/X como señales"
-        ],
-        "tier3_market": [
-          "UNRLVL-ECOMMERCE-DEEP (ecommerce-deep) — unit economics, márgenes, conversión",
-          "UNRLVL-SHOPIFY-STACK (shopify-stack) — Functions, Admin API, headless/Hydrogen",
-          "UNRLVL-MARKET-FLORIDA (market-florida) — Florida USA general · NO LATAM/comunidad latina",
-          "UNRLVL-DROPSHIP-REALITY (dropship-reality) — ¿sigue vivo? solo números, anti-hype",
-          "UNRLVL-WHOLESALE-LOGISTICS-FL (wholesale-logistics-fl) — B2B/3PL Florida hub",
-          "UNRLVL-CREATOR-MACRO-ECONOMY (creator-macro-economy) — creator economy + macro"
-        ]
-      },
-      "legacy_iid": {
-        "_status": "INTACTOS — los 14 IID-* viejos siguen activos. Decisión de destino pendiente (reasignar a UNRLVL/Sam o descartar).",
-        "finding": "Los 14 viejos son inteligencia de marketing/plataforma/mercado — encajan con UNRLVL/Sam, NO con Lucien. Los 4 con default_voice='lucien' (IID-LLM, IID-X, IID-LINKEDIN, IID-PERSONAL-BRAND) estaban mal etiquetados: investigan marketing, no la materia filosófica de Lucien.",
-        "lucien_gap": "Lucien NO tiene agentes propios de su materia (ai-cognition/ai-identity/human-essence filosóficos). Hay que CREARLOS, no reconvertir."
-      }
-    },
-    "edge_functions": ["content-dispatcher (.limit(1) debug aún puesto)", "content-run-stage v22", "iid-core", "iid-ecommerce", "aife-filter"],
-    "pending_execution": "El builder del IID (callClaudeDirect en content-run-stage) sigue sin leer brand_topics ni inyectar genoma. PREREQUISITO publish: Builder convergido + Watcher (ver protocols/ANTISPAM_CONTRACT.md).",
-    "_archivo_historico": {
-      "2026-06-02": {
-        "_status": "RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26 · DESBLOQUEADO PARA FIX (ambas voces Lucien ya existen)",
-        "schema": "intel (NO public)",
-        "tables": {
-          "iid_agents": "14 — por dominio de conocimiento, dual voice (default_voice + lucien_angle_affinity)",
-          "iid_content_queue": "~150 tras limpieza 2026-05-31 (eran 204)",
-          "iid_findings": 218,
-          "iid_research_raw": 54,
-          "iid_cron_runs": "137 — research corre diario",
-          "iid_briefs": 1,
-          "iid_scheduler_config": "5 (config conexión, no schedule)"
-        },
-        "edge_functions": ["content-dispatcher (.limit(1) debug)", "content-run-stage v22 (timeout 65s)", "iid-core", "iid-ecommerce", "aife-filter"],
-        "diagnosis_2026-05-31": "Research funciona y alimenta queue. Ejecución/publicación congelada: content-run-stage failed del 26-abr son cadáveres de arquitectura vieja (timeout 30s + CopyLab externo). v22 ya reescrita (pipeline portado, timeout 65s) pero nunca re-corrida en limpio. .limit(1) de debugging sigue puesto.",
-        "voice_unblock_2026-06-02": "Causa raíz del off-brand (sin brand_voice_genome) RESUELTA: lucien_editorial (06-01) + lucien_social (06-02) activos. Siguiente: regenerar semillas #7/#8/#14 con la voz correcta según formato (editorial para long-form, social para corto), remover .limit(1), re-correr content-run-stage v22 en limpio.",
-        "brand_id_model_agreed": "Research de plataforma compartido + intérprete por marca vía context-cache. Fuentes por vertical temático: caso por caso.",
-        "quarantine": "37 lucien/mathematical + (revisar) lucien/psychological marcados rejected/pending como dataset diagnóstico. NO purgar hasta validar voz nueva.",
-        "seeds": "Semillas rescatables de lucien/psychological: #7, #8, #14 — regenerar con voz correcta tras crear genoma (ya creado)."
-      }
-    }
+  "_status": "OPERACIONAL · Builder+Watcher LIVE · R4B en curso (deadline 1ª sem julio) · UNRLVL+Lucien como conejillos de indias hasta cerrar R4B",
+  "_name": "IID = Intelligence Insights Developers. UNRLVL-IID = los IID de UNRLVL. (Variantes previas — Intelligent Intelligence Dispatcher / Insight Distribution / Content Distribution — fueron deriva de reinterpretación al reducir a siglas; NO son canónicas.)",
+  "_repo": "unrlvl-context/IID/session_log.md — documento fundacional + session log (fundado 2026-06-22). Cuerpo §1-§8 estable + §9 session log al tope.",
+  "schema": "intel",
+  "origin": "Nació (abril 2026) como motor de inteligencia de marketing (investiga LLMs/plataformas/e-commerce/mercados). Doble uso: mejora interna del ecosystem + posicionamiento público de UNRLVL/Lucien como expertos ('cero desperdicio, máximo leverage'). Lucien se encajó después sobre la estructura de marketing → causó el bug off-brand. La entrada de Lucien estableció que el IID debía ser MULTIMARCA.",
+  "model": {
+    "principle": "La MARCA declara qué temas consume y con qué voz por destino (intel.brand_topics). El IID investiga temas NEUTROS. El default_voice del agente NO decide voz (esa fue la raíz del bug off-brand).",
+    "angle_rule": "angle = territorio (qué/dónde); genoma = ejecución (cómo). Un angle que repite el core_move del genoma colapsa la voz en fórmula (#5i).",
+    "cadence_rule": "Interpretación A: cadencia por-marca-por-plataforma (volumen total); los dominios ROTAN dentro de los slots, NO multiplican.",
+    "queue_architecture": "HÍBRIDA (2026-06-20): la queue lleva brand_id + domain (puente, escrito por el Builder en v37); brand_topics es fuente ÚNICA de platforms/cadence/rollout (leída por el Scheduler)."
   },
+  "agents": {
+    "_total_active": 29,
+    "_breakdown": "1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 2026-06-15, last_run NULL — aún sin ejecutar). default_voice='lucien' en 4 legacy (IID-LLM, IID-LINKEDIN, IID-X, IID-PERSONAL-BRAND) = legado del encaje a la fuerza; investigan marketing, no la materia filosófica de Lucien.",
+    "tier1_method": ["UNRLVL-CONTEXT-ENGINEERING","UNRLVL-BRAND-VOICE-SYSTEMS","UNRLVL-AI-INDUSTRIALIZATION","UNRLVL-CRO-PSYCHOLOGY","UNRLVL-SIGNAL-LEARNING-LOOPS"],
+    "tier2_deepstack": ["UNRLVL-META-DEEP-STACK","UNRLVL-GOOGLE-DEEP-STACK","UNRLVL-ALGORITHM-MECHANICS"],
+    "tier3_market": ["UNRLVL-ECOMMERCE-DEEP","UNRLVL-SHOPIFY-STACK","UNRLVL-MARKET-FLORIDA","UNRLVL-DROPSHIP-REALITY","UNRLVL-WHOLESALE-LOGISTICS-FL","UNRLVL-CREATOR-MACRO-ECONOMY"],
+    "legacy_iid": ["IID-IMAGE","IID-LLM","IID-VIDEO","IID-VOICE","IID-GOOGLE","IID-LINKEDIN","IID-META","IID-TIKTOK","IID-X","IID-ECOMMERCE","IID-FLORIDA","IID-PERSONAL-BRAND","IID-WHOLESALE"],
+    "hard_rule_unrlvl": "Todo respaldado por números y profundidad de código; nada filosófico (eso es territorio de Lucien).",
+    "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
+  },
+  "pipeline": {
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher (jobid 29, cada 30min, .limit(1)) → content-run-stage v37 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v1 (6 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome."
+  },
+  "edge_functions": {
+    "content-dispatcher": "v22 — cron jobid 29 cada 30min. Tiene .limit(1) (NO tocar hasta publicación real, #5f). HOY ignora scheduled_for.",
+    "content-run-stage": "v37 — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).",
+    "content-watcher": "v1 — 6 gates extraídos a EF propia (similarity, sibling-window, cadence, evidence, duplication, hard-rules). PASS/REJECT/RESCHEDULE.",
+    "approve-piece": "v14 — aprobación: publish Meta + move-to-permanent. Path reject HOY sin rejected_reason (#5r pendiente).",
+    "aife-filter": "control de calidad/seguridad de marca.",
+    "lab-worker": "v23 — orquestador viejo (dual-mode lab_jobs). Llama labs por HTTP vía lab_configs. NO tiene creds Vertex.",
+    "soporte": ["copylab-processor","brand-context-builder","iid-core","iid-ecommerce"]
+  },
+  "labs_wiring": {
+    "copylab": "unrlvl-copy-lab.vercel.app /api/execute — genera copy",
+    "imagelab": "image-lab-unrlvl.vercel.app /api/execute — Vertex AI Imagen 3.0 (fast-generate-001 + capability-001) vía Service Account imagelab-vercel@gen-lang-client-0491381650. AQUÍ vive la credencial Vertex.",
+    "sociallab": "social-lab-flame.vercel.app /api/execute + /api/publish — post por plataforma",
+    "videolab": "unrlvl-video-lab.vercel.app — active=FALSE (pendiente lanzar, Kling.ai)",
+    "orchestrator": "orchestrator-unrlvl.vercel.app — front de aprobación humana",
+    "config": "intel.iid_scheduler_config: orchestrator_url + vercel_bypass_secret (CopyLab/ImageLab/SocialLab) + iid_cron_secret"
+  },
+  "tables": {
+    "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log"],
+    "content": ["orchestrator_jobs (+ domain 2026-06-20)","content_pieces (+ domain)","content_calendar","content_performance","brand_context_cache","brand_voices"]
+  },
+  "vertex": {
+    "status": "✅ DESBLOQUEADO 2026-06-22",
+    "secrets": "GOOGLE_SERVICE_ACCOUNT_KEY (JSON del SA imagelab-vercel) + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION cargados en Supabase Secrets por Sam.",
+    "project": "gen-lang-client-0491381650",
+    "embeddings": "gemini-embedding-001 @768 dims (Matryoshka, cap HNSW 2000) para 5e-2/5e-3."
+  },
+  "r4b_status": {
+    "_deadline": "1ª sem julio 2026",
+    "done": ["5e-5 DDL (domain+pgvector v0.8.0+índice+GRANT)","5o/5p-a/5q (v36)","5e-4 content-watcher v1 (v37)","arquitectura híbrida queue","#5i genoma v1.0","Vertex desbloqueado"],
+    "pending": ["5e-1 Scheduler content-scheduler (especificado, desbloqueado — write ya en v37)","5e-2/5e-3 embeddings+gates bloqueantes (Chat 2, ya con Vertex)","parche dispatcher scheduled_for","5b publicación real Meta (chat dedicado)","5r rejected_reason","5s limpieza queue","validación genoma v1.0 con IID real","rollout_started_at en brand_rollout (1ª sem julio)"]
+  }
+},
   "brand_topics": {
     "_status": "CREADA 2026-06-15 · intel.brand_topics · insumo del Scheduler R4B",
     "_note": "La marca declara sus temas. Voz por destino y plataformas como atributos. UNIQUE(brand_id, domain).",
@@ -672,6 +670,10 @@
     "PRIORIDAD 10 — Portal Iván sprint 2: dashboard pendientes + UPS API",
     "PRIORIDAD 11 — Klaviyo flows NSCF: 4 flows bilingüe",
     "PRIORIDAD 12 — GitHub: unrlvl-supabase-mcp + unrlvl-meta-mcp (público o GitHub Pro)",
-    "PENDIENTE SESIONES — Ecosystem Tools: MCPs + Skills + Agents + AgentLab orquestación multimarca"
+    "PENDIENTE SESIONES — Ecosystem Tools: MCPs + Skills + Agents + AgentLab orquestación multimarca",
+    "🆕 IID 2026-06-22 — ecosystem_graph.json PENDIENTE ecosystem audit (datos del 05-26: dice IID frozen/14 agentes/v22, ya falso)",
+    "🆕 IID 2026-06-22 — subir IID/session_log.md (repo IID fundado)",
+    "🆕 IID 2026-06-22 — Vertex: validar formato del JSON en primer run de embeddings",
+    "🆕 IID 2026-06-22 — decidir destino de los 14 UNRLVL-* sin ejecutar + IID-* legacy voz Lucien"
   ]
 }

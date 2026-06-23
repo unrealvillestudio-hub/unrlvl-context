@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-02-v2 · No editar manualmente_
+_Generado desde ecosystem.json v2026-06-22-v1 · No editar manualmente · Sección IID actualizada al estado vivo 2026-06-22; resto preservado de la versión anterior_
 
 ---
 
@@ -50,41 +50,68 @@ Servidor: unrlvl-meta-mcp.vercel.app
 
 Datos: Supabase public.meta_accounts
   └─ brand_id · page_id · ig_user_id · ad_account_id · system_token
-  └─ UNREALville ✅ · UnrealvilleStudio ✅ (2026-05-31) · NeuroneSCF ✅
+  └─ UNREALville ✅ · UnrealvilleStudio ✅ · NeuroneSCF ✅ · LucienSael (fila ✅ — pipeline NO E2E)
 
 Brands con acceso Meta:
   └─ UNREALville / UnrealvilleStudio ✅
-  └─ NeuroneSCF ✅ (verificado 2026-05-31)
-  └─ LucienSael ⏳ NO probado en pipeline — verificar/insertar fila antes del 1er publish
-       (riesgo ~80% mismo blocker brand_id mapping que test b93627b6)
+  └─ NeuroneSCF ✅
+  └─ LucienSael ⏳ fila existe pero NO probada en pipeline — verificar antes del 1er publish (liga 5b)
   └─ DEUDA: normalizar UnrealvilleStudio vs UNREALville (2 filas)
 ```
 
-### IID Subsystem (RESEARCH VIVO · EJECUCIÓN CONGELADA · DESBLOQUEADO PARA FIX)
+### IID Subsystem — Intelligence Insights Developers (OPERACIONAL · R4B EN CURSO)
 ```
+Repo de contexto: unrlvl-context/IID/session_log.md (fundado 2026-06-22 — doc fundacional + session log)
+Nombre canónico: IID = Intelligence Insights Developers. UNRLVL-IID = los IID de UNRLVL.
 Schema: intel (NO public)
 
-Tablas:
-  └─ iid_agents (14) — por dominio, dual voice
-  └─ iid_content_queue (~150) — tras limpieza 2026-05-31
-  └─ iid_findings (218)
-  └─ iid_research_raw (54)
-  └─ iid_cron_runs (137) — research corre diario ✅
-  └─ iid_briefs (1)
-  └─ iid_scheduler_config (5)
+FLUJO COMPLETO:
+  CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw
+    → iid-process → iid_findings → iid_content_queue (brand_id + domain)
+    → content-dispatcher (jobid 29, cada 30min, .limit(1))
+    → content-run-stage v37:
+         ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
+         ├─ AIFE filter
+         ├─ ImageLab → Vertex → Storage unrlvl-media (CDN)
+         ├─ SocialLab (post por plataforma)
+         └─ callWatcher → content-watcher v1 (6 gates)
+    → content_pieces (awaiting_approval) → email content-approval@unrealvillestudio.com
+    → Orchestrator (orchestrator-unrlvl.vercel.app, aprobación Sam)
+    → approve-piece v14 (publish Meta + move-to-permanent)
 
-Edge Functions:
-  └─ content-dispatcher (.limit(1) debug — bloquea ejecución)
-  └─ content-run-stage v22 (timeout 65s — reescrita, nunca re-corrida en limpio)
-  └─ iid-core
-  └─ iid-ecommerce
-  └─ aife-filter
+AGENTES (intel.iid_agents, 29 activos):
+  └─ 1 core: IID-CORE
+  └─ 13 legacy IID-* (CORRIENDO, last_run reciente): IMAGE, LLM*, VIDEO, VOICE, GOOGLE,
+       LINKEDIN*, META, TIKTOK, X*, ECOMMERCE, FLORIDA, PERSONAL-BRAND*, WHOLESALE
+       (* = default_voice lucien, legado del encaje a la fuerza — investigan marketing, no filosofía)
+  └─ 14 UNRLVL-* (creados 15-jun, last_run NULL — SIN ejecutar aún):
+       Tier1 método: CONTEXT-ENGINEERING, BRAND-VOICE-SYSTEMS, AI-INDUSTRIALIZATION, CRO-PSYCHOLOGY, SIGNAL-LEARNING-LOOPS
+       Tier2 deep-stack: META-DEEP-STACK, GOOGLE-DEEP-STACK, ALGORITHM-MECHANICS
+       Tier3 mercado: ECOMMERCE-DEEP, SHOPIFY-STACK, MARKET-FLORIDA, DROPSHIP-REALITY, WHOLESALE-LOGISTICS-FL, CREATOR-MACRO-ECONOMY
+       Hard rule: todo con números + profundidad de código, nada filosófico (eso es Lucien).
 
-Diagnóstico: Research OK. Publicación congelada.
-Causa raíz RESUELTA 2026-06-02: LucienSael ya tiene brand_voice_genome.
-  └─ lucien_editorial v0.5 (06-01) — long-form
-  └─ lucien_social v0.5 (06-02) — short reactive
-Fix restante: regenerar seeds #7/#8/#14 por formato → remover .limit(1) → re-test content-run-stage v22 en limpio
+EDGE FUNCTIONS:
+  └─ content-dispatcher v22 (.limit(1) — NO tocar hasta publicación real; HOY ignora scheduled_for)
+  └─ content-run-stage v37 (Builder + labs + callWatcher + domain-write jobs/pieces/queue)
+  └─ content-watcher v1 (6 gates extraídos: similarity, sibling-window, cadence, evidence, duplication, hard-rules)
+  └─ approve-piece v14 (publish Meta + move-to-permanent; reject sin rejected_reason → #5r)
+  └─ aife-filter · lab-worker v23 · copylab-processor · iid-core · iid-ecommerce
+
+GOBIERNO (intel.brand_topics):
+  La MARCA declara qué consume y con qué voz por destino. El agente investiga neutro.
+  angle = territorio (qué/dónde); genoma = ejecución (cómo).
+  Cadencia Interpretación A: por-marca-por-plataforma; dominios rotan, NO multiplican.
+  Arquitectura híbrida queue: queue lleva brand_id+domain (puente); brand_topics fuente única de platforms/cadence/rollout.
+
+VERTEX (desbloqueado 2026-06-22):
+  GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION en Supabase Secrets.
+  Proyecto gen-lang-client-0491381650 (SA imagelab-vercel). Embeddings gemini-embedding-001 @768.
+
+R4B (deadline 1ª sem julio):
+  HECHO: 5e-5 DDL (domain+pgvector v0.8.0), 5o/5p-a/5q (v36), 5e-4 content-watcher v1 (v37),
+         arquitectura híbrida queue, #5i genoma v1.0 Lucien, Vertex desbloqueado.
+  PENDIENTE: 5e-1 Scheduler (especificado, desbloqueado), 5e-2/5e-3 embeddings+gates (Chat 2),
+         parche dispatcher, 5b publicación real, 5r rejected_reason, 5s limpieza queue, validación v1.0.
 ```
 
 ### Professor (OPERACIONAL)
@@ -94,11 +121,8 @@ Proxy: unrlvl-context.vercel.app/api/professor
   └─ log-case · submit-learning · approve-learning
 
 Storage: Supabase amlvyycfepwhiindxgzw
-  └─ professor_decision_criteria
-  └─ professor_veto_rules
-  └─ professor_learnings (65 total · 42 aprobados · 11 pending · relevance_score 1–5)
-  └─ professor_manuals
-  └─ professor_platform_variables
+  └─ professor_decision_criteria · professor_veto_rules
+  └─ professor_learnings · professor_manuals · professor_platform_variables
 
 Checkpoint: silencioso cada 10 mensajes
 ```
@@ -121,13 +145,16 @@ Una marca → varias voces hermanas (mismo temperamento, distinta respiración)
 Unique (brand_id, voice_id, version)
 
 LucienSael:
-  └─ lucien_editorial v0.5 (919e3707) — blog/ensayo/long-form — respira largo
-  └─ lucien_social   v0.5 (5b571b08) — Meta FB/IG + TikTok texto + X — muerde corto ≤280
+  └─ lucien_editorial v1.0 (919e3707) — blog/ensayo/long-form — respira largo
+  └─ lucien_social   v1.0 (5b571b08) — Meta FB/IG + TikTok texto + X — muerde corto ≤280
+       core_move v1.0: generativo/constructor (parte de su mirada, aporta) — NO reactivo/léxico
+       8 campos nuevos (muestreo #5i): closing_repositions, purpose_and_audience, restraint_as_power,
+       the_edge_lands_in, compression_over_explanation, the_accusing_question, elegance_is_the_blade, thematic_gravity
        Exclusiones: luciensael.com (=editorial) · LinkedIn publish (no cuenta) · video/voz (=futuro lucien_video)
-       Cita-por-destino en LinkedIn (vía voceros): redirect X/Meta/TikTok → social; .com o nativo → editorial
+       Cita-por-destino: redirect X/Meta/TikTok → social; .com o nativo long-form → editorial
 
 SamPublisher:
-  └─ sam_personal v0.5 — Meta(FB) + LinkedIn — personal public voice + vocero Lucien/UNRLVL (creado 2026-06-02)
+  └─ sam_personal v0.5 — Meta(FB) + LinkedIn — personal public voice + vocero Lucien/UNRLVL
 
 UnrealvilleStudio:
   └─ unrlvl_default v1.0 — Defiant precision
@@ -137,18 +164,10 @@ Futuros: genoma social UNRLVL · lucien_video
 
 ### OnboardingApp — Voice Genome Gap
 ```
-v1.0 puebla 5 tablas:
-  └─ brands
-  └─ humanize_profiles
-  └─ compliance_rules
-  └─ brand_palette
-  └─ brand_typography
-
+v1.0 puebla 5 tablas: brands · humanize_profiles · compliance_rules · brand_palette · brand_typography
 NO captura: brand_voice_genome (capa editorial)
 Fix: Fase 5 — spec lista en VOICE_GENOME_PHASE_SPEC.md
-     2 ramas: Voz Extraída / Voz Diseñada
-     Aprendizaje 2026-06-02: permitir derivar voz social desde editorial existente
-     (preguntar solo diferencia de respiración) + capturar modo cita para voceros
+     2 ramas: Voz Extraída / Voz Diseñada + derivar social desde editorial + modo cita voceros
 ```
 
 ---
@@ -159,7 +178,7 @@ Fix: Fase 5 — spec lista en VOICE_GENOME_PHASE_SPEC.md
 |---|---|---|
 | Orchestrator | orchestrator-unrlvl.vercel.app | ✅ v4.1 |
 | CopyLab | unrlvl-copy-lab.vercel.app | ✅ v9.7 |
-| ImageLab | image-lab-unrlvl.vercel.app | ✅ v6 |
+| ImageLab | image-lab-unrlvl.vercel.app | ✅ (Vertex SA) |
 | SocialLab | social-lab-flame.vercel.app | ✅ live |
 | OnboardingApp | unrlvl-onboarding-app.vercel.app | ✅ live |
 | unrlvl-context | unrlvl-context.vercel.app | ✅ LIVE |
@@ -171,40 +190,37 @@ Fix: Fase 5 — spec lista en VOICE_GENOME_PHASE_SPEC.md
 | luciensael-web | — | ⏳ GREENFIELD — paquete listo, deploy pendiente |
 | unrlvl-ayra | — | ⏳ POR CREAR |
 
-**Staging workflow configurado en 15 repos** — PR template + WORKFLOW.md + CLAUDE.md.
-Branch protection activa en 13. Bloqueada en 2 (privados GitHub Free): unrlvl-supabase-mcp, unrlvl-meta-mcp.
+**Staging workflow configurado en 15 repos.** Branch protection activa en 13. Bloqueada en 2 (privados GitHub Free): unrlvl-supabase-mcp, unrlvl-meta-mcp.
 
 ---
 
 ## Supabase — Schemas y tablas clave
 
-### public (80 tablas)
+### public (80+ tablas)
 ```
 brands · humanize_profiles · compliance_rules · brand_palette · brand_typography
 brand_voice_genome ← clave para pipeline IID + CopyLab
-   └─ LucienSael: lucien_editorial (919e3707) + lucien_social (5b571b08) — ambas v0.5 active
-   └─ UnrealvilleStudio: unrlvl_default v1.0
+   └─ LucienSael: lucien_editorial (919e3707) + lucien_social (5b571b08) — ambas v1.0 active
+   └─ UnrealvilleStudio: unrlvl_default v1.0 · SamPublisher: sam_personal v0.5
 brand_cache_snapshots ← zero-query mode
-lab_jobs · lab_configs · copylab_jobs (→ migrar a lab_jobs)
+lab_jobs · lab_configs · copylab_jobs
 meta_accounts · scheduled_posts
-professor_decision_criteria · professor_veto_rules · professor_learnings
-professor_manuals · professor_platform_variables · professor_cache
-professor_decision_cases · professor_errors_known · professor_sam_bypasses · professor_weights
+professor_* (decision_criteria, veto_rules, learnings, manuals, platform_variables)
 nscf_fulfillment_log · nscf_fulfillment_log_archive
-imagelab_presets · person_blueprints · location_blueprints
-product_blueprints · brand_copy_profiles
+imagelab_presets · person_blueprints · location_blueprints · product_blueprints · brand_copy_profiles
 speaks_sessions · speaks_messages · speaks_leads · speaks_golden_pass
 ```
 
-### intel (IID — NO public)
+### intel (IID — Intelligence Insights Developers — NO public)
 ```
-iid_agents · iid_content_queue · iid_findings · iid_research_raw
-iid_cron_runs · iid_briefs · iid_scheduler_config
+iid_agents (29) · brand_topics · iid_content_queue (+ domain) · iid_findings
+iid_research_raw · iid_cron_runs · iid_briefs · iid_scheduler_config · watcher_log
 ```
 
 ### content
 ```
-orchestrator_jobs
+orchestrator_jobs (+ domain) · content_pieces (+ domain) · content_calendar
+content_performance · brand_context_cache · brand_voices
 ```
 
 ### shopify
@@ -221,80 +237,62 @@ stores · audit_runs · fix_log + otras
 ├── ecosystem.json                    ← fuente de verdad
 ├── ecosystem.md                      ← render narrativo (generado)
 ├── ecosystem_filemap.md              ← este archivo (generado)
-├── ecosystem_graph.json              ← grafo nodos+edges (generado via audit)
+├── ecosystem_graph.json              ← grafo nodos+edges (generado via audit) ⚠️ PENDIENTE AUDIT (desactualizado 05-26)
 ├── AGENDA.md                         ← agenda visual (generado)
 ├── CAPABILITIES.md                   ← catálogo de capacidades (carga en arranque)
 │
+├── IID/                              ← NUEVO 2026-06-22 — hogar de contexto del IID
+│   └── session_log.md                ← doc fundacional (§1-§8 cuerpo estable) + session log (§9 al tope)
+│
 ├── infrastructure/
-│   ├── meta-mcp/
-│   │   ├── session_log.md
-│   │   └── CONFIG.md (futuro)
-│   ├── shopify-mcp/ (futuro)
-│   └── supabase-mcp/ (futuro)
+│   ├── meta-mcp/ · shopify-mcp/ (futuro) · supabase-mcp/ (futuro)
 │
 ├── brands/
-│   ├── LucienSael/
-│   │   ├── BP_Brand_Person_id.md
-│   │   └── session_log.md            ← actualizado 2026-06-02 (lucien_social)
-│   ├── SamPublisher/
-│   │   ├── brand.json                ← creado 2026-06-02 (genoma de voz)
-│   │   └── session_log.md            ← creado 2026-06-02 (sam_personal v0.5)
-│   └── [Marca]/
-│       ├── brand.json
-│       ├── BP_Brand_Context.md
-│       └── session_log.md
+│   ├── LucienSael/  (BP_Brand_Person_id.md · session_log.md — genoma v1.0)
+│   ├── SamPublisher/ (brand.json · session_log.md — sam_personal v0.5)
+│   └── [Marca]/ (brand.json · BP_Brand_Context.md · session_log.md)
 │
 ├── agents/
-│   ├── social-media-agent/
-│   ├── ddmv-assistant/
-│   └── forumphs-speaks/
+│   ├── social-media-agent/ · ddmv-assistant/ · forumphs-speaks/
 │
 ├── skills/
-│   ├── INDEX.md
-│   └── [nombre]/SKILL.md
+│   ├── INDEX.md · [nombre]/SKILL.md
 │
 ├── protocols/
-│   ├── SESSION_PROTOCOL.md
-│   ├── HRD_PROTOCOL.md
-│   ├── AYRA_MASTER_PLAN.md
-│   ├── VOICE_GENOME_PHASE_SPEC.md
-│   └── CONTEXT_SYSTEM_REFACTOR_PLAN.md ← (pendiente crear)
+│   ├── SESSION_PROTOCOL.md · HRD_PROTOCOL.md · CC_PROTOCOL.md
+│   ├── AYRA_MASTER_PLAN.md · VOICE_GENOME_PHASE_SPEC.md
+│   ├── IID_OUTPUT_QUALITY_LOTE_A_SPEC.md
+│   ├── R4B_HANDOFF_CHAT1.md · R4B_RESPUESTA_CHAT1.md · R4B_MAPEO_CHAT2_CC.md
+│   ├── DIAGNOSTICO_ANGLE_READONLY_CC.md
+│   └── CONTEXT_SYSTEM_REFACTOR_PLAN.md (pendiente crear)
 │
 └── knowledge/
-    └── ecosystem/
-        ├── decision-matrix/
-        └── professor/
+    └── ecosystem/ (decision-matrix/ · professor/)
 ```
 
-**Regla de separación agents/ vs infrastructure/:**
-- `agents/` → agentes conversacionales con canal (WhatsApp, web, SMS)
-- `infrastructure/` → herramientas técnicas — MCPs, proxies, APIs internas
+**Regla agents/ vs infrastructure/:** `agents/` = conversacionales con canal (WhatsApp/web/SMS); `infrastructure/` = herramientas técnicas (MCPs, proxies, APIs).
 
 ---
 
 ## Dependencias críticas
 
 ```
-IID pipeline (congelado · DESBLOQUEADO para fix):
-  brand_voice_genome (lucien_editorial + lucien_social) ← ✅ AMBAS CREADAS (causa raíz resuelta)
-  └─ iid_content_queue (lucien/psychological seeds #7/#8/#14 — regenerar por formato)
-  └─ content-run-stage v22 (timeout 65s — necesita re-test limpio)
-  └─ content-dispatcher (.limit(1) debe removerse)
+IID pipeline (OPERACIONAL · R4B en curso):
+  brand_voice_genome (lucien_editorial + lucien_social v1.0) ← ✅ generativo/constructor
+  brand_topics ← gobierno de voz/tema/cadencia (fuente única de platforms/cadence/rollout)
+  iid_content_queue (+ domain) ← puente brand_id+domain para el Scheduler
+  content-run-stage v37 ← Builder + labs + callWatcher
+  content-watcher v1 ← 6 gates
+  content-dispatcher (.limit(1) — quitar solo tras publicación real)
+  Vertex (GOOGLE_SERVICE_ACCOUNT_KEY en Supabase) ← embeddings 5e-2
+  Scheduler content-scheduler ← especificado, desbloqueado (write ya en v37)
 
 Pipeline end-to-end (operacional):
-  brand_cache_snapshots ← zero-query mode
-  lab_jobs ← async jobs
-  lab-worker EF ← disparo
-  Meta MCP → meta_accounts ← UNREALville/UnrealvilleStudio/NeuroneSCF con token ✅
-  └─ LucienSael ⏳ verificar fila antes del 1er publish (riesgo blocker brand_id)
+  brand_cache_snapshots · lab_jobs · lab-worker EF
+  Meta MCP → meta_accounts ← UNREALville/UnrealvilleStudio/NeuroneSCF/LucienSael
+  └─ LucienSael ⏳ verificar pipeline E2E antes del 1er publish (liga 5b)
 
-OnboardingApp Fase 5:
-  brand_voice_genome ← tabla existe, onboarding no la puebla aún
-  spec: VOICE_GENOME_PHASE_SPEC.md (lista)
-  └─ extender: derivar voz social desde editorial + modo cita voceros
+luciensael.com deploy: repo GREENFIELD · Vercel + DNS por crear
 
-luciensael.com deploy:
-  repo GREENFIELD ← no existe aún en GitHub org
-  Vercel project ← por crear
-  DNS ← por configurar
+ecosystem_graph.json: ⚠️ PENDIENTE ecosystem audit (datos del 05-26 — IID dice frozen/14 agentes/v22, ya falso)
 ```

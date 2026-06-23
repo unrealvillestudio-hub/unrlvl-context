@@ -1,5 +1,5 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-06-02-v2 · No editar manualmente_
+_Generado desde ecosystem.json v2026-06-22-v1 · No editar manualmente · Sección IID + genomas + NSCF actualizadas al estado vivo 2026-06-22_
 
 ---
 
@@ -13,10 +13,10 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 **Lucien Sael** — Seudónimo profesional público de Sam
 - web: luciensael.com — BLOG v1.0 BUILT (home+blog+1 artículo molde) · GREENFIELD: sin repo/Vercel/DNS · Paquete listo para Claude Code
-- voice_genome: ✅ **2 VOCES ACTIVAS** en brand_voice_genome v0.5 — `lucien_editorial` (919e3707 · blog/ensayo/long-form) + `lucien_social` (5b571b08 · Meta FB/IG + TikTok texto + X · short reactive). Mismo temperamento (filo 9/10, übermensch motor interno nunca citado), distinta respiración (editorial respira largo / social muerde corto ≤280).
+- voice_genome: ✅ **2 VOCES ACTIVAS** en brand_voice_genome **v1.0** (subido de v0.5 el 2026-06-19) — `lucien_editorial` (919e3707 · blog/ensayo/long-form) + `lucien_social` (5b571b08 · Meta FB/IG + TikTok texto + X · golpe ≤280). **core_move generativo/constructor** (parte de su mirada, aporta, construye — NO reactivo/léxico). 8 campos destilados por muestreo (#5i): closing_repositions, purpose_and_audience, restraint_as_power, the_edge_lands_in, compression_over_explanation, the_accusing_question, elegance_is_the_blade, thematic_gravity. Mismo temperamento (filo, übermensch motor interno nunca citado), distinta respiración (editorial respira largo / social muerde corto).
 - platforms: Meta (FB+IG) token a nivel ecosystem pero canal LucienSael NO probado en pipeline (manual-until-verified) · TikTok solo texto · X apertura escalonada anti-baneo (manual, sin API) · LinkedIn NO es plataforma de Lucien (solo cita vía voceros Sam/UNRLVL)
 - ⚠️ RIESGO ~80%: primer publish LucienSael por Orchestrator tocará blocker brand_id mapping (tipo b93627b6) — verificar/insertar fila LucienSael en meta_accounts antes
-- Pendiente futuro: `lucien_video` (guion hablado TikTok/Reels) cuando VideoLab
+- Pendiente: validar v1.0 con IID real · `lucien_video` futuro (guion hablado TikTok/Reels) cuando VideoLab
 
 ---
 
@@ -24,7 +24,7 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 
 | Marca | Mercado | Estado |
 |---|---|---|
-| **NeuroneSCF** | South & Central Florida, USA | 🟡 Activo |
+| **NeuroneSCF** | South & Central Florida, USA | 🟢 Activo — Console Fase 3 LIVE |
 | **DiamondDetails** | Alicante, España | ✅ Activo |
 | **VizosCosmetics** | Miami + España | ✅ Activo |
 | **D7Herbal** | Alicante, España | ✅ Activo |
@@ -42,16 +42,26 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 - 41 productos activos · Theme 192983662919
 - Blog LIVE: 4 artículos ES+EN · Hair Intelligence — pendiente reescritura L0+L3 HUMANIZE EMOTIONAL
 - Pixel Meta ✅ (1348252664025025) · GTM+GA4 instalado ✅ · Klaviyo ✅
+- Checkout: pickup ❌ deshabilitado (2026-05-29) · delivery ✅ desde 3PL · Kiosk: delivery ❌ / pickup ✅ solo Vizos
 - ⚠️ TikTok Pixel DUPLICADO — bloquea ads
 - ⚠️ Klaviyo flows pendiente configurar en UI
 - ✅ Meta MCP: NSCF en meta_accounts con token OK (verificado 2026-05-31)
 
 **Shopify B2B** `nj5ybc-n1.myshopify.com`
-- Theme 149164392526 · Audit score 133 · REVISAR — store_type pendiente verificar
+- Theme 149164392526 · Audit score 133 · REVISAR — store_type pendiente verificar · token SIN read_locations
 
 **Fulfillment** — 2toner Express (Iván) `2tonerexpress@gmail.com`
-- Portal LIVE ✅ 2026-05-29 · `dispatch.neuronescflorida.com/portal` (dominio custom ⏳ pendiente)
-- EF: nscf-fulfillment-portal v2 · nscf-mailer v17
+- Portal LIVE ✅ 2026-05-29 · `dispatch.neuronescflorida.com/portal` (dominio custom ⏳ pendiente Vercel+DNS)
+- EF: nscf-fulfillment-portal v2 · nscf-mailer v27
+
+**NSCF-Console (superuser interno)** — ✅ **FASE 3 LIVE — 2026-06-20**
+- Repo nscf-console (Vercel front) · Auth multi-rol ADMIN/OPS (bcrypt+JWT, NO usa el PIN del kiosko)
+- EFs: nscf-b2b-approve v8 (código v4: ambassadors_report_email +rows, inventory_view 3 columnas por location_id) · nscf-mailer v27 (commissions_report con detalle venta-a-venta)
+- Reporte comisiones: per-embajadora, detalle venta-a-venta, calculado sobre Shopify **subtotal** (sin tax/shipping), redondeo half-up `.toFixed(2)`. Entran como pending; Patricia aprueba (aprobadora única)
+- Toggle ventana: este mes / mes anterior / ambos · Inventario 3 columnas: B2C Bodega1 (3PL Iván) | B2C Bodega2 Vizos | B2B Vizos
+- Atribución: nscf-attribution v14 = webhook orders/paid; comisión = `order.subtotal_price * base_commission_rate`
+- Integridad: nscf-integrity-check v1 + cron job 34 (dom 04:00 UTC) — marca drafts fantasma `voided_test`, no toca comisiones
+- Deuda: PIN texto plano en nscf_embajadoras · read_locations al token B2B · lista de precios admin-only (futuro)
 
 **Tracking** — Meta Pixel ✅ · GTM+GA4 ✅ · Klaviyo 10 templates ES+EN ✅ · TikTok ⚠️ DUPLICADO
 
@@ -60,8 +70,8 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 ## UnrealvilleStudio — Brand Context
 
 - voice_genome: `unrlvl_default v1.0` — Defiant precision, EN default, ES mismo tono
-- meta_mcp_brand_id: `UNREALville` (original) + `UnrealvilleStudio` (añadida 2026-05-31)
-- **DEUDA:** Normalizar convención de nombres — 2 filas en meta_accounts
+- meta_mcp_brand_id: `UnrealvilleStudio` (normalizado) — UNREALville eliminado de meta_accounts 2026-06-15 (era dup exacto, mismo page_id/token)
+- page_id 1050792034789886 · ig_user_id 17841429817593693 · ad_account act_1506214917803847
 - Primer post publicado ✅ 2026-05-29
 
 ---
@@ -72,12 +82,14 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 
 | brand_id | voice_id | versión | scope | estado |
 |---|---|---|---|---|
-| LucienSael | `lucien_editorial` | v0.5 | blog / ensayo / long-form | ✅ active (919e3707) |
-| LucienSael | `lucien_social` | v0.5 | Meta FB/IG + TikTok (texto) + X · short reactive | ✅ active (5b571b08 · 2026-06-02) |
-| SamPublisher | `sam_personal` | v0.5 | Meta(FB) + LinkedIn · personal + vocero Lucien/UNRLVL | ✅ active (2026-06-02) |
+| LucienSael | `lucien_editorial` | **v1.0** | blog / ensayo / long-form | ✅ active (919e3707) |
+| LucienSael | `lucien_social` | **v1.0** | Meta FB/IG + TikTok (texto) + X · golpe ≤280 | ✅ active (5b571b08) |
+| SamPublisher | `sam_personal` | v0.5 | Meta(FB) + LinkedIn · personal + vocero Lucien/UNRLVL | ✅ active |
 | UnrealvilleStudio | `unrlvl_default` | v1.0 | infra / B2B | ✅ active |
 
-**Lucien — regla cita-por-destino (vocería en LinkedIn):** Lucien no publica en LinkedIn (sin cuenta, por diseño). Llega solo citado por voceros (Sam / UNRLVL). El genoma del fragmento citado lo elige el **destino del redirect**: a X/Meta/TikTok → `lucien_social`; a luciensael.com o post nativo sin redirect → `lucien_editorial`. La voz que presenta es su propio genoma (sesiones futuras).
+**Genoma Lucien v1.0 (2026-06-19):** destilado por muestreo (8/10 piezas marcadas Lucien por Sam). El `core_move` pasó de reactivo/léxico ("desmonta la palabra equivocada") a **generativo/constructor** (Lucien parte de su mirada, aporta, construye; el filo sirve a la construcción, no es el fin). Patrón: generativo no reactivo · figura concreta · filo material/presente sin salida digna · comprime en imagen-sentencia · hiere con garbo no crudeza · constructor>destructor · reclutar afines no humillar · contención de munición pesada · cierre que reposiciona y recluta · pregunta-cuchillo de baja frecuencia · registro culto sin ancla nacional · científico-psicológico en ai-cognition · libros/ecosystem presentes sin nombrarse.
+
+**Lucien — regla cita-por-destino (vocería en LinkedIn):** Lucien no publica en LinkedIn (sin cuenta, por diseño). Llega solo citado por voceros (Sam / UNRLVL). El genoma del fragmento citado lo elige el **destino del redirect**: a X/Meta/TikTok → `lucien_social`; a luciensael.com o post nativo sin redirect → `lucien_editorial`.
 
 ---
 
@@ -85,83 +97,78 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 
 | Lab | URL | Estado |
 |---|---|---|
-| **Orchestrator** v4.1 | orchestrator-unrlvl.vercel.app | ✅ LIVE |
+| **Orchestrator** v4.1 | orchestrator-unrlvl.vercel.app | ✅ LIVE — front de aprobación IID |
 | **CopyLab** v9.7 | unrlvl-copy-lab.vercel.app | ✅ LIVE · async ✅ |
-| **ImageLab** v6 | image-lab-unrlvl.vercel.app | ✅ OPERACIONAL 2026-05-29 |
+| **ImageLab** v6 | image-lab-unrlvl.vercel.app | ✅ OPERACIONAL — Vertex AI (SA imagelab-vercel) |
 | **SocialLab** | social-lab-flame.vercel.app | ✅ LIVE — dual-mode pendiente confirmar |
 | **WebLab** | web-lab-unrlvl.vercel.app | ✅ LIVE |
 | **AgentLab** | agent-lab-unrlvl.vercel.app | ✅ LIVE |
 | **BlueprintLab** | unrlvl-blueprint-lab.vercel.app | ✅ LIVE |
-| **VideoLab** | unrlvl-video-lab.vercel.app | ✅ LIVE — LAUNCH PENDIENTE |
+| **VideoLab** | unrlvl-video-lab.vercel.app | ✅ LIVE — LAUNCH PENDIENTE (active=false en lab_configs) |
 | **VoiceLab** | unrlvl-voice-lab.vercel.app | ✅ LIVE |
 | **OnboardingApp** | unrlvl-onboarding-app.vercel.app | ✅ LIVE — voice_genome_gap Fase 5 pendiente |
 | **SignalLab** | — | ⏳ No deployado |
 
-**SocialLab:** Vía de publicación ÚNICA al público. Debe operar dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. Re-test publicación pendiente tras fix brand_id.
-
-**OnboardingApp:** v1.0 puebla 5 tablas pero NO captura brand_voice_genome. Spec Fase 5 lista: VOICE_GENOME_PHASE_SPEC.md. Aprendizaje 2026-06-02: permitir derivar voz social desde editorial (solo preguntar diferencia de respiración) + capturar modo cita para voceros.
-
----
-
-## Pipeline Orchestrator
-
-**Status:** ✅ END-TO-END OPERACIONAL — 2026-05-29
-**Flujo:** Claude.ai → INSERT lab_jobs → pg_net → lab-worker EF → [brand_context + CopyLab + ImageLab] → Supabase CDN → pending_approval → Sam aprueba → Meta MCP → IG + FB
-**Avg time:** 30-45s total
-
-**Fixes:**
-- ✅ RESUELTO — lab_jobs.status constraint incluye 'published'
-- ✅ RESUELTO — meta_accounts: UnrealvilleStudio insertado (2026-05-31)
-- ✅ RESUELTO — NeuroneSCF ya estaba en meta_accounts
-- ⏳ SocialLab dual-mode — re-test publicación pendiente (brand_id mismatch ya resuelto)
-- ⏳ Normalizar convención UnrealvilleStudio vs UNREALville
-- ⏳ LucienSael NO probado en pipeline en ninguna plataforma — antes del primer publish verificar/insertar fila LucienSael en meta_accounts (riesgo ~80% mismo blocker brand_id que b93627b6)
+**SocialLab:** vía de publicación al público. Debe operar dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. Re-test publicación pendiente tras fix brand_id.
+**OnboardingApp:** v1.0 puebla 5 tablas pero NO captura brand_voice_genome. Spec Fase 5 lista. Permitir derivar voz social desde editorial + capturar modo cita para voceros.
 
 ---
 
-## IID Subsystem
+## IID Subsystem — Intelligence Insights Developers
 
-**Status:** RESEARCH VIVO · EJECUCIÓN CONGELADA desde 2026-04-26 · **DESBLOQUEADO PARA FIX** (ambas voces Lucien ya existen)
+**Status:** ✅ **OPERACIONAL** · Builder+Watcher LIVE · **R4B en curso** (deadline 1ª sem julio) · UNRLVL+Lucien como conejillos de indias hasta cerrar R4B
+**Repo de contexto:** `IID/session_log.md` (fundado 2026-06-22 — documento fundacional §1-§8 + session log §9)
+**Nombre:** IID = **Intelligence Insights Developers**. UNRLVL-IID = los IID de UNRLVL. (Variantes previas — Intelligent Intelligence Dispatcher / Insight Distribution / Content Distribution — fueron deriva de reinterpretación al reducir a siglas; NO canónicas.)
 **Schema:** `intel` (NO public)
 
-| Tabla | Conteo |
-|---|---|
-| iid_agents | 14 — dual voice (default_voice + lucien_angle_affinity) |
-| iid_content_queue | ~150 tras limpieza 2026-05-31 (eran 204) |
-| iid_findings | 218 |
-| iid_research_raw | 54 |
-| iid_cron_runs | 137 — research corre diario |
-| iid_briefs | 1 |
-| iid_scheduler_config | 5 (config conexión, no schedule) |
+**Origen:** nació (abril 2026) como motor de inteligencia de marketing (investiga LLMs/plataformas/e-commerce/mercados). Doble uso: mejora interna del ecosystem + posicionamiento público de UNRLVL/Lucien como expertos ("cero desperdicio, máximo leverage"). Lucien se encajó después sobre la estructura de marketing → causó el bug off-brand. Su entrada estableció que el IID debía ser MULTIMARCA.
 
-**Edge Functions:** content-dispatcher (.limit(1) debug) · content-run-stage v22 (timeout 65s) · iid-core · iid-ecommerce · aife-filter
+**Modelo de gobierno:** la MARCA declara qué temas consume y con qué voz por destino (`intel.brand_topics`). El IID investiga temas NEUTROS. El `default_voice` del agente NO decide voz (raíz del bug off-brand). `angle` = territorio (qué/dónde); genoma = ejecución (cómo). Cadencia Interpretación A: por-marca-por-plataforma, los dominios rotan dentro de los slots, NO multiplican.
 
-**Diagnóstico 2026-05-31:** Research funciona. Ejecución congelada: failed del 26-abr son cadáveres de arquitectura vieja (timeout 30s + CopyLab externo). v22 ya reescrita pero nunca re-corrida en limpio. .limit(1) de debugging sigue puesto.
+**Agentes (`intel.iid_agents`, 29 activos):**
+- 1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 15-jun, last_run NULL — sin ejecutar aún)
+- Legacy IID-*: IMAGE, LLM*, VIDEO, VOICE, GOOGLE, LINKEDIN*, META, TIKTOK, X*, ECOMMERCE, FLORIDA, PERSONAL-BRAND*, WHOLESALE (* = default_voice lucien, legado del encaje a la fuerza)
+- UNRLVL-* en 3 tiers: Tier1 método (CONTEXT-ENGINEERING, BRAND-VOICE-SYSTEMS, AI-INDUSTRIALIZATION, CRO-PSYCHOLOGY, SIGNAL-LEARNING-LOOPS) · Tier2 deep-stack (META-DEEP-STACK, GOOGLE-DEEP-STACK, ALGORITHM-MECHANICS) · Tier3 mercado (ECOMMERCE-DEEP, SHOPIFY-STACK, MARKET-FLORIDA, DROPSHIP-REALITY, WHOLESALE-LOGISTICS-FL, CREATOR-MACRO-ECONOMY)
+- Decisión pendiente: destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien
 
-**Desbloqueo de voz 2026-06-02:** Causa raíz del off-brand (sin brand_voice_genome) RESUELTA — `lucien_editorial` (06-01) + `lucien_social` (06-02) activos. Siguiente: regenerar seeds #7/#8/#14 con la voz correcta por formato (editorial para long-form, social para corto), remover .limit(1), re-correr v22 en limpio.
+**Pipeline:**
+```
+CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings
+  → iid_content_queue (brand_id+domain) → content-dispatcher (jobid 29, cada 30min, .limit(1))
+  → content-run-stage v37 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
+  → content-watcher v1 (6 gates) → content_pieces awaiting_approval
+  → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam)
+  → approve-piece v14 (publish Meta + move-to-permanent)
+```
 
-**Cuarentena:** 37 lucien/mathematical + lucien/psychological marcados rejected/pending — NO purgar hasta validar voz nueva.
-**Seeds rescatables:** lucien/psychological #7, #8, #14 — regenerar con voz correcta (genoma ya creado).
+**Edge Functions:** content-dispatcher v22 (.limit(1), ignora scheduled_for hoy) · content-run-stage v37 · content-watcher v1 (6 gates) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex)
+
+**Arquitectura híbrida queue (2026-06-20):** la queue lleva brand_id + domain (puente, escrito por el Builder en v37); `brand_topics` es fuente única de platforms/cadence/rollout (leída por el Scheduler).
+
+**Vertex (desbloqueado 2026-06-22):** GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION en Supabase Secrets. Proyecto gen-lang-client-0491381650 (SA imagelab-vercel). Embeddings gemini-embedding-001 @768 (Matryoshka).
+
+**R4B (deadline 1ª sem julio):**
+- HECHO: 5e-5 DDL (domain+pgvector v0.8.0), 5o/5p-a/5q (v36), 5e-4 content-watcher v1 (v37), arquitectura híbrida queue, #5i genoma v1.0 Lucien, Vertex desbloqueado
+- PENDIENTE: 5e-1 Scheduler content-scheduler (especificado, desbloqueado), 5e-2/5e-3 embeddings+gates (Chat 2), parche dispatcher scheduled_for, 5b publicación real Meta, 5r rejected_reason, 5s limpieza queue, validación genoma v1.0 con IID real, rollout_started_at (1ª sem julio)
 
 ---
 
 ## Supabase — unrlvl-db `amlvyycfepwhiindxgzw`
 
 ACTIVE_HEALTHY · us-east-1
-- **public:** 80 tablas · ~95 Edge Functions
-- **intel:** iid_agents, iid_content_queue, iid_findings, iid_research_raw, iid_cron_runs, iid_briefs, iid_scheduler_config
-- **content:** orchestrator_jobs · (copylab_jobs → lab_jobs migration pendiente)
+- **public:** 80 tablas · ~95 Edge Functions · nuevas: nscf_fulfillment_log, nscf_fulfillment_log_archive, nscf_integrity_log
+- **intel (IID):** iid_agents (29), brand_topics, iid_content_queue (+ domain), iid_findings, iid_research_raw, iid_cron_runs, iid_briefs, iid_scheduler_config, watcher_log
+- **content:** orchestrator_jobs (+ domain), content_pieces (+ domain), content_calendar, content_performance, brand_context_cache, brand_voices · pgvector v0.8.0 instalado
 - **shopify:** stores, audit_runs, fix_log + otras
 
 **brand_voice_genome:**
-- LucienSael / `lucien_editorial` v0.5 (919e3707) — blog/ensayo/long-form — active
-- LucienSael / `lucien_social` v0.5 (5b571b08) — Meta FB/IG + TikTok texto + X, short reactive — active (2026-06-02)
-- SamPublisher / `sam_personal` v0.5 — Meta(FB) + LinkedIn — personal public voice + vocero Lucien/UNRLVL — active (2026-06-02)
+- LucienSael / `lucien_editorial` **v1.0** (919e3707) — blog/ensayo/long-form — active
+- LucienSael / `lucien_social` **v1.0** (5b571b08) — Meta FB/IG + TikTok texto + X, golpe ≤280 — active
+- SamPublisher / `sam_personal` v0.5 — Meta(FB) + LinkedIn — active
 - UnrealvilleStudio / `unrlvl_default` v1.0 — Defiant precision — active
 
 **meta_accounts:**
-- `UNREALville` ✅ completo (page + ig + ad_account + token)
-- `UnrealvilleStudio` ✅ añadida 2026-05-31 (mapeo a UNREALville)
+- `UnrealvilleStudio` ✅ completo (page + ig + ad_account + token) — UNREALville eliminado (dup) 2026-06-15
 - `LucienSael` ⏳ verificar antes del primer publish por pipeline (riesgo blocker brand_id)
 - `NeuroneSCF` ✅ token OK (verificado 2026-05-31)
 
@@ -171,22 +178,22 @@ ACTIVE_HEALTHY · us-east-1
 
 | Agente | Canal | Estado |
 |---|---|---|
-| **Social Media Agent** | interno | ✅ OPERATIONAL |
+| **Social Media Agent** | interno (EF Supabase, sin repo) | ✅ OPERATIONAL |
 | **DDMV Assistant** | WhatsApp Twilio | ⚠️ FIX NEEDED |
 | **ForumPH Speaks** | web | ✅ OPERATIONAL |
-| **ForumPH Document Factory** | web | ✅ OPERATIONAL |
+| **ForumPH Document Factory** | web | ✅ OPERATIONAL — fphs-formalize sprint pendiente |
 
-**ForumPH Document Factory — Next Sprint:** fphs-formalize quality sprint — replicar calidad acta manual (98% Ivette). Referencia: ACTA_No1-2026_PH_LUXOR_300.docx.
+**ForumPH Document Factory — Next Sprint:** fphs-formalize quality sprint — replicar calidad acta manual (98% Ivette). Referencia: ACTA_No1-2026_PH_LUXOR_300.docx. Pendientes: 3 votaciones QA + 13 errores primera persona + imágenes acta.
 
 ---
 
-## AYRA 🔴 DEADLINE 5 JUN
+## AYRA 🔴 Sprint 0 VENCIDO (5 Jun — reprogramar)
 
 Milestone v1.0: 31 Agosto 2026
 
 | Sprint | Fecha | Estado |
 |---|---|---|
-| **Sprint 0** 🔴 | ANTES 5 Jun | PENDIENTE |
+| **Sprint 0** 🔴 | ANTES 5 Jun | VENCIDO — reprogramar |
 | Sprint 1 | Jun 5-15 | Planned |
 | Sprint 2 | Jun 16-30 | Planned |
 | Sprint 3 | Jul 1-14 | Planned |
@@ -197,9 +204,8 @@ Milestone v1.0: 31 Agosto 2026
 
 ## Professor
 
-OPERATIONAL v1.0
-Proxy: `https://unrlvl-context.vercel.app/api/professor` ✅ LIVE
-Learnings: 65 total · 42 aprobados · 11 pending approval (escala relevance_score 1–5)
+OPERATIONAL v1.0 · Proxy `https://unrlvl-context.vercel.app/api/professor` ✅ LIVE
+Learnings: base previa + 18 (19-jun, #5i + Lote A) + 15 (20-jun, R4B) — todos aprobados. Escala relevance_score 1–5.
 
 ---
 
@@ -208,13 +214,15 @@ Learnings: 65 total · 42 aprobados · 11 pending approval (escala relevance_sco
 | ID | Nombre | URL | Estado |
 |---|---|---|---|
 | INFRA-CTX | Context System | unrlvl-context.vercel.app | ✅ LIVE |
-| INFRA-META-MCP | Meta MCP | unrlvl-meta-mcp.vercel.app | ✅ ACTIVE — UNREALville + NSCF ✅ · fb_get_page_insights deprecado ⚠️ |
+| INFRA-META-MCP | Meta MCP | unrlvl-meta-mcp.vercel.app | ✅ ACTIVE — UNRLVL + NSCF ✅ · fb_get_page_insights deprecado ⚠️ |
 | INFRA-SHOPIFY-MCP | Shopify MCP | unrlvl-shopify-mcp.vercel.app | ✅ ACTIVE · write_orders ✅ |
 | INFRA-NSCF-DISPATCH | NSCF Dispatch Portal | dispatch.neuronescflorida.com/portal | ⏳ PENDIENTE — Vercel + DNS |
 | INFRA-SB-MCP | Supabase MCP | unrlvl-supabase-mcp.vercel.app | ✅ ACTIVE v1.2.1 |
 | INFRA-WEB | unrealvillestudio.com | unrealvillestudio.com | ✅ LIVE EN+ES |
 
-**Staging workflow:** ✅ ESTABLECIDO 2026-05-30 — 15 repos, 13 con branch protection. PR template + WORKFLOW.md + CLAUDE.md deployados.
+**Staging workflow:** ✅ ESTABLECIDO 2026-05-30 — 15 repos, 13 con branch protection (2 bloqueados: repos privados GitHub Free).
+
+**⚠️ ecosystem_graph.json:** PENDIENTE `ecosystem audit` — datos del 05-26 (dice IID frozen/14 agentes/v22, ya falso).
 
 ---
 
@@ -222,9 +230,10 @@ Learnings: 65 total · 42 aprobados · 11 pending approval (escala relevance_sco
 
 Ver [AGENDA.md](AGENDA.md) para prioridades completas.
 
-Top 3 inmediatos:
-1. 🟢 Deploy luciensael.com (repo+Vercel+DNS) + UNRLVL Field Notes (push CoreProject)
-2. 🔴 IID FIX — ambas voces Lucien ya existen; regenerar seeds #7/#8/#14 por formato → remover .limit(1) → re-correr v22 en limpio
-3. 🔴 Voice Genome Fase 5 en OnboardingApp (spec lista) — incluir derivación social-desde-editorial + modo cita voceros
+Top inmediatos (R4B, deadline 1ª sem julio):
+1. 🔴 5e-2/5e-3 embeddings pgvector + gates bloqueantes (Chat 2 — Vertex ya desbloqueado)
+2. 🔴 Scheduler content-scheduler (5e-1, especificado, desbloqueado — write ya en v37) + parche dispatcher
+3. 🔴 IID publicación real Meta (5b, chat dedicado) — valida genoma v1.0 + gatilla move-to-permanent
+4. 🟢 Deploy luciensael.com (repo+Vercel+DNS) + UNRLVL Field Notes
 
-✅ Completado 2026-06-02: Genoma de Sam — sam_personal v0.5 activo. Meta(FB) + LinkedIn. Modo vocería codificado.
+✅ Completado 19-22 jun: genoma v1.0 Lucien (muestreo) · R4B Chat 2 (v37, content-watcher v1) · arquitectura híbrida queue · Vertex desbloqueado · repo IID fundado · nombre canónico fijado.
