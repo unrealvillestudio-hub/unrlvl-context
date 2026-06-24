@@ -5,6 +5,27 @@ _Actualizada: 2026-06-20 · v2026-06-20-v1 (CONSOLIDADO 3 frentes: #5i genoma v1
 
 ## 🔴🔴 FOCO INMEDIATO — R4B (cierre, deadline 1ª sem julio)
 
+# BLOQUE PARA AGENDA — insertar al tope del FOCO INMEDIATO
+
+## 🔴🔴🔴 FOCO — IID FASE 3: RECONEXIÓN DEL FLUJO (próximo chat dedicado)
+
+**Estado: IID limpio y DETENIDO tras tabla rasa (2026-06-23).** Modelo viejo eliminado. Modelo nuevo intacto pero desconectado del disparo. Handoff completo sin gaps: `IID/FASE_3_HANDOFF.md`.
+
+| # | Fase 3 — construir | Estado |
+|---|---|---|
+| F3.1 | Disparo de los 14 agentes UNRLVL-* (cron/orquestador). Research que escribe brand_id+domain mapeables a brand_topics | 🔴 por construir |
+| F3.2 | Research/process nuevo puebla el puente (brand_id+domain) desde el ORIGEN, no solo en finalizePiece | 🔴 por construir |
+| F3.3 | Re-incorporar contrato de scoring (content_score>=85 → autopublish) al modelo nuevo, condicionado a brand_topics.auto_approve (DOBLE LLAVE) | 🔴 DEUDA EXPLÍCITA — conservar |
+| F3.4 | Reactivar dispatcher (jobid 29) + parche scheduled_for. NO tocar .limit(1) hasta publicación real | 🔴 tras F3.1-2 |
+| F3.5 | Scheduler content-scheduler (5e-1) — depende de F3.1-2 (necesita filas mapeables) | 🔴 desbloqueado, depende |
+| F3.6 | PRIMER RUN validación genoma v1.0 Lucien con IID real (el objetivo original) | 🟢 tras F3.1-4 |
+
+**Contrato de scoring (NO PERDER):** content_score>=85 → autopublish vive en iid-process. El modelo nuevo lo re-incorpora con doble llave (score Y auto_approve por marca). Hoy auto_approve=false en todas = nada se auto-publica sin Sam.
+
+**Drift a corregir cuando se toque:** content-dispatcher es v26 (doc decía v22), content-run-stage es v41 (doc decía v37). SocialLab usa modelo retirado claude-sonnet-4-20250514 (ítem 42).
+
+**5s limpieza queue: ✅ HECHO** (tabla rasa). **5e-2/5e-3:** ahora en chat principal (no Chat 2), Vertex ya desbloqueado.
+
 ### Bloqueos que requieren ACCIÓN DE SAM
 | # | Acción de Sam | Desbloquea |
 |---|---|---|
