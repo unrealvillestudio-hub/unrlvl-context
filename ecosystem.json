@@ -1,19 +1,18 @@
 {
   "_meta": {
-  "version": "2026-06-22-v1",
+  "version": "2026-06-24-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-06-20-v1",
+  "previous": "2026-06-22-v1",
   "last_session": {
-    "date": "2026-06-22",
-    "conducted_by": "Claude Opus 4.8 (Chat 1) + MCP (Supabase) + Chat 2 + CC",
-    "status": "IID: genoma v1.0 Lucien (muestreo) + R4B parcial (content-run-stage v37, content-watcher v1, arquitectura híbrida queue) + Vertex desbloqueado + repo IID/ fundado + nombre canónico fijado (Intelligence Insights Developers).",
+    "date": "2026-06-24",
+    "conducted_by": "Claude Opus 4.8 + CC + MCP (Vercel/Supabase)",
+    "status": "ImageLab: migración P0 Imagen→Gemini CERRADA (api/execute.ts → gemini-2.5-flash-image, PR #2 6d04556 producción verificada) + BGRemover (ex-ProductShots) MERGEADO a main (merge commit a1b2a1a).",
     "key_achievements": [
-      "Nombre canónico IID = Intelligence Insights Developers (variantes previas eran deriva de reinterpretación al reducir a siglas). UNRLVL-IID = los IID de UNRLVL.",
-      "Genoma v1.0 Lucien destilado por muestreo (8/10 piezas): core_move reactivo/léxico → generativo/constructor; 8 campos nuevos; lucien_editorial + lucien_social v0.5→v1.0.",
-      "R4B Chat 2: content-run-stage v35→v37, content-watcher v1 (6 gates extraídos), DDL domain + pgvector v0.8.0. Arquitectura híbrida queue (Chat 1).",
-      "Vertex desbloqueado: GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION en Supabase Secrets → 5e-2/5e-3 listos.",
-      "Repo IID/ fundado en unrlvl-context (session_log.md de 0 a 100).",
-      "29 agentes IID activos (1 core + 13 legacy corriendo + 14 UNRLVL-* sin ejecutar aún)."
+      "Migración P0 Vertex Imagen→gemini-2.5-flash-image: todos los modelos Imagen apagados 24-jun. api/execute.ts reescrito (:predict→:generateContent, endpoint+body+parsing+multimodal distintos, no string-swap). PR #2 MERGED (6d04556), producción verificada.",
+      "Drift cerrado: execute.ts es el ÚNICO punto de generación de imagen vivo; lab-worker + content-run-stage delegan vía lab_configs.imagelab → /api/execute.",
+      "BGRemover (ex-ProductShots): composición de catálogo DESCARTADA (límite inherente luz-coherencia + etiqueta). Recortado a herramienta de remoción de fondo (remove.bg, 3 pasos, cap 2400px). MERGEADO a main (a1b2a1a). Nueva env var REMOVEBG_API_KEY en Vercel image-lab.",
+      "Bug remove.bg resuelto: 400 'error reading the image' (PNG no-decodable) + 413 (>4.5MB serverless Vercel) → normalización cliente a JPEG baseline + cap 2400px antes de subir.",
+      "Verificación (c) end-to-end IID DIFERIDA: el IID está detenido tras tabla rasa (23-jun); no hay corrida natural que observar hasta reconexión Fase 3."
     ]
   }
 },
@@ -268,10 +267,13 @@
       "repo": "ImageLab",
       "framework": "vite",
       "ai": "vertex-ai",
-      "status": "✅ OPERACIONAL — 2026-05-29",
-      "version": "v6",
-      "last_deploy": "2026-05-29",
-      "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb"
+      "ai_model": "gemini-2.5-flash-image (vía :generateContent — migrado 2026-06-24 por apagado de Vertex Imagen 3.0; reemplaza imagen-3.0-fast-generate-001 + imagen-3.0-capability-001)",
+      "status": "✅ OPERACIONAL — migración Imagen→Gemini 2026-06-24 (PR #2, 6d04556, producción verificada)",
+      "version": "v7",
+      "last_deploy": "2026-06-24",
+      "vercel_id": "prj_0BA7MvfSUHLTXXKvOdSckGNXoTAb",
+      "feature_bgremover": "BGRemover (ex-ProductShots, composición descartada por límite luz-coherencia) — herramienta de remoción de fondo vía remove.bg, 3 pasos (subir 1-7 → quitar fondo preview gratis/alta-res 1 crédito → descargar PNG/WEBP individual+zip). Cutout cap 2400px lado mayor (límite duro 4.5MB funciones serverless Vercel). MERGEADO a main 2026-06-24 (merge commit a1b2a1a).",
+      "secrets": "REMOVEBG_API_KEY en Vercel proyecto image-lab (solo server-side, para BGRemover). Vertex: GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION."
     },
     "sociallab": {
       "url": "social-lab-flame.vercel.app",
@@ -532,7 +534,7 @@
   },
   "labs_wiring": {
     "copylab": "unrlvl-copy-lab.vercel.app /api/execute — genera copy",
-    "imagelab": "image-lab-unrlvl.vercel.app /api/execute — Vertex AI Imagen 3.0 (fast-generate-001 + capability-001) vía Service Account imagelab-vercel@gen-lang-client-0491381650. AQUÍ vive la credencial Vertex.",
+    "imagelab": "image-lab-unrlvl.vercel.app /api/execute — Vertex AI gemini-2.5-flash-image vía :generateContent (migrado 24-jun-2026 por apagado de Imagen) vía Service Account imagelab-vercel@gen-lang-client-0491381650. AQUÍ vive la credencial Vertex.",
     "sociallab": "social-lab-flame.vercel.app /api/execute + /api/publish — post por plataforma",
     "videolab": "unrlvl-video-lab.vercel.app — active=FALSE (pendiente lanzar, Kling.ai)",
     "orchestrator": "orchestrator-unrlvl.vercel.app — front de aprobación humana",

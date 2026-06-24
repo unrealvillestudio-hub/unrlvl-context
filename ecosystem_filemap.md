@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-22-v1 · No editar manualmente · Sección IID actualizada al estado vivo 2026-06-22; resto preservado de la versión anterior_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior_
 
 ---
 
@@ -72,7 +72,7 @@ FLUJO COMPLETO:
     → content-run-stage v37:
          ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
          ├─ AIFE filter
-         ├─ ImageLab → Vertex → Storage unrlvl-media (CDN)
+         ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
          ├─ SocialLab (post por plataforma)
          └─ callWatcher → content-watcher v1 (6 gates)
     → content_pieces (awaiting_approval) → email content-approval@unrealvillestudio.com
@@ -178,7 +178,7 @@ Fix: Fase 5 — spec lista en VOICE_GENOME_PHASE_SPEC.md
 |---|---|---|
 | Orchestrator | orchestrator-unrlvl.vercel.app | ✅ v4.1 |
 | CopyLab | unrlvl-copy-lab.vercel.app | ✅ v9.7 |
-| ImageLab | image-lab-unrlvl.vercel.app | ✅ (Vertex SA) |
+| ImageLab | image-lab-unrlvl.vercel.app | ✅ v7 — gemini-2.5-flash-image (migrado 24-jun) + BGRemover |
 | SocialLab | social-lab-flame.vercel.app | ✅ live |
 | OnboardingApp | unrlvl-onboarding-app.vercel.app | ✅ live |
 | unrlvl-context | unrlvl-context.vercel.app | ✅ LIVE |
@@ -246,6 +246,12 @@ stores · audit_runs · fix_log + otras
 │
 ├── infrastructure/
 │   ├── meta-mcp/ · shopify-mcp/ (futuro) · supabase-mcp/ (futuro)
+│
+├── labs/                             ← session logs por lab
+│   ├── ImageLab/                     ← NUEVO 2026-06-24 — migración Imagen→Gemini v7 + BGRemover
+│   │   └── session_log.md
+│   └── OnboardingApp/
+│       └── session_log.md            ← v1.0 + Voice Genome gap (Fase 5)
 │
 ├── brands/
 │   ├── LucienSael/  (BP_Brand_Person_id.md · session_log.md — genoma v1.0)

@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-06-20 · v2026-06-20-v1 (CONSOLIDADO 3 frentes: #5i genoma v1.0 CERRADO · R4B Chat 2 parcial · arquitectura híbrida queue resuelta · Scheduler especificado-bloqueado)_
+_Actualizada: 2026-06-24 · v2026-06-24-v1 (ImageLab migración P0 Imagen→Gemini CERRADA + BGRemover mergeado · base previa v2026-06-20-v1: #5i genoma v1.0 · R4B Chat 2 parcial · arquitectura híbrida queue · Scheduler especificado-bloqueado)_
 
 ---
 
@@ -25,6 +25,8 @@ _Actualizada: 2026-06-20 · v2026-06-20-v1 (CONSOLIDADO 3 frentes: #5i genoma v1
 **Drift a corregir cuando se toque:** content-dispatcher es v26 (doc decía v22), content-run-stage es v41 (doc decía v37). SocialLab usa modelo retirado claude-sonnet-4-20250514 (ítem 42).
 
 **5s limpieza queue: ✅ HECHO** (tabla rasa). **5e-2/5e-3:** ahora en chat principal (no Chat 2), Vertex ya desbloqueado.
+
+**Verificación (c) migración Gemini en ImageLab — DIFERIDA a Fase 3:** cuando el IID se reconecte (hoy DETENIDO tras tabla rasa 23-jun), confirmar en el PRIMER run que la pieza llega con `assets.image.url` poblada en `content.content_pieces` (valida la cadena de imagen sobre gemini-2.5-flash-image en producción IID). **No observable hasta la reconexión — NO hay cron corriendo que observar; la verificación se hace en el primer run natural de Fase 3.**
 
 ### Bloqueos que requieren ACCIÓN DE SAM
 | # | Acción de Sam | Desbloquea |
@@ -93,7 +95,7 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 | 21 | Klaviyo flows NSCF | NeuroneSCF |
 | 40 | Klaviyo key hardcodeada | NeuroneSCF |
 | 41 | Verificar keys Resend | ForumPHs/UNRLVL |
-| 42 | model ID hardcodeado + 13 EFs one-off | UNRLVL/NeuroneSCF |
+| 42 | model ID hardcodeado + 13 EFs one-off · content-run-stage loguea modelId 'imagen-3.0-fast-generate-001' en telemetría (logGen ~L742/752/760) → misatribuye modelo/costo post-migración Gemini (solo string contable, no rompe) | UNRLVL/NeuroneSCF |
 | 22 | Genoma UNRLVL social | UNRLVL |
 | 24 | Email marketing FPHs (cada marca su key) | ForumPHs |
 | 25 | ForumPHs creación cuentas | ForumPHs |
@@ -117,7 +119,13 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 
 ---
 
+## 🟠 FOCO PROPIO — CLAUDE.md (sesión dedicada · Sam la retoma pronto)
+Consolida y eleva #35 (CLAUDE.md repos restantes) + #39 (.github/CLAUDE.md repetido). **SESIÓN DEDICADA CLAUDE.md** — resolver el duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE.md` (608b), definir el canónico, cerrar la gobernanza CC a medias. Es **ley activa de CC** (no historia pasiva) → cuesta en cada sesión mientras esté incompleta. Trabajo propio con foco, NO dentro de un sprint de producto.
+
+---
+
 ## ✅ Resuelto recientemente
+- ✅ ImageLab migración P0 Imagen→Gemini (24-jun). Todos los Vertex Imagen apagados 24-jun. api/execute.ts → gemini-2.5-flash-image vía :generateContent (endpoint+body+parsing+multimodal distintos, no string-swap). PR #2 merged (6d04556), producción verificada. Drift cerrado: execute.ts único punto imagen vivo. + BGRemover (ex-ProductShots, composición descartada por límite luz-coherencia) MERGEADO a main (merge commit a1b2a1a) — herramienta de remoción de fondo remove.bg, 3 pasos, cap 2400px. — 2026-06-24
 - ✅ R4B Chat 2 — DDL + calidad output + extracción Watcher (20-jun). DDL 5e-5 (domain + pgvector v0.8.0 + índice + GRANT). content-run-stage v35→v36 (5o/5p-a/5q + domain-write) → v37 (5e-4 callWatcher fail-closed + domain-write queue). content-watcher v1 (6 gates, verificado aislado). Decisiones D-A/B/C + ventanas ET + jitter ±45min. Bloqueos: 5e-2 (Vertex creds) → 5e-3 espera. — 2026-06-20
 - ✅ Arquitectura híbrida queue + #5i frontera (20-jun, Chat 1). queue=brand_id+domain (puente), brand_topics=fuente única. DDL domain en iid_content_queue. Scheduler especificado, write ya en v37. protocols/R4B_RESPUESTA_CHAT1.md. — 2026-06-20
 - ✅ Cadencia Lucien + UNRLVL poblada (19-jun). Interpretación A. Lucien blog 1/1/2 · x/fb/ig 2/3/4 · tiktok 1/2/3. 9/9 filas fase 1 con cadence. — 2026-06-19
@@ -134,6 +142,8 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 IID — estado 2026-06-20: content-dispatcher v22 (.limit(1) intacto, IGNORA scheduled_for) → content-run-stage v37 (Builder+aife+imagelab→CDN+sociallab+callWatcher+domain-write jobs/pieces/queue) → content-watcher v1 (6 gates) → approve-piece v14 (publish Meta + move-to-permanent + reject SIN rejected_reason → #5r). Modelo claude-sonnet-4-6. Imagen unrlvl-media CDN. pgvector v0.8.0. Pendiente: Vertex creds, Scheduler (desbloqueable), parche dispatcher, publicación real (5b).
 
 Stack labs (lab_configs 20-jun): copylab=unrlvl-copy-lab · imagelab=image-lab-unrlvl (AQUÍ vive credencial Vertex) · sociallab=social-lab-flame · videolab=unrlvl-video-lab (active=false). lab-worker v23 llama por HTTP vía lab_configs; NO tiene creds Vertex (solo SUPABASE/ANTHROPIC).
+
+ImageLab (24-jun): v7 sobre gemini-2.5-flash-image vía :generateContent (Vertex Imagen apagado 24-jun; execute.ts único punto de imagen vivo). BGRemover (rama clever-bell-293d56) MERGEADO a main (merge commit a1b2a1a); removeBackground.ts (root+src) confirmado AUSENTE en origin/main. Nueva env REMOVEBG_API_KEY en Vercel image-lab. Cabos operativos no-repo: carpeta física del worktree CC bloqueada por Windows hasta cierre de sesión; main local de Sam aún en 198be69 → pull/GitHub Desktop para traer la feature.
 
 Genoma Lucien v1.0 (19-jun): 2 voces (editorial+social, NO 3). core_move generativo/constructor. Firmas: ❯ Unrealville Studio / --- LucienSael: Builder, Thinker, Operator. Patrón en Professor (13 rasgos): generativo no reactivo, figura concreta, filo material/presente sin salida digna, comprime en imagen-sentencia, garbo no crudeza, constructor>destructor, reclutar afines, contención munición pesada, cierre reposiciona+recluta, pregunta-cuchillo baja frecuencia, registro culto sin ancla nacional, científico-psicológico en ai-cognition, libros/ecosystem sin nombrar.
 

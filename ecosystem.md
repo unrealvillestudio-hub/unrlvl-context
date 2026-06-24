@@ -1,5 +1,5 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-06-22-v1 · No editar manualmente · Sección IID + genomas + NSCF actualizadas al estado vivo 2026-06-22_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22_
 
 ---
 
@@ -99,7 +99,7 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 |---|---|---|
 | **Orchestrator** v4.1 | orchestrator-unrlvl.vercel.app | ✅ LIVE — front de aprobación IID |
 | **CopyLab** v9.7 | unrlvl-copy-lab.vercel.app | ✅ LIVE · async ✅ |
-| **ImageLab** v6 | image-lab-unrlvl.vercel.app | ✅ OPERACIONAL — Vertex AI (SA imagelab-vercel) |
+| **ImageLab** v7 | image-lab-unrlvl.vercel.app | ✅ OPERACIONAL — gemini-2.5-flash-image (Vertex, migrado 24-jun) + BGRemover live |
 | **SocialLab** | social-lab-flame.vercel.app | ✅ LIVE — dual-mode pendiente confirmar |
 | **WebLab** | web-lab-unrlvl.vercel.app | ✅ LIVE |
 | **AgentLab** | agent-lab-unrlvl.vercel.app | ✅ LIVE |
@@ -109,6 +109,7 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 | **OnboardingApp** | unrlvl-onboarding-app.vercel.app | ✅ LIVE — voice_genome_gap Fase 5 pendiente |
 | **SignalLab** | — | ⏳ No deployado |
 
+**ImageLab v7 (24-jun):** migrado de Vertex Imagen 3.0 (apagado 24-jun) a **gemini-2.5-flash-image** vía `:generateContent` — único punto de generación de imagen vivo (lab-worker + content-run-stage delegan por `/api/execute`). Suma **BGRemover** (ex-ProductShots; composición de catálogo descartada por límite luz-coherencia): herramienta de remoción de fondo vía remove.bg, 3 pasos, cutout cap 2400px lado mayor. Nueva env `REMOVEBG_API_KEY`.
 **SocialLab:** vía de publicación al público. Debe operar dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. Re-test publicación pendiente tras fix brand_id.
 **OnboardingApp:** v1.0 puebla 5 tablas pero NO captura brand_voice_genome. Spec Fase 5 lista. Permitir derivar voz social desde editorial + capturar modo cita para voceros.
 
