@@ -390,8 +390,8 @@
       "brand_voice_genome": {
         "_note": "Tabla de voces de marca. Una marca puede tener varias voces hermanas (distinto voice_id) que comparten temperamento y difieren en respiración. Unique (brand_id, voice_id, version).",
         "rows_LucienSael": [
-          "lucien_editorial v0.5 (919e3707-d0be-41df-9cc1-ad145915991f) — blog/ensayo/long-form — active",
-          "lucien_social v0.5 (5b571b08-61bc-45f9-966a-3121eef126f0) — Meta FB/IG + TikTok texto + X, short reactive — active (creado 2026-06-02)"
+          "lucien_editorial v1.0 (919e3707-d0be-41df-9cc1-ad145915991f) — blog/ensayo/long-form — active (core_move generativo/constructor desde 2026-06-19)",
+          "lucien_social v1.0 (5b571b08-61bc-45f9-966a-3121eef126f0) — Meta FB/IG + TikTok texto + X, golpe ≤280 — active"
         ],
         "rows_UnrealvilleStudio": [
           "unrlvl_default v1.0 — Defiant precision"
