@@ -165,8 +165,8 @@ En el diagnóstico de junio se descubrieron **tres PromptBuilders distintos** co
 **Schema `public.*` relevante:** brand_voice_genome (genomas de voz por marca), lab_configs, lab_jobs.
 
 **EFs del pipeline (versiones al 2026-06-22):**
-- content-dispatcher **v22** — cron cada 30min, tiene el `.limit(1)` (NO tocar hasta publicación real). HOY ignora `scheduled_for`.
-- content-run-stage **v37** — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).
+- content-dispatcher **v26** (verificado 2026-06-24) — cron cada 30min, tiene el `.limit(1)` (NO tocar hasta publicación real). HOY ignora `scheduled_for`.
+- content-run-stage **v41** (verificado 2026-06-24) — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).
 - content-watcher **v1** — los 6 gates extraídos a EF propia (5e-4).
 - approve-piece **v14** — aprobación: publish Meta + move-to-permanent.
 - aife-filter — control de calidad/seguridad.
@@ -238,6 +238,60 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 ---
 
 ## §9 — SESSION LOG (novedad al tope)
+
+### 2026-06-24 — Investigación profunda del flujo de calidad + matriz de estímulos (artefacto × objetivo) · Sam + Claude (Chat 1) + CC (4 informes read-only)
+
+**Objetivo de la sesión:** antes de diseñar el eje B (mapeo marca↔tema), mapear a fondo cómo se evalúa la calidad del output en TODO el flujo del IID, no solo el scoring. Cuatro informes de CC (read-only estricto) + revisión de DB/graph por Claude.
+
+**HALLAZGO MAYOR — el "calificador" que Sam recordaba son DOS cosas distintas que el sistema fundía:**
+- El **content_score (el "85")** es una **autonota del LLM** (claude-sonnet-4-6) en el prompt STRUCTURE_SYSTEM de iid-process. Cada sub-criterio tiene una sola cláusula de una línea (`c1_novelty (0-25): how new or emerging`). NO hay rúbrica de adjudicación fina, NO hay validaciones determinísticas. iid-core solo SUMA los sub-scores (`?? 0`), sin clamping ni validación.
+- El **calificador real con validaciones = content-watcher (6 gates)**. Es el único juez de calidad con dientes. Mixto: orquestación determinística (umbrales 0.80, ventanas 14d/21d, blocking flags) + juicio LLM por gate. Opera sobre el TEXTO generado, no sobre el número.
+
+**Regla del autopublish (corregida vs memoria del equipo):** NO es solo `content_score>=85`. Es DOBLE: `content_score >= 85 && urgency === "breaking"`. La urgency es un enum que rellena el LLM SIN criterio definido (no hay clasificador de "breaking"). El 85+breaking solo salta el EMAIL a Sam; NO salta el Watcher. Toda pieza pasa los 6 gates igual. → El verdadero juez de "suficientemente bueno" es el Watcher, no el 85.
+
+**HALLAZGO DE GOBERNANZA (primer orden):** NO existe fuente versionada de NINGUNA EF del IID en toda la org (29 repos escaneados, todas las ramas). supabase/functions/ solo existe para nscf-* y fphs-formalize. Las EF del IID (iid-core, iid-process, content-dispatcher, content-run-stage, content-watcher, aife-filter) viven SOLO en el deploy de Supabase. Tell: las versionadas conservan entrypoint .../source/supabase/functions/<slug>/index.ts; las del IID tienen .../source/index.ts plano (deploy directo vía MCP/CLI). Esto explica el drift de versiones. ES DEUDA: el corazón del IID no tiene fuente de verdad recuperable.
+
+**El psycho/tension layer NO toca el texto IID hoy (doble bypass):**
+- Hay DOS sistemas de generación: el Builder interno `buildFromGenome` (que usa el IID) y el CopyLab externo (unrlvl-copy-lab.vercel.app). El IID tiene CopyLab configurado en lab_configs pero lo SALTEA — genera in-process con buildFromGenome.
+- Todo el aparato psico/tensión rico vive en el CopyLab externo: `psycho_presets` (10, multimodal: injection_copy/visual/video), `aggro_presets` (5 niveles WHISPER→FULL_AGGRO), `tension_architectures` (curvas T1-T10). El Builder interno NO lee ninguna.
+- El `psycho_preset` (etiqueta de iid-core) solo viaja a ImageLab y SOLO modula imagen — y ahí está DOBLEMENTE roto: (1) mismatch de ID (iid-core emite `curiosity_gap`, la tabla tiene `PSY-CURIOSITY`); (2) mismatch de columna (ImageLab línea 238 lee `visual_injection`, la columna real es `injection_visual`). → ni siquiera la imagen recibe psycho.
+- CopyLab externo está en modelo RETIRADO `claude-sonnet-4-20250514` (fallaría si se revive).
+
+**AIFE — el graph MENTÍA:** aife-filter SOLO reescribe (borra huella de IA, estilístico). NO filtra off-brand, NO juzga, NO toca DB (no tiene createClient — verificado por imports). La nota del ecosystem_graph ("filtra off-brand content") es FALSA. El off-brand filtering real vive en: (a) genoma pre-generación (lexicon_forbidden, prohibited_registers como listas negras) y (b) Watcher post-generación (gates evidence + hard_rules).
+
+**Huecos de antibaneo detectados:** imagen y adaptaciones sociales (SocialLab) NO pasan por ningún gate de calidad. El Watcher solo juzga el copy editorial (aife_filtered). Orden subóptimo: el Watcher (único validador) corre AL FINAL, después de generar imagen (ya en CDN-temp) y encolar scheduled_posts (quedan huérfanas en pending_oauth si REJECT).
+
+**DESENREDO CENTRAL — la matriz de estímulos (artefacto × objetivo):** Sam identificó que el sistema mezcla DOS ejes independientes que nadie había separado: (1) ARTEFACTO (texto/imagen/video) × (2) OBJETIVO (vender-ad / comunidad-orgánico / autoridad-IID). Los estímulos de una imagen para un artículo ≠ los de un ad ≠ los de un orgánico de comunidad. Claude leyó las 10 filas de psycho_presets y las clasificó en FAMILIAS por objetivo:
+- CONVERSIÓN (ads): PSY-SCARCITY, PSY-URGENCY, PSY-FOMO, PSY-ASPIRATION
+- COMUNIDAD (orgánico): PSY-BELONGING, PSY-IDENTITY
+- AUTORIDAD (IID/artículo): PSY-AUTHORITY, PSY-TRUST
+- PUENTE (varios objetivos): PSY-CURIOSITY, PSY-SOCIAL-PROOF
+→ La pregunta "¿aplica psycho al IID?" era equivocada. La correcta: "¿qué FAMILIA aplica a este objetivo?". El IID (autoridad) usa AUTHORITY/TRUST, NUNCA conversión.
+
+**REGLA RECTORA PROPUESTA (para el modelo nuevo / eje B):** el perfil de estímulo NO lo decide el lab ni el stage — lo decide la combinación (artefacto × objetivo) declarada en brand_topics. Extender brand_topics para declarar también "objetivo por destino" (hoy solo declara voz por destino). Principio madre del IID extendido: "la marca declara qué consume, con qué voz Y QUÉ OBJETIVO de estímulo por destino".
+
+**Alcance de labs (fijado):** WebLab queda FUERA de esta matriz — genera landings/webs/e-commerce/themes (WordPress/Shopify) vía sync (UI), trabajo humano. VideoLab SÍ entra como tercer artefacto (hoy dormida, pronto activa para posts/ads dual async/sync, misma lógica que ImageLab: estímulo según objetivo del output que acompaña).
+
+**Estado de la matriz:** construida y validada conceptualmente por Sam (100% de acuerdo). Queda fijar las celdas "a veces/según" (psycho-puente, psycho-comunidad en ads) celda por celda en la sesión del eje B. La matriz NO se implementa aún — es el corazón del eje B, no un preámbulo. Implementarla bien = reconectar Fase 3.
+
+**Decisión de arquitectura pendiente (eje B):** para llevar psycho/tensión al texto IID — Ruta A (re-rutear a CopyLab externo) vs Ruta B (portar el motor a buildFromGenome con selección DETERMINÍSTICA por brand_topics, no el pickRandom actual de CopyLab). Claude recomienda Ruta B (determinística encaja con marca↔tema/antibaneo). Tres arreglos de higiene previos: unificar IDs psycho (iid-core emita PSY-*), corregir ImageLab línea 238, sacar CopyLab del modelo retirado.
+
+**Versiones EF verificadas vivas:** iid-core v21 · iid-process v19 · content-dispatcher v26 · content-run-stage v41.
+
+**Método/roles confirmados:** CC ejecuta (caja de herramientas completa, lee fuente real, transcribe literal, read-only estricto); Claude diseña (la mente). Claude revisa primero lo barato (DB, graph) para afilar los briefings de CC.
+
+**Próximo:** Professor + Actualiza (esta entrega) → sesión de diseño del eje B (validar matriz celda por celda + decidir Ruta A/B + releer ANTISPAM_CONTRACT) → instrucciones a CC sin ambigüedad → reconexión Fase 3.
+
+**Deuda técnica / gobernanza registrada (para tracking):**
+1. NO existe fuente versionada de las EF del IID (solo deploy Supabase) — deuda de primer orden.
+2. ecosystem_graph.json desactualizado y con datos FALSOS: AIFE "filtra off-brand"=falso; versiones v22; estado "frozen"; 14 agentes (son 28). Regenerar tras Fase 3.
+3. Bugs ImageLab psycho (server-path): mismatch ID (curiosity_gap vs PSY-CURIOSITY) + mismatch columna (línea 238: visual_injection → injection_visual).
+4. content-dispatcher: `.limit(1)` de testing sigue en producción.
+5. CopyLab externo en modelo retirado claude-sonnet-4-20250514.
+6. Huecos antibaneo: imagen y adaptaciones sociales sin gate de calidad.
+7. Orden subóptimo: Watcher (único validador) corre al final; scheduled_posts huérfanas si REJECT.
+8. cron jobid 2 (iid-brief-biweekly) sigue active:true — se dispara 1 julio. Decidir destino antes.
+9. urgency ("breaking") sin clasificador — gatillo de autopublish sin contrato. Definir en modelo nuevo.
 
 ### 2026-06-23 — Reparación definitiva del flujo: tabla rasa del modelo viejo · Sam + Claude (Chat 1)
 
