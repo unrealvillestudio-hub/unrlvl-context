@@ -105,7 +105,7 @@ Ejes de la tabla (por fila marca+dominio):
 - **`rollout_phase`** — fase de activación.
 - **`sibling_stagger`** — flag para marcas hermanas que comparten un tema (Lucien+UNRLVL en ai-cognition); fuerza desfase ≥48h.
 
-Marcas activas hoy (fase 1): **LucienSael** (3 dominios: ai-cognition, ai-identity, human-essence) + **UnrealvilleStudio** (ai-cognition + 5 dominios Tier1).
+Marcas activas hoy (fase 1): **LucienSael** (3 dominios: ai-cognition, ai-identity, human-essence) + **UnrealvilleStudio** (ai-cognition + 5 dominios Tier1 + **algorithm-mechanics** en fase 2, abierto 25-jun).
 
 ---
 
@@ -164,10 +164,10 @@ En el diagnóstico de junio se descubrieron **tres PromptBuilders distintos** co
 **Schema `content.*`:** brand_context_cache, brand_voices, content_calendar, content_performance, content_pieces, orchestrator_jobs.
 **Schema `public.*` relevante:** brand_voice_genome (genomas de voz por marca), lab_configs, lab_jobs.
 
-**EFs del pipeline (versiones al 2026-06-22):**
-- content-dispatcher **v26** (verificado 2026-06-24) — cron cada 30min, tiene el `.limit(1)` (NO tocar hasta publicación real). HOY ignora `scheduled_for`.
-- content-run-stage **v41** (verificado 2026-06-24) — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).
-- content-watcher **v1** — los 6 gates extraídos a EF propia (5e-4).
+**EFs del pipeline (versiones al 2026-06-25):**
+- content-dispatcher **v27** (verificado 2026-06-25) — cron cada 30min, tiene el `.limit(1)` (NO tocar hasta publicación real). HOY ignora `scheduled_for`. **v27 (25-jun): transporta `domain` de la queue al job (`assets.builder_input.domain`).**
+- content-run-stage **v41** (verificado 2026-06-25) — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue). Lee `domain` de `job.assets.builder_input.domain`.
+- content-watcher **v5** — los 6 gates extraídos a EF propia (5e-4). **Nota: v5 sigue siendo lógica v1 — 6 gates. Gate 7 (objetivo↔estímulo) y Gate 8 (similitud visual) del diseño eje B NO implementados.**
 - approve-piece **v14** — aprobación: publish Meta + move-to-permanent.
 - aife-filter — control de calidad/seguridad.
 - lab-worker **v23** — orquestador VIEJO (dual-mode, lab_jobs). Llama a los labs por HTTP vía lab_configs. NO tiene credenciales Vertex (solo SUPABASE + ANTHROPIC).
@@ -198,9 +198,9 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ---
 
-## §7 — ESTADO ACTUAL (2026-06-22)
+## §7 — ESTADO ACTUAL (2026-06-25)
 
-**Operativo:** la red de agentes legacy investiga en cadencia (crons activos, last_run reciente). El pipeline produce piezas end-to-end para UNRLVL y Lucien que llegan a `awaiting_approval` con email confirmado. Genoma v1.0 de Lucien en producción.
+**Operativo:** la red de agentes legacy investiga en cadencia (crons activos, last_run reciente). El pipeline produce piezas end-to-end para UNRLVL y Lucien que llegan a `awaiting_approval` con email confirmado. Genoma v1.0 de Lucien en producción. **Tramo queue→approval REPARADO (25-jun): el transporte de `domain` ya no muere en "sin suscripción brand_topics".**
 
 **En curso — R4B** (deadline 1ª sem julio): Scheduler (content-scheduler, especificado, desbloqueado) + endurecimiento del Watcher (pgvector embeddings, gates bloqueantes) + observabilidad. Detalle en `protocols/R4B_*`.
 
@@ -210,8 +210,9 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 - R4B Chat 2 (20-jun): DDL, content-run-stage v37, content-watcher v1.
 - Arquitectura híbrida de la queue (20-jun): queue lleva brand_id+domain (puente); brand_topics fuente única de platforms/cadence/rollout.
 - Vertex desbloqueado (22-jun).
+- **Fase 3 transporte (25-jun): dispatcher v27 transporta domain, cron 29 reactivado, pieza de prueba a awaiting_approval verde.**
 
-**Pendientes mayores:** Scheduler 5e-1, embeddings 5e-2/5e-3, publicación real Meta (5b), rejected_reason (5r), validación genoma v1.0 con IID real, destino de los 14 UNRLVL-* sin correr y los IID-* legacy de voz Lucien.
+**Pendientes mayores:** Scheduler 5e-1, embeddings 5e-2/5e-3, publicación real Meta (5b), rejected_reason (5r), validación genoma v1.0 con IID real, destino de los 14 UNRLVL-* sin correr y los IID-* legacy de voz Lucien. **Fan-out multimarca en iid-core (origen) + sembrador IID + cerebro de destilado (ver §9 2026-06-25).**
 
 ---
 
@@ -238,6 +239,50 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 ---
 
 ## §9 — SESSION LOG (novedad al tope)
+
+### 2026-06-25 — IID Sembrador (diseño) + Fase 3 transporte (REPARADO) + dominio algorithm-mechanics · Sam + Claude (Chat 1) + CC (informe read-only + ejecución)
+
+**Origen de la sesión:** Sam preguntó por la viabilidad de un "sembrador de temas IID" — capturar posts de cuentas que sigue en Instagram (mayormente Reels/video) para que UNRLVL o Lucien generen contenido PROPIO sobre esos temas (no repost, no paráfrasis: el IID toma el tema, investiga por su cuenta, genera con voz de marca). Derivó en el descubrimiento y reparación de roturas del pipeline. **El sembrador NO se construyó — queda con el camino despejado.**
+
+**Decisiones de diseño del sembrador (validadas, no construidas):**
+- **No se necesita Composio ni ningún conector.** La Graph API de Meta no expone el feed de cuentas ajenas que uno sigue; ninguna herramienta lo resuelve (Composio usa la misma API). Scraping descartado (protege el Business Portfolio, activo del ANTISPAM_CONTRACT). **El humano es el sensor:** aporta link + su frase de qué trata; la máquina no lee IG.
+- **Transcripción de video ajeno:** IG solo deja bajar ~15s; la API no da captions de cuentas ajenas. Pero para el objetivo no hace falta transcribir — el humano ya comprime el tema en una frase. Si se quiere rigor, el skill `voice-reference-extractor` (Whisper+OCR) procesa muestras cortas en local. (En esta sesión se procesó un Reel de prueba de 2:25 vía OCR de frames — pipeline de transcripción Whisper bloqueado por allowlist de red del sandbox; HuggingFace se habilitó a nivel cuenta pero el entorno ya estaba arrancado.)
+- **Arquitectura del cerebro:** la semilla entra como `iid_findings` de **origen humano** (no directo a queue: `iid_content_queue.finding_id` es NOT NULL → cadena finding→queue obligatoria). Una semilla puede **bifurcar en N piezas** (una por marca suscrita al dominio). Tema y técnica de divulgación viajan en **carriles separados**.
+- **Front:** se decidió **skill conversacional con escritura a Supabase** sobre UI con dropdowns (un delegado no-experto no sabe elegir domain/voice; el skill traduce lenguaje humano → mapeo por detrás). Para delegar (Marisol), el destino final es una **subpestaña "IID Seeds" en IID Intel del Orchestrator** (reusa el input de lenguaje natural ya existente, Image confirmada) + control de acceso por rol (rol SEEDER = solo IID Seeds). El "cerebro" corre como EF `iid-inbound`, no en chat. Pregunta al usuario SOLO lo que un humano que vio el post puede dar (link + su frase + marca en humano); el mapeo a domain/voz/brand_topics lo hace el skill. **Siempre termina en cola para aprobación de Sam, nunca publish directo.**
+- **Captura de "registro/técnica de divulgación":** Sam quiere capturar también CÓMO un creador explica (ciencia psicológica "fresca, natural, aporta comprensión" — NO el filo comprimido habitual de Lucien). Es una **voz hermana** derivable del temperamento existente cambiando solo la respiración (no un Custom Job). Regla dura: capturar la TÉCNICA de divulgación (analogía antes que término, frase que aterriza, cero jerga sin traducir), **nunca clonar la voz del creador**. Agendado ~27-jun.
+
+**Post de prueba procesado:** Reel @fryrsquared sobre murmuraciones de pájaros → modelo Boids (Reynolds 1986) → 3 reglas locales sin líder → aplica a robótica/multitudes/protestas/epidemias/rumores. Tema neutro destilado: **emergencia / comportamiento colectivo / orden sin control central a partir de reglas locales.** Bifurcación validada por Sam: UNRLVL (infraestructura: algoritmos de comportamiento colectivo para anticipar consumidor y gobernar ecosistemas de agentes) + Lucien (condición humana: coordinación sin autoridad, manada/contagio/turba).
+
+**WRITE a producción — dominio nuevo:** INSERT en `intel.brand_topics` del dominio **`algorithm-mechanics`** para `UnrealvilleStudio` (id `287e4716-6a61-40a5-b0a7-c3e62ec20027`): phase 2, active, purpose [publish,internal], platforms [linkedin,meta_fb,meta_ig], voice unrlvl_default, hard_rules null. Resuelve drift histórico (el agente UNRLVL-ALGORITHM-MECHANICS existía sin dominio declarado en brand_topics). Angle clave: lectura técnico-estructural de comportamiento colectivo/emergencia; **la jerarquía la impone el diseño (corrección de Sam: NO es "sin jerarquía" — los agentes ejecutan su rol sin control central en ejecución, sin el "¿por qué?" humano que es territorio Lucien)**; barrera anti-colisión explícita con Lucien/human-essence. Phase 2 elegido sobre phase 1 para respetar el crescendo anti-spam (no abrir 7º territorio simultáneo en la primera ola).
+
+**HALLAZGO MAYOR (CC informe read-only) — el pipeline tenía 3 roturas que mataban TODA pieza por el camino automático, no solo la semilla:**
+- **Rotura 0:** cron jobid 29 (content-dispatcher) `active=false` desde la tabla rasa — nada disparaba el dispatcher.
+- **Rotura 1:** iid-core (código de ABRIL, v1.1, anterior a brand_topics) NO escribe `brand_id`/`domain`/`iid_source_tag` en la queue, aunque las columnas existen (añadidas 20-jun).
+- **Rotura 3 (la letal):** content-run-stage lee `domain` SOLO de `job.assets.builder_input.domain`, que el dispatcher dejaba en `{}` (no selecciona `queue.domain`, no escribe `builder_input`). → `loadBrandTopic(brandId, null)` → **throw "sin suscripción brand_topics"**. La generación moría en la primera etapa.
+
+**Hallazgos secundarios confirmados (CC):**
+- El scoring NO es gate de dispatch. El dispatcher solo filtra `orchestrator_status='pending'` + `aife_status='passed'` + `approval_status ∈ {pending,autopublished}`. Una fila con score NULL avanza igual.
+- El estado "listo para aprobación de Sam" = **`content_pieces.status='awaiting_approval'`** (+ email vía approve-piece), NO `approval_status='pending'`.
+- `iid_content_queue.voice` tiene CHECK que solo acepta `'unrlvl'`/`'lucien'` (voz base) — NO el genome id. El Builder deriva el genoma real de `brand_topics.voice_by_destination`. El Builder consume su material crudo de `aife_output.content.content`.
+- get_edge_function del MCP devuelve el bundle ESZIP compilado, no fuente legible (deuda #1: EFs IID sin repo).
+- El mapeo agente→marca es **uno-a-muchos** (iid_agents NO tiene brand_id; un dominio como ai-cognition pertenece a 2 marcas). Poblar brand_id en iid-core NO es transporte sino **fan-out** por brand_topics.domain (1 finding → N filas queue) — es diseño de ORIGEN, pertenece al sembrador. Mapear default_voice→brand reintroduce el pecado original (descartado).
+- content-watcher: 6 gates (v5 = lógica v1). Gate 7/8 del eje B NO existen. Solo juzga el copy; imagen y scheduled_posts no pasan por él.
+
+**FIX FASE 3 EJECUTADO (Opción C — transporte puro, fan-out de origen diferido):** CC paró correctamente en pre-flight al detectar que el "Fix 1" original (poblar brand_id en iid-core) era ORIGEN, no transporte, y contradecía el scope. Se difirió al sembrador. Fixes aplicados:
+- **content-dispatcher v26→v27** (deploy directo): select de queue +`domain`; INSERT orchestrator_jobs `assets: {builder_input:{domain: queue.domain}}` (antes `{}`). brand_id ya se copiaba. Scoring/voz/.limit(1)/verify_jwt sin tocar.
+- **content-run-stage v41:** SIN cambio (ya lee `job.assets.builder_input.domain`; el fix 2 lo alimenta). No se redeployó la función crítica por cero ganancia.
+- **iid-core:** NO tocado (fan-out diferido).
+- **cron jobid 29:** reactivado `active=false→true`. Research crons 3-28 NO tocados.
+
+**TEST E2E (cron apagado) — VERDE:** fila de prueba (algorithm-mechanics/UnrealvilleStudio/unrlvl_default) → pieza `10cda1d1-1cbb-4c8a-855b-b1329fb97c4e` llegó a `content_pieces.status='awaiting_approval'`, Watcher PASS (6 gates), labs todos ok, `domain` transportado correctamente, voz UNRLVL correcta sobre mérito (copy real sobre position bias/propensity weighting). **Bug "sin suscripción brand_topics" RESUELTO.** Confirma además que abrir el dominio en brand_topics produce voz correcta, no solo encaje mecánico. (Email de aprobación real enviado a content-approval@ — pieza de prueba, a rechazar.)
+
+**Limpieza:** artefactos de prueba (pieza 10cda1d1, job f0e06d12, queue 4bd4843f, finding 795799ea, scheduled_posts) pendientes de borrado por CC (instrucción dada; resolver FK circular como en la tabla rasa).
+
+**Nota de gobernanza:** content-dispatcher v27 es deploy directo a Supabase — NO hay nada que pushear por GitHub Desktop para ese cambio (deuda #1: EFs IID sin repo). El único push de esta sesión es este session_log.
+
+**Professor:** 6 learnings aprobados (ESZIP/sin-repo; las 3 roturas; mapeo agente→marca uno-a-muchos=fan-out; estado awaiting_approval + scoring no-gate; CHECK voice + aife_output.content.content; fix F3 validado).
+
+**Próximo (orden estricto, cada uno verifica verde antes del siguiente):** (1) limpieza test F3; (2) SEMBRADOR — fan-out multimarca en iid-core (ex-Fix 1) + briefing CC; (3) CEREBRO del sembrador (destilado link+frase→tema→mapeo→anti-IP) + DDL `iid_seeds` + EF `iid-inbound`; (4) front IID Seeds + control de acceso por rol. Carril paralelo (no bloquea): voz hermana pedagógica UNRLVL+Lucien (~27-jun; material: Reel enjambres ya procesado; revisar si `iid_content_queue.psycho_preset` basta vs tabla nueva).
 
 ### 2026-06-24 (sesión b) — Diseño del eje B: matriz validada + 2 decisiones de arquitectura + factibilidad CC#5 · Sam + Claude (Chat 1) + CC (informe #5 read-only)
 
