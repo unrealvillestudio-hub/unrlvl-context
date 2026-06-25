@@ -1,57 +1,57 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-06-24 · v2026-06-24-v1 (ImageLab migración P0 Imagen→Gemini CERRADA + BGRemover mergeado · base previa v2026-06-20-v1: #5i genoma v1.0 · R4B Chat 2 parcial · arquitectura híbrida queue · Scheduler especificado-bloqueado)_
+_Actualizada: 2026-06-25 · v2026-06-25-v1 (IID Sembrador CONSTRUIDO T1-T3: fan-out multimarca iid-core v22 + cerebro iid-inbound + iid_seeds + sentinela IID-SEEDER · base previa v2026-06-24-v1: ImageLab migración Imagen→Gemini + BGRemover)_
 
 ---
 
-## 🔴🔴 FOCO INMEDIATO — R4B (cierre, deadline 1ª sem julio)
+## 🔴🔴 FOCO INMEDIATO — Sprint IID Sembrador + R4B (cierre, deadline 1ª sem julio)
 
-# BLOQUE PARA AGENDA — insertar al tope del FOCO INMEDIATO
+## 🟢🟢🟢 SPRINT SEMBRADOR — T1-T3 CERRADAS (25-jun b) · falta T4
 
-## 🔴🔴🔴 FOCO — IID FASE 3: RECONEXIÓN DEL FLUJO (próximo chat dedicado)
+**El Sembrador está LIVE end-to-end:** semilla humana (link+frase) → destilado anti-IP → gate temprano de Sam → handoff a iid-core → fan-out multimarca v22. Dos gates en serie. Pecado original (default_voice→marca) muerto en el origen.
 
-**Estado: IID limpio y DETENIDO tras tabla rasa (2026-06-23).** Modelo viejo eliminado. Modelo nuevo intacto pero desconectado del disparo. Handoff completo sin gaps: `IID/FASE_3_HANDOFF.md`.
-
-| # | Fase 3 — construir | Estado |
+| # | Tarea Sembrador | Estado |
 |---|---|---|
-| F3.1 | Disparo de los 14 agentes UNRLVL-* (cron/orquestador). Research que escribe brand_id+domain mapeables a brand_topics | 🔴 por construir |
-| F3.2 | Research/process nuevo puebla el puente (brand_id+domain) desde el ORIGEN, no solo en finalizePiece | 🔴 por construir |
-| F3.3 | Re-incorporar contrato de scoring (content_score>=85 → autopublish) al modelo nuevo, condicionado a brand_topics.auto_approve (DOBLE LLAVE) | 🔴 DEUDA EXPLÍCITA — conservar |
-| F3.4 | Reactivar dispatcher (jobid 29) + parche scheduled_for. NO tocar .limit(1) hasta publicación real | 🔴 tras F3.1-2 |
-| F3.5 | Scheduler content-scheduler (5e-1) — depende de F3.1-2 (necesita filas mapeables) | 🔴 desbloqueado, depende |
-| F3.6 | PRIMER RUN validación genoma v1.0 Lucien con IID real (el objetivo original) | 🟢 tras F3.1-4 |
+| T1 | Limpieza test F3 | ✅ VERDE (ya estaba) |
+| T2 | Fan-out multimarca iid-core v22 + fanout.ts + migración CHECK voice→voice_id | ✅ HECHO · verificado (3 filas ai-cognition / 0 filas llm) |
+| T3 | Cerebro: tabla iid_seeds + EF iid-inbound v1 + agente IID-SEEDER | ✅ HECHO · 4 aserciones verdes |
+| **T4** | **Front IID Seeds: subpestaña en Orchestrator + control acceso rol SEEDER (Marisol) + cargar IID_INBOUND_SECRET** | 🔴 **PRÓXIMO** |
 
-**Contrato de scoring (NO PERDER):** content_score>=85 → autopublish vive en iid-process. El modelo nuevo lo re-incorpora con doble llave (score Y auto_approve por marca). Hoy auto_approve=false en todas = nada se auto-publica sin Sam.
+**Carril paralelo (no bloquea):** voz hermana pedagógica UNRLVL+Lucien (~27-jun). Material: Reel enjambres ya procesado (técnica: gancho histórico→desmontar intuición→revelar mecanismo→expandir). Campo `iid_seeds.lane` (standard|pedagogical) ya preparado. `iid_content_queue.psycho_preset` SIN CHECK → basta para preset pedagógico, NO requiere tabla nueva.
 
-**Drift a corregir cuando se toque:** content-dispatcher es v26 (doc decía v22), content-run-stage es v41 (doc decía v37). SocialLab usa modelo retirado claude-sonnet-4-20250514 (ítem 42).
+**Notas del Sembrador (para T4 y futuro):**
+- Multimarca probado por construcción: sumar NSCF/FPHs = INSERT fila en `brand_topics(domain)` + 1 línea en el CHECK de `iid_content_queue.voice`. Cero código.
+- Acople 4B aceptado: iid-inbound→iid-core por HTTP (contrato duro fijado). Si iid-core cambia su body, revisar iid-inbound.
+- Gobernanza IID EFs (sin repo): patrón canónico = direct-on-prod staged+reversible con cleanup. NO Rama+PR+Preview.
 
-**5s limpieza queue: ✅ HECHO** (tabla rasa). **5e-2/5e-3:** ahora en chat principal (no Chat 2), Vertex ya desbloqueado.
+---
 
-**Verificación (c) migración Gemini en ImageLab — DIFERIDA a Fase 3:** cuando el IID se reconecte (hoy DETENIDO tras tabla rasa 23-jun), confirmar en el PRIMER run que la pieza llega con `assets.image.url` poblada en `content.content_pieces` (valida la cadena de imagen sobre gemini-2.5-flash-image en producción IID). **No observable hasta la reconexión — NO hay cron corriendo que observar; la verificación se hace en el primer run natural de Fase 3.**
+## 🔴🔴🔴 R4B — RECONEXIÓN FASE 3 + endurecimiento Watcher (paralelo al Sembrador)
+
+**Estado base:** Fase 3 transporte REPARADO y verde (dispatcher v27 transporta domain, cron 29 activo). Modelo nuevo conectado. El Sembrador alimenta la queue por el carril humano; R4B cierra el carril automático + publicación real.
+
+| # | Item | Estado | Dueño |
+|---|---|---|---|
+| 5e-1 | Scheduler content-scheduler (EF+cron 1×/día ET). Mapea (brand_id+domain)→brand_topics, Interpretación A, jitter ±45min, ventanas ET, sibling-stagger ≥48h, escribe scheduled_for | 🔴 ESPECIFICADO, desbloqueable (write ya en v41) | Chat 1 |
+| 5e-2 | gate1+gate5 → pgvector (Vertex gemini-embedding-001 @768) | 🟢 DESBLOQUEADO (Vertex creds en Supabase) | Chat 2 |
+| 5e-3 | Gates 2/3 → BLOQUEANTES (flag OFF) | ⏳ tras 5e-2 | Chat 2 |
+| 5e-4-disp | Parche dispatcher: AND scheduled_for <= now(). NO tocar .limit(1) | ⏳ acoplado al Scheduler | Chat 1 |
+| 5b | IID publicación real (Meta) — CHAT DEDICADO. Verificar cuentas Meta Lucien/SamPublisher. Gatilla approve-piece v14. | 🔴 | Lucien/UNRLVL |
+| 5r | rejected_reason en approve-piece — rechazos manuales se pierden | 🔴 | UNRLVL/Lucien |
+
+**Eje B (post-Sembrador / dentro de R4B):** matriz estímulo (artefacto×objetivo) validada + Ruta B confirmada + Gate 7 (objetivo↔estímulo) + Gate 8 (similitud visual, GREENFIELD embeddings). Spec `IID_SPEC_EJE-B_estimulo-matriz-watcher.md` verificada de factibilidad; pendiente regenerar como spec de IMPLEMENTACIÓN con las 2 decisiones (objective_by_platform jsonb + migrar texto Y visual a embeddings). Detalle en session_log §9 (24-jun b).
 
 ### Bloqueos que requieren ACCIÓN DE SAM
 | # | Acción de Sam | Desbloquea |
 |---|---|---|
-| ✅ Vertex creds EN SUPABASE (22-jun, Sam) | Cargados los 3 secrets: GOOGLE_SERVICE_ACCOUNT_KEY (JSON completo del SA imagelab-vercel@gen-lang-client-0491381650), GOOGLE_CLOUD_PROJECT, GOOGLE_CLOUD_LOCATION. Nombres verificados por Chat 1. Pendiente: validar formato del JSON en el primer run de embeddings (modo de fallo: salto de linea en private_key). DESBLOQUEA 5e-2/5e-3. | ✅ → Chat 2 |
-| rollout_started_at | Fijar fecha 1ª sem julio en intel.brand_rollout al lanzar. | crescendo Scheduler |
-
-### R4B — estado por ítem
-| # | Item | Estado | Dueño |
-|---|---|---|---|
-| 5e-5 | DDL domain en orchestrator_jobs+content_pieces + pgvector v0.8.0 + índice + GRANT | ✅ HECHO | Chat 2 |
-| 5e-5-bis | domain columna en iid_content_queue (puente) + GRANT | ✅ HECHO | Chat 1 |
-| 5o/5p-a/5q | content-run-stage v36: email title=copy.title; seed imagen=título+copy; domain-write | ✅ deployado (falta run E2E) | Chat 2 |
-| 5e-4 | Watcher → EF content-watcher v1. content-run-stage v37 callWatcher AbortController(90s) fail-closed=REJECT + domain-write queue | ✅ HECHO | Chat 2 |
-| 5e-2 | gate1+gate5 → pgvector (Vertex gemini-embedding-001 @768) | 🟢 DESBLOQUEADO (creds en Supabase 22-jun) — listo para Chat 2 | Chat 2 |
-| 5e-3 | Gates 2/3 → BLOQUEANTES (flag OFF) | ⏳ tras 5e-2 | Chat 2 |
-| 5e-1 | Scheduler content-scheduler (EF+cron 1×/día ET). Mapea (brand_id+domain)→brand_topics, Interpretación A, jitter ±45min, ventanas ET, sibling-stagger ≥48h, escribe scheduled_for | 🔴 ESPECIFICADO, desbloqueable (write ya en v37) | Chat 1 |
-| 5e-4-disp | Parche dispatcher: AND scheduled_for <= now(). NO tocar .limit(1) | ⏳ acoplado al Scheduler | Chat 1 |
-
-Arquitectura híbrida queue (Sam 20-jun): queue lleva brand_id+domain (puente, escrito por Builder); brand_topics fuente ÚNICA de platforms/cadence/rollout. platforms=[] = no-problema. Evita drift. Detalle: protocols/R4B_RESPUESTA_CHAT1.md.
+| ✅ Vertex creds en Supabase (22-jun) | 3 secrets cargados | 5e-2/5e-3 |
+| rollout_started_at | Fijar fecha 1ª sem julio en intel.brand_rollout al lanzar | crescendo Scheduler |
+| IID_INBOUND_SECRET | Cargar al exponer el front IID Seeds (T4) | seguridad del carril semillas |
+| Aprobar 5 learnings Professor (2 T2 + 3 T3) | b85ac073, d588ce0c, 983ac335, 4a47ff92, d5748e60 | Professor |
 
 ---
 
 ## ✅ #5i — GENOMA v1.0 DE LUCIEN — CERRADO (19-jun)
-Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léxico → generativo/constructor. 8 campos nuevos. version 0.5→1.0 (lucien_editorial + lucien_social). 3 angles corregidos (ai-cognition podado; ai-identity + human-essence poblados). Professor: 6 learnings (principio madre + método calibración por muestreo). Validación pendiente: 2-3 piezas IID real post-R4B.
+Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → generativo/constructor. 8 campos nuevos. version 0.5→1.0 (lucien_editorial + lucien_social). 3 angles corregidos. Professor: 6 learnings. Validación pendiente: 2-3 piezas IID real post-R4B.
 
 ---
 
@@ -64,8 +64,6 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 ## 🔴 CRÍTICO — Esta semana (resto)
 | # | Item | Marca | Blocker |
 |---|---|---|---|
-| 5b | IID publicación real (Meta) — CHAT DEDICADO. Verificar cuentas Meta Lucien/SamPublisher. Gatilla §5.4 (approve-piece v14). Cierra run E2E que valida 5o/5p-a/5q. | Lucien/UNRLVL | Cuentas Meta (Vertex ya resuelto) |
-| 5r | rejected_reason en approve-piece (NUEVO) — rechazos manuales de Sam se pierden (failed sin motivo). Capturar campo libre. Alimenta genoma Lucien con muestreo de producción gratis. No colisiona (toca approve-piece). Adjuntar a genoma. | UNRLVL/Lucien | — |
 | 5p-b | Lucien necesita preset imagelab (caso sin-preset no probado con imagen real) | Lucien | — |
 | 6 | Voice Genome Fase 5 — OnboardingApp. signature_closer por voz. | UNRLVL | — |
 | 7 | fphs-formalize sprint | ForumPHs | DF, 13 errores |
@@ -79,10 +77,8 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 | 5c | IID propios de Lucien. Liga 5i. | Lucien |
 | 5d | Destino 14 IID-* viejos | UNRLVL |
 | 5f | Quitar .limit(1) — SOLO tras publicación real | UNRLVL |
-| 5g | ✅ RESUELTO (domain a columna = 5e-5) | — |
 | 5m | Borrar EFs efímeras (stubs 410) | UNRLVL |
 | 5n | Barrer to: sam@ hardcodeado | UNRLVL/multi |
-| 5s | Limpieza queue (NUEVO) — filas no-mapeables (abril cadáveres + 19-20jun pruebas abortadas). Purgar antes de producción Scheduler. | UNRLVL |
 | 12 | NSCF-Console Fase 3 — PRÓXIMO FOCO NSCF | NeuroneSCF |
 | 13 | NSCF Shopify infra SESIÓN DEDICADA | NeuroneSCF |
 | 14 | SocialLab dual-mode re-test | UNRLVL |
@@ -95,7 +91,7 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 | 21 | Klaviyo flows NSCF | NeuroneSCF |
 | 40 | Klaviyo key hardcodeada | NeuroneSCF |
 | 41 | Verificar keys Resend | ForumPHs/UNRLVL |
-| 42 | model ID hardcodeado + 13 EFs one-off · content-run-stage loguea modelId 'imagen-3.0-fast-generate-001' en telemetría (logGen ~L742/752/760) → misatribuye modelo/costo post-migración Gemini (solo string contable, no rompe) | UNRLVL/NeuroneSCF |
+| 42 | model ID hardcodeado + 13 EFs one-off (content-run-stage loguea modelId viejo en telemetría) | UNRLVL/NeuroneSCF |
 | 22 | Genoma UNRLVL social | UNRLVL |
 | 24 | Email marketing FPHs (cada marca su key) | ForumPHs |
 | 25 | ForumPHs creación cuentas | ForumPHs |
@@ -113,50 +109,50 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reescrito reactivo/léx
 | 33 | Validar genomas. lucien v1.0, unrlvl_default v1.0. | Lucien/SamPublisher |
 | 34 | unrlvl-CRM multimarca | UNRLVL |
 | 36 | unrlvl-SMA multimarca | UNRLVL |
-| 37 | Drift detector. Drifts: shopify.stores VIEW→BASE; /api/professor existe; content-run-stage v37; fphs_institucional v0.5 no en ecosystem.json; cron unrlvl-media 12d; get_edge_function LEGIBLE para content-run-stage pero ESZIP para lab-worker (mixto). | UNRLVL |
-| 38 | Reconciliación ecosystem_graph | UNRLVL |
+| 37 | Drift detector | UNRLVL |
+| 38 | Reconciliación ecosystem_graph (+ conteo agentes 28/29/30 con sentinela) | UNRLVL |
 | 39 | .github/CLAUDE.md repetido | UNRLVL |
+| 43 | **Versionar EFs del IID en repo (deuda sin-repo §1)** — habilita que iid-inbound reuse fanout.ts "de una sola fuente" sin duplicar; separa del sprint de producto | UNRLVL |
+| 44 | **Eje B implementación** — regenerar spec con 2 decisiones (objective_by_platform + embeddings texto/visual) → Ruta B + Gate 7 + Gate 8 greenfield | UNRLVL |
 
 ---
 
 ## 🟠 FOCO PROPIO — CLAUDE.md (sesión dedicada · Sam la retoma pronto)
-Consolida y eleva #35 (CLAUDE.md repos restantes) + #39 (.github/CLAUDE.md repetido). **SESIÓN DEDICADA CLAUDE.md** — resolver el duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE.md` (608b), definir el canónico, cerrar la gobernanza CC a medias. Es **ley activa de CC** (no historia pasiva) → cuesta en cada sesión mientras esté incompleta. Trabajo propio con foco, NO dentro de un sprint de producto.
+Consolida #35 (CLAUDE.md repos restantes) + #39 (.github/CLAUDE.md repetido). Resolver duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE.md` (608b), definir canónico, cerrar gobernanza CC a medias. Es ley activa de CC → cuesta en cada sesión mientras esté incompleta. Trabajo propio con foco, NO dentro de un sprint de producto.
 
 ---
 
 ## ✅ Resuelto recientemente
-- ✅ ImageLab migración P0 Imagen→Gemini (24-jun). Todos los Vertex Imagen apagados 24-jun. api/execute.ts → gemini-2.5-flash-image vía :generateContent (endpoint+body+parsing+multimodal distintos, no string-swap). PR #2 merged (6d04556), producción verificada. Drift cerrado: execute.ts único punto imagen vivo. + BGRemover (ex-ProductShots, composición descartada por límite luz-coherencia) MERGEADO a main (merge commit a1b2a1a) — herramienta de remoción de fondo remove.bg, 3 pasos, cap 2400px. — 2026-06-24
-- ✅ R4B Chat 2 — DDL + calidad output + extracción Watcher (20-jun). DDL 5e-5 (domain + pgvector v0.8.0 + índice + GRANT). content-run-stage v35→v36 (5o/5p-a/5q + domain-write) → v37 (5e-4 callWatcher fail-closed + domain-write queue). content-watcher v1 (6 gates, verificado aislado). Decisiones D-A/B/C + ventanas ET + jitter ±45min. Bloqueos: 5e-2 (Vertex creds) → 5e-3 espera. — 2026-06-20
-- ✅ Arquitectura híbrida queue + #5i frontera (20-jun, Chat 1). queue=brand_id+domain (puente), brand_topics=fuente única. DDL domain en iid_content_queue. Scheduler especificado, write ya en v37. protocols/R4B_RESPUESTA_CHAT1.md. — 2026-06-20
-- ✅ Cadencia Lucien + UNRLVL poblada (19-jun). Interpretación A. Lucien blog 1/1/2 · x/fb/ig 2/3/4 · tiktok 1/2/3. 9/9 filas fase 1 con cadence. — 2026-06-19
-- ✅ #5i GENOMA v1.0 LUCIEN CERRADO (19-jun). — 2026-06-19
-- ✅ IID OUTPUT QUALITY LOTE A (18-jun). content-run-stage v34→v35, approve-piece v13→v14. — 2026-06-18
-- ✅ IID #5b end-to-end (17-jun). — 2026-06-17
-- ✅ Builder Convergido + Watcher LIVE (16-jun). Cuarentena 293 cadáveres.
+- ✅ **IID Sembrador CONSTRUIDO T1-T3 (25-jun b).** Fan-out multimarca iid-core v22 (módulo fanout.ts, mata default_voice, migración CHECK voice→voice_id). Cerebro iid-inbound v1 (capture/approve/reject/list, destilado anti-IP + gate temprano + handoff 4B). Tabla iid_seeds + agente sentinela IID-SEEDER. Verificado: 3 filas ai-cognition / 0 filas llm; 4 aserciones T3 verdes; artefactos limpios; cron 29 restaurado. Dos gates en serie. Multimarca por construcción. Falta T4 (front). — 2026-06-25
+- ✅ **IID Fase 3 transporte REPARADO (25-jun a).** dispatcher v26→v27 (transporta domain queue→job), cron 29 reactivado, pieza de prueba a awaiting_approval verde. Bug "sin suscripción brand_topics" resuelto. Dominio algorithm-mechanics abierto en brand_topics (UNRLVL, phase 2). — 2026-06-25
+- ✅ Eje B diseño (24-jun b): matriz estímulo validada celda-por-celda + Ruta B confirmada + Gate 7/8 + 2 decisiones (objective_by_platform + embeddings). Factibilidad CC#5. — 2026-06-24
+- ✅ ImageLab migración Imagen→Gemini (24-jun) + BGRemover mergeado. — 2026-06-24
+- ✅ R4B Chat 2 — DDL + calidad output + extracción Watcher (20-jun). — 2026-06-20
+- ✅ Arquitectura híbrida queue + #5i frontera (20-jun). — 2026-06-20
+- ✅ Cadencia Lucien + UNRLVL poblada (19-jun). #5i GENOMA v1.0 LUCIEN CERRADO. — 2026-06-19
+- ✅ IID OUTPUT QUALITY LOTE A (18-jun). IID #5b end-to-end (17-jun). Builder Convergido + Watcher LIVE (16-jun).
 - ✅ NSCF Resend hardening / Fase 2 / PR #2 (13-16 jun). Genomas v0.5 (1-2 jun). Gobernanza CC (6-7 jun).
 
 ---
 
 ## Notas de contexto
 
-IID — estado 2026-06-20: content-dispatcher v22 (.limit(1) intacto, IGNORA scheduled_for) → content-run-stage v37 (Builder+aife+imagelab→CDN+sociallab+callWatcher+domain-write jobs/pieces/queue) → content-watcher v1 (6 gates) → approve-piece v14 (publish Meta + move-to-permanent + reject SIN rejected_reason → #5r). Modelo claude-sonnet-4-6. Imagen unrlvl-media CDN. pgvector v0.8.0. Pendiente: Vertex creds, Scheduler (desbloqueable), parche dispatcher, publicación real (5b).
+**IID Sembrador — estado 2026-06-25 b:** LIVE end-to-end. iid-inbound v1 (capture destila anti-IP + mapea brand_topics → awaiting_approval → approve handoff a iid-core → fan-out v22). iid_seeds (rastro+lane+status). IID-SEEDER sentinela (ce44ac81, is_active=false). 29 agentes = 28 research + 1 sentinela. Pecado original muerto: el fan-out lee brand_topics, NO default_voice. Contrato autopublish = score>=85 AND brand_topics.auto_approve (urgency dropeado). Falta T4 (front + rol SEEDER + IID_INBOUND_SECRET).
 
-Stack labs (lab_configs 20-jun): copylab=unrlvl-copy-lab · imagelab=image-lab-unrlvl (AQUÍ vive credencial Vertex) · sociallab=social-lab-flame · videolab=unrlvl-video-lab (active=false). lab-worker v23 llama por HTTP vía lab_configs; NO tiene creds Vertex (solo SUPABASE/ANTHROPIC).
+**IID — estado 2026-06-25 a:** content-dispatcher v27 (.limit(1) intacto, transporta domain) → content-run-stage v41 (Builder+aife+imagelab→CDN+sociallab+callWatcher+domain-write) → content-watcher v5 (6 gates, lógica v1; Gate 7/8 eje B NO implementados) → approve-piece v14. Modelo claude-sonnet-4-6.
 
-ImageLab (24-jun): v7 sobre gemini-2.5-flash-image vía :generateContent (Vertex Imagen apagado 24-jun; execute.ts único punto de imagen vivo). BGRemover (rama clever-bell-293d56) MERGEADO a main (merge commit a1b2a1a); removeBackground.ts (root+src) confirmado AUSENTE en origin/main. Nueva env REMOVEBG_API_KEY en Vercel image-lab. Cabos operativos no-repo: carpeta física del worktree CC bloqueada por Windows hasta cierre de sesión; main local de Sam aún en 198be69 → pull/GitHub Desktop para traer la feature.
+**Stack labs:** copylab=unrlvl-copy-lab · imagelab=image-lab-unrlvl (gemini-2.5-flash-image; AQUÍ vive credencial Vertex) · sociallab=social-lab-flame · videolab=unrlvl-video-lab (active=false). lab-worker v23 (sin creds Vertex).
 
-Genoma Lucien v1.0 (19-jun): 2 voces (editorial+social, NO 3). core_move generativo/constructor. Firmas: ❯ Unrealville Studio / --- LucienSael: Builder, Thinker, Operator. Patrón en Professor (13 rasgos): generativo no reactivo, figura concreta, filo material/presente sin salida digna, comprime en imagen-sentencia, garbo no crudeza, constructor>destructor, reclutar afines, contención munición pesada, cierre reposiciona+recluta, pregunta-cuchillo baja frecuencia, registro culto sin ancla nacional, científico-psicológico en ai-cognition, libros/ecosystem sin nombrar.
+**Genoma Lucien v1.0 (19-jun):** 2 voces (editorial+social). core_move generativo/constructor. Patrón en Professor (13 rasgos).
 
-Arquitectura queue híbrida (20-jun): Builder escribe brand_id+domain en iid_content_queue (puente, ya en v37); Scheduler mapea (brand_id+domain)→brand_topics, lee platforms/cadence/rollout ahí. Interpretación A: cadencia por-marca-por-plataforma, dominios rotan, NUNCA multiplican.
+**Decisiones R4B congeladas (20-jun):** Scheduler EF+cron 1×/día ET. scheduled_for en queue (NULL=no dispares). Ventanas ET, jitter ±45min. Colisión intra-marca cross-plataforma=regla dura. Sibling-stagger ≥48h. Embeddings Vertex gemini-embedding-001 @768 Matryoshka. rollout en intel.brand_rollout.
 
-Decisiones R4B congeladas (20-jun): Scheduler EF+cron 1×/día ET. scheduled_for en queue (NULL=no dispares). Ventanas ET, jitter ±45min. Colisión intra-marca cross-plataforma=regla dura. Sibling-stagger ≥48h. Embeddings Vertex gemini-embedding-001 @768 Matryoshka. rollout en intel.brand_rollout.
+**Radar pgvector:** instalado pero SIN materializar (cero columnas vector). Gates de texto usan Claude-semántico. Gate 8 visual del eje B = greenfield de embeddings, NO índice al lado de uno existente.
 
-Costeo IID: PAUSADO (Sam) — se implementa con todos los labs en secuencia cuando estén operativos. Instrumentación tokens (5e-6) diferida.
+**Patrones gobernanza:** spec sin fuente=suposiciones; reescritura EF no hereda side-effects; IID EFs sin repo → direct-on-prod staged+reversible (NO Rama+PR+Preview); CHECK de tablas core son enums cerrados (verificar antes de insertar valor nuevo; fixture que no corre = enum válido + notes, no alterar constraint); acople-por-contrato (4B) = fijar contrato duro de la EF destino + registrar dependencia.
 
-Patrones gobernanza (18-20 jun): spec sin fuente=suposiciones que el código desmiente; reescritura EF no hereda side-effects; match-exacto por código no prompt; spec puede asumir estado inexistente (verificar vivo); error_log=[] puede ser corte humano de otra EF; ante bloqueo de gobernanza pivotar método no pedir excepción; no asumir proveedor (heredar stack); slug ≠ concepto visual.
+**Secrets:** cada marca su key Resend. Vertex Service Account en Vercel image-lab + Supabase EF.
 
-Secrets: cada marca su key Resend. Vertex Service Account en Vercel image-lab-unrlvl, falta en Supabase EF (acción Sam).
+**Estado publicación:** UNREALville E2E. Lucien/SamPublisher NO E2E — verificar meta_accounts antes (liga 5b). Publicación real bloqueada por ANTISPAM_CONTRACT §6 hasta R4B.
 
-Estado publicación: UNREALville E2E. Lucien/SamPublisher NO E2E — verificar meta_accounts antes (liga 5b).
-
-Ayra Sprint 0 🔴 VENCIDO (5 Jun).
+**Ayra Sprint 0 🔴 VENCIDO (5 Jun).**

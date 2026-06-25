@@ -127,7 +127,7 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 **Modelo de gobierno:** la MARCA declara qué temas consume y con qué voz por destino (`intel.brand_topics`). El IID investiga temas NEUTROS. El `default_voice` del agente NO decide voz (raíz del bug off-brand). `angle` = territorio (qué/dónde); genoma = ejecución (cómo). Cadencia Interpretación A: por-marca-por-plataforma, los dominios rotan dentro de los slots, NO multiplican.
 
 **Agentes (`intel.iid_agents`, 29 activos):**
-- 1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 15-jun, last_run NULL — sin ejecutar aún)
+- 29 = 1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 15-jun, last_run NULL — sin ejecutar aún) + 1 sentinela IID-SEEDER (ce44ac81, is_active=false, satisface FK de iid-inbound, NO corre research). El fan-out v22 YA NO usa default_voice (la voz sale de brand_topics).
 - Legacy IID-*: IMAGE, LLM*, VIDEO, VOICE, GOOGLE, LINKEDIN*, META, TIKTOK, X*, ECOMMERCE, FLORIDA, PERSONAL-BRAND*, WHOLESALE (* = default_voice lucien, legado del encaje a la fuerza)
 - UNRLVL-* en 3 tiers: Tier1 método (CONTEXT-ENGINEERING, BRAND-VOICE-SYSTEMS, AI-INDUSTRIALIZATION, CRO-PSYCHOLOGY, SIGNAL-LEARNING-LOOPS) · Tier2 deep-stack (META-DEEP-STACK, GOOGLE-DEEP-STACK, ALGORITHM-MECHANICS) · Tier3 mercado (ECOMMERCE-DEEP, SHOPIFY-STACK, MARKET-FLORIDA, DROPSHIP-REALITY, WHOLESALE-LOGISTICS-FL, CREATOR-MACRO-ECONOMY)
 - Decisión pendiente: destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien
@@ -135,14 +135,16 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 **Pipeline:**
 ```
 CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings
-  → iid_content_queue (brand_id+domain) → content-dispatcher (jobid 29, cada 30min, .limit(1))
-  → content-run-stage v37 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
+  → iid_content_queue (brand_id+domain) → content-dispatcher v27 (jobid 29, cada 30min, .limit(1))
+  → content-run-stage v41 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
   → content-watcher v1 (6 gates) → content_pieces awaiting_approval
   → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam)
   → approve-piece v14 (publish Meta + move-to-permanent)
 ```
 
-**Edge Functions:** content-dispatcher v22 (.limit(1), ignora scheduled_for hoy) · content-run-stage v37 · content-watcher v1 (6 gates) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex)
+**Edge Functions:** content-dispatcher v27 (.limit(1), ignora scheduled_for hoy) · content-run-stage v41 · content-watcher v1 (6 gates) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex) · **iid-core v22 (fan-out multimarca por brand_topics, módulo fanout.ts; mata default_voice; body.domain override)** · **iid-inbound v1 (cerebro del Sembrador: capture/approve/reject/list, verify_jwt=false)**
+
+**Sembrador (CONSTRUIDO 25-jun b · falta T4 front):** post IG (link + frase humana) → iid-inbound `capture` (destila a TEMA NEUTRO, anti-IP: la semilla es disparador, nunca material a reescribir) → mapea a `brand_topics` → `iid_seeds` awaiting_approval → GATE TEMPRANO Sam (`approve`, puede corregir mapeo) → handoff HTTP a iid-core (4B, una sola fuente del fan-out) → fan-out v22 → N filas queue → pipeline normal → approve-piece (2º gate). Tabla `intel.iid_seeds`. Agente sentinela IID-SEEDER. 2 gates en serie, nunca publish directo.
 
 **Arquitectura híbrida queue (2026-06-20):** la queue lleva brand_id + domain (puente, escrito por el Builder en v37); `brand_topics` es fuente única de platforms/cadence/rollout (leída por el Scheduler).
 
@@ -158,7 +160,7 @@ CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → 
 
 ACTIVE_HEALTHY · us-east-1
 - **public:** 80 tablas · ~95 Edge Functions · nuevas: nscf_fulfillment_log, nscf_fulfillment_log_archive, nscf_integrity_log
-- **intel (IID):** iid_agents (29), brand_topics, iid_content_queue (+ domain), iid_findings, iid_research_raw, iid_cron_runs, iid_briefs, iid_scheduler_config, watcher_log
+- **intel (IID):** iid_agents (29), brand_topics, iid_content_queue (+ domain), iid_findings, iid_research_raw, iid_cron_runs, iid_briefs, iid_scheduler_config, watcher_log, iid_seeds (semillas humanas del Sembrador, 25-jun)
 - **content:** orchestrator_jobs (+ domain), content_pieces (+ domain), content_calendar, content_performance, brand_context_cache, brand_voices · pgvector v0.8.0 instalado
 - **shopify:** stores, audit_runs, fix_log + otras
 

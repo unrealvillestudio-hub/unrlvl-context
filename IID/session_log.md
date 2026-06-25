@@ -212,7 +212,7 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 - Vertex desbloqueado (22-jun).
 - **Fase 3 transporte (25-jun): dispatcher v27 transporta domain, cron 29 reactivado, pieza de prueba a awaiting_approval verde.**
 
-**Pendientes mayores:** Scheduler 5e-1, embeddings 5e-2/5e-3, publicación real Meta (5b), rejected_reason (5r), validación genoma v1.0 con IID real, destino de los 14 UNRLVL-* sin correr y los IID-* legacy de voz Lucien. **Fan-out multimarca en iid-core (origen) + sembrador IID + cerebro de destilado (ver §9 2026-06-25).**
+**Pendientes mayores:** Scheduler 5e-1, embeddings 5e-2/5e-3, publicación real Meta (5b), rejected_reason (5r), validación genoma v1.0 con IID real, destino de los 14 UNRLVL-* sin correr y los IID-* legacy de voz Lucien. **Sembrador IID CONSTRUIDO (fan-out v22 + iid-inbound + iid_seeds, 25-jun b) — falta front (T4).**
 
 ---
 
@@ -239,6 +239,44 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 ---
 
 ## §9 — SESSION LOG (novedad al tope)
+
+### 2026-06-25 (sesión b) — IID Sembrador CONSTRUIDO (T1–T3): fan-out multimarca v22 + cerebro iid-inbound + iid_seeds · Sam + Claude (Chat 1) + CC (ejecución)
+
+**Qué pasó:** se ejecutó el sprint Sembrador en orden estricto (cada tarea verifica verde antes de la siguiente). T1-T3 cerradas y aceptadas; T4 (front) queda como próximo. El "pecado original" (default_voice→marca) quedó MUERTO en el origen del encolado.
+
+**T1 — Limpieza test F3 (VERDE, ya estaba):** los 5 artefactos de la sesión a (pieza 10cda1d1, job f0e06d12, queue 4bd4843f, finding 795799ea, scheduled_posts) ya habían sido borrados por CC. Verificado en DB: content_pieces/orchestrator_jobs/iid_content_queue/iid_findings/scheduled_posts todas en 0; dispatchable_now=0; cron 29 active=true. Sin FK que romper.
+
+**T2 — Fan-out multimarca en iid-core (v21→v22):** se mató el pecado original en el origen del encolado.
+- **Diagnóstico (código vivo):** iid-core v21 hacía fan-out por VOZ hardcodeada (`primaryVoice=agent.default_voice`; `secondaryVoice` = el otro de unrlvl|lucien) e insertaba en queue SIN brand_id/domain. `brand_topics` aparecía 0 veces en el bundle.
+- **Bloqueador duro hallado:** `iid_content_queue_voice_check` solo admitía `'unrlvl'|'lucien'` (residuo del modelo viejo). El fan-out por voice_id real lo reventaba.
+- **Decisiones (Sam):** 1A (migrar `voice` a voice_id real, recrear CHECK) / 2A (verificar con finding sintético, sin crear agentes) / 3A (fan-out como módulo compartido, reusable por iid-inbound).
+- **Ejecución (CC, direct-on-prod staged+reversible — el patrón Rama+PR+Preview NO aplica a EFs del IID por deuda sin-repo §sesión-a):**
+  - Migración `iid_content_queue_voice_to_voiceid_eje_b`: DROP+ADD del CHECK de `voice` → ahora `voice ∈ {lucien_social, lucien_editorial, unrlvl_default}`. Rollback exacto capturado antes del ALTER: `CHECK (voice = ANY(ARRAY['unrlvl','lucien']))`. Tabla vacía → validó al instante. Extender el CHECK al sumar marcas (nota embebida).
+  - `fanout.ts` (módulo compartido): `resolveSubscribers(supabase, domain)` (lee brand_topics WHERE domain AND active) + `fanOut(opts)` (1 fila por marca×voz-de-destino-distinta) + `voiceFamily()` + `assignPsychoPreset()`. iid-core v22.
+  - Extirpados los 3 usos de `default_voice` en la ruta de encolado. `domain = body.domain ?? agent.domain`. Generador (llamada Claude) intacto.
+  - **Cambio de contrato deliberado:** la llave de autopublish pasó de `score>=85 AND urgency==='breaking'` (vieja) a **`score>=85 AND brand_topics.auto_approve`** (nueva, por marca). auto_approve=false en todas → nada autopublica.
+- **Verificación (cron 29 apagado durante el test):** Test 1 `ai-cognition` → **3 filas exactas**: LucienSael×2 (lucien_social+lucien_editorial) + UnrealvilleStudio×1 (unrlvl_default), todas platforms=[], brand_id/domain NOT NULL, pending. Test 2 `llm` (0 suscriptores) → **0 filas** + log "no subscribers". Artefactos limpiados; cron 29 restaurado.
+
+**T3 — Cerebro del sembrador (iid_seeds + iid-inbound v1):** captura de semillas humanas → destilado anti-IP → gate temprano de Sam → handoff a iid-core.
+- **Decisiones (Sam):** 1A (destilado por LLM en iid-inbound + persistencia) / 2A (gate temprano: destila, persiste awaiting_approval, SE DETIENE; no dispara research/fan-out hasta aprobación) / 3A-diferido (carril pedagógico solo como campo `lane`, sin lógica) / 4B (iid-inbound NO reimplementa fan-out — handoff HTTP a iid-core, una sola fuente).
+- **Parte 0 — agente sentinela `IID-SEEDER` `ce44ac81-1ab6-4fd2-994e-71abae337228`** (is_active=false; satisface el FK agent_id sin correr research). DESVIACIÓN forzada: los CHECK de `iid_agents` rechazan tier='seed'/run_frequency='manual' (enums cerrados: tier core/tier1-3, run_frequency daily/weekly/biweekly/monthly) → se usó tier3/monthly nominales + nota; NO se alteró el CHECK de una tabla core con 28 agentes vivos por una etiqueta. El guard real es is_active=false.
+- **Parte 1 — DDL `intel.iid_seeds`** (migración `iid_seeds_t3_sembrador_cerebro`): rastro completo (source_url, handle, raw_signal, captured_by, neutral_topic, mapped_brand_id, mapped_domain, distill_notes) + `lane` (standard|pedagogical, default standard) + `status` (captured→distilled→awaiting_approval→approved/rejected/dispatched/failed) + rejected_reason + finding_id + dispatched_at. GRANT ALL service_role + índices (status, captured_by). Rollback: `DROP TABLE intel.iid_seeds;`.
+- **Parte 2 — EF `iid-inbound` v1** (verify_jwt=false): router capture/approve/reject/list. `capture` destila vía Claude con anti-IP DURO (la semilla es disparador, NUNCA reescribir/parafrasear/citar el original; extraer TEMA NEUTRO) + mapea a brand_topics + persiste awaiting_approval y SE DETIENE. `approve` (gate de Sam, puede corregir mapeo) → handoff HTTP a iid-core con el contrato duro (agent_id=sentinela, domain=mapped override, scores 2A) → fan-out v22. `reject` → rejected+reason. `list` para el front.
+- **Verificación (4 aserciones, cron 29 apagado):** (1) capture seed ai-cognition → awaiting_approval, mapped_domain=ai-cognition, **neutral_topic ≠ raw_signal** (anti-IP funciona). (2) approve → finding + 3 filas (Lucien×2 + UNRLVL×1) + seed dispatched + trace bidireccional (finding.raw_data.seed_id ↔ seed). (3) negativo (override domain='llm', 0 subs) → failed, 0 findings/filas. (4) reject → rejected+reason. Artefactos limpiados; cron 29 restaurado; IID-SEEDER + tabla iid_seeds persisten.
+
+**Estado neto:** el Sembrador está LIVE end-to-end (semilla humana → destilado anti-IP → gate temprano → handoff → fan-out multimarca v22). DOS gates en serie intactos: (1) tema/mapeo en iid-inbound, (2) approve-piece sobre piezas generadas. Multimarca probado por construcción: sumar NSCF/FPHs = insertar fila en brand_topics + 1 línea en el CHECK de voice. Sin tráfico real (no hay front aún ni publicación real — bloqueada por ANTISPAM_CONTRACT §6 hasta R4B).
+
+**Inventario de objetos nuevos/cambiados (todos deploy directo Supabase, sin repo — deuda sin-repo persiste):**
+- iid-core **v22** (+ módulo fanout.ts) · iid-inbound **v1** (nueva) · tabla **intel.iid_seeds** · agente **IID-SEEDER** · migración del CHECK de iid_content_queue.voice (voice_id real).
+- Agentes ahora: **29 total = 28 de research (28 activos) + 1 sentinela (IID-SEEDER, inactivo)**.
+
+**Riesgo aceptado (4B):** acople por contrato iid-inbound→iid-core. El contrato del body de iid-core quedó fijado como interfaz dura; si iid-core cambia su body, revisar iid-inbound (constantes hardcodeadas con comentario).
+
+**Pendiente del sprint:** T4 — front/subpestaña "IID Seeds" en Orchestrator + control de acceso rol SEEDER (para Marisol) + cargar `IID_INBOUND_SECRET` al exponer el front. Carril paralelo (no bloquea): voz hermana pedagógica UNRLVL+Lucien (~27-jun; campo `lane` ya preparado; `iid_content_queue.psycho_preset` sin CHECK → basta para el preset pedagógico sin tabla nueva).
+
+**Professor:** 5 learnings de esta sesión esperan aprobación de Sam — 2 de T2 (CC: b85ac073 patrón EF-change direct-on-prod; d588ce0c contrato autopublish) + 3 de T3 (Claude: 983ac335 Sembrador inbound→core; 4a47ff92 CHECK enums iid_agents; d5748e60 acople-por-contrato 4B).
+
+**Hallazgo lateral confirmado (radar):** pgvector sigue instalado pero SIN materializar (cero columnas vector en toda la DB; los gates de texto del Watcher usan Claude-semántico). El Gate 8 visual del eje B será GREENFIELD de embeddings, no "un índice al lado del de texto". Coherente con deuda #11.
 
 ### 2026-06-25 — IID Sembrador (diseño) + Fase 3 transporte (REPARADO) + dominio algorithm-mechanics · Sam + Claude (Chat 1) + CC (informe read-only + ejecución)
 

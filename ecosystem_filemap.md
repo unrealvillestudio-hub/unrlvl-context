@@ -69,7 +69,7 @@ FLUJO COMPLETO:
   CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw
     → iid-process → iid_findings → iid_content_queue (brand_id + domain)
     → content-dispatcher (jobid 29, cada 30min, .limit(1))
-    → content-run-stage v37:
+    → content-run-stage v41:
          ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
          ├─ AIFE filter
          ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
@@ -79,7 +79,7 @@ FLUJO COMPLETO:
     → Orchestrator (orchestrator-unrlvl.vercel.app, aprobación Sam)
     → approve-piece v14 (publish Meta + move-to-permanent)
 
-AGENTES (intel.iid_agents, 29 activos):
+AGENTES (intel.iid_agents, 29 = 28 research + 1 sentinela):
   └─ 1 core: IID-CORE
   └─ 13 legacy IID-* (CORRIENDO, last_run reciente): IMAGE, LLM*, VIDEO, VOICE, GOOGLE,
        LINKEDIN*, META, TIKTOK, X*, ECOMMERCE, FLORIDA, PERSONAL-BRAND*, WHOLESALE
@@ -89,13 +89,15 @@ AGENTES (intel.iid_agents, 29 activos):
        Tier2 deep-stack: META-DEEP-STACK, GOOGLE-DEEP-STACK, ALGORITHM-MECHANICS
        Tier3 mercado: ECOMMERCE-DEEP, SHOPIFY-STACK, MARKET-FLORIDA, DROPSHIP-REALITY, WHOLESALE-LOGISTICS-FL, CREATOR-MACRO-ECONOMY
        Hard rule: todo con números + profundidad de código, nada filosófico (eso es Lucien).
+  └─ 1 sentinela: IID-SEEDER (ce44ac81, is_active=false — satisface FK agent_id de iid-inbound, NO corre research)
 
 EDGE FUNCTIONS:
-  └─ content-dispatcher v22 (.limit(1) — NO tocar hasta publicación real; HOY ignora scheduled_for)
-  └─ content-run-stage v37 (Builder + labs + callWatcher + domain-write jobs/pieces/queue)
+  └─ content-dispatcher v27 (.limit(1) — NO tocar hasta publicación real; HOY ignora scheduled_for; v27 transporta domain a builder_input)
+  └─ content-run-stage v41 (Builder + labs + callWatcher + domain-write jobs/pieces/queue)
   └─ content-watcher v1 (6 gates extraídos: similarity, sibling-window, cadence, evidence, duplication, hard-rules)
   └─ approve-piece v14 (publish Meta + move-to-permanent; reject sin rejected_reason → #5r)
-  └─ aife-filter · lab-worker v23 · copylab-processor · iid-core · iid-ecommerce
+  └─ iid-core v22 (fan-out multimarca por brand_topics, fanout.ts; mata default_voice; body.domain override) · iid-inbound v1 (cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
+  └─ aife-filter · lab-worker v23 · copylab-processor · iid-ecommerce
 
 GOBIERNO (intel.brand_topics):
   La MARCA declara qué consume y con qué voz por destino. El agente investiga neutro.
@@ -215,6 +217,7 @@ speaks_sessions · speaks_messages · speaks_leads · speaks_golden_pass
 ```
 iid_agents (29) · brand_topics · iid_content_queue (+ domain) · iid_findings
 iid_research_raw · iid_cron_runs · iid_briefs · iid_scheduler_config · watcher_log
+iid_seeds (semillas humanas del Sembrador: source_url/raw_signal/neutral_topic/mapeo/lane/status, 25-jun)
 ```
 
 ### content
@@ -287,7 +290,7 @@ IID pipeline (OPERACIONAL · R4B en curso):
   brand_voice_genome (lucien_editorial + lucien_social v1.0) ← ✅ generativo/constructor
   brand_topics ← gobierno de voz/tema/cadencia (fuente única de platforms/cadence/rollout)
   iid_content_queue (+ domain) ← puente brand_id+domain para el Scheduler
-  content-run-stage v37 ← Builder + labs + callWatcher
+  content-run-stage v41 ← Builder + labs + callWatcher
   content-watcher v1 ← 6 gates
   content-dispatcher (.limit(1) — quitar solo tras publicación real)
   Vertex (GOOGLE_SERVICE_ACCOUNT_KEY en Supabase) ← embeddings 5e-2

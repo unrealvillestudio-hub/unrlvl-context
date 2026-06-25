@@ -1,18 +1,19 @@
 {
   "_meta": {
-  "version": "2026-06-24-v1",
+  "version": "2026-06-25-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-06-22-v1",
+  "previous": "2026-06-24-v1",
   "last_session": {
-    "date": "2026-06-24",
-    "conducted_by": "Claude Opus 4.8 + CC + MCP (Vercel/Supabase)",
-    "status": "ImageLab: migración P0 Imagen→Gemini CERRADA (api/execute.ts → gemini-2.5-flash-image, PR #2 6d04556 producción verificada) + BGRemover (ex-ProductShots) MERGEADO a main (merge commit a1b2a1a).",
+    "date": "2026-06-25",
+    "conducted_by": "Claude Opus 4.8 + CC + MCP (Supabase/Vercel)",
+    "status": "IID Sembrador CONSTRUIDO (T1-T3): fan-out multimarca iid-core v22 + módulo fanout.ts + cerebro iid-inbound v1 + tabla iid_seeds + agente sentinela IID-SEEDER. Pecado original (default_voice→marca) muerto en el origen del encolado. T4 (front IID Seeds + rol SEEDER) pendiente.",
     "key_achievements": [
-      "Migración P0 Vertex Imagen→gemini-2.5-flash-image: todos los modelos Imagen apagados 24-jun. api/execute.ts reescrito (:predict→:generateContent, endpoint+body+parsing+multimodal distintos, no string-swap). PR #2 MERGED (6d04556), producción verificada.",
-      "Drift cerrado: execute.ts es el ÚNICO punto de generación de imagen vivo; lab-worker + content-run-stage delegan vía lab_configs.imagelab → /api/execute.",
-      "BGRemover (ex-ProductShots): composición de catálogo DESCARTADA (límite inherente luz-coherencia + etiqueta). Recortado a herramienta de remoción de fondo (remove.bg, 3 pasos, cap 2400px). MERGEADO a main (a1b2a1a). Nueva env var REMOVEBG_API_KEY en Vercel image-lab.",
-      "Bug remove.bg resuelto: 400 'error reading the image' (PNG no-decodable) + 413 (>4.5MB serverless Vercel) → normalización cliente a JPEG baseline + cap 2400px antes de subir.",
-      "Verificación (c) end-to-end IID DIFERIDA: el IID está detenido tras tabla rasa (23-jun); no hay corrida natural que observar hasta reconexión Fase 3."
+      "T2 — iid-core v21→v22: fan-out multimarca por brand_topics (resolveSubscribers+fanOut en fanout.ts). Mata default_voice (3 usos extirpados). Migración del CHECK iid_content_queue.voice → voice_id real (lucien_social/lucien_editorial/unrlvl_default). Verificado: finding ai-cognition → 3 filas (Lucien×2+UNRLVL×1); finding llm → 0 filas.",
+      "T3 — cerebro del sembrador: EF iid-inbound v1 (capture/approve/reject/list). Captura semilla humana (link+frase) → destila a TEMA NEUTRO con anti-IP duro → mapea a brand_topics → GATE TEMPRANO de Sam → handoff HTTP a iid-core (4B, una sola fuente del fan-out). Tabla intel.iid_seeds (rastro + lane + status). Agente sentinela IID-SEEDER (is_active=false, satisface FK).",
+      "Dos gates en serie confirmados: (1) tema/mapeo en iid-inbound, (2) approve-piece sobre piezas. Multimarca probado por construcción (sumar NSCF/FPHs = fila en brand_topics + 1 línea en CHECK voice).",
+      "Cambio de contrato autopublish: score>=85 AND brand_topics.auto_approve (por marca; antes score>=85 AND urgency==='breaking'). auto_approve=false en todas → nada autopublica.",
+      "Patrón de gobernanza IID EFs: sin repo (deuda persiste) → direct-on-prod staged+reversible con cleanup; NO Rama+PR+Preview. Rollback de cada DDL capturado antes de aplicar.",
+      "Radar: pgvector instalado pero sin materializar (cero columnas vector). Gate 8 visual del eje B = greenfield de embeddings."
     ]
   }
 },
@@ -498,7 +499,7 @@
     }
   },
   "iid_subsystem": {
-  "_status": "OPERACIONAL · Builder+Watcher LIVE · R4B en curso (deadline 1ª sem julio) · UNRLVL+Lucien como conejillos de indias hasta cerrar R4B",
+  "_status": "OPERACIONAL · Builder+Watcher LIVE · Sembrador CONSTRUIDO (fan-out v22 + iid-inbound + iid_seeds, 25-jun) · R4B en curso (deadline 1ª sem julio) · UNRLVL+Lucien como conejillos de indias hasta cerrar R4B",
   "_name": "IID = Intelligence Insights Developers. UNRLVL-IID = los IID de UNRLVL. (Variantes previas — Intelligent Intelligence Dispatcher / Insight Distribution / Content Distribution — fueron deriva de reinterpretación al reducir a siglas; NO son canónicas.)",
   "_repo": "unrlvl-context/IID/session_log.md — documento fundacional + session log (fundado 2026-06-22). Cuerpo §1-§8 estable + §9 session log al tope.",
   "schema": "intel",
@@ -511,7 +512,7 @@
   },
   "agents": {
     "_total_active": 29,
-    "_breakdown": "1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 2026-06-15, last_run NULL — aún sin ejecutar). default_voice='lucien' en 4 legacy (IID-LLM, IID-LINKEDIN, IID-X, IID-PERSONAL-BRAND) = legado del encaje a la fuerza; investigan marketing, no la materia filosófica de Lucien.",
+    "_breakdown": "29 agentes = 1 core (IID-CORE) + 13 legacy IID-* (corriendo) + 14 UNRLVL-* (last_run NULL) + 1 sentinela IID-SEEDER (ce44ac81, is_active=false, solo satisface FK agent_id de iid-inbound, NO corre research). 28 activos de research + 1 sentinela inactivo. default_voice='lucien' en 4 legacy = legado del encaje a la fuerza; el fan-out v22 YA NO usa default_voice (lo ignora; la voz sale de brand_topics.voice_by_destination).",
     "tier1_method": ["UNRLVL-CONTEXT-ENGINEERING","UNRLVL-BRAND-VOICE-SYSTEMS","UNRLVL-AI-INDUSTRIALIZATION","UNRLVL-CRO-PSYCHOLOGY","UNRLVL-SIGNAL-LEARNING-LOOPS"],
     "tier2_deepstack": ["UNRLVL-META-DEEP-STACK","UNRLVL-GOOGLE-DEEP-STACK","UNRLVL-ALGORITHM-MECHANICS"],
     "tier3_market": ["UNRLVL-ECOMMERCE-DEEP","UNRLVL-SHOPIFY-STACK","UNRLVL-MARKET-FLORIDA","UNRLVL-DROPSHIP-REALITY","UNRLVL-WHOLESALE-LOGISTICS-FL","UNRLVL-CREATOR-MACRO-ECONOMY"],
@@ -520,15 +521,17 @@
     "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
   },
   "pipeline": {
-    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher (jobid 29, cada 30min, .limit(1)) → content-run-stage v37 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v1 (6 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v27 (jobid 29, cada 30min, .limit(1)) → content-run-stage v41 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v1 (6 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
     "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome."
   },
   "edge_functions": {
-    "content-dispatcher": "v22 — cron jobid 29 cada 30min. Tiene .limit(1) (NO tocar hasta publicación real, #5f). HOY ignora scheduled_for.",
-    "content-run-stage": "v37 — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).",
+    "content-dispatcher": "v27 — cron jobid 29 cada 30min. Tiene .limit(1) (NO tocar hasta publicación real, #5f). HOY ignora scheduled_for. v27 (25-jun): transporta domain a assets.builder_input.domain (fix de transporte queue→approval).",
+    "content-run-stage": "v41 — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).",
     "content-watcher": "v1 — 6 gates extraídos a EF propia (similarity, sibling-window, cadence, evidence, duplication, hard-rules). PASS/REJECT/RESCHEDULE.",
     "approve-piece": "v14 — aprobación: publish Meta + move-to-permanent. Path reject HOY sin rejected_reason (#5r pendiente).",
     "aife-filter": "control de calidad/seguridad de marca.",
+    "iid-core": "v22 — fan-out multimarca por brand_topics (módulo fanout.ts: resolveSubscribers+fanOut+voiceFamily+assignPsychoPreset). Mata default_voice. Escribe brand_id+domain+voice_id real en queue. body.domain = override del domain del fan-out. Contrato de entrada (interfaz dura): req agent_id,title,summary,r_scores,c_scores + opc source_urls,raw_data,finding_date,urgency,platforms,domain.",
+    "iid-inbound": "v1 (NUEVA) — cerebro del Sembrador. Router capture/approve/reject/list. capture: destila semilla humana (link+frase) a tema neutro con anti-IP duro + mapea a brand_topics + persiste iid_seeds awaiting_approval y SE DETIENE. approve: gate de Sam (corrige mapeo) → handoff HTTP a iid-core (4B). reject/list. verify_jwt=false. Auth IID_INBOUND_SECRET pendiente de cargar al exponer el front (T4).",
     "lab-worker": "v23 — orquestador viejo (dual-mode lab_jobs). Llama labs por HTTP vía lab_configs. NO tiene creds Vertex.",
     "soporte": ["copylab-processor","brand-context-builder","iid-core","iid-ecommerce"]
   },
@@ -541,7 +544,7 @@
     "config": "intel.iid_scheduler_config: orchestrator_url + vercel_bypass_secret (CopyLab/ImageLab/SocialLab) + iid_cron_secret"
   },
   "tables": {
-    "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log"],
+    "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log","iid_seeds (rastro semillas humanas: source_url/handle/raw_signal/captured_by/neutral_topic/mapeo/lane/status + GRANT service_role, 25-jun)"],
     "content": ["orchestrator_jobs (+ domain 2026-06-20)","content_pieces (+ domain)","content_calendar","content_performance","brand_context_cache","brand_voices"]
   },
   "vertex": {
@@ -549,6 +552,20 @@
     "secrets": "GOOGLE_SERVICE_ACCOUNT_KEY (JSON del SA imagelab-vercel) + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION cargados en Supabase Secrets por Sam.",
     "project": "gen-lang-client-0491381650",
     "embeddings": "gemini-embedding-001 @768 dims (Matryoshka, cap HNSW 2000) para 5e-2/5e-3."
+  },
+  "sembrador": {
+    "_status": "CONSTRUIDO (T1-T3 25-jun) · LIVE end-to-end · falta T4 (front)",
+    "flujo": "post IG (link+frase humana) → iid-inbound capture (destila a tema neutro, anti-IP: semilla=disparador NUNCA material a reescribir) → mapea a (brand_id,domain) de brand_topics → iid_seeds awaiting_approval → GATE TEMPRANO Sam (approve, corrige mapeo) → handoff HTTP a iid-core (contrato duro, body.domain override) → fan-out v22 → N filas queue → pipeline normal → approve-piece (2º gate)",
+    "componentes": {
+      "tabla": "intel.iid_seeds",
+      "ef": "iid-inbound v1",
+      "fan_out": "iid-core v22 (fanout.ts, módulo compartido; iid-inbound lo consume vía HTTP, NO lo duplica — 4B)",
+      "agente_sentinela": "IID-SEEDER ce44ac81-1ab6-4fd2-994e-71abae337228 (is_active=false, satisface FK agent_id)"
+    },
+    "gates_en_serie": "2 — (1) tema/mapeo en iid-inbound (gate temprano, antes de gastar research), (2) approve-piece sobre piezas generadas. NUNCA publish directo.",
+    "carril_pedagogico": "DIFERIDO (~27-jun). Campo iid_seeds.lane (standard|pedagogical) preparado, sin lógica. iid_content_queue.psycho_preset SIN CHECK → basta para preset pedagógico sin tabla nueva.",
+    "delegacion": "T4 — Marisol como rol SEEDER (solo subpestaña IID Seeds del Orchestrator, patrón ADMIN/OPS de NSCF-Console). Cargar IID_INBOUND_SECRET al exponer.",
+    "multibrand_proof": "sumar NSCF/FPHs = INSERT fila en brand_topics(domain) + 1 línea en el CHECK de iid_content_queue.voice. Cero cambio de código."
   },
   "r4b_status": {
     "_deadline": "1ª sem julio 2026",
@@ -574,6 +591,7 @@
       "UnrealvilleStudio": {
         "active_phase1_tier1": ["context-engineering", "brand-voice-systems", "ai-industrialization", "cro-psychology", "signal-learning-loops"],
         "active_multibrand_test": "ai-cognition (sibling_stagger=true, ángulo infraestructura vs Lucien filosófico)",
+        "active_phase2": ["algorithm-mechanics"],
         "inactive_phase2": ["system-proof (active=false hasta validar piloto)"],
         "voice_by_destination": "unrlvl_default (editorial y social)",
         "platforms": "linkedin, meta_fb, meta_ig",
