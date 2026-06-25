@@ -239,6 +239,43 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-24 (sesión b) — Diseño del eje B: matriz validada + 2 decisiones de arquitectura + factibilidad CC#5 · Sam + Claude (Chat 1) + CC (informe #5 read-only)
+
+**Objetivo:** convertir la investigación del flujo (sesión a) en diseño accionable del eje B (mapeo marca↔tema con perfil de estímulo). Validación celda por celda de la matriz + decisión Ruta A/B + verificación de factibilidad contra código real.
+
+**MATRIZ DE ESTÍMULOS VALIDADA (artefacto × objetivo) — celda por celda con Sam:**
+- 3 artefactos (texto/imagen/video) × 3 objetivos (vender-ad/comunidad-orgánico/autoridad-IID) = 9 perfiles. WebLab FUERA (landings/webs/e-commerce/themes vía sync/UI, trabajo humano). VideoLab DENTRO (dormida hoy, misma lógica que ImageLab).
+- 4 familias psycho: CONVERSIÓN (scarcity/urgency/fomo/aspiration), COMUNIDAD (belonging/identity), AUTORIDAD (authority/trust), PUENTE (curiosity/social-proof).
+- Celda 1 (puente): CURIOSITY aplica a los 3 objetivos; SOCIAL-PROOF a comunidad+ventas, NO autoridad (abarataría el artículo). Modo: disponible/variable ANTIPATRÓN (no por defecto, no pickRandom — variación con memoria). SOCIAL-PROOF con candado: solo dato real verificable, nunca inventado.
+- Celda 2 (comunidad en ads): SÍ disponible, IDENTITY especialmente (vende identidad, no producto).
+- Celda 3 (autoridad en comunidad): SÍ disponible, TRUST encaja, AUTHORITY uso cuidadoso (no disparar forma dura: credencial/didáctico).
+- Celda 4 (Watcher en imagen/video): gate visual COMPLETO dentro del eje B, CON similitud visual entre hermanas desde ya (Sam rechazó acotarlo).
+- Principio: los objetivos NO son compartimentos estancos — familia base + préstamo de otras como vehículo.
+
+**DECISIÓN — Ruta B confirmada:** portar el motor creativo (creative_vectors 44 + tension_architectures 10 + aggro_presets 5 + psycho_presets 10) al Builder interno buildFromGenome, con selección DETERMINÍSTICA por brand_topics (no el pickRandom del CopyLab externo). Ruta A descartada: CopyLab usa pickRandom uniforme (genera patrón), psycho solo en email, modelo retirado, perdería features del Builder. Ruta B elimina 1 de los 3 sistemas de generación.
+
+**MODELO DE DOS CAPAS REFLEJADAS (confirmado por Sam):** Builder = capa prescriptiva (inyecta criterio antes de generar, pide pero no verifica). Watcher = capa validadora (juzga después, único con dientes, rechaza). Lo que el Builder prescribe, el Watcher valida → el eje B AÑADE 2 gates al Watcher:
+- Gate 7 — coherencia objetivo↔estímulo (que pieza de autoridad no contenga lenguaje de conversión). Debe ser LLM (determinístico daría falsos positivos).
+- Gate 8 — similitud VISUAL entre hermanas (extiende R1 del ANTISPAM_CONTRACT al plano visual; el contrato solo cubría texto).
+
+**FACTIBILIDAD (CC informe #5, read-only contra código vivo):**
+- Ruta B: ✅ factible, aditiva no estructural. buildFromGenome ya arma prompt por capas; añadir vector/tensión/aggro/psycho = 3 capas más. applyCreativeLogic de CopyLab (~40 líneas) portable; solo reemplazar pickRandom por selector con memoria. Features del Builder (título/firma/cifras/hard_rules) NO se rompen (verificado).
+- 3 fixes de higiene: triviales (1 función / 1 línea / 1 línea).
+- Gate 7: ✅ factible, LLM, ~30 líneas, mismo patrón que gate4.
+- Gate 8: ⚠️ factible pero GREENFIELD — estrena toda la infra de embeddings (ver decisión embeddings). Modelo Vertex multimodalembedding@001, tabla+índice HNSW nuevos.
+- Variación-con-memoria: ✅ sin tabla nueva — leer piezas recientes (loadRecentPieces 21d ya existe) + persistir creative_seed en builder_meta (campo jsonb existente).
+- Orden del flujo: ⚠️ moderado — SocialLab encola scheduled_posts ANTES del Watcher; conviene correr gates bloqueantes pre-social o insertar como draft. Refactor de fireNextStage.
+
+**2 DECISIONES DE ARQUITECTURA TOMADAS POR SAM:**
+1. **objective_by_platform** (jsonb): el objetivo se declara en brand_topics por PLATAFORMA real (x, meta_ig, linkedin), NO por destino social/editorial (el objetivo es ortogonal al destino) NI reutilizando purpose (= publish/internal, doble-uso del IID). Una columna nueva, respeta "una fila por marca+dominio". El artefacto no se declara: imagen/video hereda el objetivo del output que acompaña.
+2. **Migrar texto Y visual a embeddings** (no solo visual). Para antibaneo no desmejora — mejora consistencia/costo/velocidad. Cierra el R4B 5e-2/5e-3 pendiente. Opción híbrida disponible (embedding filtra, Claude juzga zona gris).
+
+**WRINKLES resueltos (CC los detectó contra código):** (a) objetivo es ortogonal al destino → por plataforma; (b) brand_topics.purpose ya existe y significa otra cosa → campo propio; (c) creative_compatibility_rules keyeada por content_type, no por objetivo → añadir filas por objetivo (data, no esquema).
+
+**SECUENCIA DE IMPLEMENTACIÓN (próxima sesión, CC ya no read-only):** (1) 3 fixes de higiene; (2) DDL objective_by_platform + poblar plataformas de Lucien/UNRLVL; (3) Ruta B + Gate 7 (comparten el dato objetivo); (4) Gate 8 + embeddings texto/visual + reordenamiento del flujo (frente caro/greenfield). Completar esta secuencia = reconexión Fase 3 = R4B (habilita primer publish real por ANTISPAM_CONTRACT §6).
+
+**Estado spec:** IID_SPEC_EJE-B_estimulo-matriz-watcher.md entregada como read-only de factibilidad y verificada. Pendiente: regenerar como spec de IMPLEMENTACIÓN con las 2 decisiones incorporadas (próxima sesión).
+
 ### 2026-06-24 — Investigación profunda del flujo de calidad + matriz de estímulos (artefacto × objetivo) · Sam + Claude (Chat 1) + CC (4 informes read-only)
 
 **Objetivo de la sesión:** antes de diseñar el eje B (mapeo marca↔tema), mapear a fondo cómo se evalúa la calidad del output en TODO el flujo del IID, no solo el scoring. Cuatro informes de CC (read-only estricto) + revisión de DB/graph por Claude.
@@ -292,6 +329,11 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 7. Orden subóptimo: Watcher (único validador) corre al final; scheduled_posts huérfanas si REJECT.
 8. cron jobid 2 (iid-brief-biweekly) sigue active:true — se dispara 1 julio. Decidir destino antes.
 9. urgency ("breaking") sin clasificador — gatillo de autopublish sin contrato. Definir en modelo nuevo.
+10. Discrepancia en el conteo de agentes activos: claude.ai cuenta **28**, la lectura viva de CC dio **29**. El propio doc lo arrastra (§3 encabeza "29" pero el desglose suma 28: 1 CORE + 13 legacy + 14 UNRLVL-*). Irrelevante por ahora; reconciliar al regenerar ecosystem_graph tras Fase 3.
+11. NO existen embeddings en el sistema (pgvector 0.8.0 instalado, cero columnas vector). Los gates de texto usan Claude-semantic. El R4B 5e-2/5e-3 nunca se materializó — se cierra con la migración a embeddings del eje B.
+12. creative_compatibility_rules keyeada por content_type, no por objetivo — requiere filas nuevas por objetivo para Ruta B.
+13. Asimetría a eliminar: texto Claude-semantic vs visual pgvector → resuelta por decisión de migrar ambos a embeddings.
+14. Coordinación content-run-stage ↔ content-watcher para pasar imagen+hermanas visuales al Gate 8; ambas EF sin fuente versionada (deuda #1) → cada cambio es deploy directo sin PR.
 
 ### 2026-06-23 — Reparación definitiva del flujo: tabla rasa del modelo viejo · Sam + Claude (Chat 1)
 
