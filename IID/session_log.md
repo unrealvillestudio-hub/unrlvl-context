@@ -240,6 +240,62 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-27 — #48 Approval por email COMPLETO y verificado en vivo + corrección v8→v9 · Sam + Claude (Chat 1) + CC (PR)
+
+**Qué pasó:** se diseñó, construyó y verificó end-to-end **#48 (notificación de gate por email)**. Cuando una semilla entra a `awaiting_approval`, `iid-inbound` dispara un email a `content-approval@unrealvillestudio.com` con enlace a la raíz del Orchestrator — sin resumen, anti-IP. Deploy v9 LIVE, las 5 verificaciones pasadas. Quedó pendiente solo #47 (Expert/Boids) y #45 (bloqueante) para sesiones propias.
+
+**Decisiones de diseño (cerradas con Sam):**
+- **A1 — envío INLINE en `iid-inbound` capture** (no EF separada). Replica el patrón Resend de `content-run-stage`, no el de `nscf-mailer`. Argumento: single-responsibility no paga su costo para un fetch de una línea; content-run-stage (orquestador pesado) ya manda su email inline — coherencia, no deuda.
+- **B1 — email en TODO `awaiting_approval`** (con o sin `mapped_domain`). NO en `failed` (esa rama retorna 502 antes de llegar a notifyGate). La semilla sin domain es justo la que más necesita atención de Sam (asignar domain en el approve) → no se filtra.
+- **Asunto = neutral_topic** con distinción por mapeo: `[IID Seed · pendiente] {topic}` si hay domain, `[IID Seed · sin mapear] {topic}` si null. Distingue de un vistazo cuáles requieren que Sam asigne domain a mano.
+- **Fire-and-forget con await:** el await garantiza el despacho antes de que el runtime de la EF mate el proceso; el helper traga su propio error (nunca lanza) → cumple "nunca tumba el capture". Trade-off aceptado: añade la latencia del fetch a Resend al response del capture (~200-600ms). Si molesta en la mano de Marisol, fix trivial post-merge (quitar await + .catch). Se dejó con await por fiabilidad del email > latencia.
+- **Enlace solo a raíz del Orchestrator** (`orchestrator-unrlvl.vercel.app`): verificado que el Orchestrator es estado React puro SIN routing por URL — no existe deep-link a la cola. Coincide con lo pedido ("solo enlace, sin resumen").
+
+**Patrón Resend confirmado (verificado contra código real):**
+- Correcto = `content-run-stage` v33+: key `RESEND_UNRLVL_KEY`, from `Content Queue <content@unrealvillestudio.com>`, to `content-approval@unrealvillestudio.com`.
+- Trampa evitada = `nscf-mailer`: usa `RESEND_API_KEY` (cuenta NSCF) + from `noreply@neuronescflorida.com` — clonarlo sería reincidir en el bug histórico (cada marca su key Resend). `notifyGate` NO clonó nscf-mailer.
+- `RESEND_UNRLVL_KEY` confirmada existente en el store de secrets del proyecto (Sam: emails de piezas llegan hoy; además hay un `[TEST UNRLVL] Canal de aprobación — RESEND_UNRLVL_KEY OK` del 17-jun en la bandeja).
+
+**CORRECCIÓN MAYOR — v8 fantasma (desfase numeración git↔deploy):**
+- El brief decía bump v7→v8. CC reportó que el deploy YA estaba en v8 (26-jun 20:24 UTC) sin #48. Claude verificó: comparó cabecera + constantes + rama capture del bundle v8 deployado contra el git source (sha ce0e29b) → **funcionalmente IDÉNTICOS** (solo difiere la re-serialización del bundler). El v8 fue un **redeploy benigno sin cambio de código** (probable recarga de secret al cierre de T4, o desfase git↔deploy: cada `deploy_edge_function` incrementa versión aunque el contenido no cambie).
+- **No hay deuda ni código perdido.** El git refleja fielmente lo que corría. #48 entró como **v9**, no v8.
+- Lección durable: la versión del deploy NO vive en el código (el header dice v2.0); vive en Supabase. Nunca asumir git vN == deploy vN; verificar con `get_edge_function` antes de bumpear.
+
+**Gobernanza / acceso (CC):**
+- CC se topó con el allowlist de repos pinneado a `unrlvl-context` — no podía leer/escribir/PR en `unrlvl-iid-functions` (403 en MCP y git clone). Habilitar el connector de GitHub a nivel cuenta NO amplía el allowlist de una sesión ya iniciada; hay que ARRANCAR la sesión apuntada al repo. CC actuó correctamente: se negó a rodear el límite vía el proxy Vercel api/gh. Tell de arranque establecido: el primer `get_file_contents` sobre el target debe devolver el archivo; si da 403, parar.
+- En la sesión correcta (apuntada a `unrlvl-iid-functions`) CC aplicó las 4 inserciones, verificó el ancla idéntica, confirmó blob LF-clean (working-tree CRLF por `core.autocrlf=true` es solo artefacto), y abrió **PR #5** en `unrlvl-iid-functions`. Sam mergeó y borró la rama.
+
+**Implementación (`supabase/functions/iid-inbound/index.ts`, +42 líneas, 0 borrados, sha 88f4609):**
+- Constantes `RESEND_KEY`, `ORCH_URL`, `APPROVAL_TO`, `APPROVAL_FROM` tras `CLAUDE_MODEL`.
+- Helper `notifyGate(neutralTopic, mappedDomain)` tras `subscribers(...)`.
+- Llamada `await notifyGate(...)` en la rama capture, entre el `update` a awaiting_approval y el `return` (solo caso éxito).
+- Entrada de cabecera `2026-06-27 (CC · #48)`.
+
+**Deploy + verificación (Claude, MCP):**
+- Deploy v9 ACTIVE desde el main mergeado (vía `deploy_edge_function`, LF limpio). Confirmado `version: 9`, status ACTIVE.
+- **Verificación vía EF-stub de diagnóstico temporal `iid-notify-test`** (aísla la lógica de notifyGate; necesario porque el sandbox de Claude Chat NO tiene `*.supabase.co` en su allowlist de egress — no puede invocar EFs ni curl-ear directamente; y `get_logs` del MCP está roto con 404). Sam disparó los 3 tests con curl local (CMD Windows: comandos en una línea, comillas dobles escapadas):
+  - **Test 1 (con domain):** `ok:true`, status 200, Resend id, asunto `[IID Seed · pendiente] Adopción de agentes autónomos en pymes [PRUEBA #48]`. Email LLEGÓ. ✅ (verif #1)
+  - **Test 2 (sin mapear):** `ok:true`, status 200, asunto `[IID Seed · sin mapear] Técnica de retención capilar post-tratamiento [PRUEBA #48]`. Email LLEGÓ con etiqueta correcta. ✅ (verif #2, confirma B1)
+  - **Test 3 (sin key):** `ok:false`, `detail:"no-key (esperado)"`, status 200, sin crash, **email NO llegó**. ✅ (verif #4 fire-and-forget no tumba)
+  - **Verif #3 (failed-no-email):** por lectura de código — la rama failed retorna 502 antes de notifyGate. ✅
+  - **Verif #5 (enlace):** el HTML del email muestra botón "Abrir Cola de revisión →" a `orchestrator-unrlvl.vercel.app`. ✅
+- Stub `iid-notify-test` BORRADO por Sam tras los tests (higiene; no tocaba iid_seeds → cola de Marisol limpia, sin filas de prueba que borrar).
+
+**Inventario de objetos nuevos/cambiados:**
+- `iid-inbound` **v9** (= v7 funcional + notifyGate #48). PR #5 en `unrlvl-iid-functions` mergeado.
+- Stub temporal `iid-notify-test` creado y borrado (no deja rastro).
+- Sin cambios de DDL, sin secrets nuevos (RESEND_UNRLVL_KEY ya existía).
+
+**Deuda nueva registrada:**
+- **`unrlvl-supabase-mcp:get_logs` ROTO** — devuelve 404 (`Cannot POST .../analytics/endpoints/logs.all`). Impide leer logs de EF por MCP desde Claude Chat. Workaround usado: stub + disparo externo + confirmación por bandeja.
+- **Sandbox de Claude Chat sin egress a `*.supabase.co`** — Claude no puede invocar/curl-ear EFs; el disparo de tráfico de verificación debe venir de afuera (Sam curl local).
+
+**Professor:** 5 learnings capturados (desfase numeración git↔deploy / allowlist de sesión CC no amplía en caliente / limitaciones entorno Claude Chat: egress + get_logs roto / CMD Windows backslash+comillas / #48 patrón email-approval completo).
+
+**Próximo (orden):** (1) **#45 sembrar brand_topics de las 6 marcas de Marisol** — BLOQUEANTE de producción, decisión de arquitectura de contenido, sesión propia con HRD. (2) **Sprint modo Expert/Boids (#47)** — segundo modo de captura (sub-pestaña Basic/Expert + upload + framing/OCR/análisis de técnica + seed pedagógico). Requiere decisiones de diseño con Sam antes de construir (dónde corre el análisis, cómo se persiste el output del método, dónde se almacena el upload). (3) **#46 tab Topic Proposals**. Carril paralelo: voz hermana pedagógica (lane ya listo).
+
+---
+
 ### 2026-06-26 — IID Sembrador T4 COMPLETO: front IID Seeds + auth rol/scope + iid-inbound versionado · Sam + Claude (Chat 1) + CC (ejecución)
 
 **Qué pasó:** se ejecutó y cerró T4 del Sembrador en orden estricto (E1→E4, cada etapa verifica verde antes de la siguiente). El front IID Seeds está LIVE en el Orchestrator con auth de dos ejes (rol + scope de marca), y `iid-inbound` quedó versionado en git por primera vez. Varias decisiones de diseño se tomaron sobre código real, no sobre supuestos del brief (el Orchestrator NO tenía auth; el patrón NSCF es EF de Supabase, no /api/*; iid-inbound no tenía fuente en git). Se descubrieron y mapearon dos modos de semilla (Basic vs Expert/Boids) que redefinen el roadmap del Sembrador.
