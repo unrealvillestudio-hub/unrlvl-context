@@ -240,6 +240,57 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-26 — IID Sembrador T4 COMPLETO: front IID Seeds + auth rol/scope + iid-inbound versionado · Sam + Claude (Chat 1) + CC (ejecución)
+
+**Qué pasó:** se ejecutó y cerró T4 del Sembrador en orden estricto (E1→E4, cada etapa verifica verde antes de la siguiente). El front IID Seeds está LIVE en el Orchestrator con auth de dos ejes (rol + scope de marca), y `iid-inbound` quedó versionado en git por primera vez. Varias decisiones de diseño se tomaron sobre código real, no sobre supuestos del brief (el Orchestrator NO tenía auth; el patrón NSCF es EF de Supabase, no /api/*; iid-inbound no tenía fuente en git). Se descubrieron y mapearon dos modos de semilla (Basic vs Expert/Boids) que redefinen el roadmap del Sembrador.
+
+**Hallazgos sobre código real (corrigieron supuestos del brief):**
+- **El Orchestrator NO tenía NINGÚN auth** (sin login/roles/JWT/guards) — App.tsx renderizaba todo abierto. El brief asumía "extender" un auth tipo NSCF; la realidad fue construirlo desde cero.
+- **El patrón NSCF-Console real** (verificado en `nscf-b2b-approve`): NO vive en /api/* de Vercel sino en una EF de Supabase. Usuarios en secret JSON `[{sub,role,hash}]`, bcryptjs@2.4.3 cost 10, JWT HS256 djwt v3.0.2, matriz PERMISSIONS fail-closed, sin short-circuit en el compare (anti-timing). Se replicó este patrón en `iid-inbound`.
+- **`iid-inbound` no tenía fuente en git** (ningún repo). El ESZIP del deploy no es TS legible → la fuente limpia para el commit-cero la proveyó Sam (el index.ts que tenía), NO una reconstrucción del runtime.
+- **6 marcas de Marisol existen en `public.brands` pero NO en `intel.brand_topics`** → captura destila pero approve daría "domain sin suscriptores". BLOQUEANTE de producción = #45 (sembrar sus topics, sesión propia de arquitectura de contenido). El sistema queda DORMIDO para ellas hasta entonces.
+
+**E1 — Versionar iid-inbound en git (sin cambios funcionales):** repo nuevo dedicado **`unrealvillestudio-hub/unrlvl-iid-functions`** (private) creado por Sam — infraestructura UNRLVL-core, NO de cliente (descartado meterlo en NeuroneSCF o Orchestrator). Estructura `supabase/functions/iid-inbound/`. Commit-cero = el index.ts real provisto por Sam. PR#1 mergeado. Salda parcialmente la deuda §1/§43 (versionar EFs del IID) para esta EF; el resto de EFs IID siguen direct-on-prod.
+
+**E2 — DDL `seeder_rationale`:** columna aditiva en `intel.iid_seeds` (criterio del seeder, captura razonada). Rollback capturado. Sin CHECK que tocar; RLS deshabilitado.
+
+**E3 — Auth de dos ejes en iid-inbound (VERDE):**
+- Patrón `nscf-b2b-approve`: login solo-contraseña → recorre usuarios, compara bcrypt, emite JWT 8h con `{sub, role, brand_scope}`. Matriz PERMISSIONS: `capture` (seeder+admin), `list` (seeder solo lo suyo / admin todo), `approve`/`reject` (admin), `list_options` (filtrado por scope).
+- **Scope de marca = eje NUEVO, ortogonal al rol (modelo gerente-de-cuentas):** cada usuario solo ve/toca SUS marcas, garantizado server-side en la EF (no en UI). Marisol scope = VivoseMask, D7Herbal, VizosCosmetics, PatriciaOsorioVizosSalon, PatriciaOsorioConectando, NeuroneSCF (6 id reales). Nuevo usuario futuro = su brand_scope en el secret, cero código.
+- Secrets en Supabase: `ORCHESTRATOR_NSCF_IID_INTEL_USERS` (JSON bcrypt+rol+scope) + `ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET`. PR#2 mergeado.
+- **2 bugs hallados y corregidos en la verificación:** (1) `list_options` pedía `brands.name` (no existe; es `display_name`) → alias `name:display_name`. (2) `service_role` NO tenía SELECT sobre `public.brands` (lo tenían anon/authenticated) — nueva instancia del patrón recurrente "faltan GRANTs", esta vez en tabla VIEJA consultada por EF nueva. Fix: `GRANT SELECT ON public.brands TO service_role` (migración aditiva/reversible).
+- **Verificación (token de seeder real):** seeder `approve`→403, `reject`→403, `list`→solo lo suyo, `list_options`→solo sus 6 marcas (no las ~13). login wrong-pw/sin-token/acción-desconocida → 401/401/403 fail-closed. Modelo gerente-de-cuentas confirmado funcionando.
+- **Migraciones versionadas:** PR#3 añadió `supabase/migrations/` al repo con las 3 migraciones aplicadas (iid_seeds, seeder_rationale, grant brands), cada una con rollback. Byte-parity git↔prod establecido por identidad de contenido (sha-diff automático no posible sin supabase CLI — prueba dura pendiente, riesgo bajísimo: solo comentarios).
+
+**E4 — Front IID Seeds en Orchestrator (LIVE, mergeado):**
+- Repo `Orchestrator` (rama+PR+Vercel Preview, gobernanza correcta — a diferencia de las EFs IID, este repo SÍ tiene repo). PR#1 (Orchestrator) mergeado tras validación de Sam en el Preview.
+- **Auth gating (`App.tsx`):** sesión en memoria (re-login al refrescar); sin sesión → LoginScreen (un password, con toggle ojo). `role==='seeder'` → NAV reducida a SOLO "IID Seeds" captura (Hub/Launchpad/Monitor/resto NO renderizan ni alcanzables); `role==='admin'` → NAV completa + subpestaña "IID Seeds" (cola/approve) en IID Intel.
+- **Servicio `src/services/iidInbound.ts`:** fetch directo a la EF con `{action, session_token}` (patrón SB_URL existente, sin /api/* intermedio).
+- **Captura (seeder+admin):** source_url (reetiquetado "Link de referencia — no se procesa", anti-IP visible), raw_signal, seeder_rationale (criterio de Marisol), **"¿Para qué marca lo ves?" REQUIRED** (select con solo las marcas del scope; `seeder_brand_suggestion` — sugerencia, NO mapeo; Sam decide el ruteo real), handle?. Confirmación "pendiente de revisión de Sam"; lista "mis semillas" read-only; banner honesto #45.
+- **Approve (solo admin):** cola awaiting_approval + toggle failed; cards con seeder_rationale / seeder_brand_suggestion ("pista, no ruteo") / neutral_topic / distill_notes(summary+confianza) / mapeo / captured_by; corrección inline con select domain+brand desde list_options; Aprobar → finding_id+queue_entries; Rechazar (motivo obligatorio); aviso out_of_scope.
+- **Ajuste post-validación (3 cambios):** toggle ojo en password (#1); campo marca-sugerida required (#2, columna `seeder_brand_suggestion` añadida a iid_seeds vía PR#4 en unrlvl-iid-functions → EF v7); reetiquetar source_url (#3). iid-inbound EF: v6→**v7** (acepta+devuelve seeder_brand_suggestion), verify_jwt:false preservado.
+- **Verificación (Sam en Preview):** login con ojo, scope de Marisol (solo 6 marcas, required), gating (seeder solo ve IID Seeds), card de approve con sugerencia de marca. Todo verde → merge.
+
+**Qué es el "Destilado IID" (aclarado a Sam):** NO es post/prompt/contenido — es un **tema de investigación neutro** (el concepto abstracto que el IID investiga desde cero, anti-IP). Aprobar hace handoff a iid-core → finding → fan-out a marcas suscritas → entra al pipeline normal (NO dispara copylab/imagelab directamente; el contenido viene mucho después con sus gates). El "confianza X%" = confianza del destilador en el mapeo a domain (dio 5% en prueba porque las marcas de Marisol no tienen topics aún — el sistema diciendo la verdad). El link es rastro de procedencia, el sistema NO lo lee/procesa (anti-IP: la semilla es disparador, no material).
+
+**DESCUBRIMIENTO MAYOR — dos modos de semilla (redefine roadmap):**
+- **Modo BASIC (el actual, LIVE):** link + frase → tema neutro → research desde cero. Anti-IP duro (material nunca leído). Régimen PERMANENTE.
+- **Modo EXPERT/BOIDS (próximo sprint):** subir video/imagen descargada → análisis profundo de técnica del creador (framing + OCR + tono/estructura narrativa) → seed que captura el MÉTODO para construir genomas/voces propias. Es lo que produjo el hallazgo de la voz educativa de Lucien (caso boids original). Uso INTENSIVO durante construcción de marcas/genomas; casi nulo después (cuando el batallón de IIDs ya traiga todo). El anti-IP se respeta: material = insumo de aprendizaje de técnica, NUNCA fuente a reescribir (análogo al frame Nietzsche de Lucien: motor interno, nunca citado). Sam corrigió la sobre-cautela de Claude: ni el tema UNRLVL ni el Lucien del caso boids tocaron el anti-IP. Implementación: sub-pestaña nueva, renombrar "Capturar"→"Basic" + crear "Expert", upload, pipeline de análisis, seed pedagógico (campo `lane` ya preparado).
+
+**Inventario de objetos nuevos/cambiados:**
+- Repo nuevo **`unrlvl-iid-functions`** (iid-inbound versionado + migraciones). PRs #1-#4 mergeados.
+- `iid-inbound` **v7** (auth dos ejes + seeder_rationale + seeder_brand_suggestion). `intel.iid_seeds` +2 columnas (seeder_rationale, seeder_brand_suggestion). GRANT SELECT brands→service_role.
+- `Orchestrator`: front IID Seeds (8 archivos, login+gating+captura+approve). PR#1 mergeado.
+- Secrets nuevos en Supabase: ORCHESTRATOR_NSCF_IID_INTEL_USERS + _JWT_SECRET.
+
+**Pendientes operativos de Sam (no bloquean cierre):** rotar las 2 contraseñas temporales (TempSam2026!/TempMari2026!) antes de producción real (pasaron por el chat) — opción limpia: script local sin compartir, regenerar JSON + recargar secret de usuarios (JWT secret no se toca). Byte-parity dura de iid-inbound cuando haya supabase CLI.
+
+**Professor:** 7 learnings aprobados (Orchestrator sin auth; patrón auth NSCF=EF Supabase; scope=eje ortogonal/gerente-de-cuentas; EF sin fuente=el humano la tiene; GRANT service_role en tabla vieja; disciplina sesión-nueva CC; dos modos de semilla Basic/Expert).
+
+**Próximo (orden):** (1) **#45 sembrar brand_topics de las 6 marcas de Marisol** (BLOQUEANTE de producción — sin esto captura en vacío; decisión de arquitectura de contenido). (2) **Sprint modo Expert/Boids** (sub-pestaña + upload + framing/OCR/análisis de técnica + seed pedagógico — herramienta de construcción de marcas). (3) **Approval por email** (enlace simple a "Cola de revisión", sin resumen, EF tipo nscf-mailer, disparado en awaiting_approval). (4) **#46 tab Topic Proposals** (captura estructurada de criterio de Marisol → borradores → gate de Sam). Carril paralelo: voz hermana pedagógica (lane ya listo).
+
+---
+
 ### 2026-06-25 (sesión b) — IID Sembrador CONSTRUIDO (T1–T3): fan-out multimarca v22 + cerebro iid-inbound + iid_seeds · Sam + Claude (Chat 1) + CC (ejecución)
 
 **Qué pasó:** se ejecutó el sprint Sembrador en orden estricto (cada tarea verifica verde antes de la siguiente). T1-T3 cerradas y aceptadas; T4 (front) queda como próximo. El "pecado original" (default_voice→marca) quedó MUERTO en el origen del encolado.
