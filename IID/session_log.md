@@ -240,6 +240,40 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-27 (sesión b) — #47 Expert/Boids DISEÑADO y cerrado + E1 construido (anclado en código real) · Sam + Claude (Chat 1)
+
+**Qué pasó:** sesión de DISEÑO de #47 (segundo modo de captura del Sembrador) + ejecución de E1. Se cerraron las 6 decisiones que el contexto marcaba como "tomar con Sam ANTES de construir, no asumir". Cada decisión se ancló verificando código/esquema real, no supuestos. E1 (DDL) ejecutado y verde. Plan E1-E8 listo; E2-E8 para próximos tramos. No se tocó producción salvo el DDL de E1 (aditivo, reversible) y Professor INSERT.
+
+**Reframe central (corrige el mapeo previo del contexto):** el mapeo asumía que Expert produce un "seed pedagógico" (lane=pedagogical) que va a fan-out. FALSO, verificado contra esquema de iid_seeds: su forma (neutral_topic/mapped_domain/finding_id/dispatched_at) es para temas que van a publicar. Expert produce ANÁLISIS DE MÉTODO — materia prima para construir una voz, no un tema. Forzarlo en iid_seeds repetiría el pecado original. → Expert necesita tabla propia `intel.captured_techniques`. El lane=pedagogical sigue vivo pero para el carril paralelo (técnica ya convertida en voz que genera contenido), no para almacenar el análisis.
+
+**Distinción que Sam aportó y reorganizó el diseño:** efímero por-marca ≠ efímero para UNRLVL. Expert es infraestructura PERMANENTE de onboarding — se usa en ráfagas al inicio de cada marca/cliente, pero se reusa con cada cliente nuevo. Eso sube #47 de "sprint con UI ligera" a subsistema con tabla + UI operada por delegado + persistencia del método.
+
+**Las 6 decisiones cerradas:**
+1. **A — OCR-only, sin Whisper.** Sam corrigió: navegador no puede detectar/instalar software en máquina del cliente (sandbox browser por diseño); Whisper revienta EF Supabase (mismo muro que en sandbox Claude Chat); Boids se resolvió con OCR de frames. Clips ~15s + captions exigibles + ffmpeg fps=1 → Tesseract server-side. Audio se ignora deliberadamente (on-screen + caption alcanza para leer técnica).
+2. **B — tabla `intel.captured_techniques`** diseñada mapeando campo-a-campo a brand_voice_genome real (verificado vía information_schema + fila Lucien editorial poblada). divulgation_structure (fenómeno→modelo→reglas→proyección, forma que reveló Boids) → argumentative_architecture. technique_summary (prosa retomable) → notes + handoff Fase1→2.
+3. **C — dos fases.** Fase 1 (captura+OCR+análisis) se construye. Fase 2 (calibración por convergencia) es SKILL conversacional. El método de Lucien (Claude genera tentativas, Sam juzga "¿es Lucien? sí/no/por qué", converge a textos limpios; con Lucien fueron 10 textos, últimos 3 limpios) es juicio irreducible → no se automatiza, se codifica como protocolo (`genome-calibration`).
+4. **Quién opera — calibración scope-gated.** Sam pidió que Marisol calibre para ahorrar tiempo de Sam. Claude frenó condicionalmente: quien calibra debe ser experto de dominio (la señal sí/no vale lo que vale el juez). Marisol PUEDE calibrar sus 6 marcas (experta haircare), NUNCA Lucien/UNRLVL. Candados: scope server-side (gerente-de-cuentas) + INSERT a brand_voice_genome lo firma SIEMPRE Sam. El gate de Sam pasa de proceso (cada texto) a producto (voz convergida). Sam aceptó con ambos candados.
+5. **EF OCR en `unrlvl-iid-functions`** (versionada, como iid-inbound — lleva lógica de producto operada por cliente, merece versión).
+6. **Storage solo-frames.** Sam mejoró la propuesta: guardar SOLO los frames (no el video), retención cortísima, borrar tras extraer. El video ajeno nunca persiste → anti-IP reducido a casi cero (solo persiste texto-método destilado).
+
+**Fase 2 = Skill (decisión de Sam):** el bucle de calibración es protocolo conversacional, no software → `skills/genome-calibration/SKILL.md`, carga bajo demanda. Codifica: cómo retomar desde technique_summary, generar tentativas, registrar señal sí/no, declarar convergencia, cerrar con INSERT a brand_voice_genome. Repetible para cada marca sin reinventar el método.
+
+**Verificaciones contra código real (lo que afiló el diseño):**
+- `voice-reference-extractor` skill: ya hace OCR+Whisper LOCAL y se autodescribe como "paso 1 de construcción de brand_voice_genome" con paso 2 = "chat con Claude". El flujo de Expert ya existía como concepto; #47 le da UI + persistencia.
+- Front IID Seeds (Orchestrator): ya existen IidSeedsCapture/Approve/iidInbound/LoginScreen/gating en App.tsx. "Renombrar Capturar→Basic + crear Expert" = selector de modo + IidSeedsExpert.tsx nuevo, reusando auth/scope entero.
+- iid_seeds esquema + CHECKs: lane ∈ {standard,pedagogical} confirmado; status hasta dispatched; forma para temas-a-publicar (no para método).
+- brand_voice_genome esquema + fila Lucien editorial: 18 columnas jsonb (identity_anchors, argumentative_architecture, lexicon_signature/forbidden, syntactic_signatures, relational_stance, emotional_register, source_evidence...). La tabla captured_techniques se diseñó como su precursora.
+
+**E1 EJECUTADO (verde, 27-jun):** migración `captured_techniques_t1_expert_boids` aplicada. `intel.captured_techniques` LIVE — 17 columnas (id, creator_handle, source_refs jsonb, raw_material jsonb, technique_summary, divulgation_structure jsonb, register_notes jsonb, lexicon_observed jsonb, applies_to_brands text[], tags text[], captured_by, lane, status, resulting_voice_id, rejected_reason, created_at, updated_at). 2 CHECKs: lane ∈ {standard,pedagogical}; status ∈ {awaiting_review,approved,in_calibration,genome_built,rejected,archived}. GRANT ALL service_role. 2 índices (status, captured_by). Rollback: `DROP TABLE IF EXISTS intel.captured_techniques;`. Aditivo, no tocó iid_seeds ni el Sembrador.
+
+**Plan de construcción (E1-E8, orden estricto, cada uno verde antes del siguiente):** E1 ✅ DDL captured_techniques · E2 bucket Storage frames · E3 EF iid-expert-ocr (unrlvl-iid-functions) · E4 iid-inbound acciones expert_* · E5 front sub-pestaña Expert (Orchestrator) · E6 calibración scope-gated · E7 skill genome-calibration · E8 resumen retomable. E1 fue DDL puro (sin sesión CC apuntada). E3/E4 → sesión CC en unrlvl-iid-functions; E5 → sesión CC en Orchestrator (allowlist se fija al arrancar — dos tramos).
+
+**Professor:** 5 learnings capturados, esperando aprobación de Sam (Expert=2 fases no seed pedagógico / calibración por convergencia=juicio irreducible=skill / calibración scope-gated requiere experto de dominio / Whisper inviable→OCR-only / tabla precursora se diseña leyendo forma destino).
+
+**Próximo:** construir E2-E8 de #47. Luego #45 brand_topics 6 marcas Marisol (bloqueante de producción). Carril paralelo: voz hermana pedagógica (lane ya listo).
+
+---
+
 ### 2026-06-27 — #48 Approval por email COMPLETO y verificado en vivo + corrección v8→v9 · Sam + Claude (Chat 1) + CC (PR)
 
 **Qué pasó:** se diseñó, construyó y verificó end-to-end **#48 (notificación de gate por email)**. Cuando una semilla entra a `awaiting_approval`, `iid-inbound` dispara un email a `content-approval@unrealvillestudio.com` con enlace a la raíz del Orchestrator — sin resumen, anti-IP. Deploy v9 LIVE, las 5 verificaciones pasadas. Quedó pendiente solo #47 (Expert/Boids) y #45 (bloqueante) para sesiones propias.
