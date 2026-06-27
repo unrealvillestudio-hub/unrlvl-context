@@ -240,6 +240,43 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-27 (sesión c) — #47 E1+E2+E3-EF construidos y verificados (Vía D) · Sam + Claude (Chat 1) + CC (informe + EF + smoke)
+
+**Qué pasó:** se construyó y verificó el tramo servidor del modo Expert (Fase 1). El informe de factibilidad de CC mató la arquitectura EF-self-contained y reorientó a **Vía D** (frames extraídos en el navegador + OCR por Cloud Vision). E1 (tabla), E2 (bucket), E3-EF (la EF `iid-expert-ocr` v1) construidos, deployados y con smoke verde. Queda E3-FRONT (extracción canvas en Orchestrator) + prueba real de Marisol.
+
+**Informe E3-exploratorio (CC, read-only) — mató la EF self-contained:**
+- Runtime de EF Supabase (Deno isolate): **NO permite subprocess** (`"spawning subprocesses is not allowed"`) → ffmpeg/tesseract como binarios imposible. **Cap 2s CPU** → OCR pesado in-EF imposible aunque sea WASM. **Bundle 20MB** → ffmpeg.wasm (~31MB) no cabe. Verificado contra docs oficiales, supuestos abiertos declarados.
+- Recomendación de CC: EF orquestadora + lab Vercel. Claude reabrió la opción descartada (frames en cliente) corrigiendo el criterio: extraer frames en el navegador NO necesita ffmpeg.wasm — el canvas nativo ya decodifica video, gratis, sin instalar nada. Eso parte el problema: extracción (navegador, trivial) + OCR (API externa).
+
+**Decisión de arquitectura — Vía D (cerrada con Sam):**
+- Navegador de Marisol extrae frames con canvas nativo → redimensiona ~720px JPEG → manda en el body a la EF → EF hace OCR vía **Cloud Vision** (DOCUMENT_TEXT_DETECTION) reusando la **credencial Vertex existente** (GOOGLE_SERVICE_ACCOUNT_KEY, proyecto gen-lang-client-0491381650; cero proveedor nuevo) → consolida texto (dedupe) → persiste solo texto en captured_techniques.
+- **Anti-IP máximo:** el video ajeno NUNCA toca la infra (se queda en el navegador). Solo suben frames-imagen, que la EF OCRea y descarta. Persiste solo texto-método.
+- OCR vía Vision: Sam confirmó por captura que la **Cloud Vision API está habilitada** en el proyecto y el SA `imagelab-vercel` es compatible (paso de Sam, distinto de tener la credencial Vertex — son APIs distintas del mismo proyecto).
+- Frames en el body (no bucket), redimensionados — probamos la vía simple; si el payload no cabe en la prueba, se ajusta antes de reintroducir bucket.
+
+**E1 (tabla) — LIVE:** `intel.captured_techniques` (17 cols, precursora de brand_voice_genome, 2 CHECKs lane/status, GRANT service_role, 2 índices). Aplicada por Claude vía apply_migration. (registrada en sesión b)
+
+**E2 (bucket) — LIVE CONDICIONAL:** bucket privado `iid-expert-uploads` (50MB, MIME video+imagen). Creado por Claude vía migración. NOTA: con Vía D el video no necesita subir (frames en body) → **el bucket queda candidato a LIMPIEZA tras la prueba real de Marisol**. Es la red de seguridad por si la extracción canvas falla en su navegador (plan B: video al bucket). Rollback: `DELETE FROM storage.buckets WHERE id='iid-expert-uploads';`.
+
+**E3-EF (la EF) — v1 LIVE + smoke verde:**
+- `iid-expert-ocr` v1 (231 líneas, nueva). Auth dos ejes reusada de iid-inbound (mismo JWT_SECRET, rol seeder/admin, scope server-side fail-closed). OAuth2 del SA (PKCS8 → RS256 JWT → access_token) → Cloud Vision batch ≤16 → consolida → persiste raw_material en awaiting_review. NO analiza técnica (Fase 2). NO guarda imagen ni video.
+- **PR #6** (CC, en unrlvl-iid-functions) mergeado. Pre-flight verificó esquema real de captured_techniques.
+- **Fix PEM (PR #7):** Claude detectó al revisar el código que `pemToPkcs8` asumía saltos reales en la private_key, pero el JSON del SA trae `\n` ESCAPADOS como secret. CC añadió des-escapado defensivo (`replace(/\\n/g,"\n")` antes de limpiar la PEM) por PR — NO Claude inyectándolo en el deploy (eso reintroduciría el desfase git↔deploy de #48). Sam mergeó.
+- **Deploy:** Claude deployó por MCP el contenido EXACTO de main (con el fix) → v1, paridad git↔deploy desde el minuto uno. verify_jwt=false.
+- **Smoke (CC, entorno local de Sam — tiene red a supabase.co que el sandbox de Claude Chat no):** CC generó imagen de prueba, se logueó como seeder, disparó la EF. Happy-path: `ok:true`, chars_extracted=59, **texto OCR coincide exacto con la imagen** (PEM→Vision→insert sano — confirma que el fix de PEM era necesario). Scope 403 (marca fuera de scope rechazada). Body vacío 400. Filas de prueba borradas. Gobernanza limpia.
+
+**HALLAZGO DE SEGURIDAD (smoke E3):** la contraseña temporal de Marisol registrada en el contexto (`TempMari2026!`) NO coincide con la real (la que funcionó en login). El contexto registra una credencial incorrecta Y expuesta. Doble problema: credenciales en texto en el contexto + la registrada ni funciona. **Acción: rotar las contraseñas temporales del Sembrador antes de producción real de Marisol (sube prioridad), vía script local sin pasar por chat, regenerar JSON de ORCHESTRATOR_NSCF_IID_INTEL_USERS, recargar solo ese secret. Limpiar la referencia del contexto.** (Nunca debe haber credenciales en el contexto.)
+
+**Revisión pendiente — ¿E4 sigue siendo necesaria?** El plan original tenía E4 = acciones `expert_*` en iid-inbound. Pero E3-EF (`iid-expert-ocr`) ya hace la captura completa como EF propia. Evaluar al llegar a E4 si se absorbe o se mantiene separada. No bloquea E3-FRONT.
+
+**Inventario nuevo/cambiado:** `intel.captured_techniques` (E1) · bucket `iid-expert-uploads` (E2, condicional) · EF `iid-expert-ocr` v1 (E3-EF, PRs #6+#7 en unrlvl-iid-functions). Vision API habilitada en GCP. iid-inbound confirmado deploy v9.
+
+**Professor:** 6 learnings nuevos (runtime EF sin subprocess/2s CPU → trabajo pesado fuera; Vía D frames-navegador+Vision; des-escapado PEM del SA; paridad git↔deploy en deploy por MCP; smoke E2E local por CC; deuda seguridad contraseña). 28 learnings de la ventana IID (24+27-jun) APROBADOS por Sam. 22 de mayo pendientes (listados, a criterio de Sam).
+
+**Próximo (orden):** (1) **E3-FRONT** — extracción de frames con canvas en `Orchestrator` (sesión CC apuntada a ESE repo; allowlist se fija al arrancar). Construir el módulo de extracción aislado y probarlo antes de envolver la UI Expert completa. (2) **Prueba real de Marisol** desde su computadora — cierra E3, valida el navegador, **decide el destino de E2** (verde → limpiar bucket; falla → plan B). (3) E4 (revisar necesidad) → E5-E8. Luego #45 brand_topics 6 marcas Marisol (bloqueante de producción).
+
+---
+
 ### 2026-06-27 (sesión b) — #47 Expert/Boids DISEÑADO y cerrado + E1 construido (anclado en código real) · Sam + Claude (Chat 1)
 
 **Qué pasó:** sesión de DISEÑO de #47 (segundo modo de captura del Sembrador) + ejecución de E1. Se cerraron las 6 decisiones que el contexto marcaba como "tomar con Sam ANTES de construir, no asumir". Cada decisión se ancló verificando código/esquema real, no supuestos. E1 (DDL) ejecutado y verde. Plan E1-E8 listo; E2-E8 para próximos tramos. No se tocó producción salvo el DDL de E1 (aditivo, reversible) y Professor INSERT.
