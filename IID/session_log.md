@@ -240,6 +240,41 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-28 — #47 E3-FRONT construido + prueba E2E exitosa desde Preview (Sam) · Sam + Claude (Chat 1) + CC (front)
+
+**Qué pasó:** se construyó E3-FRONT (extracción de frames en el navegador, Vía D) y Sam lo probó end-to-end desde el Vercel Preview con un video real — extracción + OCR + persistencia TODO verde. Queda solo la prueba real desde el dispositivo de Marisol (desde cero, prog. 28-jun) para cerrar E3 formalmente. Sin learnings nuevos: la prueba confirma learnings ya aprobados (Vía D funciona, PEM des-escapado necesario, Vision lee texto útil).
+
+**E3-FRONT (CC, repo Orchestrator, PR #2):**
+- Sesión CC apuntada a `Orchestrator` (allowlist correcto, tell de arranque OK). Rama+PR+Preview, NO merge propio.
+- `src/services/iidExpert.ts` (nuevo) — cliente de la EF iid-expert-ocr (patrón SB_URL + IidError de iidInbound.ts).
+- `src/modules/iid/ExpertCapture.tsx` (nuevo) — núcleo: input video → extracción canvas NATIVA (sin librerías: `<video>` + seek + `<canvas>.drawImage` → JPEG ~720px) → preview thumbnails → envío a la EF con session_token. Parámetros tuneables al tope: MAX_FRAMES=15, TARGET_WIDTH=720, JPEG_QUALITY=0.8, SEEK_TIMEOUT_MS=8000.
+- `src/App.tsx` (mod) — mount TEMPORAL "Expert (prueba)" en SeederShell para que Marisol (seeder) alcance el Expert en Preview. **Marcado como reemplazable por E5** (la sub-pestaña Expert completa). NO dejar en producción tal cual.
+- Build verde (tsc -b + vite). package-lock.json restaurado (drift ajeno, fuera de scope).
+
+**Ajuste caption (mismo PR #2):** el componente mandaba `captions` como campo suelto que la EF ignora → se perdía. Claude detectó la pérdida silenciosa. Fix: el caption va dentro de `source_refs` como elemento del array (`['<link>', { caption: '<texto>' }]`). CC verificó contra el código deployado de la EF que `source_refs` se persiste con `Array.isArray(source_refs) ? source_refs : []` → un objeto suelto se descartaría a `[]`; la opción (a) (caption como elemento del array) pasa el guard. Sin tocar la EF (source_refs es jsonb libre).
+
+**PRUEBA E2E (Sam, desde el Vercel Preview — NO aún desde dispositivo de Marisol):**
+- Video real `VID_...mp4` (720×1280, ~30s, 1057 KB) → **15 frames extraídos** (canvas funcionó en el navegador de Sam — el ~20% de riesgo de Vía D superado en este entorno).
+- Cloud Vision leyó **1115 caracteres de calidad** (un Reel sobre edge AI; la estructura de divulgación fenómeno→arquitectura→demo→lección visible en el OCR — exactamente la materia prima que la Fase 2 destila).
+- Fila persistida: `captured_by: marisol`, `applies_to_brands: [NeuroneSCF]` (scope validado server-side), `status: awaiting_review`, `raw_material` con ocr_consolidated + frame_count + ocr_engine.
+- Confirma el pipeline completo de Fase 1 con datos reales (no el smoke sintético).
+- **Fila de prueba BORRADA** (era de tech/AI, no de marcas de Patricia; mañana se prueba desde cero). Tabla captured_techniques en 0 filas.
+
+**Observaciones honestas:**
+- `source_refs` salió `[]` en la prueba porque Sam no pegó caption ni link → el mecanismo del caption NO se ejercitó (funcionó con campos vacíos como debía, pero falta una captura CON caption para confirmar que se guarda).
+- El email de #48 NO llega en modo Expert — correcto por diseño: notifyGate vive en iid-inbound (Sembrador Basic), no en iid-expert-ocr. La técnica queda en awaiting_review para Fase 2, no es gate urgente. Si se quiere notificación para Expert, es decisión aparte.
+- El contenido fue tech/AI (prueba técnica válida); el uso real será material de haircare/salón de las marcas de Patricia.
+
+**Sin email de notificación en Expert / sobre iPhone:** Sam preguntó si Marisol puede trabajar desde iPhone. Respuesta: la mitad fácil (subir/enviar) sí; la extracción canvas en Safari iOS tiene riesgo conocido (autoplay/decode restringido → frames negros; requiere playsinline+muted; límites de memoria más estrictos). NO verificado — si Marisol usa iPhone, la prueba debe correr en iPhone y conviene endurecer para iOS antes. Pendiente según el dispositivo real de uso.
+
+**PENDIENTE para cerrar E3 (gate real):** prueba desde el dispositivo de Marisol, desde cero (prog. 28-jun). Valida el navegador/dispositivo real. Verde → Vía D confirmada → **limpiar bucket E2** (`DELETE FROM storage.buckets WHERE id='iid-expert-uploads';`). Falla (códec/payload/iOS) → plan B (bucket E2 ya existe). E2 se mantiene como red de seguridad hasta entonces (un bucket vacío no cuesta).
+
+**Professor:** sin learnings nuevos (la prueba confirma learnings ya aprobados, no agrega conocimiento — capturar "lo confirmado" sería ruido).
+
+**Próximo (orden):** (1) Sam mergea PR #2 (tras verificar Preview). (2) **Prueba real de Marisol** desde su dispositivo (cierra E3, decide E2). (3) E4 (revisar si E3-EF la absorbe — `iid-expert-ocr` ya hace la captura). (4) E5 (sub-pestaña Expert completa, reemplaza el mount temporal) → E6 calibración → E7 skill genome-calibration → E8 resumen retomable. Luego #45 brand_topics 6 marcas Marisol. Pendiente seguridad: rotar contraseñas temporales antes de producción real.
+
+---
+
 ### 2026-06-27 (sesión c) — #47 E1+E2+E3-EF construidos y verificados (Vía D) · Sam + Claude (Chat 1) + CC (informe + EF + smoke)
 
 **Qué pasó:** se construyó y verificó el tramo servidor del modo Expert (Fase 1). El informe de factibilidad de CC mató la arquitectura EF-self-contained y reorientó a **Vía D** (frames extraídos en el navegador + OCR por Cloud Vision). E1 (tabla), E2 (bucket), E3-EF (la EF `iid-expert-ocr` v1) construidos, deployados y con smoke verde. Queda E3-FRONT (extracción canvas en Orchestrator) + prueba real de Marisol.
