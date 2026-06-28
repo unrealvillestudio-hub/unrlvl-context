@@ -240,6 +240,48 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-28 (sesión b) — #47 E3-FRONT-canvas FALLÓ con HEVC → REDISEÑO server-side · Sam + Claude (Chat 1)
+
+**Qué pasó:** la prueba de E3-FRONT desde el equipo de Marisol FALLÓ — su video era HEVC/H.265 y Chrome no lo decodifica, así que la extracción canvas (Vía D) no pudo sacar frames. Se diagnosticó con VLC, se confirmó el códec, y se rediseñó la extracción a SERVER-SIDE con ffmpeg. Diseño cerrado con Sam (4 decisiones), consolidado en DISENO_E3_server_side.md. Pendiente construcción E3b-1..4.
+
+**El fallo (diagnóstico completo):**
+- Marisol probó desde su equipo (Acer, Chrome) con un video real → mensaje de error de decodificación del componente ("Este formato de video no se pudo leer en tu navegador") + Network tab mostró blobs a 0.0 kB (el componente manejó el fallo bien, no crasheó).
+- VLC → Información del códec: **MPEG-H Part2/HEVC (H.265) (hvc1)**, 1080×1920, 43s, 30fps, audio AAC.
+- Chrome en el equipo de Marisol NO decodifica HEVC → canvas no extrae frames.
+- El video de Sam (que funcionó el 28-jun a) era H.264. **El peso NO era el problema** (el de Marisol pesaba menos). Era el códec.
+- Leffón: extracción en el navegador depende del soporte de códec del navegador del usuario → frágil/impredecible para producto operado por no-técnicos. Pedirle al usuario convertir a mano (VLC) = la fricción que el diseño debe evitar.
+
+**Rediseño — SERVER-SIDE TOTAL (4 decisiones cerradas con Sam):**
+1. **Server-side total, NO híbrido.** Un solo camino: todos los videos a ffmpeg server-side, sin importar códec. El canvas se jubila. (Híbrido descartado: casos borde feos como frames negros en iOS en vez de fallo limpio.)
+2. **El servicio Vercel SOLO extrae frames.** La EF iid-expert-ocr (probada, smoke verde) sigue con OCR+persistencia+scope. No se reimplementa nada de la EF.
+3. **Flujo A — el navegador orquesta, la EF NO se toca.** Navegador: sube video al bucket → llama al servicio ffmpeg → recibe frames → los pasa a iid-expert-ocr (igual que hoy). La EF recibe frames en el body como ya está probada.
+4. **ffmpeg como `/api` DENTRO del Orchestrator** (NO proyecto nuevo, NO ImageLab). Razón: es de ese dominio, CC ya tiene el repo, evita infra nueva para algo efímero; ffmpeg aislado en /api (el front no lo importa) mitiga el acople. (Sam cuestionó bien por qué mezclarlo con ImageLab; la respuesta correcta no era ni ImageLab ni proyecto nuevo, sino /api del propio Orchestrator.)
+
+**Sub-decisiones:** el servicio ffmpeg borra el video del bucket apenas extrae frames + cron de huérfanos (barre videos > 1h). Bucket iid-expert-uploads (E2) pasa de "candidato a limpieza" a PROTAGONISTA.
+
+**Cambio de postura anti-IP (explícito):** Vía D prometía "el video NUNCA toca la infra". Server-side total: el video SÍ sube al bucket, transita segundos, se borra. TRANSITA, no PERSISTE; solo persiste texto-método. Precio de soportar HEVC sin pedirle nada al usuario. El bucket E2 que NO se borró (red de seguridad) resultó ser justo lo que la solución necesitaba.
+
+**Patrones cicatriz a respetar (en el diseño desde el inicio):**
+- Handler Vercel Node nativo (VercelRequest/VercelResponse) — el formato Web API ignora maxDuration → 504. ffmpeg tarda más que una request normal.
+- VITE_* env vars son build-time → undefined en runtime serverless. La function /api no usa prefijo VITE_ para secrets.
+- Video sube DIRECTO al bucket por signed URL (no por la function, por límite de payload). La function recibe el path, no el video.
+- Verificar (CC, antes de construir): ffmpeg-static entra en límites de bundle de Vercel; runtime soporta handler Node nativo.
+
+**Plan de construcción (E3b, orden estricto):**
+- E3b-1: `Orchestrator/api/extract-frames` (ffmpeg-static, handler Node nativo, borra video). Smoke con el MISMO video HEVC de Marisol.
+- E3b-2: front ExpertCapture.tsx reescrito (sube a bucket → llama extract-frames → pasa frames a la EF intacta). Rama+PR+Preview.
+- E3b-3: cron de limpieza de huérfanos.
+- E3b-4: prueba real de Marisol con el MISMO video HEVC que falló → debe pasar E2E. Gate de cierre E3.
+- Todo en repo Orchestrator (front + /api) → 1 sola sesión CC apuntada a Orchestrator. La EF NO se toca.
+
+**Qué sigue intacto:** EF iid-expert-ocr v1 (smoke verde), tabla captured_techniques (E1), bucket iid-expert-uploads (E2, ahora protagonista). El PR #2 (canvas) quedó mergeado pero el canvas se reemplaza.
+
+**Professor:** 3 learnings (extracción navegador frágil por códec/HEVC; solución server-side total + ubicación /api Orchestrator; cambio anti-IP documentado + valor de dejar redes de seguridad). Esperan aprobación de Sam.
+
+**Próximo:** construir E3b-1 (/api/extract-frames). Luego E3b-2..4. Pendiente seguridad: rotar contraseñas temporales. E4 a revisar.
+
+---
+
 ### 2026-06-28 — #47 E3-FRONT construido + prueba E2E exitosa desde Preview (Sam) · Sam + Claude (Chat 1) + CC (front)
 
 **Qué pasó:** se construyó E3-FRONT (extracción de frames en el navegador, Vía D) y Sam lo probó end-to-end desde el Vercel Preview con un video real — extracción + OCR + persistencia TODO verde. Queda solo la prueba real desde el dispositivo de Marisol (desde cero, prog. 28-jun) para cerrar E3 formalmente. Sin learnings nuevos: la prueba confirma learnings ya aprobados (Vía D funciona, PEM des-escapado necesario, Vision lee texto útil).
