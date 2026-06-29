@@ -1,5 +1,5 @@
 # HRD — Hard Instructions Protocol
-_Versión: 1.1 · 2026-05-20 · UNRLVL Studio_
+_HRD Protocol v1.2 · UNRLVL Studio · 2026-06-29 (HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas)_
 
 ---
 
@@ -67,6 +67,12 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 **Verificación:** "Ok Sam, querés ejecutar el protocolo Actualiza completo. Sin alterar el protocolo, correcto? Me faltan estos datos: ninguno — procedo."
 
 **Pasos inviolables:**
+
+0. **RECARGAR EL ESTADO VIGENTE DEL REPO ANTES DE EDITAR NADA.** No partir de la copia del sandbox (es una foto del momento de carga de la sesión y puede estar desactualizada — otras sesiones, CC, u otro chat de Sam pueden haber pusheado versiones nuevas entre el arranque de esta sesión y ahora). Por cada archivo de contexto que esta sesión va a modificar (AGENDA.md, session_log.md correspondiente, ecosystem.json, etc.):
+   - Fetch la versión vigente vía `Vercel:web_fetch_vercel_url` (AGENDA/ecosystem) o `/api/gh?action=file` (session_logs y otros).
+   - Editar SOBRE esa versión vigente, no sobre la copia del sandbox.
+   - Si el archivo vigente difiere de lo que la sesión asumía: integrar los cambios ajenos, NO pisarlos. Si hay conflicto real que no se puede integrar limpio: STOP y avisar a Sam antes de generar el output.
+   → Confirmar: "Estado vigente recargado del repo · [archivo]: v[versión vigente]"
 
 1. Verificar Social Media Agent:
    GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=6lk8yfcMFdv%40L5%243H%5EoT%26AxR` vía `Vercel:web_fetch_vercel_url`
