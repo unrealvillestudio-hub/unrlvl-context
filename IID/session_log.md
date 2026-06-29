@@ -240,6 +240,41 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-06-28 (sesión c) — #47 E3b-1 CERRADO: ffmpeg server-side decodifica HEVC en producción · Sam + Claude (Chat 1) + CC
+
+**Qué pasó:** se construyó y probó E3b-1 (`/api/extract-frames`), la pieza de mayor riesgo del rediseño server-side. ffmpeg decodificó el video HEVC REAL de Marisol en la Lambda de Vercel → 15 frames + borrado del video. La Vía D server-side está confirmada en producción-Preview. El camino tuvo una cadena larga de blockers de credenciales, todos resueltos a certeza.
+
+**E3b-1 — `/api/extract-frames` (CC, repo Orchestrator, PR #3):**
+- Serverless function Node nativo (`@vercel/node`, VercelRequest/VercelResponse), maxDuration=60, ffmpeg-static bundleado vía includeFiles.
+- Contrato: recibe `{session_token, video_path}` → valida auth (token seeder, mismo JWT_SECRET) → descarga video del bucket (service role) a /tmp → ffmpeg extrae 15 frames ~720px JPEG → devuelve base64 → BORRA el video del bucket. Errores 200/400/401/404.
+- Commits: fa4be2f (función) · 13dc2e0 (fix 2 errores TS: ffmpeg-static default import + proc.stderr null guard) · ca371e2 (trim defensivo secret) · 2497e4e (diagnóstico temporal key_len/sb_body) · 2c818c4 (fix mapeo 404 + limpieza del diagnóstico).
+- Fix de contrato que CC observó: Supabase Storage devuelve HTTP 400 (body statusCode 404) para objeto faltante, así que el mapeo a 404 video_not_found no disparaba → normalizado.
+
+**SMOKE E2E VERDE (Preview, commit 2c818c4):** con la service_role legacy en Vercel (key_len 40→219):
+- Video HEVC real de Marisol (VID_20260628_043003_494.mp4, hvc1 1080×1920 43.28s): HTTP 200, 27.0s, ok:true, frame_count:15, duration_sec:43.28, video_deleted:true, 15/15 JPEG válidos (~1.46 MB).
+- **ffmpeg decodificó el HEVC en la Lambda → justo lo que Chrome no podía.**
+- Video borrado: verificado por SQL aparte (iid-expert-uploads = 0 objetos) — confirmado también por Claude Chat vía MCP.
+- Contrato completo: 200 (15 frames+borrado) · 404 video_not_found (path inexistente) · 401 (token malo) · 400 (falta video_path).
+
+**Cadena de blockers de credenciales resueltos (todos config de Sam):**
+1. **env var faltante:** ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET no estaba en Vercel → 503 config_missing (fail-closed funcionó). Sam la agregó.
+2. **JWT secret no matcheaba (401):** el secret regenerado tenía chars especiales (%, $, &, ^) que se interpretan distinto entre Vercel (Windows) y Supabase al pegar → valores efectivamente distintos aunque "copiados idéntico". CC lo diagnosticó a certeza (token válido contra iid-expert-ocr pero rechazado en Vercel; .trim() no ayudó → no era whitespace). Solución: regenerar ALFANUMÉRICO PURO (sin símbolos) y sincronizar Supabase+Vercel. Auth OK.
+3. **Storage "Bucket not found" (key_len 40):** la SUPABASE_SERVICE_ROLE_KEY en Vercel era formato nuevo (sb_secret_, ~40c). PostgREST la acepta (queries andan) pero el Storage API NO la honra como service_role para bucket privado → bucket invisible. CC lo probó: misma URL con anon legacy da "Object not found" (bucket resuelve), con la key de Vercel da "Bucket not found". Solución: service_role LEGACY (eyJ... ~219c) de Settings>API Keys>pestaña "Legacy anon, service_role". key_len saltó 40→219. Reconfirma el learning ya registrado del ecosistema.
+
+**Aclaración importante (Sam preguntó):** ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET es la columna vertebral de la auth IID (lo comparten iid-inbound, iid-expert-ocr, el front del Orchestrator y /api/extract-frames), NO solo de la function nueva. Cambiarlo invalida todos los tokens → re-login + sincronizar en ambas plataformas. Quedó resuelto (alfanumérico), NO se toca más. El proyecto Supabase migró a JWT Signing Keys; las legacy keys siguen activas y NO se deben deshabilitar (varias cosas las usan).
+
+**Video al bucket:** lo subió Sam por Supabase Studio (Claude Chat no puede subir binarios: MCP solo SQL+EF, sandbox sin egress a supabase.co; service role key NUNCA circula por chat). video_path = VID_20260628_043003_494.mp4.
+
+**Decisión que E3b-1 reveló para E3b-2:** el bucket iid-expert-uploads NO tiene policy de anon-insert → el navegador de Marisol no podrá subir directo con la anon key (solo service_role escribe ahí). Opciones para E3b-2: (a) policy de Storage para seeders autenticados; (b) signed upload URL generada por una /api con service role (probable mejor opción, evita límite de payload). A cerrar al diseñar E3b-2.
+
+**Professor:** 6 learnings APROBADOS (E3b-1 cerrado; gotcha JWT secret chars especiales; gotcha service_role legacy para Storage; el JWT secret es columna vertebral de auth IID; Claude Chat no sube binarios a Storage; decisión de upload pendiente para E3b-2).
+
+**Estados:** E1 tabla LIVE · E2 bucket LIVE (protagonista del flujo) · E3-EF iid-expert-ocr v1 LIVE+smoke verde (INTACTA) · E3b-1 cerrado (PR #3 a mergear). E3-FRONT-canvas (PR #2) obsoleto, reemplazado por server-side.
+
+**Próximo (orden):** (1) Sam mergea PR #3. (2) **E3b-2 (front)** — reescribir ExpertCapture.tsx: subir video al bucket (DECISIÓN: signed upload URL vs policy) → llamar extract-frames → pasar frames a la EF. Sesión CC apuntada a Orchestrator. (3) E3b-3 cron huérfanos. (4) E3b-4 prueba real de Marisol desde su dispositivo (cierra E3). Luego E4 (revisar) → E5-E8. Pendiente seguridad: rotar contraseñas temporales (ahora el JWT secret vive en 2 lugares). Deudas: migrar a service key nueva cuando Storage la acepte; renombrar el secret (quitar NSCF).
+
+---
+
 ### 2026-06-28 (sesión b) — #47 E3-FRONT-canvas FALLÓ con HEVC → REDISEÑO server-side · Sam + Claude (Chat 1)
 
 **Qué pasó:** la prueba de E3-FRONT desde el equipo de Marisol FALLÓ — su video era HEVC/H.265 y Chrome no lo decodifica, así que la extracción canvas (Vía D) no pudo sacar frames. Se diagnosticó con VLC, se confirmó el códec, y se rediseñó la extracción a SERVER-SIDE con ffmpeg. Diseño cerrado con Sam (4 decisiones), consolidado en DISENO_E3_server_side.md. Pendiente construcción E3b-1..4.
