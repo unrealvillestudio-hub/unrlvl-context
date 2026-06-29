@@ -101,11 +101,11 @@ Sin esto el Sembrador NO produce para las marcas de Patricia: capture destila pe
 | 🔴 ROTAR contraseñas temporales Sembrador (SUBE PRIORIDAD) | la registrada en contexto NO coincide con la real (hallazgo smoke E3); credenciales expuestas en sesiones. Script local, recargar secret usuarios. NOTA: el JWT secret ahora vive en 2 lugares (Supabase+Vercel) — rotar en ambos | producción real Marisol |
 | 🟡 DEUDA: migrar service key a SUPABASE_SECRET_KEYS nueva | cuando se confirme que el Storage API acepta el formato nuevo; NO deshabilitar legacy keys (varias cosas las usan) | limpieza credenciales |
 | 🟡 DEUDA naming: ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET | arrastra "NSCF" pero gobierna toda la auth IID; renombrar junto con rotación | limpieza |
-| 🔵 MERGEAR PR #3 (E3b-1) | Preview verde verificado; Sam mergea | E3b-1 a main |
+| ✅ MERGEAR PR #3 (E3b-1) | Preview verde verificado; Sam mergea | E3b-1 a main |
 | 🔵 PRUEBA REAL desde el dispositivo de Marisol (E3b-4, cierra E3) | tras E3b-2 (front) → Marisol prueba desde SU dispositivo con su video HEVC, desde cero. Verde → limpiar bucket E2 (o queda como protagonista del flujo server-side) | cierre E3 |
 | rollout_started_at | Fijar fecha 1ª sem julio en intel.brand_rollout al lanzar | crescendo Scheduler |
 | brand_topics 6 marcas Marisol (#45) | Decidir domains por marca en sesión propia | Sembrador produce para NSCF/Patricia |
-| Aprobar learnings Professor | ✅ 28 ventana IID (24+27-jun) + 6 de E3b-1 (28-jun c) aprobados · 25 pendientes (22 mayo + 3 del 28-jun b, a tu criterio) | Professor |
+| Aprobar learnings Professor | ✅ 28 ventana IID (24+27-jun) + 6 de E3b-1 (+ 3 28-jun b) (28-jun c) aprobados · 22 pendientes (mayo) | Professor |
 
 ---
 
