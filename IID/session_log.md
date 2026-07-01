@@ -240,6 +240,81 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-07-01 — #47 E3b-2/3/4 CERRADAS: E3 (captura Expert) COMPLETO end-to-end + EF genérica de barrido de Storage + INCIDENTE dispatcher detectado · Sam + Claude (Chat 1) + CC
+
+**Qué pasó:** se cerraron las tres etapas que faltaban del carril server-side de #47 (E3b-2 front signed upload, E3b-3 cron de huérfanos, E3b-4 prueba real de Marisol), dejando **E3 (captura Expert) COMPLETO y verificado end-to-end**. Marisol capturó una técnica desde SU dispositivo con su video HEVC, desde cero, verde. En paralelo se construyó una EF genérica de barrido de huérfanos de Storage (infra primaria reutilizable) y se detectó un **incidente serio no relacionado**: el cron `content-dispatcher-poll` lleva 592 fallos consecutivos desde el 17-jun (dominio R4B, dejado a su chat, no tocado desde acá).
+
+---
+
+**E3b-2 — front signed upload (CC, repo Orchestrator, PR #4 MERGEADO):**
+- **Decisión de diseño cerrada:** la subida del video de Marisol al bucket privado se resolvió con **signed upload URL firmada server-side con service_role** (NO policy anon-insert, que abriría el bucket privado a cualquiera con la anon key pública). Se descartó explícitamente la policy porque la auth del IID no es auth de Supabase (es JWT propio HS256), así que una policy `authenticated` no reconocería a Marisol.
+- **Verificación previa que cambió el brief:** el repo Orchestrator **NO tiene `@supabase/supabase-js`** (verificado en package.json) → todo Storage se habla por **REST crudo con fetch** (patrón A1), igual que `extract-frames`. No se agregó el SDK.
+- **Pieza nueva `/api/sign-upload.ts`:** función Vercel Node-native, espejo de `extract-frames` (reusa `normalizeSupabaseUrl`, `SB_URL`, `SB_KEY`, `verifyToken` HMAC, `objectUrl`). Valida token seeder fail-closed → genera signed upload URL vía `POST /storage/v1/object/upload/sign/{bucket}/{path}` con service_role legacy → devuelve al navegador. Path con UUID: `expert/{seeder}/{timestamp}_{uuid}.{ext}` (sanitizado por UUID, no por limpieza de nombre — solo se conserva la extensión).
+- **`ExpertCapture.tsx` reescrito:** se jubiló toda la maquinaria canvas (extractFrames/waitFor/etc.). Flujo nuevo: elegir/soltar video (drag&drop + file picker dual) → pedir signed URL → PUT directo del video a Storage → llamar `/api/extract-frames` → recibir frames → preview → `submitExpertCapture` (intacto). Indicadores de fase (subiendo/extrayendo/leyendo) para el flujo de ~40-60s.
+- **`vercel.json`:** entry opcional para sign-upload con maxDuration 15, SIN includeFiles (no lleva ffmpeg). No hereda la config de extract-frames (el mapa functions es por-función explícito).
+
+**GOTCHA signed upload (bug encontrado en la prueba, corregido en la misma rama):** el primer disparo dio **502 / sign_failed**. Causa: el endpoint de firma de Storage (Fastify) rechaza con 400 `"Body cannot be empty when content-type is set to 'application/json'"` si se manda header `Content-Type: application/json` SIN body. El endpoint de firma no lleva body (el path va en la URL). **Fix:** quitar el header `Content-Type` de esa llamada (no mandar body vacío disfrazado) — coherente con cómo extract-frames habla con Storage en sus GET/DELETE (solo apikey + Authorization). El fetch del PUT del navegador SÍ conserva su Content-Type real (file.type) — es correcto y distinto.
+
+**PRUEBA E2E E3b-2 (Sam, desde Vercel Preview con el HEVC real de Marisol):** verde. sign → PUT → extract → OCR corrió completo, consola sin errores. Fila `785af870` en captured_techniques (captured_by marisol, scope NeuroneSCF, awaiting_review, 15 frames, 594 OCR chars, cloud_vision). Bucket en 0 tras la extracción (video borrado, anti-IP cumplido). `toAbsoluteUploadUrl()` (el punto de incertidumbre del shape de Storage) funcionó a la primera, sin segundo ajuste. PR #4 mergeado por Sam, rama borrada.
+
+---
+
+**E3b-3 — EF genérica de barrido de huérfanos (CC, repo unrlvl-iid-functions, PR #8 MERGEADO + deployada):**
+- **Decisión de arquitectura forzada por un hallazgo:** NO se puede usar `DELETE FROM storage.objects` directo (el brief original lo proponía). El schema storage tiene un trigger ACTIVO **`protect_objects_delete`** (función `storage.protect_delete`) que bloquea todo DELETE directo con excepción 42501 (*"Direct deletion from storage tables is not allowed. Use the Storage API instead. This prevents accidental data loss from orphaned objects."*), salvo que se setee `storage.allow_delete_query='true'`. → el borrado DEBE ir por la Storage API REST, igual que `extract-frames.deleteVideo()`. Consistencia total primario↔backup.
+- **Hallazgo colateral:** el job 32 `unrlvl-media-temp-cleanup` usaba exactamente ese `DELETE FROM storage.objects` bloqueado → **fallaba en silencio en cada corrida**, dejando 11 huérfanos acumulados en unrlvl-media/temp/ (los más viejos de mayo). "active:true" no significa "funcionando".
+- **EF `storage-orphan-sweep`** (genérica, parametrizable — infra primaria de barrido para TODOS los buckets temporales del ecosistema): body `{bucket, older_than_minutes, prefix?}`. Auth D3 fail-closed por header `x-sweep-secret` (timing-safe SHA-256) vs secret `STORAGE_SWEEP_SECRET`, NO JWT de usuario (la invoca cron/máquina). Service_role legacy para buckets privados. Topes de seguridad por corrida (MAX_SCANNED 1000, MAX_LIST_REQS 300, reporta truncated:true).
+- **GOTCHA CRÍTICO que CC detectó probando en vivo (y corrigió el diseño):** el endpoint `object/list/{bucket}` es **folder-aware / NO recursivo** (delimitado por `/`). Listar `prefix='temp/'` devuelve SOLO placeholders de subcarpeta (id:null, created_at:null), no los archivos anidados. Los objetos de unrlvl-media viven en `temp/{owner}/{uuid}/{file}.png` (3 niveles). Un barrido plano con prefix+offset (como pedía el brief) habría borrado 0 objetos ahí — repitiendo el mismo fallo silencioso del job 32 que la EF viene a matar. CC lo cambió a **recorrido recursivo** (BFS por cola de prefijos, desciende en cada entrada id===null), con los topes globales cortando cualquier recursión patológica sin necesitar tope de profundidad explícito. `name` es leaf-relative al prefix (path completo = prefix + name).
+- **Revisión de código de Claude Chat (contra el index.ts real):** tope de recursión sólido (corte por conteo global vía MAX_LIST_REQS), auth fail-closed validada ANTES de leer el body, REST-only respeta el trigger, distinción id===null correcta. Observaciones menores no bloqueantes: borrado secuencial (irrelevante para el volumen real; el batch {prefixes} sería la optimización si algún bucket crece) y `body: any` (validado campo a campo después). Aprobado.
+
+**PRUEBA E2E E3b-3 (Claude Chat por MCP, sobre unrlvl-media como banco de pruebas real):** verde. Disparo vía `net.http_post` desde Postgres con `{bucket:'unrlvl-media', older_than_minutes:17280, prefix:'temp/'}`. Resultado: `scanned:11, deleted:10` — barrió los 10 viejos (>12 días) y **respetó el reciente** (25-jun, ~6 días). Verificado contra DB: bucket pasó de 11 a 1 objeto (el reciente). El borrado REST liberó físico+metadata (pasó el trigger). El recorrido recursivo alcanzó los 3 niveles de anidamiento.
+
+**Deploy y config:** EF deployada por Sam vía Dashboard. Secret `STORAGE_SWEEP_SECRET` cargado (64 chars alfanuméricos de Bitwarden). **Verify-JWT toggle OFF** en la EF — es la config CORRECTA para una EF con auth propia (es la recomendación de Supabase: "OFF with JWT and custom auth logic in your function code"). Con verify-JWT ON, `net.http_post` con JWT inválido da 401 `UNAUTHORIZED_LEGACY_JWT` del gateway antes de ejecutar la EF.
+
+**Crons creados (Claude Chat por MCP, bajo checkpoint HRD):**
+- **`iid-expert-orphan-sweep`** (jobid 35) · `0 * * * *` (cada hora) → net.http_post a la EF con `{bucket:'iid-expert-uploads', older_than_minutes:60}`. El backup del borrado inline de extract-frames.
+- **`unrlvl-media-temp-cleanup`** (jobid 36, reemplaza el 32 roto) · `0 3 * * *` (3 AM diario) → net.http_post a la EF con `{bucket:'unrlvl-media', older_than_minutes:17280, prefix:'temp/'}`. El job 32 roto quedó unscheduled; el nombre es idéntico.
+- Ambos llevan el `x-sweep-secret` en claro en el command (queda visible en cron.job). Aceptado para este secret (blast radius = disparar un barrido; no da acceso a datos).
+
+---
+
+**E3b-4 — prueba real de Marisol (GATE DE CIERRE DE E3, VERDE):**
+- Marisol capturó una técnica desde SU dispositivo, con su video HEVC, desde cero. Fila `3c40f492` en captured_techniques: captured_by marisol, applies_to_brands [NeuroneSCF], status awaiting_review, 15 frames, 601 OCR chars, cloud_vision, creado 1-jul 11:27. Bucket iid-expert-uploads en 0 tras la extracción (video borrado).
+- **El caso HEVC que rompía el canvas ahora funciona en el equipo real de Marisol vía server-side.** Es la validación operativa que E3b-1/2/3 (probadas desde el entorno de Sam) no cubrían. E3 cerrado.
+- Distinción registrada: la prueba de Sam desde Preview valida el código; la de Marisol desde su equipo valida el caso de uso real (su dispositivo, su red, su archivo crudo). Ambas verdes.
+
+---
+
+**INCIDENTE detectado (dominio R4B/dispatcher — NO tocado desde este chat, dejado a su chat con brief):**
+- `content-dispatcher-poll` (cron jobid 29, cada 30 min) lleva **592 fallos consecutivos desde 17-jun 10:00**, cero éxitos en 14 días. También `iid-brief-biweekly` (jobid 2) falló hoy 1-jul 7:00 AM.
+- **Causa raíz:** `intel.trigger_iid_agent` tiene DOS overloads — `(text)` y `(text, jsonb)`. Los crons la llaman con literal sin cast: `trigger_iid_agent('content-dispatcher')`. Postgres tipa el literal como `unknown` y no puede elegir → excepción `is not unique` → el job no dispara. El overload `(text,jsonb)` se agregó ~17-jun (coincide con el inicio de los fallos).
+- **Implicación:** la EF content-dispatcher (v27) está sana pero **nadie la invoca** hace 2 semanas → el carril automático de contenido está parado. El contexto decía "cron 29 activo" sin capturar que fallaba en cada corrida.
+- **Fix (no aplicado desde acá):** castear el literal a `::text`. Los ~24 crons `iid-*-research/process` (active:false) tienen el mismo bug latente. Bajo checkpoint HRD (mutación de cron.job en producción, dominio R4B). Brief entregado a Sam para su chat del dispatcher.
+
+---
+
+**Estado neto de #47 (Expert/Boids):** E1 tabla LIVE · E2 bucket LIVE (protagonista) · E3-EF iid-expert-ocr v1 LIVE (INTACTA) · **E3b-1/2/3/4 CERRADAS → E3 (captura Expert) COMPLETO end-to-end**. Marisol puede capturar técnicas en producción desde su dispositivo. Pendiente de Fase 1: **E5** (front Expert completo que reemplaza el mount temporal "Expert (prueba)") + **decisión E4** (absorber o no, ya que iid-expert-ocr hace la captura). Fase 2 (E6 calibración scope-gated + E7 skill genome-calibration + E8 resumen retomable) es otra cosa, no bloquea captura.
+
+**Inventario de objetos nuevos/cambiados:**
+- `Orchestrator`: `/api/sign-upload.ts` (nueva) + `ExpertCapture.tsx` (reescrito) + `iidExpert.ts` (helpers signUpload/uploadToSignedUrl/extractFrames) + vercel.json. PR #4 mergeado.
+- `unrlvl-iid-functions`: EF `storage-orphan-sweep` (nueva, genérica). PR #8 mergeado + deployada.
+- Secret nuevo en Supabase: `STORAGE_SWEEP_SECRET`.
+- Crons: jobid 35 nuevo (iid-expert-orphan-sweep) + jobid 36 (unrlvl-media-temp-cleanup, reemplaza el 32 roto).
+- Verify-JWT OFF en storage-orphan-sweep.
+
+**Deudas vivas (no bloquean):**
+- 🟡 **Rotar `STORAGE_SWEEP_SECRET`** — se pegó en el chat durante la prueba (blast radius mínimo). Higiene: regenerar → secrets set → actualizar command de jobid 35 y 36.
+- 🔴 **Rotar contraseñas temporales Sembrador** antes de producción real (arrastrada de sesiones previas; el JWT secret vive en Supabase + Vercel → rotar en ambos).
+- 🟡 Renombrar `ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET` (arrastra "NSCF" pero gobierna toda la auth IID) — mini-proyecto junto con la rotación.
+- 🟡 Migrar service key a SUPABASE_SECRET_KEYS nueva cuando Storage la acepte (NO deshabilitar legacy).
+- Limpiar filas de prueba viejas en captured_techniques (ca298046 D7Herbal 28-jun, 785af870 29-jun) antes de producción real, pendiente OK de Sam.
+- Professor: 22 learnings de mayo pendientes (sessions 2026-05-26 y 2026-05-29).
+
+**Professor:** 8 learnings del 1-jul APROBADOS por Sam (E3b-2 signed upload; gotcha content-type en sign; E3b-3 EF genérica; gotcha protect_delete trigger; gotcha list no-recursivo; incidente dispatcher; patrón verify-JWT en EF con auth propia; E3 cerrado end-to-end).
+
+**Próximo (orden):** (1) **E5** — front Expert completo (sub-pestaña Basic/Expert que envuelve E3b-2 y reemplaza el mount temporal "Expert (prueba)"). Sesión CC apuntada a Orchestrator. (2) **Decisión E4** (absorber o mantener). (3) Fase 2: E6/E7/E8. En paralelo: **#45 brand_topics de las 6 marcas de Marisol** (BLOQUEANTE de producción — sin esto captura entra pero approve falla con "domain sin suscriptores"). El incidente del dispatcher lo resuelve el chat de R4B.
+
+---
+
 ### 2026-06-28 (sesión c) — #47 E3b-1 CERRADO: ffmpeg server-side decodifica HEVC en producción · Sam + Claude (Chat 1) + CC
 
 **Qué pasó:** se construyó y probó E3b-1 (`/api/extract-frames`), la pieza de mayor riesgo del rediseño server-side. ffmpeg decodificó el video HEVC REAL de Marisol en la Lambda de Vercel → 15 frames + borrado del video. La Vía D server-side está confirmada en producción-Preview. El camino tuvo una cadena larga de blockers de credenciales, todos resueltos a certeza.
