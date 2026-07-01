@@ -240,6 +240,95 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-07-01 (sesión b) — #47 E5a CERRADO: pestaña única IID Seeds (captura OCR unificada + Seed/Genoma) + E4 absorbida + diseño E5b/Fase 2 cerrado · Sam + Claude (Chat 1) + CC (2 sesiones paralelas)
+
+**Qué pasó:** se construyó y cerró E5a — la pestaña única "IID Seeds" que reemplaza el toggle temporal Basic/Expert con captura OCR unificada y bifurcador de destino Seed/Genoma. Dos sesiones CC en paralelo (front + EFs) contra un contrato cerrado de antemano. E4 se cerró como ABSORBIDA (sin código). Se cerró el diseño completo de E5b (bucle Boids en la UI) y de la Fase 2 (aprobación de genomas en el chat), pendientes de construir.
+
+---
+
+**DESCUBRIMIENTO DE DISEÑO (la simplificación que ordenó todo):** Basic y Expert NO son dos modos — la captura es IDÉNTICA (mismo post, mismo OCR, mismas 3 preguntas). Lo único que difiere es el DESTINO de lo capturado, que se elige al final con dos botones. Por eso: UNA pestaña "IID Seeds", no dos. El mount temporal "Expert (prueba)" murió.
+
+**Estructura de la pestaña única (E5a):**
+- Post — drag&drop (imagen O video) + file picker → OCR (obligatorio en ambos destinos).
+- "¿Qué querés capturar?" → checkboxes Tema / Método de comunicación (`capture_intent`).
+- "¿Para qué marca lo ves?" → dropdown de scope.
+- "¿Por qué importa?" (requerido) → la visión de Marisol (`raw_signal`).
+- Destino → botones "Guardar como Seed" (primario) / "Calibrar Genoma" (secundario).
+- Enlace gold "¿No tenés un post de modelo? Entrá directo a calibrar y hablemos" — VISIBLE pero inerte en E5a (su destino, el text window, nace en E5b).
+- ELIMINADOS del front (anti-IP / no aportan): link de referencia, cuenta/handle, tags, caption, criterio-opcional separado.
+
+**Corrección conceptual anti-IP importante:** la regla NO era "no leer el post" sino "no republicar el post". Leer el OCR para aprender tema+método está permitido (es insumo de aprendizaje, como el frame Nietzsche de Lucien); copiar para publicar no. Por eso ambos destinos (Seed y Genoma) procesan el OCR. El Seed siempre fue manual (Marisol transcribía a mano) NO por diseño sino por limitación (sin acceso a plataformas para leer el post); el drag&drop+OCR resuelve esa limitación histórica.
+
+---
+
+**E4 — ABSORBIDA (cerrada sin código):** el plan preveía acciones `expert_*` en iid-inbound. Pero `iid-expert-ocr` ya hace la captura Expert de forma autónoma (auth propia, scope-check, OCR, persiste). Meter `expert_*` en iid-inbound sería duplicar. E4 se cierra como "absorbida". El approve/reject de técnicas Expert NO es E4 — es parte del flujo de Fase 2 (calibración).
+
+---
+
+**CONTRATO E5a (acople-por-contrato, 2 sesiones CC paralelas):**
+- **Sesión A → Orchestrator (front):** pestaña única, formulario, drag&drop, bifurcación. PR #5 mergeado. Hallazgo bueno de CC: `IidSeedsCapture.tsx` (Basic viejo) lo usa TAMBIÉN el admin (`IidSeedsAdmin`) → creó `IidSeedsUnified.tsx` nuevo en vez de reescribir, evitando regresión no anticipada por el brief. Conservó "Mis semillas" (read-only) — dropearla era regresión.
+- **Sesión B → unrlvl-iid-functions (EFs):** el flag `persist` + campos OCR. PR #9 mergeado + deployado.
+- **El contrato:**
+  1. `iid-expert-ocr` gana flag `persist` (default true=persiste en captured_techniques como hoy; false=hace OCR y DEVUELVE `ocr_text` sin persistir — para Seed).
+  2. `iid-inbound` capture acepta `ocr_text` + `capture_intent` (aditivos, retrocompatibles); `distill()` los usa con `DISTILL_SYSTEM` extendido (OCR_TEXT es disparador anti-IP, no reproducir; capture_intent orienta tema/método).
+  3. Migración aditiva `iid_seeds`: `ocr_text text` + `capture_intent text[]`.
+- **Hallazgo verificado (corrige modelo previo):** `iid-expert-ocr` NO borra video — recibe frames YA extraídos en el body (época canvas), solo memoria de invocación; el borrado del video lo hace `/api/extract-frames` en Orchestrator. Por eso el early-return `persist:false` es seguro.
+
+**Enrutamiento por destino:**
+- Genoma → `iid-expert-ocr` (persist:true) → captured_techniques.
+- Seed → `iid-expert-ocr` (persist:false) → `ocr_text` → `iid-inbound` capture → iid_seeds.
+
+---
+
+**FIX de imagen (E5a-fix, PR #6 mergeado):** al probar en Preview, imagen (PNG/JPG) daba 500 en `/api/extract-frames`: `"ffmpeg no produjo frames (video sin pista de video legible?)"`. Causa: extract-frames usa ffmpeg para extraer frames por intervalos de un VIDEO; una imagen fija no tiene pista de video → 0 frames → 500. El supuesto "ffmpeg trata imagen como 1 frame" no se sostuvo. **FIX (Opción B):** el front bifurca por `file.type` — video va server-side (sign-upload→extract-frames); IMAGEN se lee con `FileReader.readAsDataURL` y va DIRECTO al OCR como frame único (iid-expert-ocr ya acepta data URLs). La imagen ya ES el frame, no necesita ffmpeg. Bonus: imagen casi instantánea vs video ~40-60s.
+
+**PRUEBA E2E (Sam, Preview):** las 4 combinaciones verdes — imagen y video × Seed y Genoma. Verificado por Claude por MCP: seeds destilados correctos (ej. post del zorro "Fishing For Customers" → neutral_topic "captación de clientes vía prueba social"; video haircare → "condiciones climáticas extremas como variable de segmentación"). Genoma → captured_techniques.
+
+**GOTCHA merge=deploy + migración aparte (2 lecciones):**
+1. En repos conectados a Vercel, mergear PR a main deploya a PRODUCCIÓN automáticamente (no hay staging). → probar en Preview ANTES de mergear. El PR #5 se fue a prod antes de probar (sin daño, solo Marisol lo usa).
+2. Mergear el PR de EFs NO aplica sus migraciones SQL. Las columnas `ocr_text`/`capture_intent` no existían tras mergear+deployar las EFs porque la migración quedó sin aplicar → la destilación funcionaba pero esos 2 campos no se persistían. Claude aplicó la migración por MCP bajo HRD. Regla: tras mergear PR con migración, aplicarla explícitamente.
+
+---
+
+**DISEÑO E5b + FASE 2 (cerrado, PENDIENTE de construir) — el bucle Boids en la UI:**
+- **Qué es:** el text window donde Marisol calibra la voz de una marca. El corazón de Genoma. Decisión B: el bucle vive DENTRO de la UI de Marisol (Claude por API), no en chat aparte.
+- **Método Boids replicado:** CLAUDE genera textos uno por uno; el OPERADOR (Marisol para sus marcas scope-gated; Sam para Lucien) juzga SÍ/NO. En NO, se le pide "¿cómo lo escribirías vos/la marca?" (convierte el rechazo en insumo para ajustar el siguiente). Los textos los genera CLAUDE, no el operador.
+- **Regla de convergencia:** MÍNIMO 10 textos Y los últimos 3 deben ser SÍ consecutivos (obliga a 8,9,10=SÍ en el mejor caso). Si nunca hay 3 SÍ seguidos → no hay definición real de la marca (resultado válido, no fracaso).
+- **Dos puertas de entrada:** desde un Genoma capturado en E5a, o desde CERO (sin post — la intuición de Marisol; la mejor forma de que entienda el proceso).
+- **Fix del enlace gold (mapeado a E5b):** hoy está dentro del panel que solo abre tras subir post → "sin post" queda escondido detrás de "subí post". En E5b se reubica a la zona de captura inicial (visible sin subir nada) Y se conecta al text window.
+
+**PROPÓSITO (IID Agents) — el para qué de todo:** el genoma existe para que el IID Agent de una marca produzca contenido con SU voz (sin genoma = output genérico/off-brand, el pecado original default_voice). Las 6 marcas de Marisol hoy no tienen genoma NI brand_topics (#45). Este trabajo las hace operables por el IID: primero genoma (voz, vía Expert), después topics (qué consume, #45).
+
+**GATE DE APROBACIÓN DE GENOMAS (Fase 2, vive en el chat Sam-Claude, no en UI):**
+- Circuito: Marisol converge el genoma en el text window → status listo, email AVISO a Sam (solo id + marca, sin el trabajo). Sam viene al chat con el id → Claude trae todo → discuten, ajustan → al coincidir "¿Apruebas?" (checkpoint HRD) → Claude dispara INSERT/UPDATE a `brand_voice_genome` desde el chat. El Orchestrator NUNCA escribe genomas.
+- Sam NO vuelve a la UI ni al email para aprobar (el trabajo real pasó en el chat).
+- El modelo del gate ya existe en el ejercicio Boids-Lucien → se replica en el skill (E7), no es infra nueva.
+- El gate de Seeds también puede escalar (táctico=post para la marca vs estratégico=¿este territorio merece un agente IID nuevo?) — también vía el skill, en el ejercicio Sam-Claude.
+
+---
+
+**Estado neto de #47:** E1 tabla LIVE · E2 bucket LIVE · E3-EF LIVE · E3b-1/2/3/4 cerradas · **E5a CERRADO (pestaña única, Seed+Genoma, imagen+video, en producción)** · E4 ABSORBIDA. **PENDIENTE: E5b (text window / bucle Boids + reubicar enlace gold) + E6 (mecánica de aprobación scope-gated, ya diseñada: vive en chat) + E7 (skill genome-calibration) + E8 (technique_summary retomable).** Fase 1 de captura COMPLETA; Fase 2 (calibración) es lo que sigue.
+
+**Inventario de objetos nuevos/cambiados:**
+- `Orchestrator`: `IidSeedsUnified.tsx` (nuevo), `App.tsx` (SeederShell sin toggle), `iidExpert.ts` (ocrOnly persist:false + captureSeed), `iidInbound.ts` (capture + ocr_text/capture_intent), `ExpertCapture.tsx` jubilado. PRs #5 + #6 mergeados.
+- `unrlvl-iid-functions`: `iid-expert-ocr` (flag persist) + `iid-inbound` (ocr_text/capture_intent en capture + distill). PR #9 mergeado + deployado.
+- Migración aplicada (por Claude/MCP): `iid_seeds` + `ocr_text text` + `capture_intent text[]`.
+
+**Deudas vivas (no bloquean):**
+- 🟡 Reubicar + conectar el enlace gold "sin post, hablemos" → parte de E5b.
+- 🟡 Rotar `STORAGE_SWEEP_SECRET` (se pegó en chat 1-jul).
+- 🔴 Rotar contraseñas temporales Sembrador antes de producción real de Marisol.
+- 🟡 Renombrar ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET (arrastra "NSCF", gobierna toda la auth IID).
+- 🟡 Migrar service key a SUPABASE_SECRET_KEYS nueva cuando Storage la acepte.
+- Los 2 seeds de prueba de hoy tienen ocr_text/capture_intent vacíos (se guardaron pre-migración) — no importa, son pruebas.
+- Professor: 22 learnings de mayo pendientes.
+
+**Professor:** 6 learnings del 1-jul (sesión b) APROBADOS (E5a cerrado; gotcha imagen/ffmpeg; contrato paralelo A/B; gotcha merge=deploy+migración; diseño E5b/bucle Boids; propósito IID Agents + gate de aprobación). Total del 1-jul: 14 learnings.
+
+**Próximo (orden):** (1) **E5b** — text window de calibración (bucle Boids, Claude por API, 2 puertas, regla 10/3-SÍ) + reubicar enlace gold. Sesión CC apuntada a Orchestrator (+ posible EF si el bucle necesita backend). (2) **E7** — skill `genome-calibration` (protocolo del bucle + gate de aprobación Sam-Claude). (3) **E6/E8**. En paralelo, prerequisito de producción real: **#45 brand_topics de las 6 marcas**. Incidente dispatcher → chat R4B.
+
+---
+
 ### 2026-07-01 — #47 E3b-2/3/4 CERRADAS: E3 (captura Expert) COMPLETO end-to-end + EF genérica de barrido de Storage + INCIDENTE dispatcher detectado · Sam + Claude (Chat 1) + CC
 
 **Qué pasó:** se cerraron las tres etapas que faltaban del carril server-side de #47 (E3b-2 front signed upload, E3b-3 cron de huérfanos, E3b-4 prueba real de Marisol), dejando **E3 (captura Expert) COMPLETO y verificado end-to-end**. Marisol capturó una técnica desde SU dispositivo con su video HEVC, desde cero, verde. En paralelo se construyó una EF genérica de barrido de huérfanos de Storage (infra primaria reutilizable) y se detectó un **incidente serio no relacionado**: el cron `content-dispatcher-poll` lleva 592 fallos consecutivos desde el 17-jun (dominio R4B, dejado a su chat, no tocado desde acá).
