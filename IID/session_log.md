@@ -240,6 +240,40 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-02 · E5b — Mecánica del bucle VALIDADA en vivo (banco de pruebas NSCF) · Sam + Claude
+
+**Estado:** mecánica del bucle Boids confirmada con un ejercicio real Sam×Claude sobre NeuroneSCF. Alimenta el diseño de `/api/calibrate.ts`. Diseño técnico D1–D4 aún pendiente (sesión siguiente).
+
+### Qué se validó
+La mecánica real del bucle (corrige el diseño previo que decía ambiguamente "Claude genera / el operador juzga"):
+1. Claude PROPONE el texto (hipótesis de voz desde el eje fundador + veredictos previos).
+2. Claude pregunta "¿es [marca]? SÍ/NO".
+3. Operador responde SÍ/NO + su VISIÓN del porqué (criterio, no reescritura).
+4. Claude recalibra y propone el siguiente.
+5. Convergencia = mín 10 textos + últimos 3 SÍ consecutivos.
+
+Quien genera es Claude SIEMPRE. El operador aporta criterio, no prosa — esto hace viable a Marisol como operador (reconoce/explica con autoridad de dominio; no necesita escribir voz).
+
+### Decisiones D1–D4 confirmadas por Sam (para el diseño técnico pendiente)
+- **D1 Persistir:** sí. Tabla `intel.calibration_sessions` (greenfield). Doble propósito: no perder trabajo + caja negra del genoma para diagnóstico/corrección.
+- **D2:** `/api/calibrate.ts` en el Orchestrator, molde de `interpret-intent.ts` (fetch directo a Anthropic, key server-side). OJO: NO heredar el model ID retirado `claude-sonnet-4-20250514` de interpret-intent — usar el modelo canónico vigente.
+- **D3:** mecánica = la validada arriba. El eje fundador está embebido en el material de arranque (OCR de `captured_techniques` en puerta "desde Genoma"; texto/posts semilla en "desde cero"), no en una fase 0 de preguntas.
+- **D4:** persistir sesión completa (textos + `verdict_voice` + `notes_intent` + recalibraciones + flag convergencia).
+
+### Nuevo requisito de diseño emergente
+El bucle captura DOS señales, no una: `verdict_voice` (SÍ/NO de sonido de marca) y `notes_intent` (observación estratégica). La convergencia de voz no cierra el genoma; la intención es eje aparte. El esquema de `calibration_sessions` debe reflejar ambas.
+
+### Techo de producción (para el prompt del generador)
+Voz constante, TÉCNICA variable pieza a pieza. El generador porta el arsenal del comunicador experto (ES+EN, vocabulario rico) y no reincide en técnica — exige memoria de lo ya generado (`creative_seed`/`loadRecentPieces` del eje B).
+
+### Método completo
+Codificado en el skill `genome-calibration` v1.0 (el "Tratado"), redactado esta sesión. Es la fuente única del método; `/api/calibrate.ts` lo implementa y el OnboardingApp lo consumirá. Pendiente de push por Sam.
+
+### Pendiente inmediato
+Diseño técnico D1–D4: DDL de `intel.calibration_sessions` + endpoint `/api/calibrate.ts` + prompt del generador anclado en la mecánica validada.
+
+---
+
 ### 2026-07-01 (sesión b) — #47 E5a CERRADO: pestaña única IID Seeds (captura OCR unificada + Seed/Genoma) + E4 absorbida + diseño E5b/Fase 2 cerrado · Sam + Claude (Chat 1) + CC (2 sesiones paralelas)
 
 **Qué pasó:** se construyó y cerró E5a — la pestaña única "IID Seeds" que reemplaza el toggle temporal Basic/Expert con captura OCR unificada y bifurcador de destino Seed/Genoma. Dos sesiones CC en paralelo (front + EFs) contra un contrato cerrado de antemano. E4 se cerró como ABSORBIDA (sin código). Se cerró el diseño completo de E5b (bucle Boids en la UI) y de la Fase 2 (aprobación de genomas en el chat), pendientes de construir.

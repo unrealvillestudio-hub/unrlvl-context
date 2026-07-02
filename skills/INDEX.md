@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.5 · 2026-06-13 · Mantenido por: Claude_
+_Versión: 1.6 · 2026-07-02 · Mantenido por: Claude_
 
 ---
 
@@ -19,6 +19,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `shopify-mcp` | `skills/shopify-mcp/SKILL.md` | Trabajo directo en Shopify via conector MCP | Interno — NeuroneSCF (activo), futuras marcas |
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
+| `genome-calibration` | `skills/genome-calibration/SKILL.md` | Crear/calibrar/diagnosticar un `brand_voice_genome` — bucle Boids, calibración de voz de marca, entrada E5b (UI Marisol), Tratado de genomas | Interno — voice research / IID Fase 2 |
 | `nscf-pricing` | `skills/nscf-pricing/SKILL.md` | Pricing B2B/B2C NSCF, cotizaciones, Custom Kits, márgenes, rentabilidad de producto | Exclusivo NeuroneSCF |
 | `agent-builder` | `skills/agent-builder/SKILL.md` | Crear, configurar o deployar agentes | UNRLVL + clientes |
 | `copylab-reference` | `skills/copylab-reference/SKILL.md` | Sesiones con CopyLab, plantillas, contenido por canal | UNRLVL + clientes |
@@ -34,6 +35,13 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.6
+
+**Cambios respecto a v1.5:**
+- `genome-calibration` → skill nuevo · v1.0 · 2026-07-02 · el "Tratado" de creación de genomas. Protocolo convocable que conduce a un operador (Sam/Marisol/delegado) por la creación completa de un `brand_voice_genome`: triangulación de fuentes → eje fundador → bucle Boids (Claude propone, operador juzga SÍ/NO + porqué, converge a 10+3SÍ) → destilación bajo HRD. Fuente única del método; lo consumen el bucle E5b (`/api/calibrate.ts`) y el OnboardingApp (Fase Voice Genome). Incluye anexo NeuroneSCF como ejemplar de referencia. Se relaciona con `voice-reference-extractor` (paso 1, research local) — este skill es la Fase 2 (calibración/destilación).
 
 ---
 
@@ -87,6 +95,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "Shopify B2C / audit / fix" → `shopify-auditor` + `shopify-mcp`
 - Sam dice "HTML / componente / diseño" → `ui-ux-layer`
 - Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline`
+- Sam dice "genoma / calibrar voz / bucle Boids / Tratado de genomas / crear la voz de [marca]" → `genome-calibration`
 - Sam dice "pricing / cotización / kit B2B / margen / rentabilidad NSCF" → `nscf-pricing` + `ui-ux-layer` (para output visual)
 - Sam dice "agente / WhatsApp / bot" → `agent-builder` + `security`
 - Sam dice "imagen / video / LoRA" → `image-processing` (+ `higgsfield` si hay MCP activo)
@@ -95,7 +104,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "pipeline / IID / Orchestrator" → `content-pipeline`
 - Sam dice "actualiza graph / actualiza ecosystem / ecosystem desactualizado" → `ecosystem-auditor` + `ecosystem-updater`
 - Sam dice "ecosystem audit" o "ecosystem scan" → `ecosystem-auditor` (ver también HRD_ECOSYSTEM_AUDIT en userPreferences)
-- Sam dice "videos TikTok / transcribir / OCR / voice genome / referencia de cuenta" → `voice-reference-extractor`
+- Sam dice "videos TikTok / transcribir / OCR / voice genome / referencia de cuenta" → `voice-reference-extractor` (research local, paso 1) → `genome-calibration` (calibración, paso 2)
 
 **Nunca se cargan proactivamente sin declaración:**
 - `ads-mcp` — solo si hay campaña activa en esa sesión
@@ -130,4 +139,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.5 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.6 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_

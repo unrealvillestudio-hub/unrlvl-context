@@ -2,6 +2,52 @@
 _Actualizado: 2026-06-16 (sesión 7)_
 
 ---
+## 2026-07-02 · NSCF — Calibración de VOZ / Genoma (bucle Boids en vivo) · Sam + Claude
+
+**Conducido por:** Claude Opus 4.8 (chat) + MCP (Supabase) · **Marca:** NeuroneSCF
+**Estado:** ✅ Genoma de CONVERSIÓN convergido (bucle 10 piezas, últimas 3 SÍ). Profesor: 8 learnings escritos y aprobados. Tratado (skill genome-calibration v1.0) redactado para push. Genomas editorial y B2B identificados, pendientes de su propia pasada.
+**Contexto:** este ejercicio nació como banco de pruebas de la mecánica del bucle E5b (IID #47) antes de codificar `/api/calibrate.ts`. Sam sembró el eje fundador de NSCF y corrimos el bucle en vivo. Doble entregable: validar la mecánica + destilar el genoma real de NSCF.
+
+### Mecánica validada (corrige el diseño previo de E5b)
+Claude PROPONE el texto; Claude pregunta "¿es NSCF? SÍ/NO"; Sam responde SÍ/NO + su VISIÓN del porqué; Claude recalibra y propone el siguiente. Quien genera es Claude, siempre. Convergencia = 10 mín + últimos 3 SÍ. Detalle completo del método en el skill `genome-calibration` (Tratado).
+
+### Hallazgo estructural: NSCF tiene MÍNIMO 3 genomas hermanos
+Mismo núcleo, distinta respiración (patrón análogo a Lucien editorial/social):
+- **`nscf_conversion`** — marketing directo (escena→giro→tuteo→cierre en Neurone/CTA). **ÚNICO CALIBRADO** en esta sesión.
+- **`nscf_editorial`** — Hair Intelligence: enseña, respira largo, recluta lectoras→futuras clientas, invoca la CIENCIA Neurone como prueba, cierra en firma de autoridad / siguiente artículo. Molde real existente (artículo "por qué el acondicionador no basta"). Pendiente de bucle propio.
+- **`nscf_professional`** — B2B, dato primero, entre pares. Declarado en `brand_personas`, fuera de mapa por ahora.
+
+Fuente ya existente de la voz: `brand_personas` (9 personas activas) + `humanize_profiles` (no `brand_voice_genome`, donde el IID la busca). El genoma debe UNIFICAR y elevar lo ya destilado en esas tablas.
+
+### Eje moral de NSCF (lo más profundo del ejercicio — 3 campos)
+1. **Autoridad-por-contraste:** la marca nace de hacer lo que los demás no hacen — asesorar personalizado frente al clima real de Florida.
+2. **Blanco = asesoramiento genérico y conveniente** (el consejo sesgado por la renta del salón). FENÓMENO, nunca la clienta, nunca el estilista como persona ni guerra abierta al B2B.
+3. **Prohibición:** nunca absolver la falla genérica ("tu colorista hizo su parte" prohibido), ni personalizarla.
+
+### Correcciones duras de Sam (permanentes)
+- **Target:** el cliente INVIERTE, NO compra en el súper. "El producto del súper" la insulta y la pierde. Adversario = el consejo genérico, no el gasto bajo.
+- **Filo 5/10 instrumental:** corta para mover, no para herir; convierte por diseño; nunca burdo ni corriente.
+- **Capa científica:** Neurone = "la ciencia detrás de…" (neurocosmética, nanotribología, acción multinivel, 40+ años). La calidez la da Patricia; la autoridad última la da la ciencia.
+- **Bilingüe:** ES y EN neutros SIN regionalismos, generados por separado, nunca traducidos.
+- **Dominio correcto:** `neuronescflorida.com`.
+
+### Reglas de forma destiladas (microtécnica)
+Regla de oro (no preguntar lo que responde en contra) · desplazamiento de protagonista (tercero → ella → Neurone) · presunción de compañía · precisión sin "casi" · tuteo directo desde el giro · ley del cierre (lo último = Neurone) · estructura mínima 3 partes · CTA puede ser servicio (diagnóstico con PO). Todo codificado en el Tratado §9.
+
+### Voz vs Intención (aprendizaje de método)
+El bucle converge VOZ; la INTENCIÓN estratégica es un eje aparte. Un texto puede sonar 100% a la marca y fallar en intención (la 10/10 fue "SÍ pero" y ese "pero" produjo el eje moral). `/api/calibrate.ts` debe capturar dos señales: `verdict_voice` + `notes_intent`.
+
+### Escrituras en DB
+- `public.professor_learnings`: 8 filas nuevas `session_date=2026-07-02`, category `voice_genome`, score 5, `approved_by_sam=true` (3 de método bajo UnrealvilleStudio, 5 de genoma bajo NeuroneSCF). Verificadas.
+- Ninguna escritura a `brand_voice_genome` todavía — la destilación al genoma (E6) es paso posterior bajo HRD.
+
+### Pendientes generados
+- [ ] E6: destilar `nscf_conversion` a `brand_voice_genome` (chat Sam×Claude, HRD, método quirúrgico).
+- [ ] Bucle propio para `nscf_editorial` (usar el artículo Hair Intelligence como semilla — caso ideal de la puerta "desde Genoma capturado").
+- [ ] Decisión E6: ¿el `es-FL` de `brand_personas`/`humanize_profiles` se neutraliza a ES neutro sin regionalismos? (marcado, no tocado).
+- [ ] Diseño técnico D1–D4 de E5b (`intel.calibration_sessions` + `/api/calibrate.ts` + prompt del generador) — sesión siguiente, ahora anclado en la mecánica validada.
+
+---
 
 ## 2026-06-20 (cont.) · NSCF — Cron de integridad Shopify↔Supabase + limpieza fantasmas
 
