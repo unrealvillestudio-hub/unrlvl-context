@@ -1,5 +1,5 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-07-01 · v2026-07-01-b (#47 Expert/Boids: E5a CERRADO — pestaña única IID Seeds (captura OCR unificada + bifurcador Seed/Genoma), imagen+video × Seed+Genoma verdes en producción. E4 ABSORBIDA. Diseño E5b (bucle Boids en la UI) + Fase 2 (aprobación de genomas en el chat) cerrados, pendientes de construir. Próximo: E5b text window. · base previa v2026-07-01)_
+_Actualizada: 2026-07-03 · v2026-07-03-a (ForumPHs DF: CIERRE DE GENERACIÓN — 5 gaps #7–#11 mergeados en main, Venezia OR 1-2026 a 0 CRÍTICOS en 2 corridas finales (techo automatizable). Pendientes: #7 mergear PR #12 (reporte ICR .docx) + entregar a Ivette · #8 quitar ANEXO ICR embebido del cuerpo del acta (defecto persistente) · #9 pre-flight de Ivette. Backlog #50–52. Próximo: cargar acta corregida por Ivette y mapear regresiones. · base previa v2026-07-01-b (#47 Expert/Boids E5a CERRADO — pestaña única IID Seeds, E4 ABSORBIDA, próximo E5b text window))_
 
 ---
 
@@ -127,9 +127,9 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → ge
 |---|---|---|---|
 | 5p-b | Lucien necesita preset imagelab (caso sin-preset no probado con imagen real) | Lucien | — |
 | 6 | Voice Genome Fase 5 — OnboardingApp. signature_closer por voz. | UNRLVL | — |
-| 7 | fphs-formalize sprint | ForumPHs | DF, 13 errores |
-| 8 | Verificar unidades Luxor 300 | ForumPHs | Acta 129 |
-| 9 | DF QA 3 votaciones+13 errores | ForumPHs | — |
+| 7 | DF: mergear PR #12 (botón reporte ICR .docx) + correr Venezia final + entregar a Ivette. **PRÓXIMO: cargar acta ya corregida por Ivette → mapear regresiones (falló en cosas ya superadas)** | ForumPHs | PR #12 abierto, sin merge |
+| 8 | DF FIX: quitar ANEXO ICR embebido del cuerpo del .docx del acta (PR limpio, separado de #12). Confirmado en 2 corridas: anexo degradado 2–4 hallazgos vs reporte real 17–19 | ForumPHs | defecto persistente |
+| 9 | DF: pre-flight de Ivette — input donde declara representantes de admin de ESA asamblea antes de generar → alimenta classifyRoles paso 2 como dato verificado → reduce [ROL NO VERIFICADO] | ForumPHs | diseño aparte |
 | 10 | Ayra Sprint 0 ⚠️ VENCIDO (5 Jun) | UNRLVL | Reprogramar |
 
 ---
@@ -158,6 +158,9 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → ge
 | 25 | ForumPHs creación cuentas | ForumPHs |
 | 35 | CLAUDE.md repos restantes | UNRLVL |
 | 49 | **`unrlvl-supabase-mcp:get_logs` ROTO** — 404. Impide leer logs de EF por MCP desde Claude Chat. | UNRLVL |
+| 50 | **DF: ledger de costos** — una fila/acta en `ops_token_sessions` (cost=(in/1M*3)+(out/1M*15)); fphs-formalize debe DEVOLVER tokens y dejar de escribir por su cuenta (neutralizar `logTokensBatch` doble-conteo). PR #5 CERRADO sin merge (approach UNRLVL_SERVICE_KEY-en-DF abandonado). | ForumPHs |
+| 51 | **DF: soporte multi-candidato VotationRecord** — elección Tesorero hoy queda `[ELECCIÓN MULTI-CANDIDATO — PENDIENTE DE PROCESAR]`. | ForumPHs |
+| 52 | **DF: reemplazar `/api/icr` "Claude open" por Agente Experto permanente** — auditoría Ley 284 embebida + curaduría visual de imágenes (corrección tipo-$300M y validación de identidad = criterio legal, viven aquí). | ForumPHs |
 
 ---
 
