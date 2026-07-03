@@ -1,5 +1,117 @@
 # ForumPHs — Session Log
 
+## 2026-07-03 — DF Análisis de REGRESIÓN Venezia (acta corregida por Ivette) + Bloque 1 + R4 (PR #13 merged) + EF fphs-formalize v39 (R3)
+
+### CONTEXTO — por qué esta sesión
+Sam cargó la última acta del DF (Venezia OR 1-2026) **ya corregida por Ivette** para mapear
+regresiones: cosas que sprints previos ya habían superado y volvieron a romperse. Diagnóstico
+hecho con **lectura de código real** (no solo del output), y corregido dos veces contra la
+hipótesis inicial de Sam. Resultado: 5 regresiones identificadas, causa-raíz en código, y
+resueltas o dejadas en su estado correcto por diseño.
+
+### LAS 5 REGRESIONES — diagnóstico con causa-raíz en código
+- **R1 — duplicación aparente** → **FALSO POSITIVO de R2.** La misma deliberación (sistema húmedo
+  $2,269/$2,978, Hilda Lorena + Greyz + ADM) aparecía en 2 lugares a ~2000 líneas. NO era doble
+  input: era el reorden (R2) haciendo que **dos momentos temporales legítimos** parecieran
+  duplicados por estar en secciones equivocadas. **PRUEBA:** Ivette también los conserva en 2
+  lugares (líneas 941 y 1123 de su acta). El dedup acertó al NO marcarlos.
+- **R2 — reorden temporal** → causa: `sectionAssigner` reasignaba bloques por keyword-match débil
+  (`>0.4`) y `generate` los renderizaba **agrupados por `agenda_section`, nunca por timestamp**.
+  Un bloque de presupuesto caía bajo el header "Elección" por coincidencia léxica.
+- **R3 — fragmentos vacíos** → causa: `fphs-formalize` SYS1/SYS2 con `forceInclude` prohíben NULL
+  → formalizan ruido oral ("tomó nota", "respondió negativamente") como intervenciones.
+- **R4 — numeración de secciones eliminada** → causa: `sectionTitle()` en `generate` **quitaba el
+  prefijo numérico a propósito** (comentario "removed number prefix (Ivette canonical format)") —
+  malinterpretación: el acta real de Ivette **sí numera** (1.–8.). Regresión contra PASO 3/4.2.
+- **R5 — ANEXO ICR embebido degradado** → sigue en `generate` (banners inline + anexo). NO se tocó
+  esta sesión (es Bloque 2). El anexo embebido usa `icrFindings` local (pobre, 2 hallazgos) vs el
+  reporte externo de `/api/icr` (rico, 16-19). Dos motores ICR distintos.
+
+**HALLAZGO de lectura de código que corrigió la hipótesis de Sam:** la UI de barridos **NO
+acumulaba** — React remonta `ProcessingPipeline` con `key=formalize-${retry}`, siempre parte de
+`parsed.debates`, y `runGenerate` reemplaza (no concatena). Por eso la duplicación **no venía de
+correr 2 barridos en la UI**, sino de **input doblado a nivel ZIP/transcripción sin capa de dedup**
+(`consolidate()` solo une turnos consecutivos del mismo hablante).
+
+### CONSTRUIDO — PR #13 (merged por Sam) — Bloque 1 + R4
+Un solo PR, 7 archivos. Build+typecheck verde local, Vercel Preview verde. CC declaró 2 archivos
+extra fuera de la lista (justificados: `QAReport.tsx` por el barrido único, tilde QUÓRUM en
+`actaBuilder.ts` por el `acta_text` que audita el ICR).
+1. **`lib/types.ts`** — `DebateBlock` += `possible_duplicate?` + `duplicate_of?` (opcionales).
+2. **`parseTranscripcion.ts`** — dedup **como MARCA** (no borra): firma hablante+contenido
+   normalizado no-consecutivo, Jaccard ≥0.85 → `possible_duplicate=true` + `duplicate_of`.
+3. **`sectionAssigner.ts`** — umbral keyword `0.4→0.7` (deja de teletransportar) + exporta
+   `sortByTimestamp` (fallback estable a índice si falta timestamp).
+4. **`generate/route.ts`** — ordena secciones por `sortByTimestamp` · empuja ICR MEDIO de
+   duplicados marcados · **R4:** restaura `1./2./3.` en `sectionTitle` + QUÓRUM con tilde.
+5. **`actaBuilder.ts`** — mismo `sortByTimestamp` en `buildDebateSections` (docx↔acta_text↔ICR
+   en orden idéntico).
+6. **`app/page.tsx` + `ProcessingPipeline.tsx`** — barrido **único** con selector de nivel:
+   **"0 (mínimo)" / "1 (intermedio)" / "2 (literal)"** → `retryAttempt` fijo (SYS0/1/2). Se
+   eliminó la lógica de sweeps acumulativos.
+7. **`supabase/functions/fphs-formalize/index.ts`** — R3: `TRIVIAL_MIN_WORDS=5`, skip de
+   fragmentos con <5 palabras sustantivas ANTES del modelo, aplica en todos los niveles.
+
+**DECISIÓN de arquitectura (Sam) — Opción A cronológica:** se mantiene la agrupación por punto del
+orden del día (PASO 3), pero DENTRO de cada sección se ordena por timestamp global. NO cronológico
+absoluto (rompería PASO 3 y no reproduciría a Ivette).
+
+**PRINCIPIO (Sam) — "dedup se marca, NO se corrige":** extensión del principio ICR. El dedup vive
+en el parser (punto más temprano, sobre `text_raw` crudo). Detecta y MARCA, nunca borra. Beneficio
+forense: si con barrido ÚNICO el ICR aún marca duplicados → la fuente es Hypal (upstream); si no →
+era el doble barrido manual. El reporte ICR se vuelve instrumento de diagnóstico de origen.
+
+### DEPLOY EF — fphs-formalize v38 → v39 (yo, vía Supabase MCP, con confirmación de Sam)
+- Proyecto **UNRLVL `amlvyycfepwhiindxgzw`** (el EF vive aquí, NO en FPHS `tajuoqdbnsnzkhyqvdgs`).
+- **`verify_jwt: false` explícito** — el front llama sin `Authorization`; el default `true` habría
+  roto la formalización con 401. **GOTCHA registrado.**
+- Capturé v38 con `get_edge_function` antes de desplegar (confirmé que la v38 era pre-R3). Post-deploy
+  verificado: **v39 ACTIVE**, contiene `TRIVIAL_MIN_WORDS` + skip trivial, `verify_jwt=false` preservado.
+- **Merge del PR ≠ deploy del EF** — el EF está versionado en el repo pero el deploy a Supabase es
+  paso aparte. Se hizo explícito tras el merge.
+
+### VERIFICACIÓN — comparación peras con peras (3 corridas, todas nivel 2 literal)
+| Métrica | DF1 (original) | DF2 (post-merge, EF v38) | **DF3 (EF v39)** | Ivette |
+|---|---|---|---|---|
+| Líneas | 4105 | 4263 | **3370** ↓ | 2573 |
+| Fragmentos triviales | ~25 | 25 | **1** ✅ | 0 |
+| ROL NO VERIFICADO | 98 | 98 | **46** ↓ | 0 |
+| ICR ALTO | 6 | — | **4** ↓ | — |
+
+- **R2** ✅ bajo header "Elección" ahora hay contenido de elección (no de presupuesto).
+- **R4** ✅ secciones 1./3./4./5./6./7./8. + QUÓRUM con tilde.
+- **R1** ✅ falso positivo confirmado; los 2 momentos del $2,269 coinciden con Ivette.
+- **R3** ✅ EF v39: acta −21% (4263→3370), triviales 25→1, SIN perder contenido sustantivo.
+- Los ICR ALTO restantes (ACTA No sin número, Daniel Puentes/admin sin rol, género Greyz) son
+  **criterio legal de Ivette, NO regresiones** = techo de lo automatizable.
+
+### PENDIENTE — próximo chat
+1. **R5 (Bloque 2)** — marcas ICR **visuales inline** dentro del `.docx`: resaltado en color de
+   gravedad + referencia `ICR N` (decisión de Sam: texto resaltado, Ivette borra ~7 chars; NO
+   comentarios anclados) + **mantener** el reporte ICR externo + **QUITAR el ANEXO ICR embebido**
+   (degradado) y sus rastros. Autocontenido.
+2. **Warning temprano de dedup (idea de Sam)** — exponer `possible_duplicate` como aviso
+   NO-bloqueante en la fase de parsing de la UI, además del hallazgo ICR. Convierte el parseo en
+   punto de diagnóstico de ORIGEN (Hypal vs doble barrido). El dedup ya lo calcula; falta el surface.
+3. **Deuda R4:** colisión de número de sección si una convocatoria NO empieza por quórum (el punto 1
+   de agenda y la sección hardcodeada de quórum podrían chocar en el nº 1). Señalado, no arreglado
+   para no regresar el caso estándar Venezia.
+4. **"APROBACIÓN DEL ORDEN DEL DÍA" sin header propio** — el parser no la extrae como agenda_item;
+   el ICR la marca ALTO/Estructura (numeración salta 1→3). Fix requiere trabajo en parseResumen.
+5. Calibrar `TRIVIAL_MIN_WORDS=5` si llegara a cortar intervenciones cortas válidas.
+6. Verificar R3 en nivel 0 (encoge aún más, más cerca de Ivette).
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+- **EF fphs-formalize: v38 → v39** (fix R3), `verify_jwt=false`, proyecto `amlvyycfepwhiindxgzw`.
+- Sin cambios de esquema/tablas. Sin migraciones.
+- **Professor: 9 learnings** (session_date 2026-07-03, brand_id ForumPHs, `approved_by_sam=true`):
+  5 con relevance_score 5 (R1 falso positivo / principio dedup-marca / gotcha verify_jwt / orden
+  cronológico Opción A / cierre sprint) + 4 con score 4 (R3 EF-side / barrido único / deuda R4 /
+  idea warning temprano).
+
+---
+*ForumPHs · DF análisis de regresión + Bloque 1 + R4 (PR #13) + EF v39 · 2026-07-03*
+
 ## 2026-06-19 — DF Quality Sprint: CIERRE DE GENERACIÓN (5 gaps merged) + corridas finales Venezia + feature reporte ICR .docx (PR #12) + mapa de pendientes
 
 ### EN PRODUCCIÓN (mergeado a main, verificado)
