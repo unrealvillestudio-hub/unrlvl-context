@@ -1,9 +1,18 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-07-03 · v2026-07-03-a (ForumPHs DF: CIERRE DE GENERACIÓN — 5 gaps #7–#11 mergeados en main, Venezia OR 1-2026 a 0 CRÍTICOS en 2 corridas finales (techo automatizable). Pendientes: #7 mergear PR #12 (reporte ICR .docx) + entregar a Ivette · #8 quitar ANEXO ICR embebido del cuerpo del acta (defecto persistente) · #9 pre-flight de Ivette. Backlog #50–52. Próximo: cargar acta corregida por Ivette y mapear regresiones. · base previa v2026-07-01-b (#47 Expert/Boids E5a CERRADO — pestaña única IID Seeds, E4 ABSORBIDA, próximo E5b text window))_
+_Actualizada: 2026-07-03 · v2026-07-03-b (E6 + #45 NeuroneSCF: genoma **nscf_conversion** v0.5 ESCRITO y activo en brand_voice_genome + 5 brand_topics sembrados. NeuroneSCF OPERABLE end-to-end por el IID (voz + topics) — primera marca de Marisol operable. #45 pasa de bloqueante total a PARCIAL. Deuda nueva: po_consumer mal asignado (#53). · base previa v2026-07-03-a: ForumPHs DF CIERRE DE GENERACIÓN — gaps #7–#11 mergeados, Venezia a 0 críticos; pendientes #7 PR #12 + #8 ANEXO ICR + #9 pre-flight Ivette; backlog DF #50–52)_
 
 ---
 
-## 🔴🔴 FOCO INMEDIATO — #47 E5b (bucle Boids) + #45 brand_topics Marisol (BLOQUEANTE) + R4B
+## 🔴🔴 FOCO INMEDIATO — #47 E5b (bucle Boids) + #45 brand_topics 5 marcas restantes (NSCF ✅ hecha) + R4B
+
+## 🟢 E6 + #45 NeuroneSCF — genoma de conversión + topics (2026-07-02)
+
+**NeuroneSCF quedó OPERABLE end-to-end por el IID** (primera marca de Marisol operable): tiene VOZ (`nscf_conversion` v0.5 activa) + TOPICS (5 brand_topics). El pipeline puede researchear y generar con la voz de la marca, entrando al gate de Sam (auto_approve=false).
+
+- **E6 — genoma `nscf_conversion` v0.5** escrito y activo en `public.brand_voice_genome` (12 dimensiones espejadas de unrlvl_default). Voz de CONVERSIÓN destilada del bucle Boids del 2-jul. 1 de 3 hermanas (+ editorial + professional pendientes, #54). TikTok añadido como capa de texto (guion hablado → futuro nscf_video). Escrito en el CHAT Sam-Claude bajo HRD, no en UI — confirma el circuito E6 diseñado.
+- **#45 fase 1 — 5 brand_topics de NSCF** en `intel.brand_topics`: frizz-humidity, color-fade, damage-repair (priority 100) + chlorine-sun, fine-fragile (priority 90). Todos → nscf_conversion, platforms=[meta_fb, meta_ig, tiktok], auto_approve=false, cadencia crescendo. **Arquitectura:** topics de marca de producto/conversión se mapean a PROBLEMAS/PERSONAS reales (brand_personas), no a research abstracto como UNRLVL/Lucien.
+- **Professor:** 4 learnings (2-jul, voice_genome). Total del día: 12.
+- **Distinción de marca:** NeuroneSCF ≠ Patricia Osorio (PO). Dos marcas distintas de Patricia. Ver deuda #53.
 
 ## 🟢🟢🟢 SPRINT SEMBRADOR — COMPLETO (T1-T4 + #48 cerradas)
 
@@ -51,9 +60,9 @@ _Actualizada: 2026-07-03 · v2026-07-03-a (ForumPHs DF: CIERRE DE GENERACIÓN �
 | E3b | Server-side | extract-frames ffmpeg (E3b-1) + signed upload (E3b-2) + cron huérfanos (E3b-3) + prueba Marisol (E3b-4) | ✅ **COMPLETO (1-jul)** |
 | E4 | iid-inbound expert_* | **ABSORBIDA — NO se construye.** iid-expert-ocr ya hace la captura Expert autónoma; expert_* sería duplicación. El approve de técnicas Expert es Fase 2, no E4. | ✅ **cerrada (absorbida, 1-jul)** |
 | **E5a** | **Pestaña única IID Seeds** | captura OCR unificada + bifurcador Seed/Genoma. PRs #5 (front) + #9 (EFs) + #6 (fix imagen) mergeados. Migración iid_seeds aplicada. | ✅ **CERRADO — imagen+video × Seed+Genoma verdes en producción (1-jul)** |
-| **E5b** | **Text window calibración (bucle Boids)** | el corazón de Genoma: Claude genera textos por API, Marisol juzga, converge (regla 10/3-SÍ). 2 puertas (desde Genoma capturado / desde cero). Reubicar+conectar enlace gold. **PRÓXIMO FOCO de #47.** | 🔵 **PRÓXIMO — diseño cerrado** |
-| E6 | Aprobación genoma | mecánica scope-gated + firma Sam en INSERT. **Ya diseñada: vive en el CHAT Sam-Claude, no en UI.** El Orchestrator nunca escribe genomas. | 🔵 diseñado |
-| E7 | Skill | `skills/genome-calibration/SKILL.md` — protocolo del bucle Boids + gate de aprobación Sam-Claude (táctico vs estratégico→agente) | 🔵 mapeado |
+| **E5b** | **Text window calibración (bucle Boids)** | Claude genera textos por API, Marisol juzga, converge (regla 10/3-SÍ). 2 puertas. Reubicar+conectar enlace gold. **MECÁNICA VALIDADA EN VIVO (2-jul, ejercicio NSCF); falta diseño técnico D1-D4.** | 🔵 **PRÓXIMO — mecánica validada** |
+| E6 | Aprobación/escritura genoma | mecánica scope-gated + firma Sam en INSERT, en el CHAT Sam-Claude (no UI). **EJERCIDO por 1ª vez con nscf_conversion (2-jul).** | ✅ **probado (2-jul, NSCF)** |
+| E7 | Skill | `skills/genome-calibration/SKILL.md` v1.0 — el Tratado. Protocolo del bucle Boids + gate Sam-Claude. | ✅ **ESCRITO + pusheado (2-jul)** |
 | E8 | Resumen retomable | render de `technique_summary` como handoff Fase 1→Fase 2 | 🔵 mapeado |
 
 **Descubrimiento de diseño E5a:** Basic y Expert NO son dos modos — la captura es idéntica; solo difiere el DESTINO (Seed→contenido / Genoma→voz), elegido al final. Por eso una sola pestaña. Corrección anti-IP: la regla es "no republicar el post", NO "no leer el post" — leer el OCR para aprender tema+método está permitido (insumo de aprendizaje). Ambos destinos procesan OCR.
@@ -62,8 +71,8 @@ _Actualizada: 2026-07-03 · v2026-07-03-a (ForumPHs DF: CIERRE DE GENERACIÓN �
 
 **Orden CC:** E5b → sesión apuntada a `Orchestrator` (+ posible EF si el bucle necesita backend de estado). El allowlist se fija al arrancar.
 
-## 🔴 BLOQUEANTE — #45 brand_topics de las 6 marcas de Marisol (prerequisito de producción real)
-Sin esto el Sembrador NO produce para las marcas de Patricia: capture destila pero approve falla con "domain sin suscriptores". Además, sin genoma (E5b) el agente produce off-brand. Los dos (genoma + topics) hacen a las marcas operables por el IID. Decisión de arquitectura de contenido → sesión propia con HRD. Ver #45.
+## 🟡 #45 brand_topics de las marcas de Marisol — PARCIAL (NeuroneSCF hecha; faltan 5 + default)
+**NeuroneSCF ya OPERABLE (2-jul):** 5 topics sembrados → nscf_conversion. Ya no está dormida. **Faltan:** las otras 5 marcas de Marisol (VivoseMask, D7Herbal, VizosCosmetics, PatriciaOsorioVizosSalon, PatriciaOsorioConectando) + la persona `default` de NSCF. Sin topics, capture destila pero approve falla con "domain sin suscriptores"; sin genoma (E5b/E6) el agente produce off-brand. Arquitectura confirmada: topics de producto/conversión → personas reales (brand_personas), no research abstracto. Sesión propia con HRD por marca. Ver #45.
 
 **Notas del Sembrador:**
 - Multimarca por construcción: sumar marca a un domain = INSERT en brand_topics + 1 línea en CHECK. Cero código.
@@ -101,13 +110,14 @@ Sin esto el Sembrador NO produce para las marcas de Patricia: capture destila pe
 | ✅ MERGEAR PR #3 (E3b-1) + #4 (E3b-2) + #8 (E3b-3) | mergeados 1-jul | E3b |
 | ✅ PRUEBA REAL de Marisol (E3b-4) | VERDE 1-jul (fila 3c40f492). E3 CERRADO. | cierre E3 ✅ |
 | ✅ MERGEAR PR #5+#6 (E5a front) + #9 (E5a EFs) + aplicar migración iid_seeds | mergeados 1-jul; migración aplicada por MCP; E5a en producción | E5a ✅ |
+| ✅ PUSH Tratado genome-calibration v1.0 + INDEX v1.6 + session_logs (2-jul) | pusheados y verificados vivos | E7 ✅ |
 | 🔴 ROTAR contraseñas temporales Sembrador (SUBE PRIORIDAD) | la registrada no coincide con la real; expuestas en sesiones. JWT secret en 2 lugares (Supabase+Vercel) → rotar en ambos | producción real Marisol |
 | 🟡 Rotar STORAGE_SWEEP_SECRET | se pegó en chat 1-jul (blast radius mínimo); regenerar + actualizar command de crons 35/36 | higiene |
 | 🟡 DEUDA: migrar service key a SUPABASE_SECRET_KEYS nueva | cuando Storage acepte el formato nuevo; NO deshabilitar legacy | limpieza |
 | 🟡 DEUDA naming: ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET | arrastra "NSCF", gobierna toda la auth IID; renombrar junto con rotación | limpieza |
 | rollout_started_at | Fijar fecha 1ª sem julio en intel.brand_rollout al lanzar | crescendo Scheduler |
-| brand_topics 6 marcas Marisol (#45) | Decidir domains por marca en sesión propia | Sembrador produce para NSCF/Patricia |
-| Aprobar learnings Professor | ✅ 28 (24+27-jun) + 6 E3b-1 + 3 (28-jun b) + 14 (1-jul: 8 E3b + 6 E5a) aprobados · 22 pendientes (mayo) | Professor |
+| brand_topics 5 marcas restantes de Marisol (#45) | Decidir domains por marca (NeuroneSCF ✅ hecha 2-jul) | Sembrador produce para Patricia |
+| Aprobar learnings Professor | ✅ 28 (24+27-jun) + 6 E3b-1 + 3 (28-jun b) + 14 (1-jul) + 12 (2-jul: calibración+E6+#45) aprobados · 22 pendientes (mayo) | Professor |
 
 ---
 
@@ -161,6 +171,7 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → ge
 | 50 | **DF: ledger de costos** — una fila/acta en `ops_token_sessions` (cost=(in/1M*3)+(out/1M*15)); fphs-formalize debe DEVOLVER tokens y dejar de escribir por su cuenta (neutralizar `logTokensBatch` doble-conteo). PR #5 CERRADO sin merge (approach UNRLVL_SERVICE_KEY-en-DF abandonado). | ForumPHs |
 | 51 | **DF: soporte multi-candidato VotationRecord** — elección Tesorero hoy queda `[ELECCIÓN MULTI-CANDIDATO — PENDIENTE DE PROCESAR]`. | ForumPHs |
 | 52 | **DF: reemplazar `/api/icr` "Claude open" por Agente Experto permanente** — auditoría Ley 284 embebida + curaduría visual de imágenes (corrección tipo-$300M y validación de identidad = criterio legal, viven aquí). | ForumPHs |
+| 53 | **DEUDA `po_consumer` mal asignado (NUEVA 2-jul)** — fila po_consumer v0.6 activa bajo brand_id=NeuroneSCF probablemente es voz de PO-persona (asesora "no convence, clarifica"), no de la distribuidora Neurone. NeuroneSCF ≠ marca personal de Patricia. Verificar y reasignar brand_id a la marca de PO correspondiente. También verificar si PO como marca tiene brand_topics propios en Meta+TikTok (si no → revisión). NO tocada (fila activa). | NeuroneSCF/PatriciaOsorio |
 
 ---
 
@@ -171,7 +182,7 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → ge
 | 30 | Ecosystem Tools SESIÓN DEDICADA | UNRLVL |
 | 31 | GRAN BLOQUE SocialLab/IID | UNRLVL |
 | 32 | lucien_video | Lucien |
-| 33 | Validar genomas. lucien v1.0, unrlvl_default v1.0. | Lucien/SamPublisher |
+| 33 | Validar genomas. lucien v1.0, unrlvl_default v1.0, nscf_conversion v0.5. | Lucien/SamPublisher/NeuroneSCF |
 | 34 | unrlvl-CRM multimarca | UNRLVL |
 | 36 | unrlvl-SMA multimarca | UNRLVL |
 | 37 | Drift detector | UNRLVL |
@@ -179,10 +190,11 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → ge
 | 39 | .github/CLAUDE.md repetido | UNRLVL |
 | 43 | **Versionar EFs del IID en repo (deuda sin-repo §1)** — PARCIALMENTE saldado (iid-inbound + iid-expert-ocr + storage-orphan-sweep en unrlvl-iid-functions). Falta el resto (iid-core, fanout.ts, content-*, etc.). | UNRLVL |
 | 44 | **Eje B implementación** — regenerar spec con 2 decisiones → Ruta B + Gate 7 + Gate 8 greenfield | UNRLVL |
-| 45 | **Sembrar brand_topics de las 6 marcas de Marisol (BLOQUEANTE producción NSCF/Patricia)** — existen en public.brands pero SIN topics/domains en intel.brand_topics. Sin esto capture destila pero approve falla ("domain sin suscriptores"). Con genoma (E5b) + topics (#45), las marcas quedan operables por el IID. Sesión propia con HRD. | NeuroneSCF/UNRLVL |
+| 45 | **Sembrar brand_topics de las marcas de Marisol — PARCIAL.** ✅ NeuroneSCF hecha (2-jul, 5 topics → nscf_conversion). Faltan 5 marcas (VivoseMask, D7Herbal, VizosCosmetics, PatriciaOsorioVizosSalon, PatriciaOsorioConectando) + persona default de NSCF. Arquitectura: topics de producto/conversión → personas reales (brand_personas), no research abstracto. Sesión propia con HRD por marca. | NeuroneSCF/UNRLVL |
 | 46 | **Tab "Topic Proposals" en IID Intel (post-#45, ligado)** — captura estructurada de criterio de Marisol (preguntas guiadas → iid_topic_proposals → Sam convierte en domains → CC inserta). | NeuroneSCF/UNRLVL |
-| 47 | ✅ **Modo Expert/Boids — Fase 1 captura COMPLETA (1-jul).** E3b-1/2/3/4 + E5a cerradas, E4 absorbida. Marisol captura Seed y Genoma (imagen+video) en producción. PRÓXIMO: E5b (bucle Boids). Ver session_log §9 (1-jul b). | UNRLVL |
+| 47 | ✅ **Modo Expert/Boids — Fase 1 COMPLETA (1-jul) + Fase 2 EN CURSO.** E3b + E5a cerradas, E4 absorbida. E7 (Tratado) escrito 2-jul. E6 probado con nscf_conversion 2-jul. PRÓXIMO: E5b (diseño técnico D1-D4, mecánica ya validada). Ver session_log §9. | UNRLVL |
 | 48 | ✅ **Approval por email — COMPLETO (27-jun).** iid-inbound v9, notifyGate inline. | UNRLVL |
+| 54 | **nscf_editorial + nscf_professional — bucles propios pendientes.** editorial = Hair Intelligence (molde real: artículo "por qué el acondicionador no basta"); professional = B2B dato-primero. Cada uno su pasada de bucle Boids. | NeuroneSCF |
 
 ---
 
@@ -192,6 +204,8 @@ Consolida #35 + #39. Resolver duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE
 ---
 
 ## ✅ Resuelto recientemente
+- ✅ **E6 + #45 NeuroneSCF (2-jul).** Genoma nscf_conversion v0.5 escrito y activo en brand_voice_genome (12 dimensiones, +TikTok capa texto). 5 brand_topics sembrados → nscf_conversion (Meta+TikTok). NeuroneSCF operable end-to-end por el IID (primera marca de Marisol). Distinción de marca NSCF≠PO registrada; deuda po_consumer (#53). Professor: 4 learnings. — 2026-07-02
+- ✅ **#47 Calibración de voz NSCF + Tratado genome-calibration v1.0 (2-jul).** Bucle Boids validado en vivo (Sam×Claude, 10 piezas). Genoma de conversión convergido. Eje moral (autoridad-por-contraste, blanco=asesoramiento genérico, filo 5/10 instrumental), capa científica, reglas de forma. Voz vs intención = ejes distintos. Skill genome-calibration v1.0 (Tratado, E7) escrito y pusheado + INDEX v1.6. Professor: 8 learnings. — 2026-07-02
 - ✅ **#47 Expert/Boids — E5a CERRADO: pestaña única IID Seeds (1-jul b).** Captura OCR unificada + bifurcador Seed/Genoma reemplaza el toggle Basic/Expert. Descubrimiento: Basic/Expert no son modos, solo difiere el destino. 2 sesiones CC paralelas contra contrato cerrado (front PR #5+#6, EFs PR #9). Fix imagen: bypass de ffmpeg (imagen→data URL→OCR directo; ffmpeg solo para video). Gotchas: merge=deploy a producción en Vercel (probar Preview antes); merge de EFs ≠ aplicar migración (columnas ocr_text/capture_intent aplicadas por MCP tras el hecho). E4 ABSORBIDA (iid-expert-ocr ya hace la captura). Probado E2E: imagen+video × Seed+Genoma verdes. Diseño E5b (bucle Boids en UI) + Fase 2 (aprobación en chat) cerrados. Professor: 6 learnings. Próximo: E5b. — 2026-07-01
 - ✅ **#47 Expert/Boids — E3 CAPTURA COMPLETO end-to-end (1-jul).** E3b-2 (front signed upload URL, PR #4) + E3b-3 (EF genérica storage-orphan-sweep, REST-only por trigger protect_delete, recorrido recursivo, PR #8 + crons 35/36) + E3b-4 (Marisol desde su dispositivo, fila 3c40f492). Gotcha: sign-upload rechazaba 400 por Content-Type sin body. Hallazgo: trigger protect_delete bloquea DELETE FROM storage.objects (job 32 fallaba en silencio). Incidente dispatcher detectado (dejado a R4B). Professor: 8 learnings. — 2026-07-01
 - ✅ **#47 Expert/Boids — E3b-1 CERRADO: ffmpeg server-side decodifica HEVC (28-jun c).** `/api/extract-frames` probada E2E con el HEVC real de Marisol (hvc1 1080×1920 43.28s): 15/15 JPEG, video borrado. PR #3. 2 gotchas de credenciales resueltos (JWT chars especiales; service_role legacy). Professor: 6 learnings. — 2026-06-28
@@ -210,6 +224,10 @@ Consolida #35 + #39. Resolver duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE
 
 ## Notas de contexto
 
+**Genomas de NeuroneSCF (2-jul):** 3 voces hermanas planificadas, núcleo común (Patricia percibida no declarada + Neurone solución + adversario del consejo genérico-conveniente + lectora protagonista + ES/EN neutros sin regionalismos generados por separado). (1) **nscf_conversion v0.5 ACTIVA** — marketing directo, filo 5/10 instrumental, escena→giro→tuteo→cierre en Neurone/CTA, plataformas Meta+TikTok(texto)+email. (2) **nscf_editorial** — Hair Intelligence, enseña/recluta, invoca la ciencia, molde real existente, pendiente de bucle (#54). (3) **nscf_professional** — B2B dato-primero, fuera de mapa (#54). DEUDA: po_consumer v0.6 bajo NeuroneSCF probablemente mal asignado (es PO-persona, #53). NeuroneSCF ≠ marca personal de Patricia.
+
+**Calibración de genoma — método (skill genome-calibration v1.0):** 2 ramas (Voz Extraída / Voz Diseñada) · 2 ejes (voz vs intención, no fundir) · triangulación de fuentes obligatoria · eje fundador embebido en material de arranque · bucle Boids (Claude propone, operador juzga SÍ/NO + porqué, converge 10+3SÍ) · destilación al genoma bajo HRD en el chat (quirúrgico, nunca en UI) · voces hermanas · reglas transversales (bilingüe reescritura no traducción; cita-por-destino; motor filosófico interno nunca se nombra) · techo de producción (voz constante, técnica variable con memoria). Anexo NSCF como ejemplar.
+
 **#47 Expert/Boids — estado 2026-07-01 b (Fase 1 captura COMPLETA):** subsistema PERMANENTE de onboarding. 2 fases: Fase 1 (captura+OCR) E1-E5a COMPLETA; Fase 2 (calibración) = E5b (bucle Boids en UI) + E6 (aprobación en chat) + E7 (skill) + E8 (resumen). **Pestaña única IID Seeds** (E5a): Marisol sube post (imagen/video, drag&drop) → OCR → 3 preguntas (checkboxes tema/método, marca, por qué importa) → bifurcador Seed/Genoma. Seed→iid_seeds (pipeline contenido); Genoma→captured_techniques (calibración voz). El mount temporal "Expert (prueba)" murió. **Arquitectura captura:** video → sign-upload→extract-frames (ffmpeg server-side, cualquier códec); imagen → FileReader.readAsDataURL directo al OCR (bypass ffmpeg, la imagen ya es el frame). Ambos → iid-expert-ocr (flag persist: true=Genoma persiste / false=Seed devuelve ocr_text). Anti-IP: video transita segundos y se borra (+cron storage-orphan-sweep); la regla es "no republicar", leer OCR para aprender tema/método está permitido. **PRÓXIMO: E5b** — text window de calibración (Claude genera textos por API, Marisol juzga SÍ/NO, regla 10 textos mín + 3 SÍ consecutivos para converger; 2 puertas: desde Genoma capturado / desde cero; reubicar+conectar enlace gold). Fase 2 aprobación de genomas vive en el CHAT Sam-Claude (checkpoint HRD → INSERT a brand_voice_genome); el Orchestrator nunca escribe genomas. Propósito: el genoma da voz al IID Agent de cada marca (sin él, output off-brand). Las 6 marcas de Marisol necesitan genoma (E5b) + topics (#45) para ser operables por el IID.
 
 **Storage barrido (infra primaria, 1-jul):** EF `storage-orphan-sweep` (genérica, bucket+older_than_minutes+prefix). REST-only (trigger protect_objects_delete bloquea DELETE FROM storage.objects con 42501). List folder-aware → recorrido recursivo. Auth header x-sweep-secret (verify-JWT OFF). Crons jobid 35 (iid-expert 1h) + 36 (unrlvl-media 3AM, reemplaza el 32 roto).
@@ -218,11 +236,13 @@ Consolida #35 + #39. Resolver duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE
 
 **IID — estado 2026-06-25 a:** content-dispatcher v27 → content-run-stage v41 → content-watcher v5 (6 gates) → approve-piece v14. Modelo claude-sonnet-4-6. **NOTA 1-jul: el cron que invoca content-dispatcher (jobid 29) está ROTO desde 17-jun (ver INCIDENTE R4B) — la EF sana pero no se dispara.**
 
-**Marcas (public.brands) — scope:** las 6 de Marisol = VivoseMask, D7Herbal, VizosCosmetics, PatriciaOsorioVizosSalon, PatriciaOsorioConectando, NeuroneSCF. brand_topics SOLO pobladas para LucienSael + UnrealvilleStudio.
+**Marcas (public.brands) — scope:** las 6 de Marisol = VivoseMask, D7Herbal, VizosCosmetics, PatriciaOsorioVizosSalon, PatriciaOsorioConectando, NeuroneSCF. brand_topics pobladas para LucienSael + UnrealvilleStudio + **NeuroneSCF (5 topics, 2-jul)**. Faltan las otras 5 de Marisol.
 
 **Stack labs:** copylab=unrlvl-copy-lab · imagelab=image-lab-unrlvl (gemini-2.5-flash-image; credencial Vertex) · sociallab=social-lab-flame · videolab=unrlvl-video-lab (active=false). lab-worker v23.
 
 **Genoma Lucien v1.0 (19-jun):** 2 voces. core_move generativo/constructor. Es el MODELO del bucle Boids (E5b/E7).
+
+**Genomas activos:** lucien_editorial v1.0 + lucien_social v1.0 · unrlvl_default v1.0 · **nscf_conversion v0.5 (2-jul)** · po_consumer v0.6 (bajo NeuroneSCF, revisar brand_id #53). El método está codificado en genome-calibration v1.0.
 
 **Decisiones R4B congeladas (20-jun):** Scheduler EF+cron 1×/día ET. scheduled_for. Ventanas ET, jitter ±45min. Sibling-stagger ≥48h. Embeddings Vertex gemini-embedding-001 @768.
 

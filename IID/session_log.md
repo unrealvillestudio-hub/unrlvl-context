@@ -240,6 +240,29 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-02 (cont.) · E6 + #45 NeuroneSCF — primera marca de Marisol OPERABLE end-to-end · Sam + Claude
+
+**Estado:** NeuroneSCF quedó operable por el IID: tiene VOZ (genoma nscf_conversion v0.5 activo) + TOPICS (5 brand_topics). El pipeline ya puede researchear estos territorios y generar con la voz de la marca, entrando al gate de Sam (auto_approve=false). Continuación directa del ejercicio de calibración del mismo día.
+
+### E6 — genoma escrito (no en UI, en el chat bajo HRD)
+`brand_voice_genome`: nscf_conversion v0.5 active, brand_id=NeuroneSCF. 12 dimensiones espejadas de unrlvl_default. Destilado del bucle Boids validado ese día. Es la voz de CONVERSIÓN (1 de 3 hermanas: + editorial + professional pendientes). TikTok añadido como capa de texto. Confirma el circuito E6 diseñado: el genoma se escribe en el chat Sam-Claude, el Orchestrator nunca lo escribe.
+
+### #45 (fase 1) — brand_topics de NSCF (avance del BLOQUEANTE)
+5 topics sembrados (frizz-humidity, color-fade, damage-repair @100 + chlorine-sun, fine-fragile @90), todos → nscf_conversion, Meta FB/IG + TikTok. #45 pasa de BLOQUEANTE total a PARCIAL: NeuroneSCF ya no está dormida; faltan las otras 5 marcas de Marisol y la persona default de NSCF.
+
+**Aprendizaje de arquitectura para el resto de #45:** los topics de una marca de producto/conversión se mapean a PROBLEMAS/PERSONAS reales (brand_personas), no a research abstracto como UNRLVL/Lucien. El angle sale del tone_for_segment/copy_hooks/avoid de cada persona. Esto define cómo sembrar las 5 marcas restantes.
+
+### Validación cruzada del método E5b (por qué importa para la construcción)
+E6 se hizo con material producido por el bucle Boids validado en vivo — confirma que la cadena bucle→destilación→genoma funciona de punta a punta ANTES de construir E5b en la UI. Cuando se construya E5b (`/api/calibrate.ts`), su output alimenta exactamente este paso E6, ya probado manualmente.
+
+### Deuda mapeada (NO tocada)
+`po_consumer` v0.6 activo bajo brand_id=NeuroneSCF probablemente mal asignado (voz de PO-persona, no de la distribuidora). NeuroneSCF ≠ marca personal de Patricia. A verificar/reasignar. Ver AGENDA #50.
+
+### Escrituras
+brand_voice_genome (+1 fila, +1 UPDATE) · intel.brand_topics (+5) · professor_learnings (+4). Todo verificado por MCP.
+
+---
+
 ## 2026-07-02 · E5b — Mecánica del bucle VALIDADA en vivo (banco de pruebas NSCF) · Sam + Claude
 
 **Estado:** mecánica del bucle Boids confirmada con un ejercicio real Sam×Claude sobre NeuroneSCF. Alimenta el diseño de `/api/calibrate.ts`. Diseño técnico D1–D4 aún pendiente (sesión siguiente).

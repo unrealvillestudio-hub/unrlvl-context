@@ -2,6 +2,49 @@
 _Actualizado: 2026-06-16 (sesión 7)_
 
 ---
+
+## 2026-07-02 (cont.) · NSCF — E6 genoma nscf_conversion ESCRITO + #45 brand_topics sembrados · Sam + Claude
+
+**Conducido por:** Claude Opus 4.8 (chat) + MCP (Supabase) · **Marca:** NeuroneSCF
+**Estado:** ✅ E6 cerrado (genoma de conversión vivo y activo) + #45 fase 1 cerrado (5 topics). NeuroneSCF quedó OPERABLE end-to-end por el IID (voz + topics). Professor: 4 learnings nuevos. Continuación directa del ejercicio de calibración del mismo día.
+
+### E6 — genoma `nscf_conversion` v0.5 (INSERT verificado)
+- `public.brand_voice_genome`: brand_id=NeuroneSCF, voice_id=**nscf_conversion**, version 0.5, maturity v0.5, active=true. 12 dimensiones JSONB, formato espejado de `unrlvl_default` v1.0.
+- Contenido destilado del bucle Boids: eje moral (autoridad-por-contraste, blanco=asesoramiento genérico-conveniente, prohibición de absolver), filo 5/10 instrumental, estructura canónica (escena tercero→giro tuteo→mercado falla→Neurone→cierre), reglas de forma (regla de oro, desplazamiento de protagonista, presunción de compañía, precisión sin "casi", tuteo desde el giro, ley del cierre, variación de técnica), capa científica Neurone, Patricia percibida no declarada.
+- **Idioma:** ES-neutro + EN-neutro sin regionalismos, generados por separado (no traducir). Contexto temático = Florida; registro lingüístico = neutro.
+- **TikTok añadido** a application_constraints como CAPA DE TEXTO (caption/on-screen); guion hablado reservado a futuro `nscf_video` (frontera de genoma, patrón Lucien).
+- version 0.5 porque calibra criterio, no valida producción; sube a v1.0 tras outputs reales del IID.
+
+### #45 (fase 1) — 5 brand_topics de NeuroneSCF (INSERT verificado)
+`intel.brand_topics`, todos voice_by_destination={social/editorial: nscf_conversion}, platforms=[meta_fb, meta_ig, tiktok], purpose=[publish,internal], auto_approve=false, active=true, rollout_phase=1, cadencia crescendo:
+- **frizz-humidity** (priority 100) — persona b2c_frizz_humidity
+- **color-fade** (priority 100) — persona b2c_color_fade
+- **damage-repair** (priority 100) — persona b2c_damage_repair
+- **chlorine-sun** (priority 90) — persona b2c_chlorine_sun
+- **fine-fragile** (priority 90) — persona b2c_fine_fragile
+
+Cada `angle` se nutre del tone_for_segment/copy_hooks/avoid de su persona en `brand_personas`. `hard_rules` de cada uno lleva el eje moral + idioma neutro + reveal tardío + filo 5/10.
+
+**Aprendizaje de arquitectura:** los topics de una marca de PRODUCTO/CONVERSIÓN (NSCF) se mapean a PROBLEMAS/PERSONAS reales (los del clima de Florida ya poblados en brand_personas), NO a territorios de research abstracto como las marcas de AUTORIDAD (UNRLVL/Lucien → ai-cognition, etc.).
+
+### Distinción de marca crítica (registrada)
+NeuroneSCF ≠ Patricia Osorio (PO). Son DOS marcas distintas de Patricia. PO = marca personal (PatriciaOsorioConectando, comunidad); NeuroneSCF = e-commerce/distribuidora de productos Neurone. Relación: PO es parte de Neurone pero no ES Neurone; Neurone es parte de PO pero no ES PO. No se colapsan.
+
+### DEUDA detectada — `po_consumer` mal asignado (a verificar, NO tocado)
+Existe fila `po_consumer` v0.6 ACTIVA bajo brand_id=**NeuroneSCF** que probablemente está MAL ASIGNADA: es voz de PO-persona (asesora, "no convence, clarifica", honestidad clínica), no de la distribuidora Neurone. Acción pendiente: verificar y reasignar brand_id a la marca de PO correspondiente. NO se tocó (fila activa en producción). También verificar si PO como marca tiene sus propios brand_topics en Meta+TikTok (si no, va a revisión).
+
+### Deudas relacionadas mapeadas
+- Persona `default` de NSCF sin topic (fase 2 de #45).
+- `nscf_editorial` (Hair Intelligence) y `nscf_professional` (B2B) pendientes de sus propios bucles.
+- `es-FL` de brand_personas/humanize_profiles a neutralizar a ES-neutro (contradice el idioma unificado).
+
+### Escrituras en DB
+- `brand_voice_genome`: 1 fila nueva (nscf_conversion v0.5) + 1 UPDATE (TikTok en application_constraints). Verificadas.
+- `intel.brand_topics`: 5 filas nuevas. Verificadas.
+- `professor_learnings`: 4 learnings nuevos 2026-07-02, category voice_genome, approved_by_sam=true.
+
+---
+
 ## 2026-07-02 · NSCF — Calibración de VOZ / Genoma (bucle Boids en vivo) · Sam + Claude
 
 **Conducido por:** Claude Opus 4.8 (chat) + MCP (Supabase) · **Marca:** NeuroneSCF
