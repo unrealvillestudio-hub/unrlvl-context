@@ -1,5 +1,90 @@
 # ForumPHs — Session Log
 
+## 2026-06-19 — DF Quality Sprint: CIERRE DE GENERACIÓN (5 gaps merged) + corridas finales Venezia + feature reporte ICR .docx (PR #12) + mapa de pendientes
+
+### EN PRODUCCIÓN (mergeado a main, verificado)
+- **5 GENERATION GAPS CERRADOS** — PRs #6–#11 mergeados a main. Venezia OR 1-2026 pasó de
+  🛑 BLOQUEADO → ❌ REQUIERE CORRECCIÓN con **0 CRÍTICOS**. Nivel comparable a Castilla (98%).
+  - **#6** fphs-formalize v23 (ruido oral/género/warnings ICR) → desplegado como EF **v28**
+    (verify_jwt:false, model claude-sonnet-4-6, key Deno.env `forumphs_document_factory`).
+  - **#7** votaciones (classifyVote + try-catch DB + scan dinámico + placeholder multi-candidato).
+  - **#8** ingesta asistencia (`lib/parsers/parseAsistencia.ts`): raíz quórum-0 = header mismatch
+    (parser buscaba `Unidad`/`Asistencia`, Hypal trae `Unidades`/`Asistente`). Fix = matching
+    TOLERANTE (normHeader + pickField por stem) + tower-from-suffix. 161 registros → quórum 88.46%.
+  - **#9** render (route.ts + actaBuilder.ts): Gap1 quórum duplicado (`isQuorumSectionTitle()` omite
+    heading de agenda) + Gap4 `{.mark}` residual (`stripInlineMarkup()` preserva `[FINCA PENDIENTE]`).
+  - **#10** generador: Gap2 reproceso (`lib/processors/reprocessPending.ts`, reintenta solo bloques
+    pendientes, nunca claude_null/logistica/empty/agent_error) + Gap3 género-por-persona
+    (`genderConsolidation.ts`, mayoría por speaker_name, admin excluido, nunca por diccionario).
+  - **#11** Gap5 roles (`classifyRoles.ts`, determinista): unidad en padrón→propietario; sin unidad +
+    match exacto en acta_admin_personnel→admin; ninguno→`[ROL NO VERIFICADO]` + ICRFinding.
+    AJUSTE de Sam: ELIMINADO match por nombre parcial ("Lorena"→Hilda era adivinar disfrazado).
+  - Conflictos en route.ts resueltos por CC vía rebase #6→#11. Sam autorizó merge directo "solo por esta vez".
+
+### CORRIDAS FINALES VENEZIA (2 ejecuciones, post-5-gaps) — la mejor acta que el DF ha producido
+- **Gap 5 funcionó en AMBAS corridas:** `[ROL NO VERIFICADO]` correcto en Patricia Navajas Navarro,
+  Sadia De Gonzalez, Tate, Yara, Rocío, Alejandra, [Nombre], Administración. Crucial: **"Lorena"
+  (barbacoa/gastos legales) NO se resolvió a Hilda Lorena** — principio respetado. Propietarios con
+  unidad (Greyz 13H, Celia Local A, Adnan Mauricio 9H) bien clasificados. Ivette/Daniel → admin.
+- **ICR completo (runtime, separado) = el bueno:** corrida 1 → 19 hallazgos (0/4/10/5);
+  corrida 2 → 17 hallazgos (0/6/8/3). **0 críticos en ambas.**
+- **$300M:** corrida 1 lo dejó ~354,000; corrida 2 transcribió el error oral literal 300,554,673
+  con aclaración parentética. ICR lo marca ALTO/a-verificar, NO auto-corrige (correcto).
+- **Riesgo legal detectado por ICR corrida 2:** "Mercedes 62 puntos" para Tesorero cuando XLSX
+  registra 0/0 NO APROBADO → marcado riesgo potencial CRITICAL para Ivette. Elección Tesorero sigue
+  `[ELECCIÓN MULTI-CANDIDATO — PENDIENTE DE PROCESAR]` (honesto, no inventa).
+- **Conclusión:** Venezia llegó al TECHO de lo automatizable. Lo que queda es criterio legal de Ivette,
+  no errores del sistema.
+
+### FEATURE: reporte ICR como .docx (PR #12 — ⏸ PARADO EN PR, esperando merge de Sam)
+- CC construyó `lib/generators/icrReportDocx.ts` (serializador con shading w:shd por severidad:
+  CRÍTICO #C00000 / ALTO #E36C09 / MEDIO #BF9000 / BAJO #808080; nota a Ivette; tabla resumen;
+  hallazgos Crítico→Bajo con Hallazgo:/Recomendación:; $354,000 como "valor a verificar", nunca afirmado)
+  + `app/api/icr-docx/route.ts` + botón "Descargar reporte ICR (.docx)" en page.tsx. Build 19/19.
+- **PATH B confirmado** para entregar a Ivette: mergear #12 → correr Venezia → clic en botón →
+  baja REPORTE_ICR_ACTA_OR_1-2026_PH_VENEZIA_TOWER_E.docx con los findings reales (no fabricados).
+- **Bloqueo de PATH A (pegar JSON):** el ICR NO se persiste — re-confirmado por SQL esta sesión que
+  NO existe tabla icr/findings ni en UNRLVL (amlvyycfepwhiindxgzw) ni en FPHS (tajuoqdbnsnzkhyqvdgs).
+  ICR es runtime puro (vive solo en pantalla). Claude no puede generar el .docx desde su contexto y
+  no fabrica findings (violaría el principio del ICR).
+
+### DEFECTO PERSISTENTE — ANEXO ICR pobre embebido en el .docx (FIX PENDIENTE, PR limpio aparte)
+- Confirmado en LAS 2 corridas: cada acta (pre-#12) incrusta en su cuerpo un "ANEXO ICR — REVISIÓN
+  DE CONSISTENCIA LEGAL" DEGRADADO (corrida 1: 4 hallazgos con "ADM"/guion colgante; corrida 2: solo
+  2 hallazgos). En paralelo el reporte separado tiene 19/17. → El ICR NO debe vivir incrustado en el
+  acta legal (mezcla documento legal con auditoría interna y entrega a Ivette un anexo contradictorio).
+- **#12 separa el reporte en archivo propio pero NO quita el anexo.** FIX pendiente: remover el ANEXO
+  del cuerpo del acta (route.ts/actaBuilder.ts). NO es backlog cómodo — se repite cada corrida.
+
+### PRÓXIMO CHAT — lo primero que haga Claude (orden sugerido)
+1. **Mergear PR #12** (bajo riesgo: archivos nuevos + botón). Verificar en main + /api/icr-docx registrado.
+2. **Correr Venezia final** con #12 en main (última de verdad — #12 no cambia el acta, solo agrega botón).
+3. **Clic "Descargar reporte ICR (.docx)"** → entregar a Ivette: acta + reporte ICR (17 hallazgos, el bueno).
+4. **FIX ANEXO embebido** (PR limpio, separado de #12): quitar el ANEXO ICR del cuerpo del acta.
+5. **Pre-flight de Ivette** (diseño aparte): input en DF donde Ivette declara los representantes de admin
+   de ESA asamblea antes de generar → alimenta classifyRoles paso 2 como dato verificado → reduce
+   `[ROL NO VERIFICADO]`. Principio: conocimiento asamblea-específico = DATO humano, no inferencia de código.
+
+### BACKLOG (no urgente, arrastrado)
+- **Ledger de costos del DF** (instrucciones `CC_INSTRUCCIONES_ledger_costos_DF.md` ya en mano de Sam):
+  una fila por acta en `ops_token_sessions`, cost = (in/1M*3)+(out/1M*15). fphs-formalize debe DEVOLVER
+  tokens y dejar de escribir por su cuenta (hoy `logTokensBatch` duplica — NEUTRALIZAR al conectar ledger).
+  PR #5 fue CERRADO sin merge (approach UNRLVL_SERVICE_KEY-en-DF abandonado). `ops_token_sessions`:
+  session_type/input_tokens/output_tokens son NOT NULL (usar 0, nunca null).
+- Soporte completo VotationRecord multi-candidato (Tesorero hoy placeholder).
+- Reemplazar `/api/icr` "Claude open" por Agente Experto permanente (auditoría Ley 284 embebida +
+  curaduría visual de imágenes; la corrección tipo-$300M y validación de identidad son criterio legal,
+  pueden vivir aquí). Reglamento como 2º artefacto del DF. Cargar locales L01–L06 Castilla (fincas).
+- Warning ICR de fincas faltantes (si fincaPendientes.length>0 → MEDIUM/DATA_MISMATCH no bloqueante).
+- Mejora ICR "sugerir patrón de normalización" para alta de PH (sesión Agente Experto).
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+- Sin cambios de DB esta sesión (todo fue código vía PR + verificación). EF fphs-formalize confirmada
+  en **v28** (= patch v23). Professor: 3 learnings checkpoint 13 (approved_by_sam=true).
+
+---
+*ForumPHs · DF cierre de generación + corridas finales Venezia + PR #12 reporte ICR .docx · 2026-06-19*
+
 ## 2026-06-08 — Fincas Castilla + ledger de costos + warning ICR (mapeo para próximo chat)
 
 ### EN PRODUCCIÓN (aplicado y verificado)
