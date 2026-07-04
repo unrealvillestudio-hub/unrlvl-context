@@ -1,5 +1,67 @@
 # ForumPHs — Session Log
 
+## 2026-07-04 — DF: R5 mergeado pero INERTE + SPRINT PARSER MULTI-PLATAFORMA (Lefevre 75/TOC) + Sonnet 5
+
+### CONTEXTO — por qué esta sesión
+Arrancó como R5/Bloque 2 (marcas ICR inline). Al verificar el `.docx` generado se descubrió que **R5 quedó INERTE**, y al probar el primer paquete **no-Venezia** (Lefevre 75, plataforma TOC/HIF) se destapó que **todo el parser estaba calibrado a Hypal/Venezia**. La sesión terminó siendo el sprint de generalización multi-plataforma del DF. Verificación con lectura de código real y diagnósticos read-only de CC; varias hipótesis propias descartadas con evidencia.
+
+### R5 (Bloque 2) — MERGEADO (PR #14) pero INERTE
+- El brief R5 se construyó y CC lo entregó: quitar el ANEXO ICR embebido, `icrSectionBanner` como puntero visual al reporte externo (sin numeración `N` — decisión de Sam de eliminar el `N`; se volvió `⟦ICR⟧`/`⟦ICR · N hallazgos⟧` con shading de peor gravedad vía `getWorstSev`), warning temprano de dedup en `page.tsx`. PR #14 mergeado.
+- **PERO al abrir un `.docx` real: cero marcas ICR, cero shading, cero anexo.** Causa raíz (lectura de código):
+  - `page.tsx` `handleFormalized` → `runGenerate(blocks, [])` — **icr_findings hardcodeado a `[]`**. El auditor `/api/icr` corre DESPUÉS, en otro paso, sobre el acta ya generada. A `/api/generate` siempre le llega `icr_findings: []`.
+  - Los findings internos que sí genera `/api/generate` (roles, género, dedup) tienen `location: "Cuerpo del acta"`, no `"sección N"` → `findingsForSection` (que exige match textual de nº de sección) devuelve `[]` → banner `null`.
+  - El anexo ICR viejo tampoco se renderizaba nunca por la misma causa.
+- **Conclusión:** R5 está bien escrito pero pinta sobre un array vacío / sin match de sección. **→ Deuda #57 (cablear ICR→generate), sprint aparte.** Sam acepta `[ICR]` en el .docx como pendiente (#59).
+
+### SPRINT PARSER MULTI-PLATAFORMA — 3 PRs mergeados
+Primer paquete no-Venezia (Lefevre 75 / TOC/HIF). El preflight salió **PH "AYALA" / tipo "Ordinaria" / fecha "18 enero" / 0 bloques / 0 asistentes** — todo mal, aunque el texto fuente lo tenía correcto. El parser asumía formato Hypal/Zoom en cada etapa.
+
+**Bug memorable:** `extractPHName` con regex `\bP\.?H\.?\s+...` matcheó el **"ph"** dentro de **"Jose*ph* Ayala"** (un propietario) → "PH Ayala". El `\b` trata la frontera letra→"ph" como válida.
+
+- **PR-A #15 — skeleton multi-formato** (`parseResumen.ts` + `parse/route.ts`):
+  - `extractPHName`: reconoce "PROPIEDAD HORIZONTAL X"/"P.H."/"PH" con ancla real de palabra (no `\b`, para no matchear dentro de "Joseph"); prioriza encabezado; corta en R.U.C.
+  - `extractAssemblyType`: contempla "ASAMBLEA GENERAL EXTRAORDINARIA" (GENERAL en medio); **elimina el default silencioso ORDINARIA** → marca `INDETERMINADA`/`assembly_type_uncertain`.
+  - `extractDate`: ancla a "celebrada el / siendo el día / encabezado", no la primera fecha suelta; soporta "veintiocho (28)".
+  - **Cross-check filename↔contenido** (idea de Sam): los nombres de archivo como pista de contraste → bandera de sospecha no-bloqueante cuando no concuerdan. Nunca corrige, avisa.
+- **PR-B #16 — transcripción TOC + asistencia** (`detectPlatform.ts` nuevo, `parseTranscripcion.ts`, `parseAsistencia.ts`, `zipExtractor.ts`, `parse/route.ts`):
+  - **Auto-detección de plataforma** (sin selector manual, decisión de Sam) leyendo la tabla **`df_platform_parsing_config`** (UNRLVL) por señales del texto.
+  - Segmentación **TOC `prose_paragraph`** (prosa continua, turnos por cues, hablante por auto-presentación, sin inventar identidades).
+  - Fix xlsx: saltar filas de título + reconocer header "Propiedad".
+- **PR-C #17 — fix runtime + colaterales + Sonnet 5** (`zipExtractor.ts`, `parseTranscripcion.ts`, `detectPlatform.ts`, `PreflightForm.tsx`, `icr/route.ts`, `imageCuration.ts`, `fphs-formalize/index.ts`, `.env.example`):
+  - **Fix `detectHeaderRow`:** índice calculado en array colapsado (`blankrows:false`) usado como `range` ABSOLUTO → con fila en blanco sobre el header, `range` cae en la vacía → claves `__EMPTY` → 0 asistentes. Fix: calcular en coordenadas absolutas. (Lefevre: `range:2 → __EMPTY` / `range:3 → Propiedad`.)
+  - Banner visible de plataforma/degradación (antes se emitía como campo, invisible); logging en el `catch` de `detectPlatform` (antes silencioso); copy sin "Hypal" hardcodeado (lee `platform_id`).
+  - **Migración `claude-sonnet-4-6` → `claude-sonnet-5`** con `thinking: {type:'disabled'}`. GOTCHA: SDK `@anthropic-ai/sdk@0.24.3` predata el param `thinking` → passthrough runtime (SDK serializa campos extra al body; tsc no los tipa) + fetch crudo en la EF.
+
+### CAUSA RAÍZ del "degrada a Hypal" — GRANT faltante (mi error de omisión)
+Tras PR-C, el Preview seguía degradando a Hypal pese a env var puesta, tabla con datos y RLS off. Diagnóstico read-only de CC (nueva sesión) encontró el smoking gun en logs de runtime: `[detectPlatform] config unreadable, degrading to hypal: HTTP 403`. **Causa:** la tabla `df_platform_parsing_config` **no tenía `GRANT SELECT` para `service_role`** — solo `postgres` tenía privilegios. PostgREST verifica GRANTs a nivel tabla ANTES que policies; `BYPASSRLS` del `service_role` omite policies, no GRANTs. Resultado: `42501 permission denied` → 403 → fallback. **El error fue mío:** al crear la tabla con `apply_migration` escribí el `CREATE TABLE` pero omití el `GRANT`.
+- **Fix aplicado (por Claude, tabla en UNRLVL):** `GRANT SELECT ON public.df_platform_parsing_config TO service_role;` + `ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO service_role;` (para futuras tablas). Verificado.
+
+### RESULTADO — DF MULTI-PLATAFORMA VIVO
+Con el GRANT, el Preview de Lefevre mostró: **"Plataforma detectada: TOC / HIF"**, **117 asistentes**, PH LEFEVRE 75 / EXTRAORDINARIA / 28 junio, banner honesto de baja densidad de locutor (7 bloques/~12847 palabras → pedir a TOC export con etiquetas de hablante), corrió en **Sonnet 5**, y el **ICR marcó 14 hallazgos (4 CRÍTICOS: porcentajes sobre bases distintas, quórum contradictorio 117 vs 23, fechas discordantes 28 vs 24 junio, roles no verificados) → BLOQUEADO correctamente**. El ICR (segunda capa, Agente Experto) funcionó de forma excelente.
+
+### DEFECTO CONFIRMADO — QA↔ICR desconectados (deuda #58)
+El **QA dio PASS / 100% / "Acta lista para revisión de Ivette"** sobre la MISMA acta que el ICR declaró **BLOQUEADA con 4 críticos**. El QA valida ESTRUCTURA (apertura, quórum, firmas, votaciones listadas → 15/15) pero NO contenido; un acta de ~7 páginas con target 27-33 igual pasa. **Decisión de Sam:** vivir con esto MIENTRAS el ICR atrape (el ICR es el que importa); deuda conocida-y-aceptada, NO urgente. Fix futuro: QA debe FAIL cuando ICR bloquea.
+
+### tabla nueva df_platform_parsing_config (UNRLVL amlvyycfepwhiindxgzw)
+Columnas: id, display_name, active, detect_signals (jsonb regex), detect_priority, segmentation (speaker_colon|prose_paragraph), speaker_line_regex, timestamp_regex, turn_cues (jsonb), asistencia_header_offset, extra (jsonb). 2 filas seed: **hypal** (speaker_colon, priority 10, offset 0) y **toc** (prose_paragraph, priority 5, offset 3, 7 turn-cues). GRANT SELECT → service_role. Config por plataforma = DATA no code; plataforma nueva = 1 fila.
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+- **DB (UNRLVL `amlvyycfepwhiindxgzw`):** CREATE TABLE `df_platform_parsing_config` + 2 filas seed + GRANT SELECT service_role + ALTER DEFAULT PRIVILEGES.
+- **Env var (Vercel):** Sam agregó `UNRLVL_SUPABASE_URL` = `https://amlvyycfepwhiindxgzw.supabase.co` (Prod+Preview).
+- **Modelo:** DF migrado a `claude-sonnet-5` (thinking:disabled). Deuda: SDK 0.24.3 viejo (#61).
+- **Pendiente de Sam:** re-deploy EF `fphs-formalize` con `verify_jwt:false` si el cambio de modelo la tocó (regla conocida).
+- **PRs #14 (R5), #15 (PR-A), #16 (PR-B), #17 (PR-C)** mergeados por Sam vía GitHub Desktop.
+- **Professor: 10 learnings** (session_date 2026-07-04, brand_id ForumPHs, approved_by_sam=true): GRANT faltante (5), parser Venezia-céntrico (5), detectHeaderRow coords (4), migración Sonnet 5 (4), QA↔ICR (4), R5 inerte (4), segmentación TOC (3), cross-check filename (3), vía logs alterna (3), artefacto de plataforma Anthropic (3).
+
+### PENDIENTE — próximos chats
+1. **#57 cablear ICR→generate** (R5 inerte): correr /api/icr antes de /api/generate o regenerar con findings; matchear findings a sección. Sin esto no hay marcas ICR en el .docx.
+2. **#58 QA↔ICR** (deuda aceptada, no urgente).
+3. **#60** transcripción TOC de baja densidad: Ivette pide a HIF/TOC export con etiquetas de hablante.
+4. Deudas menores: #61 SDK viejo, #62 placeholders Venezia UI, #63 normalización "E 01A", #64 LOGISTICA_NAMES a config.
+
+---
+*ForumPHs · DF R5 inerte + parser multi-plataforma (PR-A/B/C) + GRANT fix + Sonnet 5 · 2026-07-04*
+
 ## 2026-07-03 — DF Análisis de REGRESIÓN Venezia (acta corregida por Ivette) + Bloque 1 + R4 (PR #13 merged) + EF fphs-formalize v39 (R3)
 
 ### CONTEXTO — por qué esta sesión
