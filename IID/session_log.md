@@ -240,6 +240,50 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-04 · E5b BACKEND CONSTRUIDO — bucle Boids en producción (D1 + D2) · Sam + Claude (Chat) + CC
+
+**Estado:** el backend del text window de calibración está VIVO y verificado end-to-end en producción. Falta solo el FRONT (#65) para que Marisol lo use. Cierra el diseño técnico D1-D4 que quedó pendiente el 2-jul; la mecánica del bucle ya estaba validada en vivo.
+
+### D1 — tablas de persistencia (Opción B, normalizada)
+Aplicadas por MCP (apply_migration), verificadas:
+- `intel.calibration_sessions` — id uuid, brand_id, **intent_label** (descripción libre de la voz buscada, ancla humana de entrada), **target_voice_id nullable** (el voice_id técnico es SALIDA, emerge al converger — no se exige al abrir), entry_gate ∈ {from_genome, from_scratch}, founder_axis jsonb, source_technique_id (FK→captured_techniques ON DELETE SET NULL), status ∈ {active, converged, abandoned}, converged_at, resulting_voice_id, operator, notes, created_at/updated_at.
+- `intel.calibration_turns` — id, session_id (FK→sessions ON DELETE CASCADE), turn_number, proposed_text, technique_used, verdict_voice ∈ {si, no} (null mientras espera), notes_intent, is_convergence_marker, created_at. UNIQUE(session_id, turn_number).
+- GRANTs SELECT/INSERT/UPDATE/DELETE a service_role en ambas (RLS sola no basta). 4 índices. Trigger updated_at.
+- **Decisión de diseño (Sam):** el voice_id NO se pide al abrir la sesión — el usuario interactúa con Claude que lo guía; el nombre técnico se construye durante/al converger. La sesión se ancla en brand_id (obligatorio) + intent_label (texto libre).
+- **Solo service_role:** todo pasa por /api/calibrate.ts server-side; el front nunca toca las tablas.
+
+### D2 — endpoint /api/calibrate.ts (Orchestrator, Node-native)
+- 3 acciones discriminadas por body.action: **start** (valida, INSERT sesión, genera turno 1, persiste, devuelve session_id + turno), **verdict** (UPDATE turno con verdict_voice + notes_intent, recalcula convergencia, si converge → status converged sin generar más; si no → genera turno siguiente), **status** (devuelve sesión + todos los turnos para reanudar tras cerrar el navegador).
+- **Opción X (stateful vía DB):** el endpoint no tiene memoria propia; lee founder_axis + intent_label + turnos previos + técnicas ya usadas de la DB en cada llamada, arma el prompt, genera, persiste.
+- **Generador con claude-sonnet-5:** system prompt con eje fundador + intención + material capturado (si from_genome) + historia del bucle (turnos previos con veredicto y notes_intent) + techo de producción (voz constante, técnica variable, lista de técnicas a NO repetir). Devuelve JSON {proposed_text, technique_used autodeclarado}.
+- **Convergencia leída de DB:** mín 10 turnos con veredicto + últimos 3 SÍ consecutivos.
+- **Resiliencia:** generation_failed → HTTP 502 (no 200), sesión intacta y reintentable. start acepta session_id opcional para reintentar el turno 1 sin crear sesiones huérfanas (desviación aditiva del brief, aprobada).
+
+### interpret-intent.ts revivido (PR #7)
+Estaba ROTO en producción silenciosamente: colgaba por firma Web-standard, ni siquiera alcanzaba el fallback confidence 0.3. El brief D2 lo había designado como molde — molde defectuoso. Migrado a Node-native + claude-sonnet-5. Ahora responde confidence real (0.85 en prueba). Lección: verificar que el MOLDE funciona, no solo leer su código.
+
+### Gotchas nuevos (capturados en Professor)
+1. **Firma de handler Vercel:** `(req: Request): Promise<Response>` (Web-standard) CUELGA en este proyecto (504, incluso en GET que debería dar 405 antes de tocar nada). El patrón que funciona es Node-native `(req: VercelRequest, res: VercelResponse)` con res.status().json() — el de sign-upload/trigger-job/extract-frames. Extiende el gotcha previo de extract-frames (Web API ignora maxDuration).
+2. **claude-sonnet-5 antepone bloque thinking:** leer solo content[0].text da VACÍO → concatenar TODOS los bloques type:text. Prefill de assistant ("{") da 400. (Nota: para tareas deterministas, el DF usa thinking:{type:disabled}; el generador de voz SÍ quiere thinking, por eso concatena en vez de desactivar.)
+3. **Model ID canónico jul-2026:** claude-sonnet-5 (verificado docs oficiales). Retirados claude-sonnet-4-* / claude-opus-4-* gen ≤4.
+
+### Verificación (Camino 3: CC prueba HTTP + Claude verifica DB por MCP)
+CC ejecutó start→verdict→status contra el Preview con bypass de auth. **Round-trip PostgREST con Accept-Profile:intel confirmado en vivo** (el riesgo que llevaba 3 intentos sin descartar). Claude verificó por MCP: sesión de smoke (022bf9da) con 2 turnos, técnicas distintas (turno1 "objeción anticipada", turno2 "contraste" — anti-repetición funciona), notes_intent persistido, convergencia correcta. Ambos PRs (#7 interpret-intent, #8 calibrate) merged. CC limpió las 5 sesiones de prueba.
+
+### Depuración en cadena (el smoke destapó bugs por capas)
+Migrar a Node-native destapó generation_failed → causa: bloque thinking → fix concatenar bloques → intento de prefill (400) → revertir a extracción robusta. Cada capa ocultaba la siguiente. Lección: la validación DB (build/tsc/INSERT-ROLLBACK) NO sustituye el smoke en vivo — transporte HTTP y shape real de la respuesta del modelo solo se ven ejecutando.
+
+### Escrituras
+intel.calibration_sessions + calibration_turns (DDL, D1) · /api/calibrate.ts (nuevo) + interpret-intent.ts (fix) en Orchestrator, PRs #7+#8 merged · professor_learnings (+7, 4-jul).
+
+### Deudas nuevas mapeadas (AGENDA)
+#65 front E5b (PRÓXIMO foco) · #66 skill verificación de versiones de modelo · #67 barrer otros endpoints con firma Web colgados · #68 RLS deshabilitado en calibration_* + max_tokens:1024 justo.
+
+### Pendiente inmediato
+**E5b FRONT (#65):** text window en el Orchestrator que consume /api/calibrate.ts (start/verdict/status), 2 puertas de entrada (desde Genoma capturado / desde cero), mostrar convergencia, reubicar+conectar el enlace gold. Brief de CC apuntado a Orchestrator.
+
+---
+
 ## 2026-07-02 (cont.) · E6 + #45 NeuroneSCF — primera marca de Marisol OPERABLE end-to-end · Sam + Claude
 
 **Estado:** NeuroneSCF quedó operable por el IID: tiene VOZ (genoma nscf_conversion v0.5 activo) + TOPICS (5 brand_topics). El pipeline ya puede researchear estos territorios y generar con la voz de la marca, entrando al gate de Sam (auto_approve=false). Continuación directa del ejercicio de calibración del mismo día.
