@@ -240,6 +240,36 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-06 · Siembra de EJES FUNDADORES desde la DB — 5 marcas de Marisol · Sam + Claude (Chat) + CC
+
+**Estado:** método nuevo validado y 5 ejes fundadores sembrados en intel.calibration_sessions, listos para correr el bucle Boids. Resuelve el hueco from_genome de #65 por otro camino: no hace falta que Marisol capture una técnica — la DB ya tiene el material de arranque.
+
+### El método (intuición de Sam)
+Las marcas de Marisol ya tienen datos ricos en Supabase (public.brands.positioning/brand_context/tono_base + brand_copy_profiles + humanize_profiles + brand_services) de cuando Sam diseñó el ecosistema. Esos datos SON el punto de partida del bucle. Flujo: Claude lee las tablas → propone eje fundador → Sam corrige con criterio → se siembra como fila en calibration_sessions (founder_axis jsonb, status active, 0 turnos). CLAVE: la DB da el PUNTO DE PARTIDA, NO el genoma — ese sigue necesitando el criterio de Sam en el bucle (lo que ninguna columna tiene).
+
+### 5 ejes sembrados (mapa de voces diferenciadas)
+- **D7Herbal** (fb0b08ab) — botánica honesta al consumidor escéptico, CONTENCIÓN como autoridad (opuesto al filo de NSCF), adversario=exageración del mercado, compliance cosmético estricto.
+- **VizosCosmetics** (ad03ff4e) — maison INSTITUCIONAL caleña de savoir-faire heredado (Dora→Patricia→Marisol), NO vende legitima, Healing Systems innegociable, solo orgánico, orgullo en equilibrio + proyección internacional. + DB CORREGIDA (era falsa: laboratorio/fabrica/ads/naturales → casa diseñadora).
+- **VivoseMask** (4ccc4f74) — SENSORIAL/conversión, ritual de transformación, hermana de casa de D7H pero VOZ PROPIA (no gemela), ads+performance.
+- **VizosSalon** (455ab6ce, sembrada bajo id PatriciaOsorioVizosSalon) — la casa física de Patricia, imán=Patricia estilista COMPLETA, profesional-anfitriona, showroom/pickup de Neurone, idioma NEUTRO por clientela multicultural.
+- **PatriciaOsorioConectando** — Patricia-mujer íntima, comunidad latina, 5 pilares, regla anti-plantilla, idioma es-FL (excepción por comunidad homogénea), scope dual Marisol-seedea/Patricia-personaliza.
+
+### Principios nuevos
+- Cada marca = temperamento distinto; NUNCA se funden aunque compartan casa/persona/categoría (extensión de NSCF≠PO).
+- El idioma sigue a la AUDIENCIA: neutro default (VizosSalon multicultural), es-FL solo si comunidad íntima homogénea (Conectando).
+- La DB puede estar DESALINEADA, no solo incompleta (Vizos era falsa) → el método siembra-desde-DB REQUIERE el gate de criterio de Sam.
+
+### Enredo de IDs PO resuelto (Sam 6-jul) → Operación B (#69)
+PatriciaOsorioComunidad ERA Conectando; PatriciaOsorioVizosSalon ES VizosSalon; PatriciaOsorioPersonal no se usa. CC mapeó la cirugía (solo lectura): superficie DB doble (public.brands 28 FKs + crm.orgs 7 FKs, todas ON UPDATE NO ACTION) + 8 archivos de código en 7 repos en 2 casings. Runbook pendiente.
+
+### Escrituras
+intel.calibration_sessions (+5 filas) · public.brands + brand_copy_profiles + humanize_profiles (Vizos corregida) · professor_learnings (+7). Todo verificado por MCP.
+
+### Pendiente
+Correr los bucles Boids → genomas (chat o front #65). Operación B (consolidación IDs). Sembrar brand_topics de las 5. Conectando entra a scope Marisol con matiz (Patricia personaliza).
+
+---
+
 ## 2026-07-04 · E5b BACKEND CONSTRUIDO — bucle Boids en producción (D1 + D2) · Sam + Claude (Chat) + CC
 
 **Estado:** el backend del text window de calibración está VIVO y verificado end-to-end en producción. Falta solo el FRONT (#65) para que Marisol lo use. Cierra el diseño técnico D1-D4 que quedó pendiente el 2-jul; la mecánica del bucle ya estaba validada en vivo.
