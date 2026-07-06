@@ -240,6 +240,43 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-06 — #47 E5b FRONT (#65) CERRADO: text window del bucle Boids en producción
+
+**Qué se cerró:** la UI de calibración de voz que faltaba para que Marisol opere el bucle Boids desde el Seeder. Backend ya estaba en prod (4-jul); esta sesión entregó el front + dos cambios de backend aditivos.
+
+### Verificación previa (código vivo, antes de escribir el brief de CC)
+Se leyó contra main: contrato de api/calibrate.ts (start/verdict/status), IidSeedsUnified.tsx (enlace gold inerte en bloque 6), patrón callApi de iidExpert.ts (rutas /api/* Node-native, IidError por status), iidInbound.ts (IidSession: role/brand_scope/sub; listOptions filtra por scope), App.tsx (SeederShell monta solo IidSeedsUnified sin tabs). Hallazgos que cambiaron el diseño: (1) el endpoint NO tenía acción list → las 5 sembradas eran inaccesibles desde UI; (2) verdict_operator no existía en calibration_turns; (3) el scope-gating no vive en calibrate.ts (service_role sin JWT) sino en el front.
+
+### Decisiones de alcance (con Sam)
+- Opción A: solo from_scratch; from_genome queda como stub honesto (depende de endpoint de captured_techniques inexistente + E8 technique_summary). No reabrir el backend verde por una puerta no lista aguas arriba.
+- from_scratch tiene dos sub-casos: crear sesión nueva (captura founder_axis en vivo) y retomar sembrada (las 5 del 6-jul). El front DEBE listar/retomar sesiones active → obligó a la acción list.
+- Sesiones sembradas: solo Retomar, sin editar founder_axis desde el front (los ejes se diseñan en el chat con criterio; degradarlos desde UI no).
+- Enlace gold → lleva al selector de marca/sesión (no a una sesión concreta).
+- Convergencia = solo reflejo visual (turnos + racha SÍ del server); la regla 10+3SÍ vive server-side, el front nunca calcula ni bloquea.
+- verdict_operator (plan A): el operador que JUZGA el turno (Marisol) se registra en el turno, distinto de session.operator (quién sembró = Sam). Va en el veredicto, no en el turno genérico (el turno lo genera Claude, lo juzga el operador). Orden: DDL primero verificada → handleVerdict lee/persiste → front lo manda desde session.sub. handleStart NO se toca (turno 1 sin veredicto).
+
+### Entregado por CC (PR #9 Orchestrator, merged, branch borrado)
+- DDL: intel.calibration_turns + verdict_operator text nullable (migración add_verdict_operator_to_calibration_turns), verificada antes del front.
+- Backend api/calibrate.ts: +case 'list'/handleList (brand_id + status opcional default active; devuelve id, brand_id, intent_label, entry_gate, status, operator, has_founder_axis, turn_count, created_at; turn_count vía 2º select agregado, NO count embebido de PostgREST que suele venir OFF; nunca devuelve turnos ni founder_axis completo). handleVerdict persiste verdict_operator desde el body (opcional, null si no viene). No se tocó handleStart/handleStatus/generador/convergencia.
+- Front: src/services/iidCalibrate.ts (cliente tipado, patrón callApi de iidExpert, IidError reutilizado, distinción por status: 502 generation_failed reintentable / 409 invalid_state / 404 / 400). src/modules/iid/CalibrationConsole.tsx (selector marca scope-gated vía listOptions + lista de sesiones para retomar + form from_scratch nuevo con captura de eje + bucle veredicto + convergencia + banner reintento 502). App.tsx SeederShell: toggle Capturar/Calibrar (pill-tabs). IidSeedsUnified.tsx: enlace gold activo → onGoCalibrate (quitado disabled/"Disponible pronto").
+
+### Validación
+- tsc -b && vite build limpio; tsc --strict sobre api/calibrate.ts (Vercel compila /api fuera del proyecto front).
+- Preview autenticado (share-link) smoke real: list D7Herbal → 200 con sesión sembrada (has_founder_axis:true, turn_count:0, founder_axis no expuesto); start (nueva throwaway) → turno 1; verdict(si) → turno 2 + progress {turns_done:1, consecutive_si:1} del server; DB confirmó verdict_operator='smoke-marisol' ≠ session operator='smoke-sam'. Datos throwaway (SMOKE_E5b_DELETEME) borrados; 5 sembradas intactas, 0 turnos totales.
+- Verificado en vivo por Sam con capturas: (1) select lista solo las 6 marcas de Marisol (D7Herbal, Neurone S&C Florida, PO·Conectando, PO·Vizos Salón, Vivosé Mask, Vizos Cosmetics) — cero Lucien/UNRLVL/SamPublisher → scope-gating OK; (2) D7Herbal muestra sesión sembrada "sembrada · 0 turnos" + "eje fundador ✓" + Retomar + Crear nueva + stub honesto from_genome; (3) turno 1 generado desde el founder_axis de D7Herbal — la pieza ES la voz sembrada (pregunta acusadora, contención como autoridad, botánica con nombre y origen, cierre "Confianza, no variable").
+
+### Gotchas / aprendizajes (3 a Professor)
+1. Scope-gating de calibración vive en el FRONT, no en calibrate.ts (service_role sin JWT → el <select> limitado a listOptions es la única barrera). Patrón: todo endpoint service_role sin JWT delega gating al front.
+2. DDL en PR de front = cambio de prod inmediato (DB única Preview↔prod). Ventana schema-vs-código; inocua si nullable y solo se llena; mergear pronto.
+3. count embebido de PostgREST (tabla(count)) suele venir deshabilitado → 400 en runtime aunque compile; usar 2º select agregado.
+
+### Estado de la actividad IID Seeds tras esta sesión
+- 5 sesiones sembradas (6-jul) YA retomables desde la UI de Marisol. Próximo: Marisol corre los 5 bucles → convergen → Sam destila cada genoma (E6, chat, HRD).
+- #54 (nscf_editorial + nscf_professional) operable por Marisol vía Seeder, PERO falta sembrar los 2 ejes de NSCF en intel.calibration_sessions (hoy 0 filas; verificado). El eje lo formula Sam en chat.
+- #45 fase 2: sembrar brand_topics de las 5 marcas + persona default NSCF (sin topics el approve falla "domain sin suscriptores").
+- Deudas DB agrupadas para sesión conjunta: #69 (consolidación IDs PO, superficie alta) + #68 (RLS calibration_* + vigilar max_tokens:1024 del generador con el bloque thinking de sonnet-5 por delante) + #67 (barrer firma Web). #66 (skill versiones) y #46 (tab Topic Proposals, diferido) por separado.
+- Nota: api/professor.js está desplegado en unrlvl-context (la agenda decía "pendiente de construir" — desactualizado). Vía primaria; INSERT directo = fallback.
+
 ## 2026-07-06 · Siembra de EJES FUNDADORES desde la DB — 5 marcas de Marisol · Sam + Claude (Chat) + CC
 
 **Estado:** método nuevo validado y 5 ejes fundadores sembrados en intel.calibration_sessions, listos para correr el bucle Boids. Resuelve el hueco from_genome de #65 por otro camino: no hace falta que Marisol capture una técnica — la DB ya tiene el material de arranque.
