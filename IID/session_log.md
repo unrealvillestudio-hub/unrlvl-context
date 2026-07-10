@@ -240,6 +240,49 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-10 — Bucle Boids: E7 GenomePromptBuilder + E5c convergencia extensible + GENOMA D7Herbal (1ª marca calibrada end-to-end)
+
+Sesión larga operando el bucle Boids con Marisol. Empezó como "revisar un bucle" y produjo 3 hitos + el primer genoma completo del sistema.
+
+### Contexto: el bucle de D7Herbal reveló el problema
+Al retomar el bucle de D7Herbal (sesión fb0b08ab), los turnos 1-4 alucinaban ingredientes (Serenoa repens 32%, Ortiga, Ginkgo) — ninguno de D7H. Marisol (experta de dominio) los rechazó: "NO SABES CUÁLES SON LOS COMPONENTES, BÚSCALOS EN LA DB". Causa: el generador solo consumía founder_axis (temperamento de voz) sin el CUERPO de datos de la marca. La fórmula real vivía en product_blueprints y el generador nunca la leía.
+
+### E7 — GenomePromptBuilder (PR #10 MERGEADO)
+Diseño (con Sam): el generador debe ensamblar el contexto COMPLETO de la marca desde Supabase, agnóstico al tipo de marca. Módulo nuevo api/_genomePromptBuilder.ts: buildBrandKnowledge(brandId, sbSelectPublic) con 5 capas (identidad brands / voz brand_copy_profiles / fórmula product_blueprints / servicios brand_services / dirección founder_axis), degradación elegante (cada capa opcional se omite si falta; brand_context es piso garantizado). Bloque "CONOCIMIENTO REAL" con regla dura de veracidad (prohibido inventar fuera de lo listado). Integración en calibrate.ts: +sbSelectPublic (Accept-Profile:public, sin tocar el de intel), contextBlock inyectado antes del eje con jerarquía (conocimiento=hechos, eje=hipótesis ajustable), max_tokens 1024→2048.
+
+Verificación por marca reveló datos heterogéneos: D7H/Vivosé tienen blueprint; VizosCosmetics es maison sin SKU (voz+servicios); Conectando solo brand_context. El builder degrada bien en todos.
+
+DOS bugs encontrados y resueltos (CC leyó el error real, no obedeció el diagnóstico inicial de Claude Chat que estaba equivocado):
+1. CRASH FUNCTION_INVOCATION_FAILED: el import `from './_genomePromptBuilder'` sin extensión .js. package.json es "type":"module" → @vercel/node compila bajo NodeNext → extensionless no resuelve → TS2835 (build NO falla, queda READY) → lambda muere al cargar con ERR_MODULE_NOT_FOUND antes del handler → FUNCTION_INVOCATION_FAILED en TODAS las acciones. Fix: './_genomePromptBuilder.js'. (Diagnóstico inicial de Claude Chat —includeFiles en vercel.json— era ERRÓNEO; CC probó que no funcionaría: Node no importa .ts crudo.)
+2. CAPA DE FÓRMULA MUDA: tras arreglar el crash, start daba 200 pero "7 extractos" sin nombrar ninguno. Log: product_blueprints falló con order=is_primary.desc.nullslast → PostgREST 400. product_blueprints NO tiene is_primary (brand_services SÍ — la cláusula se copió entre capas). safeRead lo tragó → formula=false. Fix: order=name.asc. (Claude Chat había fencado calibrate.ts como "correcto, no tocar" — falsado por evidencia de runtime.)
+GRANT SELECT product_blueprints + brand_services → service_role (faltaban 2 de 4; el builder lee las 4). Smoke verde: D7H nombra Romero/Anís/Quina con su rol real del blueprint, cero alucinación, formula=true, contexto 1866→3419 chars.
+
+MÉTODO: Sam frenó dos veces ("QA antes de darlo por corregido"); CC leyó el error literal en vez de obedecer el brief. Ningún error de diagnóstico llegó a prod. La gobernanza (Preview antes de merge, CC rompe la cerca del brief cuando la evidencia manda, firma de Sam) atrapó cada fallo en la capa correcta.
+
+### E5c — convergencia extensible (PR #11 MERGEADO 10-jul)
+Observación de Sam en el bucle de D7H: convergió al turno 10 y cerró solo, pero él quería explorar más cómo el generador convertía promesas en testimonios. La regla dura casi lo empuja a votar NO a un buen turno solo para seguir. Decisión (Opción B): el umbral 10+3SÍ deja de CERRAR, pasa a SUGERIR (flag can_converge en progress). El bucle sigue active y generando mientras el operador juzgue; cerrar es acción explícita (converge) con guardia de umbral (409 si no se cumple). El "¿cerrás o 3 más?" vive en el front (aviso suave + botón), no en la máquina de estados. Backend sigue siendo autoridad de QUÉ es cerrable; operador decide CUÁNDO. Quién cerró → notes jsonb (columna existente, sin crear nueva). Gotcha (CC lo cazó): la racha de SÍ debe calcularse sobre turnos JUZGADOS, ignorando el turno propuesto pendiente que el bucle genera al alcanzar umbral (si no, ese turno con verdict null rompe la racha y el guardia rechaza el cierre legítimo). Smoke verde a nivel API en Preview (sesiones throwaway D7Herbal, limpiadas al final; las 5 originales + fb0b08ab intactas). MERGEADO por Sam (PR #11, 10-jul).
+
+### GENOMA D7Herbal (chat, HRD, escrito a prod)
+Bucle fb0b08ab convergido: 10 turnos, 4 SÍ (5/8/9/10). Turnos 1-4 pre-E7 (alucinados, rechazados); 5-10 con fórmula real → calibraron la voz. Marisol como calibradora experta: notas de dirección editorial precisa ("menos ansioso con disclaimers", "convierte promesas en testimonios", "días no semanas", "CTA + marca ×2").
+
+Aprendizaje de VOZ (identidad del genoma): la honestidad de D7H se encarna en la ESTRUCTURA (testimonio, progresión temporal en días, ingrediente real por beneficio), NO en un disclaimer defensivo. Trasladar promesa a testimonio ("una usuaria dice a los 15 días" ≠ "D7H promete a los 15 días"). El testimonio es, tras los ingredientes, la mayor fuerza de venta.
+
+Escritura a prod (HRD transaccional, 2 rollbacks evitables por no verificar esquema primero — updated_at inexistente, relational_stance/emotional_register son jsonb no text; ambos rollback atómico, sin estado a medias):
+- Parche blueprint: Ron reclasificado como 7º activo botánico (era "Alcohol Denat." sin common → +common:"Ron"). Resuelve la discrepancia marketing("7 extractos") vs blueprint(6 con nombre): el 7º estaba cargado como excipiente. Ficha oficial confirmó 7 + epítetos por ingrediente. Sirve a todo lo que lea product_blueprints, no solo IID.
+- INSERT genoma d7herbal_conversion v1.0 ACTIVO en brand_voice_genome: identity_anchors (7 activos con rol+epíteto), lexicon_signature, lexicon_forbidden (+disclaimers defensivos, +promesas en voz de marca), argumentative_architecture (promesa→testimonio), source_evidence (sesión fb0b08ab, turnos SÍ 5/8/9/10). D7H = 1ª marca calibrada end-to-end por el sistema completo (sembrada por Sam → calibrada por Marisol contra fórmula real → convergida → destilada → ratificada).
+
+### Descubrimientos operativos
+- 8 genomas activos (no 2): UnrealvilleStudio, LucienSael×2, SamPublisher, NeuroneSCF×2 (nscf_conversion + po_consumer #53), ForumPHs, D7Herbal(nuevo). "Agente IID" por marca = genoma activo + brand_topics; NO un agente instanciado. El pipeline lee ambos por brand_id. Multimarca por construcción.
+- El bucle como DETECTOR de desalineación de datos: destapó marketing vs fórmula vs ficha. El parche-de-marca en la aprobación del genoma es el momento de reconciliar. La calibración densifica el conocimiento de marca, no solo produce voz.
+- Nueva capacidad de plataforma: Claude Code ahora tiene browser (navega/clic/screenshot). Cerraría el smoke de UI logueada que hasta ahora quedaba pendiente por Vercel SSO. Gobernanza CC debe extenderse: no clics de escritura en prod sin firma de Sam.
+
+### Estado tras la sesión
+- E7 en prod. E5c MERGEADO (PR #11, 10-jul).
+- D7Herbal: genoma activo, falta brand_topics (#45) para operabilidad plena.
+- Pendiente carril Marisol: correr 4 bucles restantes (Vizos/Vivosé/VizosSalon/Conectando) con E7 vivo + #54 NSCF. Gate: rotar pwd Marisol.
+- Pendiente carril Sam: sembrar ejes #54, destilar genomas + parches, #45 topics, deudas #69+#68+#67.
+- Professor: 10 learnings (5 críticos).
+
 ## 2026-07-06 — #47 E5b FRONT (#65) CERRADO: text window del bucle Boids en producción
 
 **Qué se cerró:** la UI de calibración de voz que faltaba para que Marisol opere el bucle Boids desde el Seeder. Backend ya estaba en prod (4-jul); esta sesión entregó el front + dos cambios de backend aditivos.
