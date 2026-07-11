@@ -29,7 +29,7 @@ HQ: 12951 Biscayne Blvd · North Miami, FL 33181
 | **VizosCosmetics** | Miami + España | ✅ Activo |
 | **D7Herbal** | Alicante, España | ✅ Activo |
 | **VivoseMask** | España | ✅ Activo |
-| **PatriciaOsorioPersonal** | Miami, FL | ✅ Activo |
+| **Patricia Osorio** · patriciaosorio.com _(id: PatriciaOsorioPersonal)_ | Internacional — salones, marcas, distribuidores | ✅ Activo |
 | **ForumPHs** | Panamá | ✅ Activo |
 | **SamPublisher** | Global — Meta(FB) + LinkedIn | 🟢 Activo |
 | **UnrealvilleStudio** | Global — HQ Miami FL | ✅ Activo |
