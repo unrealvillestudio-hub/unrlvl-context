@@ -185,10 +185,12 @@
     },
     {
       "id": "PatriciaOsorioPersonal",
-      "name": "Patricia Osorio · Personal",
+      "name": "Patricia Osorio",
+      "domain": "patriciaosorio.com",
       "type": "personal_brand",
-      "market": "Miami, FL",
-      "status": "active"
+      "market": "Internacional — salones, marcas, distribuidores",
+      "status": "active",
+      "note": "Alias 11-jul: la fila PatriciaOsorioPersonal (que nadie usaba) se reutilizó como PatriciaOsorio.com. El id técnico se mantiene intacto (cero FKs repuntadas); el nombre público vive en name+domain. Ver #69 REDUCIDA."
     },
     {
       "id": "ForumPHs",
