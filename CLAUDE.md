@@ -10,7 +10,11 @@ Antes de cualquier acción en este repositorio, Claude Code DEBE cargar y obedec
 
 **Este repo es CRÍTICO — el sistema nervioso del ecosistema. Reglas reforzadas:**
 
-1. **CC NUNCA escribe en este repo. Ni push directo, ni vía PR, ni con `api/gh-write`.** Este repo se actualiza EXCLUSIVAMENTE por Sam vía GitHub Desktop. CC prepara archivos y los entrega para que Sam los suba; CC nunca los commitea ni pushea aquí. Si CC cree que necesita escribir acá, se DETIENE y se lo plantea a Sam.
+1. **CC nunca pushea a `main` ni mergea en este repo.** CC SÍ puede crear una rama,
+   commitear, pushear esa rama y abrir un PR contra `main` — ese es el flujo estándar
+   (ver `protocols/CC_PROTOCOL.md` → "Flujo de entrega de context files"). Nada entra
+   a `main` sin que Sam revise el PR, lo mergee y borre la rama. Prohibido: push directo
+   a `main`, merge de PRs, y `api/gh-write` sobre este repo.
 
 2. **CONTEXT FILES NUNCA SE REEMPLAZAN.** Se actualizan preservando historia: lo nuevo al tope, lo anterior archivado debajo bajo `## ARCHIVO HISTÓRICO`, nunca borrado. Aplica a TODO `.json`/`.md` de este repo (ecosystem.json, brand.json, session_log, AGENDA, protocolos, etc.). Antes de proponer cualquier cambio: verificar que el diff solo AÑADE, no BORRA historia.
 
