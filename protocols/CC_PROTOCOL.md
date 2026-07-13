@@ -33,12 +33,35 @@ Los **context files** alimentan operaciones diarias vivas de múltiples marcas. 
 
 | Repo | Cómo se actualiza |
 |---|---|
-| `unrlvl-context` | **NUNCA push directo. NUNCA por CC.** Solo Sam vía GitHub Desktop. CC prepara los archivos y deja el commit listo; Sam lo pushea. **Además: CC nunca crea worktrees aquí — ver §7.** |
+| `unrlvl-context` | CC trabaja en **branch + PR**, igual que en los repos de código: **nunca commit directo a `main`, nunca push a `main`, nunca merge.** CC crea la rama, commitea, **pushea la rama de PR** y abre el PR contra `main`; Sam revisa, mergea y borra la rama (ver "Flujo de entrega de context files"). **Además: CC nunca crea worktrees aquí — ver §7.** |
 | Repos de código (`AgentLab`, `CoreProject`, `WebLab`, `BluePrints`, labs) | CC trabaja en **branch + PR**, nunca push directo a `main`. Sam revisa y mergea. Si CC usa worktree, es responsable de eliminarlo al cerrar el PR — ver §7. |
 
 CC **nunca** mergea un PR por su cuenta. El merge es decisión de Sam.
 
-Si CC cree que necesita pushear a `main` o a `unrlvl-context`, se DETIENE y se lo plantea a Sam con la razón. No lo hace.
+Si CC cree que necesita pushear directo a `main` (de cualquier repo) o mergear un PR, se DETIENE y se lo plantea a Sam con la razón. No lo hace. Publicar una **rama de PR** (incluido en `unrlvl-context`) NO es pushear a `main`: es legítimo y esperado — ver "Flujo de entrega de context files".
+
+---
+
+## Flujo de entrega de context files (estándar)
+
+Todo trabajo de CC sobre `unrlvl-context` (Actualiza, protocolos, docs) se entrega así:
+
+1. CC crea una rama (`ctx/<tarea>-YYYY-MM-DD`).
+2. CC commitea sus cambios en esa rama.
+3. CC **pushea la rama** y **abre el PR** contra `main`.
+4. **CC NO mergea nunca.**
+5. Sam revisa el PR, mergea y borra la rama.
+
+**Nunca commit directo en `main`**, ni local ni remoto. La regla "CC no pushea a
+unrlvl-context" significa: **CC no pushea a `main` ni mergea**. Publicar una rama
+de PR es legítimo y esperado — le da a Sam el diff revisable antes de que nada
+toque `main`.
+
+**Corolario para quien escribe briefs:** todo brief que produzca un commit debe
+decir explícitamente (a) sobre qué rama, (b) si CC publica la rama, (c) si CC abre
+el PR, (d) quién mergea y quién borra la rama. Una instrucción ambigua no la
+resuelve mal el ejecutor — la resuelve *razonablemente pero de forma inconsistente*
+entre sesiones, y eso deja al humano sin saber qué camino seguir.
 
 ---
 
@@ -101,7 +124,7 @@ Este documento vive en `unrlvl-context/protocols/CC_PROTOCOL.md`. Se modifica pr
 Los worktrees huérfanos son un defecto recurrente: CC crea un worktree para un PR y lo deja sin eliminar, ensuciando el repo local de Sam. Esta sección corta el problema de raíz.
 
 **7.1 — `unrlvl-context`: PROHIBIDO crear worktrees.**
-En el repo de contexto, CC **nunca** ejecuta `git worktree add` ni trabaja en un worktree separado. CC trabaja en el **working tree principal**, prepara/actualiza los archivos preservando historia (§0), y deja todo listo para que Sam pushee por GitHub Desktop (§1). No hay PR ni branch que justifique un worktree aquí, porque CC no pushea este repo.
+En el repo de contexto, CC **nunca** ejecuta `git worktree add` ni trabaja en un worktree separado. CC trabaja en el **working tree principal**: crea ahí la rama de PR, actualiza los archivos preservando historia (§0), commitea y **pushea la rama** para abrir el PR (ver "Flujo de entrega de context files" y §1). El flujo branch + PR **no requiere un worktree**: la rama se maneja en el working tree principal. El merge y el borrado de la rama los hace Sam.
 
 **7.2 — Repos de código: el worktree es desechable y CC lo elimina.**
 Si para un PR CC crea un worktree (`git worktree add`), CC es **responsable de eliminarlo** (`git worktree remove <ruta>` + `git worktree prune` si queda registro) al cerrar o mergear el PR. Un worktree no se deja "por si acaso". Dejar un worktree huérfano es un defecto, no un estado aceptable.
