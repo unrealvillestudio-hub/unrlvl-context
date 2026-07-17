@@ -133,8 +133,9 @@ Marcas activas hoy (fase 1): **LucienSael** (3 dominios: ai-cognition, ai-identi
      ├─ AIFE filter (aife-filter EF): control de calidad/seguridad de marca
      ├─ ImageLab: genera imagen (Vertex) → sube a Storage unrlvl-media (CDN)
      ├─ SocialLab: arma el post por plataforma
-     └─ callWatcher → content-watcher (v1): 6 gates (similarity, sibling-window,
-           cadence, evidence, duplication, hard-rules) → PASS / REJECT / RESCHEDULE
+     └─ callWatcher → content-watcher (v2, deploy build _14): 8 gates (similarity,
+           sibling-window, cadence, evidence, duplication, hard-rules + gate7
+           objective_stimulus + gate8 visual_sibling) → PASS / REJECT / RESCHEDULE
                      ▼
 8. content_pieces (status awaiting_approval) + email a content-approval@unrealvillestudio.com
                      ▼
@@ -166,8 +167,8 @@ En el diagnóstico de junio se descubrieron **tres PromptBuilders distintos** co
 
 **EFs del pipeline (versiones al 2026-06-25):**
 - content-dispatcher **v27** (verificado 2026-06-25) — cron cada 30min, tiene el `.limit(1)` (NO tocar hasta publicación real). HOY ignora `scheduled_for`. **v27 (25-jun): transporta `domain` de la queue al job (`assets.builder_input.domain`).**
-- content-run-stage **v41** (verificado 2026-06-25) — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue). Lee `domain` de `job.assets.builder_input.domain`.
-- content-watcher **v5** — los 6 gates extraídos a EF propia (5e-4). **Nota: v5 sigue siendo lógica v1 — 6 gates. Gate 7 (objetivo↔estímulo) y Gate 8 (similitud visual) del diseño eje B NO implementados.**
+- content-run-stage **v37 (runtime; deploy build _50)** — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue). Lee `domain` de `job.assets.builder_input.domain`. **17-jul: +pending_publish, +image_url, catch del INSERT propagado, ctx de gate7/gate8.**
+- content-watcher **v2 (deploy build _14)** — los gates extraídos a EF propia (5e-4). **8 gates: los 6 originales (similarity, sibling-window, cadence, evidence, duplication, hard-rules) + gate7 objective_stimulus + gate8 visual_sibling, ambos blocking — implementados y deployados 17-jul.**
 - approve-piece **v14** — aprobación: publish Meta + move-to-permanent.
 - aife-filter — control de calidad/seguridad.
 - lab-worker **v23** — orquestador VIEJO (dual-mode, lab_jobs). Llama a los labs por HTTP vía lab_configs. NO tiene credenciales Vertex (solo SUPABASE + ANTHROPIC).
@@ -225,6 +226,7 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 - **19-jun** — Genoma v1.0 de Lucien por muestreo (8/10). core_move de reactivo/léxico → generativo/constructor. Principio madre: el angle es territorio, no mirada; codificar el core_move como receta literal colapsa la voz en fórmula. Cadencia poblada (Interpretación A).
 - **20-jun** — R4B Chat 2 (DDL, v36, v37, content-watcher v1) + arquitectura híbrida de la queue (Chat 1). Hallazgo: la queue tenía 3 generaciones conviviendo; el supuesto del spec R4B era falso.
 - **22-jun** — Vertex desbloqueado (creds a Supabase). Nombre canónico fijado: **Intelligence Insights Developers**. Fundado este repo de contexto.
+- **15-17 jul** — Tanda técnica IID (5 frentes). B.1 overload de `trigger_iid_agent` cerrado (3859 fallos→succeeded; DROP+recreate porque Postgres no quita DEFAULT con CREATE OR REPLACE). B.4 causa raíz de publicación: SocialLab escribía `pending_oauth` (nadie lo drenaba) en vez de `pending_publish`; catch del INSERT mudo (ledger success con 0 filas). Eje B VIVO en prod: migración `objective_by_platform`, gate7 (objective_stimulus) + gate8 (visual_sibling) blocking, Ruta B (preset derivado del objetivo, no hash sesgado). Migración de las 3 EFs de modelo a claude-sonnet-5 (sin temperature, thinking:disabled, max_tokens +30%). Firma Web→Node-native en 4 labs (approve-job/trigger-job estaban muertos; trigger-job nunca vivió en prod). **HALLAZGO: mergear a main NO deploya las EFs de Supabase — es paso manual aparte; versión real = entrypoint_path, no el contador.** 6 EFs deployadas y verificadas en prod. Frente de seguridad 🟠 (schema intel expuesto pero latente: auth.users vacía) diferido a ventana propia. Professor: 18 learnings.
 
 ### Principios destilados (resumen; el detalle vive en professor_learnings)
 - La marca declara qué consume y con qué voz; el agente investiga neutro. El default_voice del agente NO decide voz.
@@ -239,6 +241,57 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 ---
 
 ## §9 — SESSION LOG (novedad al tope)
+
+## 2026-07-17 — TANDA TÉCNICA IID: 5 frentes de deuda + Eje B VIVO + causa raíz de publicación + 6 EFs deployadas a prod
+
+Sesión larga de ejecución (CC + Claude-chat), forense y deploy. Cierra el grueso de la deuda técnica del carril IID que venía arrastrándose. Al final: los 6 Edge Functions tocados quedaron **deployados y verificados en producción** (no solo mergeados) — con el hallazgo de gobernanza que lo enmarca.
+
+### HALLAZGO DE GOBERNANZA (el más importante de la tanda)
+**Mergear un PR a `main` NO deploya las Edge Functions de Supabase.** `main` solo actualiza el repo. El deploy de cada EF es un paso manual aparte (`supabase functions deploy` o `deploy_edge_function` vía MCP). Vercel SÍ auto-deploya al mergear (SocialLab, Orchestrator); las EFs de Supabase NO. Corolario: **un PR de EF mergeado ≠ EF viva en prod.** Esto casi hace que el Actualiza registrara Eje B como "vivo" cuando el código estaba en el repo pero las EFs corriendo eran las viejas. Regla nueva: tras mergear un PR que toca EFs, deployarlas explícitamente y verificar el build real por `entrypoint_path`.
+
+### Los 6 deploys (Claude-chat, MCP, bajo HRD, cola seca)
+Leídos de `main` vía gh proxy, deployados en orden de dependencia (modelos → Eje B → orquestador). Build real verificado por `entrypoint_path` (no el contador `version`, que incrementa en cada llamada a deploy sin importar si el contenido cambió):
+- **aife-filter** `_15`→`_28` — Sonnet 5, max_tokens 2600, thinking disabled
+- **brand-context-builder** `_6`→`_19` — Sonnet 5, 10400
+- **iid-inbound** `_9`→`_14` — Sonnet 5, 910
+- **content-watcher** `_13`→`_14` — **8 gates** (6 + gate7 objective_stimulus + gate8 visual_sibling)
+- **iid-core** `_31`→`_32` — **Ruta B** (index.ts + fanout.ts juntos)
+- **content-run-stage** `_49`→`_50` — pending_publish + image_url + catch propagado + gate7/8 ctx
+
+### FRENTE A — línea de montaje (parcial, lo humano diferido)
+A.4 (IID Agents parametrizados data-driven) decidido: 1 EF data-driven. A.2/A.3 (destilar marcas + topics con Marisol) = trabajo humano, DIFERIDO.
+
+### FRENTE B — scheduler + dispatcher + publicación
+- **B.1 overload CERRADO (causa raíz del cron muerto):** `intel.trigger_iid_agent` tenía dos overloads `(text)` + `(text, jsonb DEFAULT '{}')` → la llamada 1-arg matcheaba ambos → "function is not unique". Postgres NO deja quitar un DEFAULT con `CREATE OR REPLACE FUNCTION` → hubo que DROP + recreate del overload de 2 args SIN el DEFAULT, en transacción. Verificado: cron jobid 29 pasó de **3859 fallos consecutivos a `succeeded` sostenido**. Ambos overloads quedaron con `pronargdefaults=0`. Esto cierra el INCIDENTE R4B del content-dispatcher-poll.
+- **B.4 causa raíz de publicación (forense):** SocialLab escribía `scheduled_posts` con status `pending_oauth`, un callejón sin salida que ningún worker leía. El único status que drena `publish.ts` es `pending_publish`. Los tokens Meta viven en `meta_accounts`, no falta OAuth. Además el catch del INSERT se tragaba el error en una etiqueta `queued_local` que nadie miraba → el ledger registraba `success` con 0 filas en tabla. Fix (en content-run-stage v37 + SocialLab): status `pending_publish`, propagar `image_url`, y el catch del INSERT lanza+loguea entero, propagándose al call-site (labs_status.failed + error_log + ledger failed). El carril de publicación estaba **frío, no roto**.
+
+### FRENTE C — calidad Eje B (VIVO en prod)
+- **Migración `objective_by_platform jsonb`** aplicada a `intel.brand_topics` (nullable, nace NULL, GRANTs heredados a nivel tabla). Rollback: DROP COLUMN.
+- **gate7 (objective_stimulus)** y **gate8 (visual_sibling)** — ambos blocking, nacen VIVOS porque el ctx trae el dato: gate7 exige `topic.objective_by_platform` en el select de loadBrandTopic; gate8 exige `piece.image_prompt` + `siblingPieces[].image_prompt` (loadRecentPieces ya traía `assets`, solo los descartaba en el map). Sin esos 3 cambios de datos (cero lógica), los gates nacían muertos/informativos para siempre.
+- **Ruta B (fanout.ts):** el psycho_preset se DERIVA del objetivo declarado, no de un hash fijo por ángulo. El mapa viejo (PSYCHO_BY_ANGLE) tenía sesgo (PSY-TRUST ×4, fallback ciego a AUTHORITY) y catálogo congelado (8 de 13 presets; urgency/belonging/fomo/aspiration/reciprocity nunca salían). Ahora: `objective_tag` → familia (4/3/3/3, ningún preset fuera) → el ángulo desempata dentro de la familia. `DEFAULT_OBJECTIVE=AUTHORITY` (el más conservador: sin objetivo declarado se establece criterio, no se empuja a comprar). Verificado por simulación: 13/13 presets usados. **Decisión:** marcas hermanas con mismo objetivo+ángulo+voz obtienen mismo preset — NO se diferencia en origen; la diferenciación la hace el Watcher (gate1+gate8). Diseño de dos capas correcto (Builder prescribe, Watcher valida).
+
+### FRENTE D — gobernanza
+- **D.1 versionado:** regla de versión real = número al final de `entrypoint_path`, no el campo `version`. Carril viejo (iid-research, iid-ecommerce*, iid-brief-generator, iid-process) = dejar morir sin versionar.
+- **D.4 migración de modelo:** las 3 EFs de modelo (aife-filter, brand-context-builder, iid-inbound) migradas a `claude-sonnet-5`. Patrón: (1) sin `temperature` (Sonnet 5 no tiene default → 400); (2) `thinking:{type:disabled}` reemplaza el determinismo de temperature:0; (3) max_tokens +30% (el tokenizer emite más tokens; un techo justo trunca a media frase y el truncado se propaga como output bueno o revienta el JSON.parse del consumidor).
+- **D.5/D.6 typecheck labs + firma:** las 4 sesiones de Sesión 1 (SocialLab, iid-functions, CopyLab, ImageLab) migraron endpoints de firma Web `(req:Request):Promise<Response>` a Node-native `(req,res)` — la firma Web CUELGA en este Vercel (`req.headers.get is not a function`). approve-job y trigger-job del Orchestrator estuvieron MUERTOS por esto desde antes del primer post (trigger-job **nunca vivió en prod**). Gates `tsc` agregados a CopyLab e ImageLab destaparon deuda de tipos preexistente (bundle hash idéntico = prueba de que no se cambió comportamiento). **CORRECCIÓN registrada:** tipar los params NO caza el bug de firma — el código viejo roto pasa el typecheck limpio; lo único que lo cazaría es `const handler: VercelApiHandler = …` (TS2322). La migración es correcta igual; la guarda de typecheck que creíamos ganar no existe sin esa anotación.
+
+### FRENTE seguridad (🟠 LATENTE — ventana propia, NO ejecutado)
+Cadena de 3 eslabones confirmada contra DB viva pero **latente, no activa**: (1) schema `intel` expuesto por PostgREST + anon/authenticated con USAGE; (2) `iid_scheduler_config` con policy `USING(true)` para authenticated → lee `iid_cron_secret`+`vercel_bypass_secret` en texto plano; (3) `trigger_iid_agent` SECURITY DEFINER con EXECUTE a PUBLIC. **MITIGANTE CRÍTICO: `auth.users` tiene CERO usuarios/identidades/sesiones** → nadie tiene rol `authenticated` hoy → el vector "usuario logueado lee secretos" es latente. Baja de 🔴 a 🟠. El vector `anon` SÍ vive (la anon key va en el bundle del frontend), pero leer los secretos requiere `authenticated`. El toggle de signup no es leíble por SQL; cero identidades históricas sugiere cerrado. Cierre transversal futuro (REVOKE USAGE anon/authenticated sobre intel + sacar intel de PostgREST + REVOKE EXECUTE trigger_iid_agent + secretos a Vault + rotar iid_cron_secret/vercel_bypass_secret/x-sweep-secret) **no toca ningún lab** — los labs no leen intel por anon key, el pipeline corre por service_role dentro de las EFs. Las UIs (Orchestrator, labs) no tienen auth de usuario (seguridad por oscuridad de URL); meter login por UI sería frágil, el arreglo correcto es cerrar la superficie de DB. Auditar antes si alguna UI lee intel/content por anon key. Ventana propia con Sam presente.
+
+### Deudas menores diferidas (próxima tanda)
+- Bug muerto CopyLab: `buildCopyPrompt()` nunca reenvía `wordCountMin/Max` al prompt aunque el OutputTemplate los trae → "Extensión X-Y palabras" nunca entra. Fix 1 línea.
+- `tsconfig.api.json` falta en Orchestrator (el gate tsc no cubre `api/`, por eso sobrevivió el bug de firma).
+- Alias `@` de ImageLab reapuntar a src/ (hoy apunta a raíz = trampa que vuelve código muerto en aparentemente-vivo).
+- Worktrees huérfanos (ImageLab 3; Orchestrator goofy-cori-9be76d + keen-mahavira-8d8269, confirmados muertos por CC, esperan OK de Sam para borrar).
+
+### Verificaciones pendientes de Sam (solo él, son llamadas reales a prod)
+3 checks de SocialLab publish.ts ("No pending posts" ~200ms no 504); execute real con copy (confirmar Sonnet 5 no degrada en silencio en adaptForPlatform); re-sondeo approve-job/trigger-job Orchestrator; poblar `objective_by_platform` en ≥1 marca y probar gate7/gate8 con dato real.
+
+### Professor
+18 learnings capturados y aprobados en bulk (session_date 2026-07-17): 5 debugging (B.1, firma Web-vs-Node, tipar-no-caza-el-bug, causa raíz B.4, bug muerto CopyLab), 3 security (frente latente, toggle signup + UIs sin auth, anon key en bundle), 2 iid_design (dos capas Builder/Watcher + gates vivos, Ruta B), 3 process (gate tsc destapa deuda, typecheck con resolución entre archivos, esquema real de professor_learnings), 2 supabase_edge_functions (merge-no-deploya-EFs, versión real = entrypoint_path), 1 architecture (FAIL-LOUD), 1 model-migration (patrón Sonnet 5), 1 governance (AGENDA:303 desactualizado).
+
+### PRs mergeados esta tanda (Sam)
+#1 (SocialLab), #12 (Orchestrator/Sesión 3), #14 (D.1 versionado), #15 (iid-functions Sesión 1), #16 (Eje B); ImageLab #4/#5; CopyLab #4/#5. Todos + los 6 deploys de EF = parte técnica del IID COMPLETA.
 
 ## 2026-07-11 — Siembra de 4 ejes fundadores + PatriciaOsorio.com (alias) + REGLA DURA DE VOZ
 

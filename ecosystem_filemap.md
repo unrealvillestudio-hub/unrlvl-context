@@ -69,12 +69,12 @@ FLUJO COMPLETO:
   CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw
     → iid-process → iid_findings → iid_content_queue (brand_id + domain)
     → content-dispatcher (jobid 29, cada 30min, .limit(1))
-    → content-run-stage v41:
+    → content-run-stage v37 runtime / deploy build _50:
          ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
          ├─ AIFE filter
          ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
          ├─ SocialLab (post por plataforma)
-         └─ callWatcher → content-watcher v1 (6 gates)
+         └─ callWatcher → content-watcher v2 / deploy build _14 (8 gates)
     → content_pieces (awaiting_approval) → email content-approval@unrealvillestudio.com
     → Orchestrator (orchestrator-unrlvl.vercel.app, aprobación Sam)
     → approve-piece v14 (publish Meta + move-to-permanent)
@@ -93,11 +93,11 @@ AGENTES (intel.iid_agents, 29 = 28 research + 1 sentinela):
 
 EDGE FUNCTIONS:
   └─ content-dispatcher v27 (.limit(1) — NO tocar hasta publicación real; HOY ignora scheduled_for; v27 transporta domain a builder_input)
-  └─ content-run-stage v41 (Builder + labs + callWatcher + domain-write jobs/pieces/queue)
-  └─ content-watcher v1 (6 gates extraídos: similarity, sibling-window, cadence, evidence, duplication, hard-rules)
+  └─ content-run-stage v37 runtime / deploy build _50 (Builder + labs + callWatcher + domain-write jobs/pieces/queue)
+  └─ content-watcher v2 / deploy build _14 (8 gates: los 6 + gate7 objective_stimulus + gate8 visual_sibling, blocking)
   └─ approve-piece v14 (publish Meta + move-to-permanent; reject sin rejected_reason → #5r)
-  └─ iid-core v22 (fan-out multimarca por brand_topics, fanout.ts; mata default_voice; body.domain override) · iid-inbound v1 (cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
-  └─ aife-filter · lab-worker v23 · copylab-processor · iid-ecommerce
+  └─ iid-core v22 / deploy build _32 (Ruta B en fanout.ts: preset derivado del objetivo declarado; mata default_voice; body.domain override) · iid-inbound / deploy build _14 (Sonnet 5; cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
+  └─ aife-filter (deploy build _28, Sonnet 5) · brand-context-builder (deploy build _19, Sonnet 5) · lab-worker v23 · copylab-processor · iid-ecommerce
 
 GOBIERNO (intel.brand_topics):
   La MARCA declara qué consume y con qué voz por destino. El agente investiga neutro.
@@ -190,6 +190,7 @@ Fix: Fase 5 — spec lista en VOICE_GENOME_PHASE_SPEC.md
 | unrlvl-social-media-agent | unrlvl-social-media-agent.vercel.app | ✅ LIVE |
 | DDMV-Assistant | ddmv-assistant.vercel.app | ⚠️ FIX NEEDED |
 | luciensael-web | — | ⏳ GREENFIELD — paquete listo, deploy pendiente |
+| unrlvl-iid-functions | (Supabase deploy) | ✅ fuente de las EFs IID (deploy manual por MCP desde main) |
 | unrlvl-ayra | — | ⏳ POR CREAR |
 
 **Staging workflow configurado en 15 repos.** Branch protection activa en 13. Bloqueada en 2 (privados GitHub Free): unrlvl-supabase-mcp, unrlvl-meta-mcp.
@@ -290,8 +291,8 @@ IID pipeline (OPERACIONAL · R4B en curso):
   brand_voice_genome (lucien_editorial + lucien_social v1.0) ← ✅ generativo/constructor
   brand_topics ← gobierno de voz/tema/cadencia (fuente única de platforms/cadence/rollout)
   iid_content_queue (+ domain) ← puente brand_id+domain para el Scheduler
-  content-run-stage v41 ← Builder + labs + callWatcher
-  content-watcher v1 ← 6 gates
+  content-run-stage (build _50) ← Builder + labs + callWatcher
+  content-watcher v2 (build _14) ← 8 gates
   content-dispatcher (.limit(1) — quitar solo tras publicación real)
   Vertex (GOOGLE_SERVICE_ACCOUNT_KEY en Supabase) ← embeddings 5e-2
   Scheduler content-scheduler ← especificado, desbloqueado (write ya en v37)
