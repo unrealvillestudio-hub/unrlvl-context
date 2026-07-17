@@ -140,7 +140,7 @@ Cadena confirmada pero LATENTE (auth.users vacía → nadie es `authenticated` h
 | 🟡 DEUDA naming: ORCHESTRATOR_NSCF_IID_INTEL_JWT_SECRET | arrastra "NSCF", gobierna toda la auth IID; renombrar junto con rotación | limpieza |
 | rollout_started_at | Fijar fecha 1ª sem julio en intel.brand_rollout al lanzar | crescendo Scheduler |
 | brand_topics 5 marcas restantes de Marisol (#45) (ejes fundadores ya sembrados 6-jul, faltan bucles + topics) | Decidir domains por marca (NeuroneSCF ✅ hecha 2-jul) | Sembrador produce para Patricia |
-| Aprobar learnings Professor | ✅ 28 (24+27-jun) + 6 E3b-1 + 3 (28-jun b) + 14 (1-jul) + 12 (2-jul) + 9 (3-jul DF) + 10 (4-jul DF multi-plataforma) + 7 (4-jul E5b backend) + 3 (6-jul E5b front) + 10 (10-jul bucle Boids: E7+E5c+genoma D7H, 5 críticos) + 8 (11-jul siembra de ejes + regla dura de voz, 5 críticos) + 18 (17-jul tanda técnica IID: 8 críticos score 5) + 9 (13-jul: 5 arsenal PSY + 4 fórmula marca↔persona/rol Ivette/skill r4b) aprobados · 22 pendientes (mayo) | Professor |
+| Aprobar learnings Professor | ✅ 28 (24+27-jun) + 6 E3b-1 + 3 (28-jun b) + 14 (1-jul) + 12 (2-jul) + 9 (3-jul DF) + 10 (4-jul DF multi-plataforma) + 7 (4-jul E5b backend) + 3 (6-jul E5b front) + 10 (10-jul bucle Boids: E7+E5c+genoma D7H, 5 críticos) + 8 (11-jul siembra de ejes + regla dura de voz, 5 críticos) + 18 (17-jul tanda técnica IID: 8 críticos score 5) + 10 (13-jul: 5 arsenal PSY + 5 fórmula/rol/skill/protocolo) aprobados · 22 pendientes (mayo) | Professor |
 
 ---
 
