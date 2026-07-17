@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.6 · 2026-07-02 · Mantenido por: Claude_
+_Versión: 1.7 · 2026-07-13 · Mantenido por: Claude_
 
 ---
 
@@ -20,6 +20,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
 | `genome-calibration` | `skills/genome-calibration/SKILL.md` | Crear/calibrar/diagnosticar un `brand_voice_genome` — bucle Boids, calibración de voz de marca, entrada E5b (UI Marisol), Tratado de genomas | Interno — voice research / IID Fase 2 |
+| `r4b-genome-calibration` | `skills/r4b-genome-calibration/SKILL.md` | Llevar una marca de cero a R4B, o recalibrar una marca completa (voz + parche + topics + agentes + scheduler). Orquesta el ciclo completo; delega la voz a genome-calibration | Interno — Sam×Claude, brand onboarding |
 | `nscf-pricing` | `skills/nscf-pricing/SKILL.md` | Pricing B2B/B2C NSCF, cotizaciones, Custom Kits, márgenes, rentabilidad de producto | Exclusivo NeuroneSCF |
 | `agent-builder` | `skills/agent-builder/SKILL.md` | Crear, configurar o deployar agentes | UNRLVL + clientes |
 | `copylab-reference` | `skills/copylab-reference/SKILL.md` | Sesiones con CopyLab, plantillas, contenido por canal | UNRLVL + clientes |
@@ -35,6 +36,13 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.7
+
+**Cambios respecto a v1.6:**
+- `r4b-genome-calibration` → skill nuevo · v1.0 · 2026-07-13 · orquestador "de cero a R4B" (Ready for Business). Conduce a Sam×Claude por el ciclo completo de una marca: Fase 0 (revisar lo que hay) → arquitectura de voz (fórmula marca↔persona) → siembra de ejes → bucle Boids → destilación + parche de marca → brand_topics → agentes + scheduler del Orchestrator. DELEGA la parte de voz a `genome-calibration` (no la duplica; el Tratado sigue siendo la fuente única del método de voz). Agrega sobre el Tratado: la fórmula marca↔persona con sus fronteras, la regla dura generalizada, el patrón alias, el rol anclado al dominio, y las fases post-voz hasta R4B. Método base Sam×Claude en chat; la UI del Seeder es una opción de delegación de la Fase 3.
 
 ---
 
@@ -96,6 +104,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "HTML / componente / diseño" → `ui-ux-layer`
 - Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline`
 - Sam dice "genoma / calibrar voz / bucle Boids / Tratado de genomas / crear la voz de [marca]" → `genome-calibration`
+- Sam dice "marca nueva de cero a R4B / recalibrar marca completa / llevar [marca] a R4B / montar el ecosistema de voz de [marca]" → `r4b-genome-calibration` (invoca `genome-calibration` en la fase de voz)
 - Sam dice "pricing / cotización / kit B2B / margen / rentabilidad NSCF" → `nscf-pricing` + `ui-ux-layer` (para output visual)
 - Sam dice "agente / WhatsApp / bot" → `agent-builder` + `security`
 - Sam dice "imagen / video / LoRA" → `image-processing` (+ `higgsfield` si hay MCP activo)
@@ -139,4 +148,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.6 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.7 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
