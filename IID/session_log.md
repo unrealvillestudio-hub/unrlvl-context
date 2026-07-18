@@ -242,6 +242,35 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-13 (tarde) — Skill r4b-genome-calibration + fórmula marca↔persona + corrección rol Ivette
+
+Sesión de arquitectura de marca + creación de herramienta. Preparación para llevar ForumPHs/Ivette de cero a R4B en un chat limpio.
+
+### La fórmula marca↔persona (formalizada, validada 2 veces)
+Neurone↔Patricia fue el primer par; ForumPHs↔Ivette es el segundo. Misma estructura → fórmula reproducible, no caso a medida:
+- La MARCA (sistema/producto) lleva Conversión + Educativa + Editorial. NO lleva Profesional: se disuelve (el "currículum" de una empresa ES su Conversión; su criterio sobre el oficio ES su Editorial; el desdoblamiento Profesional existe en una PERSONA, no en una empresa).
+- La PERSONA (la figura que encarna) lleva Profesional + Educativa + Editorial.
+- 3 VERBOS que separan las voces de marca sin solape: Conversión VENDE (al decisor: Junta, comprador); Educativa ENSEÑA (al que VIVE/USA — el "doliente", el propietario bajo régimen de PH, la clienta — NO necesariamente el decisor); Editorial OPINA (del oficio/mercado, crítica y posición, no currículum).
+- FRONTERAS (la parte más valiosa; sin ellas 6 voces suenan igual): la marca no hace el trabajo de la persona y viceversa; la persona cita la marca como obra propia pero no la vende; FRONTERA DE RESPONSABILIDAD cuando la persona es profesional regulado — Ivette (Abogada) INTERPRETA el marco legal / ForumPHs (empresa) OPERA el sistema; cruzarlas es riesgo legal (la empresa daría consejo legal, o la jurista vendería servicio y perdería independencia), no solo estético.
+
+### Skill r4b-genome-calibration v1.0 (orquestador, delega — no duplica)
+Creado y pusheado por Sam a skills/r4b-genome-calibration/SKILL.md; registrado en INDEX v1.7. Lleva una marca de cero a R4B (Ready for Business): genoma(s) activo(s) + parche de datos + brand_topics + agentes + SCHEDULER del Orchestrator establecido = listo para publicar. Fases: 0 (revisar lo que hay, innegociable) → 1 (arquitectura de voz / fórmula marca↔persona) → 2 (siembra de ejes) → 3 (bucle Boids, DELEGA a genome-calibration §4) → 4 (destilación E6 + parche de marca, checkpoint doble) → 5 (brand_topics) → 6 (agentes + scheduler → R4B).
+PATRÓN DE DISEÑO: orquestar, no duplicar. La voz vive en genome-calibration (el Tratado, fuente única); r4b lo INVOCA. Duplicarlo generaría dos vocabularios desincronizados (el mismo anti-patrón del bug del psycho). Antes de escribir el orquestador se LEYÓ el Tratado completo para no duplicar/contradecir.
+Lo que r4b agrega sobre el Tratado (todo posterior al 2-jul): Fase 0, la fórmula marca↔persona, la regla dura generalizada (la voz demuestra nunca declara — ni promesas ni credenciales autodeclaradas; el dato/título verificable ES la credencial), el patrón alias, el rol anclado al dominio, y las fases post-voz. Método base Sam×Claude en chat; el Seeder de Marisol es una opción de DELEGACIÓN de la Fase 3, no el método base.
+NOTA: v1.0 se refinará al ejecutar ForumPHs de punta a punta (primera prueba de fuego real).
+
+### Corrección del rol de Ivette Flores (mutación en prod)
+Ivette corrigió: se la vendía como "Experta en Ley 284", pero cuando esa ley se derogue la credencial caduca. Rol correcto: "Abogada y Especialista en Régimen de Propiedad Horizontal". La ley es una INSTANCIA; el régimen es el DOMINIO. Dos matices: (1) "Abogada Y Especialista" (conjunción que suma dos calificaciones) — "Abogada" es título habilitante VERIFICABLE (hecho afirmable, cumple la regla dura), "especialista" se demuestra; la combinación da piso legal + profundidad. (2) es el MISMO rol que ejerce en ForumPHs — NO "Gerente General"; esto refuerza la frontera marca↔persona (ForumPHs pone SU criterio jurídico al servicio del cliente).
+Aplicado a public.brands (ForumPHs): positioning + brand_context corregidos, criterio anclado al régimen. PENDIENTE (#73): el genoma fphs_institucional v0.5 aún dice "Abogada Ley 284" → se corrige al recalibrar (será fphs_conversion v1.0, heredera de la v0.5, cuya arquitectura estado→sin sistema→Ley 284→ForumPHs→prueba es claramente la voz de Conversión de marca).
+
+### Estado tras la sesión
+- Skill r4b-genome-calibration v1.0 vivo y registrado (INDEX v1.7).
+- Fórmula marca↔persona formalizada en el skill.
+- Rol de Ivette corregido en public.brands; deuda en el genoma v0.5 (#73).
+- PRÓXIMO: ForumPHs de cero a R4B en chat nuevo (skill cargado). 6 voces (3 marca + 3-4 Ivette), marca primero, ~2 voces por sesión.
+- Professor: 4 learnings (13-jul).
+
+
 ## 2026-07-17 — TANDA TÉCNICA IID: 5 frentes de deuda + Eje B VIVO + causa raíz de publicación + 6 EFs deployadas a prod
 
 Sesión larga de ejecución (CC + Claude-chat), forense y deploy. Cierra el grueso de la deuda técnica del carril IID que venía arrastrándose. Al final: los 6 Edge Functions tocados quedaron **deployados y verificados en producción** (no solo mergeados) — con el hallazgo de gobernanza que lo enmarca.
