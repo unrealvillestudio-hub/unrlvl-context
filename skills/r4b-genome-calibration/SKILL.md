@@ -1,9 +1,11 @@
 # SKILL — r4b-genome-calibration (De Cero a R4B · Método Sam×Claude)
 
-**Versión:** v1.0 · **Creado:** 2026-07-13 · **Rama:** IID / Brand Onboarding
+**Versión:** v1.1 · **Creado:** 2026-07-13 · **Actualizado:** 2026-07-18 · **Rama:** IID / Brand Onboarding
 **Naturaleza:** PROTOCOLO ORQUESTADOR convocable. Conduce a Sam×Claude (en el chat, sin UI de Seeder ni de Orchestrator) por el ciclo COMPLETO de una marca: de cero —o desde una marca existente a recalibrar— hasta **R4B (Ready for Business): genoma(s) activo(s) + parche de datos + brand_topics + agentes + scheduler del Orchestrator establecido, listo para publicar.**
 **Disparadores:** "marca nueva de cero a R4B", "recalibrar marca completa", "llevar [marca] a R4B", "montar el ecosistema de voz de [marca]".
 **Audiencia:** Sam×Claude en chat. NO es el bucle E5b de la UI de Marisol — esa es una opción de DELEGACIÓN de la Fase 3 a un tercero, no el método base de Sam.
+
+**Cambios v1.0 → v1.1 (2026-07-18):** sincronización con la **familia voice** (`voice-craft` v1.0, `voice-conversion` v1.0, `comm-arsenal` v1.0), creada después de la v1.0 de este skill. El INDEX v1.8/v1.9 ya declaraba que este orquestador los invoca en la fase de voz, pero el skill no los mencionaba — dos vocabularios desincronizados, el anti-patrón que este ecosistema ya pagó caro. Se corrige en §3 (carga obligatoria de la familia voice), §7 (reparto de la delegación de método) y §8.3 (orden de ejecución). El resto del skill queda intacto.
 
 ---
 
@@ -102,6 +104,8 @@ Disciplina de sesión: **una marca por sesión de chat; máximo ~2 voces por ses
 
 ## 3. FASE 3 — CALIBRACIÓN (BUCLE BOIDS) → DELEGA AL TRATADO
 
+**CARGA OBLIGATORIA DE LA FAMILIA VOICE:** además del Tratado (método), cargar `voice-craft` (oficio — SIEMPRE), `comm-arsenal` (el repertorio de técnicas que `voice-craft` §2 exige operar) y el PERFIL del tipo de voz que se calibra (`voice-conversion` hoy; editorial/educativa/professional cuando existan). El Tratado dice CÓMO se corre el bucle; la familia voice dice CON QUÉ OFICIO se escribe cada turno. Sin ellos el texto converge y aun así sale tibio.
+
 **Ejecutar `genome-calibration` §4 tal cual.** No se repite aquí. Resumen de interfaz:
 - Claude PROPONE texto (el operador nunca escribe prosa); pregunta ¿es [marca]? SÍ/NO; el operador responde SÍ/NO + su VISIÓN DEL PORQUÉ; Claude recalibra y propone el siguiente.
 - Convergencia: **≥10 textos Y últimos 3 SÍ consecutivos** (E5c: el umbral SUGIERE cerrar; el operador cierra cuando está satisfecho — puede seguir más allá de 10+3).
@@ -111,6 +115,8 @@ Disciplina de sesión: **una marca por sesión de chat; máximo ~2 voces por ses
 **Dos caminos de ejecución:**
 - **Sam en el chat** (método base de este skill): Sam juzga los SÍ/NO. Sin UI.
 - **Delegado vía Seeder** (opción): Marisol corre el bucle en la UI del Orchestrator; requiere que la marca esté en su `brand_scope` (secret `USERS_RAW` de la EF `iid-inbound` — NO vive en la DB) y sus credenciales rotadas. Sam solo aprueba el genoma resultante.
+
+> **Advertencia de asimetría (v1.1):** el camino "Sam en el chat" carga la familia voice; el camino "delegado vía Seeder" NO — `/api/calibrate.ts` no lee skills. Hasta que el arsenal llegue al runtime del generador, las dos vías no producen la misma calidad. Considerarlo al decidir qué voz se delega.
 
 ---
 
@@ -154,7 +160,7 @@ Para R4B (Ready for Business, listo para publicar):
 - **Flujo de entrega de context files:** CC crea rama, pushea, abre PR contra main; CC NO mergea; Sam revisa, mergea y borra la rama. Nunca commit directo en main.
 - **La regla dura de voz (§1.4) gobierna todo output de todas las voces.**
 - **Verificar antes de afirmar** la existencia/naturaleza de un archivo, módulo, tabla o componente. Si no se puede verificar, decir "no lo verifiqué". (Los planes obsoletos apuntan a componentes que fueron absorbidos/refactorizados.)
-- **Delegación de método:** la voz vive en `genome-calibration`; el output de texto en `content-pipeline`; los agentes en `agent-builder`; el visual en `ui-ux-layer`. Este skill orquesta, no reemplaza.
+- **Delegación de método:** la voz se reparte: el MÉTODO del bucle en `genome-calibration`; el OFICIO en `voice-craft`; el REPERTORIO de técnicas en `comm-arsenal`; la PARAMETRIZACIÓN por tipo de voz en los perfiles (`voice-conversion`, etc.). El output de texto en `content-pipeline`; los agentes en `agent-builder`; el visual en `ui-ux-layer`. Este skill orquesta, no reemplaza.
 - **Bilingüe = mismo genoma, reescritura NO traducción** (Tratado §8). ES/EN neutro internacional salvo que la marca defina lo contrario.
 
 ---
@@ -164,10 +170,10 @@ Para R4B (Ready for Business, listo para publicar):
 0. **Revisar lo que hay** (§0) — Supabase + repos + material publicado + esquema. Nunca saltar.
 1. **Arquitectura de voz** (§1) — mapa marca↔persona, fronteras, regla dura, recorrido. Decidir voice_id.
 2. **Sembrar ejes** (§2) — borrador → corrección de Sam → HRD → INSERT en calibration_sessions. Una marca/sesión, ~2 voces máx.
-3. **Bucle Boids** (§3) — delega a `genome-calibration §4`. Sam juzga (o delega a Marisol). Converger.
+3. **Bucle Boids** (§3) — delega a `genome-calibration §4` (método) + carga `voice-craft` + `comm-arsenal` + el perfil del tipo de voz (oficio). Sam juzga (o delega a Marisol). Converger.
 4. **Destilar genoma + parche de marca** (§4) — E6 bajo HRD, checkpoint doble (voz + datos).
 5. **Brand_topics** (§5) — la segunda pata.
 6. **Agentes + scheduler** (§6) — hasta R4B.
 7. **Cerrar** con Professor + Actualiza (rama + PR).
 
-_Fin del orquestador v1.0 · r4b-genome-calibration · delega la voz a genome-calibration · Unreal>ille IID_
+_Fin del orquestador v1.1 · r4b-genome-calibration · delega la voz a genome-calibration + familia voice · Unreal>ille IID_
