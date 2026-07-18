@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.8 · 2026-07-18 · Mantenido por: Claude_
+_Versión: 1.9 · 2026-07-18 · Mantenido por: Claude_
 
 ---
 
@@ -20,6 +20,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
 | `voice-craft` | `skills/voice-craft/SKILL.md` | **CAPA PRIMARIA — siempre que se calibre o genere CUALQUIER voz.** Oficio comunicacional transversal: arsenal operado, artefacto de destino, ejemplo-como-mecanismo, capas PSY/AIFE/Watcher declaradas, reparto genoma↔angle, triage técnica/intención | Multimarca — toda voz |
+| `comm-arsenal` | `skills/comm-arsenal/SKILL.md` | **SE CARGA JUNTO CON `voice-craft`** — es el arsenal que `voice-craft` §2 exige operar. Cuerpo de técnicas de comunicación oral y escrita: estructuras persuasivas, niveles de conciencia, aperturas por canal, prueba/objeción/contraste/analogía/especificidad/reencuadre, tipología de cierres, ritmo micro, ejecución escrita vs oral, anti-patrones | Multimarca — toda redacción y todo guion |
 | `voice-conversion` | `skills/voice-conversion/SKILL.md` | Calibrar o generar una voz de CONVERSIÓN (la que VENDE al decisor). Perfil secundario delgado — **invoca `voice-craft`** | Multimarca — marcas de producto/servicio |
 | `genome-calibration` | `skills/genome-calibration/SKILL.md` | Crear/calibrar/diagnosticar un `brand_voice_genome` — bucle Boids, calibración de voz de marca, entrada E5b (UI Marisol), Tratado de genomas | Interno — voice research / IID Fase 2 |
 | `r4b-genome-calibration` | `skills/r4b-genome-calibration/SKILL.md` | Llevar una marca de cero a R4B, o recalibrar una marca completa (voz + parche + topics + agentes + scheduler). Orquesta el ciclo completo; delega la voz a genome-calibration | Interno — Sam×Claude, brand onboarding |
@@ -38,6 +39,14 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.9
+
+**Cambios respecto a v1.8:**
+- `comm-arsenal` → skill nuevo · v1.0 · 2026-07-18 · **el CUERPO DE TÉCNICAS de comunicación (oral y escrita).** Nace de un defecto de `voice-craft`: su §2 exige "operar el arsenal con oficio" pero no entrega el arsenal — solo principios y ocho recursos sintácticos. Es el mismo defecto que `voice-craft` diagnosticó en `calibrate.ts` ("enumera, no opera"), un nivel más arriba. UN SOLO skill con separación interna oral/escrito: el repertorio es idéntico en ambos canales y lo que difiere es la EJECUCIÓN (redundancia, respiración, ausencia de scroll, puntuación vs pausa) — parametrización, no cuerpo distinto. Contiene: estructuras persuasivas completas con tabla de selección, niveles de conciencia del mercado, repertorio de aperturas con sus fallos por canal (+ tabla de aperturas PROHIBIDAS con su alternativa demostrativa), jerarquía de prueba, manejo de objeciones, contraste/analogía/especificidad/reencuadre, tipología de cierres, ritmo y forma de la frase, ejecución escrita (§7), ejecución oral (§8, incluye por qué un texto escrito leído en voz alta casi siempre falla), y anti-patrones. **Filtro obligatorio:** toda técnica entra con las reglas duras del ecosistema puestas; las que las violan entran MARCADAS COMO PROHIBIDAS con su alternativa. **Disciplina anti-enciclopedia:** una técnica entra solo si cambia una decisión concreta al escribir. Fuente: el cuerpo de conocimiento del oficio, no la DB de UNRLVL; el criterio de Sam actúa como FILTRO.
+- `r4b-genome-calibration` → **v1.0 → v1.1** · sincronización con la familia voice. El skill se escribió antes de que existieran `voice-craft`, `voice-conversion` y `comm-arsenal`, y no los mencionaba, mientras el INDEX v1.8 ya declaraba que los invoca — dos vocabularios desincronizados. Se corrige en §3 (carga obligatoria de la familia voice + advertencia de asimetría chat vs Seeder), §7 (reparto de la delegación de método) y §8.3 (orden de ejecución). El resto intacto.
 
 ---
 
@@ -113,8 +122,8 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 **Se activan por contexto declarado:**
 - Sam dice "Shopify B2C / audit / fix" → `shopify-auditor` + `shopify-mcp`
 - Sam dice "HTML / componente / diseño" → `ui-ux-layer`
-- Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline` + **`voice-craft`** + el perfil de voz del tipo declarado
-- Sam dice "genoma / calibrar voz / bucle Boids / Tratado de genomas / crear la voz de [marca]" → `genome-calibration` + **`voice-craft`** (siempre) + el perfil secundario del tipo de voz
+- Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline` + **`voice-craft`** + **`comm-arsenal`** + el perfil de voz del tipo declarado
+- Sam dice "genoma / calibrar voz / bucle Boids / Tratado de genomas / crear la voz de [marca]" → `genome-calibration` + **`voice-craft`** + **`comm-arsenal`** (siempre) + el perfil secundario del tipo de voz
 - Sam dice "marca nueva de cero a R4B / recalibrar marca completa / llevar [marca] a R4B / montar el ecosistema de voz de [marca]" → `r4b-genome-calibration` (invoca `genome-calibration` + `voice-craft` + perfil en la fase de voz)
 - Sam dice "voz de conversión / la voz que vende / calibrar [marca]_conversion" → `voice-conversion` (+ `voice-craft` obligatorio)
 - Sam dice "pricing / cotización / kit B2B / margen / rentabilidad NSCF" → `nscf-pricing` + `ui-ux-layer` (para output visual)
@@ -127,10 +136,11 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "ecosystem audit" o "ecosystem scan" → `ecosystem-auditor` (ver también HRD_ECOSYSTEM_AUDIT en userPreferences)
 - Sam dice "videos TikTok / transcribir / OCR / voice genome / referencia de cuenta" → `voice-reference-extractor` (research local, paso 1) → `genome-calibration` (calibración, paso 2)
 
-**Regla de carga de la familia VOICE (nueva v1.8):**
-- **`voice-craft` es PRIMARIO: se carga SIEMPRE que haya calibración o generación de voz**, junto con `genome-calibration` (método) y/o `content-pipeline` (output). Nunca se usa un perfil secundario sin él.
-- **Los perfiles secundarios se cargan por TIPO DE VOZ declarado**, uno a la vez: `voice-conversion` (existe) · `voice-editorial` / `voice-educative` / `voice-professional` (pendientes de escribir con casos reales).
-- Si el tipo de voz no tiene perfil escrito, se calibra con `voice-craft` + el cuadro de parametrización de `IID/CALIBRATOR_MINDSET.md` §4, y se documenta el caso para escribir el perfil después.
+**Regla de carga de la familia VOICE (v1.9):**
+- **`voice-craft` + `comm-arsenal` SE CARGAN JUNTOS, SIEMPRE**, en toda calibración o generación de voz. No son alternativas ni opcionales entre sí: `voice-craft` es el oficio (qué hace bueno a un texto) y `comm-arsenal` es el repertorio que ese oficio ejecuta. Cargar `voice-craft` sin `comm-arsenal` reproduce exactamente el defecto que ambos diagnostican: principios sin cuerpo.
+- Se suman a `genome-calibration` (método del bucle) y/o `content-pipeline` (output).
+- **Los perfiles secundarios se cargan por TIPO DE VOZ declarado**, uno a la vez: `voice-conversion` (existe) · `voice-editorial` / `voice-educative` / `voice-professional` (pendientes).
+- Si el tipo de voz no tiene perfil escrito, se calibra con `voice-craft` + `comm-arsenal` + el cuadro de parametrización de `IID/CALIBRATOR_MINDSET.md` §4, y se documenta el caso.
 
 **Nunca se cargan proactivamente sin declaración:**
 - `ads-mcp` — solo si hay campaña activa en esa sesión
@@ -168,4 +178,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.8 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.9 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
