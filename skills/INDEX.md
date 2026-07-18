@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.7 · 2026-07-13 · Mantenido por: Claude_
+_Versión: 1.8 · 2026-07-18 · Mantenido por: Claude_
 
 ---
 
@@ -19,6 +19,8 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `shopify-mcp` | `skills/shopify-mcp/SKILL.md` | Trabajo directo en Shopify via conector MCP | Interno — NeuroneSCF (activo), futuras marcas |
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
+| `voice-craft` | `skills/voice-craft/SKILL.md` | **CAPA PRIMARIA — siempre que se calibre o genere CUALQUIER voz.** Oficio comunicacional transversal: arsenal operado, artefacto de destino, ejemplo-como-mecanismo, capas PSY/AIFE/Watcher declaradas, reparto genoma↔angle, triage técnica/intención | Multimarca — toda voz |
+| `voice-conversion` | `skills/voice-conversion/SKILL.md` | Calibrar o generar una voz de CONVERSIÓN (la que VENDE al decisor). Perfil secundario delgado — **invoca `voice-craft`** | Multimarca — marcas de producto/servicio |
 | `genome-calibration` | `skills/genome-calibration/SKILL.md` | Crear/calibrar/diagnosticar un `brand_voice_genome` — bucle Boids, calibración de voz de marca, entrada E5b (UI Marisol), Tratado de genomas | Interno — voice research / IID Fase 2 |
 | `r4b-genome-calibration` | `skills/r4b-genome-calibration/SKILL.md` | Llevar una marca de cero a R4B, o recalibrar una marca completa (voz + parche + topics + agentes + scheduler). Orquesta el ciclo completo; delega la voz a genome-calibration | Interno — Sam×Claude, brand onboarding |
 | `nscf-pricing` | `skills/nscf-pricing/SKILL.md` | Pricing B2B/B2C NSCF, cotizaciones, Custom Kits, márgenes, rentabilidad de producto | Exclusivo NeuroneSCF |
@@ -36,6 +38,15 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.8
+
+**Cambios respecto a v1.7:**
+- `voice-craft` → skill nuevo · v1.0 · 2026-07-18 · **CAPA PRIMARIA COMPARTIDA de oficio comunicacional.** Destilado de `IID/CALIBRATOR_MINDSET.md` (triangulación de 4 calibraciones reales: Lucien editorial, NSCF conversión, D7Herbal conversión, ForumPHs conversión). Contiene lo TRANSVERSAL (~80%): los 9 modos, el arsenal OPERADO (no enumerado), la regla dura de voz, las capas del pipeline DECLARADAS (13 psycho_presets / 4 familias CONVERSION-COMMUNITY-AUTHORITY-BRIDGE, AIFE, Watcher 8 gates, `objective_by_platform`), el reparto genoma↔angle, el triage error-de-técnica vs error-de-intención, y el techo de producción (voz constante / técnica variable + memoria). **Dos reglas duras nuevas** que nacen del fracaso de calibración del 17-jul: (a) **declarar el artefacto de destino ANTES de generar** — canal + formato + extensión; un texto sin destino sale genérico (se escribió un párrafo largo para un feed de IG); (b) **el ejemplo es MECANISMO, no molde** — de un texto de referencia se extrae lo que lo hace funcionar, jamás su forma literal. Declara además 5 deudas abiertas que afectan a toda calibración (`calibrate.ts` no lee PSY, no opera el arsenal, no pausa para conversar el eje; `objective_by_platform` NULL; AIFE fuera del bucle).
+- `voice-conversion` → skill nuevo · v1.0 · 2026-07-18 · **perfil SECUNDARIO delgado** de la voz que VENDE al decisor. Lleva solo su parametrización (filo 5/10 instrumental · audiencia perdida se minimiza · cierre CTA/marca · familia PSY CONVERSION · blanco = el patrón) y sus técnicas propias (escena-no-pregunta, desplazamiento de protagonista, punto de no retorno, presunción de compañía, falso binario con remate, reencuadre patrimonial, el test de VENDER). **Invoca `voice-craft` para todo lo común — no duplica el núcleo.** Ejemplares: nscf_conversion, d7herbal_conversion, fphs_conversion (po_consumer en revisión por #72).
+- **Patrón de diseño aplicado: ORQUESTAR, no duplicar.** `genome-calibration` (el Tratado) sigue siendo la fuente única del MÉTODO del bucle; `voice-craft` es su hermano y le aporta la capa de comunicación/arsenal/PSY que le faltaba al generador. Los otros 3 perfiles (`voice-editorial`, `voice-educative`, `voice-professional`) se escribirán cuando toque calibrar esa voz, con casos reales — no se especulan.
 
 ---
 
@@ -102,9 +113,10 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 **Se activan por contexto declarado:**
 - Sam dice "Shopify B2C / audit / fix" → `shopify-auditor` + `shopify-mcp`
 - Sam dice "HTML / componente / diseño" → `ui-ux-layer`
-- Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline`
-- Sam dice "genoma / calibrar voz / bucle Boids / Tratado de genomas / crear la voz de [marca]" → `genome-calibration`
-- Sam dice "marca nueva de cero a R4B / recalibrar marca completa / llevar [marca] a R4B / montar el ecosistema de voz de [marca]" → `r4b-genome-calibration` (invoca `genome-calibration` en la fase de voz)
+- Sam dice "copy / contenido / post / artículo / descripción / ad" → `content-pipeline` + **`voice-craft`** + el perfil de voz del tipo declarado
+- Sam dice "genoma / calibrar voz / bucle Boids / Tratado de genomas / crear la voz de [marca]" → `genome-calibration` + **`voice-craft`** (siempre) + el perfil secundario del tipo de voz
+- Sam dice "marca nueva de cero a R4B / recalibrar marca completa / llevar [marca] a R4B / montar el ecosistema de voz de [marca]" → `r4b-genome-calibration` (invoca `genome-calibration` + `voice-craft` + perfil en la fase de voz)
+- Sam dice "voz de conversión / la voz que vende / calibrar [marca]_conversion" → `voice-conversion` (+ `voice-craft` obligatorio)
 - Sam dice "pricing / cotización / kit B2B / margen / rentabilidad NSCF" → `nscf-pricing` + `ui-ux-layer` (para output visual)
 - Sam dice "agente / WhatsApp / bot" → `agent-builder` + `security`
 - Sam dice "imagen / video / LoRA" → `image-processing` (+ `higgsfield` si hay MCP activo)
@@ -114,6 +126,11 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "actualiza graph / actualiza ecosystem / ecosystem desactualizado" → `ecosystem-auditor` + `ecosystem-updater`
 - Sam dice "ecosystem audit" o "ecosystem scan" → `ecosystem-auditor` (ver también HRD_ECOSYSTEM_AUDIT en userPreferences)
 - Sam dice "videos TikTok / transcribir / OCR / voice genome / referencia de cuenta" → `voice-reference-extractor` (research local, paso 1) → `genome-calibration` (calibración, paso 2)
+
+**Regla de carga de la familia VOICE (nueva v1.8):**
+- **`voice-craft` es PRIMARIO: se carga SIEMPRE que haya calibración o generación de voz**, junto con `genome-calibration` (método) y/o `content-pipeline` (output). Nunca se usa un perfil secundario sin él.
+- **Los perfiles secundarios se cargan por TIPO DE VOZ declarado**, uno a la vez: `voice-conversion` (existe) · `voice-editorial` / `voice-educative` / `voice-professional` (pendientes de escribir con casos reales).
+- Si el tipo de voz no tiene perfil escrito, se calibra con `voice-craft` + el cuadro de parametrización de `IID/CALIBRATOR_MINDSET.md` §4, y se documenta el caso para escribir el perfil después.
 
 **Nunca se cargan proactivamente sin declaración:**
 - `ads-mcp` — solo si hay campaña activa en esa sesión
@@ -129,6 +146,9 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 
 | Skill | Estado | Prerequisito |
 |-------|--------|-------------|
+| `voice-editorial` | Pendiente | Escribir cuando toque calibrar una voz editorial con caso real (base: Lucien, ya calibrado — parametrización en CALIBRATOR_MINDSET §4) |
+| `voice-educative` | Pendiente | Escribir cuando toque calibrar una voz educativa con caso real (candidatos: NSCF editorial "Hair Intelligence", D7Herbal editorial — ejes ya sembrados) |
+| `voice-professional` | Pendiente | Escribir cuando toque calibrar una voz profesional con caso real (candidatos: NSCF professional "la Técnica de marca", Ivette Flores) |
 | `tiktok-mcp` | Pendiente | OAuth TikTok for Business completado (PO) |
 | `meta-organic` | Pendiente | IG→FB link + tokens completados (PO) |
 | `wordpress-mcp` | Pendiente | MCP WordPress construido |
@@ -148,4 +168,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.7 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.8 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
