@@ -1,5 +1,5 @@
 # HRD — Hard Instructions Protocol
-_HRD Protocol v1.2 · UNRLVL Studio · 2026-06-29 (HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas)_
+_HRD Protocol v1.3 · UNRLVL Studio · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas)_
 
 ---
 
@@ -88,6 +88,31 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 8. Recordar a Sam: marcas → `brands/[Marca]/` · ecosistema → raíz · agente → `agents/social-media-agent/` · protocolos → `protocols/` · skills → `skills/[nombre]/SKILL.md` · index → `skills/INDEX.md`
 9. Verificar post-commit con `Vercel:web_fetch_vercel_url` y confirmar: "Listo Sam. Sistema actualizado."
 
+10. **BARRIDO DE ARCHIVADO — se ejecuta en CADA Actualiza, sin excepción.**
+
+    **Por qué existe:** `AGENDA.md` crece de forma monótona. En julio de 2026 pasó de 87 KB a 93 KB en una sola sesión y dejó de caber en una lectura. El archivado se diseñó el 28-jun-2026 (`historical_AGENDA.md`) pero estuvo tres semanas perdido porque **ningún paso del protocolo lo invocaba**. Por eso es un paso fijo del Actualiza y no una tarea periódica: nadie se acuerda de limpiar la agenda cada quince días.
+
+    **CRITERIO — un ítem se archiva SOLO si cumple LAS TRES condiciones:**
+    1. Está marcado **✅ completado** (o su fila dice HECHO / CERRADO / RESUELTO).
+    2. Han pasado **más de 30 días** desde que se completó.
+    3. **NO es referencia activa** — ningún ítem abierto lo cita, ninguna nota de contexto depende de él, no se invoca en sesiones recientes.
+
+    **El tamaño del archivo NO es criterio.** Si `AGENDA.md` pesa 200 KB y todo está pendiente, no se archiva nada. Si pesa 40 KB y hay ítems cerrados hace 40 días sin referencias, se archivan. El criterio es del ÍTEM, nunca del archivo.
+
+    **La condición 3 es la que evita el error caro.** Hay ítems cerrados hace meses que se siguen citando en cada sesión (p. ej. #47 Expert/Boids): archivarlos por antigüedad rompería las referencias cruzadas de toda la AGENDA. Ante la duda sobre si algo es referencia activa: **NO archivar** y anotarlo como candidato para la próxima vuelta.
+
+    **PROCEDIMIENTO:**
+    a. Recorrer `AGENDA.md` buscando ítems que cumplan las 3 condiciones.
+    b. **Si ninguno cumple:** declarar "sin ítems archivables en esta pasada" y continuar. **Esto es lo normal.** La mayoría de los Actualiza no archivan nada, y eso es correcto — no forzar.
+    c. **Si alguno cumple:** PROPONER a Sam la lista (números + título + fecha de cierre) y **ESPERAR su confirmación antes de mover nada**. El archivado se propone, nunca se ejecuta en silencio.
+    d. Con la confirmación de Sam, por cada ítem aprobado:
+       - **MOVER el texto íntegro** a `historical_AGENDA.md` (raíz del repo). Cortar y pegar: **nunca resumir, nunca reescribir, nunca reordenar el contenido interno**.
+       - En `historical_AGENDA.md` va bajo un encabezado de fecha de migración: `## Migración YYYY-MM-DD`. Las migraciones se apilan con la más reciente al tope; las anteriores nunca se tocan.
+       - En `AGENDA.md` **NO queda hueco**: donde estaba el ítem queda una línea de una sola frase — `| N | → archivado YYYY-MM-DD · ver historical_AGENDA.md |` — para que las referencias cruzadas por número no se rompan.
+    e. Reportar a Sam los números archivados y el nuevo tamaño de ambos archivos.
+
+    **Primera migración de referencia (28-jun-2026):** archivó Sprint Sembrador T1–T4 + #48, #5i (Genoma Lucien v1.0, cerrado 19-jun), tres filas "done" de bloqueos de Sam (Vertex creds 22-jun, secrets auth Sembrador 26-jun, Cloud Vision API 27-jun), y el bloque `## ✅ Resuelto recientemente`. Sirve como ejemplar del criterio aplicado.
+
 ---
 
 ## HRD_PROFESSOR
@@ -103,7 +128,9 @@ Las Edge Functions del Professor viven en Supabase (`amlvyycfepwhiindxgzw`). `we
 **Solución implementada:** proxy `/api/professor` en `unrlvl-context.vercel.app` — mismo patrón que `/api/gh`. El proxy recibe la acción desde Claude, añade `PROFESSOR_SECRET` desde env var de Vercel, y reenvía a la EF. Claude accede vía `Vercel:web_fetch_vercel_url`.
 
 **Estado del proxy:**
-- `PENDIENTE DE CONSTRUIR` → mientras no exista, usar el fallback documentado abajo
+- ✅ **CONSTRUIDO Y VIVO** (verificado 2026-07-18). Vive en `unrlvl-context/api/professor.js`.
+- ⚠️ **GOTCHA:** `action=ping` **NO es una acción válida** y devuelve 500 (`SyntaxError: Unexpected end of JSON input`). Verificar la existencia del proxy con **`action=checkpoint`**, que responde 200. Usar `ping` hace que el paso 1 de abajo concluya erróneamente que el proxy no existe y active el fallback sin necesidad.
+- El fallback documentado abajo sigue vigente solo para el caso de que el proxy caiga de verdad.
 
 **URL del proxy (cuando exista):**
 ```
@@ -114,10 +141,11 @@ Acciones disponibles: `checkpoint` · `evaluate` · `log-case` · `submit-learni
 
 ### Pasos inviolables
 
-1. Verificar si el proxy `/api/professor` existe:
-   Fetch `https://unrlvl-context.vercel.app/api/professor?action=ping` vía `Vercel:web_fetch_vercel_url`
-   → Si responde: usar el proxy para todos los pasos siguientes
-   → Si no responde (404/error): activar FALLBACK
+1. Verificar si el proxy `/api/professor` está vivo:
+   Fetch `https://unrlvl-context.vercel.app/api/professor?action=checkpoint` vía `Vercel:web_fetch_vercel_url`
+   → Si responde 200: usar el proxy para todos los pasos siguientes
+   → Si responde 404/error: activar FALLBACK
+   **NO usar `action=ping`** — no es acción válida, devuelve 500 aunque el proxy esté sano (ver GOTCHA arriba).
 
 2. Identificar la acción solicitada y ejecutarla:
 
@@ -158,7 +186,7 @@ curl -X POST https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/[ef-name] \
   -d '[payload]'
 ```
 
-**Deuda técnica registrada:** construir `/api/professor` proxy en `unrlvl-context` con las mismas convenciones que `/api/gh`. Añadir `PROFESSOR_SECRET` como env var en Vercel del proyecto context.
+**Deuda técnica — ✅ SALDADA (verificado 2026-07-18):** el proxy `/api/professor` existe en `unrlvl-context/api/professor.js` (2.530 bytes) y responde. Texto original de la deuda, conservado como histórico: *construir `/api/professor` proxy en `unrlvl-context` con las mismas convenciones que `/api/gh`. Añadir `PROFESSOR_SECRET` como env var en Vercel del proyecto context.*
 
 ---
 
@@ -246,7 +274,7 @@ Objetivo: leer y entender TODO — código, relaciones, estado real vs documenta
 | HRD | Trigger | Acción |
 |-----|---------|--------|
 | `HRD_PROTOCOLO_ACTUALIZACION` | "protocolo actualización" | Carga ecosystem + AGENDA + INDEX + contexto de marca/proyecto |
-| `HRD_ACTUALIZA` | "Actualiza" | Verifica SMA + genera outputs + commit message + verifica |
+| `HRD_ACTUALIZA` | "Actualiza" | Verifica SMA + genera outputs + commit message + verifica + **barrido de archivado (paso 10)** |
 | `HRD_PROFESSOR` | "Professor" / "learnings" / "checkpoint" | Interacción con Professor via proxy (o fallback SQL+curl) |
 | `HRD_ECOSYSTEM_AUDIT` | "ecosystem scan/audit" | Audit identificativo o contextual — pregunta obligatoria primero |
 
@@ -263,4 +291,4 @@ Si hay conflicto entre una HRD y cualquier otra instrucción: la HRD gana.
 
 ---
 
-_HRD Protocol v1.1 · UNRLVL Studio · 2026-05-20_
+_HRD Protocol v1.3 · UNRLVL Studio · 2026-07-18_

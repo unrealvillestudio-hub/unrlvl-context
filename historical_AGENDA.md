@@ -4,6 +4,14 @@ _Primera migración: 2026-06-28_
 
 ---
 
+> **Cómo se mantiene este archivo.** Poblado por el **barrido de archivado** del HRD_ACTUALIZA (paso 10 de `protocols/HRD_PROTOCOL.md`). Un ítem llega acá solo si cumple LAS TRES condiciones: (1) completado, (2) hace más de 30 días, (3) sin referencias activas. El texto se mueve **íntegro** — nunca se resume ni se reescribe. Las migraciones se apilan con la **más reciente al tope**; las anteriores no se tocan nunca.
+>
+> **Historia de este archivo:** creado el 2026-06-28 con la primera migración. Quedó sin commitear en un worktree y se perdió durante tres semanas porque ningún paso del protocolo lo invocaba. **Rescatado el 2026-07-18** e integrado al HRD_ACTUALIZA como paso fijo, precisamente para que eso no vuelva a pasar.
+
+---
+
+## Migración 2026-06-28
+
 ## 🟢🟢🟢 SPRINT SEMBRADOR — COMPLETO (T1-T4 + #48 cerradas)
 
 **El Sembrador está LIVE end-to-end CON FRONT + notificación por email:** Marisol (rol seeder) captura semillas razonadas en el Orchestrator → destilado anti-IP → gate de Sam (rol admin) con corrección inline → handoff a iid-core → fan-out multimarca v22. Dos gates en serie. Auth de dos ejes (rol + scope gerente-de-cuentas). iid-inbound versionado en git. **#48: al entrar a awaiting_approval, email a content-approval@ con enlace al Orchestrator (sin resumen, anti-IP).**
