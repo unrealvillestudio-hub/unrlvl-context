@@ -104,6 +104,7 @@ Ejes de la tabla (por fila marca+dominio):
 - **`cadence`** — crescendo por mes y plataforma. **Interpretación A:** la cadencia es por-marca-por-plataforma (volumen total); los dominios ROTAN dentro de los slots, NO multiplican.
 - **`rollout_phase`** — fase de activación.
 - **`sibling_stagger`** — flag para marcas hermanas que comparten un tema (Lucien+UNRLVL en ai-cognition); fuerza desfase ≥48h.
+- **`objective_by_platform`** (jsonb, añadida 17-jul con el Eje B) — el OBJETIVO psicológico declarado por plataforma. Determina la FAMILIA de psycho-preset (CONVERSION / COMMUNITY / AUTHORITY / BRIDGE) y el `angle` desempata determinísticamente DENTRO de esa familia (Ruta B en `fanout.ts`): **coherencia primero, variedad después.** Default `AUTHORITY` cuando la marca no lo declaró — a propósito el más conservador: si no sabemos qué busca la marca, se establece criterio, no se empuja a comprar. Alimenta el gate7 (objetivo↔estímulo) del Watcher. **ESTADO 18-jul: NULL en las 16 filas existentes** → gate7 informativo hasta poblarlo en ≥1 marca. Los 13 psycho-presets viven en `public.psycho_presets` (NO en `intel`); el mapeo objetivo→familia vive en `TAG_TO_FAMILY` dentro de `fanout.ts` (repo `unrlvl-iid-functions`), no en la DB.
 
 Marcas activas hoy (fase 1): **LucienSael** (3 dominios: ai-cognition, ai-identity, human-essence) + **UnrealvilleStudio** (ai-cognition + 5 dominios Tier1 + **algorithm-mechanics** en fase 2, abierto 25-jun).
 
@@ -127,7 +128,7 @@ Marcas activas hoy (fase 1): **LucienSael** (3 dominios: ai-cognition, ai-identi
 6. CRON jobid 29 (cada 30min) ──→ content-dispatcher (.limit(1))
                      │   selecciona UNA pieza pendiente de la queue
                      ▼
-7. content-run-stage (v37) — EL ORQUESTADOR DE PRODUCCIÓN:
+7. content-run-stage (deploy build _50 al 17-jul; era v37 al fundarse este doc) — EL ORQUESTADOR DE PRODUCCIÓN:
      ├─ Builder buildFromGenome (stage 1): lee brand_topics + brand_voice_genome,
      │     arma el prompt jerárquico, llama a CopyLab
      ├─ AIFE filter (aife-filter EF): control de calidad/seguridad de marca
@@ -199,7 +200,22 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ---
 
-## §7 — ESTADO ACTUAL (2026-06-25)
+## §7 — ESTADO ACTUAL
+
+> **⚠️ ACTUALIZACIÓN 2026-07-18.** El bloque de abajo es la foto del **25-jun** y se conserva como referencia histórica, pero está superado. Estado real al 18-jul:
+>
+> - **Fase 1 del Sembrador COMPLETA** (T1-T4 + #48). **Fase 2 (calibración) en producción:** E5b backend + front, E5c (convergencia extensible, el operador cierra), E7 (GenomePromptBuilder — el generador lee el contexto REAL de la marca desde Supabase, mata la alucinación de ingredientes).
+> - **Eje B VIVO en prod (17-jul):** `objective_by_platform` en `brand_topics`, `content-watcher` v2 con **8 gates** (se sumaron gate7 objective↔stimulus y gate8 visual-sibling, ambos bloqueantes), Ruta B en `fanout.ts` (el preset se deriva del objetivo declarado, no de un hash sesgado → los 13 presets se usan, antes 5 estaban muertos). PENDIENTE: `objective_by_platform` nace NULL — sigue NULL en las 16 filas, así que gate7 es informativo hasta poblarlo en ≥1 marca.
+> - **Modelo canónico: `claude-sonnet-5`** en todo el pipeline (era `claude-sonnet-4-6`).
+> - **Genomas activos: 8** (no 2, como se creía hasta el 10-jul). Destilados nuevos: `nscf_conversion` v0.5, `d7herbal_conversion` v1.0. Convergida sin destilar: VivoseMask (15 turnos). **7 sesiones de calibración activas** esperando a Marisol.
+> - **Familia VOICE de skills (13-18 jul):** `genome-calibration` (método del bucle) + `r4b-genome-calibration` v1.1 (orquestador de-cero-a-R4B) + `voice-craft` (oficio) + `comm-arsenal` (repertorio de técnicas) + `voice-conversion` (perfil). Regla dura: voice-craft y comm-arsenal se cargan JUNTOS.
+> - **Sprint CRAFT-01 EN CURSO (18-jul):** lleva ese arsenal al runtime del bucle. 3 columnas nuevas en `calibration_sessions` aplicadas en prod; PR #13 abierto y BLOQUEADO por módulos vacíos.
+> - **Cron `content-dispatcher-poll` REPARADO (17-jul)** — llevaba 3859 fallos consecutivos por el overload de `trigger_iid_agent`.
+> - **Bloqueo operativo persistente:** rotar contraseña de Marisol + ampliar su `brand_scope`. Ambas cosas viven en el secret `USERS_RAW` de la EF `iid-inbound`, **no en la DB**. Sin eso Marisol no corre los 7 bucles pendientes.
+>
+> Detalle de cada punto en las entradas de §9.
+
+### Foto del 2026-06-25 (histórica)
 
 **Operativo:** la red de agentes legacy investiga en cadencia (crons activos, last_run reciente). El pipeline produce piezas end-to-end para UNRLVL y Lucien que llegan a `awaiting_approval` con email confirmado. Genoma v1.0 de Lucien en producción. **Tramo queue→approval REPARADO (25-jun): el transporte de `domain` ya no muere en "sin suscripción brand_topics".**
 
@@ -242,34 +258,137 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
-## 2026-07-13 (tarde) — Skill r4b-genome-calibration + fórmula marca↔persona + corrección rol Ivette
+## 2026-07-18 · comm-arsenal + r4b v1.1 + INDEX v1.9 · Sprint CRAFT-01 (el arsenal llega al runtime) · UX del Seeder
 
-Sesión de arquitectura de marca + creación de herramienta. Preparación para llevar ForumPHs/Ivette de cero a R4B en un chat limpio.
+**Conducido por:** Claude Opus 4.8 (chat: diseño, skills, briefs, verificación) + Claude Code (implementación) + Sam (decisiones y merges)
+**Foco:** cerrar la familia VOICE de skills, y después resolver el problema que esos skills declaraban pero no resolvían — que solo operan cuando Claude escribe en el chat.
 
-### La fórmula marca↔persona (formalizada, validada 2 veces)
-Neurone↔Patricia fue el primer par; ForumPHs↔Ivette es el segundo. Misma estructura → fórmula reproducible, no caso a medida:
-- La MARCA (sistema/producto) lleva Conversión + Educativa + Editorial. NO lleva Profesional: se disuelve (el "currículum" de una empresa ES su Conversión; su criterio sobre el oficio ES su Editorial; el desdoblamiento Profesional existe en una PERSONA, no en una empresa).
-- La PERSONA (la figura que encarna) lleva Profesional + Educativa + Editorial.
-- 3 VERBOS que separan las voces de marca sin solape: Conversión VENDE (al decisor: Junta, comprador); Educativa ENSEÑA (al que VIVE/USA — el "doliente", el propietario bajo régimen de PH, la clienta — NO necesariamente el decisor); Editorial OPINA (del oficio/mercado, crítica y posición, no currículum).
-- FRONTERAS (la parte más valiosa; sin ellas 6 voces suenan igual): la marca no hace el trabajo de la persona y viceversa; la persona cita la marca como obra propia pero no la vende; FRONTERA DE RESPONSABILIDAD cuando la persona es profesional regulado — Ivette (Abogada) INTERPRETA el marco legal / ForumPHs (empresa) OPERA el sistema; cruzarlas es riesgo legal (la empresa daría consejo legal, o la jurista vendería servicio y perdería independencia), no solo estético.
+---
 
-### Skill r4b-genome-calibration v1.0 (orquestador, delega — no duplica)
-Creado y pusheado por Sam a skills/r4b-genome-calibration/SKILL.md; registrado en INDEX v1.7. Lleva una marca de cero a R4B (Ready for Business): genoma(s) activo(s) + parche de datos + brand_topics + agentes + SCHEDULER del Orchestrator establecido = listo para publicar. Fases: 0 (revisar lo que hay, innegociable) → 1 (arquitectura de voz / fórmula marca↔persona) → 2 (siembra de ejes) → 3 (bucle Boids, DELEGA a genome-calibration §4) → 4 (destilación E6 + parche de marca, checkpoint doble) → 5 (brand_topics) → 6 (agentes + scheduler → R4B).
-PATRÓN DE DISEÑO: orquestar, no duplicar. La voz vive en genome-calibration (el Tratado, fuente única); r4b lo INVOCA. Duplicarlo generaría dos vocabularios desincronizados (el mismo anti-patrón del bug del psycho). Antes de escribir el orquestador se LEYÓ el Tratado completo para no duplicar/contradecir.
-Lo que r4b agrega sobre el Tratado (todo posterior al 2-jul): Fase 0, la fórmula marca↔persona, la regla dura generalizada (la voz demuestra nunca declara — ni promesas ni credenciales autodeclaradas; el dato/título verificable ES la credencial), el patrón alias, el rol anclado al dominio, y las fases post-voz. Método base Sam×Claude en chat; el Seeder de Marisol es una opción de DELEGACIÓN de la Fase 3, no el método base.
-NOTA: v1.0 se refinará al ejecutar ForumPHs de punta a punta (primera prueba de fuego real).
+### 1 · comm-arsenal v1.0 — el cuerpo de técnicas (PR #9 mergeado)
 
-### Corrección del rol de Ivette Flores (mutación en prod)
-Ivette corrigió: se la vendía como "Experta en Ley 284", pero cuando esa ley se derogue la credencial caduca. Rol correcto: "Abogada y Especialista en Régimen de Propiedad Horizontal". La ley es una INSTANCIA; el régimen es el DOMINIO. Dos matices: (1) "Abogada Y Especialista" (conjunción que suma dos calificaciones) — "Abogada" es título habilitante VERIFICABLE (hecho afirmable, cumple la regla dura), "especialista" se demuestra; la combinación da piso legal + profundidad. (2) es el MISMO rol que ejerce en ForumPHs — NO "Gerente General"; esto refuerza la frontera marca↔persona (ForumPHs pone SU criterio jurídico al servicio del cliente).
-Aplicado a public.brands (ForumPHs): positioning + brand_context corregidos, criterio anclado al régimen. PENDIENTE (#73): el genoma fphs_institucional v0.5 aún dice "Abogada Ley 284" → se corrige al recalibrar (será fphs_conversion v1.0, heredera de la v0.5, cuya arquitectura estado→sin sistema→Ley 284→ForumPHs→prueba es claramente la voz de Conversión de marca).
+**Por qué nació:** `voice-craft` §2 exige "operar el arsenal con oficio" pero **no entrega el arsenal** — da cinco principios de ejecución y ocho recursos sintácticos. Es el mismo defecto que `voice-craft` diagnosticó en `calibrate.ts` (*enumera, no opera*), un nivel más arriba. `comm-arsenal` es el cuerpo que faltaba.
 
-### Estado tras la sesión
-- Skill r4b-genome-calibration v1.0 vivo y registrado (INDEX v1.7).
-- Fórmula marca↔persona formalizada en el skill.
-- Rol de Ivette corregido en public.brands; deuda en el genoma v0.5 (#73).
-- PRÓXIMO: ForumPHs de cero a R4B en chat nuevo (skill cargado). 6 voces (3 marca + 3-4 Ivette), marca primero, ~2 voces por sesión.
-- Professor: 4 learnings (13-jul).
+**Arquitectura:** UN SOLO skill con separación interna oral/escrito. El repertorio (estructuras persuasivas, niveles de conciencia, jerarquía de objeciones, prueba, apertura, cierre, reencuadre, contraste, analogía) es IDÉNTICO en ambos canales; lo que difiere es la EJECUCIÓN (redundancia, respiración, ausencia de scroll, puntuación vs pausa). Eso es parametrización, no cuerpo distinto. Dos skills habrían duplicado el núcleo y se habrían desincronizado.
 
+**Contenido (12 secciones):** estructuras persuasivas con tabla de selección · niveles de conciencia del mercado · repertorio de aperturas con sus fallos por canal + tabla de aperturas PROHIBIDAS con su alternativa demostrativa · jerarquía de prueba (6 escalones, el 6º —credencial declarada— PROHIBIDO) · manejo de objeciones (raíz vs satélites) · contraste/analogía/especificidad/reencuadre · tipología de cierres · ritmo y forma de la frase · ejecución escrita (§7) · ejecución oral (§8, incluye §8.7 "por qué un texto escrito leído en voz alta casi siempre falla" con test verificable) · anti-patrones · checklist.
+
+**Dos disciplinas de diseño que lo gobiernan:**
+- **FILTRO obligatorio (§0.2):** ninguna técnica entra "limpia". Las que violan las reglas duras del ecosistema entran MARCADAS COMO PROHIBIDAS con su alternativa demostrativa — porque están en todos los manuales y un generador las produciría por defecto si no se las nombra para vetarlas.
+- **ANTI-ENCICLOPEDIA (§0.3):** una técnica entra solo si CAMBIA UNA DECISIÓN CONCRETA AL ESCRIBIR. Quedaron fuera: taxonomías de figuras retóricas, Cialdini como catálogo (ya vive operativo en los 13 psycho_presets), historia del copywriting, viaje del héroe.
+
+**Dos correcciones de Sam antes de subirlo:** (a) la fila "Muy consciente" de §2 llevaba "urgencia legítima" sin restricción → se le añadió la de §0.2.5 (no romper calidez, no prometer, no inventar cifras); (b) la tabla de estructuras era tan clara que invitaba a ejecutarla como receta de frases → línea dura al pie: *"La estructura ordena los MOVIMIENTOS; jamás dicta las FRASES. Si dos piezas comparten estructura, deben ser irreconocibles entre sí."*
+
+**Contradicción aparente marcada a propósito:** §4.5 (especificidad: el dato exacto ES la credencial) vs §8.6 (léxico oral: "casi tres de cada cuatro" retiene mejor que "73,8%"). No es inconsistencia — es la misma regla ejecutada en un canal donde el oyente no puede releer. Señalado en el texto para que nadie "corrija" uno de los dos.
+
+---
+
+### 2 · r4b-genome-calibration v1.0 → v1.1 (mismo PR)
+
+El skill se escribió el 13-jul, ANTES de que existieran `voice-craft`, `voice-conversion` y `comm-arsenal`, y no los mencionaba — mientras el INDEX v1.8 ya declaraba que los invoca en la fase de voz. **Skill e INDEX contradictorios = el anti-patrón de dos vocabularios**, el mismo que este ecosistema ya pagó caro.
+
+Corregido en 3 puntos, todo lo demás intacto:
+- **§3** — carga obligatoria de la familia voice + **advertencia de asimetría**: el camino "Sam en el chat" carga los skills, el camino "delegado vía Seeder" NO (calibrate.ts no lee skills) → las dos vías no producen la misma calidad. *Sale cuando el sprint CRAFT-01 esté mergeado.*
+- **§7** — la delegación de método se reparte: MÉTODO del bucle en `genome-calibration`; OFICIO en `voice-craft`; REPERTORIO en `comm-arsenal`; PARAMETRIZACIÓN por tipo de voz en los perfiles.
+- **§8.3** — orden de ejecución actualizado.
+
+**INDEX v1.9** con la regla de carga dura: **`voice-craft` + `comm-arsenal` SE CARGAN JUNTOS, SIEMPRE.** Cargar uno sin el otro reproduce el defecto que ambos diagnostican: principios sin cuerpo.
+
+---
+
+### 3 · Sprint CRAFT-01 — diseño de cómo el arsenal llega al runtime
+
+**El problema declarado por los propios skills:** los 3 skills de voz (~50KB) solo operan cuando Claude escribe en el chat. El carril automático y Marisol (Seeder) no cargan skills. **Cada mejora a los skills AMPLÍA la brecha.**
+
+**Lo que el código real reveló** (leídos `_genomePromptBuilder.ts` y `calibrate.ts` completos):
+
+1. **La infraestructura de inyección YA EXISTE y está bien hecha.** `buildBrandKnowledge()` es función pura de solo lectura con lector inyectado, degradación elegante y log de trazabilidad. No había que construir el mecanismo — había que agregarle una fuente. Abarató el sprint sustancialmente.
+2. **`buildSystemPrompt` ya tenía el hueco señalado.** El bloque `TECHO DE PRODUCCIÓN` decía: *"Elige una técnica DISTINTA (escena, contraste, analogía, dato-ancla, reencuadre, objeción anticipada, testimonio, diagnóstico, principio invertido, etc.)"*. Once nombres y un "etc.". El lugar del arsenal estaba marcado y vacío.
+3. **HALLAZGO — el artefacto de destino NO EXISTE en el esquema.** `calibration_sessions` no tiene canal, ni formato, ni extensión; el prompt tampoco. **El párrafo largo para feed de IG del 17-jul no fue descuido del operador: el sistema no tenía dónde declararlo.** `voice-craft` §3 lo había puesto como regla dura, pero era incumplible por diseño.
+4. **HALLAZGO — no se puede derivar el objetivo desde `brand_topics` en calibración.** `objective_by_platform` sigue NULL en las 16 filas, y **ninguna marca de Marisol tiene topics** — la fila ni siquiera existe. Razón estructural: en calibración la marca todavía no tiene topics, se están calibrando justamente para poder sembrarlos después. `brand_topics` es la fuente del PIPELINE, no del bucle.
+
+**Diseño elegido — Opción B: destilación MODULAR seleccionada por contexto.** Descartadas: el skill completo (~50KB, insostenible), la destilación única (mezcla oral/escrito y conversión/editorial), y los módulos en DB (el contenido saldría del repo y se volvería invisible al PR — el drift entre repo y DB es peor que entre dos archivos, porque un lado no se revisa nunca).
+
+**Sobre el DRIFT — la parte central del diseño.** La pregunta "¿quién mantiene la destilación sincronizada con el skill?" tiene respuesta incómoda: nadie puede de forma fiable, **y por eso la destilación NO debe ser un resumen del skill.** Los módulos de runtime son las REGLAS EJECUTABLES; el skill es su EXPLICACIÓN. No es el mismo contenido en dos tamaños — son dos cosas distintas. El módulo dice *"nunca abras con una pregunta que pueda responderse en contra"*; el skill explica por qué, da el ejemplo y lo sitúa en el repertorio. Viven en el mismo repo (`skills/comm-arsenal/runtime/`) y el SKILL.md los referencia por sección: un PR que toca una regla y no toca su módulo es visible en el diff.
+
+**Los 6 módulos:** `core` (filtro + anti-patrones, SIEMPRE) · `structure` (estructuras + niveles de conciencia, SIEMPRE) · `written` (§7) · `oral` (§8) · `psy_<FAMILIA>` (×4) · `profile_<tipo>` (hoy solo conversion). Presupuesto típico: ~3.500-4.500 tokens/turno; con prompt caching, ~400-600 efectivos tras el primero.
+
+**Costo (no fue el factor decisivo):** con caché, ~$0,12 por bucle de 15 turnos vs ~$0,09 hoy. Siete bucles de Marisol: veinte centavos de diferencia. Lo decisivo es el tiempo de implementación y la superficie de riesgo.
+
+---
+
+### 4 · Sprint CRAFT-01 — ejecución (PR #13, ABIERTO)
+
+**DDL APLICADO EN PRODUCCIÓN** (con OK de Sam, una sentencia por llamada): 3 columnas aditivas nullable en `intel.calibration_sessions` — `voice_type` (text), `target_artifact` (jsonb, incluye `mode: written|oral`), `psy_family` (text). Verificado: las 10 filas existentes quedan NULL → modo degradado, como se diseñó. Sin CHECK constraint (los 3 perfiles que faltan lo bloquearían al crearlos); validación en el endpoint.
+
+**Construido por CC:** `api/_craftModules.ts` (builder puro/síncrono, hermano de `_genomePromptBuilder`) · 9 archivos placeholder en `api/craft-modules/` con cabecera de provenencia canónica · wiring en `calibrate.ts` (validación, persistencia, prompt reordenado, caching, log, `craft_warnings`) · `vercel.json` con `includeFiles` · front del Seeder (3 selectores + aviso + warnings) · migration file.
+
+**Técnica de carga elegida:** `fs.readFileSync(join(process.cwd(), 'api/craft-modules', file))` + `includeFiles` en vercel.json (precedente: ffmpeg-static). Evita `__dirname` (no existe bajo ESM nodenext) y una llamada de red por turno. Los .md quedan como fuente editable, sin build step.
+
+**Degradación con columnas NULL — el requisito central.** Las columnas van a estar NULL en la MAYORÍA de sesiones durante la transición (las 10 existentes + toda sesión previa al front), no en una minoría. Regla: **degradación elegante, NUNCA inferencia.** Sin artefacto → solo `core`+`structure`, jamás adivinar el canal. Sin `psy_family` → sin módulo PSY, **no caer a AUTHORITY** (en `fanout.ts` ese default es correcto porque es decisión de publicación; en calibración sería fabricar un objetivo que nadie declaró). Sin `voice_type` → sin perfil, no derivar de `intent_label` por heurística de texto.
+
+**Log que distingue ausencia de fallo.** Heredado del bug de `order=is_primary`, que se escondió días porque `safeRead` tragaba el 400 y `hasFormula=false` era idéntico a "no hay blueprints". El nuevo log separa `skipped` (ausencia DECLARADA) de `errors` (fallo de LECTURA) y **lista lo omitido, no solo lo inyectado** — la diferencia entre encontrar el bug en diez minutos o en días.
+
+**Condición dura de merge (§1 del brief):** el PR no se mergea sin los 3 selectores del Seeder operativos. Razón: un backend que lee 3 columnas NULL es indistinguible de uno que no las lee; ningún test de humo falla. Precedente exacto: `objective_by_platform`, vivo desde el 17-jul y NULL en las 16 filas porque nadie construyó el productor. **Aprendizaje: reordenar los pasos no protege — la definition of done explícita + confirmación obligatoria en el reporte, sí.**
+
+**QA:** casos 1-4 verdes (22/22 assertions), typecheck API + build front OK. **Casos 5-6 (live) PENDIENTES** — requieren Preview deploy; CC los declaró "verificados por construcción", que es honesto pero no es verificado.
+
+**⚠️ EL PR NO ESTÁ LISTO PARA MERGE.** Dos bloqueos: los 9 placeholders vacíos y los QA 5-6. **Desplegar con placeholders deja el sistema PEOR que antes:** el placeholder se lee correctamente (va a `injected`, no a `errors`), así que el fallback no dispara, y el `craftBlock` vacío REEMPLAZA el paréntesis enumerativo que sí existía.
+
+---
+
+### 5 · UX del Seeder — 3 ajustes de etiquetas (mismo PR #13)
+
+Los selectores funcionaban y escribían bien, pero eran **inusables para Marisol**: valores crudos en inglés (`CONVERSION`, `BRIDGE`, `educative`) y vocabulario de diseño filtrado a la interfaz ("artefacto de destino", "afina el arsenal", "modo degradado", "dimensión", "piso del arsenal").
+
+- **Ajuste 1** — etiquetas en español con glosa breve para Tipo de voz y Objetivo psicológico; canales con marca de cuáles son orales; ayuda contextual bajo cada selector.
+- **Ajuste 2** — `ARTEFACTO DE DESTINO` → `DÓNDE SE PUBLICA`; ayuda reescrita; placeholders sin `≤` (se lee como error de codificación); `CONTEXTO DE LA PIEZA — afina el arsenal` → `CONTEXTO — ayuda al generador a afinar`. **`EJE FUNDADOR` conservado**: es término del método, vive en el Tratado y en la DB, y Marisol ya lo usa.
+- **Ajuste 3** — aviso de modo degradado reescrito sin jerga; `craft_warnings` mapeados a texto legible; barrido de "pieza→texto" en microcopy preexistente.
+
+**REGLA DURA en los 3: solo cambian las etiquetas visibles. Los valores enviados a la DB no se tocan** (`psy_family` sigue mandando `CONVERSION` en mayúsculas porque lo espera `TAG_TO_FAMILY` en `fanout.ts`).
+
+**El criterio que ordenó los tres:** *lo que lee el operador va en su idioma; lo que leemos nosotros en logs se queda en vocabulario del sistema.* Dos audiencias distintas — se estaban mezclando. **Test: si para saber qué poner en un campo hay que haber leído un skill, la etiqueta está mal.**
+
+CC distinguió bien dos sentidos de la misma palabra: cambió "pieza→texto" en el formulario y **conservó "piezas del pipeline"** en el stub de `from_genome`, donde significa otra cosa. Un buscar-y-reemplazar habría roto el segundo.
+
+---
+
+### 6 · Deuda detectada — `craft_warnings` mapea frase→frase
+
+El front NO recibe los códigos crudos (`ARTEFACTO NO DECLARADO`): el backend ya los reduce a frases en `craftWarnings()`, y el front mapea frase→frase. **Si alguien toca la frase intermedia, el mapa deja de acertar en silencio** y el operador ve el texto intermedio. Nada rompe, nada se loguea — el mismo patrón de fallo enmascarado que perseguimos todo el sprint.
+
+CC lo detectó, propuso la corrección y **no la hizo porque el brief decía "backend fuera de alcance"**. Comportamiento correcto de su parte; el error de alcance fue de Claude. **Regla: mapear siempre sobre el CÓDIGO estable, nunca sobre texto legible intermedio.** Se corrige en el mismo PR donde se sustituyan los placeholders (ahí ya se toca `api/`, coste marginal cero).
+
+---
+
+### 7 · Hallazgos de infraestructura
+
+- **`api/` NO está en el grafo de `tsc -b`** del Orchestrator: ningún tsconfig lo cubre → `npm run build` **no typechequea los endpoints**. Todo cambio en `api/*` necesita typecheck standalone, con `--lib` que incluya DOM (los tipos de `fetch`/`Response.json()` lo requieren).
+- **El proxy `/api/professor` YA EXISTE y funciona** (`HRD_PROTOCOL` lo daba como "PENDIENTE DE CONSTRUIR"). GOTCHA: `action=ping` no es acción válida y devuelve 500 → **el paso 1 del HRD_PROFESSOR, que verifica con ping, concluye erróneamente que el proxy no existe.** Verificar con `action=checkpoint`. Actualizar HRD_PROTOCOL.
+- **`psycho_presets` vive en `public`, no en `intel`** (el insumo decía `intel.psycho_presets`). 13 filas activas. El mapeo objetivo→familia vive en `TAG_TO_FAMILY` de `fanout.ts`, no en la DB.
+- **RLS — alcance preciso: 6 tablas** sin RLS en `intel` (`brand_topics`, `calibration_sessions`, `calibration_turns`, `captured_techniques`, `iid_seeds`, `watcher_log`); las 7 `iid_*` sí lo tienen. Refina #68 y la ventana de seguridad del 17-jul. **La superficie CRECIÓ hoy:** `calibration_sessions` sumó 3 columnas que exponen criterio de voz de marcas de clientes. Sigue LATENTE (`auth.users` vacía).
+
+---
+
+### 8 · Estado al cierre y qué falta para R4B del sprint
+
+**Mergeado:** PR #9 (comm-arsenal + r4b v1.1 + INDEX v1.9).
+**Abierto:** PR #13 (Orchestrator) — código completo, DDL aplicado, **bloqueado por módulos vacíos + QA 5-6**.
+**Marisol NO puede trabajar con esto todavía.** Sigue calibrando como hasta ahora.
+
+**Secuencia hasta R4B:**
+1. Claude escribe los 6 módulos de runtime (~4.000 palabras de destilación — sesión propia).
+2. Sam los coloca en `unrlvl-context/skills/comm-arsenal/runtime/` y pushea.
+3. Brief corto a CC: copiar los contenidos reales sobre los 9 placeholders + corregir `craft_warnings` a códigos crudos. Mismo PR.
+4. QA 5-6 en Preview (Claude, con la URL).
+5. Sam revisa la UX del Preview con ojo de operadora y mergea.
+6. Cierre: sacar la advertencia de asimetría de `r4b-genome-calibration` §3 (deja de ser cierta al mergear).
+
+**Riesgo del paso 1 (~25%):** que los módulos, al ser prescriptivos, produzcan texto que suene a manual de copywriting — técnica visible, justo lo que `comm-arsenal` §9.1 prohíbe. Mitigación: redactarlos como restricciones y prohibiciones, no como sugerencias de qué hacer. Se detecta en los primeros 3 turnos de la primera calibración.
+
+**Professor:** 12 learnings (3 críticos score 5, 4 altos score 4, 5 medios).
+
+---
 
 ## 2026-07-17 — TANDA TÉCNICA IID: 5 frentes de deuda + Eje B VIVO + causa raíz de publicación + 6 EFs deployadas a prod
 
@@ -321,6 +440,35 @@ Cadena de 3 eslabones confirmada contra DB viva pero **latente, no activa**: (1)
 
 ### PRs mergeados esta tanda (Sam)
 #1 (SocialLab), #12 (Orchestrator/Sesión 3), #14 (D.1 versionado), #15 (iid-functions Sesión 1), #16 (Eje B); ImageLab #4/#5; CopyLab #4/#5. Todos + los 6 deploys de EF = parte técnica del IID COMPLETA.
+
+## 2026-07-13 (tarde) — Skill r4b-genome-calibration + fórmula marca↔persona + corrección rol Ivette
+
+Sesión de arquitectura de marca + creación de herramienta. Preparación para llevar ForumPHs/Ivette de cero a R4B en un chat limpio.
+
+### La fórmula marca↔persona (formalizada, validada 2 veces)
+Neurone↔Patricia fue el primer par; ForumPHs↔Ivette es el segundo. Misma estructura → fórmula reproducible, no caso a medida:
+- La MARCA (sistema/producto) lleva Conversión + Educativa + Editorial. NO lleva Profesional: se disuelve (el "currículum" de una empresa ES su Conversión; su criterio sobre el oficio ES su Editorial; el desdoblamiento Profesional existe en una PERSONA, no en una empresa).
+- La PERSONA (la figura que encarna) lleva Profesional + Educativa + Editorial.
+- 3 VERBOS que separan las voces de marca sin solape: Conversión VENDE (al decisor: Junta, comprador); Educativa ENSEÑA (al que VIVE/USA — el "doliente", el propietario bajo régimen de PH, la clienta — NO necesariamente el decisor); Editorial OPINA (del oficio/mercado, crítica y posición, no currículum).
+- FRONTERAS (la parte más valiosa; sin ellas 6 voces suenan igual): la marca no hace el trabajo de la persona y viceversa; la persona cita la marca como obra propia pero no la vende; FRONTERA DE RESPONSABILIDAD cuando la persona es profesional regulado — Ivette (Abogada) INTERPRETA el marco legal / ForumPHs (empresa) OPERA el sistema; cruzarlas es riesgo legal (la empresa daría consejo legal, o la jurista vendería servicio y perdería independencia), no solo estético.
+
+### Skill r4b-genome-calibration v1.0 (orquestador, delega — no duplica)
+Creado y pusheado por Sam a skills/r4b-genome-calibration/SKILL.md; registrado en INDEX v1.7. Lleva una marca de cero a R4B (Ready for Business): genoma(s) activo(s) + parche de datos + brand_topics + agentes + SCHEDULER del Orchestrator establecido = listo para publicar. Fases: 0 (revisar lo que hay, innegociable) → 1 (arquitectura de voz / fórmula marca↔persona) → 2 (siembra de ejes) → 3 (bucle Boids, DELEGA a genome-calibration §4) → 4 (destilación E6 + parche de marca, checkpoint doble) → 5 (brand_topics) → 6 (agentes + scheduler → R4B).
+PATRÓN DE DISEÑO: orquestar, no duplicar. La voz vive en genome-calibration (el Tratado, fuente única); r4b lo INVOCA. Duplicarlo generaría dos vocabularios desincronizados (el mismo anti-patrón del bug del psycho). Antes de escribir el orquestador se LEYÓ el Tratado completo para no duplicar/contradecir.
+Lo que r4b agrega sobre el Tratado (todo posterior al 2-jul): Fase 0, la fórmula marca↔persona, la regla dura generalizada (la voz demuestra nunca declara — ni promesas ni credenciales autodeclaradas; el dato/título verificable ES la credencial), el patrón alias, el rol anclado al dominio, y las fases post-voz. Método base Sam×Claude en chat; el Seeder de Marisol es una opción de DELEGACIÓN de la Fase 3, no el método base.
+NOTA: v1.0 se refinará al ejecutar ForumPHs de punta a punta (primera prueba de fuego real).
+
+### Corrección del rol de Ivette Flores (mutación en prod)
+Ivette corrigió: se la vendía como "Experta en Ley 284", pero cuando esa ley se derogue la credencial caduca. Rol correcto: "Abogada y Especialista en Régimen de Propiedad Horizontal". La ley es una INSTANCIA; el régimen es el DOMINIO. Dos matices: (1) "Abogada Y Especialista" (conjunción que suma dos calificaciones) — "Abogada" es título habilitante VERIFICABLE (hecho afirmable, cumple la regla dura), "especialista" se demuestra; la combinación da piso legal + profundidad. (2) es el MISMO rol que ejerce en ForumPHs — NO "Gerente General"; esto refuerza la frontera marca↔persona (ForumPHs pone SU criterio jurídico al servicio del cliente).
+Aplicado a public.brands (ForumPHs): positioning + brand_context corregidos, criterio anclado al régimen. PENDIENTE (#73): el genoma fphs_institucional v0.5 aún dice "Abogada Ley 284" → se corrige al recalibrar (será fphs_conversion v1.0, heredera de la v0.5, cuya arquitectura estado→sin sistema→Ley 284→ForumPHs→prueba es claramente la voz de Conversión de marca).
+
+### Estado tras la sesión
+- Skill r4b-genome-calibration v1.0 vivo y registrado (INDEX v1.7).
+- Fórmula marca↔persona formalizada en el skill.
+- Rol de Ivette corregido en public.brands; deuda en el genoma v0.5 (#73).
+- PRÓXIMO: ForumPHs de cero a R4B en chat nuevo (skill cargado). 6 voces (3 marca + 3-4 Ivette), marca primero, ~2 voces por sesión.
+- Professor: 4 learnings (13-jul).
+
 
 ## 2026-07-11 — Siembra de 4 ejes fundadores + PatriciaOsorio.com (alias) + REGLA DURA DE VOZ
 
