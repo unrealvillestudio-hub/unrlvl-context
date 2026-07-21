@@ -1,5 +1,195 @@
 # ForumPHs — Session Log
 
+## 2026-07-21 — PIVOTE FPHS-OPS → AGENTE WHATSAPP DE PROPIETARIOS · diseño completo + QA pre-diseño + diagnóstico Sage 50 + mapeo de ingesta validado 198/198
+
+### CONTEXTO — por qué esta sesión
+Sam llegó de una reunión larga: la app **FPHS-OPS** exigía una curva de aprendizaje que amenazaba
+su adopción por parte de las administradoras y de la propia Ivette. Decisión: **pivotar a un agente
+único de IA por WhatsApp** para los propietarios de todos los PHs. La sesión fue **diseño +
+verificación**, sin construcción. Cero escrituras en DB salvo Professor.
+
+### EL PIVOTE
+- **De:** app mobile OPS (curva de aprendizaje = riesgo de adopción).
+- **A:** UN agente conversacional por WhatsApp, disponible a todos los propietarios de cada PH.
+  Identifica por número, resuelve tareas acotadas (estado de cuenta, estado de reportes, crear incidencias).
+- **Principio:** cuando la barrera es la ADOPCIÓN y no la capacidad, mover el producto al canal
+  donde el usuario YA ESTÁ vence a construir mejor interfaz. **WhatsApp > Telegram** en Panamá
+  (pedir instalar app nueva reintroduce la fricción de la que se huye).
+- El agente reemplaza la **cara al propietario** de OPS. La **cara al administrador** (dashboard de
+  tickets) queda como **deuda heredada explícita**, no se pierde.
+
+### LA DB YA ANTICIPABA MULTICANAL (hallazgo de inventario)
+`incidents` ya trae `reported_via` (incluye `whatsapp`), `reported_by_type` (`propietario`/`residente`),
+`visible_to_owner`, `owner_notified_at`, `due_at`, `sla_hours`. `incident_categories` 16 filas con SLA.
+**`communications`** (building/unit/owner + channel + subject + body + status + sent_at) = **el outbox
+de emails YA EXISTE**. Lección: inventariar el esquema ANTES de diseñar capas nuevas — se iba a
+construir algo que ya estaba. El trabajo real es **identidad + canal + cerebro**, no estructura de negocio.
+
+### MODELO DE IDENTIDAD — declaración firmada (idea de Sam, superior al diseño inicial)
+En vez de INFERIR identidad desde datos sucios, el propietario **DECLARA Y FIRMA** qué números e
+identidades pueden acceder en su nombre (cónyuge, hijos, representante, residente). Convierte dato
+adivinado en **dato consentido con responsable legal**.
+- Beneficios de segundo orden: **disclosure/responsabilidad** del propietario · **trace auditable**
+  de quién accedió a nombre de quién · **informe mensual al titular real** = mecanismo PASIVO de
+  detección de abuso (si alguien accede sin que el titular sepa, el informe lo delata).
+- **Disuelve el problema del gestor/corredor:** deja de ser una inferencia sobre un número sucio y
+  pasa a ser un rol declarado y firmado.
+
+**DOS CORRECCIONES DE SAM a errores de diseño míos (ambas críticas):**
+1. **Nunca ofrecer las opciones válidas.** Preguntar *"¿hablo con Carlos o con María?"* REGALA las
+   respuestas. Forma correcta: **pregunta abierta** (*"¿quién habla?"*) con **match silencioso**
+   contra las identidades declaradas. Diferencia entre examen de opción múltiple (adivinable) y de
+   respuesta abierta (exige saber).
+2. **El onboarding NO puede hacerlo el agente.** Si el agente conduce la primera declaración, el
+   usuario **se auto-otorga acceso**: quien controla el teléfono se declara titular y firma su propia
+   autorización. El sujeto que se autentica no puede ser la autoridad que concede. → El onboarding lo
+   hace **la administración, PH por PH**, fuera del agente, y **sin canal alternativo** (la ausencia de
+   puerta trasera garantiza que el 100% de accesos tenga firma detrás).
+
+**Cascada de 3 factores** (fricción proporcional al riesgo; un titular simple no ve ninguna):
+número → identidad (si el número tiene varias) → **propiedad (siempre obligatorio para dato financiero)**.
+
+**Validación tolerante pero segura:** tolerar variación en cómo se EXPRESA la identidad, no ausencia de
+lo que VERIFICA. Nombre fuzzy ("Alberto" matchea "Carlos Alberto") con resolución **única**; propiedad
+con **discriminador mínimo** (*"¿tu 1A de qué torre es?"*). Nunca ofrecer opciones, nunca rechazar por forma.
+
+### CICLO DE VIDA POR TAREA + CANALES
+- **Persistencia por TAREA, no por sesión** (marco de Sam), simplificado finalmente a: **sesión
+  uniforme de 24h para todo**, PERO **el dato financiero re-confirma propiedad en el momento, siempre**.
+- **Lo sensible viaja por EMAIL** (no-reply + **CC a ops@forumphs.com** = constancia auditable), nunca
+  por WhatsApp. **HALLAZGO QUE LO VALIDA:** la cobertura de email es MUY superior a la de teléfono.
+- **"Entregado" = el CC llegó a ops@** — un mecanismo cumple dos funciones (constancia + confirmación).
+- **Autenticación del dato por ORIGEN** (precisión de Sam): el estado de cuenta no lo prepara un
+  administrador; son datos que **el sistema emite y firma desde la plataforma**. Si hay error → ops@.
+- El email es **solo saliente** (unidireccional). El agente informa **ESTADO** del ticket, **no
+  novedades** ("el plomero viene a las 3pm") porque esa narrativa nadie la captura todavía.
+
+### DASHBOARD DE TICKETS — deuda heredada de FPHS-OPS
+Alcance mínimo definido: ver tickets + timer SLA + cambiar estado + **escribir la "etapa"**.
+Permisos: Ivette/supervisión = todos los PHs; administradora = solo su PH.
+- **La "etapa" es el puente que faltaba:** al darle al administrador un campo donde escribe el avance,
+  esa narrativa **pasa a existir en la DB** y el agente puede devolvérsela al usuario.
+- **Decisión:** usar **`incident_updates`** (tabla existente) en vez de campo nuevo → **historial gratis**.
+- ⚠️ **FALTA `visible_to_owner`** en `incident_updates`. NO existe. `notified_owner` es "¿ya se le
+  avisó?", no "¿puede verlo?". Sin ese flag, notas internas del admin serían legibles por el propietario.
+- ⚠️ **`incidents.status` NO es enum**: es CHECK con **SEIS** valores
+  (`abierto/en_proceso/pendiente_proveedor/resuelto/cerrado/cancelado`) — mejores que los 3 diseñados
+  (`pendiente_proveedor` ES el caso del plomero). **Adoptar los seis.**
+
+### 🔴 QA PRE-DISEÑO — la Fase 1 era imposible (instrucción de Sam que salvó el sprint)
+Sam pidió *"un QA antes de diseñar, que CC no te sorprenda con hallazgos que tú debiste ver"*. Resultado:
+- **`arrears` = 0 · `mora_mensual` = 0 · `payments` = 0 filas.** Se había diseñado toda la Fase 1
+  (estado de cuenta con re-validación y entrega por email) **sobre tablas vacías**.
+- Se verificó que no hubiera fuente alterna: se leyó el código de **`fphs-bi-data`** → lee `mora_mensual`
+  del **MISMO** proyecto FPHS. No hay financieros escondidos en UNRLVL.
+- **REGLA DURA:** verificar **EXISTENCIA DE DATOS** (count), no solo existencia de esquema, antes de
+  diseñar una capacidad sobre una tabla.
+- Otros hallazgos del QA: `owners` usa `primary_email`/`secondary_email` (no `email`); `incident_updates`
+  sin `visible_to_owner`; `incidents.status` con 6 valores.
+
+**Cobertura de contacto (PHs piloto) — el email gana:**
+| PH | Owners | Con email | Con teléfono | Sin contacto |
+|---|---|---|---|---|
+| Venezia Tower | 182 | **180 (99%)** | 178 (98%) | 2 |
+| PH Torres de Castilla | 306 | **305 (99.7%)** | 148 (48%) | 1 |
+
+### SAGE 50 (ex-Peachtree) — diagnóstico
+7 máquinas locales, **propiedad de cada PH**, ubicaciones separadas, internet distinto, uso exclusivo del
+equipo FPHs. Versiones: **2022** (mayoría), **2023** (Los Álamos), **2026** (Torres de Castilla), todas
+Premium US Edition.
+- **HALLAZGO:** **CINCO PHs comparten serial** `34892-DC83-A5F1-DEDF` y Customer ID `4007208843`
+  (contradice "cada PH su licencia"); la mayoría con **Plan Level: Expired**. Para que Ivette lo sepa.
+- **Sage 50 es DESKTOP: no hay API a la que conectarse.** ODBC exige estar en la misma máquina/red.
+- **DECISIÓN: agente de sincronización local DESCARTADO.** Sería una flota de puntos de falla
+  distribuidos geográficamente, en máquinas de terceros, para un dato que cambia **una vez al mes**
+  (`mora_mensual` ya trabaja por período). Además: instalar software propio en la máquina contable de
+  un cliente es responsabilidad reputacional que no compensa.
+- **Camino elegido:** exportación periódica desde Sage → **parser de ingesta** → DB limpia.
+
+### MAPEO SAGE → SUPABASE — VALIDADO 198/198 (el riesgo que podía matar el proyecto)
+La pregunta crítica era *¿Sage identifica al cliente por nombre o por unidad?*. **Por unidad.**
+| PH | Códigos en Sage | Casan con DB | Regla |
+|---|---|---|---|
+| **Venezia Tower** | 61 | **61 (100%)** | quitar prefijo `^\d-` + quitar guiones → `07A` |
+| **Lefevre 75** | 137 | **137 (100%)** | quitar prefijo `^I-` + match literal → `01-E-A` |
+
+**Resuelto por dato + confirmado con Ivette:**
+- **`I-` en Lefevre = inmobiliaria** — unidades aún en venta por la promotora. `I-09-E-C` y `09-E-C` son
+  **el mismo apartamento**; el prefijo es **estado transitorio**, no atributo. El parser lo quita.
+- **`2-17-E` en Venezia = "apartamento con 2 propietarios"** (convención contable de ellos). Verificado:
+  **`17-E` NO existe** como Customer ID → **no hay duplicación**, hay un solo bloque
+  (GREYFIELD HOLDING, −129.15). Se carga como `17E`.
+- **Lefevre TIENE DOS TORRES: Este y Oeste** (corrección de Ivette a una conclusión errónea mía — yo
+  inferí "orientación, no torre" porque `units.tower` está NULL). → **`units.tower` de Lefevre es un
+  hueco de datos**, derivable del propio `unit_code`. Y el factor de desambiguación de propiedad
+  **aplica también a Lefevre**. Lección: **un campo NULL no es evidencia de que el concepto no exista.**
+
+### ANATOMÍA DEL EXPORT — los formatos NO son iguales entre PHs
+- **Idioma/hoja:** Venezia y Lefevre EN-ish (`Aged Receivables`); Torres de Castilla ES
+  (`Antigüedad de CXC`) y con **menos columnas**.
+- **Estructura de filas:** Venezia/Lefevre **DETALLADOS** (una fila por factura + subtotal por unidad +
+  separadoras); Torres de Castilla **RESUMIDO** (una fila por unidad).
+- **REGLA DE FILA que gobierna el parser:** es **MOVIMIENTO** si tiene `Invoice/CM #`; es **SUBTOTAL**
+  si tiene `Customer ID` sin `Invoice #`. Vacías y `Report Total` se descartan.
+- **Tipos de movimiento por prefijo de factura** (`M-`/`MUL-`=multa, `REC-`=pago, `EXT-`=extraordinario)
+  — **el diccionario varía por PH**.
+- **Saldos negativos = saldo a favor** (preservar, no son errores).
+- ⚠️ **NO HAY COLUMNA DE FECHA.** Un "historial de movimientos" sin cronología es cojo. Algunos IDs la
+  traen embebida (`REC-09-D-11062026`) pero no de forma consistente. **ACCIÓN: que el formato estándar
+  la incluya desde el día uno.**
+
+### DECISIONES DE SAM SOBRE LA INGESTA
+1. **Estandarizar el export** para obtener **DETALLE** → estado de cuenta con **historial de
+   movimientos**, no un saldo. Confirmado con Ivette.
+2. **Frontera limpia:** el **parser es el método de ingesta**; el agente **lee limpio desde DB**, nunca
+   toca un `.xlsx`. Toda la suciedad muere en la ingesta.
+3. **Ingesta estándar con interpretación bilingüe** (ES/EN → esquema canónico), con **config por PH**
+   (mismo patrón que `df_platform_parsing_config` del DF: client-specific knowledge = DATA, no code).
+
+### CENTRALIZACIÓN CONTABLE — proyecto aparte, mediano plazo
+Recomendado a Ivette. Decisión de Sam: **NO migrar los actuales**; incorporar los **NUEVOS** a un
+sistema **cloud centralizado**, y migrar los viejos poco a poco sin presión.
+- **Argumento más fuerte (no es el ahorro):** con **+20 PHs en 18 meses**, cada PH nuevo agrega una isla
+  más y la complejidad crece **linealmente con cada cliente**. La capacidad instalada no puede depender
+  de trabajo manual disperso en 20 localidades.
+- **Requisito innegociable de Sam:** **salida limpia garantizada** (un PH que se va se lleva sus libros
+  sin fricción) — evita lock-in y riesgo legal.
+- **NO mezclar** con el sprint del agente.
+
+### DEUDA DE DATOS RESUELTA SIN REGISTRO (hallazgo colateral)
+El session_log de **2026-06-01** marcaba `Venezia unit_code` como **CRÍTICA** ("fórmulas Excel
+`=SUM(A10)+1`, 364 filas = duplicado ×2 del real 182, requiere REIMPORTACIÓN"). **Verificado hoy: está
+sana** — 182 unidades, `unit_code` limpio (`07A`…), `tower` poblado correctamente (A–D→Torre A,
+E–H→Torre B). La reimportación se hizo en algún momento y **no quedó registrada**.
+**Lección: verificar el estado ACTUAL de las deudas de datos antes de arrastrarlas como vigentes.**
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+- **Cero escrituras** en FPHS (`tajuoqdbnsnzkhyqvdgs`) y en UNRLVL, salvo Professor. Todo fue lectura.
+- **Cero repos tocados.** No hay PRs de esta sesión.
+- **Incidente operativo:** la DB FPHS **auto-pausó** a mitad de sesión (free tier, ~7 días de
+  inactividad) — 4 timeouts consecutivos incluido un `SELECT 1`. Sam la despertó desde el dashboard.
+- **Professor: 19 learnings** (`session_date` 2026-07-21, `brand_id` ForumPHs, `approved_by_sam=true`),
+  **15 con `relevance_score` 5**.
+
+### ENTREGABLES DE LA SESIÓN
+1. `ForumPHs_ARCHITECTURE_BRIEF_owner_agent_pilot.md` — brief v0.1 (**parcialmente desactualizado**: la
+   sección de identidad la reemplaza el modelo de declaración firmada).
+2. `ForumPHs_AGENDA_owner_agent.md` — **agenda de implementación mapeada** (Fases 0-3, decisiones
+   ancladas, riesgos).
+3. Instructivo de export Sage 50 para administradoras.
+
+### PENDIENTE — próximos chats
+1. **Cerrar con Ivette:** columna de **fecha** en el export estándar · alcance del rol **gestor** ·
+   carga operativa del onboarding de declaraciones.
+2. **Recolectar exports** de los 5 PHs restantes y validar formatos.
+3. **Spec de construcción de Fase 0** para CC (normalización + tabla de identidad + parser), bajo HRD
+   y flujo de PR.
+4. **Poblar `units.tower` de Lefevre** (Este/Oeste) — escritura, va con su propio HRD.
+5. **Agregar `visible_to_owner`** a `incident_updates` — prerrequisito de Fase 2.
+
+---
+*ForumPHs · Pivote OPS→agente WhatsApp + QA pre-diseño + diagnóstico Sage 50 + mapeo 198/198 · 2026-07-21*
+
 ## 2026-07-04 — DF: R5 mergeado pero INERTE + SPRINT PARSER MULTI-PLATAFORMA (Lefevre 75/TOC) + Sonnet 5
 
 ### CONTEXTO — por qué esta sesión

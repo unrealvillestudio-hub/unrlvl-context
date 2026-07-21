@@ -258,6 +258,132 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-20/21 · CRAFT-01 CERRADO Y MERGEADO — el arsenal opera en el runtime · 9 módulos canónicos · truncado por `thinking` descubierto y corregido
+
+**Conducido por:** Claude Opus 4.8 (coordinación, diseño, briefs, verificación) + chat auxiliar (redacción de los 9 módulos) + Claude Code (implementación y QA en vivo) + Sam (decisiones y merge)
+**Resultado:** **PR #13 MERGEADO.** El arsenal de comunicación se inyecta en cada turno del bucle de calibración, en el chat y en el Seeder por igual. La brecha que `comm-arsenal` §12 declaraba —"los skills solo operan cuando Claude escribe en el chat"— está cerrada.
+
+---
+
+### 1 · Los 9 módulos de runtime — escritos y canónicos
+
+Escritos en chat auxiliar, pusheados por Sam a `unrlvl-context/skills/comm-arsenal/runtime/`:
+
+| Módulo | Bytes | Tokens (est. +30% tokenizer) |
+|---|---|---|
+| `core.md` | 2.316 | ~714 |
+| `structure.md` | 2.155 | ~718 |
+| `written.md` | 2.166 | ~746 |
+| `oral.md` | 2.280 | ~777 |
+| `psy_CONVERSION.md` | 1.106 | ~369 |
+| `psy_COMMUNITY.md` | 1.113 | ~382 |
+| `psy_AUTHORITY.md` | 1.379 | ~417 |
+| `psy_BRIDGE.md` | 1.192 | ~411 |
+| `profile_conversion.md` | 2.350 | ~827 |
+
+**Qué SON estos módulos (decisión de diseño, no negociable):** NO son un resumen del skill. Son las **REGLAS EJECUTABLES**; el skill es su **EXPLICACIÓN**. Dos artefactos distintos, no el mismo en dos tamaños. Redactados como **restricciones y prohibiciones**, nunca como recetas — ese es el antídoto contra el riesgo de que el generador produzca texto que suene a manual de copywriting (`comm-arsenal` §9.1).
+
+**Tres decisiones tomadas con el contrato a la vista:**
+- **`psy_BRIDGE` NO hereda de AUTHORITY.** La familia es excluyente (solo se carga una), así que heredar habría significado duplicar texto de AUTHORITY dentro de BRIDGE — exactamente lo que "orquestar, no duplicar" prohíbe.
+- **Reparto PSY vs profile:** el PSY lleva la **restricción de estímulo** (qué siente el lector); el profile lleva la **parametrización de voz** (filo, cierre, blanco) y sus técnicas propias. Un módulo responde "qué empuja", el otro "cómo suena quien empuja".
+- **NO se copió `injection_copy` de `psycho_presets`.** Esa tabla la consume `fanout.ts`; una copia en el módulo sería una segunda fuente que se desincroniza al primer UPDATE. Es el mismo fallo silencioso que el sprint perseguía.
+
+**Los 4 psy quedaron por debajo del piso de 600 tokens (369-417) — a propósito.** Cada uno es una restricción de estímulo, no un cuerpo de doctrina; lo transversal ya vive en `core` y `structure`. **Corolario inverso, útil como alarma:** si un psy creciera a 700, habría que sospechar duplicación.
+
+**Restricción de formato que el brief no tenía:** `stripProvenanceHeaders` borra **TODO** comentario HTML (`/<!--[\s\S]*?-->/g`), no solo la cabecera. Ningún módulo puede usar comentarios HTML internamente. Y si tras limpiar queda vacío → `errors`.
+
+---
+
+### 2 · El hallazgo que casi cierra el sprint en falso: TRUNCADO POR `thinking`
+
+**El QA en vivo reveló que el feature no producía turnos utilizables.** Dos de los tres casos daban 502:
+
+- **Camino feliz** (5 módulos, prefijo 6.046 tok): `stop=max_tokens out=2048 blocks=[thinking]` → el bloque de thinking consumió **el presupuesto entero**, cero bloques de texto → `generation_failed` ("Anthropic sin texto").
+- **NeuroneSCF degradado** (2 módulos, prefijo 8.295 tok): el texto arrancó pero se cortó → **JSON inválido**.
+- **D7Herbal degradado** (prefijo 3.627) sí generaba.
+
+**Causa raíz:** el bloque `thinking` de `claude-sonnet-5` **cuenta contra `max_tokens`**, y `max_tokens: 2048` era insuficiente cuando el prompt real crecía.
+
+**Fix aplicado** (commit `2811bb7`): `thinking: { type: 'disabled' }` — la tarea es **determinista** (generar una pieza siguiendo restricciones declaradas), no exploratoria — **más** `max_tokens: 2048 → 4096` por margen.
+
+**Re-QA: los tres casos verdes.**
+
+| Caso | `injected` | `stop_reason` | `out=` |
+|---|---|---|---|
+| 5 — sin selectores (D7Herbal) | `[core, structure]` · skipped 3 · errors 0 | `end_turn` | 209 |
+| 6 — NeuroneSCF NULL (peor prefijo) | `[core, structure]` · skipped 3 · errors 0 | `end_turn` | 472 |
+| Camino feliz — 5 módulos | `[core, structure, written, psy_CONVERSION, profile_conversion]` · skipped 0 · errors 0 | `end_turn` | 157 |
+
+El Caso 6 corrió sobre **la misma sesión de NeuroneSCF que truncaba antes** — la prueba más fuerte de que el fix funciona.
+
+---
+
+### 3 · Números reales medidos (reemplazan las estimaciones del diseño, que erraban al 50%)
+
+| Métrica | Estimado (18-jul) | Real medido |
+|---|---|---|
+| Prefijo estable, camino feliz | ~3.400 tok | **6.046 tok** |
+| Prefijo, degradado D7Herbal | — | **3.627 tok** |
+| Prefijo, degradado NeuroneSCF | — | **8.295 tok** |
+| `cache_read_input_tokens` turno 2 | — | **3.627** (caching CONFIRMADO) |
+| Salida por turno | — | **157-472 tok** (techo 4.096) |
+
+**El factor dominante NO son los módulos: es `brandKnowledge`.** NeuroneSCF llega a 8.295 con solo 2 módulos porque su contexto de marca pesa 7.362. Los 3 módulos extra del camino feliz aportan 2.419.
+
+**Y eso está BIEN.** Se propuso un ítem #78 para "acotar `buildBrandKnowledge`" y **se retiró tras el cuestionamiento de Sam**: `max_tokens` limita solo la SALIDA (los `out=` reales son 157-472 contra techo 4.096); el input tiene la ventana del modelo (~200K) como límite, o sea **dos órdenes de magnitud de margen**. Además el prefijo grande es el que se **cachea**. Acotarlo habría degradado la generación para ahorrar centavos. Un contexto de marca grande es señal de marca bien poblada, no un problema.
+
+El **#79** propuesto ("fallback ante prompt sobredimensionado") también se retiró: no hubo tal problema — hubo un problema de `thinking`, ya resuelto. La vigilancia queda cubierta pasivamente por la instrumentación de logging.
+
+---
+
+### 4 · Deuda #75 cerrada — y el arreglo fue QUITAR código
+
+`craftWarnings()` traducía los `SkipRecord` a frases en minúscula antes de mandarlas al front, que las volvía a mapear. Dos capas de traducción encadenadas: tocar la frase intermedia rompía el mapa **en silencio**.
+
+Al leer el código se verificó que **`SkipRecord` ya expone `module` y `reason` por separado** — el código estable ya viajaba y se estaba descartando. El fix: dejar de traducir en el backend; el front mapea **una sola vez sobre `reason`** (`ARTEFACTO NO DECLARADO`, `MODO NO DECLARADO`, `FAMILIA NO DECLARADA`, `TIPO DE VOZ NO DECLARADO`), con fallback pass-through para razones sin mapa.
+
+**Verificado en vivo** en las ramas normales de `start` **y** `verdict`.
+
+---
+
+### 5 · Instrumentación permanente (desviación de CC, aceptada)
+
+CC detectó que `usage` y `stop_reason` de Anthropic eran **inobservables desde fuera** y añadió una línea de log en `generateTurn`, fuera del brief.
+
+**Sin esa línea, el re-QA habría reportado verde con el feature roto.** Se decidió que **queda como instrumentación permanente**, no como andamio de QA, y su comentario se reformuló en ese sentido. Es el mismo principio que separar `skipped` de `errors`: lo que no se puede ver no se puede diagnosticar.
+
+---
+
+### 6 · Estado final del sprint
+
+**MERGEADO.** `api/craft-modules/` y `api/_craftModules.ts` vivos en `main` de Orchestrator. 7 commits en el PR.
+
+- 3 columnas en `intel.calibration_sessions` (`voice_type`, `target_artifact`, `psy_family`) — aplicadas en prod, 10 filas existentes en NULL = modo degradado.
+- Front del Seeder con 3 selectores + aviso no bloqueante + 3 ajustes de UX (la jerga de Claude salió de la interfaz).
+- Prompt caching funcionando.
+- **Marisol puede calibrar con el arsenal operando en el runtime.**
+
+**Pendientes que deja abiertos:**
+- **#77** — perfiles `profile_editorial` / `profile_educative` / `profile_professional` no existen. Al declarar esas voces, el módulo cae a ENOENT → `errors` (no `skipped`), y el operador ve un warning de fallo de LECTURA cuando en realidad es contenido no escrito. No tumba el turno (core+structure entran igual), pero ensucia `errors` y **entrena al operador a ignorarlo** — justo lo que el sprint quería evitar. Impacto en calidad: esas voces se calibran sin su parametrización.
+- **#76** — sacar la advertencia de asimetría de `r4b-genome-calibration` §3: dejó de ser cierta con el merge.
+- La UI no distingue "no escrito todavía" de "ilegible" — ambos colapsan en `errors`.
+
+---
+
+### 7 · Aprendizajes del tramo (7 learnings en Professor)
+
+**Críticos:**
+1. **Confundí el límite de input con el de output** y construí una deuda de arquitectura falsa encima. Sam lo cuestionó con la pregunta correcta: *¿por qué acotar aunque no genere bien?* Un número estimado no fundamenta una deuda; se mide primero.
+2. **`thinking` de sonnet-5 compite por `max_tokens`.** En toda llamada con tarea determinista y prompt grande debe ir explícitamente `disabled` — el default lo habilita.
+
+**Altos:**
+3. **La degradación elegante NO protege del tamaño del prompt.** Son dos fallos distintos que yo había mezclado: cubre la ausencia de datos, no el volumen. Al diseñar un fallback, nombrar de qué protege y de qué NO.
+4. **La instrumentación que hace visible el fallo es parte del feature**, no andamio.
+5. **Leer el código antes de diseñar el arreglo** — el dato correcto puede estar ya presente y descartándose (#75). Corolario: el gh proxy acepta `?branch=`, así que se puede leer código de una rama de PR sin pedirle `cat` a CC.
+6. **Placeholder vacío = fallback que no dispara** (confirmado en la práctica). Razón concreta de que la definition of done fuera "módulos reales + QA en vivo", no "build verde".
+
+---
+
 ## 2026-07-18 · comm-arsenal + r4b v1.1 + INDEX v1.9 · Sprint CRAFT-01 (el arsenal llega al runtime) · UX del Seeder
 
 **Conducido por:** Claude Opus 4.8 (chat: diseño, skills, briefs, verificación) + Claude Code (implementación) + Sam (decisiones y merges)

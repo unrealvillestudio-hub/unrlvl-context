@@ -82,6 +82,17 @@ Los riesgos se cuantifican y las mitigaciones se codifican **en un campo del gen
 ### 8 · Bilingüe = re-anclar, no traducir
 ES y EN aplican el mismo genoma pero **se generan por separado desde origen**. Nunca traducir de uno al otro. El filo se mantiene pero se ancla en el argumento, no en el insulto: **el español castiga la arrogancia distinto que el inglés.** Registro neutro internacional salvo que la marca declare lo contrario (excepción viva: es-FL en PatriciaOsorioConectando, por comunidad íntima homogénea — el idioma sigue a la AUDIENCIA).
 
+### 10 · Variabilidad de publicación — no enlazar afuera por defecto
+_(Rescatado de `RETOMA_AIID_ARTICULOS.md` 2026-06-01, antes de archivarlo el 21-jul.)_
+
+No todo post que presenta a otra marca o persona debe **sacar al lector de la plataforma**. Se modula entre dos modos, y elegir siempre el mismo es un error:
+- **Redirección** — traer a la otra voz con un device ("he recibido un mensaje de…") + enlace a su terreno.
+- **Retención** — dejar que el visitante EXPERIMENTE esa voz ahí mismo, en el post nativo, **sin enlace**. Si no le bastó, un post posterior lo lleva de paseo a su mundo.
+
+**Razón técnica, no estética:** los posts con links externos tienen **menos alcance orgánico** (Meta y LinkedIn penalizan sacar gente de la plataforma). Mezclar formatos protege el alcance **y** construye la otra voz.
+
+El pipeline no debe enlazar afuera por defecto: la variabilidad es una decisión por pieza.
+
 ### 9 · Nunca inventar
 Si no se sabe, se pregunta o se lee la DB. El generador debe leer el conocimiento REAL de la marca (`product_blueprints`, `brand_services`, `brand_copy_profiles`) — es lo que hace E7/`_genomePromptBuilder`.
 

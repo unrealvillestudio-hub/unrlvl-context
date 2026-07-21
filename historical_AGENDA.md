@@ -10,6 +10,13 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-07-21
+_Primera ejecución del barrido automático del HRD_ACTUALIZA paso 10 (protocolo v1.3, creado 18-jul). Criterio aplicado: completado ✅ + más de 30 días (corte 2026-06-21) + sin referencias activas. Aprobado por Sam antes de mover._
+### #5i — GENOMA v1.0 DE LUCIEN — CERRADO (19-jun)
+Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → generativo/constructor. 8 campos nuevos. version 0.5→1.0 (lucien_editorial + lucien_social). Professor: 6 learnings. Validación pendiente: 2-3 piezas IID real post-R4B. NOTA: el gate Boids-Lucien (Claude propone, Sam juzga SÍ/NO, converge) es el MODELO del bucle E5b y del skill E7.
+### Resueltos comprimidos del 13 al 24-jun
+- ✅ Eje B diseño (24-jun b). ImageLab Imagen→Gemini (24-jun). R4B Chat 2 (20-jun). #5i GENOMA v1.0 LUCIEN (19-jun). IID QUALITY LOTE A (18-jun). Builder+Watcher LIVE (16-jun). NSCF Resend/Fase 2 (13-16 jun).
+---
 ## Migración 2026-06-28
 
 ## 🟢🟢🟢 SPRINT SEMBRADOR — COMPLETO (T1-T4 + #48 cerradas)
