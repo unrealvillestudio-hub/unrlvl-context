@@ -1,5 +1,147 @@
 # ForumPHs — Session Log
 
+## 2026-07-21 (b) — CALIBRACIÓN Y DESTILACIÓN DE VOZ · familia de marca ForumPHs COMPLETA (`fphs_educativa` v1.0 + `fphs_editorial` v1.0)
+
+> Sesión distinta y posterior a la del pivote FPHS-OPS→agente WhatsApp del mismo día. Aquella fue producto e infraestructura; ésta es VOZ. No se tocó nada del agente.
+
+### CONTEXTO — qué se pidió y qué cambió en el camino
+Sam pidió "calibrar y destilar ForumPHs" con el skill `r4b-genome-calibration`, 2 voces en la sesión,
+y declaró a **Ivette como marca propia** (vinculada a FPHs igual que PO a NSCF) — su calibración
+queda para sesión aparte. La Fase 0 cambió el plan: **la deuda #73 ya estaba cerrada**.
+
+### FASE 0 — lo que la verificación encontró (y contradijo)
+| Checklist | Estado real |
+|---|---|
+| Marca en `public.brands` | ✅ rica y ya corregida (rol de Ivette anclado al RÉGIMEN, RUC, 8 PHs, slogan, ICP) |
+| Genomas | ✅ **`fphs_conversion` v1.0 ACTIVA desde el 17-jul** · `fphs_institucional` v0.5 desactivada el mismo día |
+| `intel.brand_topics` | ❌ **CERO filas** — el bloqueo real de R4B |
+| Material | 2 servicios · 1 copy_profile · 3 personas · 2 humanize · 0 blueprints (normal: es servicio) |
+| Sesiones previas | 1 sola, `abandoned`, 2 turnos |
+
+- **#73 YA ESTABA CERRADA.** La AGENDA la seguía listando como pendiente; `voice-conversion` §5 tenía razón.
+- **La sesión abandonada (17-jul) es la caja negra del sprint CRAFT-01:** su turno 2 fue NO por
+  redacción, con la nota *"el generador del bucle no carga arsenal de comunicación"*. Es el origen
+  documental de `comm-arsenal` y del PR #13.
+
+### PARCHE DE MARCA — `brand_services` decía que ForumPHs vende inmuebles
+Mismo patrón que Vizos (#70): **datos falsos, no incompletos**. Con E7 vivo el generador los lee.
+UPDATE sobre las 2 filas existentes (IDs reutilizados, cero FKs tocadas):
+| id | antes (falso) | ahora |
+|---|---|---|
+| `7f16c41a` | bienes raíces Panamá | **administración de propiedad horizontal** |
+| `63456313` | propiedades en venta | **inteligencia financiera y reporte BI para juntas directivas** |
+
+### AUDITORÍA DE `fphs_conversion` v1.0 → **SANA, NO SE RECALIBRA**
+Verificada contra la regla dura y `voice-conversion`: rol anclado al Régimen (Ley 284 degradada a
+instancia), autoridad prohibida, promesas prohibidas, oposición prohibida, blanco = patrón.
+**Rasgo que excede el perfil estándar y merece subir al skill:** su `argumentative_architecture`
+resuelve el **decisor doble** — la JD impulsa pero la asamblea ratifica, así que la voz no solo
+convence al miembro de JD: **le entrega argumentos que él pueda defender ante los propietarios**.
+
+### ARQUITECTURA — la fórmula §1.1 se corrigió en vivo
+El eje sembrado para la Editorial (audiencia = gremio) **fue derrumbado por Sam en el turno 1**:
+*"el gremio son mis competidores, no tenemos interés en aportarles nada; el target siempre es el doliente"*.
+→ **Educativa y Editorial COMPARTEN AUDIENCIA y se separan por VERBO.** Hallazgo de arquitectura nuevo.
+
+| | `fphs_conversion` v1.0 | `fphs_educativa` v1.0 | `fphs_editorial` v1.0 |
+|---|---|---|---|
+| Verbo | VENDE | **ENSEÑA** | **REVELA** |
+| Audiencia | JD-decisor | propietario-doliente | propietario-doliente |
+| Blanco | el administrador reactivo | su desconocimiento | la práctica del oficio |
+| Filo | — | 3/10 | 7/10 |
+| Cierre | CTA | instrumento | golpe único |
+
+La marca **no lleva Profesional** (se disuelve en Ivette-persona). Familia de marca **COMPLETA**.
+
+### `fphs_educativa` v1.0 — 6 turnos (5 SÍ / 1 NO positivo), sesión `a082116f`
+Artefactos recorridos: blog, meta_ig, meta_fb, email. Temas: financiero **y** documental.
+- **T1 (blog, "Usted no compró un apartamento")** — SÍ total. Reencuadre de categoría: compró una
+  fracción indivisa + una cuota de decisión. Confirmó que **la frontera no-vender NO deja la voz sin fuerza**.
+- **T2→T3 (caption)** — SÍ con defecto de VOLTAJE. **Filo 3/10 = no atacar a nadie, NO voltaje bajo.**
+  Educar sin impacto no enseña. Remate corregido: *cuota que nunca sube = deuda diferida que aparece el día que venda*.
+- **T4 (caption 70 palabras)** — SÍ total y **FRONTERA RATIFICADA**: Sam pidió que el doliente exigiera
+  revisar al administrador **actual**; se objetó que eso es Conversión con máscara educativa (mover al
+  propietario contra un proveedor concreto para que entre ForumPHs). Sam ratificó: *"no lo empujes hacia
+  ningún lado, enséñales a ver los números"*. **La voz instala el estándar y deja que el estándar trabaje.**
+- **T5 (email, el acta de asamblea)** — SÍ. **Prueba de estrés superada: la voz existe fuera del dinero.**
+- **T6 CONTROL NEGATIVO** — NO. Pieza competente rechazada por venta blanda + registro de gremio + juicio prestado.
+
+### `fphs_editorial` v1.0 — 14 turnos (10 SÍ / 4 NO), sesión `e71bebdc`
+Temas: traspaso de administración · la asamblea anual · recaudación y fondo de reserva.
+- **T1 NO ESTRUCTURAL** — derrumbe del eje (audiencia). Ver arriba.
+- **T2 NO por DATO** — se afirmó que no existe licencia para administradores. **Un dato que se
+  malinterpreta en primera lectura es un dato roto aunque sea cierto.** Retirado hasta verificar.
+- **Tres técnicas de marketer fijadas por Sam:** TRADUCIR A INTERÉS PROPIO (*"lo que hace falta"* →
+  *"lo que tu inversión necesita"*) · ANALOGÍA QUE POSICIONA (*multimarca vs especialista* — hace el
+  argumento y planta la categoría sin nombrar la marca; jamás una analogía que culpe al lector de su
+  compra) · CORTAR PARA ASIGNAR (*"le asigna A USTED responsabilidades. Y son concretas."*).
+- **T5 SÍ tibio → REGLA: UN SOLO GOLPE POR PIEZA.** Dos golpes buenos encadenados **se cancelan** si
+  sus cargas son opuestas (uno cierra en pérdida, el otro abre en competencia). Sam: *los golpes se
+  administran en el tiempo; si ignora el primero tal vez fue descuido, un segundo golpe en OTRA
+  ocasión lo obliga a reflexionar, o simplemente no tiene ese problema*.
+- **T6 NO — el cierre trabajaba para el competidor:** *"usted no necesita un administrador mejor,
+  necesita que el próximo no tenga que adivinar"* absolvía al administrador actual, le pedía al
+  propietario que lo mejorara, y **regalaba la tesis (trazabilidad)** sin dejarla pegada a nadie.
+  Causa raíz: **"usted no necesita X" es una instrucción**. También se prohibió el modismo calcado
+  *"se llama martes"* (it's called Tuesday): claro para quien lo capta, opaco para el resto.
+  → **OBJETIVO EXPLÍCITO DE LA VOZ: que el propietario termine sabiendo QUÉ DEBERÍA PODER PEDIR Y NO PUEDE.**
+- **T9 NO — RETROCESO:** al reducir a un golpe se suavizaron los dos. **Un golpe único no es un golpe
+  más suave: es un golpe sin competencia.** Nombrar el objeto con precisión ES el golpe
+  (*"revise las proyecciones financieras a cinco y diez años de su edificio"*); genericarlo lo desactiva.
+- **T11 SÍ limpio — COMPOSICIÓN DEL DOBLE REMATE: imagen primero, instrumento después.** Al revés el
+  lector ya tiene tarea y deja de escuchar; en este orden **se da la vuelta y corre al espejo con la
+  herramienta en la mano**.
+- **T13 (65 palabras)** — la voz sobrevive al formato corto. Dos hallazgos: **"y usted es socio"**
+  (reencuadre de POSICIÓN: no es cliente de una administración, es copropietario de una empresa que
+  factura) y **ADMINISTRADO vs ATENDIDO** — toda la tesis comprimida en dos palabras.
+- **T14 CONTROL NEGATIVO** — NO. Sam: *"esta pieza es tan inflamable como Sam, pero **FPHs no es Sam**"*.
+  **Riesgo específico de esta voz** (distinto al de la Educativa): con filo 7 y audiencia doliente la
+  fuga no es hacia la venta blanda sino hacia **instigar al propietario contra su administrador** —
+  gana al doliente y **pierde al decisor**, que es quien firma el contrato.
+
+### BANDERAS DE LA MARCA (declaradas por Sam, embebidas en la Editorial)
+**EL SISTEMA** y **EL ENFOQUE FINANCIERO** — las dos carencias mayores de la competencia. Cada pieza
+demuestra la ausencia de una: sin sistema (nada se hereda entre gestiones, el método vive en la cabeza
+de una persona, la reunión sustituye al método) o sin finanzas (no hay proyección, la reserva no se
+calcula, la mora se cobra en vez de preverse). **Nunca se dice que ForumPHs las tiene: se instala el
+estándar y el lector deduce quién lo cumple.**
+
+### DATO REGULATORIO — VERIFICADO CON IVETTE (cierra el pendiente del T2)
+En Panamá las **únicas** licencias del sector son las de **Corredor de Bienes Raíces**, otorgadas por
+el **MICI previo examen**, y **NO se les exigen a los administradores de PH**. La Ley 284 sugiere muy
+sutilmente perfil gerencial y conocimientos en RRHH y régimen laboral, pero **nadie lo revisa ni lo
+acredita**; el proyecto de ley que iba a exigirlo murió en la cuna. **Uso permitido:** afirmar que
+administrar un PH en Panamá no exige licencia, examen ni acreditación verificable. **Cuidado de
+redacción:** distinguir SIEMPRE *administrador de PH* de *corredor de bienes raíces*. Grabado en
+`application_constraints` de ambos genomas nuevos.
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+- `public.brand_services` — UPDATE de 2 filas (parche de marca, IDs reutilizados).
+- `intel.calibration_sessions` — 2 INSERT (`a082116f` educativa, `e71bebdc` editorial), ambas
+  `converged` con `resulting_voice_id`. **Primeras sesiones que usan las 3 columnas del CRAFT-01**
+  (`voice_type`, `target_artifact`, `psy_family`) con valor real; las 10 anteriores quedaron NULL.
+- `intel.calibration_turns` — 20 turnos persistidos con veredicto y notas.
+- `public.brand_voice_genome` — 2 INSERT: `fphs_educativa` v1.0 + `fphs_editorial` v1.0, ambas
+  `active=true`, `maturity='calibrated'`. **`fphs_conversion` v1.0 NO se tocó.**
+- **Cero repos tocados. Cero EFs. Cero PRs.**
+- **Professor: 12 learnings** (`session_date` 2026-07-21, `approved_by_sam=true`), 10 con score 5.
+  ⚠️ **Con los 19 de la sesión del pivote, hoy hay 31 learnings con fecha 2026-07-21** — un
+  `UPDATE ... WHERE session_date='2026-07-21'` alcanza a los dos lotes.
+
+### PENDIENTES QUE DEJA ESTA SESIÓN
+1. **`intel.brand_topics` de ForumPHs = CERO filas.** Es lo único que separa a la marca de operar en
+   R4B; sin topics, `approve` falla con "domain sin suscriptores". Ahora hay 3 voces esperándolos.
+2. **Los 2 `humanize_profiles` de ForumPHs no se verificaron** contra estas voces nuevas.
+3. **`maturity` usa dos convenciones** en `brand_voice_genome` (`calibrated` vs `v1.0`). No rompe
+   nada hoy; conviene unificar antes de que haya seis voces.
+4. **Ivette-persona:** marca propia (decisión de Sam). Requiere fila nueva en `public.brands` —
+   no hay fila reutilizable, así que **no aplica el patrón alias**. Sesión propia: la frontera de
+   responsabilidad (Ivette INTERPRETA el marco / ForumPHs OPERA el sistema) no es trámite.
+5. **Sitio forumphs.com** — 4 violaciones de voz (AGENDA #74 original) siguen sin corregir.
+
+---
+*ForumPHs · calibración y destilación de voz · familia de marca completa (Conversión + Educativa + Editorial) · 2026-07-21 (b)*
+
 ## 2026-07-21 — PIVOTE FPHS-OPS → AGENTE WHATSAPP DE PROPIETARIOS · diseño completo + QA pre-diseño + diagnóstico Sage 50 + mapeo de ingesta validado 198/198
 
 ### CONTEXTO — por qué esta sesión
