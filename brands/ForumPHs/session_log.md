@@ -1,5 +1,104 @@
 # ForumPHs — Session Log
 
+## 2026-07-22 — SIEMBRA DE `brand_topics` · ForumPHs pasa de CERO topics a DOS voces operables (Educativa + Editorial) + mapa de dominios de las 3 voces
+
+> Continuación directa de la calibración del 21-jul (b). Aquella destiló las voces; ésta les da AGENDA.
+> ForumPHs deja de estar muda: el pipeline ya puede ejecutar dos de sus tres voces.
+
+### CONTEXTO
+Sam eligió cerrar el pendiente #82 (`intel.brand_topics` = 0 filas). Método acordado: **explorar los
+dominios de cada voz ANTES de fijar cadencia** — la cantidad de topics no es la meta; cada voz necesita
+los territorios que requiera para respirar sin repetirse, y mapear todo primero deja ver el volumen real
+del que sale la cadencia honesta. Se mapearon los **23 dominios de las 3 voces** y se sembraron las **2
+primeras voces completas** (Educativa 7 + Editorial 7). Conversión (9 dominios) queda para sesión propia.
+
+### MAPA DE DOMINIOS — grabado en la DB (no se pierde entre sesiones)
+Los 3 mapas viven en `founder_axis.mapa_de_dominios` de cada sesión de calibración
+(`a082116f` educativa, `e71bebdc` editorial) y en `fphs_conversion.application_constraints`.
+Dominios que comparten TEMA (mora, asamblea, fondo de reserva) **no se pisan: se separan por VERBO.**
+
+**Educativa (7, ENSEÑA):** patrimonio-vs-apartamento · la-cuota-por-dentro · el-acta-como-instrumento ·
+mis-derechos-bajo-el-regimen · la-asamblea-que-no-entiendo · la-mora-cuando-escala · el-regimen-que-me-rige.
+Los dos últimos con frontera anti-asesoría (marco general, no el caso del lector = Ivette).
+
+**Editorial (7, REVELA):** administrado-vs-atendido (reencuadre madre) · administracion-sin-sistema ·
+la-reunion-como-metodo · el-dinero-sin-proyeccion · la-mora-que-se-persigue · mis-datos-de-quien-son
+(mayor filo latente) · hacia-donde-va-el-oficio (horizonte internacional).
+
+**Conversión (9, VENDE, DOBLE FRENTE — mapa grabado, SIN sembrar):** el-momento-del-cambio ·
+la-jd-que-hereda-un-desastre · rendir-cuentas-sin-sudar · el-informe-que-si-existe ·
+profesionalizar-sin-perder-el-control · la-cuota-extraordinaria-que-viene · mi-unidad-vale-menos-y-no-lo-sabes ·
+las-cuatro-preguntas-que-nadie-calcula · el-futuro-de-tu-patrimonio.
+
+### CORRECCIÓN DE ARQUITECTURA — la JD es INFLUENCER, no decisor (Sam)
+El decisor soberano de un PH es la **ASAMBLEA**; la JD propone/empuja/recomienda a los suyos pero no firma
+la voluntad colectiva. Consecuencia: **la Conversión tiene DOS FRENTES.** Frente JD = vende el servicio
+(CTA contrátennos). Frente doliente = vende **la EXIGENCIA** (CTA exige el estándar), armando al propietario
+para que presione en asamblea. Un influencer capturado (JD que busca conocidos, acepta arreglos) se
+neutraliza con un soberano informado. El mismo dominio se cuenta con dos enfoques (`audience_frame` jd/doliente),
+no son dos listas. **La frontera del turno 4 escala:** el frente doliente SÍ empuja a la acción — pero hacia
+el ESTÁNDAR, nunca contra la persona ("exige que se evalúe" = legítimo; "exige que echen a tu administrador"
+= quema, gana al doliente y pierde al influencer que trae el contrato).
+
+### EL BI REAL COMO ACTIVO DE CONVERSIÓN
+Sam adjuntó `ForumPHs_BI_ClienteConfidencial_2025` — proyección financiera real de un PH. Es **la prueba de
+las dos banderas hecha producto**: convierte cada carencia en una consecuencia futura con nombre, fecha y
+monto (extraordinaria de $420–630/unidad en 2028 por elevadores; índice patrimonial 54/100; fondo de reserva
+en $0; 1.3 meses de liquidez; los 4 indicadores que "ningún administrador calcula"; calendario de reemplazos
+2026-2030). Dio **4 dominios nuevos a la Conversión** (cuota-extraordinaria-que-viene, mi-unidad-vale-menos,
+las-4-preguntas, el-futuro-de-tu-patrimonio) que NO prometen, DEMUESTRAN — blindados contra la regla dura.
+**Candado de confidencialidad (matiz de Sam):** la protección ya está en el diseño del BI (sin nombre, sin
+datos identificables); la regla NO limita el uso — Sam recomienda fuertemente usar su contenido de ejemplo.
+Cifras y tipos de hallazgo habilitados; única prohibición = cualquier dato que sugiera IDENTIDAD del PH.
+Todo grabado en `fphs_conversion.application_constraints`.
+
+### META COMO EMBUDO DE CAPTACIÓN DEL EDITORIAL (corrección de Sam)
+La Editorial no es solo voz de destino: **Meta es donde el doliente que NO sigue todavía se engancha** con
+una pieza punzante y migra al blog/LinkedIn. El caption es el tráiler, el blog es la película — en Meta va
+el GOLPE como gancho + invitación a la pieza larga, nunca el argumento completo. `hacia-donde-va-el-oficio`
+es el anzuelo principal. Por eso la Editorial lleva `meta_ig`/`meta_fb` además de `linkedin`/`blog`.
+
+### LO SEMBRADO — 14 topics activos en `intel.brand_topics`
+- **fphs_educativa (7 topics):** blog + LinkedIn + Meta IG/FB + email. Filo 3/10. Cadencia repartida entre
+  los 7 para que el total por plataforma sea sano (blog ~2/sem global, LinkedIn 3/sem, Meta 4/sem c/u, email 2/mes).
+- **fphs_editorial (7 topics):** LinkedIn + blog + Meta IG/FB (captación). Filo 7/10. Cadencia más baja
+  (voz de posición). `hacia-donde-va-el-oficio` con la cadencia de Meta más alta (anzuelo).
+- **TODOS:** `active=true`, `auto_approve=false` (gate de Sam), `voice_by_destination` a su voz sin cruce,
+  `sibling_stagger=true`, con `angle` + `objective_by_platform` + `cadence` + `hard_rules` completos.
+- **La frontera anti-instigación va en los 14 `hard_rules`:** blanco = la práctica, nunca la persona; no
+  dirige contra el administrador actual (gana al doliente, pierde al decisor).
+
+### HITO — objective_by_platform
+**ForumPHs es la PRIMERA marca del sistema con `objective_by_platform` poblado** (el resto lo tiene NULL,
+pendiente #44) → gate7 (objetivo↔estímulo) y gate8 tienen con qué trabajar por fin en runtime.
+
+### GOTCHA DE TOOLING (registrado en Professor)
+`brand_voice_genome.application_constraints` es un **ARRAY jsonb, no un objeto.** El `|| jsonb_build_object()`
+mete el objeto como ELEMENTO (persiste, pero estructura fea); y `?`/`jsonb_object_keys()` **fallan o dan
+falso-negativo** sobre un array — una verificación con `?` dijo que el contexto de la Conversión NO estaba,
+cuando SÍ estaba. Para verificar contenido en array jsonb usar `jsonb_pretty()`, nunca `?`. El contexto
+ultrafino de la Conversión (dos frentes, 9 dominios, candado BI) quedó correctamente persistido.
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+- `intel.brand_topics` — **14 INSERT** (7 educativa + 7 editorial), todos active, auto_approve=false.
+- `intel.calibration_sessions` — 2 UPDATE (mapa de dominios en `founder_axis` de educativa y editorial).
+- `public.brand_voice_genome` — UPDATE de `fphs_conversion` (dos frentes + mapa 9 dominios + candado BI)
+  y de `fphs_educativa`/`fphs_editorial` (dato regulatorio de Ivette, ya de la sesión previa).
+- **Cero repos tocados. Cero EFs. Cero PRs de código.**
+- **Professor: 8 learnings** (`session_date` 2026-07-22, `approved_by_sam=true`), 5 con score 5.
+
+### PENDIENTES QUE DEJA ESTA SESIÓN
+1. **Sembrar `fphs_conversion` (9 dominios, doble frente).** Mapa + BI + candado ya persistidos en el
+   genoma → el próximo chat los lee con solo cargar el genoma. Es la siembra más grande y delicada
+   (doble frente + cifras reales del BI sin filtrar identidad) → merece sesión fresca propia.
+2. **El eslabón de runtime:** que el scheduler/dispatcher (R4B #5e) levante estos topics. Ahora hay con
+   qué alimentarlo, pero el carril automático es territorio de R4B, no de esta sesión.
+3. Los pendientes heredados de la calibración siguen abiertos: humanize_profiles sin verificar (#83),
+   convención de `maturity` (#84), Ivette-persona (sesión propia), sitio forumphs.com (#74 original).
+
+---
+*ForumPHs · siembra de brand_topics: 2 voces operables (Educativa + Editorial) + mapa de 23 dominios + BI como activo de conversión · 2026-07-22*
+
 ## 2026-07-21 (b) — CALIBRACIÓN Y DESTILACIÓN DE VOZ · familia de marca ForumPHs COMPLETA (`fphs_educativa` v1.0 + `fphs_editorial` v1.0)
 
 > Sesión distinta y posterior a la del pivote FPHS-OPS→agente WhatsApp del mismo día. Aquella fue producto e infraestructura; ésta es VOZ. No se tocó nada del agente.
