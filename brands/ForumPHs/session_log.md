@@ -112,16 +112,25 @@ anterior a los 4 PRs**. Nada de lo mergeado hoy está corriendo.
 > **✅ ADENDA (mismo día, posterior al cierre del bloque de arriba).** El deploy SE HIZO.
 > Verificado por CC contra `list_edge_functions` el 2026-07-23: `iid-core` **`_33`** ·
 > `content-watcher` **`_16`** · `content-run-stage` **`_51`**. Los 4 PRs están corriendo en
-> producción. **P1 queda CERRADO**; el bloqueante activo pasa a ser P2 (sembrar
-> `platforms_by_destination`, 0/48 filas). El párrafo de arriba se conserva como quedó al cierre
-> de la sesión — no se borra, se corrige debajo.
+> producción. **P1 queda CERRADO.** El párrafo de arriba se conserva como quedó al cierre de la
+> sesión — no se borra, se corrige debajo.
+>
+> **P2 también cerró el mismo día:** `platforms_by_destination` sembrado en **las 48 filas** por
+> Claude bajo HRD, con exhaustividad verificada en ambas direcciones (`platforms ⊆ union` 48/48 y
+> `union ⊆ platforms` 48/48) → cero plataformas huérfanas, cero literales fantasma.
+> **`email_propietarios` → `editorial`** (está en `PLATFORM_NO_ADAPT`, objetivo
+> `relacion_de_confianza` → `trust`, y un email educativo respira largo; `social` lo mandaría a
+> pieza corta y filosa). **El frente activo pasa a U4**, que va junto con P4 en un mismo PR: el
+> sembrado le dio a LucienSael un split real (`social` = x/meta_fb/meta_ig/tiktok · `editorial` =
+> blog), su fila editorial materializa `blog` como `platforms[0]`, y sin P4 ese ensayo entra al
+> adaptador con reglas de Instagram.
 
 #### Pendientes ordenados por bloqueo
 
 1. ✅ **Deploy de las 3 EFs** — HECHO y verificado (`_33` / `_16` / `_51`)
-2. 🔴 **Sembrar `platforms_by_destination`** — 0 de 48 filas. Ojo: el split es EXHAUSTIVO ← bloqueante activo
-3. 🟠 **U4** — fan-out emite `platforms=[p]`; cierra por diseño el defecto de `platforms[0]`
-4. 🟠 `blog` de LucienSael falta en `PLATFORM_NO_ADAPT` (CC metió `blog_forumphs` y `email_propietarios`)
+2. ✅ **Sembrar `platforms_by_destination`** — HECHO, 48/48, exhaustividad verificada en ambas direcciones
+3. 🟠 **U4** — fan-out emite `platforms=[p]`; cierra por diseño el defecto de `platforms[0]` ← frente activo
+4. 🟠 `blog` de LucienSael falta en `PLATFORM_NO_ADAPT` (CC metió `blog_forumphs` y `email_propietarios`) — va en el mismo PR que U4
 5. 🟡 Registro de migraciones divergido (3 de 6)
 6. 🟡 Voice sibling `Ivette-persona` (requiere calibración)
 7. 🟢 BI como imán de conversión en el sitio (dos caminos abiertos)
