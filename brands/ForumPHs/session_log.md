@@ -1,5 +1,136 @@
 # ForumPHs — Session Log
 
+## 2026-07-23 — Genoma de conversión: 18 topics sembrados + BI destilado + sitio corregido
+
+**Alcance:** cierre del ítem #82 (brand_topics de `fphs_conversion`), destilación del BI real a
+JSON consultable, erradicación de Ley 284 en `public.brands`, revisión completa de forumphs.com,
+y cableado del pipeline (4 PRs mergeados, **ninguno desplegado aún**).
+
+---
+
+### Sembrado — 18 topics `fphs_conversion`
+
+Arquitectura decidida: **cada dominio se desdobla en una fila por frente real**. Los 9 dominios
+tienen doble frente → 18 filas (9 `jd` + 9 `doliente`). Opción descartada: los dos frentes en una
+sola fila, porque CTA/objetivo/plataforma difieren y dejaría a gate7 juzgando a ciegas.
+
+| # | dominio | frentes |
+|---|---|---|
+| 1 | `el-momento-del-cambio` | jd + doliente |
+| 2 | `la-jd-que-hereda-un-desastre` | jd + doliente |
+| 3 | `rendir-cuentas-sin-sudar` | jd + doliente |
+| 4 | `el-informe-que-si-existe` | jd + doliente |
+| 5 | `profesionalizar-sin-perder-el-control` | jd + doliente |
+| 6 | `la-cuota-extraordinaria-que-viene` | jd + doliente |
+| 7 | `mi-unidad-vale-menos-y-no-lo-sabes` | doliente (madre) + jd |
+| 8 | `las-cuatro-preguntas-que-nadie-calcula` | doliente + jd |
+| 9 | `el-futuro-de-tu-patrimonio` | jd + doliente |
+
+**Parámetros transversales:** ambos frentes usan las 4 plataformas (`meta_fb`, `meta_ig`,
+`linkedin`, `blog_forumphs`) — la plataforma segmenta *función*, no audiencia: Meta recluta,
+LinkedIn y blog convierten. Cadence crescendo en Meta/LinkedIn; blog `on_supply` (sin tope).
+
+**6 etiquetas de `objective_by_platform`:** `jd__reclutar_gancho`, `jd__convertir_autoridad`,
+`jd__convertir_profundo`, `dol__sembrar_gancho`, `dol__validar_aporte`, `dol__armar_exigencia`.
+
+**Columna nueva `audience_frame`** (`text`, CHECK `IN ('jd','doliente','general')`, nullable).
+Patrón reusable para cualquier marca con decisor ≠ usuario.
+
+Las 32 filas FPHs (3 voces) recibieron además `hard_rules.blog_enlace`: toda pieza de blog cierra
+invitando a otro artículo del genoma.
+
+---
+
+### BI destilado — `brand-intel/forumphs/bi_2025.json`
+
+Bucket **`brand-intel`** creado (privado, MIME JSON+HTML). `iid-expert-uploads` fue descartado:
+su `allowed_mime_types` solo admite video e imagen.
+
+7 hallazgos financistas extraídos del BI real: `mora_aparentemente_controlada`,
+`liquidez_en_descenso`, `cero_fondo_de_reserva`, `extraordinaria_elevadores_ano3`,
+`deficit_estructural_por_unidad`, `erosion_valor_patrimonial`,
+`cuatro_indicadores_que_nadie_calcula`.
+
+Estructura por hallazgo: `titular_financista`, `lectura_superficial`, `lectura_del_financista`,
+`cadena_de_consecuencia`, `reflexion_espejo`, `gancho_doliente`, `angulo_jd`,
+`rangos_realistas_para_variacion`.
+
+**Candado real:** cifras SÍ, sin atribuir origen. Excluidos del JSON: nombre del PH, ubicación,
+proveedores, número de pisos. Decisión de Sam: *"el BI es un as bajo la manga y el punto de
+cierre seguro — no va en la home"*.
+
+---
+
+### Ley 284 erradicada de `public.brands`
+
+5 campos corregidos. El más grave: `extra_instructions` **ordenaba** "Citar Ley 284 cuando
+relevante", contradiciendo la regla dura de marca. También `key_messages[2]`, `agent_value_prop`,
+`territory`, `differentiators[2]` y `[5]`.
+
+`brand_context` se conserva intacto (explica *por qué* no se cita). Genoma y `brand_topics` no se
+tocan: sus menciones son las reglas prohibitivas.
+
+**Rol canónico de Ivette Flores:** *Abogada · Especialista en Régimen de Propiedad Horizontal*.
+
+---
+
+### Sitio forumphs.com — 25 ediciones (subido a GitHub)
+
+9 × Ley 284 → Régimen de PH · 4 × rol de Ivette · 9 × oposicionales eliminadas (incluido
+"no un intermediario" del hero) · hero con el slogan invariable · About reanclado al oficio ·
+datos actualizados (8 PH, +10 años de oficio, ~1.500 unidades) · sección nueva **"Inteligencia
+financiera"** con 4 quotes BI · FAQ del frente doliente · fecha fija → "Último período".
+
+---
+
+### Pipeline — 4 PRs mergeados, **0 desplegados**
+
+| PR | contenido | estado |
+|---|---|---|
+| #23 | `platforms_by_destination` + consumo en fanout | merged |
+| #24 | cableado `objective_by_platform` + `audience_frame` + gate7 con frente | merged |
+| #25 | U1 — gate5 distingue variante de duplicado | merged |
+| #26 | U2+U3 — preset y plataforma llegan al copy | merged |
+
+**Migraciones aplicadas vía MCP** (`db push` no es fiable en este proyecto):
+`add_audience_frame_to_brand_topics`, `widen_iid_content_queue_voice_check_fphs`,
+`brand_topics_platforms_by_destination`.
+
+CHECK de `iid_content_queue.voice` ampliado a 6 voces (antes bloqueaba toda voz de FPHs).
+
+Mapeo de 17 etiquetas → `objective_tag`. 3 correcciones de Sam sobre la propuesta de CC:
+`golpe_gancho_captacion`→`surprise`, `gancho_de_reencuadre`→`curiosity`,
+`reencuadre_incomodo`→`surprise`.
+
+---
+
+### ⚠️ Estado de deploy al cierre
+
+`iid-core` `_32` · `content-watcher` `_14` · `content-run-stage` `_50` — **las tres sirven código
+anterior a los 4 PRs**. Nada de lo mergeado hoy está corriendo.
+
+> **✅ ADENDA (mismo día, posterior al cierre del bloque de arriba).** El deploy SE HIZO.
+> Verificado por CC contra `list_edge_functions` el 2026-07-23: `iid-core` **`_33`** ·
+> `content-watcher` **`_16`** · `content-run-stage` **`_51`**. Los 4 PRs están corriendo en
+> producción. **P1 queda CERRADO**; el bloqueante activo pasa a ser P2 (sembrar
+> `platforms_by_destination`, 0/48 filas). El párrafo de arriba se conserva como quedó al cierre
+> de la sesión — no se borra, se corrige debajo.
+
+#### Pendientes ordenados por bloqueo
+
+1. ✅ **Deploy de las 3 EFs** — HECHO y verificado (`_33` / `_16` / `_51`)
+2. 🔴 **Sembrar `platforms_by_destination`** — 0 de 48 filas. Ojo: el split es EXHAUSTIVO ← bloqueante activo
+3. 🟠 **U4** — fan-out emite `platforms=[p]`; cierra por diseño el defecto de `platforms[0]`
+4. 🟠 `blog` de LucienSael falta en `PLATFORM_NO_ADAPT` (CC metió `blog_forumphs` y `email_propietarios`)
+5. 🟡 Registro de migraciones divergido (3 de 6)
+6. 🟡 Voice sibling `Ivette-persona` (requiere calibración)
+7. 🟢 BI como imán de conversión en el sitio (dos caminos abiertos)
+
+> Handoff completo de la sesión (estado verificado contra DB + EFs, decisiones cerradas, reglas de
+> voz nuevas y gotchas de tooling): `brands/ForumPHs/ESTADO_Y_HANDOFF_2026-07-23.md`.
+
+---
+
 ## 2026-07-22 — SIEMBRA DE `brand_topics` · ForumPHs pasa de CERO topics a DOS voces operables (Educativa + Editorial) + mapa de dominios de las 3 voces
 
 > Continuación directa de la calibración del 21-jul (b). Aquella destiló las voces; ésta les da AGENDA.
