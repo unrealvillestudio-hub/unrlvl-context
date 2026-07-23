@@ -311,3 +311,24 @@ Todo lo de §3. Están decididas y verificadas.
   para revisar un PR abierto hay que pedirle el contenido a CC o a Sam.
 - Buckets con `allowed_mime_types` restrictivo rechazan silenciosamente por tipo: verificar
   antes de subir.
+
+### Añadidas el 2026-07-24 (incidente de deploy de `iid-core` — falsa alarma, ver abajo)
+
+- **La transcripción manual queda DESCARTADA como método de deploy** para archivos de este tamaño.
+  **Incluye la vía MCP:** `deploy_edge_function` exige `files:[{name, content}]`, o sea que el
+  contenido pasa **escrito** por quien llama — 45 KB entre `index.ts` y `fanout.ts` por un canal
+  que no garantiza fidelidad. Aplica a cualquier EF del ecosistema, no solo a `iid-core`.
+- **Canal correcto: `supabase` CLI** (v2.109.1, instalada y logueada el 24-jul). Los bytes van de
+  la API al disco y del disco al diff, sin intermediario que los reescriba:
+  `supabase functions download <slug> --project-ref <ref> --use-api` (el `--use-api` evita Docker)
+  y `supabase functions deploy <slug>` para subir desde disco.
+- **`diff --strip-trailing-cr` es OBLIGATORIO** al comparar repo contra deploy: el repo está en
+  CRLF y el deploy en LF puro. Sin eso el diff sale 100 % falso positivo.
+- **Invocar una EF y ver que responde NO verifica su contenido.** Una variable sin declarar es
+  `ReferenceError` en *ejecución*, no error de parseo — Deno hace type-stripping, no type-check:
+  la función arranca igual y devuelve su 400 de validación sin tocar nunca la rama rota. Misma
+  familia de falso-verde que el `node --check` (que además no corre sobre `.ts`). Para verificar
+  contenido: leer el bundle con `get_edge_function`, y para cerrarlo, paridad byte a byte.
+- **Un `ezbr_sha256` que no cambia entre dos deploys NO significa "no entró el cambio"** — significa
+  "el segundo deploy no cambió nada". `deploy_edge_function` incrementa el contador `version` en
+  cada llamada aunque el contenido sea idéntico. Leer el sufijo de `entrypoint_path`, no el contador.
