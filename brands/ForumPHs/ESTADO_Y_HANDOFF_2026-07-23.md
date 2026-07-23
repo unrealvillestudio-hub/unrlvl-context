@@ -20,9 +20,32 @@ Los 4 PRs (#23, #24, #25, #26) **sí están corriendo en producción**. Todo lo 
 dice más abajo sobre "nada está desplegado" describe el estado al momento de redactarlo y se
 conserva íntegro como registro — **no se borra, se corrige aquí**.
 
-**Consecuencia:** el bloqueante activo pasa a ser **P2 · sembrar `platforms_by_destination`
-(0/48 filas)**. El orden de trabajo de §5 arranca ahora en P2. Pendiente de correr: el smoke test
-post-deploy descrito en P1 (pieza `doliente` → CTA de exigencia; `stimulus_source` = `"declared"`).
+**P2 también quedó CERRADO el mismo día.** `platforms_by_destination` sembrado en **las 48 filas**,
+por Claude bajo HRD. Exhaustividad verificada en ambas direcciones:
+`platforms ⊆ union(social, editorial)` en **48/48** y `union ⊆ platforms` en **48/48** → cero
+plataformas huérfanas (que dejarían de publicarse sin warn) y cero literales fantasma.
+
+**`email_propietarios` resuelto — destino `editorial`.** Deja de ser `[NV]`. Razón: está en
+`PLATFORM_NO_ADAPT`, su objetivo declarado es `relacion_de_confianza` (→ `trust`), y un email
+educativo respira largo — mandarlo a `social` lo empujaría a "pieza corta y filosa".
+
+Reparto sembrado, para el registro:
+
+| marca | filas | `social` | `editorial` |
+|---|---|---|---|
+| LucienSael ⚠️ **split real** | 3 | `x`, `meta_fb`, `meta_ig`, `tiktok` | `blog` |
+| FPHs Educativa | 7 | `meta_fb`, `meta_ig`, `linkedin` | `blog_forumphs`, `email_propietarios` |
+| FPHs Editorial + Conversión | 25 | `meta_fb`, `meta_ig`, `linkedin` | `blog_forumphs` |
+| NeuroneSCF | 5 | `meta_fb`, `meta_ig`, `tiktok` | _(idéntico)_ |
+| UnrealvilleStudio | 8 | `linkedin`, `meta_fb`, `meta_ig` | _(idéntico)_ |
+
+**Consecuencia:** el frente activo pasa a **P3 · U4** (fan-out parte por plataforma), que va junto
+con **P4** en un mismo PR: el sembrado de P2 le dio a LucienSael un **split real**, su fila
+editorial materializa `blog` como `platforms[0]`, y sin P4 ese ensayo entraría al adaptador con
+reglas de Instagram.
+
+Pendiente de correr: el **smoke test** post-deploy descrito en P1 (pieza `doliente` → CTA de
+exigencia; `stimulus_source` = `"declared"`). Sam decide el momento — requiere generar pieza real.
 
 ---
 
@@ -132,9 +155,14 @@ del procedimiento:
 "contáctenos"); `gate_detail.objective_stimulus.stimulus_source` debe decir `"declared"`, no
 `"inferred"`.
 
-### 🔴 P2 · Sembrar `platforms_by_destination` — 0/48 filas ← BLOQUEANTE ACTIVO
-La columna existe y el código de #23 la consume, pero **nadie la sembró**. El propio PR la
-declaró fuera de alcance ("lo ejecuta Claude con Sam bajo HRD").
+### ✅ P2 · Sembrar `platforms_by_destination` — **CERRADO** (48/48, ver ADENDA)
+Sembrado por Claude bajo HRD el 2026-07-23. Exhaustividad verificada en ambas direcciones (48/48
+en cada una). `email_propietarios` → `editorial`. El reparto por marca está en la ADENDA.
+El texto original se conserva porque la trampa que documenta sigue siendo la regla al tocar la
+columna:
+
+> La columna existe y el código de #23 la consume, pero **nadie la sembró**. El propio PR la
+> declaró fuera de alcance ("lo ejecuta Claude con Sam bajo HRD").
 
 **Trampa documentada en #23 — el split es EXHAUSTIVO:** una plataforma que está en `platforms`
 pero no aparece en ningún destino **deja de publicarse, sin warn**. La unión de los dos arrays
@@ -154,9 +182,11 @@ Vocabulario real por marca (verificado):
 
 Propuesta para FPHs (las 32 filas, misma voz en ambos destinos → recibe la unión):
 `{"social": ["meta_fb","meta_ig","linkedin"], "editorial": ["blog_forumphs"]}`
-Las 7 con `email_propietarios` necesitan decisión: ¿editorial o canal aparte? **[NV]**
+~~Las 7 con `email_propietarios` necesitan decisión: ¿editorial o canal aparte? **[NV]**~~
+→ **RESUELTO: `editorial`** (está en `PLATFORM_NO_ADAPT`, objetivo `relacion_de_confianza` → `trust`,
+y un email educativo respira largo; `social` lo empujaría a pieza corta y filosa).
 
-### 🟠 P3 · U4 — fan-out parte por plataforma (`platforms = [p]`)
+### 🟠 P3 · U4 — fan-out parte por plataforma (`platforms = [p]`) ← FRENTE ACTIVO
 **Los 3 prerrequisitos ya están en `main`:** U1 (#25), U2+U3 (#26), D1+D2 (datos).
 Decisión de arquitectura tomada el 21-jul: **Corte A**. Con `platforms=[p]` de un elemento,
 P2/P4/P5/P6 quedan correctos sin tocar una línea.
@@ -249,11 +279,11 @@ _(Al 2026-07-23 quedaron en `_33` / `_16` / `_51` → P1 cerrado. La verificaci�
 primer paso: confirma que nadie redeployó código viejo encima.)_
 
 ### Orden de trabajo sugerido
-1. ~~**P1 deploy** (3 EFs, orden estricto)~~ ✅ hecho — falta solo el **smoke test**
-2. **P4** (una línea, preguntar a CC por `blog` de Lucien)
-3. **P2 sembrar `platforms_by_destination`** — 48 filas, bajo HRD, ojo con el split exhaustivo
-4. **P3 brief de U4 para CC**
-5. Lo demás según prioridad de Sam
+1. ~~**P1 deploy** (3 EFs, orden estricto)~~ ✅ hecho — falta solo el **smoke test** (Sam elige cuándo)
+2. ~~**P2 sembrar `platforms_by_destination`**~~ ✅ hecho, 48/48 verificadas en ambas direcciones
+3. **P3 (U4) + P4 en un mismo PR** ← frente activo. Van juntos porque el split real de LucienSael
+   materializa `blog` como `platforms[0]` y sin P4 ese ensayo entra al adaptador con reglas de IG
+4. Lo demás según prioridad de Sam
 
 ### Lo que NO hay que volver a discutir
 Todo lo de §3. Están decididas y verificadas.
