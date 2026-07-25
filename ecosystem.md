@@ -117,7 +117,7 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 
 ## IID Subsystem — Intelligence Insights Developers
 
-**Status:** ✅ **OPERACIONAL** · Builder+Watcher LIVE · **R4B en curso** (deadline 1ª sem julio) · UNRLVL+Lucien como conejillos de indias hasta cerrar R4B
+**Status:** ✅ **OPERACIONAL** · Builder+Watcher LIVE · **R4B carril async validado** (smoke test PASS 2026-07-25: iid-core v36 + content-dispatcher v36 + content-run-stage v52 desplegados y verificados byte a byte) · mañana se enciende R4B para evaluación funcional + ICR (Industrial Consistency Ready)
 **Repo de contexto:** `IID/session_log.md` (fundado 2026-06-22 — documento fundacional §1-§8 + session log §9)
 **Nombre:** IID = **Intelligence Insights Developers**. UNRLVL-IID = los IID de UNRLVL. (Variantes previas — Intelligent Intelligence Dispatcher / Insight Distribution / Content Distribution — fueron deriva de reinterpretación al reducir a siglas; NO canónicas.)
 **Schema:** `intel` (NO public)
@@ -127,7 +127,7 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 **Modelo de gobierno:** la MARCA declara qué temas consume y con qué voz por destino (`intel.brand_topics`). El IID investiga temas NEUTROS. El `default_voice` del agente NO decide voz (raíz del bug off-brand). `angle` = territorio (qué/dónde); genoma = ejecución (cómo). Cadencia Interpretación A: por-marca-por-plataforma, los dominios rotan dentro de los slots, NO multiplican.
 
 **Agentes (`intel.iid_agents`, 29 activos):**
-- 29 = 1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 15-jun, last_run NULL — sin ejecutar aún) + 1 sentinela IID-SEEDER (ce44ac81, is_active=false, satisface FK de iid-inbound, NO corre research). El fan-out v22 YA NO usa default_voice (la voz sale de brand_topics).
+- 29 = 1 core (IID-CORE) + 13 legacy IID-* (corriendo, last_run reciente) + 14 UNRLVL-* (creados 15-jun, last_run NULL — sin ejecutar aún) + 1 sentinela IID-SEEDER (ce44ac81, is_active=false, satisface FK de iid-inbound, NO corre research). El fan-out v36 YA NO usa default_voice (la voz sale de brand_topics).
 - Legacy IID-*: IMAGE, LLM*, VIDEO, VOICE, GOOGLE, LINKEDIN*, META, TIKTOK, X*, ECOMMERCE, FLORIDA, PERSONAL-BRAND*, WHOLESALE (* = default_voice lucien, legado del encaje a la fuerza)
 - UNRLVL-* en 3 tiers: Tier1 método (CONTEXT-ENGINEERING, BRAND-VOICE-SYSTEMS, AI-INDUSTRIALIZATION, CRO-PSYCHOLOGY, SIGNAL-LEARNING-LOOPS) · Tier2 deep-stack (META-DEEP-STACK, GOOGLE-DEEP-STACK, ALGORITHM-MECHANICS) · Tier3 mercado (ECOMMERCE-DEEP, SHOPIFY-STACK, MARKET-FLORIDA, DROPSHIP-REALITY, WHOLESALE-LOGISTICS-FL, CREATOR-MACRO-ECONOMY)
 - Decisión pendiente: destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien
@@ -135,14 +135,14 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 **Pipeline:**
 ```
 CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings
-  → iid_content_queue (brand_id+domain) → content-dispatcher v27 (jobid 29, cada 30min, .limit(1))
-  → content-run-stage v41 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
+  → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT, lee scheduled_for)
+  → content-run-stage v52 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
   → content-watcher v1 (6 gates) → content_pieces awaiting_approval
   → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam)
   → approve-piece v14 (publish Meta + move-to-permanent)
 ```
 
-**Edge Functions:** content-dispatcher v27 (.limit(1), ignora scheduled_for hoy) · content-run-stage v41 · content-watcher v1 (6 gates) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex) · **iid-core v22 (fan-out multimarca por brand_topics, módulo fanout.ts; mata default_voice; body.domain override)** · **iid-inbound v1 (cerebro del Sembrador: capture/approve/reject/list, verify_jwt=false)**
+**Edge Functions:** content-dispatcher v36 (B2: lee scheduled_for + .or(is.null,lte.now); B3: DISPATCH_LIMIT=5) · content-run-stage v52 (#95-D bloque CANAL: email_propietarios saltea imagen) · content-watcher v1 (6 gates) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex) · **iid-core v36 (#93 fan-out multimarca; deja de generar copy, brief neutro en aife_output.content.content; body.domain override)** · **iid-inbound v1 (cerebro del Sembrador: capture/approve/reject/list, verify_jwt=false)**
 
 **Sembrador (CONSTRUIDO 25-jun b · falta T4 front):** post IG (link + frase humana) → iid-inbound `capture` (destila a TEMA NEUTRO, anti-IP: la semilla es disparador, nunca material a reescribir) → mapea a `brand_topics` → `iid_seeds` awaiting_approval → GATE TEMPRANO Sam (`approve`, puede corregir mapeo) → handoff HTTP a iid-core (4B, una sola fuente del fan-out) → fan-out v22 → N filas queue → pipeline normal → approve-piece (2º gate). Tabla `intel.iid_seeds`. Agente sentinela IID-SEEDER. 2 gates en serie, nunca publish directo.
 
@@ -151,8 +151,8 @@ CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → 
 **Vertex (desbloqueado 2026-06-22):** GOOGLE_SERVICE_ACCOUNT_KEY + GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION en Supabase Secrets. Proyecto gen-lang-client-0491381650 (SA imagelab-vercel). Embeddings gemini-embedding-001 @768 (Matryoshka).
 
 **R4B (deadline 1ª sem julio):**
-- HECHO: 5e-5 DDL (domain+pgvector v0.8.0), 5o/5p-a/5q (v36), 5e-4 content-watcher v1 (v37), arquitectura híbrida queue, #5i genoma v1.0 Lucien, Vertex desbloqueado
-- PENDIENTE: 5e-1 Scheduler content-scheduler (especificado, desbloqueado), 5e-2/5e-3 embeddings+gates (Chat 2), parche dispatcher scheduled_for, 5b publicación real Meta, 5r rejected_reason, 5s limpieza queue, validación genoma v1.0 con IID real, rollout_started_at (1ª sem julio)
+- HECHO: **carril async multimarca (iid-core v36 + dispatcher v36 + run-stage v52) validado end-to-end por smoke test PASS 2026-07-25**, GRANT service_role sobre 3 tablas de public del carril (migración grant_service_role_public_iid_carril), 5e-5 DDL (domain+pgvector v0.8.0), 5o/5p-a/5q (v36), 5e-4 content-watcher v1 (v37), arquitectura híbrida queue, #5i genoma v1.0 Lucien, Vertex desbloqueado
+- PENDIENTE: **encender R4B para evaluación funcional + ICR (mañana)**, **D7Herbal sembrar fila brand_topics (genoma huérfano)**, **B4 cadencia (ejecutor de agenda sobre pg_cron — requiere siembra de dato inexistente)**, 5e-1 Scheduler content-scheduler, 5e-2/5e-3 embeddings+gates (Chat 2), parche dispatcher scheduled_for (B2 hecho 2026-07-25), 5b publicación real Meta, 5r rejected_reason, 5s limpieza queue, validación genoma v1.0 con IID real, rollout_started_at (1ª sem julio)
 
 ---
 

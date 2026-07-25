@@ -1,19 +1,20 @@
 {
   "_meta": {
-  "version": "2026-06-25-v1",
+  "version": "2026-07-25-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-06-24-v1",
+  "previous": "2026-06-25-v1",
   "last_session": {
-    "date": "2026-06-25",
-    "conducted_by": "Claude Opus 4.8 + CC + MCP (Supabase/Vercel)",
-    "status": "IID Sembrador CONSTRUIDO (T1-T3): fan-out multimarca iid-core v22 + módulo fanout.ts + cerebro iid-inbound v1 + tabla iid_seeds + agente sentinela IID-SEEDER. Pecado original (default_voice→marca) muerto en el origen del encolado. T4 (front IID Seeds + rol SEEDER) pendiente.",
+    "date": "2026-07-25",
+    "conducted_by": "Claude Opus 4.8 + MCP (Supabase/Vercel)",
+    "status": "R4B carril async: 3 EF desplegadas y verificadas byte a byte (iid-core v36, content-dispatcher v36, content-run-stage v52). GRANT bloqueante de service_role sobre 3 tablas de public corregido. Smoke test end-to-end PASS. Mañana se enciende R4B para evaluación funcional + calidad ICR (Industrial Consistency Ready).",
     "key_achievements": [
-      "T2 — iid-core v21→v22: fan-out multimarca por brand_topics (resolveSubscribers+fanOut en fanout.ts). Mata default_voice (3 usos extirpados). Migración del CHECK iid_content_queue.voice → voice_id real (lucien_social/lucien_editorial/unrlvl_default). Verificado: finding ai-cognition → 3 filas (Lucien×2+UNRLVL×1); finding llm → 0 filas.",
-      "T3 — cerebro del sembrador: EF iid-inbound v1 (capture/approve/reject/list). Captura semilla humana (link+frase) → destila a TEMA NEUTRO con anti-IP duro → mapea a brand_topics → GATE TEMPRANO de Sam → handoff HTTP a iid-core (4B, una sola fuente del fan-out). Tabla intel.iid_seeds (rastro + lane + status). Agente sentinela IID-SEEDER (is_active=false, satisface FK).",
-      "Dos gates en serie confirmados: (1) tema/mapeo en iid-inbound, (2) approve-piece sobre piezas. Multimarca probado por construcción (sumar NSCF/FPHs = fila en brand_topics + 1 línea en CHECK voice).",
-      "Cambio de contrato autopublish: score>=85 AND brand_topics.auto_approve (por marca; antes score>=85 AND urgency==='breaking'). auto_approve=false en todas → nada autopublica.",
-      "Patrón de gobernanza IID EFs: sin repo (deuda persiste) → direct-on-prod staged+reversible con cleanup; NO Rama+PR+Preview. Rollback de cada DDL capturado antes de aplicar.",
-      "Radar: pgvector instalado pero sin materializar (cero columnas vector). Gate 8 visual del eje B = greenfield de embeddings."
+      "iid-core v35->v36: #93 fan-out multimarca, iid-core deja de generar copy (brief neutro en aife_output.content.content). Verificado en smoke: ai-cognition encoló 8 filas (Lucien+UNRLVL, dominio compartido), fphs-jd 4 filas.",
+      "content-dispatcher v35->v36: B2 (lee scheduled_for, .or(is.null,lte.now), order ASC NULLS FIRST) + B3 (DISPATCH_LIMIT=5). Verificado: toma exactamente 5 por corrida.",
+      "content-run-stage v51->v52: #95-D email_propietarios saltea imagen (bloque CANAL con CANAL_BY_PLATFORM + CANAL_NONE + rama guard en stage 3). Canales visuales correctos verificados (FACEBOOK_FEED/X_FEED/INSTAGRAM_FEED).",
+      "HALLAZGO+FIX (migración grant_service_role_public_iid_carril): service_role sin GRANT sobre public.psycho_presets (SELECT), public.scheduled_posts (SELECT+INSERT), public.ops_generation_ledger (SELECT+UPDATE). Era bloqueante latente de TODO el fan-out (FANOUT_PRESETS_FAILED). Fail-loud funcionó. Learning de calibración: verificar grants service_role sobre tablas nuevas de public.",
+      "Smoke test PASS end-to-end: #93 + U4 + Ruta B preset-por-objetivo (mapeo jd exacto) + dispatcher limit=5 + builder desde genoma + Watcher discriminando PASS/REJECT. REJECT de FPHs (hard_rules) y UNRLVL (evidence) fueron de MARCA sobre briefs sintéticos pobres, no fallos técnicos.",
+      "Mecanismo de invocación documentado: iid-core sin secreto (IID_CORE_SECRET no seteado en entorno); content-dispatcher exige IID_CRON_SECRET vía intel.trigger_iid_agent (SECURITY DEFINER, lee de intel.iid_scheduler_config). Secretos EF NO están en Vault. Ningún cron drena scheduled_posts.",
+      "D7Herbal genoma HUÉRFANO: d7herbal_conversion v1.0 activo pero CERO filas en brand_topics → no puede correr el carril async hasta sembrar suscripción."
     ]
   }
 },
@@ -174,7 +175,8 @@
       "name": "D7 Herbal",
       "type": "brand",
       "market": "Alicante, España",
-      "status": "active"
+      "status": "active",
+      "note": "Genoma d7herbal_conversion v1.0 ACTIVO pero CERO filas en intel.brand_topics (2026-07-25). Huérfano: no puede correr el carril async hasta sembrar suscripción de dominio (domain + voice_by_destination + platforms + objective_by_platform)."
     },
     {
       "id": "VivoseMask",
@@ -369,7 +371,8 @@
           ],
           "new_2026-06-20": [
             "nscf_integrity_log — log de integridad (drafts fantasma marcados voided_test, GRANT service_role)"
-          ]
+          ],
+          "grants_2026-07-25": "service_role recibió GRANT sobre 3 tablas de public (bloqueante latente del fan-out, migración grant_service_role_public_iid_carril): psycho_presets (SELECT), scheduled_posts (SELECT+INSERT), ops_generation_ledger (SELECT+UPDATE). Las tablas en intel y content ya tenían los grants; el hueco era solo en public."
         }
       },
       "edge_functions": {
@@ -388,6 +391,11 @@
         "pg_cron_new": {
           "archive-fulfillment-log": "2am UTC diario — archiva nscf_fulfillment_log > 3 meses",
           "nscf-integrity-check-weekly": "job 34 — dom 04:00 UTC, net.http_post a nscf-integrity-check (integridad drafts fantasma)"
+        },
+        "key_changes_2026-07-25": {
+          "iid-core": "v36 — #93 fan-out multimarca sin generación de copy (brief neutro).",
+          "content-dispatcher": "v36 — B2 agenda (scheduled_for) + B3 DISPATCH_LIMIT=5.",
+          "content-run-stage": "v52 — #95-D email_propietarios saltea imagen (bloque CANAL)."
         }
       },
       "brand_voice_genome": {
@@ -523,16 +531,16 @@
     "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
   },
   "pipeline": {
-    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v27 (jobid 29, cada 30min, .limit(1)) → content-run-stage v41 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v1 (6 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v52 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v1 (6 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
     "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome."
   },
   "edge_functions": {
-    "content-dispatcher": "v27 — cron jobid 29 cada 30min. Tiene .limit(1) (NO tocar hasta publicación real, #5f). HOY ignora scheduled_for. v27 (25-jun): transporta domain a assets.builder_input.domain (fix de transporte queue→approval).",
-    "content-run-stage": "v41 — orquestador de producción (Builder + labs + callWatcher + domain-write a jobs/pieces/queue).",
+    "content-dispatcher": "v36 — cron jobid 29 cada 30min. B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST. B3: DISPATCH_LIMIT=5 (antes .limit(1)). Exige IID_CRON_SECRET (401 sin él). verify_jwt:false.",
+    "content-run-stage": "v52 — orquestador de producción (Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher + domain-write). #95-D: bloque CANAL (CANAL_BY_PLATFORM + CANAL_NONE); email_propietarios saltea imagen (ls=skipped, success=true). verify_jwt:false.",
     "content-watcher": "v1 — 6 gates extraídos a EF propia (similarity, sibling-window, cadence, evidence, duplication, hard-rules). PASS/REJECT/RESCHEDULE.",
     "approve-piece": "v14 — aprobación: publish Meta + move-to-permanent. Path reject HOY sin rejected_reason (#5r pendiente).",
     "aife-filter": "control de calidad/seguridad de marca.",
-    "iid-core": "v22 — fan-out multimarca por brand_topics (módulo fanout.ts: resolveSubscribers+fanOut+voiceFamily+assignPsychoPreset). Mata default_voice. Escribe brand_id+domain+voice_id real en queue. body.domain = override del domain del fan-out. Contrato de entrada (interfaz dura): req agent_id,title,summary,r_scores,c_scores + opc source_urls,raw_data,finding_date,urgency,platforms,domain.",
+    "iid-core": "v36 — fan-out multimarca por brand_topics (fanout.ts). #93: deja de generar copy, encola brief neutro (título+resumen) en aife_output.content.content. Sin filtro de familia. body.domain override. NO exige secreto (IID_CORE_SECRET no seteado en entorno). Contrato: agent_id,title,summary,r_scores,c_scores + opc source_urls,raw_data,finding_date,urgency,platforms,domain.",
     "iid-inbound": "v1 (NUEVA) — cerebro del Sembrador. Router capture/approve/reject/list. capture: destila semilla humana (link+frase) a tema neutro con anti-IP duro + mapea a brand_topics + persiste iid_seeds awaiting_approval y SE DETIENE. approve: gate de Sam (corrige mapeo) → handoff HTTP a iid-core (4B). reject/list. verify_jwt=false. Auth IID_INBOUND_SECRET pendiente de cargar al exponer el front (T4).",
     "lab-worker": "v23 — orquestador viejo (dual-mode lab_jobs). Llama labs por HTTP vía lab_configs. NO tiene creds Vertex.",
     "soporte": ["copylab-processor","brand-context-builder","iid-core","iid-ecommerce"]
@@ -571,8 +579,8 @@
   },
   "r4b_status": {
     "_deadline": "1ª sem julio 2026",
-    "done": ["5e-5 DDL (domain+pgvector v0.8.0+índice+GRANT)","5o/5p-a/5q (v36)","5e-4 content-watcher v1 (v37)","arquitectura híbrida queue","#5i genoma v1.0","Vertex desbloqueado"],
-    "pending": ["5e-1 Scheduler content-scheduler (especificado, desbloqueado — write ya en v37)","5e-2/5e-3 embeddings+gates bloqueantes (Chat 2, ya con Vertex)","parche dispatcher scheduled_for","5b publicación real Meta (chat dedicado)","5r rejected_reason","5s limpieza queue","validación genoma v1.0 con IID real","rollout_started_at en brand_rollout (1ª sem julio)"]
+    "done": ["carril async multimarca (iid-core v36 + dispatcher v36 + run-stage v52) validado end-to-end por smoke test PASS 2026-07-25","GRANT service_role sobre tablas public del carril","5e-5 DDL (domain+pgvector v0.8.0+índice+GRANT)","5o/5p-a/5q (v36)","5e-4 content-watcher v1 (v37)","arquitectura híbrida queue","#5i genoma v1.0","Vertex desbloqueado"],
+    "pending": ["encender R4B para evaluación funcional + ICR (Industrial Consistency Ready) — mañana","D7Herbal: sembrar fila brand_topics (genoma huérfano)","B4 cadencia (ejecutor de agenda sobre pg_cron — bloqueante para R4B pleno, requiere siembra de dato inexistente)","5e-1 Scheduler content-scheduler (especificado, desbloqueado — write ya en v37)","5e-2/5e-3 embeddings+gates bloqueantes (Chat 2, ya con Vertex)","parche dispatcher scheduled_for (B2 hecho 2026-07-25, deploy dispatcher v36)","5b publicación real Meta (chat dedicado)","5r rejected_reason","5s limpieza queue","validación genoma v1.0 con IID real","rollout_started_at en brand_rollout (1ª sem julio)"]
   }
 },
   "brand_topics": {

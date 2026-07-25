@@ -258,6 +258,20 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+### 2026-07-25 — R4B carril async: deploys verificados + smoke test PASS
+
+**Deploys (byte a byte contra main):** iid-core v35→v36 (#93 fan-out multimarca, sin generación de copy), content-dispatcher v35→v36 (B2 agenda + B3 limit=5), content-run-stage v51→v52 (#95-D email_propietarios sin imagen). Drift repo↔deploy del carril CERRADO. Transporte del index.ts de 92KB resuelto: Sam sube el archivo, normalización CRLF→LF con Python, verificación de git blob sha1 idéntico a main antes de deployar.
+
+**Hallazgo bloqueante corregido:** el smoke destapó que `service_role` (rol de las EF) no tenía GRANT sobre 3 tablas de `public` — bloqueante latente de TODO el fan-out (`FANOUT_PRESETS_FAILED: permission denied for table psycho_presets`). El fail-loud funcionó (gritó en vez de fallar en silencio). Migración `grant_service_role_public_iid_carril`: SELECT en psycho_presets, SELECT+INSERT en scheduled_posts, SELECT+UPDATE en ops_generation_ledger. Learning de calibración: verificar grants de service_role sobre tablas nuevas de public es check obligatorio.
+
+**Smoke test end-to-end: PASS.** 2 findings sintéticos (LucienSael ai-cognition + ForumPHs el-futuro-de-tu-patrimonio-jd), ya limpiados. Validado en vivo: #93 fan-out (Lucien+UNRLVL comparten ai-cognition → 8 filas; FPHs → 4), brief neutro en aife_output.content.content (no copy de iid-core), U4 una fila por plataforma, Ruta B/C.3 preset-por-objetivo (mapeo jd exacto: blog_forumphs→PSY-TRUST, linkedin→PSY-AUTHORITY, meta→PSY-CURIOSITY), B2/B3 dispatcher limit=5 (3 corridas para 12 filas), builder desde genoma con títulos de marca propios, canales visuales correctos (#95-D: FACEBOOK_FEED/X_FEED/INSTAGRAM_FEED), Watcher discriminando: LucienSael lucien_social ×4 PASS, UNRLVL 1 PASS + 2 REJECT(evidence), FPHs fphs_conversion ×4 REJECT(hard_rules). Los REJECT son de MARCA sobre briefs sintéticos pobres — el gate haciendo su trabajo, no fallo técnico (labs_status entero ok, error_log vacío). REJECT de marca no dispara alarma Watcher-ciego.
+
+**Mecanismo de invocación documentado:** iid-core NO exige secreto (IID_CORE_SECRET no seteado en entorno EF). content-dispatcher SÍ exige IID_CRON_SECRET (401 sin él); vía canónica desde Postgres: `SELECT intel.trigger_iid_agent('content-dispatcher')` (SECURITY DEFINER, lee secreto de intel.iid_scheduler_config, header x-cron-secret; misma que usa el cron jobid 29). Secretos EF NO están en Vault. Ningún cron drena scheduled_posts → escribir pending_publish no publica en redes por sí solo.
+
+**Hallazgos pendientes:** (1) D7Herbal genoma huérfano — d7herbal_conversion v1.0 activo pero cero filas en brand_topics, no puede correr el carril async; (2) B4 cadencia sigue bloqueante para R4B pleno (ejecutor de agenda sobre pg_cron, requiere siembra de dato inexistente); (3) objective_by_platform NULL en topics de Lucien/NSCF/UVS + imagelab_visual_identity NULL en ForumPHs (imagen genérica).
+
+**Mañana:** encender R4B para evaluación funcional + calidad ICR (Industrial Consistency Ready) sobre resultados que Sam pueda evaluar.
+
 ## 2026-07-20/21 · CRAFT-01 CERRADO Y MERGEADO — el arsenal opera en el runtime · 9 módulos canónicos · truncado por `thinking` descubierto y corregido
 
 **Conducido por:** Claude Opus 4.8 (coordinación, diseño, briefs, verificación) + chat auxiliar (redacción de los 9 módulos) + Claude Code (implementación y QA en vivo) + Sam (decisiones y merge)
