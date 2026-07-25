@@ -68,8 +68,8 @@ Schema: intel (NO public)
 FLUJO COMPLETO:
   CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw
     → iid-process → iid_findings → iid_content_queue (brand_id + domain)
-    → content-dispatcher (jobid 29, cada 30min, .limit(1))
-    → content-run-stage v37 runtime / deploy build _50:
+    → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT + lee scheduled_for)
+    → content-run-stage v52 (deploy 2026-07-25):
          ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
          ├─ AIFE filter
          ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
@@ -92,11 +92,11 @@ AGENTES (intel.iid_agents, 29 = 28 research + 1 sentinela):
   └─ 1 sentinela: IID-SEEDER (ce44ac81, is_active=false — satisface FK agent_id de iid-inbound, NO corre research)
 
 EDGE FUNCTIONS:
-  └─ content-dispatcher v27 (.limit(1) — NO tocar hasta publicación real; HOY ignora scheduled_for; v27 transporta domain a builder_input)
-  └─ content-run-stage v37 runtime / deploy build _50 (Builder + labs + callWatcher + domain-write jobs/pieces/queue)
+  └─ content-dispatcher v36 (B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST; B3: .limit(5) DISPATCH_LIMIT; transporta domain a builder_input)
+  └─ content-run-stage v52 (Builder + labs + callWatcher + domain-write jobs/pieces/queue; #95-D bloque CANAL: email_propietarios saltea imagen)
   └─ content-watcher v2 / deploy build _14 (8 gates: los 6 + gate7 objective_stimulus + gate8 visual_sibling, blocking)
   └─ approve-piece v14 (publish Meta + move-to-permanent; reject sin rejected_reason → #5r)
-  └─ iid-core v22 / deploy build _32 (Ruta B en fanout.ts: preset derivado del objetivo declarado; mata default_voice; body.domain override) · iid-inbound / deploy build _14 (Sonnet 5; cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
+  └─ iid-core v36 (#93 fan-out multimarca: deja de generar copy, brief neutro en aife_output.content.content; Ruta B en fanout.ts: preset derivado del objetivo; mata default_voice; body.domain override) · iid-inbound / deploy build _14 (Sonnet 5; cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
   └─ aife-filter (deploy build _28, Sonnet 5) · brand-context-builder (deploy build _19, Sonnet 5) · lab-worker v23 · copylab-processor · iid-ecommerce
 
 GOBIERNO (intel.brand_topics):
@@ -291,9 +291,9 @@ IID pipeline (OPERACIONAL · R4B en curso):
   brand_voice_genome (lucien_editorial + lucien_social v1.0) ← ✅ generativo/constructor
   brand_topics ← gobierno de voz/tema/cadencia (fuente única de platforms/cadence/rollout)
   iid_content_queue (+ domain) ← puente brand_id+domain para el Scheduler
-  content-run-stage (build _50) ← Builder + labs + callWatcher
+  content-run-stage v52 ← Builder + labs + callWatcher (#95-D bloque CANAL)
   content-watcher v2 (build _14) ← 8 gates
-  content-dispatcher (.limit(1) — quitar solo tras publicación real)
+  content-dispatcher v36 (.limit(5) DISPATCH_LIMIT + lee scheduled_for — B2/B3 2026-07-25)
   Vertex (GOOGLE_SERVICE_ACCOUNT_KEY en Supabase) ← embeddings 5e-2
   Scheduler content-scheduler ← especificado, desbloqueado (write ya en v37)
 
