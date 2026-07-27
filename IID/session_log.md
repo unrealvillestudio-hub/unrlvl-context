@@ -258,6 +258,22 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## Sesión 2026-07-25b — R4B calibración de aprobación + diagnóstico de unificación
+
+**B4 fase 1 (calibración de aprobación) — validado end-to-end:**
+- Bandeja de calibración "ve TODO" operativa (PR #14 + #15 mergeados). Fuente única content.orchestrator_jobs; orchestrator_jobs.id = piece_id del corpus. Muestra aprobadas (awaiting_approval) + rechazadas por watcher (failed + assets.watcher.result=REJECT), con veredicto del watcher visible. Corpus intel.approval_calibration guarda doble veredicto (Sam + watcher: columnas watcher_result/watcher_gate).
+- EF iid-approval-digest v2 + cron diario 7am ET (from: Content Queue <content@unrealvillestudio.com>).
+- Fixes de render: bucket unrlvl-media acepta text/html; render vía iframe srcdoc (Supabase sirve público como text/plain+nosniff).
+- 2 findings de calibración sembrados (FPHs el-futuro-de-tu-patrimonio-jd, NSCF frizz-humidity) → 7 piezas (2 PASS + 5 REJECT-watcher con copy real). Tag [CAL-01].
+
+**Cura de hardcode:** CHECK iid_content_queue_voice_check (6 voces hardcoded) → reemplazado por trigger dinámico intel.validate_queue_voice() que valida contra brand_voice_genome activo. Migración iid_queue_voice_validation_dynamic. Desbloqueó 5 voces.
+
+**Diagnóstico mayor (bloqueante R4B):** 3 generadores de brand-cache desalineados + 2 generadores de texto duplicados; capa creativa de CopyLab nunca ejecutada en el carril. Ver proyecto de unificación (abajo).
+
+**Hallazgo:** el Builder del carril async es buildFromGenome LOCAL en content-run-stage (no CopyLab externo, que queda como lab sync/duplicado). El watcher juzga copy, no imagen.
+
+**Professor:** 6 learnings capturados (approved_by_sam), session_date 2026-07-25.
+
 ### 2026-07-25 — R4B carril async: deploys verificados + smoke test PASS
 
 **Deploys (byte a byte contra main):** iid-core v35→v36 (#93 fan-out multimarca, sin generación de copy), content-dispatcher v35→v36 (B2 agenda + B3 limit=5), content-run-stage v51→v52 (#95-D email_propietarios sin imagen). Drift repo↔deploy del carril CERRADO. Transporte del index.ts de 92KB resuelto: Sam sube el archivo, normalización CRLF→LF con Python, verificación de git blob sha1 idéntico a main antes de deployar.
