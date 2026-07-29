@@ -136,13 +136,13 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 ```
 CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings
   → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT, lee scheduled_for)
-  → content-run-stage v52 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
-  → content-watcher v1 (6 gates) → content_pieces awaiting_approval
+  → content-run-stage v57 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
+  → content-watcher v18 (8 gates) → content_pieces awaiting_approval
   → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam)
   → approve-piece v14 (publish Meta + move-to-permanent)
 ```
 
-**Edge Functions:** content-dispatcher v36 (B2: lee scheduled_for + .or(is.null,lte.now); B3: DISPATCH_LIMIT=5) · content-run-stage v52 (#95-D bloque CANAL: email_propietarios saltea imagen) · content-watcher v1 (6 gates) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex) · **iid-core v36 (#93 fan-out multimarca; deja de generar copy, brief neutro en aife_output.content.content; body.domain override)** · **iid-inbound v1 (cerebro del Sembrador: capture/approve/reject/list, verify_jwt=false)**
+**Edge Functions:** content-dispatcher v36 (B2: lee scheduled_for + .or(is.null,lte.now); B3: DISPATCH_LIMIT=5) · content-run-stage v57 (#95-D bloque CANAL: email_propietarios saltea imagen) · content-watcher v18 (8 gates: +gate7 objective_stimulus +gate8 visual_sibling; reglas por código desde intel.watcher_rules, precedencia brand>sector>gen; watcher_full_scan ON) · approve-piece v14 (reject sin rejected_reason → #5r) · aife-filter · lab-worker v23 (no tiene creds Vertex) · **iid-core v36 (#93 fan-out multimarca; deja de generar copy, brief neutro en aife_output.content.content; body.domain override)** · **iid-inbound v1 (cerebro del Sembrador: capture/approve/reject/list, verify_jwt=false)** · **iid-approval-digest v2 (creada 26-jul; digest diario 7am ET del corpus de calibración de aprobación, lee intel.approval_calibration)**
 
 **Sembrador (CONSTRUIDO 25-jun b · falta T4 front):** post IG (link + frase humana) → iid-inbound `capture` (destila a TEMA NEUTRO, anti-IP: la semilla es disparador, nunca material a reescribir) → mapea a `brand_topics` → `iid_seeds` awaiting_approval → GATE TEMPRANO Sam (`approve`, puede corregir mapeo) → handoff HTTP a iid-core (4B, una sola fuente del fan-out) → fan-out v22 → N filas queue → pipeline normal → approve-piece (2º gate). Tabla `intel.iid_seeds`. Agente sentinela IID-SEEDER. 2 gates en serie, nunca publish directo.
 
@@ -160,7 +160,7 @@ CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → 
 
 ACTIVE_HEALTHY · us-east-1
 - **public:** 80 tablas · ~95 Edge Functions · nuevas: nscf_fulfillment_log, nscf_fulfillment_log_archive, nscf_integrity_log
-- **intel (IID):** iid_agents (29), brand_topics, iid_content_queue (+ domain), iid_findings, iid_research_raw, iid_cron_runs, iid_briefs, iid_scheduler_config, watcher_log, iid_seeds (semillas humanas del Sembrador, 25-jun)
+- **intel (IID):** iid_agents (29), brand_topics, iid_content_queue (+ domain), iid_findings, iid_research_raw, iid_cron_runs, iid_briefs, iid_scheduler_config, watcher_log, iid_seeds (semillas humanas del Sembrador, 25-jun), watcher_rules (54 reglas por código HR-*/IMG-*; subject/sector/scope; precedencia brand>sector>gen; 29-jul), brand_sector (9 marcas→RETAIL/LEGAL/PERSONA; UnrealvilleStudio sin sector; 29-jul)
 - **content:** orchestrator_jobs (+ domain), content_pieces (+ domain), content_calendar, content_performance, brand_context_cache, brand_voices · pgvector v0.8.0 instalado
 - **shopify:** stores, audit_runs, fix_log + otras
 
