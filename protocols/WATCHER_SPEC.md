@@ -1,137 +1,176 @@
-# WATCHER — Spec de ejecución para Claude Code
-### Stage 5 en `content-run-stage` · Gate obligatorio previo a `pending_approval` · 6 gates del ANTISPAM_CONTRACT
-_Versión 1.0 · 2026-06-16 · Autor: Claude (chat) · Ejecutor: Claude Code · Prerequisito DURO del primer publish_
+# WATCHER_SPEC — Especificación del Watcher
+_v2.0 · 2026-07-29 · reemplaza v1.0 (2026-06-16)_
+
+> **Cambio estructural respecto de v1.0:** la decisión C1 ("el Watcher corre dentro de
+> `content-run-stage`, NO se crea EF separada en el piloto") fue **revertida**. El Watcher
+> es EF propia desde junio y v1.0 nunca se actualizó. Esa desactualización casi provocó
+> que se editara el archivo equivocado en la sesión del 29-jul. Fuente de verdad: el
+> deploy, no este documento.
 
 ---
 
-## 0. CONTEXTO Y DECISIÓN DE ARQUITECTURA
+## 0. UBICACIÓN REAL
 
-**Decisión tomada (Sam, 2026-06-16): C1 — Watcher como stage 5 en la máquina de stages existente.**
-NO se crea EF separada en el piloto. El Watcher corre **dentro de `content-run-stage`**, después de sociallab (stage 4) y **antes** del INSERT de `content_pieces` + email Resend. Los 6 gates se implementan como **funciones modulares** para poder extraerse a una EF `content-watcher` dedicada (C2) cuando llegue R4B/Scheduler.
+**`content-watcher`** — Edge Function propia, build **_18**.
+Invocada por `content-run-stage` (_57) tras sociallab, antes del INSERT en `content_pieces`.
 
-**Regla rectora del contrato:** ninguna pieza llega a `pending_approval` (bandeja de Sam) sin pasar el Watcher. El Watcher es lo que evita el autobaneo multimarca. Preferimos no publicar a publicar algo que nos banee.
+**Contrato de pureza — inviolable:** `content-watcher` NO toca la DB. Recibe `ctx` completo
+y devuelve veredicto. Todo dato que necesite se le inyecta desde `content-run-stage`.
+Cualquier lectura de base dentro del Watcher rompe el contrato.
 
-**Estado verificado (2026-06-16):** no existe ninguna EF Watcher. `content_pieces` no tiene columna de watcher. Greenfield.
-
-**Riesgo que mitiga (contrato §1):** las 3 marcas publican desde el MISMO Business Portfolio Meta y el MISMO System User token (verificado). Cuentas nuevas (0–3 meses) = escrutinio máximo. Dos hermanas publicando contenido percibido como duplicado en ventana cercana puede arrastrar varias cuentas a la vez.
-
----
-
-## 1. UBICACIÓN EN EL FLUJO
-
-```
-stage 1 copylab  → buildFromGenome (ver Builder spec)
-stage 2 aife
-stage 3 imagelab
-stage 4 sociallab
-stage 5 WATCHER  ← NUEVO. 6 gates. Decide si la pieza avanza.
-   ├─ PASS       → INSERT content_pieces (status=awaiting_approval) + email Resend a Sam   [flujo actual]
-   ├─ REJECT     → NO inserta como awaiting. Marca pieza/queue para regeneración. NO email.
-   └─ RESCHEDULE → pieza válida, timing no. Marca para que el Scheduler la reubique. NO email aún.
-```
-
-**Cambio de control:** hoy `content-run-stage`, al terminar el último stage, inserta `content_pieces` con `status=awaiting_approval` y manda email. **Ese bloque pasa a ejecutarse SOLO si el Watcher devuelve PASS.** El Builder spec deja la pieza construida en `assets`; el Watcher decide.
+Salidas: **PASS** · **REJECT** · **RESCHEDULE**.
 
 ---
 
-## 2. PERSISTENCIA NUEVA
+## 1. FUENTE DE REGLAS
 
-### 2.1 Tabla de log del Watcher (auditable — contrato §4.3)
-Crear `intel.watcher_log`:
-```
-id              uuid pk default gen_random_uuid()
-job_id          uuid              -- content.orchestrator_jobs.id
-queue_id        uuid
-brand_id        text
-domain          text
-voice_id        text
-result          text              -- 'PASS' | 'REJECT' | 'RESCHEDULE'
-failed_gate     text              -- null si PASS; nombre del gate que falló
-gate_detail     jsonb             -- resultado por gate (los 6), con score/razón
-created_at      timestamptz default now()
-```
-Todo paso por el Watcher se loguea, gane o pierda. Sin esto no hay auditoría.
+**`intel.watcher_rules`** — 54 reglas enumeradas con código citable.
+**NO es `brand_topics.hard_rules`.** Esa columna sigue existiendo y sigue alimentando al
+Builder como prescripción, pero el Watcher ya no la juzga: era una bolsa mixta con
+prohibiciones, requisitos, parámetros de voz, listas de datos y una ruta de archivo.
 
-### 2.2 Estado en la pieza
-Cuando REJECT/RESCHEDULE: NO insertar en `content_pieces` como `awaiting_approval`. Marcar `intel.iid_content_queue.orchestrator_status`:
-- REJECT → `watcher_rejected`
-- RESCHEDULE → `watcher_rescheduled`
-- PASS → sigue el flujo normal (`complete` tras insertar pieza).
+### Esquema
+| columna | rol |
+|---|---|
+| `code` | identificador citable — `HR-FPHS-02`, `IMG-GEN-01` |
+| `subject` | **la materia**. Eje de agregación del corpus y de la precedencia |
+| `scope` | GENERATED: `brand` si hay `brand_id`, `sector` si hay `sector`, si no `gen` |
+| `kind` | `prohibition` \| `requirement` \| `proof` |
+| `plane` | `text` \| `image` |
+| `severity` | `blocking` \| `warn` |
+| `statement` | enunciado juzgable. Admite `{{clave}}` |
 
----
+### Precedencia
+Candidatas = `gen` + las del sector de la marca + las propias.
+Se agrupan por `(subject, plane)` y **gana la más específica**: `brand` > `sector` > `gen`.
+Reglas con `subject` NULL no se agrupan: pasan todas.
+Empate dentro del mismo subject → desempate por `code` asc **y se registra como anomalía**
+en `gate_detail.precedence_anomalies`. Nunca en silencio.
 
-## 3. LOS 6 GATES (orden obligatorio, contrato §4.2)
+El sector de cada marca vive en **`intel.brand_sector`**. Sectores: `RETAIL`, `LEGAL`,
+`PERSONA`. Una marca sin fila recibe solo `gen` + las suyas — UnrealvilleStudio es la casa
+y no lleva sector a propósito.
 
-Cada gate es una función pura `gateX(piece, ctx) → { pass: bool, detail: {...} }`. Se ejecutan en orden; **el primer REJECT corta** (no se siguen evaluando los siguientes, pero se loguea cuál cortó). RESCHEDULE no corta similarity/evidence pero sí desvía al final.
+### Parámetros
+`{{clave}}` se sustituye desde `brand_topics.hard_rules` **antes** de armar `ctx.rules`.
+Placeholder sin resolver → **la regla NO se envía** y se registra en
+`gate_detail.skipped_unresolved`. Jamás llega un enunciado crudo al juez: inventaría el criterio.
 
-### Gate 1 — Similarity (R1) — **check semántico vía Claude (decisión Sam)**
-- Compara la pieza nueva contra piezas recientes de **marcas hermanas sobre el mismo `domain`** (ventana: últimos 14 días; fuente: `content_pieces` PASS + agendadas).
-- Método piloto: llamada a Claude con system "evaluá si estas dos piezas serían percibidas por un humano como el mismo contenido/estructura. Devolvé SOLO un número 0.00–1.00 de similitud percibida y una razón de ≤15 palabras."
-- Umbral: **> 0.80 → REJECT** (regenerar con ángulo más divergente).
-- Si no hay piezas hermanas en ventana → PASS automático (nada con qué chocar).
-- **pgvector/embeddings queda explícitamente para R4B.** En piloto el volumen es bajo (1 pieza por corrida) y el check semántico es suficiente.
-
-### Gate 2 — Sibling-window (R1+R3)
-- Solo aplica si `brand_topic.sibling_stagger = true` para ese `(brand_id, domain)`.
-- Verifica que NO haya otra pieza de **marca hermana** sobre el mismo `domain` publicada o agendada dentro de **48–72h**.
-- Si la hay → **RESCHEDULE** (no REJECT — la pieza es buena, el timing no).
-- En piloto (sin Scheduler) RESCHEDULE = marcar `watcher_rescheduled` y avisar a Sam en el reporte; Sam decide cuándo.
-
-### Gate 3 — Cadence (R5)
-- Verifica que publicar esta pieza no exceda la cadencia de la fase/plataforma (`brand_topic.cadence`, tabla del contrato §3.4).
-- En piloto, sin Scheduler corriendo cadencia automática, este gate es **informativo**: loguea si excedería, pero no bloquea (PASS con flag). En R4B se vuelve bloqueante → RESCHEDULE.
-
-### Gate 4 — Evidence (marca-específico)
-- **UNRLVL:** la pieza DEBE contener datos/números (no opinión suelta). Heurística piloto: detectar presencia de cifras/porcentajes/métricas; si cero → REJECT. (Refuerza `hard_rule.evidence_principle`.)
-- **Lucien:** verificar que NO viole sus hard_rules → frame übermensch nunca manifiesto, cero mención/tease de libros. Esto se valida vía check semántico de Claude contra `brand_topic.hard_rules`. Violación → REJECT.
-
-### Gate 5 — Duplication (R4)
-- Verifica que el mismo `domain` no se haya publicado con texto similar (de la **misma marca**) en la ventana de no-repetición (sugerido: 3 semanas).
-- Método: igual que gate 1 pero contra la propia marca. > 0.80 → REJECT.
-
-### Gate 6 — Hard-rules (contrato §4.2.6)
-- Valida **todas** las `hard_rules` del `brand_topic` de esa marca/tema (confidencialidades, anti-política, edge_safety_rail, linkedin-no-es-destino-de-Lucien, etc.).
-- Esto solapa parcialmente con gate 4 para Lucien — está bien, gate 6 es el catch-all exhaustivo. Una violación de cualquier hard_rule → REJECT.
-- Método: check semántico vía Claude, pasando la pieza + el objeto `hard_rules` completo, pidiendo lista de reglas violadas (vacía = PASS).
+### Dos criterios de admisión de una regla
+1. **Atómica.** Un código que empaqueta cuatro reglas no diagnostica nada: al disparar no
+   se sabe cuál falló. `HR-FPHS-11` se partió en cuatro por esto.
+2. **Juzgable sobre la pieza.** Una regla de ruteo, una propiedad del proceso o un enunciado
+   paramétrico sin su valor **no son rigor: son ruido con formato de regla**. Se apagan o
+   se acotan a su parte juzgable.
 
 ---
 
-## 4. SALIDAS (contrato §4.3)
+## 2. PERSISTENCIA
 
-```
-PASS       → la pieza avanza: INSERT content_pieces (awaiting_approval) + email Resend. [flujo actual intacto]
-REJECT     → vuelve al builder (regenerar). Loguear failed_gate + razón. Queue → 'watcher_rejected'. NO email.
-RESCHEDULE → válida, timing no. Queue → 'watcher_rescheduled'. NO email aún. Reporte a Sam.
-```
-Todo resultado se escribe en `intel.watcher_log` con el detalle por gate.
+**`intel.watcher_log`** — `result`, `failed_gate`, `gate_detail` (jsonb).
+`gate_detail` guarda por gate: `violated` (solo códigos conocidos), `unmatched`
+(lo que el juez devolvió y no matchea ningún código), `warned`, `evaluated`, `raw`.
 
----
+**Validación de salida:** `violated = devueltos ∩ códigos conocidos`. Todo lo demás va a
+`unmatched`. Esto existe porque la v1 partía la prosa del modelo por comas y guardaba
+`"**Justificación breve:**"` como si fuera una regla violada.
 
-## 5. CRITERIOS DE VALIDACIÓN OBJETIVOS
+**`content_pieces.assets.watcher`** — `{result, failed_gate, failed_rules, rules_evaluated}`.
+Es lo que lee el badge de la bandeja.
 
-CC debe poder demostrar con query/log:
-1. Una pieza on-brand y divergente (Lucien filosófico vs UNRLVL técnico sobre ai-cognition) → ambas PASS gate 1 (similitud < 0.80). **Este es el corazón del piloto: prueba que el Builder diverge y el Watcher lo confirma.**
-2. Dos piezas casi idénticas forzadas → la segunda REJECT en gate 1, con `failed_gate='similarity'` en `watcher_log`.
-3. Una pieza UNRLVL sin números → REJECT gate 4.
-4. Una pieza Lucien que mencione/tease un libro → REJECT gate 6 (o 4).
-5. `intel.watcher_log` tiene una fila por cada paso, con `gate_detail` poblado.
-6. Ninguna pieza llega a `content_pieces.status='awaiting_approval'` sin una fila PASS en `watcher_log`.
+**`intel.approval_calibration`** — el corpus. Lleva `watcher_result`, `watcher_gate`,
+`watcher_rules`, `watcher_rules_evaluated` desnormalizados. **No se resuelve por JOIN contra
+`content_pieces`**: esa tabla se limpia periódicamente y el corpus debe sobrevivir a eso.
 
 ---
 
-## 6. MODULARIDAD PARA R4B (C2)
+## 3. LOS 8 GATES
 
-Los 6 gates se escriben como funciones independientes con firma uniforme `(piece, ctx) → {pass, detail}`, sin estado compartido, para que en R4B se extraigan tal cual a una EF `content-watcher` que el Scheduler invoque. En esa fase:
-- Gate 1 y 5 migran de check semántico a pgvector/embeddings.
-- Gate 2 y 3 se vuelven bloqueantes reales (RESCHEDULE efectivo, no informativo).
-- El Watcher sigue siendo gate obligatorio incluso en modo autónomo (contrato §5).
+Orden canónico. **No se reordena** — el corpus debe ser comparable entre tandas.
+
+| # | gate | qué juzga |
+|---|---|---|
+| 1 | `similarity` | similitud semántica contra piezas recientes. >0.80 → REJECT |
+| 2 | `sibling_window` | ventana 48–72 h entre hermanas → RESCHEDULE |
+| 3 | `cadence` | informativo en piloto |
+| 4 | `evidence` | reglas `kind='proof'`. **Sin regla declarada → PASS informativo**, registrado, nunca silencioso |
+| 5 | `duplication` | duplicado real vs. variante legítima de plataforma |
+| 6 | `hard_rules` | reglas `prohibition` + `requirement` |
+| 7 | `objective_stimulus` | coherencia objetivo↔estímulo (C.3), incluye `audience_frame` |
+| 8 | `visual_sibling` | similitud visual entre hermanas |
+
+### gate4 — evidence
+**Ya no está cableado por marca.** La versión anterior tenía `if (brand === "UnrealvilleStudio")`
+/ `if (brand === "LucienSael")` y `return pass:true` para el resto: no juzgaba peor a las demás
+marcas, **no las juzgaba**. Rechazaba 4 de 10 piezas de las dos cableadas y 0 de 7 del resto.
+Es el patrón `SUPPORTED = {lista cerrada}` del issue #93, replicado dentro del Watcher.
+
+### gate6 — hard_rules
+**Distingue el sentido de la regla**: una `prohibition` falla si el elemento **está**; un
+`requirement` falla si **falta**. La v1 no distinguía y rechazó tres piezas por "no hay CTA"
+cuando el CTA solo estaba *permitido*.
+
+Formato de salida exigido: un código por línea, sin prosa, o `NINGUNA`.
+
+### `watcher_full_scan`
+Flag global en `intel.iid_scheduler_config`. Override por job vía
+`builder_input.watcher_full_scan`, que gana si está presente. Sin fila → `false`.
+Lectura fallida → **THROW**, jamás degradar a `false`.
+
+En `true`: corren los 8 gates **sin corto-circuito**; `failed_gate` reporta el primer
+bloqueante del orden canónico. Existe porque con corto-circuito `gate6` se ejecutó 1 de 7
+veces, y el corpus no podría distinguir **"regla muerta"** de **"regla que nunca se ejecutó"**.
+
+**Instrumento de calibración, no modo de producción.** Multiplica el costo por pieza.
+Apagar al cerrar la recogida.
 
 ---
 
-## 7. REGLA DE LANZAMIENTO
+## 4. PLANO IMAGEN — HUECO ABIERTO
 
-- El Watcher es **prerequisito duro**: el primer publish real NO ocurre sin él operativo (contrato §6).
-- Se construye DESPUÉS del Builder (necesita piezas reales del Builder para calibrar el umbral de similarity).
-- CC entrega vía Ruta B (UPDATE in-place + DDL de `watcher_log` por migración), informa éxito, presenta para confirmación de Sam. NO auto-mergea.
+12 reglas `IMG-*` sembradas y **ningún gate las lee**. `gate8` compara prompts entre hermanas;
+nadie valida el contenido de la imagen contra sus reglas.
 
-_FIN — Watcher Spec v1.0_
+Consecuencia observada: una pieza de NeuroneSCF con texto corrupto generado
+—español inventado— **pasó el Watcher** y quedó programada para Instagram.
+
+Diferido a propósito: si ImageLab deja de escribir texto en la imagen, `IMG-GEN-01` y
+`IMG-GEN-02` se quedan sin sujeto y el gate se reduce a coherencia imagen↔copy y persona real
+sin blueprint. **Decidir la raíz antes de construir el gate.**
+
+---
+
+## 5. FAIL-LOUD — REGLA DURA
+
+- Fallo al leer reglas → `THROW RULES_FETCH_FAILED`. Sin `?? []`.
+- Fallo al leer sector → `THROW BRAND_SECTOR_FETCH_FAILED`. **Ausencia de fila ≠ query rota.**
+- `ctx` sin `rules` → `THROW RULES_MISSING`, fail-closed REJECT.
+
+Un gate sin reglas aprueba todo en silencio. Ese es el modo de fallo que estas tres
+excepciones existen para impedir.
+
+---
+
+## 6. ORDEN DE DEPLOY — CANDADO
+
+**`content-run-stage` primero, `content-watcher` después.** Siempre.
+
+Al revés, la ventana entre deploys rechaza el 100% del tráfico: el watcher nuevo exige
+`ctx.rules` y el run-stage viejo no las manda. En el orden correcto es inocuo — el watcher
+viejo ignora el campo extra.
+
+Ambos con `--no-verify-jwt`: sin el flag la CLI los deja en `verify_jwt: true` y el
+dispatcher empieza a comer 401, un fallo que no parece de deploy.
+
+**Verificación:** el número real es el del final de `entrypoint_path`, no el contador
+`version`. Y un `ezbr_sha256` que no cambia significa *"este deploy no cambió nada"*,
+nunca *"el cambio no entró"*.
+
+---
+
+## 7. LO QUE EL WATCHER NO HACE
+
+No aprende. Registra veredictos; no se recalibra solo. El corpus produce el tablero de salud
+por regla —falso positivo donde Sam aprueba y el Watcher rechaza; regla faltante donde Sam
+rechaza y el Watcher aprueba— y el ajuste de `watcher_rules` es manual. El aprobador
+automático (Ayra) es posterior al corpus.

@@ -10,6 +10,20 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-07-29
+_Barrido del HRD_ACTUALIZA paso 10 tras la Actualiza 2026-07-29 (PR #20). **Grupo A** del barrido: ítems ✅ + >30 días (corte 2026-06-29) + sin referencias activas, aprobados por Sam. El **Grupo B** (#48, IID Sembrador T4 COMPLETO, IID Sembrador T4 brief) NO se archivó por tener referencia activa y permanece en AGENDA.md. NOTA: varios de estos ítems ya tenían texto más extenso archivado en las migraciones 2026-06-28 y 2026-07-21; acá se mueve la **línea comprimida** que seguía viva en AGENDA.md — las migraciones anteriores no se tocaron._
+
+- ✅ **#47 Expert/Boids — E3b-1 CERRADO: ffmpeg server-side decodifica HEVC (28-jun c).** `/api/extract-frames` probada E2E con el HEVC real de Marisol (hvc1 1080×1920 43.28s): 15/15 JPEG, video borrado. PR #3. 2 gotchas de credenciales resueltos (JWT chars especiales; service_role legacy). Professor: 6 learnings. — 2026-06-28
+- ⚠️ **#47 — E3-FRONT-canvas FALLÓ con HEVC → rediseño server-side (28-jun b).** Chrome no decodifica H.265 → canvas falló. Decisión: server-side total (ffmpeg). Professor: 3 learnings. — 2026-06-28
+- ✅ **#47 — E3-FRONT canvas construido + E2E Preview (28-jun).** PR #2 (obsoleto al día siguiente por HEVC). — 2026-06-28
+- ✅ **#47 — E1+E2+E3-EF construidos (27-jun c).** Vía D (frames navegador + Cloud Vision). iid-expert-ocr v1 (PR #6+#7 fix PEM). Professor: 6 learnings. — 2026-06-27
+- ✅ **#47 DISEÑADO + E1 (27-jun b).** Subsistema onboarding 2 fases. 6 decisiones. Professor: 5. — 2026-06-27
+- ✅ **IID Sembrador CONSTRUIDO T1-T3 (25-jun b).** Fan-out iid-core v22 (fanout.ts). Cerebro iid-inbound v1. — 2026-06-25
+- ✅ **IID Fase 3 transporte REPARADO (25-jun a).** dispatcher v26→v27. — 2026-06-25
+- ✅ Eje B diseño (24-jun b). ImageLab Imagen→Gemini (24-jun). R4B Chat 2 (20-jun). #5i GENOMA v1.0 LUCIEN (19-jun). IID QUALITY LOTE A (18-jun). Builder+Watcher LIVE (16-jun). NSCF Resend/Fase 2 (13-16 jun).
+
+---
+
 ## Migración 2026-07-21
 _Primera ejecución del barrido automático del HRD_ACTUALIZA paso 10 (protocolo v1.3, creado 18-jul). Criterio aplicado: completado ✅ + más de 30 días (corte 2026-06-21) + sin referencias activas. Aprobado por Sam antes de mover._
 ### #5i — GENOMA v1.0 DE LUCIEN — CERRADO (19-jun)
