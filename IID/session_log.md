@@ -258,6 +258,36 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-07-29 — Watcher: reglas enumeradas, precedencia por sector y full_scan
+
+**Estado:** Watcher cerrado como instrumento. Carril vacío y armado, esperando activación de agentes IID.
+
+**Punto de partida:** `gate6HardRules` guardaba prosa del modelo como si fueran códigos de regla —el parser partía por comas el texto libre— y `gate4Evidence` estaba cableado a UnrealvilleStudio y LucienSael, devolviendo `pass:true` para el resto: ForumPHs y NeuroneSCF cruzaron 7 corridas por un gate que no las juzgaba.
+
+**Entregado:**
+- `intel.watcher_rules` — 54 reglas enumeradas con código citable. Columnas `subject` (materia, eje de agregación del corpus), `sector`, `scope` (GENERATED: brand/sector/gen).
+- `intel.brand_sector` — 9 marcas. Sectores RETAIL, LEGAL, PERSONA. UnrealvilleStudio sin sector: es la casa.
+- Precedencia por `subject`: brand > sector > gen. Verificada contra datos vivos — 2 desplazamientos, ambos intencionales.
+- Códigos atómicos: `HR-FPHS-11` partida en `HR-FPHS-11/12/13/14`; `HR-NSCF-08` acotada al mecanismo.
+- Parámetros `{{clave}}` desde `brand_topics.hard_rules`. Sin resolver → regla omitida y registrada en `skipped_unresolved`, jamás enviada cruda.
+- `HR-GEN-01` completitud: rescatada del cableado de Lucien a transversal. Cazó una pieza truncada en su primera salida.
+- `watcher_full_scan` — flag global en `intel.iid_scheduler_config`. **ENCENDIDO.**
+- Badge de bandeja + `intel.approval_calibration.watcher_rules` / `watcher_rules_evaluated`.
+
+**PRs:** iid-functions #37, #38, #40 · Orchestrator #17, #18.
+**Deploys:** `content-run-stage` _53 → _57 · `content-watcher` _17 → _18. Byte-identidad verificada.
+
+**Cobertura ganada:** D7Herbal, VizosCosmetics, VivoseMask y DiamondDetails pasaron de 0 reglas a 6 de texto y 6 de imagen heredando de RETAIL, sin calibración manual. D7Herbal —ingerible— queda cubierta por `claim_medico` por pertenencia al sector.
+
+**Carril vaciado:** 7 queue, 4 findings, 2 piezas, 7 jobs, 17 `watcher_log`, 2 `scheduled_posts`, 36 objetos de storage. Preservadas las 132 filas de `ops_generation_ledger` como línea base de costo. `intel.approval_calibration` estaba en 0: no se perdió ningún veredicto.
+
+**Hallazgos abiertos:**
+- Solo `iid-brief-biweekly` (jobid 2) está activo de 27 agentes IID. Sin activación manual no hay tanda hasta el 1-ago 07:00 UTC.
+- 2 `scheduled_posts` quedaron en `pending_publish` 24 h después de su hora: el publicador no corrió o falló en silencio.
+- FK circular `orchestrator_jobs.piece_id` ↔ `content_pieces.job_id`: ningún orden de borrado funciona sin NULL previo.
+- 12 reglas `IMG-*` sembradas sin gate que las lea. Diferido a la decisión sobre ImageLab.
+- `professor_learnings.category` tiene 150+ valores distintos mezclando idioma y capitalización.
+
 ## Sesión 2026-07-25b — R4B calibración de aprobación + diagnóstico de unificación
 
 **B4 fase 1 (calibración de aprobación) — validado end-to-end:**

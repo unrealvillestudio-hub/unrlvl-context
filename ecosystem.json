@@ -531,18 +531,19 @@
     "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
   },
   "pipeline": {
-    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v52 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v1 (6 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v57 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v18 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
     "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome."
   },
   "edge_functions": {
     "content-dispatcher": "v36 — cron jobid 29 cada 30min. B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST. B3: DISPATCH_LIMIT=5 (antes .limit(1)). Exige IID_CRON_SECRET (401 sin él). verify_jwt:false.",
-    "content-run-stage": "v52 — orquestador de producción (Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher + domain-write). #95-D: bloque CANAL (CANAL_BY_PLATFORM + CANAL_NONE); email_propietarios saltea imagen (ls=skipped, success=true). verify_jwt:false.",
-    "content-watcher": "v1 — 6 gates extraídos a EF propia (similarity, sibling-window, cadence, evidence, duplication, hard-rules). PASS/REJECT/RESCHEDULE.",
+    "content-run-stage": "v57 — orquestador de producción (Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher + domain-write). #95-D: bloque CANAL (CANAL_BY_PLATFORM + CANAL_NONE); email_propietarios saltea imagen (ls=skipped, success=true). verify_jwt:false.",
+    "content-watcher": "v18 — 8 gates (similarity, sibling-window, cadence, evidence, duplication, hard-rules + gate7 objective_stimulus + gate8 visual_sibling). PASS/REJECT/RESCHEDULE. 29-jul: reglas enumeradas con código citable desde intel.watcher_rules (precedencia brand>sector>gen), gate4/evidence cableado a marcas específicas neutralizado, devuelve el código de regla en watcher_log.gate_detail y a la bandeja; watcher_full_scan ENCENDIDO para recoger corpus.",
     "approve-piece": "v14 — aprobación: publish Meta + move-to-permanent. Path reject HOY sin rejected_reason (#5r pendiente).",
     "aife-filter": "control de calidad/seguridad de marca.",
     "iid-core": "v36 — fan-out multimarca por brand_topics (fanout.ts). #93: deja de generar copy, encola brief neutro (título+resumen) en aife_output.content.content. Sin filtro de familia. body.domain override. NO exige secreto (IID_CORE_SECRET no seteado en entorno). Contrato: agent_id,title,summary,r_scores,c_scores + opc source_urls,raw_data,finding_date,urgency,platforms,domain.",
     "iid-inbound": "v1 (NUEVA) — cerebro del Sembrador. Router capture/approve/reject/list. capture: destila semilla humana (link+frase) a tema neutro con anti-IP duro + mapea a brand_topics + persiste iid_seeds awaiting_approval y SE DETIENE. approve: gate de Sam (corrige mapeo) → handoff HTTP a iid-core (4B). reject/list. verify_jwt=false. Auth IID_INBOUND_SECRET pendiente de cargar al exponer el front (T4).",
     "lab-worker": "v23 — orquestador viejo (dual-mode lab_jobs). Llama labs por HTTP vía lab_configs. NO tiene creds Vertex.",
+    "iid-approval-digest": "v2 (creada 26-jul, no documentada hasta 29-jul) — digest diario 7am ET del corpus de calibración de aprobación (from: Content Queue <content@unrealvillestudio.com>); lee intel.approval_calibration (doble veredicto Sam+watcher).",
     "soporte": ["copylab-processor","brand-context-builder","iid-core","iid-ecommerce"]
   },
   "labs_wiring": {
@@ -551,10 +552,10 @@
     "sociallab": "social-lab-flame.vercel.app /api/execute + /api/publish — post por plataforma",
     "videolab": "unrlvl-video-lab.vercel.app — active=FALSE (pendiente lanzar, Kling.ai)",
     "orchestrator": "orchestrator-unrlvl.vercel.app — front de aprobación humana",
-    "config": "intel.iid_scheduler_config: orchestrator_url + vercel_bypass_secret (CopyLab/ImageLab/SocialLab) + iid_cron_secret"
+    "config": "intel.iid_scheduler_config: orchestrator_url + vercel_bypass_secret (CopyLab/ImageLab/SocialLab) + iid_cron_secret + watcher_full_scan (flag global, ENCENDIDO 29-jul para recoger corpus de calibración; apagar al cerrar la recogida)"
   },
   "tables": {
-    "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log","iid_seeds (rastro semillas humanas: source_url/handle/raw_signal/captured_by/neutral_topic/mapeo/lane/status + GRANT service_role, 25-jun)"],
+    "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log","iid_seeds (rastro semillas humanas: source_url/handle/raw_signal/captured_by/neutral_topic/mapeo/lane/status + GRANT service_role, 25-jun)","watcher_rules (54 reglas enumeradas con código citable HR-*/IMG-*; columnas subject/sector/scope GENERATED brand/sector/gen; precedencia brand>sector>gen; params {{clave}} desde brand_topics.hard_rules, sin resolver→skipped_unresolved; 29-jul)","brand_sector (9 marcas→sectores RETAIL/LEGAL/PERSONA; UnrealvilleStudio sin sector=la casa; eje de herencia de reglas del watcher; 29-jul)"],
     "content": ["orchestrator_jobs (+ domain 2026-06-20)","content_pieces (+ domain)","content_calendar","content_performance","brand_context_cache","brand_voices"]
   },
   "vertex": {

@@ -69,12 +69,12 @@ FLUJO COMPLETO:
   CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw
     → iid-process → iid_findings → iid_content_queue (brand_id + domain)
     → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT + lee scheduled_for)
-    → content-run-stage v52 (deploy 2026-07-25):
+    → content-run-stage v57 (deploy 2026-07-29):
          ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
          ├─ AIFE filter
          ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
          ├─ SocialLab (post por plataforma)
-         └─ callWatcher → content-watcher v2 / deploy build _14 (8 gates)
+         └─ callWatcher → content-watcher build _18 (8 gates; reglas por código desde intel.watcher_rules)
     → content_pieces (awaiting_approval) → email content-approval@unrealvillestudio.com
     → Orchestrator (orchestrator-unrlvl.vercel.app, aprobación Sam)
     → approve-piece v14 (publish Meta + move-to-permanent)
@@ -93,11 +93,11 @@ AGENTES (intel.iid_agents, 29 = 28 research + 1 sentinela):
 
 EDGE FUNCTIONS:
   └─ content-dispatcher v36 (B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST; B3: .limit(5) DISPATCH_LIMIT; transporta domain a builder_input)
-  └─ content-run-stage v52 (Builder + labs + callWatcher + domain-write jobs/pieces/queue; #95-D bloque CANAL: email_propietarios saltea imagen)
-  └─ content-watcher v2 / deploy build _14 (8 gates: los 6 + gate7 objective_stimulus + gate8 visual_sibling, blocking)
+  └─ content-run-stage build _57 (Builder + labs + callWatcher + domain-write jobs/pieces/queue; #95-D bloque CANAL: email_propietarios saltea imagen)
+  └─ content-watcher build _18 (8 gates: los 6 + gate7 objective_stimulus + gate8 visual_sibling, blocking; 29-jul reglas enumeradas por código desde intel.watcher_rules —precedencia brand>sector>gen—, gate4/evidence cableado a marcas neutralizado, código de regla en watcher_log.gate_detail + bandeja, watcher_full_scan ON)
   └─ approve-piece v14 (publish Meta + move-to-permanent; reject sin rejected_reason → #5r)
   └─ iid-core v36 (#93 fan-out multimarca: deja de generar copy, brief neutro en aife_output.content.content; Ruta B en fanout.ts: preset derivado del objetivo; mata default_voice; body.domain override) · iid-inbound / deploy build _14 (Sonnet 5; cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
-  └─ aife-filter (deploy build _28, Sonnet 5) · brand-context-builder (deploy build _19, Sonnet 5) · lab-worker v23 · copylab-processor · iid-ecommerce
+  └─ aife-filter (deploy build _28, Sonnet 5) · brand-context-builder (deploy build _19, Sonnet 5) · lab-worker v23 · copylab-processor · iid-ecommerce · iid-approval-digest v2 (26-jul; digest diario 7am ET del corpus de calibración de aprobación, lee intel.approval_calibration)
 
 GOBIERNO (intel.brand_topics):
   La MARCA declara qué consume y con qué voz por destino. El agente investiga neutro.
@@ -219,6 +219,7 @@ speaks_sessions · speaks_messages · speaks_leads · speaks_golden_pass
 iid_agents (29) · brand_topics · iid_content_queue (+ domain) · iid_findings
 iid_research_raw · iid_cron_runs · iid_briefs · iid_scheduler_config · watcher_log
 iid_seeds (semillas humanas del Sembrador: source_url/raw_signal/neutral_topic/mapeo/lane/status, 25-jun)
+watcher_rules (54 reglas por código HR-*/IMG-*: subject/sector/scope, precedencia brand>sector>gen, 29-jul) · brand_sector (9 marcas→RETAIL/LEGAL/PERSONA, UnrealvilleStudio sin sector, 29-jul)
 ```
 
 ### content
