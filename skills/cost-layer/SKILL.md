@@ -1,317 +1,191 @@
-# SKILL — cost-layer v1.0
-_UNRLVL-OPS · Token Tracking · Margin Calculator · Model Efficiency_
-_Versión: 1.0 · 2026-04-24_
+# SKILL — cost-layer v2.0
+_UNRLVL-OPS · Costo real desde el ledger · Tarifas con procedencia · Guardián de vencimientos_
+_Versión: 2.0 · 2026-07-30 (M-6). Reescritura completa de v1.0 — ver [ARCHIVE_v1.md](ARCHIVE_v1.md)._
 
 ---
 
-## INSTRUCCIÓN DE CARGA
+## REGLA CERO — DE DÓNDE SALE UN PRECIO
 
-Este skill se activa cuando Sam indica:
-- "cuánto costó [lab/marca/sesión]"
-- "cuál es el margen de [cliente]"
-- "estamos usando el modelo correcto en [lab]"
-- "registra esta sesión de tokens"
-- cualquier análisis de costos o eficiencia de compute
+**Ninguna tarifa vive en este skill, ni en el código, ni en un ejemplo. La ÚNICA fuente de precio es la tabla `ops_lab_rates`, resuelta por la función `ops_resolve_rate`.** Si necesitás saber cuánto cuesta un `(lab, model_id, unit_type)` a una fecha, se lo preguntás a la función — nunca lo escribís.
 
----
-
-## SECCIÓN 1 — ARQUITECTURA
-
-### Qué trackea el Cost Layer
-
-```
-Sesiones de Claude (chats, labs, agentes, Edge Functions)
-    ↓
-ops_token_sessions — registro granular por llamada
-    ↓
-Agregación mensual por marca/lab
-    ↓
-ops_client_monthly — margen por cliente
-    ↓
-ops_model_alerts — alertas de eficiencia
+```sql
+-- La tarifa vigente a una fecha (composite: rate_usd, rate_id, effective_from):
+SELECT public.ops_resolve_rate(NULL, 'claude-sonnet-5', 'tokens_in', CURRENT_DATE);
+-- p_lab NULL = tarifa genérica; un lab concreto resuelve la específica si existe (ver precedencia).
 ```
 
-### Relación con lo que ya existía
-
-El Cost Layer extiende UNRLVL-OPS sin reemplazarlo:
-- `ops_services` + `ops_costs` → costos de servicios (Vercel, Supabase, fal.ai, etc.) — sin cambios
-- `ops_token_sessions` → **nuevo** — granularidad de tokens por sesión/llamada
-- `ops_client_monthly` → **nuevo** — margen calculado por cliente y mes
-- `ops_model_pricing` → **nuevo** — precios actuales por modelo
-- `ops_model_alerts` → **nuevo** — alertas de ineficiencia
+> v1 de este skill tenía una tabla de precios de Sonnet 4.6 / Opus / Haiku hardcodeada y todos sus ejemplos usaban `claude-sonnet-4-6` con números literales. Ese literal ERA el bug: se propagaba a cada sesión que cargaba el skill. Está archivado en [ARCHIVE_v1.md](ARCHIVE_v1.md) — obsoleto, no es fuente de nada.
 
 ---
 
-## SECCIÓN 2 — MODELOS Y PRECIOS ACTUALES
+## SECCIÓN 1 — TARIFA vs. CATÁLOGO (cambió en M-4)
 
-### Tabla ops_model_pricing (datos al 2026-04-24)
+Son **dos cosas distintas** desde M-4:
 
-| Modelo | ID | Input/1M | Output/1M | Cache Write/1M | Cache Read/1M | Tier |
-|---|---|---|---|---|---|---|
-| Claude Sonnet 4.6 | `claude-sonnet-4-6` | $3.00 | $15.00 | $3.75 | $0.30 | balanced |
-| Claude Opus 4.6 | `claude-opus-4-6` | $15.00 | $75.00 | $18.75 | $1.50 | powerful |
-| Claude Haiku 4.5 | `claude-haiku-4-5` | $0.80 | $4.00 | $1.00 | $0.08 | fast |
+| | Tabla | Qué es | Se usa para |
+|---|---|---|---|
+| **Tarifa** (precio) | `ops_lab_rates` | Precio por `(lab, model_id, unit_type)` con vigencia | Calcular costo. **Única fuente.** |
+| **Catálogo** (descriptivo) | `ops_model_pricing` | Nombre legible, `tier`, `context_window`, notas | Mostrar/elegir modelo. **NO es fuente de precio.** |
 
-### Cuándo usar cada modelo en UNRLVL
+`ops_model_pricing` describe el modelo (que Claude Sonnet 5 es `balanced`, ventana 1M, etc.). No lo consultes para cobrar: sus columnas de precio son referencia descriptiva, la tarifa facturable sale de `ops_lab_rates`.
 
-| Tarea | Modelo correcto | Por qué |
+### Precedencia: lab-específico > genérico
+
+`ops_resolve_rate` resuelve la fila **más específica**: si hay una tarifa para el `lab` exacto la usa; si no, cae a la **genérica** (`lab IS NULL`). Es el mismo idioma que `intel.watcher_rules` (brand > sector > gen).
+
+**Por qué:** Anthropic factura **por modelo**, no por nuestro lab interno. El `lab` es nuestro eje de *atribución* de costo, no un eje de precio de Anthropic. Por eso la fila genérica (`lab IS NULL`) de un modelo aplica a copylab, aife, sociallab, watcher por igual — todos pagan el mismo precio de Anthropic por Sonnet 5. Una fila lab-específica sólo existe cuando ese lab tiene un precio propio real (p. ej. un proveedor distinto, como `imagelab/gemini`).
+
+---
+
+## SECCIÓN 2 — PROCEDENCIA DEL COSTO: `rate_source`, `UNSEEDED`, `NULL`
+
+Cada asiento del ledger (`ops_generation_ledger`) congela **su** tarifa y de dónde salió, en `rate_source`:
+
+| `rate_source` | Significa | Auditable |
 |---|---|---|
-| CopyLab — copy de marca | Sonnet 4.6 | Calidad suficiente, costo óptimo |
-| IID Network — análisis | Sonnet 4.6 | Razonamiento bueno a precio razonable |
-| Agentes conversacionales simples | Haiku 4.5 | Respuestas cortas, bajo costo, alta velocidad |
-| Document Factory — formalización | Sonnet 4.6 | Precisión sin sobrepagar |
-| Análisis complejo / estratégico | Opus 4.6 | Reservar para cuando Sonnet no alcanza |
-| Shopify Auditor — queries | Sonnet 4.6 | Procesamiento de datos estructurados |
-| Libros Lucien — escritura | Sonnet 4.6 | Calidad literaria, costo sostenible |
-| Clasificación / routing | Haiku 4.5 | Tarea simple, máxima eficiencia |
+| `ops_lab_rates:<uuid>[+<uuid>]` | Costo derivado de esa(s) fila(s) de tarifa, congeladas al momento del asiento | **Sí** — el uuid apunta a la tarifa exacta |
+| `UNSEEDED` | No había tarifa vigente para ese `(lab, model, unit_type, fecha)` → costo 0, a la espera de sembrar la tarifa | **Sí** — estado explícito, no un agujero |
+| `NULL` | Fila **anterior a M-4** (antes de que existiera el congelado de tarifa) | **No.** No se rellena nunca con supuestos. |
 
-**Regla:** Opus solo cuando Sonnet genuinamente no es suficiente. Cada llamada a Opus cuesta 5x más que Sonnet.
-
-### Cálculo rápido de costo
-
-```sql
--- Costo de una sesión: función calc_token_cost
-SELECT public.calc_token_cost('claude-sonnet-4-6', 50000, 8000);
--- Ejemplo: 50K input + 8K output Sonnet = $0.15 + $0.12 = $0.27
-
--- Comparar si valía usar Opus:
-SELECT
-  public.calc_token_cost('claude-opus-4-6', 50000, 8000) AS opus_cost,
-  public.calc_token_cost('claude-sonnet-4-6', 50000, 8000) AS sonnet_cost;
--- Opus: $0.75 + $0.60 = $1.35 vs Sonnet: $0.27 — 5x más caro
-```
+**`NULL` ≠ `UNSEEDED`.** Un asiento pre-M-4 con `rate_source NULL` no es auditable y **jamás** se completa con una tarifa inferida — su costo se calculó con la lógica vieja y así queda. `UNSEEDED` es un estado nuevo y deliberado: "faltó tarifa, lo dejamos en 0 y visible". El tablero cuenta ambos como "filas sin tarifa" para no mentir en el total.
 
 ---
 
-## SECCIÓN 3 — REGISTRO DE SESIONES
+## SECCIÓN 3 — CICLO DE VIDA DE UNA TARIFA (M-6, guardián)
 
-### Insertar una sesión manualmente
+`ops_lab_rates.status ∈ {vigente, previsto, historico}` + `effective_from` + `valid_to` + `auto_promote`.
+
+- **`vigente`** (`active=true`): la que cobra hoy. `valid_to IS NULL` = no vence; una fecha = vence ese día.
+- **`previsto`** (`active=false`): la que entra en el futuro (`effective_from` futuro). No cobra todavía.
+- **`historico`**: ya venció; se conserva por trazabilidad.
+
+### El guardián: `ops_promote_rates()` + cron diario
+
+Una función `SECURITY DEFINER` corre por cron a las **06:00 UTC** (`SELECT public.ops_promote_rates();`) y, por cada `(lab, model_id, unit_type)`:
+1. archiva a `historico` toda `vigente` cuyo `valid_to < hoy`;
+2. promueve a `vigente`+`active=true` toda `previsto` con `effective_from <= hoy` **y `auto_promote=true`**.
+
+`auto_promote` es el discriminador explícito: una fila `previsto` con `auto_promote=false` **nunca** se promueve sola aunque su fecha ya pasó (caso `gemini-2.5-flash-image tokens_out`, congelada hasta confirmar facturación por token). Es idempotente: correrla dos veces el mismo día no cambia nada. Cada transición escribe en `ops_rate_transitions` (auditoría: `rate_id, de_status, a_status, at`).
+
+### La alerta preventiva: `v_rate_gaps` (+ alerta "vence sin reemplazo")
+
+`v_rate_gaps` (creada en M-7) lista toda tarifa `vigente` con `valid_to` no nulo, sus `dias_para_vencer` y si `tiene_reemplazo_previsto`. El guard a vigilar es la fila que **vence pronto y NO tiene reemplazo**:
 
 ```sql
-INSERT INTO public.ops_token_sessions (
-  session_type, model_id, brand_id, lab,
-  input_tokens, output_tokens, notes
-) VALUES (
-  'claude_chat',             -- tipo de sesión
-  'claude-sonnet-4-6',       -- modelo usado
-  'NeuroneSCF',              -- marca (null si es interno UNRLVL)
-  'copylab',                 -- lab que generó el gasto
-  45000,                     -- input tokens
-  12000,                     -- output tokens
-  'Sesión copy campaña IG NeuroneSCF B2C'
-);
--- cost_usd se calcula automáticamente por el trigger
+-- Tarifas que vencen en <14 días SIN previsto que las reemplace (hoy: vacío = sano):
+SELECT * FROM public.v_rate_gaps
+WHERE dias_para_vencer < 14 AND NOT tiene_reemplazo_previsto
+ORDER BY dias_para_vencer;
 ```
 
-### Tipos de sesión
-
-| session_type | Cuándo |
-|---|---|
-| `claude_chat` | Sesiones de trabajo de Sam con Claude (como esta) |
-| `lab_call` | Llamada desde CopyLab, ImageLab, WebLab, etc. |
-| `agent_call` | Llamada desde agente deployado (Profiler, Speaks, SMA) |
-| `edge_function` | Edge Function que llama a Claude directamente |
-| `batch` | Procesamiento batch (Document Factory, etc.) |
-
-### Registro automático desde Edge Functions
-
-```typescript
-// Al final de cada Edge Function que llame a Claude:
-async function logTokenUsage(
-  supabase: SupabaseClient,
-  sessionType: string,
-  modelId: string,
-  brandId: string | null,
-  lab: string | null,
-  usage: { input_tokens: number; output_tokens: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number }
-) {
-  await supabase.from('ops_token_sessions').insert({
-    session_type: sessionType,
-    model_id: modelId,
-    brand_id: brandId,
-    lab: lab,
-    input_tokens: usage.input_tokens,
-    output_tokens: usage.output_tokens,
-    cache_write_tokens: usage.cache_creation_input_tokens ?? 0,
-    cache_read_tokens: usage.cache_read_input_tokens ?? 0
-    // cost_usd calculado automáticamente
-  });
-}
-
-// Uso después de llamar a Claude:
-const response = await anthropic.messages.create({ ... });
-await logTokenUsage(supabase, 'lab_call', 'claude-sonnet-4-6',
-  'NeuroneSCF', 'copylab', response.usage);
-```
+Por qué existe: el 2026-08-31 vence el introductorio de Sonnet 5 y su `previsto` de reemplazo estaba `active=false`; sin guardián, el 1-sep `ops_resolve_rate` habría devuelto NULL para los cuatro labs de texto → todo `UNSEEDED`, costo 0. Con `ops_promote_rates` + esta alerta, el vencimiento se ve venir y se promueve solo.
 
 ---
 
-## SECCIÓN 4 — MARGEN POR CLIENTE
+## SECCIÓN 4 — DÓNDE VIVE EL COSTO REAL: EL LEDGER Y SUS VISTAS
 
-### Registrar un mes de cliente
-
-```sql
-INSERT INTO public.ops_client_monthly (
-  brand_id, period_month, retainer_usd, compute_usd, labor_hours
-) VALUES (
-  'NeuroneSCF',
-  '2026-04-01',   -- primer día del mes
-  3500.00,        -- retainer mensual (SIGNAL tier)
-  45.00,          -- costo de compute ese mes (desde v_cost_by_brand_lab)
-  12.5            -- horas de Sam ese mes (manual)
-);
--- margin_usd y margin_pct se calculan automáticamente
-```
-
-### Consultar margen
+El costo real de generación está en `ops_generation_ledger`, expuesto por vistas M-4 (no en `ops_token_sessions`, que es sólo el registro manual). Cada vista trae **`cost_actual`** y **`cost_projected`** (proyectado con la tarifa `previsto`) donde aplica, y una señal de tarifa incierta.
 
 ```sql
--- Margen de todos los clientes este mes
-SELECT brand_name, retainer_usd, compute_usd,
-       labor_cost_usd, margin_usd, margin_pct, margin_status
-FROM public.v_client_margin
-WHERE period_month = DATE_TRUNC('month', CURRENT_DATE);
+-- Costo por marca/lab este mes (asiento real del ledger):
+SELECT brand_id, lab, model_id, unit_type, status,
+       cost_actual, cost_projected, rate_source
+FROM public.v_cost_unified
+WHERE period_month = DATE_TRUNC('month', CURRENT_DATE)::date
+ORDER BY cost_actual DESC;
 
--- Margen histórico de un cliente
-SELECT period_month, retainer_usd, margin_usd, margin_pct, margin_status
-FROM public.v_client_margin
-WHERE brand_id = 'NeuroneSCF'
-ORDER BY period_month DESC;
-```
+-- Embudo por marca: costo por PIEZA PUBLICADA con el denominador visible.
+-- Un costo/publicada sin la tasa de PASS al lado engaña:
+SELECT brand_id, domain,
+       piezas_intentadas, aprobados, rechazados, pass_pct,
+       costo_total, costo_por_publicada, contiene_tarifa_incierta
+FROM public.v_iid_funnel
+WHERE period_month = DATE_TRUNC('month', CURRENT_DATE)::date
+ORDER BY costo_total DESC NULLS LAST;
 
-### Umbrales de margen
+-- Por pieza: generación (Builder/labs) vs juicio (Watcher, stage propio):
+SELECT brand_id, platform, veredicto, corte,
+       cost_generacion, cost_juicio, cost_total, tarifa_incierta
+FROM public.v_iid_piece_cost
+WHERE period_month = DATE_TRUNC('month', CURRENT_DATE)::date
+ORDER BY cost_total DESC NULLS LAST;
 
-| Estado | Margen % | Acción |
-|---|---|---|
-| `healthy` | ≥ 60% | — |
-| `ok` | 40–59% | Monitorear |
-| `tight` | 20–39% | Revisar eficiencia o precio |
-| `at_risk` | < 20% | Conversación con Sam urgente |
-
----
-
-## SECCIÓN 5 — EFICIENCIA DE MODELOS
-
-### Ver si estamos usando el modelo correcto
-
-```sql
--- ¿Dónde estamos usando Opus cuando Sonnet sería suficiente?
-SELECT model_name, tier, lab, brand_id, period_month,
-       total_calls, total_cost_usd,
-       sonnet_equivalent_cost,
-       overspend_vs_sonnet
+-- Eficiencia por modelo: actual vs proyectado + filas sin tarifa:
+SELECT model_id, model_name, tier, lab, brand_id,
+       total_calls, total_cost_usd, projected_cost_usd, filas_sin_tarifa
 FROM public.v_model_efficiency
-WHERE tier = 'powerful'  -- solo Opus
-  AND overspend_vs_sonnet > 1.00  -- sobrepagando más de $1
-ORDER BY overspend_vs_sonnet DESC;
-
--- Costo por lab este mes
-SELECT lab, brand_id, total_calls, total_tokens, total_cost_usd,
-       avg_cost_per_call
-FROM public.v_cost_by_brand_lab
-WHERE period_month = DATE_TRUNC('month', CURRENT_DATE)
-ORDER BY total_cost_usd DESC;
+WHERE period_month = DATE_TRUNC('month', CURRENT_DATE)::date
+ORDER BY total_cost_usd DESC NULLS LAST;
 ```
 
-### Alertas automáticas
+> Nota: `v_model_efficiency` fue recreada en M-4 **sin** las columnas `sonnet_equivalent_cost` / `overspend_vs_sonnet` (que v1 usaba). La comparación hoy es `total_cost_usd` (actual) vs `projected_cost_usd` (tarifa previsto) + `filas_sin_tarifa`.
+
+---
+
+## SECCIÓN 5 — REGISTRO MANUAL DE SESIÓN
+
+Para sesiones que aún no se auto-registran (chats de Sam, llamadas no instrumentadas):
 
 ```sql
--- Ver alertas activas
-SELECT alert_type, brand_id, lab, detail, cost_impact_usd, created_at
-FROM public.ops_model_alerts
-WHERE resolved = false
-ORDER BY created_at DESC;
+-- El model_id sale del CATÁLOGO (ops_model_pricing), no de un literal:
+INSERT INTO public.ops_token_sessions (session_type, model_id, brand_id, lab, input_tokens, output_tokens, notes)
+VALUES (
+  'claude_chat',
+  (SELECT id FROM public.ops_model_pricing WHERE active AND tier = 'balanced' ORDER BY input_per_1m LIMIT 1),
+  'NeuroneSCF', 'copylab', 45000, 12000, 'Sesión copy campaña IG'
+);
+-- cost_usd lo calcula el trigger contra la tarifa vigente.
+```
 
--- Registrar una alerta manualmente
-INSERT INTO public.ops_model_alerts (alert_type, brand_id, lab, detail, cost_impact_usd)
-VALUES ('wrong_model', 'NeuroneSCF', 'copylab',
-        'Se usó Opus en 12 calls de copylab — Sonnet habría sido suficiente',
-        8.40);
+Los Edge Functions ya registran automáticamente en el ledger vía `ops_log_generation` (que resuelve y congela la tarifa por asiento — ver el skill del pipeline IID). Este formulario es el respaldo manual.
+
+---
+
+## SECCIÓN 6 — VERIFICAR UNA TARIFA CONTRA LA FACTURA (método, no tabla)
+
+Cuando llega la factura de Anthropic, se **reconcilia** la tarifa sembrada dividiendo el importe por los tokens facturados y comparando contra `ops_resolve_rate`. Los números abajo son el **método aplicado a jul-2026**, no una tabla de precios a copiar — la tarifa canónica sigue viviendo en `ops_lab_rates`.
+
+| Modelo · dirección | Tokens factura jul-2026 | Importe | Implica tarifa | ¿Coincide con `ops_lab_rates`? |
+|---|---|---|---|---|
+| Sonnet 5 · input | 221.493 | $0,44 | $2,00 / 1M | Sí (introductorio vigente) |
+| Sonnet 5 · output | 24.074 | $0,24 | $10,00 / 1M | Sí |
+| Sonnet 5 · cache_write_5m | — | — | $2,50 / 1M | referencia |
+| Sonnet 5 · cache_read | — | — | $0,20 / 1M | referencia |
+| Sonnet 4.6 · input | 1.114.620 | $3,34 | $3,00 / 1M | Sí |
+
+Procedimiento: `importe / (tokens / 1e6)` → tarifa implícita → comparar con `ops_resolve_rate(...)` a la fecha de la factura. Si no coincide, se corrige la fila en `ops_lab_rates` (o se siembra la que falte); **nunca** se ajusta un literal en un skill o en el código.
+
+---
+
+## SECCIÓN 7 — SCHEMA (referencia)
+
+```
+FUENTE DE TARIFA (precio):
+  ops_lab_rates            — tarifa por (lab, model_id, unit_type) con status/effective_from/valid_to/auto_promote
+  ops_resolve_rate()       — resuelve la tarifa vigente a una fecha, precedencia lab-específico > genérico
+  ops_promote_rates()      — [M-6] guardián: archiva vencidas, promueve previstas (cron 06:00 UTC)
+  ops_rate_transitions     — [M-6] auditoría de cada promoción/archivado
+  v_rate_gaps              — [M-7] tarifas que vencen + si tienen reemplazo previsto
+
+CATÁLOGO (descriptivo, NO precio):
+  ops_model_pricing        — nombre, tier, ventana de contexto, notas
+
+COSTO REAL (ledger):
+  ops_generation_ledger    — asiento por generación, con tarifa congelada (rate_in/out/source/effective_at)
+  v_cost_unified           — costo por asiento: cost_actual + cost_projected + rate_source
+  v_iid_funnel             — embudo por marca: intentadas/aprobados/pass_pct/costo_por_publicada
+  v_iid_piece_cost         — por pieza: generación vs juicio (Watcher stage propio)
+  v_model_efficiency       — por modelo: actual vs proyectado + filas_sin_tarifa
+
+REGISTRO / SERVICIOS (sin cambios):
+  ops_token_sessions       — registro manual de tokens
+  ops_services / ops_costs — costos de servicios (Vercel, Supabase, fal.ai…)
+  ops_client_monthly / v_client_margin — margen por cliente (fuera de alcance activo)
+  ops_model_alerts         — alertas de eficiencia
 ```
 
 ---
 
-## SECCIÓN 6 — QUERIES DE DIAGNÓSTICO RÁPIDO
-
-### Costo total del mes actual
-
-```sql
-SELECT
-  SUM(cost_usd) AS total_mes_usd,
-  SUM(input_tokens + output_tokens) AS total_tokens,
-  COUNT(*) AS total_llamadas
-FROM public.ops_token_sessions
-WHERE recorded_at >= DATE_TRUNC('month', CURRENT_DATE);
-```
-
-### Top 5 sesiones más caras (detectar outliers)
-
-```sql
-SELECT session_type, model_id, brand_id, lab,
-       input_tokens, output_tokens, cost_usd, notes, recorded_at
-FROM public.ops_token_sessions
-WHERE recorded_at >= DATE_TRUNC('month', CURRENT_DATE)
-ORDER BY cost_usd DESC NULLS LAST
-LIMIT 5;
-```
-
-### Costo estimado de esta sesión de chat
-
-```sql
--- Estimación manual — Claude chats no se auto-registran todavía
--- Registrar al final de una sesión larga:
-SELECT public.calc_token_cost('claude-sonnet-4-6',
-  [input_tokens],   -- reemplazar con valor real
-  [output_tokens]   -- reemplazar con valor real
-) AS estimated_cost_usd;
-```
-
----
-
-## SECCIÓN 7 — INTEGRACIÓN CON IID NETWORK
-
-Cuando UNRLVL-IID detecta un hallazgo de ahorro (ej: "Cartesia Sonic = 60% ahorro en TTS"), Cost Layer confirma el ROI real:
-
-```sql
--- ¿Cuánto gastamos en ElevenLabs el mes pasado?
-SELECT SUM(cost_usd) FROM public.ops_costs
-WHERE service_id = 'elevenlabs'
-  AND period_month = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month');
-
--- Si el resultado es $X, el ahorro proyectado con Cartesia es X * 0.60
--- IID puede generar el sprint sugerido con ROI calculado
-```
-
----
-
-## SECCIÓN 8 — SCHEMA COMPLETO (referencia)
-
-```
-ops_model_pricing     — precios por modelo (Anthropic, future: otros)
-ops_token_sessions    — registro granular de cada llamada a Claude
-ops_client_monthly    — margen calculado por cliente y mes
-ops_model_alerts      — alertas de ineficiencia
-
-Tablas existentes (sin cambios):
-ops_services          — catálogo de servicios
-ops_costs             — costos mensuales por servicio
-ops_thresholds        — alertas de gasto
-ops_renewals          — renovaciones
-ops_insights          — insights manuales
-
-Vistas (nuevas):
-v_cost_by_brand_lab   — costo agregado por marca/lab/mes
-v_model_efficiency    — eficiencia por modelo, sobrecosto vs Sonnet
-v_client_margin       — margen por cliente con status
-
-Función:
-calc_token_cost()     — calcula costo dado modelo + tokens
-
-Trigger:
-trg_auto_calc_session_cost — auto-calcula cost_usd al insertar sesión
-```
-
----
-
-_SKILL cost-layer v1.0 · Unreal>ille Studio · UNRLVL-OPS extension_
-_Schema deployado en Supabase public.* al 2026-04-24_
+_SKILL cost-layer v2.0 · Unrealville Studio · M-6 guardián de tarifas._
+_Fuente única de tarifas: `ops_lab_rates` vía `ops_resolve_rate`. Cero precios literales en este archivo._
+_Historia: ver [ARCHIVE_v1.md](ARCHIVE_v1.md) (v1.0, obsoleto — no usar como fuente)._
