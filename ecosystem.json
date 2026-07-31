@@ -1,20 +1,20 @@
 {
   "_meta": {
-  "version": "2026-07-25-v1",
+  "version": "2026-07-31-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-06-25-v1",
+  "previous": "2026-07-25-v1",
   "last_session": {
-    "date": "2026-07-25",
-    "conducted_by": "Claude Opus 4.8 + MCP (Supabase/Vercel)",
-    "status": "R4B carril async: 3 EF desplegadas y verificadas byte a byte (iid-core v36, content-dispatcher v36, content-run-stage v52). GRANT bloqueante de service_role sobre 3 tablas de public corregido. Smoke test end-to-end PASS. Mañana se enciende R4B para evaluación funcional + calidad ICR (Industrial Consistency Ready).",
+    "date": "2026-07-31",
+    "conducted_by": "Claude Opus 4.8 + Claude Code (aplicación) + MCP (Supabase/Vercel)",
+    "status": "Instrumentación de costo end-to-end aplicada y verificada en producción: 16 migraciones (M-0..M-16), 13 PRs de iid-functions (#41-#50, #52) + unrlvl-ops #1/#2 + context #22 + ImageLab #10 + CopyLab #6, todos mergeados y desplegados. Primera medición real del carril: 5 piezas / 5 PASS / $0,0681 por pieza publicada. Hallazgo mayor: el desvío buildFromGenome (motor local que reconstruye CopyLab en vez de llamarlo) — ⚠️ DESVIACIÓN a corregir, converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B).",
     "key_achievements": [
-      "iid-core v35->v36: #93 fan-out multimarca, iid-core deja de generar copy (brief neutro en aife_output.content.content). Verificado en smoke: ai-cognition encoló 8 filas (Lucien+UNRLVL, dominio compartido), fphs-jd 4 filas.",
-      "content-dispatcher v35->v36: B2 (lee scheduled_for, .or(is.null,lte.now), order ASC NULLS FIRST) + B3 (DISPATCH_LIMIT=5). Verificado: toma exactamente 5 por corrida.",
-      "content-run-stage v51->v52: #95-D email_propietarios saltea imagen (bloque CANAL con CANAL_BY_PLATFORM + CANAL_NONE + rama guard en stage 3). Canales visuales correctos verificados (FACEBOOK_FEED/X_FEED/INSTAGRAM_FEED).",
-      "HALLAZGO+FIX (migración grant_service_role_public_iid_carril): service_role sin GRANT sobre public.psycho_presets (SELECT), public.scheduled_posts (SELECT+INSERT), public.ops_generation_ledger (SELECT+UPDATE). Era bloqueante latente de TODO el fan-out (FANOUT_PRESETS_FAILED). Fail-loud funcionó. Learning de calibración: verificar grants service_role sobre tablas nuevas de public.",
-      "Smoke test PASS end-to-end: #93 + U4 + Ruta B preset-por-objetivo (mapeo jd exacto) + dispatcher limit=5 + builder desde genoma + Watcher discriminando PASS/REJECT. REJECT de FPHs (hard_rules) y UNRLVL (evidence) fueron de MARCA sobre briefs sintéticos pobres, no fallos técnicos.",
-      "Mecanismo de invocación documentado: iid-core sin secreto (IID_CORE_SECRET no seteado en entorno); content-dispatcher exige IID_CRON_SECRET vía intel.trigger_iid_agent (SECURITY DEFINER, lee de intel.iid_scheduler_config). Secretos EF NO están en Vault. Ningún cron drena scheduled_posts.",
-      "D7Herbal genoma HUÉRFANO: d7herbal_conversion v1.0 activo pero CERO filas en brand_topics → no puede correr el carril async hasta sembrar suscripción."
+      "Capa de costo (ops_*): M-4 ledger contable (ops_generation_ledger) + ops_lab_rates con vigencia (status vigente/previsto/historico + effective_from/valid_to/auto_promote). M-4c/M-4d: asiento con tarifa CONGELADA (uuid de la fila guardado en la referencia), precedencia lab-específico > genérico (lab IS NULL aplica a copylab/aife/sociallab/watcher; fila lab-específica sólo con precio propio real, p. ej. imagelab/gemini). Reparación de ops_log_generation, rota tras eliminar la firma de 4 args de ops_compute_cost. FUENTE ÚNICA de tarifa = ops_lab_rates vía ops_resolve_rate; CERO precios literales en código o docs (regla del skill cost-layer).",
+      "M-6: ops_promote_rates + ops_rate_transitions + cron 38 a las 06:00 UTC, con auto_promote=false en el flip de gemini. M-7: voice_id + source_app + api_key_ref + vistas v_cost_pivot / v_cost_por_dimension / v_rate_gaps. M-8b/M-8d: ops_invoice_by_app sin escritura anónima + v_reconciliacion + api_key_ref en ops_token_sessions.",
+      "M-0: GRANTs + precio Sonnet 5 sembrado. M-10/M-11/M-12: filo de UNRLVL 5/10 en genoma, canon de idiomas NEUTRO con excepción Conectando, intel.rule_param_sources, eje languages. M-14: 5 reglas reescritas por procedimiento + HR-GEN-06/07/08 de gramática. M-15: perfiles de copy y humanización de LucienSael (brand_copy_profiles + humanize_profiles) — última de 10 sin ellos; incluye política de hashtags y firma. M-16 (iid-functions): esos perfiles llegan al Builder.",
+      "Primera medición real del carril (método de reconciliación jul-2026): 5 piezas, 5 PASS, $0,0681 por pieza. Reparto por lab: imagelab 58,7 % · copylab 28,4 % · aife 5,6 % · sociallab 3,7 % · watcher 3,5 %. Confirma con dato que full_scan nunca fue el riesgo; la imagen es el 59 % y sigue constante sin medir.",
+      "Coste de prueba aislado por source_app='iid-carril-test': 40 asientos / $0,6030, distinguible de $1,0626 de producción y $2,7192 de línea base. El eje source_app (M-7) separa el costo de pruebas del real.",
+      "HALLAZGO MAYOR — desvío buildFromGenome: el carril async escribe con buildFromGenome (motor LOCAL en content-run-stage) mientras lab_configs declara copylab->unrlvl-copy-lab.vercel.app y NUNCA lo invoca; igual con sociallab (runSocialLabDirect). Prueba comparativa 31-jul con CopyLab entero: ninguno gana completo (CopyLab = motor creativo, cero gobierno; buildFromGenome = gobierno, ningún ángulo). CopyLab gana porque ES el lab (UI, modo dual, superficie humana). Marcado ⚠️ DESVIACIÓN en pipeline.flow/prompt_hierarchy; regla de nomenclatura en labs._note. Corrección converge con Proyecto UNIFICACIÓN.",
+      "Con fecha 1-sep: el introductorio de Sonnet 5 vence el 2026-08-31; el cron 38 (06:00 UTC) promueve 2 filas (previsto->vigente) y archiva 2 (vigente->historico). Verificar ops_rate_transitions ese día, no confiar en la automatización."
     ]
   }
 },
@@ -247,6 +247,7 @@
   ],
   "labs": {
     "_note": "Todos los labs tienen live:false en Vercel — corren en subdominios vercel.app sin dominio custom",
+    "_naming_rule": "REGLA DE NOMENCLATURA INVIOLABLE (2026-07-31): cuando Sam dice CopyLab / ImageLab / SocialLab / VideoLab se refiere a ESTAS apps — repo, UI, modo dual (sync vía UI + async vía Orchestrator) —, NUNCA a un servicio genérico. Ningún carril construye el motor de un lab existente: lo LLAMA por su api_endpoint (lab_configs). Precedente del desvío a corregir: buildFromGenome (motor local en content-run-stage que reconstruye CopyLab en vez de invocarlo; igual runSocialLabDirect por SocialLab). Ver iid_subsystem.pipeline.flow / prompt_hierarchy (⚠️ DESVIACIÓN) y labs_wiring.",
     "orchestrator": {
       "url": "orchestrator-unrlvl.vercel.app",
       "repo": "Orchestrator",
@@ -531,8 +532,9 @@
     "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
   },
   "pipeline": {
-    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v57 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher] → content-watcher v18 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
-    "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome."
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v57 [Builder buildFromGenome ⚠️DESVIACIÓN + AIFE + ImageLab→CDN + SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN + callWatcher] → content-watcher v18 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "_desviacion_buildFromGenome": "⚠️ DESVIACIÓN A CORREGIR, NO ARQUITECTURA (2026-07-31). content-run-stage arma el copy con buildFromGenome (motor LOCAL) y el post con runSocialLabDirect (local), mientras lab_configs declara copylab->unrlvl-copy-lab.vercel.app y sociallab->social-lab-flame.vercel.app y NUNCA los invoca. buildFromGenome tiene gobierno pero ningún ángulo creativo; CopyLab tiene el ángulo y es el lab (UI, modo dual, superficie humana). La corrección es llamar al lab por su api_endpoint, no reconstruir su motor — converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B). Ver labs._note y labs_wiring.",
+    "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome — que resolvió la fragmentación del prompt pero al hacerlo reconstruyó el motor de CopyLab localmente (⚠️ DESVIACIÓN, ver flow._desviacion_buildFromGenome y labs_wiring), en vez de llamar a CopyLab por su api_endpoint."
   },
   "edge_functions": {
     "content-dispatcher": "v36 — cron jobid 29 cada 30min. B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST. B3: DISPATCH_LIMIT=5 (antes .limit(1)). Exige IID_CRON_SECRET (401 sin él). verify_jwt:false.",
@@ -547,12 +549,31 @@
     "soporte": ["copylab-processor","brand-context-builder","iid-core","iid-ecommerce"]
   },
   "labs_wiring": {
-    "copylab": "unrlvl-copy-lab.vercel.app /api/execute — genera copy",
-    "imagelab": "image-lab-unrlvl.vercel.app /api/execute — Vertex AI gemini-2.5-flash-image vía :generateContent (migrado 24-jun-2026 por apagado de Imagen) vía Service Account imagelab-vercel@gen-lang-client-0491381650. AQUÍ vive la credencial Vertex.",
-    "sociallab": "social-lab-flame.vercel.app /api/execute + /api/publish — post por plataforma",
+    "_desviacion": "⚠️ 2026-07-31: copylab y sociallab están DECLARADOS aquí y en lab_configs pero el carril async NO los invoca — content-run-stage arma el copy con buildFromGenome (motor local) y el post con runSocialLabDirect (local). Sólo ImageLab se llama de verdad por su api_endpoint. DESVIACIÓN a corregir (no arquitectura): ningún carril reconstruye el motor de un lab existente, lo llama por su endpoint. Ver labs._note e iid_subsystem.pipeline._desviacion_buildFromGenome. Corrección converge con Proyecto UNIFICACIÓN.",
+    "copylab": "unrlvl-copy-lab.vercel.app /api/execute — genera copy. ⚠️ DECLARADO pero NO invocado por el carril (buildFromGenome lo reemplaza localmente). La UNIFICACIÓN debe hacer que el carril lo llame por este endpoint.",
+    "imagelab": "image-lab-unrlvl.vercel.app /api/execute — Vertex AI gemini-2.5-flash-image vía :generateContent (migrado 24-jun-2026 por apagado de Imagen) vía Service Account imagelab-vercel@gen-lang-client-0491381650. AQUÍ vive la credencial Vertex. ÚNICO lab que el carril invoca de verdad por su endpoint (58,7 % del costo por pieza, medición 31-jul).",
+    "sociallab": "social-lab-flame.vercel.app /api/execute + /api/publish — post por plataforma. ⚠️ DECLARADO pero NO invocado por el carril (runSocialLabDirect lo reemplaza localmente).",
     "videolab": "unrlvl-video-lab.vercel.app — active=FALSE (pendiente lanzar, Kling.ai)",
     "orchestrator": "orchestrator-unrlvl.vercel.app — front de aprobación humana",
     "config": "intel.iid_scheduler_config: orchestrator_url + vercel_bypass_secret (CopyLab/ImageLab/SocialLab) + iid_cron_secret + watcher_full_scan (flag global, ENCENDIDO 29-jul para recoger corpus de calibración; apagar al cerrar la recogida)"
+  },
+  "cost_instrumentation": {
+    "_status": "LIVE (2026-07-31) — capa ops_* instrumentada end-to-end, 16 migraciones M-0..M-16 aplicadas y verificadas en producción.",
+    "_single_source_of_rate": "La ÚNICA fuente de tarifa (precio) es public.ops_lab_rates, resuelta por public.ops_resolve_rate(lab, model_id, unit_type, fecha). CERO precios literales en código, skills, o este archivo — ese literal ERA el bug de cost-layer v1. Ver skill cost-layer.",
+    "tables": ["ops_generation_ledger (asientos, línea base de costo)","ops_lab_rates (tarifa por (lab,model_id,unit_type) con status vigente/previsto/historico + effective_from/valid_to/auto_promote)","ops_model_pricing (catálogo descriptivo, NO fuente de precio)","ops_token_sessions (+api_key_ref, M-8d)","ops_rate_transitions (M-6)","ops_invoice_by_app (M-8b, sin escritura anónima)"],
+    "functions": ["ops_resolve_rate (resuelve tarifa a fecha)","ops_compute_cost (firma de 4 args ELIMINADA)","ops_log_generation (reparada M-4d tras la eliminación de la firma de 4 args)","ops_promote_rates (M-6, promueve previsto->vigente y archiva vigente->historico)"],
+    "views": ["v_cost_pivot","v_cost_por_dimension","v_rate_gaps","v_reconciliacion"],
+    "cost_axes_M7": "voice_id + source_app + api_key_ref — permiten pivotar el costo por voz/app/clave y AISLAR pruebas de producción (source_app).",
+    "rate_precedence": "lab-específico > genérico. Fila genérica (lab IS NULL) aplica a copylab/aife/sociallab/watcher por igual (mismo precio de Anthropic por modelo); una fila lab-específica sólo existe con precio propio real (p. ej. imagelab/gemini). El asiento CONGELA la tarifa (uuid de la fila en la referencia).",
+    "cron_38": "06:00 UTC — ops_promote_rates. auto_promote=false en el flip de gemini (revisión manual).",
+    "first_measurement_2026-07-31": {
+      "sample": "5 piezas, 5 PASS",
+      "cost_per_published_piece_usd": 0.0681,
+      "breakdown_pct": {"imagelab": 58.7, "copylab": 28.4, "aife": 5.6, "sociallab": 3.7, "watcher": 3.5},
+      "conclusion": "full_scan nunca fue el riesgo; la imagen es el 59 % del costo por pieza y sigue constante sin medir. Cifras del método de reconciliación jul-2026; tarifa canónica en ops_lab_rates.",
+      "test_cost_isolated": "source_app='iid-carril-test': 40 asientos / $0,6030 — distinguible de $1,0626 producción y $2,7192 línea base."
+    },
+    "dated_2026-09-01": "El introductorio de Sonnet 5 vence el 2026-08-31. El cron 38 (06:00 UTC) promueve 2 filas (previsto->vigente) y archiva 2 (vigente->historico) — Sonnet 5 pasa a su tarifa post-introductoria. VERIFICAR ops_rate_transitions ese día, no confiar en la automatización. (Tarifa exacta: ops_lab_rates, no literal aquí.)"
   },
   "tables": {
     "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log","iid_seeds (rastro semillas humanas: source_url/handle/raw_signal/captured_by/neutral_topic/mapeo/lane/status + GRANT service_role, 25-jun)","watcher_rules (54 reglas enumeradas con código citable HR-*/IMG-*; columnas subject/sector/scope GENERATED brand/sector/gen; precedencia brand>sector>gen; params {{clave}} desde brand_topics.hard_rules, sin resolver→skipped_unresolved; 29-jul)","brand_sector (9 marcas→sectores RETAIL/LEGAL/PERSONA; UnrealvilleStudio sin sector=la casa; eje de herencia de reglas del watcher; 29-jul)"],
