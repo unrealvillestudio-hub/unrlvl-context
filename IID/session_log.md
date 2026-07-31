@@ -108,6 +108,25 @@ Ejes de la tabla (por fila marca+dominio):
 
 Marcas activas hoy (fase 1): **LucienSael** (3 dominios: ai-cognition, ai-identity, human-essence) + **UnrealvilleStudio** (ai-cognition + 5 dominios Tier1 + **algorithm-mechanics** en fase 2, abierto 25-jun).
 
+### El filo — dos modelos, ambos correctos (M-12·A, 2026-07-31)
+
+El `filo` (cuán cortante es la pieza) se declara en **dos sitios**, según sea constante de marca o variable de tema — y ambos modelos son correctos:
+
+- **De VOZ** — cuando el filo es constante de la marca, vive en el genoma: `brand_voice_genome.emotional_register.the_edge`. LucienSael `9 of 10`, UnrealvilleStudio `5 of 10`, NeuroneSCF `5 de 10 instrumental`. [LEÍDO: `brand_voice_genome`, 2026-07-31]
+- **De TEMA** — cuando varía por dominio, vive en `brand_topics.hard_rules.filo`. ForumPHs y NeuroneSCF van de `3/10` (educativa: agresión baja, no voltaje) a `7/10` (editorial: controversial sin amarillismo) según el dominio. [LEÍDO: `brand_topics.hard_rules`, 2026-07-31]
+
+El resolvedor de params los cubre **por registro, no por código**: `intel.rule_param_sources` declara, como dato, las fuentes de cada `{{param}}` y su precedencia (topic 30 > genoma 10 → un tema puede sobreescribir el filo-constante de la voz). El valor viaja **crudo** al juez —nunca se parsea— porque el juez es multilingüe y lee igual `"9 of 10."` que `"7/10 controversial sin amarillismo"`; extraer el número reintroduciría la dependencia de idioma. Antes del registro, `injectRuleParams` sólo miraba `hard_rules` y descartaba `HR-GEN-04` para las marcas de filo-de-voz: **Lucien no era juzgado por su propio filo.** (`rule_param_sources` en `unrlvl-iid-functions`; M-12·A.)
+
+### El canon de idiomas (M-12·B, 2026-07-31)
+
+El idioma es **dato de marca, nunca dimensión del código.** Vive en `public.brand_languages` (por marca: `idioma_id`, `mercado`, `is_primary`, `active`) y —con M-12·B— se proyecta a `brand_topics.languages` (`text[]`, activos, primario primero), que el fan-out consume como **eje ortogonal**: una fila de queue por (plataforma × voz × idioma). Se publica en `meta_ig` en ES y en EN — misma plataforma, dos piezas.
+
+- **Por defecto `es-NEUTRO` / `en-NEUTRO`** — neutro internacional sin regionalismos, generados por separado (no traducidos). UnrealvilleStudio, NeuroneSCF, VizosCosmetics, PatriciaOsorioVizosSalon.
+- **Regional sólo cuando el mercado lo exige** — `es-PA` (ForumPHs · Panamá), `ES` (D7Herbal, VivoseMask · España), `EN-UK` + `VAL` (DiamondDetails · UK + Comunitat Valenciana).
+- **La excepción — Patricia Osorio · Conectando** (el espacio de comunidad íntima): `es-FL` / `en-FL` / Spanglish, **no** el neutro. Razón, del **aprendizaje del Professor del 2026-07-06**: la comunidad es íntima y homogénea; el neutro traicionaría la intimidad. Es la única marca que rompe el default a propósito — por eso se documenta con su razón, para que no se "corrija" a neutro por error. (Brand IDs de la persona: `PatriciaOsorioConectando` / `PatriciaOsorioComunidad`; filas de excepción vivas en `brand_languages`.) [LEÍDO: `brand_languages`, 2026-07-31]
+
+Añadir un idioma —o una marca en valenciano— es un `INSERT`, jamás un PR: por eso ningún idioma se enumera en código.
+
 ---
 
 ## §5 — EL PIPELINE (flujo CLAUDE → ORCHESTRATOR → labs → publicación)
@@ -257,6 +276,23 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 ---
 
 ## §9 — SESSION LOG (novedad al tope)
+
+## 2026-07-31 — El Builder lee las reglas que lo juzgan · el filo por registro · el idioma como eje (M-9 + M-12)
+
+**Estado:** tres frentes cerrados sobre el mismo patrón de fondo. Tres PRs en `unrlvl-iid-functions` (A y B) + esta doc en `unrlvl-context` (C). CC no mergea; deploy manual posterior.
+
+**El patrón, repetido tres veces esta sesión.** El dato existía; el consumidor no lo consultaba.
+1. **M-9 (PR #48, MERGEADO):** P3 (27-jul) migró el Watcher a `intel.watcher_rules`, pero el Builder siguió leyendo `topic.hard_rules` → prescriptor y juez sobre catálogos distintos. 7 de 8 piezas rechazadas por reglas que el Builder nunca vio. Ahora `buildFromGenome` recibe las MISMAS reglas que el juez (misma precedencia, filtradas a las imperativas) con el **código visible**: si el Watcher cita `HR-LUC-07` y el Builder lo tenía, incumplió; si no lo tenía, falló el sistema.
+2. **M-12·A (PR #49):** `injectRuleParams` resolvía `{{filo}}` sólo contra `hard_rules` → Lucien (filo-de-voz, en el genoma) no era juzgado por su propio filo. Ahora `intel.rule_param_sources` declara las fuentes por dato; el resolvedor recorre por precedencia (topic 30 > genoma 10) y el valor viaja **crudo** (el juez es multilingüe). Ver §4 → *El filo — dos modelos*.
+3. **M-12·B (PR #50):** `public.brand_languages` existía (9 marcas, hasta 3 idiomas) y el carril nunca la leía. Ahora el idioma es **eje ortogonal** del fan-out: una fila por (plataforma × voz × idioma), transportada por `brand_topics.languages` → `iid_content_queue.language` → `builder_input.language` → IDIOMA OBLIGATORIO del Builder. Retrocompat total: `NULL` → comportamiento de hoy. Ver §4 → *El canon de idiomas*.
+
+**El principio transversal (nuevo canon):** **el idioma es dato de marca, nunca dimensión del código.** Ningún idioma se enumera en `.ts`; una marca nueva en valenciano es un `INSERT`. Su **corolario**, que esta sesión demostró tres veces: **toda regla debe declarar quién la lee.** Una regla, un filo o un idioma que el consumidor no consulta es exactamente lo mismo que no existir — y el fallo es silencioso, que es el peor modo de fallar (patrón #97, ya con 3 réplicas).
+
+**Advertencia de volumen (M-12·B, al poblar `brand_topics.languages`):** UnrealvilleStudio y NeuroneSCF ×2 (3→6 piezas/finding); ForumPHs ×1 (1 idioma); LucienSael ×1 (0 idiomas activos); DiamondDetails ×3 hipotético (3 idiomas, aún sin `brand_topics`). Sin scheduler, el único control de cadencia es el número de findings. Poblar es un acto por marca, reversible.
+
+**Fuera de alcance (los tres frentes):** el Watcher, la precedencia de `watcher_rules`, `psycho_presets`, y poblar `languages` en marcas de producción.
+
+**PRs:** iid-functions #48 (M-9, mergeado), #49 (M-12·A), #50 (M-12·B) · unrlvl-context (M-12·C, esta doc).
 
 ## 2026-07-29 — Watcher: reglas enumeradas, precedencia por sector y full_scan
 
