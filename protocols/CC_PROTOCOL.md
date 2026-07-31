@@ -1,6 +1,8 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-06-08-v1 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-07-31-v2 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
+
+> **Cambios v2 (2026-07-31):** añadida a §4 la convención **"Instrucciones para Sam"** — cuando CC deja acciones para Sam, van bajo un encabezado destacado en el **cyan de UNRLVL (`#00FFD1`)** donde la superficie lo permita. (La versión previa 2026-06-08-v1 se archiva bajo ARCHIVO HISTÓRICO junto con la 2026-06-06-v1.)
 
 > Análogo a las custom instructions + protocolos de claude.ai (browser), pero para Claude Code.
 > Cada repo tiene un `CLAUDE.md` raíz que apunta a este documento. CC lee el `CLAUDE.md`
@@ -102,6 +104,14 @@ RIESGOS / DUDAS:
 
 Si no hubo context files tocados, declararlo explícito: "PRESERVACIÓN DE CONTEXTO: ninguno tocado."
 Si no se crearon worktrees, declararlo explícito: "WORKTREES: ninguno creado."
+
+### 4.1 — "Instrucciones para Sam" (convención de color · v2, 2026-07-31)
+
+Cuando CC deja **instrucciones o acciones manuales para Sam** (lo que en §4 es `PENDIENTE PARA SAM`), las presenta bajo un encabezado explícito **"Instrucciones para Sam"**, destacado en el **cyan de UNRLVL: `#00FFD1`** (el único color de acento de la marca — chevron, borde de footer, texto ICR).
+
+- **Dónde la superficie soporta color** (HTML, artifacts, paneles con estilos): el encabezado "Instrucciones para Sam" va en `#00FFD1` (p. ej. `<span style="color:#00FFD1">Instrucciones para Sam</span>` o el token de diseño equivalente).
+- **En markdown plano / terminal** (que no rinde color arbitrario): usar el encabezado destacado igual — `### 🟦 Instrucciones para Sam` o similar — para que **resalte visualmente** aunque el cyan no se renderice. La intención es que Sam localice sus acciones de un vistazo.
+- Aplica a **todo reporte de CC** en cualquier repo, no sólo `unrlvl-context`.
 
 ---
 

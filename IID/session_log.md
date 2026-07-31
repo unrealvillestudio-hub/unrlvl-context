@@ -127,6 +127,14 @@ El idioma es **dato de marca, nunca dimensión del código.** Vive en `public.br
 
 Añadir un idioma —o una marca en valenciano— es un `INSERT`, jamás un PR: por eso ningún idioma se enumera en código.
 
+### Hashtags y firma — LucienSael (M-15, 2026-07-31)
+
+LucienSael era **la única marca de 10 sin perfiles de copy y humanización.** M-15 los sembró en `public.brand_copy_profiles` (política de copy por plataforma: hashtags, firma/sign-off, longitud, tono de cierre) y `public.humanize_profiles` (parámetros de humanización), y M-16 (iid-functions) los cableó para que el **Builder los lea** — cierra el mismo patrón de la sesión: el dato existía sólo cuando el consumidor lo consulta.
+
+- **La fuente de verdad es la tabla, no este documento:** los valores exactos (qué hashtags, con qué firma, por plataforma) viven en `brand_copy_profiles`/`humanize_profiles`. Cambiarlos es un `UPDATE`, jamás un PR — mismo canon que el idioma y el filo.
+- **La disciplina de marca manda sobre la de plataforma:** coherente con el genoma de LucienSael (`the_unit_is_the_blow`, `length_discipline` ≤280 como ancla de IDENTIDAD, no de plataforma), la política de hashtags y firma es **austera** — la firma no sobreseñaliza y los hashtags no diluyen el golpe. La marca decide cuánto sostiene; la plataforma no le impone su convención.
+- **Por qué se documenta aquí:** para que la ausencia de un hashtag ruidoso o de una firma florida no se "corrija" por error a la convención genérica de la plataforma — es política deliberada, igual que la excepción de Conectando en el canon de idiomas.
+
 ---
 
 ## §5 — EL PIPELINE (flujo CLAUDE → ORCHESTRATOR → labs → publicación)
@@ -167,6 +175,8 @@ Añadir un idioma —o una marca en valenciano— es un `INSERT`, jamás un PR: 
 
 ### Los tres PromptBuilders (historia importante)
 En el diagnóstico de junio se descubrieron **tres PromptBuilders distintos** conviviendo: el de CopyLab (front), el de CopyLab (`api/execute.ts`), y el del propio IID (versión degradada que NO leía el genoma). La corrección fue `buildFromGenome` dentro de content-run-stage, con jerarquía de prompt canónica de 6 capas: instrucción arriba → hard rules → brand voice (genoma) → brand+audience context → creative direction → guidance/reference. Se evaluó y RECHAZÓ la idea de una "capa LLM rewriter" a favor de `formatForEngine()` determinístico por motor + jerarquía estructural.
+
+> **Nota 2026-07-31 (ver §9 y `ecosystem.json`):** `buildFromGenome` resolvió la fragmentación del prompt, pero al hacerlo **reconstruyó el motor de CopyLab localmente** en `content-run-stage` en vez de llamar a CopyLab por su `api_endpoint` (`lab_configs` lo declara y nadie lo invoca; igual con sociallab / `runSocialLabDirect`). Tiene gobierno pero ningún ángulo creativo. Es un **⚠️ DESVÍO a corregir, NO arquitectura** — converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B). Regla de nomenclatura inviolable: ningún carril construye el motor de un lab existente; lo llama por su endpoint. Ver `ecosystem.json → labs._note` / `labs_wiring`.
 
 ### La jerarquía del prompt (canónica)
 1. Instrucción (identidad del builder: "construyes la pieza ENCARNANDO el genoma")
@@ -276,6 +286,40 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 ---
 
 ## §9 — SESSION LOG (novedad al tope)
+
+## 2026-07-31 — Instrumentación de costo end-to-end, el Builder lee las reglas que lo juzgan, y el desvío buildFromGenome identificado
+
+**Estado:** aplicado y verificado en producción. **16 migraciones**, todas desplegadas y verificadas:
+
+- **M-0** — GRANTs + precio de Sonnet 5 sembrado (la tarifa vive en `ops_lab_rates`, nunca literal en código; ver skill `cost-layer`).
+- **M-4** — ledger contable (`ops_generation_ledger` como fuente de asientos) + `ops_lab_rates` con vigencia (`status ∈ {vigente, previsto, historico}`, `effective_from`/`valid_to`/`auto_promote`).
+- **M-4c / M-4d** — el asiento congela la tarifa al momento (uuid de la fila de `ops_lab_rates` guardado en la referencia); precedencia **lab-específico > genérico** (`lab IS NULL` aplica a copylab/aife/sociallab/watcher por igual — todos pagan el mismo precio de Anthropic; una fila lab-específica sólo existe con precio propio real, p. ej. `imagelab/gemini`). Reparación de `ops_log_generation`, que estaba rota tras eliminar la firma de 4 args de `ops_compute_cost`.
+- **M-6** — `ops_promote_rates` + `ops_rate_transitions` + cron 38 a las **06:00 UTC**, con `auto_promote=false` en el flip de gemini (no se auto-promueve; se revisa a mano).
+- **M-7** — `voice_id`, `source_app`, `api_key_ref` + vistas `v_cost_pivot`, `v_cost_por_dimension`, `v_rate_gaps`.
+- **M-8b / M-8d** — `ops_invoice_by_app` sin escritura anónima + `v_reconciliacion` + `api_key_ref` en `ops_token_sessions`.
+- **M-10 / M-11 / M-12** — filo de UNRLVL `5/10` en el genoma, canon de idiomas **NEUTRO** con la excepción de **Conectando**, `intel.rule_param_sources`, y el eje `languages`.
+- **M-14** — 5 reglas reescritas por procedimiento + `HR-GEN-06/07/08` de gramática.
+- **M-15** — perfiles de copy y humanización de **LucienSael** (`brand_copy_profiles` + `humanize_profiles`): era la única marca de 10 sin ellos. Incluye su política de hashtags y firma (ver §4).
+
+**PRs mergeados y desplegados:** #41 #42 #43 #44 #45 #46 #47 #48 #49 #50 #52 (iid-functions) · #1 #2 (unrlvl-ops) · #22 (context) · ImageLab #10 · CopyLab #6.
+
+**Primera medición real del carril** (fin del "full_scan nunca fue el riesgo, medímoslo"): **5 piezas, 5 PASS, $0,0681 por pieza publicada.** Reparto por lab:
+
+| Lab | % del costo por pieza |
+|---|---|
+| imagelab | 58,7 % |
+| copylab | 28,4 % |
+| aife | 5,6 % |
+| sociallab | 3,7 % |
+| watcher | 3,5 % |
+
+Confirma con dato lo que era estimación: **full_scan nunca fue el riesgo; la imagen es el 59 %** del costo por pieza y sigue siendo constante sin medir. (Cifras del método de reconciliación jul-2026; la tarifa canónica sigue viviendo en `ops_lab_rates` vía `ops_resolve_rate`.)
+
+**Coste de prueba separado** (para no contaminar la línea de producción): `source_app='iid-carril-test'` — 40 asientos / $0,6030, distinguible de $1,0626 de producción y $2,7192 de línea base. El eje `source_app` (M-7) es lo que permite aislar el costo de las pruebas del costo real.
+
+**El hallazgo mayor — el desvío `buildFromGenome`.** El carril async escribe con `buildFromGenome`, **motor local en `content-run-stage`**, mientras `lab_configs` declara `copylab → unrlvl-copy-lab.vercel.app` y **nunca lo invoca**. Lo mismo con sociallab (`runSocialLabDirect`). Prueba comparativa del 31-jul con CopyLab entero: **ninguno gana completo** — CopyLab tiene motor creativo y cero gobierno; `buildFromGenome` tiene gobierno y ningún ángulo. **CopyLab es el ganador porque es el lab:** UI, modo dual, superficie humana. La regla de nomenclatura inviolable queda fijada (ver `ecosystem.json → labs._note` y `labs_wiring`): **ningún carril construye el motor de un lab existente — lo llama por su `api_endpoint`.** `buildFromGenome` es el precedente del desvío, marcado en `ecosystem.json` con ⚠️ DESVIACIÓN a corregir (NO arquitectura). La corrección converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B).
+
+**En §4:** los dos modelos de filo, el canon de idiomas con la excepción de PatriciaOsorioConectando (aprendizaje del Professor 6-jul), y la política de hashtags y firma de LucienSael.
 
 ## 2026-07-31 — El Builder lee las reglas que lo juzgan · el filo por registro · el idioma como eje (M-9 + M-12)
 

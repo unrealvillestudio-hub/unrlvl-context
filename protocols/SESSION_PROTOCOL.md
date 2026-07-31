@@ -1,5 +1,7 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
-**Versión:** 2026-06-07-v16 | **Mantenido por:** Claude
+**Versión:** 2026-07-31-v17 | **Mantenido por:** Claude
+
+> **Cambios v17 (2026-07-31):** (1) **Corregido el punto de push de CC a `unrlvl-context`** según la instrucción de Sam del 29-jul, que revoca la redacción de v16 ("CC nunca pushea a `unrlvl-context`"): **CC SÍ pushea ramas de PR** a `unrlvl-context`; la restricción es **sólo `main` y el merge** (regla vigente en `protocols/CC_PROTOCOL.md` → "Flujo de entrega de context files"). (2) **Añadida al Paso 1 de carga** la confirmación de que **los labs son apps del ecosistema** (CopyLab/ImageLab/SocialLab/VideoLab = repo + UI + modo dual), nunca servicios genéricos.
 
 ---
 
@@ -81,6 +83,8 @@ El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
 ```
 
 Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprendizajes pendientes de aprobación."`
+
+**Confirmación de nomenclatura (Paso 1, añadida v17):** los labs son **apps del ecosistema** — cuando Sam dice **CopyLab / ImageLab / SocialLab / VideoLab** se refiere a **estas apps** (repo + UI + modo dual sync/async), **nunca a un servicio genérico**. Ningún carril reconstruye el motor de un lab existente: lo llama por su `api_endpoint` (`lab_configs`). Precedente del desvío a corregir: `buildFromGenome` (motor local en `content-run-stage` que reconstruye CopyLab en vez de invocarlo; igual `runSocialLabDirect` por SocialLab). Ver `ecosystem.json → labs._note` / `labs_wiring`.
 
 ### Paso 2 — Pregunta
 > *"Hola Sam, ¿con qué marca y proyecto vamos a trabajar?"*
@@ -279,7 +283,7 @@ SESSION_PROTOCOL.md · SKILL.md · INDEX.md · HRD_PROTOCOL.md · CC_PROTOCOL.md
 ## PUSH DIRECTO A GITHUB DESDE CLAUDE
 
 **Cuándo:** repos de código (CoreProject, WebLab, BluePrints, labs)
-**Cuándo NO:** `unrlvl-context` — GitHub Desktop siempre.
+**Cuándo NO (para Claude / claude.ai):** `unrlvl-context` — GitHub Desktop siempre. _(Esto aplica a **Claude en el browser**. Para **CC**, ver la nota de abajo: CC sí pushea ramas de PR a `unrlvl-context`.)_
 
 ```bash
 git clone https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git /tmp/repo
@@ -288,7 +292,7 @@ git add [archivos] && git commit -m "[mensaje]"
 git push https://[PAT]@github.com/unrealvillestudio-hub/[REPO].git main
 ```
 
-**Nota:** esto aplica a Claude (claude.ai). Para Claude Code (CC), las reglas de push están en `protocols/CC_PROTOCOL.md` — CC nunca pushea a `unrlvl-context` ni mergea PRs por su cuenta.
+**Nota (CC — corregida v17, 2026-07-31):** esto aplica a Claude (claude.ai). Para Claude Code (CC), las reglas de push están en `protocols/CC_PROTOCOL.md`. La redacción de v16 ("CC nunca pushea a `unrlvl-context`") queda **revocada por la instrucción de Sam del 29-jul**: **CC SÍ crea rama, commitea y pushea esa rama de PR** a `unrlvl-context` y abre el PR contra `main`. La restricción es **sólo `main` y el merge**: CC nunca pushea directo a `main` ni mergea PRs por su cuenta (eso lo hace Sam). Publicar una rama de PR es legítimo y esperado — es el "Flujo de entrega de context files" de `CC_PROTOCOL.md`.
 
 ---
 
