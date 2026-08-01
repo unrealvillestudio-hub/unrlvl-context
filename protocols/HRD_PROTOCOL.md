@@ -52,7 +52,7 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
    → Confirmar: prioridades activas
 3. Fetch `https://unrlvl-context.vercel.app/skills/INDEX.md` vía `Vercel:web_fetch_vercel_url`
    → Confirmar: versión del INDEX
-4. Responder exactamente: "Hola Sam, protocolo cargado, ¿con qué marca o proyecto vamos a trabajar?"
+4. Responder exactamente: "Hola Sam, protocolo cargado. Confirmo: los labs son apps del ecosistema, no servicios genéricos. ¿Con qué marca o proyecto vamos a trabajar?"
 5. Si Sam indica marca → fetch `brands/[Marca]/brand.json` + `brands/[Marca]/BP_Brand_Context.md` + `brands/[Marca]/session_log.md`
 6. Si Sam indica ecosistema/labs → fetch `ecosystem.md` + `ecosystem_filemap.md`
 7. Consultar `skills/INDEX.md` y cargar skills relevantes para el trabajo declarado

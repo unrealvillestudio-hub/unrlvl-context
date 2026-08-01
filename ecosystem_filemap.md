@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1_
 
 ---
 
@@ -70,10 +70,10 @@ FLUJO COMPLETO:
     → iid-process → iid_findings → iid_content_queue (brand_id + domain)
     → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT + lee scheduled_for)
     → content-run-stage v57 (deploy 2026-07-29):
-         ├─ Builder buildFromGenome (lee brand_topics + brand_voice_genome)
+         ├─ Builder buildFromGenome ⚠️DESVIACIÓN (motor LOCAL; lee brand_topics + brand_voice_genome — debe llamar a CopyLab por su api_endpoint, no reconstruir su motor)
          ├─ AIFE filter
          ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
-         ├─ SocialLab (post por plataforma)
+         ├─ SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN (motor LOCAL; debe llamar a SocialLab por su api_endpoint)
          └─ callWatcher → content-watcher build _18 (8 gates; reglas por código desde intel.watcher_rules)
     → content_pieces (awaiting_approval) → email content-approval@unrealvillestudio.com
     → Orchestrator (orchestrator-unrlvl.vercel.app, aprobación Sam)

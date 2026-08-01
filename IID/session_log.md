@@ -287,6 +287,22 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-01 — Regla de nomenclatura de labs registrada · `_naming_rule` unificada en `_note` · contradicción del `flow` corregida
+
+**Estado:** persistido en `ecosystem.json` v2026-08-01-v1 (+ derivados) y este log. Rama `ctx/labs-son-apps`; PR contra `main` abierto por CC. **CC no mergea.**
+
+**Qué se registró.** La regla de nomenclatura de los labs pasa a ser texto canónico e **INVIOLABLE** en `ecosystem.json → labs._note`: cuando Sam dice **CopyLab, ImageLab, SocialLab, VideoLab, VoiceLab, WebLab, AgentLab o BlueprintLab** se refiere SIEMPRE a **estas apps** —repo propio, UI para trabajo humano, modo dual `sync` (UI) + `async` (carril)—, **nunca** a un servicio genérico, una función, un stage del pipeline ni un módulo interno. Un lab es una aplicación con **superficie humana**; el motor que lleva dentro es intercambiable, el lab no. Si un carril necesita la capacidad de un lab, **lo llama por su `api_endpoint`** — no construye su propio motor. Precedente vivo: `buildFromGenome`, motor duplicado dentro de `content-run-stage` que dejó a CopyLab fuera del carril async durante meses (ver la entrada del 2026-07-31, *el desvío buildFromGenome*).
+
+**Unificación `_naming_rule` → `_note`.** La clave `_naming_rule` (introducida el 2026-07-31) existía **sólo** en `ecosystem.json` — barrido del árbol + `grep`: ningún `api/*.js` la consumía. Se **eliminó** y su contenido, reescrito, vive ahora dentro de `labs._note`. Una sola fuente de la regla.
+
+**Contradicción del `flow` corregida.** En `iid_subsystem.pipeline.flow`, el fragmento `Builder buildFromGenome ⚠️DESVIACIÓN` se reemplazó por una nota que lo nombra **desvío a corregir, NO arquitectura**, describe el síntoma (el stage `copylab` ignora su `api_endpoint` de `lab_configs` y usa un motor local; lo mismo `sociallab`/`runSocialLabDirect`) y remite a `labs_wiring`, que sí declara la arquitectura correcta.
+
+**Brief de CopyLab persistido.** `PROYECTO_COPYLAB_hereda_y_profilaxis.md` (raíz) recoge las tres fases: **A** — las 5 capas de gobierno que el generador único hereda de CopyLab (de ellas, voz-por-destino y reglas del Watcher son **portación real**), más 2 correcciones propias (`packInstructions` fuerza CTA; idioma ignorado) y 2 abiertas (falta el `await` de `upsertSnapshot`; catálogo de 44 vectores aún monoindustria); **B** — `execLab` en el stage `copylab`, `buildFromGenome` se retira **sólo** con las 5 capas presentes y una corrida verificada; **C** — SocialLab, mismo patrón. Principio de cierre: **ningún carril construye el motor de un lab que ya existe.**
+
+**Confirmación de nomenclatura** añadida a la respuesta de apertura de `HRD_PROTOCOLO_ACTUALIZACION` (los labs son apps del ecosistema, no servicios genéricos).
+
+**Pendiente dedicado nuevo — discrepancia estático↔repo.** El `ecosystem.json`/`AGENDA.md` **servidos por Vercel** difieren en bytes de los de `main`. Diagnóstico parcial de esta sesión: el árbol de trabajo local está en **CRLF** (`core.autocrlf=true`) y el blob de git en **LF** (`ecosystem.json`: blob 48.180 b / árbol 48.890 b, delta exacto = 1 CR por línea) — normalización de fin de línea, esperada en Windows y **no** corrupción. **Pero** los tamaños del brief (54.681 / 172.440) no coinciden ni con el blob ni con el árbol local, así que **falta confirmar contra el estático realmente servido por Vercel**. Se deja como **ventana dedicada**, no resuelta en este PR.
+
 ## 2026-07-31 — Instrumentación de costo end-to-end, el Builder lee las reglas que lo juzgan, y el desvío buildFromGenome identificado
 
 **Estado:** aplicado y verificado en producción. **16 migraciones**, todas desplegadas y verificadas:
