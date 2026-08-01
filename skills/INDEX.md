@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.9 · 2026-07-18 · Mantenido por: Claude_
+_Versión: 1.10 · 2026-07-26 · Mantenido por: Claude_
 
 ---
 
@@ -25,6 +25,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `genome-calibration` | `skills/genome-calibration/SKILL.md` | Crear/calibrar/diagnosticar un `brand_voice_genome` — bucle Boids, calibración de voz de marca, entrada E5b (UI Marisol), Tratado de genomas | Interno — voice research / IID Fase 2 |
 | `r4b-genome-calibration` | `skills/r4b-genome-calibration/SKILL.md` | Llevar una marca de cero a R4B, o recalibrar una marca completa (voz + parche + topics + agentes + scheduler). Orquesta el ciclo completo; delega la voz a genome-calibration | Interno — Sam×Claude, brand onboarding |
 | `nscf-pricing` | `skills/nscf-pricing/SKILL.md` | Pricing B2B/B2C NSCF, cotizaciones, Custom Kits, márgenes, rentabilidad de producto | Exclusivo NeuroneSCF |
+| `acta-repair` | `skills/acta-repair/SKILL.md` | Reparar o auditar un acta de asamblea de PH Panamá — output defectuoso del Document Factory, o revisión previa a la firma de Ivette. **NO para generar actas en volumen** (eso es el DF) | Exclusivo ForumPHs |
 | `agent-builder` | `skills/agent-builder/SKILL.md` | Crear, configurar o deployar agentes | UNRLVL + clientes |
 | `copylab-reference` | `skills/copylab-reference/SKILL.md` | Sesiones con CopyLab, plantillas, contenido por canal | UNRLVL + clientes |
 | `image-processing` | `skills/image-processing/SKILL.md` | Imágenes, LoRA prep, pipeline visual | UNRLVL + clientes |
@@ -39,6 +40,14 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.10
+
+**Cambios respecto a v1.9:**
+- `acta-repair` → skill nuevo · v1.0 · 2026-07-26 · **camino de reparación forense de actas de asamblea de PH Panamá.** Nace de una reparación real: el Document Factory produjo un acta con el PH inventado (tomó el nombre de la ley por nombre del edificio), la finca de otro cliente, el tipo y la modalidad de asamblea equivocados y el umbral legal del artículo equivocado. Alcance deliberadamente acotado — **reparar y auditar, nunca generar a escala**; un modo `generar` en un skill de chat nace muerto porque generar con UI para Ivette es del DF y siempre lo será. Abre con **Regla 0: nunca se entrega un acta sin su reporte ICR**, incluso cuando no hay hallazgos (estado `APTO PARA FIRMA`) — el reporte es el acto de haber revisado, no la lista de defectos; la regla existe porque se violó en la sesión que originó el skill y lo detectó el cliente, no el sistema. Contiene: **las tres magnitudes** (total de unidades ≠ unidades al día ≠ unidades presentes) con el artículo que gobierna cada una, que es el error más caro del dominio · arts. 62/67/68/73/74/83/90 de la Ley 284 · jerarquía de fuentes con la DB FPHs mandando siempre · las cuatro trampas verificadas del padrón (`total_units` que miente, unidades comerciales ausentes, `full_name` con notas operativas embebidas, fincas que rompen el patrón de longitud) · reconciliación de hablantes contra diarización no confiable · OCR de resultados en captura con sus trampas duras · los 8 gates deterministas · reglas duras del acta (anexo solo con presentes y representados, personal de plataforma omitido, Ivette nunca propietaria, sin footer) · formato del reporte ICR con su taxonomía de severidades · checklist de cierre.
+- **§2 del skill es el texto canónico del rulebook Ley 284.** Decisión que corrige a `actaConfig.ts` del DF, que declaraba la ley *"embebida en el agente por ser común a todo PH"*. La sesión probó que estaba mal: al rulebook embebido le faltaba el art. 74, **nadie podía verlo**, y el error se propagó al generador y al auditor a la vez — cuando ambos comparten la misma laguna, la revisión no revisa nada. Común y estable no significa "va en código": significa que es dato de **jurisdicción**, no de cliente. **Una fuente, dos consumidores** — el PR-4 del runbook de fix del DF implementa desde el skill, no reescribe.
 
 ---
 
@@ -127,6 +136,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "marca nueva de cero a R4B / recalibrar marca completa / llevar [marca] a R4B / montar el ecosistema de voz de [marca]" → `r4b-genome-calibration` (invoca `genome-calibration` + `voice-craft` + perfil en la fase de voz)
 - Sam dice "voz de conversión / la voz que vende / calibrar [marca]_conversion" → `voice-conversion` (+ `voice-craft` obligatorio)
 - Sam dice "pricing / cotización / kit B2B / margen / rentabilidad NSCF" → `nscf-pricing` + `ui-ux-layer` (para output visual)
+- Sam dice "acta / reparar acta / auditar acta / ICR / el DF sacó mal el acta" → `acta-repair` (+ skill `docx` para generar el entregable)
 - Sam dice "agente / WhatsApp / bot" → `agent-builder` + `security`
 - Sam dice "imagen / video / LoRA" → `image-processing` (+ `higgsfield` si hay MCP activo)
 - Sam dice "ads / campaña / Meta / TikTok" → `ads-mcp`
@@ -149,6 +159,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - `ecosystem-auditor` / `ecosystem-updater` — solo bajo demanda explícita
 - `supabase-auditor` — solo bajo demanda del protocolo auditor (el cruce código↔DB es caro)
 - `voice-reference-extractor` — solo cuando hay carpeta de videos lista para procesar
+- `acta-repair` — solo cuando hay un acta concreta que reparar o auditar
 
 ---
 
@@ -178,4 +189,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.9 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.10 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_

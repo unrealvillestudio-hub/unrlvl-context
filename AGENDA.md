@@ -41,6 +41,25 @@ _(Bloque al tope; el detalle vive en `IID/session_log.md` §9 y `ecosystem.json`
 
 ---
 
+## 🗓️ ForumPHs 2026-07-26 — DF: acta Torres de Castilla defectuosa · reparación + runbook de fix v2 + skill `acta-repair`
+
+_(Ítems añadidos directo a AGENDA por decisión de Sam — los ítems de agenda de ForumPHs viven aquí, no en `ecosystem.json`. Detalle completo en `brands/ForumPHs/session_log.md` §2026-07-26. Skill nuevo `acta-repair` v1.0 registrado en `skills/INDEX.md` v1.10.)_
+
+| prioridad | ítem |
+|---|---|
+| 🔴 | **Sembrar `registro_finca` + `registro_code` en los 8 PH** (`buildings`, hoy NULL en 8/8). Palanca principal del fix del DF: sin esto, el camino "borrador para reparación" es el camino normal para todos los PH. |
+| 🔴 | **Corregir el ejemplo canónico de las instrucciones del proyecto ForumPHs.** Enseña a nombrar al personal de plataforma (*"El señor Daniel Puentes de la empresa Hipal dio la bienvenida…"*), contra la decisión del 26-jul de omitirlo. Es la fuente más autoritativa que ven el DF y el skill. |
+| 🟠 | **Ejecutar el runbook de fix del DF** — `RUNBOOK_FIX_DOCUMENT_FACTORY_v2_2026-07-26.md`. Fase 0 (env vars + logs de `detectPlatform`) **antes** de cualquier PR. Incluye PR-0 (saneamiento del preflight, ver #62). |
+| 🟠 | **Ivette debe cerrar los 10 hallazgos del reporte ICR** del acta de Torres de Castilla antes de firmar (2 críticos: finca/código inexistentes; titularidad de los 6 locales contradice lo declarado en sesión por el Secretario electo). |
+| 🟡 | Insertar los **6 locales comerciales** `L 01`–`L 06` de Torres de Castilla en `units` con su finca (deuda arrastrada desde el 8-jun). |
+| 🟡 | Reconciliar `buildings.total_units` de Torres de Castilla: **305 → 312** (filas en `units` = 306, reales = 312). |
+| 🟡 | Limpiar `full_name` contaminado en `A 18-C` y `A 28-B` (traen notas operativas dentro del nombre) y verificar finca de `B 27-F` (9 dígitos donde todas tienen 8). |
+| 🟡 | Insertar **Alberto Paul** en `acta_admin_personnel` con rol `asesor_legal_externo`. |
+
+**Reclasificado/anotado en la tabla numerada de deudas (abajo):** #62 → 🔴 (los placeholders Venezia eran finca/código reales; PR-0 del runbook) · #59 → referencia al PR-4/PR-7 del runbook, queda **abierto**.
+
+---
+
 ### 🔴 BLOQUEANTE R4B — Proyecto UNIFICACIÓN (cache + generador de texto)
 Diseño cerrado en PROYECTO_UNIFICACION_cache_y_generador.md (entregado por Sam a chat dedicado). 3 fases: (1) brand-cache unificado pre-montado por marca con capas especializadas por industria — mata los 3 generadores actuales; (2) CopyLab multiindustria (poblar creative_compatibility_rules editoriales); (3) generador de texto único que hereda de CopyLab + buildFromGenome. Se ejecuta en chat dedicado. NO bloquea la calibración (sigue con buildFromGenome).
 
@@ -309,10 +328,10 @@ Destilado por muestreo (8/10 marcadas Lucien). core_move reactivo/léxico → ge
 | 56 | **DF: "APROBACIÓN DEL ORDEN DEL DÍA" sin header propio (3-jul)** — el parser (extractAgendaItems) no la extrae como agenda_item; el ICR la marca ALTO/Estructura (la numeración salta 1→3). Fix en parseResumen/parseTranscripcion, PR futuro. | ForumPHs |
 | 57 | **DF: cablear ICR→generate (R5 quedó inerte) — SPRINT NUEVO (4-jul).** page.tsx debe correr /api/icr ANTES de /api/generate (o regenerar tras el ICR) para que icr_findings llegue poblado; y los findings (internos + auditor) deben traer nº de sección o findingsForSection debe matchear "Cuerpo del acta". Sin esto, las marcas ICR inline de R5 nunca aparecen. | ForumPHs |
 | 58 | **DF: QA↔ICR desconectados — DEUDA CONOCIDA-Y-ACEPTADA (Sam 4-jul).** El QA da PASS/100%/lista sobre acta que el ICR declara BLOQUEADA (4 críticos). QA valida estructura, no contenido. Sam decide vivir con esto MIENTRAS el ICR atrape (el ICR es el que importa). Fix futuro: QA debe FAIL cuando ICR bloquea. NO urgente por decisión de Sam. | ForumPHs |
-| 59 | **DF: marca [ICR] dentro del .docx — PENDIENTE (Sam 4-jul).** Ligado a #57 (sin cableado no hay marcas que mostrar). Dejado como pendiente aceptado. | ForumPHs |
+| 59 | **DF: marca [ICR] dentro del .docx — PENDIENTE (Sam 4-jul) · ABIERTO.** Ligado a #57 (sin cableado no hay marcas que mostrar). Dejado como pendiente aceptado. **Ref (26-jul):** se resuelve en **PR-4/PR-7 del runbook de fix del DF** — las marcas `[ICR]` salen del body del `.docx` y van al reporte ICR. NO se cierra: queda abierto hasta ejecutar esos PRs. | ForumPHs |
 | 60 | **DF: segmentación TOC de baja densidad (4-jul).** Transcripción TOC real casi sin cues de locutor (7 bloques/426 párrafos). El DF avisa (gap no-bloqueante) y no pierde texto, pero la calidad depende del export del proveedor TOC. Ivette solicita a HIF/TOC export con etiquetas de hablante. No es bug del DF. | ForumPHs |
 | 61 | **DF: SDK @anthropic-ai/sdk@0.24.3 viejo (4-jul)** — predata el param thinking (se usa passthrough runtime). Actualizar el SDK en algún momento. | ForumPHs |
-| 62 | **DF: campos hardcodeados Venezia en UI (4-jul)** — placeholders "ej: 30285586"/"ej: 8706" en PreflightForm (datos de Venezia). Barrer residuos Venezia-céntricos de la UI. | ForumPHs |
+| 62 | **🔴 DF: campos hardcodeados Venezia en UI (4-jul → 🔴 26-jul)** — placeholders "ej: 30285586"/"ej: 8706" en PreflightForm (datos de Venezia). Barrer residuos Venezia-céntricos de la UI. **Su consecuencia real no era cosmética (verificado 26-jul):** esos placeholders contienen la finca y el código **reales de Venezia Tower**, y el acta de Torres de Castilla salió con `302855586` — el placeholder con un dígito de más — como finca de otro PH. Un texto de ejemplo en un formulario nunca debe ser un dato verdadero de un cliente. **Entra como PR-0 del runbook de fix del DF**, junto con el default `"de la Junta Directiva"` de los campos de nombre (que terminó firmando el acta), `TIPO`/`MODALIDAD` no editables y la fecha del sistema en lugar de la fecha de asamblea. | ForumPHs |
 | 63 | **DF: normalización unidades formato "E 01A"/"O 01B" de Lefevre (4-jul)** (letra de sección + código). splitUnitTower puede no manejarlo. PR de normalización aparte. | ForumPHs |
 | 64 | **DF: mover LOGISTICA_NAMES a config (4-jul)** (Daniel Puentes/Hypal, Paula Cebaros/TOC) a df_platform_parsing_config.extra para no hardcodear coordinadores por plataforma. | ForumPHs |
 | 65 | ✅ **#47 E5b FRONT — text window del bucle Boids CERRADO (6-jul).** UI en Orchestrator (Seeder de Marisol): toggle Capturar/Calibrar, selector marca scope-gated, retomar sembradas / crear from_scratch, bucle veredicto + progreso reflejo, convergencia, stub honesto from_genome. Backend +list +verdict_operator. PR #9 merged, verificado en vivo. Professor: 3 learnings. | UNRLVL | HECHO |
