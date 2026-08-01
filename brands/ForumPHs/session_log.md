@@ -1,5 +1,176 @@
 # ForumPHs — Session Log
 
+## 2026-07-26 — DF: acta Torres de Castilla defectuosa · reparación completa + reporte ICR + runbook de fix v2 + skill `acta-repair`
+
+**Alcance:** el DF generó el acta de la Segunda Asamblea Ordinaria 2026 de Torres de Castilla con
+fallos estructurales. Se reparó a mano contra las fuentes primarias, se emitió su reporte ICR, se
+investigó el código real del DF y se produjo el runbook de fix. Nació el skill `acta-repair`.
+**Cero código tocado. Cero PRs. Cero escrituras en FPHS.**
+
+---
+
+### El acta que produjo el DF no era del edificio correcto
+
+| lo que escribió el DF | verificado |
+|---|---|
+| PH "LEY 284 DE 14 DE FEBRERO" | **P.H. Torres de Castilla** — tomó el nombre de la ley |
+| Finca `302855586` · código `8706` | **no consta**; `buildings.registro_finca` NULL en 8/8 |
+| Asamblea EXTRAORDINARIA · virtual | **Segunda ORDINARIA 2026 · presencial** |
+| Quórum 0 unidades (0%) "supera el mínimo de 157" | **221 de 312 = 70,83%** |
+| Umbral 157 (art. 67 sobre el total) | **131** (art. 74, 51% de 255 al día) |
+| Segundo llamado | **no ocurrió**; instalada 2:32 p.m. |
+| Sección 2 duplicada · cuerpo truncado · 8 secciones vacías | — |
+| Ninguna unidad de los 5 electos correcta | ver §8-bis del runbook |
+
+**Origen de la finca — no era contaminación del GOAL example.** El placeholder del campo en
+`PreflightForm` dice `(ej: 30285586)` y `(ej: 8706)`: la finca y el código **reales de Venezia
+Tower**. El acta salió con ese placeholder más un dígito. Un texto de ejemplo que contiene dato
+verdadero de un cliente. Es exactamente la deuda **#62**, que estaba anotada como "barrer residuos
+Venezia-céntricos de la UI" — su consecuencia real era mucho peor que cosmética.
+
+**El bloque de firmas roto nace en el mismo formulario:** los campos de presidente y secretario
+vienen prellenados con el literal `"de la Junta Directiva"`, que es lo que apareció firmando.
+
+---
+
+### El ICR no podía detectarlo
+
+`app/api/icr/route.ts` es **100% LLM, cero gates deterministas**. Su ground truth completo es
+`parsed.attendance.length`, el resumen de votos, la lista de administración y el texto del acta.
+**No recibe `buildings`, ni el padrón, ni `units`.** No es que se le pasara el PH inventado: no
+tenía con qué compararlo.
+
+Su `LEY_284_RULES` cubre los arts. 62, 64, 67 y 83. **No incluye el 74** (elección de JD sobre
+unidades al día), ni el 73, 90 ni 68. Generador y auditor compartían la misma laguna, así que la
+revisión no revisaba. Y el `catch` devuelve `APPROVED_WITH_NOTES` — *"never block the user's
+download"*: un ICR que crashea produce un veredicto casi-aprobado.
+
+---
+
+### Reparación entregada
+
+**Acta corregida v2** — 17 pp., reconstruida contra transcripción, lista de asistencia, capturas de
+votación y resumen consolidado, cruzada contra el padrón FPHs. Incluye el **Anexo A** que el DF
+omitió: **221 unidades** con finca individual y titular.
+
+**Corrección de Ivette (calificó el acta 98/100):** el anexo lista **solo presentes o representados**;
+las ausentes no aparecen. Estaba a la vista en los dos actas de referencia — Venezia lista 135 de 182,
+Lefevre 123 de 163 — y no se leyó. Se bajó de 312 filas a 221.
+
+**Decisión de Sam:** el personal de la plataforma de votación **no se menciona** en el acta. No es
+relevante al objeto. ⚠️ El ejemplo canónico de las instrucciones del proyecto enseña lo contrario
+(*"El señor Daniel Puentes de la empresa Hipal dio la bienvenida…"*) — **hay que corregirlo**, o el
+DF y el skill seguirán aprendiendo la regla vieja de la fuente más autoritativa que tienen.
+
+**Reporte ICR** — BLOQUEADO, 10 hallazgos (2 críticos · 3 altos · 3 medios · 2 bajos), **ninguno
+resoluble sin Ivette**. Los dos críticos: finca y código del inmueble inexistentes; y los 6 locales
+comerciales figuran en la plataforma a nombre del Secretario electo, que en la misma sesión declaró
+que pertenecen a la promotora con representante propio — con 6 votos detrás.
+
+**Regla que se violó y quedó escrita:** se entregó primero el acta **sin** reporte ICR. Lo detectó
+Sam, no el sistema. Un acta reparada sin ICR parece limpia y no lo está — peor que el BLOQUEADO
+honesto del DF.
+
+---
+
+### Contrato nuevo del DF — tres capas
+
+El DF tiene hoy un contrato implícito equivocado: **entregar siempre un `.docx`**. Cinco
+degradaciones silenciosas distintas en el código son la misma decisión repetida (`db()` traga el
+error en `fincaLookup` y en `actaConfig`; `detectPlatform` degrada a `hypal`; el `catch` del ICR
+aprueba; `resolveBuildingId` devuelve `null` y el pipeline sigue).
+
+| capa | regla |
+|---|---|
+| **CAPACIDAD** | el DF hace el trabajo: lee los PNG, procesa el formato, no informa de lo que puede resolver |
+| **BLOQUEO** | uno solo: **si el PH no está en la DB, no hay acta** |
+| **DECISIÓN** | todo lo demás lo decide el operador informado, y **la decisión queda escrita en el ICR** |
+
+La pregunta no es *"¿generás igual?"* — eso significa entregar algo malo. Es **"¿generar borrador
+para reparación?"**: lo que sale por ese camino es materia prima para el skill, con nombre
+`BORRADOR_ACTA_...`, rótulo **NO FIRMABLE** y veredicto BLOQUEADO por definición.
+
+El ICR gana la sección **DECISIONES DEL OPERADOR**: qué se advirtió, qué se eligió, cuándo. El
+hallazgo se redacta neutro; **la decisión de proceder es un hallazgo aparte**, por haberse tomado
+fuera de HRD.
+
+> El preflight ya avisa antes de generar (*"ICR — Orden del Día no detectado"*) y ya recoge
+> overrides manuales. **La capa de decisión no hay que inventarla: hay que convertir avisos
+> existentes en decisiones registradas.**
+
+---
+
+### Hallazgos de datos — FPHS
+
+| hallazgo | detalle |
+|---|---|
+| Tres cifras de unidades | `total_units` 305 · filas `units` 306 · reales **312** |
+| Faltan los 6 locales | `L 01`–`L 06`, cero `commercial` en `units` — es la deuda arrastrada desde el 8-jun |
+| `registro_finca`/`registro_code` NULL | **8/8 edificios** — es lo que empuja al DF a inventar |
+| Finca de 9 dígitos | `B 27-F` → `302069995`; todas las demás tienen 8 |
+| `full_name` contaminado | `A 18-C` y `A 28-B` traen notas operativas dentro del nombre |
+| `acta_admin_personnel` | falta **Alberto Paul** (asesor legal externo) |
+
+**Sembrar `registro_finca` en los 8 PH es la palanca principal del fix.** Media tarde de trabajo
+separa un DF autónomo de uno que depende del skill en cada corrida.
+
+---
+
+### Entregables
+
+1. **`RUNBOOK_FIX_DOCUMENT_FACTORY_v2_2026-07-26.md`** — 4 fases, 8 PRs (PR-0 saneamiento del
+   preflight primero, por barato y sin dependencias), 8 gates deterministas, manifiesto de corrida
+   `df_run_manifest` en UNRLVL, y §8-bis con los datos verificados del caso como fixture de regresión.
+2. **`skills/acta-repair/SKILL.md`** — v1.0, ya en el repo.
+3. **Acta corregida v2 + reporte ICR** — a Ivette.
+4. **`DF_HALLAZGOS_…md`** — registro histórico del caso. ⚠️ **No cargar a la sesión de fix**: sus
+   causas raíz están superadas en tres puntos.
+
+### Skill nuevo — `acta-repair` v1.0
+
+Camino de reparación forense, **no un DF de bolsillo**: generar a escala sigue siendo del DF.
+Abre con **Regla 0 — nunca se entrega un acta sin su reporte ICR**, incluso sin hallazgos
+(estado `APTO PARA FIRMA`): el reporte es el acto de haber revisado, no la lista de defectos.
+
+Contiene: las tres magnitudes (total ≠ al día ≠ presentes) con el artículo que gobierna cada una ·
+arts. 62/67/68/73/74/83/90 · jerarquía de fuentes con la DB mandando siempre · las cuatro trampas
+del padrón · reconciliación de hablantes contra diarización no confiable · OCR con sus trampas ·
+los 8 gates · reglas duras del acta · formato del ICR · checklist de cierre.
+
+**§6.2 resuelto:** el rulebook Ley 284 se escribe **una sola vez**, como §2 del skill. PR-4 lo
+implementa desde ahí, no lo reescribe. Corrige la decisión de `actaConfig.ts`, que declaraba la ley
+"embebida en el agente por ser común a todo PH": común y estable no significa que vaya en código,
+significa que es dato de **jurisdicción**.
+
+---
+
+### Pendientes que deja esta sesión
+
+1. **Corregir el ejemplo canónico** de las instrucciones del proyecto (personal de plataforma).
+2. **Sembrar `registro_finca` + `registro_code`** en los 8 PH — desbloquea el DF.
+3. Fase 0 del runbook: verificar env vars y logs de `detectPlatform` **antes** de cualquier PR.
+4. §4.1 del runbook queda **a verificar**: la captura del preflight muestra `Hypal / Zoom`
+   detectado, no `toc`. El manifiesto (Fase 1) lo resuelve en una corrida.
+5. Insertar los 6 locales · limpiar `full_name` de `A 18-C` y `A 28-B` · verificar finca `B 27-F`.
+6. Ivette debe cerrar los 10 hallazgos del ICR antes de firmar.
+
+### REGLAS DB / DEPLOYS DE ESTA SESIÓN
+
+- **Cero escrituras en FPHS.** Todo lectura.
+- **Cero repos tocados. Cero EFs. Cero PRs.**
+- **Professor: 2 learnings** (`session_date` 2026-07-26, `brand_id` ecosystem, `TOOLING_GOTCHA`,
+  `approved_by_sam=true`, score 4): OCR en el contenedor de Claude Chat (tesseract y pytesseract SÍ
+  están instalados, pack `spa` NO, reescalado ×4 obligatorio en capturas de UI, validar por
+  aritmética nunca por confianza en el OCR, imágenes de un `.docx` con `unzip word/media/*`) ·
+  tool results grandes no entran al contexto: se descargan a `/mnt/user-data/tool_results/*.json`
+  y se leen con bash, sin reintentar la llamada.
+- ⚠️ **Fallo de protocolo registrado:** los learnings se escribieron por SQL directo sin verificar
+  antes el proxy `/api/professor` con `action=checkpoint`, como manda `HRD_PROFESSOR` paso 1. El
+  proxy está vivo desde el 18-jul.
+
+---
+*ForumPHs · reparación de acta Torres de Castilla + runbook de fix v2 + skill acta-repair · 2026-07-26*
+
 ## 2026-07-23 — Genoma de conversión: 18 topics sembrados + BI destilado + sitio corregido
 
 **Alcance:** cierre del ítem #82 (brand_topics de `fphs_conversion`), destilación del BI real a
