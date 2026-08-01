@@ -1,5 +1,5 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1_
 
 ---
 
@@ -112,6 +112,8 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 **ImageLab v7 (24-jun):** migrado de Vertex Imagen 3.0 (apagado 24-jun) a **gemini-2.5-flash-image** vía `:generateContent` — único punto de generación de imagen vivo (lab-worker + content-run-stage delegan por `/api/execute`). Suma **BGRemover** (ex-ProductShots; composición de catálogo descartada por límite luz-coherencia): herramienta de remoción de fondo vía remove.bg, 3 pasos, cutout cap 2400px lado mayor. Nueva env `REMOVEBG_API_KEY`.
 **SocialLab:** vía de publicación al público. Debe operar dual-mode (sync UI + async Orchestrator) igual que CopyLab/ImageLab. Re-test publicación pendiente tras fix brand_id.
 **OnboardingApp:** v1.0 puebla 5 tablas pero NO captura brand_voice_genome. Spec Fase 5 lista. Permitir derivar voz social desde editorial + capturar modo cita para voceros.
+**Regla de nomenclatura (INVIOLABLE, `ecosystem.json → labs._note`):** los labs (CopyLab / ImageLab / SocialLab / VideoLab / VoiceLab / WebLab / AgentLab / BlueprintLab) son APPS del ecosistema —repo propio, UI para trabajo humano, modo dual sync (UI) + async (carril)—, nunca un servicio genérico, una función, un stage ni un módulo interno. Si un carril necesita la capacidad de un lab, lo llama por su `api_endpoint` (`lab_configs`); no construye su propio motor.
+**⚠️ Desvío buildFromGenome (a corregir, NO arquitectura):** el carril async NO invoca a CopyLab ni a SocialLab — arma el copy con `buildFromGenome` y el post con `runSocialLabDirect`, motores LOCALES en `content-run-stage`, aunque `lab_configs` los declara. Sólo ImageLab se llama de verdad por su endpoint. Corrección en `PROYECTO_COPYLAB_hereda_y_profilaxis.md`; ver `ecosystem.json → labs_wiring`.
 
 ---
 
@@ -136,7 +138,7 @@ Una marca puede tener varias **voces hermanas** (distinto `voice_id`) que compar
 ```
 CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings
   → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT, lee scheduled_for)
-  → content-run-stage v57 [Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher]
+  → content-run-stage v57 [Builder buildFromGenome ⚠️DESVIACIÓN + AIFE + ImageLab→CDN + SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN + callWatcher]
   → content-watcher v18 (8 gates) → content_pieces awaiting_approval
   → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam)
   → approve-piece v14 (publish Meta + move-to-permanent)
