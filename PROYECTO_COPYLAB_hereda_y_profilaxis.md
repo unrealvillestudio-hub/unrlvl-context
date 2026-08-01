@@ -90,3 +90,12 @@ Ningún carril construye el motor de un lab que ya existe. Si un carril necesita
 **llama por su `api_endpoint`**. Un lab es una aplicación con superficie humana; el motor que lleva dentro
 es intercambiable, el lab no. Esta corrección **converge con el Proyecto UNIFICACIÓN** (cache + generador),
 que es BLOQUEANTE de R4B — pero la calibración no depende de ella.
+
+---
+
+## Cierre — 2026-08-01
+
+**Fase A ejecutada y cerrada** en los PRs #8–#13 (CopyLab @ `main` `e7d517c`). El **diagnóstico de este
+documento se mantiene como registro** — no se reescribe. El **estado vigente** de CopyLab vive en
+`knowledge/ecosystem/labs/COPYLAB_NOTES.md`; la **continuación** (Fase B: `execLab` en el stage `copylab`,
+retiro seguro de `buildFromGenome`) va al handoff de Fase B.

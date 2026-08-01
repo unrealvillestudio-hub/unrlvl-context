@@ -15,6 +15,8 @@ _Aprobado por Sam: 2026-05-18_
 
 Categorías: Observación directa (A) · Verdad sin filtro (B) · Identificación social (C) · Narrativa de tensión (D) · Autoridad diagnóstica (E) · Urgencia real (F).
 
+> _2026-08-01 — El no-repeat descrito arriba solo opera en modo UI. En el carril IID, `buildPreviousOutputs` no setea `last_creative_vector`, así que `applyCreativeLogic` no tiene con qué filtrar y el mismo vector puede repetirse indefinidamente. Restaurarlo es ítem de CopyLab Fase B._
+
 ### Layer 15 — TENSION_ARCHITECTURE
 10 arquitecturas que definen cómo se mueve la presión emocional a lo largo del copy. No es el tono — es la curva. Ejemplos: T1 INVERTED_PYRAMID (Cart A canónico — reveal tardío), T2 EARLY_SPIKE (Cart B — tensión máxima desde el primer segundo), T10 THE_QUIET_KNIFE (cada frase corta sin que se note la presión).
 
