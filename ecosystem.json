@@ -1,8 +1,8 @@
 {
   "_meta": {
-  "version": "2026-07-31-v1",
+  "version": "2026-08-01-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-07-25-v1",
+  "previous": "2026-07-31-v1",
   "last_session": {
     "date": "2026-07-31",
     "conducted_by": "Claude Opus 4.8 + Claude Code (aplicación) + MCP (Supabase/Vercel)",
@@ -246,8 +246,7 @@
     }
   ],
   "labs": {
-    "_note": "Todos los labs tienen live:false en Vercel — corren en subdominios vercel.app sin dominio custom",
-    "_naming_rule": "REGLA DE NOMENCLATURA INVIOLABLE (2026-07-31): cuando Sam dice CopyLab / ImageLab / SocialLab / VideoLab se refiere a ESTAS apps — repo, UI, modo dual (sync vía UI + async vía Orchestrator) —, NUNCA a un servicio genérico. Ningún carril construye el motor de un lab existente: lo LLAMA por su api_endpoint (lab_configs). Precedente del desvío a corregir: buildFromGenome (motor local en content-run-stage que reconstruye CopyLab en vez de invocarlo; igual runSocialLabDirect por SocialLab). Ver iid_subsystem.pipeline.flow / prompt_hierarchy (⚠️ DESVIACIÓN) y labs_wiring.",
+    "_note": "Todos los labs tienen live:false en Vercel — corren en subdominios vercel.app sin dominio custom. REGLA DE NOMENCLATURA — INVIOLABLE. Cuando Sam dice CopyLab, ImageLab, SocialLab, VideoLab, VoiceLab, WebLab, AgentLab o BlueprintLab, se refiere SIEMPRE a estas apps: repo propio, UI para trabajo humano, y modo dual sync (UI) + async (carril). Nunca a un servicio genérico, una función, un stage del pipeline ni un módulo interno. Un lab es una aplicación con superficie humana; el motor que lleva dentro es intercambiable, el lab no. Si un carril necesita la capacidad de un lab, llama al lab por su api_endpoint — no construye su propio motor. Precedente: en 2026, una interpretación de copylab como servicio genérico produjo buildFromGenome, un motor duplicado dentro de content-run-stage que dejó a CopyLab fuera del carril async durante meses.",
     "orchestrator": {
       "url": "orchestrator-unrlvl.vercel.app",
       "repo": "Orchestrator",
@@ -532,7 +531,7 @@
     "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
   },
   "pipeline": {
-    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v57 [Builder buildFromGenome ⚠️DESVIACIÓN + AIFE + ImageLab→CDN + SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN + callWatcher] → content-watcher v18 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v57 [[⚠️ Builder buildFromGenome — DESVIACIÓN a corregir, NO arquitectura: el stage copylab ignora su api_endpoint de lab_configs y usa un motor local. Lo mismo con sociallab (runSocialLabDirect). Corrección en curso: el carril vuelve a llamar a los labs. Ver labs_wiring, que sí declara la arquitectura correcta.] + AIFE + ImageLab→CDN + SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN + callWatcher] → content-watcher v18 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
     "_desviacion_buildFromGenome": "⚠️ DESVIACIÓN A CORREGIR, NO ARQUITECTURA (2026-07-31). content-run-stage arma el copy con buildFromGenome (motor LOCAL) y el post con runSocialLabDirect (local), mientras lab_configs declara copylab->unrlvl-copy-lab.vercel.app y sociallab->social-lab-flame.vercel.app y NUNCA los invoca. buildFromGenome tiene gobierno pero ningún ángulo creativo; CopyLab tiene el ángulo y es el lab (UI, modo dual, superficie humana). La corrección es llamar al lab por su api_endpoint, no reconstruir su motor — converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B). Ver labs._note y labs_wiring.",
     "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome — que resolvió la fragmentación del prompt pero al hacerlo reconstruyó el motor de CopyLab localmente (⚠️ DESVIACIÓN, ver flow._desviacion_buildFromGenome y labs_wiring), en vez de llamar a CopyLab por su api_endpoint."
   },
