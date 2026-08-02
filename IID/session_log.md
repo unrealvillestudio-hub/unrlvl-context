@@ -287,6 +287,20 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-01 — CopyLab Fase A cerrada (PRs #8–#13)
+
+CopyLab pasó de motor sin gobierno a lab con contrato. Cuatro contratos del modo carril: `builder_input` como transporte único, response con `title`/`body` separados, firma **sin estampar** y `usage` real, normalización de `brandContext` con supresión **por rebanada**, y disciplina fail-loud en `sb`/`sbArray`.
+
+El harness destapó dos defectos vivos que se habían mergeado: el desajuste de clave `brand` (escritor v2.1) contra `brands` (lector), causa raíz del literal `'ES'` hardcodeado que hacía generar en español a marcas EN-primarias; y la precedencia de `humanize_profiles`, donde `[0]` sobre un array que mergea DEFAULT primero hacía que **siete marcas** generaran con textura ajena. Se sumó un tercero que nadie había reportado: el modo literal conservaba el `[0]` del genoma, así que teasers y announcements de LucienSael salían con la voz que el array trajera primero.
+
+Estado final: `main` @ `e7d517c`, 23 tests verdes, dos goldens anclados a `da182aa` (43.056 b), CI en GitHub Actions — antes no había nada verificando ningún PR.
+
+Pendiente Fase B: mapa `destination`/`platform` → `content_type` (hoy toda pieza cae en `social_post` por el default del pack), no-repeat de vectores muerto (`buildPreviousOutputs` nunca setea `last_creative_vector`), `brandContext` del stage, y retiro de `buildFromGenome`.
+
+**Versiones de EFs corregidas en `ecosystem.json`.** El registro vivo `edge_functions` estaba desfasado: `content-run-stage`, `iid-core`, `content-watcher` y `content-dispatcher` decían v57/v36/v18/v36; las reales son **74/47/29/47**, verificadas con `list_edge_functions` (el contador `version` coincide exacto con el sufijo de `entrypoint_path` — **ése es el marcador confiable de versión**). Se corrigieron **solo las 4 entradas del registro vivo**; las menciones fechadas (p.ej. `key_changes_2026-07-25`, que dice v52) **no se tocan**: son historia — registran qué era cierto ese día y explican por qué el registro vivo subió (la EF se redeployó varias veces entre esa fecha y hoy). Regla #1 del repo.
+
+Hallazgo que abre frente propio: `src/lib/buildCopyPrompt.ts` (21.799 b) es un **tercer armador de prompt** en el front-end de CopyLab. Mientras exista, "CopyLab es el único generador" es falso dentro de CopyLab mismo.
+
 ## 2026-08-01 — Regla de nomenclatura de labs registrada · `_naming_rule` unificada en `_note` · contradicción del `flow` corregida
 
 **Estado:** persistido en `ecosystem.json` v2026-08-01-v1 (+ derivados) y este log. Rama `ctx/labs-son-apps`; PR contra `main` abierto por CC. **CC no mergea.**

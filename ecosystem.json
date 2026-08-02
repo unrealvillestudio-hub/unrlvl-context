@@ -1,9 +1,15 @@
 {
   "_meta": {
-  "version": "2026-08-01-v1",
+  "version": "2026-08-02-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-07-31-v1",
+  "previous": "2026-08-01-v1",
   "last_session": {
+    "date": "2026-08-02",
+    "conducted_by": "Claude Opus 4.8 + Claude Code (CopyLab + unrlvl-context) + MCP (GitHub)",
+    "status": "CopyLab Fase A cerrada (PRs #8–#13): cuatro contratos del modo carril (builder_input; response con title/body separados + firma sin estampar + usage real; supresión de cache por rebanada; disciplina fail-loud en sb/sbArray), corrección del lector (brand singular v2.1; precedencia de humanize marca>DEFAULT y copy>text; voz del modo literal por voice_id), escritor determinista (order=medium en los DEFAULT), dos goldens anclados a da182aa (43.056 b) y CI en GitHub Actions. main @ e7d517c, 23 tests verdes. Actualización de context files (session_log §9, AGENDA v2, COPYLAB_NOTES, PROYECTO, BUILDER_CONVERGED_SPEC) + corrección de versiones EF en el registro edge_functions y en el flow (content-run-stage v74, iid-core v47, content-watcher v29, content-dispatcher v47), verificadas por sufijo de entrypoint_path."
+  },
+  "previous_sessions": [
+  {
     "date": "2026-07-31",
     "conducted_by": "Claude Opus 4.8 + Claude Code (aplicación) + MCP (Supabase/Vercel)",
     "status": "Instrumentación de costo end-to-end aplicada y verificada en producción: 16 migraciones (M-0..M-16), 13 PRs de iid-functions (#41-#50, #52) + unrlvl-ops #1/#2 + context #22 + ImageLab #10 + CopyLab #6, todos mergeados y desplegados. Primera medición real del carril: 5 piezas / 5 PASS / $0,0681 por pieza publicada. Hallazgo mayor: el desvío buildFromGenome (motor local que reconstruye CopyLab en vez de llamarlo) — ⚠️ DESVIACIÓN a corregir, converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B).",
@@ -17,6 +23,7 @@
       "Con fecha 1-sep: el introductorio de Sonnet 5 vence el 2026-08-31; el cron 38 (06:00 UTC) promueve 2 filas (previsto->vigente) y archiva 2 (vigente->historico). Verificar ops_rate_transitions ese día, no confiar en la automatización."
     ]
   }
+  ]
 },
   "studio": {
     "name": "Unrealville Studio",
@@ -531,17 +538,17 @@
     "decision_pending": "Destino de los 14 UNRLVL-* sin correr + de los IID-* legacy de voz Lucien (reasignar a UNRLVL/Sam o crear agentes propios de la materia filosófica de Lucien)."
   },
   "pipeline": {
-    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v57 [[⚠️ Builder buildFromGenome — DESVIACIÓN a corregir, NO arquitectura: el stage copylab ignora su api_endpoint de lab_configs y usa un motor local. Lo mismo con sociallab (runSocialLabDirect). Corrección en curso: el carril vuelve a llamar a los labs. Ver labs_wiring, que sí declara la arquitectura correcta.] + AIFE + ImageLab→CDN + SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN + callWatcher] → content-watcher v18 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
+    "flow": "CRON (jobids 2-28, trigger_iid_agent) → iid-research → iid_research_raw → iid-process → iid_findings → iid_content_queue (brand_id+domain) → content-dispatcher v47 (jobid 29, cada 30min, .limit(5) (DISPATCH_LIMIT)) → content-run-stage v74 [[⚠️ Builder buildFromGenome — DESVIACIÓN a corregir, NO arquitectura: el stage copylab ignora su api_endpoint de lab_configs y usa un motor local. Lo mismo con sociallab (runSocialLabDirect). Corrección en curso: el carril vuelve a llamar a los labs. Ver labs_wiring, que sí declara la arquitectura correcta.] + AIFE + ImageLab→CDN + SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN + callWatcher] → content-watcher v29 (8 gates) → content_pieces awaiting_approval → email content-approval@unrealvillestudio.com → Orchestrator (aprobación Sam) → approve-piece v14 (publish Meta + move-to-permanent)",
     "_desviacion_buildFromGenome": "⚠️ DESVIACIÓN A CORREGIR, NO ARQUITECTURA (2026-07-31). content-run-stage arma el copy con buildFromGenome (motor LOCAL) y el post con runSocialLabDirect (local), mientras lab_configs declara copylab->unrlvl-copy-lab.vercel.app y sociallab->social-lab-flame.vercel.app y NUNCA los invoca. buildFromGenome tiene gobierno pero ningún ángulo creativo; CopyLab tiene el ángulo y es el lab (UI, modo dual, superficie humana). La corrección es llamar al lab por su api_endpoint, no reconstruir su motor — converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B). Ver labs._note y labs_wiring.",
     "prompt_hierarchy": "6 capas: instrucción → L0 marca/mercado → EJE ESTRUCTURAL (angle=territorio) → GENOMA (ejecutar no mencionar) → anti-formula/title/closer/hard rules → BRIEF research (materia neutra). Tres PromptBuilders históricos consolidados en buildFromGenome — que resolvió la fragmentación del prompt pero al hacerlo reconstruyó el motor de CopyLab localmente (⚠️ DESVIACIÓN, ver flow._desviacion_buildFromGenome y labs_wiring), en vez de llamar a CopyLab por su api_endpoint."
   },
   "edge_functions": {
-    "content-dispatcher": "v36 — cron jobid 29 cada 30min. B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST. B3: DISPATCH_LIMIT=5 (antes .limit(1)). Exige IID_CRON_SECRET (401 sin él). verify_jwt:false.",
-    "content-run-stage": "v57 — orquestador de producción (Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher + domain-write). #95-D: bloque CANAL (CANAL_BY_PLATFORM + CANAL_NONE); email_propietarios saltea imagen (ls=skipped, success=true). verify_jwt:false.",
-    "content-watcher": "v18 — 8 gates (similarity, sibling-window, cadence, evidence, duplication, hard-rules + gate7 objective_stimulus + gate8 visual_sibling). PASS/REJECT/RESCHEDULE. 29-jul: reglas enumeradas con código citable desde intel.watcher_rules (precedencia brand>sector>gen), gate4/evidence cableado a marcas específicas neutralizado, devuelve el código de regla en watcher_log.gate_detail y a la bandeja; watcher_full_scan ENCENDIDO para recoger corpus.",
+    "content-dispatcher": "v47 — cron jobid 29 cada 30min. B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST. B3: DISPATCH_LIMIT=5 (antes .limit(1)). Exige IID_CRON_SECRET (401 sin él). verify_jwt:false.",
+    "content-run-stage": "v74 — orquestador de producción (Builder buildFromGenome + AIFE + ImageLab→CDN + SocialLab + callWatcher + domain-write). #95-D: bloque CANAL (CANAL_BY_PLATFORM + CANAL_NONE); email_propietarios saltea imagen (ls=skipped, success=true). verify_jwt:false.",
+    "content-watcher": "v29 — 8 gates (similarity, sibling-window, cadence, evidence, duplication, hard-rules + gate7 objective_stimulus + gate8 visual_sibling). PASS/REJECT/RESCHEDULE. 29-jul: reglas enumeradas con código citable desde intel.watcher_rules (precedencia brand>sector>gen), gate4/evidence cableado a marcas específicas neutralizado, devuelve el código de regla en watcher_log.gate_detail y a la bandeja; watcher_full_scan ENCENDIDO para recoger corpus.",
     "approve-piece": "v14 — aprobación: publish Meta + move-to-permanent. Path reject HOY sin rejected_reason (#5r pendiente).",
     "aife-filter": "control de calidad/seguridad de marca.",
-    "iid-core": "v36 — fan-out multimarca por brand_topics (fanout.ts). #93: deja de generar copy, encola brief neutro (título+resumen) en aife_output.content.content. Sin filtro de familia. body.domain override. NO exige secreto (IID_CORE_SECRET no seteado en entorno). Contrato: agent_id,title,summary,r_scores,c_scores + opc source_urls,raw_data,finding_date,urgency,platforms,domain.",
+    "iid-core": "v47 — fan-out multimarca por brand_topics (fanout.ts). #93: deja de generar copy, encola brief neutro (título+resumen) en aife_output.content.content. Sin filtro de familia. body.domain override. NO exige secreto (IID_CORE_SECRET no seteado en entorno). Contrato: agent_id,title,summary,r_scores,c_scores + opc source_urls,raw_data,finding_date,urgency,platforms,domain.",
     "iid-inbound": "v1 (NUEVA) — cerebro del Sembrador. Router capture/approve/reject/list. capture: destila semilla humana (link+frase) a tema neutro con anti-IP duro + mapea a brand_topics + persiste iid_seeds awaiting_approval y SE DETIENE. approve: gate de Sam (corrige mapeo) → handoff HTTP a iid-core (4B). reject/list. verify_jwt=false. Auth IID_INBOUND_SECRET pendiente de cargar al exponer el front (T4).",
     "lab-worker": "v23 — orquestador viejo (dual-mode lab_jobs). Llama labs por HTTP vía lab_configs. NO tiene creds Vertex.",
     "iid-approval-digest": "v2 (creada 26-jul, no documentada hasta 29-jul) — digest diario 7am ET del corpus de calibración de aprobación (from: Content Queue <content@unrealvillestudio.com>); lee intel.approval_calibration (doble veredicto Sam+watcher).",

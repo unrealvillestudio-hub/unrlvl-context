@@ -4,6 +4,10 @@ _Versión 1.0 · 2026-06-16 · Autor: Claude (chat) · Ejecutor: Claude Code · 
 
 ---
 
+> **ESTADO 2026-08-01 — SUPERSEDIDA PARCIALMENTE.** Esta spec creó `buildFromGenome`, que sigue vivo y en producción. CopyLab Fase A (PRs #8–#13) trasladó su gobierno al lab vía el contrato `builder_input`; Fase B retira `buildFromGenome` del carril. **Los parámetros de modelo de §3 están caducados y NO deben seguirse:** `claude-sonnet-4-20250514` está retirado, `temperature` con cualquier valor no-default hace fallar a Sonnet 5 con 400, y los techos vigentes son 4000 editorial / 640 social. La lógica de resolución de §2 (marca, tema, voz híbrida por destino, genoma) sigue siendo canónica y es la que Fase B extrae a `buildBuilderInput()`.
+
+---
+
 ## 0. CONTEXTO Y DECISIÓN DE ARQUITECTURA
 
 **Decisión tomada (Sam, 2026-06-16): A1 — cirugía in-place.**

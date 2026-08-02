@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas)_
 
 ---
 
@@ -92,11 +92,11 @@ AGENTES (intel.iid_agents, 29 = 28 research + 1 sentinela):
   └─ 1 sentinela: IID-SEEDER (ce44ac81, is_active=false — satisface FK agent_id de iid-inbound, NO corre research)
 
 EDGE FUNCTIONS:
-  └─ content-dispatcher v36 (B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST; B3: .limit(5) DISPATCH_LIMIT; transporta domain a builder_input)
-  └─ content-run-stage build _57 (Builder + labs + callWatcher + domain-write jobs/pieces/queue; #95-D bloque CANAL: email_propietarios saltea imagen)
-  └─ content-watcher build _18 (8 gates: los 6 + gate7 objective_stimulus + gate8 visual_sibling, blocking; 29-jul reglas enumeradas por código desde intel.watcher_rules —precedencia brand>sector>gen—, gate4/evidence cableado a marcas neutralizado, código de regla en watcher_log.gate_detail + bandeja, watcher_full_scan ON)
+  └─ content-dispatcher v47 (B2: lee scheduled_for + .or(is.null,lte.now) + order ASC NULLS FIRST; B3: .limit(5) DISPATCH_LIMIT; transporta domain a builder_input)
+  └─ content-run-stage build _74 (Builder + labs + callWatcher + domain-write jobs/pieces/queue; #95-D bloque CANAL: email_propietarios saltea imagen)
+  └─ content-watcher build _29 (8 gates: los 6 + gate7 objective_stimulus + gate8 visual_sibling, blocking; 29-jul reglas enumeradas por código desde intel.watcher_rules —precedencia brand>sector>gen—, gate4/evidence cableado a marcas neutralizado, código de regla en watcher_log.gate_detail + bandeja, watcher_full_scan ON)
   └─ approve-piece v14 (publish Meta + move-to-permanent; reject sin rejected_reason → #5r)
-  └─ iid-core v36 (#93 fan-out multimarca: deja de generar copy, brief neutro en aife_output.content.content; Ruta B en fanout.ts: preset derivado del objetivo; mata default_voice; body.domain override) · iid-inbound / deploy build _14 (Sonnet 5; cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
+  └─ iid-core v47 (#93 fan-out multimarca: deja de generar copy, brief neutro en aife_output.content.content; Ruta B en fanout.ts: preset derivado del objetivo; mata default_voice; body.domain override) · iid-inbound / deploy build _14 (Sonnet 5; cerebro Sembrador: capture/approve/reject/list, verify_jwt=false)
   └─ aife-filter (deploy build _28, Sonnet 5) · brand-context-builder (deploy build _19, Sonnet 5) · lab-worker v23 · copylab-processor · iid-ecommerce · iid-approval-digest v2 (26-jul; digest diario 7am ET del corpus de calibración de aprobación, lee intel.approval_calibration)
 
 GOBIERNO (intel.brand_topics):
