@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-07-31-v2 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-08-02-v3 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v3 (2026-08-02):** §6 exige ahora un guard `⛔ NO OPERATIVO` inmediatamente debajo del encabezado de todo bloque `ARCHIVO HISTÓRICO`; el bloque histórico v2026-06-06-v1 lo estrena. Motivo: su §1 derogado ("unrlvl-context — NUNCA por CC" / "Solo Sam vía GitHub Desktop") seguía leyéndose como imperativo en mayúsculas y trababa a CC, aunque el cuerpo vivo ya dice lo contrario. Preservar historia (§0) no es dejarla operativa.
+>
 > **Cambios v2 (2026-07-31):** añadida a §4 la convención **"Instrucciones para Sam"** — cuando CC deja acciones para Sam, van bajo un encabezado destacado en el **cyan de UNRLVL (`#00FFD1`)** donde la superficie lo permita. (La versión previa 2026-06-08-v1 se archiva bajo ARCHIVO HISTÓRICO junto con la 2026-06-06-v1.)
 
 > Análogo a las custom instructions + protocolos de claude.ai (browser), pero para Claude Code.
@@ -127,6 +129,8 @@ Cuando CC deja **instrucciones o acciones manuales para Sam** (lo que en §4 es 
 
 Este documento vive en `unrlvl-context/protocols/CC_PROTOCOL.md`. Se modifica preservando historia (es un context file). Los `CLAUDE.md` de cada repo solo apuntan aquí — no duplican reglas, para no divergir.
 
+**Guard obligatorio en bloques archivados.** Todo bloque `ARCHIVO HISTÓRICO` de cualquier context file lleva un guard `⛔ NO OPERATIVO` inmediatamente debajo de su encabezado. Preservar historia (§0) y dejarla operativa son cosas distintas: un documento que se lee entero necesita decir explícitamente qué parte manda. Sin el guard, archivar una regla derogada equivale a mantenerla viva. Aplica hacia adelante a `AGENDA.md`, los `session_log.md` y cualquier archivo con bloques archivados; ese barrido es una unidad posterior (este cambio solo toca `CC_PROTOCOL.md`).
+
 ---
 
 ## 7. WORKTREES — DISCIPLINA Y PROHIBICIÓN EN CONTEXT REPO
@@ -148,6 +152,8 @@ El campo `WORKTREES:` del reporte (§4) es obligatorio: declara `creado y elimin
 ---
 
 ## ARCHIVO HISTÓRICO — CC_PROTOCOL v2026-06-06-v1 (archivado 2026-06-08)
+
+> **⛔ NO OPERATIVO — registro histórico únicamente.** Todo lo que sigue hasta el final del documento está derogado y se conserva solo por trazabilidad. Ninguna regla de esta sección se obedece. Si algo aquí contradice el cuerpo vivo de arriba, manda el cuerpo vivo, siempre. Derogaciones conocidas que siguen causando confusión: (a) "unrlvl-context — NUNCA por CC" — falso desde 2026-07-31: CC publica ramas de PR también en `unrlvl-context` (§1 y "Flujo de entrega de context files"); (b) "Solo Sam vía GitHub Desktop" — Sam usa GitHub Web UI desde 2026-07-29.
 
 > Versión inicial del protocolo. Reemplazada por v2026-06-08-v1, que añade §7 (worktrees) y la referencia cruzada en §1. Se conserva íntegra por trazabilidad.
 
