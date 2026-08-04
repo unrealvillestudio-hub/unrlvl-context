@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas)_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col_
 
 ---
 
@@ -231,6 +231,18 @@ content_performance · brand_context_cache · brand_voices
 ### shopify
 ```
 stores · audit_runs · fix_log + otras
+```
+
+### public.ops_* — capa de instrumentación de costo (2ª ola 2026-08-04)
+```
+ops_generation_ledger (+billable) · ops_lab_rates · ops_model_pricing
+ops_token_sessions_retired (ex ops_token_sessions, RETIRADA 2026-08-04)
+ops_rate_transitions · ops_invoice_by_app
+ops_costs (14 cols: +billable +amount_original +currency_orig) · ops_credits (3 filas)
+ops_services (20 servicios: anthropic · anthropic_plan · vertex · google_ai · resend · twilio ·
+  klaviyo · elevenlabs · creatomate · fal_ai · runway · tenzorart · heygen · supabase · vercel ·
+  github · hostinger · cloudflare · shopify · custom)
+vistas: v_cost_pivot (31 col) · v_cost_por_dimension · v_rate_gaps · v_reconciliacion
 ```
 
 ---
