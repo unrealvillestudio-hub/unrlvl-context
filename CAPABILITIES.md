@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.1 · 2026-06-03 · Mantenido por: Claude_
+_Versión: 1.2 · 2026-08-04 · Mantenido por: Claude_
 
 ---
 
@@ -60,6 +60,7 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 | **Pipeline v22** | Claude→INSERT lab_jobs→lab-worker EF→CopyLab+ImageLab→Supabase CDN→pending_approval→Sam aprueba→approve-job→Meta MCP→IG+FB | INSERT en `lab_jobs`. Detalle: `skills/content-pipeline/SKILL.md` |
 | **IID subsystem** | Research diario (schema `intel`)→queue→dispatch. Research vivo; ejecución/publicación en revisión. | cron. Detalle: bloque `iid_subsystem` en ecosystem.json |
 | **content-pipeline** | TODO texto público (blog, producto, ad, social, landing, email). Incluye voice_genome L0/L1.5 + AIFE Layer 2. | "copy/texto/post/contenido". `skills/content-pipeline/SKILL.md` |
+| **CopyLab (carril)** | Motor de voz por genoma (el inyector lee el genoma de la marca); `content_type` por doble eje + `canal_block` real; escritor del cache en `service_role` (persiste). Objetos DB: `content_type_registry`, `platform_canal_map`, `creative_compatibility_rules.voice_id`. | Detalle: `brands/UnrealvilleStudio/session_log.md` (2026-08-04) + AGENDA `v2026-08-04-v2` |
 | **Professor** | learnings + checkpoint (cada 10 msgs, silencioso) + decision-matrix | "Professor / anota / checkpoint". Proxy `/api/professor` PENDIENTE → fallback Supabase SQL. |
 
 ---
@@ -114,8 +115,18 @@ Cada archivo de un paquete de actualización se nombra con **prefijo de carpeta 
 ## PUSH A REPOS
 
 - **Código** (CoreProject, WebLab, labs, luciensael): push directo vía PAT permitido (ver SESSION_PROTOCOL). Sitios en vivo → rama + PR + Preview, no push directo a main.
-- **`unrlvl-context`**: SIEMPRE vía GitHub Desktop (Sam pushea), nunca push directo de Claude.
+- **`unrlvl-context`**: CC trabaja en **rama + PR**, igual que en los repos de código. CC **publica ramas** (incluida aquí, en `unrlvl-context`) y abre el PR contra `main`; su restricción es **no pushear a `main` y no mergear**. Sam revisa, mergea y borra la rama **por GitHub Web UI** (no GitHub Desktop). Ver `protocols/CC_PROTOCOL.md` §1 + "Flujo de entrega de context files".
 
 ---
 
-_CAPABILITIES v1.0 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
+_CAPABILITIES v1.2 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
+
+---
+
+## ARCHIVO HISTÓRICO — CAPABILITIES: redacción previa de "PUSH A REPOS" (archivado 2026-08-04)
+
+> **⛔ NO OPERATIVO — registro histórico únicamente.** Lo que sigue es la redacción del bullet `unrlvl-context` de "PUSH A REPOS" vigente hasta v1.1 (2026-06-03), conservada por trazabilidad (§0 del `CC_PROTOCOL.md`). Está **derogada** y no se obedece: contradecía el cuerpo vivo del protocolo — CC **sí** publica ramas de PR también en `unrlvl-context` (su restricción es no pushear a `main` ni mergear), y Sam usa GitHub **Web UI** desde 2026-07-29, no GitHub Desktop. Si algo aquí contradice la sección viva de arriba, manda la viva, siempre.
+
+```
+- **`unrlvl-context`**: SIEMPRE vía GitHub Desktop (Sam pushea), nunca push directo de Claude.
+```
