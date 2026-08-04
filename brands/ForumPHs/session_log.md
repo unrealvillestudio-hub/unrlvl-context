@@ -1,5 +1,55 @@
 # ForumPHs — Session Log
 
+## 2026-08-04 — HRD_ACTUALIZA + BI + FIE: 2ª ola de costo, primer costo unitario de un acta, y dos frentes abiertos
+
+**Alcance:** actualización de context files (`ecosystem.json`, `AGENDA.md`, este log) **verificada contra la
+DB** (`information_schema` del proyecto `amlvyycfepwhiindxgzw`, no el brief) + apertura de dos PRs en
+`forumphs-document-factory`. Este PR (A) toca **sólo** context files de `unrlvl-context`; los PRs B y C son
+código y viven en el otro repo. **CC no mergea — Sam mergea y borra las ramas.**
+
+---
+
+### Instrumentación de costo — 2ª ola (verificada contra la DB)
+
+Verificado contra `information_schema` de `amlvyycfepwhiindxgzw` (la DB manda sobre el brief):
+
+| cambio | estado real en la DB |
+|---|---|
+| `ops_services` | catálogo de **20** servicios/proveedores (api/database/domain/ecommerce/hosting/media/custom) |
+| `ops_credits` | tabla nueva de créditos/saldos por servicio — **3 filas** |
+| `billable` (text) | añadida a `ops_costs` **y** `ops_generation_ledger` |
+| `amount_original` + `currency_orig` | añadidas a `ops_costs` (costo en divisa original) |
+| `ops_token_sessions` | **RETIRADA** → renombrada `ops_token_sessions_retired` (la original ya no existe) |
+| `v_cost_pivot` | **31 columnas** (ejes en español) |
+
+**Discrepancia brief ↔ DB:** el brief nombró 5 servicios nuevos (`vertex`/`resend`/`twilio`/`github`/`klaviyo`);
+la tabla tiene **20**. Se registró el roster real completo, no los 5. (Un dato falso en `ecosystem.json`
+sobrevive semanas sin dar error → la DB manda.)
+
+### ForumPHs — T-series y primer costo de un acta
+
+- **T1 migración aplicada; T3/T4/T5/T6/T6b mergeados.**
+- **4 EFs verificadas contra el deploy** (marcador confiable = sufijo de `entrypoint_path`, no el repo):
+  `fphs-icr-apply` **_37** · `fphs-bi-report` **_27** · `fphs-chat` **_44** · `fphs-formalize` **_52** (todas ACTIVE).
+- **Primer costo unitario de un acta ForumPHs = $0,42**, respaldado por **35 asientos** ForumPHs en
+  `ops_generation_ledger` (`ops_costs` aún sin filas ForumPHs). Brecha Console↔ledger de **62% a 12%**.
+
+### Dos frentes abiertos en `forumphs-document-factory` (PRs B y C — aparte)
+
+- **PR B — BI (rama `fphs/bi-rls-diagnostico`).** El 404 de BI **no es de código**: `FPHS_SERVICE_KEY` no
+  contiene una clave `service_role`, y `buildings` tiene RLS activo (2 políticas) → devuelve 0 filas, que la EF
+  traduce a 404. CC hará fail-loud en `fphs-bi-data`/`fphs-bi-report` para distinguir *0-filas-por-RLS* de
+  *id inexistente*. **La rotación de la clave la hace Sam** (no CC).
+- **PR C — FIE (rama `fphs/fie-sonnet5-e-instrumentacion`).** `/api/fie/generate` y `/api/fie/parse` corren
+  `claude-sonnet-4` (retirado) → migración a `claude-sonnet-5` + instrumentación al `lib/server/ledger.ts`
+  compartido. **FIE usa `ANTHROPIC_API_KEY`, no `forumphs_document_factory`** → superficie de costo separada,
+  por eso nunca apareció en la medición del acta. Va **después** de mergear B (mismo repo, no cruzar ramas).
+
+**Este turno:** entregado sólo **PR A** (context files). B y C quedan para después de que Sam confirme y
+mergee, en ese orden.
+
+---
+
 ## 2026-07-26 — DF: acta Torres de Castilla defectuosa · reparación completa + reporte ICR + runbook de fix v2 + skill `acta-repair`
 
 **Alcance:** el DF generó el acta de la Segunda Asamblea Ordinaria 2026 de Torres de Castilla con

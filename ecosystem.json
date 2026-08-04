@@ -1,14 +1,19 @@
 {
   "_meta": {
-  "version": "2026-08-02-v1",
+  "version": "2026-08-04-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-08-01-v1",
+  "previous": "2026-08-02-v1",
   "last_session": {
+    "date": "2026-08-04",
+    "conducted_by": "Claude Opus 4.8 (Claude Code) — HRD_ACTUALIZA + BI + FIE · MCP Supabase amlvyycfepwhiindxgzw (verificación information_schema)",
+    "status": "HRD_ACTUALIZA + BI + FIE — actualización de context files VERIFICADA contra la DB (information_schema del proyecto amlvyycfepwhiindxgzw, 2026-08-04; la DB manda sobre el brief). Segunda ola de instrumentación de costo: ops_services (catálogo de 20 servicios/proveedores), ops_credits (créditos/saldos), columna billable en ops_costs y ops_generation_ledger, amount_original+currency_orig en ops_costs, ops_token_sessions RETIRADA→ops_token_sessions_retired, v_cost_pivot a 31 columnas. ForumPHs: T1 migración aplicada; T3/T4/T5/T6/T6b mergeados; 4 EFs verificadas contra el deploy (fphs-icr-apply _37, fphs-bi-report _27, fphs-chat _44, fphs-formalize _52, todas ACTIVE); primer costo unitario de un acta = $0,42 (respaldado por 35 asientos ForumPHs en ops_generation_ledger); brecha Console↔ledger de 62% a 12%. Discrepancia registrada: el brief nombró 5 servicios nuevos, la tabla tiene 20 — se registró el roster real. PRs B (BI: FPHS_SERVICE_KEY sin service_role + RLS en buildings → fail-loud) y C (FIE: migración a claude-sonnet-5 + instrumentación al ledger) van en forumphs-document-factory, aparte. Solo PR A entregado este turno."
+  },
+  "previous_sessions": [
+  {
     "date": "2026-08-02",
     "conducted_by": "Claude Opus 4.8 + Claude Code (CopyLab + unrlvl-context) + MCP (GitHub)",
     "status": "CopyLab Fase A cerrada (PRs #8–#13): cuatro contratos del modo carril (builder_input; response con title/body separados + firma sin estampar + usage real; supresión de cache por rebanada; disciplina fail-loud en sb/sbArray), corrección del lector (brand singular v2.1; precedencia de humanize marca>DEFAULT y copy>text; voz del modo literal por voice_id), escritor determinista (order=medium en los DEFAULT), dos goldens anclados a da182aa (43.056 b) y CI en GitHub Actions. main @ e7d517c, 23 tests verdes. Actualización de context files (session_log §9, AGENDA v2, COPYLAB_NOTES, PROYECTO, BUILDER_CONVERGED_SPEC) + corrección de versiones EF en el registro edge_functions y en el flow (content-run-stage v74, iid-core v47, content-watcher v29, content-dispatcher v47), verificadas por sufijo de entrypoint_path."
   },
-  "previous_sessions": [
   {
     "date": "2026-07-31",
     "conducted_by": "Claude Opus 4.8 + Claude Code (aplicación) + MCP (Supabase/Vercel)",
@@ -564,11 +569,12 @@
     "config": "intel.iid_scheduler_config: orchestrator_url + vercel_bypass_secret (CopyLab/ImageLab/SocialLab) + iid_cron_secret + watcher_full_scan (flag global, ENCENDIDO 29-jul para recoger corpus de calibración; apagar al cerrar la recogida)"
   },
   "cost_instrumentation": {
-    "_status": "LIVE (2026-07-31) — capa ops_* instrumentada end-to-end, 16 migraciones M-0..M-16 aplicadas y verificadas en producción.",
+    "_status": "LIVE (2026-07-31) — capa ops_* instrumentada end-to-end, 16 migraciones M-0..M-16 aplicadas y verificadas en producción. 2ª ola 2026-08-04: ops_services/ops_credits/ops_costs + columna billable + v_cost_pivot a 31 columnas (ver _update_2026-08-04).",
+    "_update_2026-08-04": "2ª ola, VERIFICADA contra information_schema del proyecto amlvyycfepwhiindxgzw (la DB manda sobre el brief): (1) ops_services — catálogo de 20 servicios/proveedores: api = anthropic, anthropic_plan, creatomate, elevenlabs, fal_ai, google_ai, klaviyo, resend, runway, tenzorart, twilio, vertex; database = supabase; domain = cloudflare; ecommerce = shopify; hosting = github, hostinger, vercel; media = heygen; custom = custom (billing_type usage/flat/hybrid/credit/custom). (2) ops_credits — créditos/saldos por servicio, 3 filas. (3) columna billable (text) añadida a ops_costs y ops_generation_ledger. (4) ops_costs suma amount_original + currency_orig (costo en divisa original). (5) ops_token_sessions RETIRADA → renombrada ops_token_sessions_retired (la original ya no existe). (6) v_cost_pivot pasa a 31 columnas (ejes en español: asiento_id, dia, mes, aplicacion, marca, voz, lab, agente, dominio, plataforma, proveedor, service_id, modelo, unidad, costo_actual, costo_proyectado, tarifa_incierta, billable, entre otras). NOTA DE DISCREPANCIA: el brief nombró 5 servicios nuevos (vertex/resend/twilio/github/klaviyo); la tabla real tiene 20 — se registró el roster completo.",
     "_single_source_of_rate": "La ÚNICA fuente de tarifa (precio) es public.ops_lab_rates, resuelta por public.ops_resolve_rate(lab, model_id, unit_type, fecha). CERO precios literales en código, skills, o este archivo — ese literal ERA el bug de cost-layer v1. Ver skill cost-layer.",
-    "tables": ["ops_generation_ledger (asientos, línea base de costo)","ops_lab_rates (tarifa por (lab,model_id,unit_type) con status vigente/previsto/historico + effective_from/valid_to/auto_promote)","ops_model_pricing (catálogo descriptivo, NO fuente de precio)","ops_token_sessions (+api_key_ref, M-8d)","ops_rate_transitions (M-6)","ops_invoice_by_app (M-8b, sin escritura anónima)"],
+    "tables": ["ops_generation_ledger (asientos, línea base de costo; +billable 2026-08-04)","ops_lab_rates (tarifa por (lab,model_id,unit_type) con status vigente/previsto/historico + effective_from/valid_to/auto_promote)","ops_model_pricing (catálogo descriptivo, NO fuente de precio)","ops_token_sessions_retired (RETIRADA/renombrada 2026-08-04; ex ops_token_sessions +api_key_ref M-8d)","ops_rate_transitions (M-6)","ops_invoice_by_app (M-8b, sin escritura anónima)","ops_costs (costo mensual por servicio/lab/marca; 14 cols incl. billable + amount_original + currency_orig, 2026-08-04)","ops_credits (créditos/saldos por servicio: credit_name/credit_ref/amount_original_usd/balance_usd/granted_at/expires_at/status/scope_note; 3 filas, 2026-08-04)","ops_services (catálogo de 20 servicios/proveedores: id/name/category/billing_type/currency/website/active, 2026-08-04)"],
     "functions": ["ops_resolve_rate (resuelve tarifa a fecha)","ops_compute_cost (firma de 4 args ELIMINADA)","ops_log_generation (reparada M-4d tras la eliminación de la firma de 4 args)","ops_promote_rates (M-6, promueve previsto->vigente y archiva vigente->historico)"],
-    "views": ["v_cost_pivot","v_cost_por_dimension","v_rate_gaps","v_reconciliacion"],
+    "views": ["v_cost_pivot (31 columnas, 2026-08-04)","v_cost_por_dimension","v_rate_gaps","v_reconciliacion"],
     "cost_axes_M7": "voice_id + source_app + api_key_ref — permiten pivotar el costo por voz/app/clave y AISLAR pruebas de producción (source_app).",
     "rate_precedence": "lab-específico > genérico. Fila genérica (lab IS NULL) aplica a copylab/aife/sociallab/watcher por igual (mismo precio de Anthropic por modelo); una fila lab-específica sólo existe con precio propio real (p. ej. imagelab/gemini). El asiento CONGELA la tarifa (uuid de la fila en la referencia).",
     "cron_38": "06:00 UTC — ops_promote_rates. auto_promote=false en el flip de gemini (revisión manual).",
