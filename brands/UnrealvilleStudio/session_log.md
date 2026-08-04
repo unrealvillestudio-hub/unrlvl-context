@@ -1,5 +1,59 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-08-04 · CopyLab — el motor de voz nunca había leído los genomas
+
+**Conducido por:** Claude Opus 4.8 (chat, diagnóstico + decisiones + DB directa) + Claude Code (ejecución de PRs y verificación).
+**Foco:** cerrar la cadena de CopyLab que dejaba salir copy sin voz de marca, trasplantar los guardarraíles al carril real (`/api/execute`), y verificar en producción. **PRs #16–#22, todos mergeados y verificados.** Este PR de contexto (`unrlvl-context`) sólo actualiza los context files; el código vive en el repo de CopyLab.
+
+### Lo más importante: el motor de voz nunca había leído los genomas (B0)
+
+`buildCopyPrompt` **no inyectaba el genoma**. El generador armaba el prompt sin el genoma de la marca, así que ninguna de las **10 voces activas** salía con su voz — todas producían un genérico de marca-cero. No era un caso borde: era el estado por defecto de las 10. El cuadro de voces confirmó el alcance (10/10 sin genoma en el prompt). Reparado y verificado voz por voz.
+
+### Tres fallos que se apilaban encima del inyector roto
+
+1. **El tipo mentía.** El `content_type` se registraba mentido: **toda pieza caía en `social_post`**, sin importar destino ni plataforma. `creative_compatibility_rules`/`aggroByType` juzgaban entonces sobre un tipo falso. Fix: registro de `content_type` con **doble eje** (destino × plataforma) + precedencia por voz (`voice_id`) en compatibilidad.
+2. **El template corría contra el genoma.** El bloque de canal no existía como tal: el template resolvía contra el genoma en vez del canal real. Fix: **bloque de canal real, 17 `canal_blocks` activados** + sustitución de variables de template (18 templates afectados; las variables ya no salen crudas).
+3. **La UI nunca pasaba por `/api/execute`.** Toda la disciplina de `buildCopyPrompt` (geomix, CTA por canal, compliance ordenado, personas y goals completos, gramática `##` unificada) vivía en un armador que la UI no ejecutaba. Fix: **trasplante de los guardarraíles a `/api/execute`**, que es el carril que la UI sí recorre. `buildCopyPrompt` deja de ser un segundo motor.
+
+### El cache persiste por primera vez desde que existe
+
+El escritor del cache pasó a `service_role`: antes escribía sin permiso efectivo y **no cuajaba** — el cache existía en el esquema pero nunca persistía. Ahora sí.
+
+### Limpieza de motores duplicados
+
+Retirados `src/lib/buildCopyPrompt.ts`, `queries.ts` y el hook `useCopyPrompt` (muerto). Con el trasplante hecho, mantenerlos vivos reproducía el patrón "hay más de un generador dentro de CopyLab".
+
+### Tablas y columnas nuevas (creadas por Claude.ai, fuera de PR)
+
+- **`content_type_registry`** — 15 filas, ahora con `voice_id` y **PK compuesta**.
+- **`platform_canal_map`** — 8 filas `organic`.
+- **`creative_compatibility_rules.voice_id`** — columna nueva + **2 índices parciales** + trigger.
+- **Triggers de integridad** — `validate_compat_voice`, `validate_registry_voice`, `validate_canal_map_content_type`.
+
+### Genoma: `financial_lens`
+
+Se añadió `financial_lens` a `argumentative_architecture` en `lucien_editorial` y `lucien_social`, con **texto idéntico** en ambas voces.
+
+### Smoke verificado
+
+**B4·truth + T10 + AGGRO_3.** El genoma se inyecta, el tipo se registra por su eje real, el canal_block sale del canal y no del genoma; `financial_lens` **no se dispara** cuando no corresponde.
+
+### PENDIENTE — abierto tras esta sesión
+
+- **Consolidación del motor** — `copyEngine` + los **18 templates de CopyPack** por unificar.
+- **C / B5 · D / B3 · E** — frentes pendientes del plan CopyLab.
+- **⚠️ ADS como sección propia (IMPORTANTE):** ADS es **una fila en el mismo carril, no un carril clonado** — no duplicar el motor.
+
+### Deuda declarada
+
+- **`api/claude.ts`** — conservado hasta el reporte de las **3 sub-tools**.
+- **`brand_context_cache` + RPC `upsert_brand_cache`** — huérfanas, **pendiente DROP**.
+- **`linkedin` → `WEB`** — fallback forzado con **38 filas**.
+- **`meta_fb` y `x`** — sin `canal_block` propio.
+- **`build_all=true`** — no funciona en `brand-cache.js`.
+
+---
+
 ## 2026-06-17 · #5b VALIDADO end-to-end · contrato de voice afinado · pendientes de calidad de output
 
 **Conducido por:** Claude Opus 4.8 (chat, diseño + decisiones + DB directa) + Claude Code (ejecución de EFs)
