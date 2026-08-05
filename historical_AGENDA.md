@@ -6,6 +6,8 @@ _Primera migración: 2026-06-28_
 
 > **Cómo se mantiene este archivo.** Poblado por el **barrido de archivado** del HRD_ACTUALIZA (paso 10 de `protocols/HRD_PROTOCOL.md`). Un ítem llega acá solo si cumple LAS TRES condiciones: (1) completado, (2) hace más de 30 días, (3) sin referencias activas. El texto se mueve **íntegro** — nunca se resume ni se reescribe. Las migraciones se apilan con la **más reciente al tope**; las anteriores no se tocan nunca.
 >
+> **Qué cuenta como "referencia activa" (condición 3) — aclarado 2026-08-06.** *Descalifica* si: (a) un ítem ABIERTO/pendiente depende del candidato · (b) `ecosystem.json` lo usa como **estado vivo** (una tabla, EF, vista o campo que existe hoy) · (c) aparece en `AGENDA.md` **fuera de la zona de completados**. *NO descalifica* si: solo aparece en un `session_log.md` como registro fechado (es append-only: narra historia, no depende de nada) · aparece en `ecosystem.json` dentro de un bloque `_update_*` o nota histórica. Una mención en un `session_log.md` **nunca** basta para retener un ítem — si bastara, nada sería archivable jamás, y los barridos 06-28 / 07-21 / 07-29 lo contradicen (archivaron con logs presentes).
+>
 > **Historia de este archivo:** creado el 2026-06-28 con la primera migración. Quedó sin commitear en un worktree y se perdió durante tres semanas porque ningún paso del protocolo lo invocaba. **Rescatado el 2026-07-18** e integrado al HRD_ACTUALIZA como paso fijo, precisamente para que eso no vuelva a pasar.
 
 ---
