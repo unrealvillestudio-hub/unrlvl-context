@@ -1,5 +1,5 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage v74 · iid-core v47 · content-watcher v29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage v74 · iid-core v47 · content-watcher v29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha ledger↔Console por scope: document-factory 12% · fie 3,5%)_
 
 ---
 
@@ -181,10 +181,11 @@ ACTIVE_HEALTHY · us-east-1
 
 ## Capa de instrumentación de costo (ops_*)
 
-_LIVE (2026-07-31) — capa `ops_*` instrumentada end-to-end (16 migraciones M-0..M-16). **2ª ola 2026-08-04** sincronizada desde `ecosystem.json` v2026-08-04-v1 (verificada contra `information_schema` de `amlvyycfepwhiindxgzw`). Fuente ÚNICA de tarifa = `public.ops_lab_rates` vía `ops_resolve_rate`; CERO precios literales._
+_LIVE (2026-07-31) — capa `ops_*` instrumentada end-to-end (16 migraciones M-0..M-16). **2ª ola 2026-08-04** sincronizada desde `ecosystem.json` v2026-08-04-v1 · **3ª ola 2026-08-05** (residuo de brecha ledger↔Console), ambas verificadas contra `information_schema` de `amlvyycfepwhiindxgzw`. Fuente ÚNICA de tarifa = `public.ops_lab_rates` vía `ops_resolve_rate`; CERO precios literales._
 
 **Tablas:**
 - `ops_generation_ledger` — asientos, línea base de costo (+`billable` 2026-08-04)
+- `ops_cost_residual` — residuo de brecha ledger↔Console por scope (`scope_type`/`scope_value`/`residual_pct`/`measured_gap_pct`/`valid_from`/`valid_to`/`rationale`; vigente = `valid_to IS NULL`); 2 filas: document-factory **12%** · fie **3,5%** (2026-08-05)
 - `ops_lab_rates` — tarifa por (lab, model_id, unit_type) con vigencia (vigente/previsto/historico)
 - `ops_model_pricing` — catálogo descriptivo (NO fuente de precio)
 - `ops_token_sessions_retired` — RETIRADA/renombrada 2026-08-04 (ex `ops_token_sessions`, +api_key_ref M-8d)
@@ -193,7 +194,7 @@ _LIVE (2026-07-31) — capa `ops_*` instrumentada end-to-end (16 migraciones M-0
 - `ops_credits` — créditos/saldos por servicio (3 filas, 2026-08-04)
 - `ops_services` — catálogo de **20** servicios/proveedores (2026-08-04)
 
-**Vistas:** `v_cost_pivot` (**31 columnas**, 2026-08-04) · `v_cost_por_dimension` · `v_rate_gaps` · `v_reconciliacion`
+**Vistas:** `v_cost_pivot` (**31 columnas**, 2026-08-04) · `v_cost_por_dimension` · `v_rate_gaps` · `v_reconciliacion` · `v_cost_residual_vigente` (residuos vigentes, `valid_to IS NULL`, 2026-08-05)
 
 **ops_services (20):** api = anthropic, anthropic_plan, creatomate, elevenlabs, fal_ai, google_ai, klaviyo, resend, runway, tenzorart, twilio, vertex · database = supabase · domain = cloudflare · ecommerce = shopify · hosting = github, hostinger, vercel · media = heygen · custom = custom
 
