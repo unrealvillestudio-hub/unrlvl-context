@@ -1,5 +1,58 @@
 # ForumPHs — Session Log
 
+## 2026-08-05 — Actualiza incremental (PR E): residuo de costo (`ops_cost_residual`), 6 flujos midiendo, BI re-diagnosticado
+
+**Alcance:** actualización incremental de context files (`ecosystem.json`, `AGENDA.md`, este log) + derivados
+(`ecosystem.md`, `ecosystem_filemap.md`), **sólo lo posterior al PR #31**. **VERIFICADO contra la DB**
+(`information_schema` de `amlvyycfepwhiindxgzw` = unrlvl-db, y `tajuoqdbnsnzkhyqvdgs` = forumphs-db; la DB manda
+sobre el brief). Este PR toca **sólo** `unrlvl-context`; el código de BI/FIE vive en `forumphs-document-factory`
+(PRs **#23** y **#24** ya mergeados y desplegados). **CC no mergea — Sam mergea y borra la rama.**
+
+---
+
+### Instrumentación de costo — 3ª ola: el residuo de brecha (verificada contra la DB)
+
+Dos objetos nuevos en `amlvyycfepwhiindxgzw` (verificados por `information_schema`), registrados en
+`ecosystem.json → iid_subsystem.cost_instrumentation`:
+
+| objeto | qué es (verificado) |
+|---|---|
+| `ops_cost_residual` (tabla) | residuo de brecha ledger↔Console por scope. Cols: `id`(uuid) · `scope_type` · `scope_value` · `residual_pct` · `valid_from` · `valid_to` · `measured_gap_pct` · `rationale` · `created_at`. Vigente = `valid_to IS NULL`. |
+| `v_cost_residual_vigente` (vista) | `SELECT scope_type, scope_value, residual_pct, measured_gap_pct, valid_from, rationale FROM ops_cost_residual WHERE valid_to IS NULL`. |
+
+**Filas vigentes (valid_from 2026-08-05):**
+- `lab=document-factory` → residuo **12,000%** (`measured_gap` 12,000%; ledger **1,1186** vs Console **1,27**, clave `forumphs-document-factory`).
+- `lab=fie` → residuo **3,500%** (`measured_gap` 3,500%; ledger **0,3672** vs Console **0,38**, clave `forumphs-fie`).
+
+### Seis flujos ForumPHs midiendo (verificado en `ops_generation_ledger`)
+
+`acta` (fphs-document-factory) · `fie_parse_pdf` (fphs-fie-parse) · `icr_audit` (fphs-icr) ·
+`image_curation` (fphs-image-curation) · `informe_fie` (fphs-fie-generate) · `speaks_chat` (fphs-chat).
+
+- **Costo unitario verificado contra factura:** acta **~$0,43 medido / ~$0,48 ajustado** (residuo 12%) ·
+  suite FIE **~$0,38** medido y ajustado, coincidente al centavo con Console.
+- **Auditoría del acta cerrada:** `/api/qa`, `classifyRoles`, `/api/parse` y **PRE-FLIGHT** (`preflightDetector`)
+  verificados **deterministas** leyendo la fuente. No quedan superficies del acta sin instrumentar. El residuo
+  restante se atribuye a dos `catch` exteriores que pierden tokens ya consumidos (`fphs-formalize` devuelve 500
+  sin `logLedger`; el `JSON.parse` de `/api/icr` salta antes del asiento).
+- **Hipótesis descartada:** el parse FIE manda 167k tokens de entrada de estructura fija y aun así la brecha es
+  3,5% → los tokens de cache **no** son la causa del residuo del acta.
+
+### BI re-diagnosticado (afina el PR-B del 2026-08-04)
+
+El 08-04 el PR-B atribuyó el 404 de BI a `FPHS_SERVICE_KEY` sin `service_role` + RLS en `buildings`. Con el
+**fail-loud del PR #23** en producción (distingue `0-filas-por-RLS` de `id inexistente`), la causa real salió a
+la luz: **`monthly_kpis`, `eeff_preliminar` y `mora_mensual` están VACÍAS** — **0 filas en toda la DB**
+`forumphs-db` (`tajuoqdbnsnzkhyqvdgs`), incluida `PH Lefevre 75 Don Enrique` (que **sí existe** en `buildings`).
+**No era clave ni RLS: falta carga de datos, no código.**
+
+### Vencimiento 2026-08-31
+
+Vence el introductorio de Sonnet 5: **acta proyecta ~$0,72**, **suite FIE ~$0,57**. Verificar
+`ops_rate_transitions` ese día (cron 38, 06:00 UTC) — no confiar en la automatización.
+
+---
+
 ## 2026-08-04 — HRD_ACTUALIZA + BI + FIE: 2ª ola de costo, primer costo unitario de un acta, y dos frentes abiertos
 
 **Alcance:** actualización de context files (`ecosystem.json`, `AGENDA.md`, este log) **verificada contra la
