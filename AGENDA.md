@@ -163,7 +163,7 @@ _(Reinserción de deudas, **no** sesión nueva — sin bump de versión de AGEND
 
 - **#74 — Barrido de archivos commiteados en base64 en otros repos (14-jul).** El proxy `gh` devuelve base64; alguien commiteó sin decodificar → `CopyLab/api/process-job.ts` (ya arreglado). Buscar archivos de una sola línea larga terminada en `=`/`==`. — UNRLVL
 - **#75 — El typecheck NO bloquea el build en los labs (14-jul).** Causa raíz de que 2 bugs de CopyLab vivieran ~35 días. Evaluar `tsc --noEmit` en CI para CopyLab / ImageLab / SocialLab / Orchestrator. _(Nota: `.github/CLAUDE.md` y el PR template ya piden `tsc --noEmit` **local**; lo que falta es el **gate en CI** que bloquee de verdad — el checkbox manual es justo lo que se saltó durante esos 35 días.)_ — UNRLVL
-- **#77 (14-jul) — la `temperature` por destino de `content-run-stage` se perdió con Sonnet 5.** Mover la varianza creativa a instrucciones de **system prompt** (no reintroducir el parámetro: con sonnet-5 un `temperature` no-default da 400). ⚠️ **COLISIÓN DE NÚMERO:** en main el `#77` ya fue reasignado al debt de ForumPHs (`incident_updates` "etapa", WhatsApp 21-jul) — este es el `#77` original del 14-jul. **Sam renumera al integrar.** — UNRLVL
+- **#102 — la `temperature` por destino de `content-run-stage` se perdió con Sonnet 5** (rescatada del Actualiza 14-jul; era `#77`, **renumerada 2026-08-06** al siguiente libre porque el `#77` ya lo ocupa el debt de ForumPHs `incident_updates` "etapa", WhatsApp 21-jul — se renumera el rescatado, sin referencias, no el de ForumPHs). Mover la varianza creativa a instrucciones de **system prompt** (no reintroducir el parámetro: con sonnet-5 un `temperature` no-default da 400). — UNRLVL
 
 ---
 
