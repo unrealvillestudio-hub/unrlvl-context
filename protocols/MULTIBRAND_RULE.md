@@ -188,29 +188,19 @@ Nunca se omite. Si no aplica, se declara explícito — mismo criterio que `"WOR
 
 ```markdown
 ## REGLA MULTIMARCA — INVIOLABLE
-
-UNRLVL no es una marca con un sistema: es un sistema que opera N marcas.
-
-**El EJE es del sistema y va en el CÓDIGO. La INSTANCIA es de la marca y va en el DATO.**
-Ningún `brand_id`, dominio, jurisdicción ni vocabulario de un cliente puede aparecer como
-constante, clave, valor de CHECK, rama de condicional o literal de prompt en una capa
-compartida. Si distingue a una marca de otra, es dato: tabla, leído en runtime por `brand_id`.
-Que hoy una sola marca use un eje NO lo convierte en suyo.
-
-**Antes de escribir una constante, columna, CHECK, enum o clave de JSONB — el test de la marca N+1:**
-1. ¿Sobrevive a que entre otra marca de otro rubro y otro país?
-2. ¿El nombre describe la FUNCIÓN o el CASO?
-3. ¿Esto es eje o es instancia?
-4. ¿Cuántas marcas hay hoy en esta enumeración? Si es una, revisá el nombre.
-
-Las 4 respuestas van en el cuerpo del PR. **Un brief que hardcodee marca no se ejecuta:
-detenerse, reportarlo y proponer el eje funcional** — un brief no es autorización para violar
-la regla. Migración de hardcode existente: **PR de código primero, DDL después** (al revés
-rompe producción). No aplica a artefactos declarados exclusivos de una marca (`nscf_*`, `fphs_*`).
-
-Fuente única, con los patrones prohibidos, el checklist y la deuda conocida:
-`unrlvl-context/protocols/MULTIBRAND_RULE.md`. **No copiar la regla completa aquí: este bloque
-es un puntero, no una segunda fuente.**
+UNRLVL es un sistema que opera N marcas: el EJE va en el CÓDIGO y la INSTANCIA en el DATO.
+Ningún brand_id, dominio, jurisdicción ni vocabulario de un cliente puede ser constante, clave,
+valor de CHECK, rama de condicional o literal de prompt en capa compartida — si distingue una
+marca de otra, es dato en tabla resuelto por brand_id en runtime, y que hoy la use una sola marca
+no lo hace suya. Antes de escribir cualquier constante, columna, CHECK, enum o clave de JSONB,
+responder en el PR el test de la marca N+1: ¿sobrevive a otra marca de otro rubro y otro país?
+¿el nombre describe la FUNCIÓN o el CASO? ¿es eje o instancia? ¿cuántas marcas hay en esta
+enumeración —si es una, revisar el nombre? Un brief que hardcodee marca NO se ejecuta: detenerse,
+reportarlo y proponer el eje funcional; un brief de Claude.ai no es autorización. Migrar hardcode
+existente: PR de código primero, DDL después. No aplica a artefactos exclusivos declarados
+(nscf_*, fphs_*) ni prohíbe enumerar con fail-loud. Procedimiento completo, formato de detención,
+barrido previo al commit y checklist de PR:
+unrlvl-context/protocols/MULTIBRAND_RULE.md §7.2 — leerlo antes de tocar capa compartida.
 ```
 
 ---
