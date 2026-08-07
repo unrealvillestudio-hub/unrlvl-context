@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%)_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version)_
 
 ---
 
@@ -286,6 +286,7 @@ vistas: v_cost_pivot (31 col) · v_cost_por_dimension · v_rate_gaps · v_reconc
 │
 ├── protocols/
 │   ├── SESSION_PROTOCOL.md · HRD_PROTOCOL.md · CC_PROTOCOL.md
+│   ├── MULTIBRAND_RULE.md (regla inviolable — eje en código, instancia en dato)
 │   ├── AYRA_MASTER_PLAN.md · VOICE_GENOME_PHASE_SPEC.md
 │   ├── IID_OUTPUT_QUALITY_LOTE_A_SPEC.md
 │   ├── R4B_HANDOFF_CHAT1.md · R4B_RESPUESTA_CHAT1.md · R4B_MAPEO_CHAT2_CC.md

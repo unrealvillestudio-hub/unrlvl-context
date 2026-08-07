@@ -1,5 +1,16 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage v74 · iid-core v47 · content-watcher v29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha ledger↔Console por scope: document-factory 12% · fie 3,5%)_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage v74 · iid-core v47 · content-watcher v29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha ledger↔Console por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: sección propia + clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version)_
+
+---
+
+## Regla Multimarca — INVIOLABLE (vigente desde 2026-08-07)
+
+El **EJE** es del sistema y va en el **CÓDIGO**. La **INSTANCIA** es de la marca y va en el **DATO**. Ninguna capa compartida hardcodea `brand_id`, dominio, jurisdicción ni vocabulario de cliente. Que hoy una sola marca use un eje **NO** lo convierte en suyo.
+
+- **Fuente:** `protocols/MULTIBRAND_RULE.md`
+- **Gate:** Test de la marca N+1 respondido en todo brief y PR que produzca código, migración o siembra.
+- **Orden de migración:** hardcode existente → PR de código primero, DDL después (al revés rompe producción).
+- **Deuda conocida:** 5 casos verificados el 2026-08-07 — ver anexo del protocolo.
 
 ---
 

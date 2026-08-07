@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-08-02-v3 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-08-07-v4 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v4 (2026-08-07):** instalada la **REGLA MULTIMARCA**. Nueva §8 (el eje va en el CÓDIGO, la instancia en el DATO; CC responde el test de la marca N+1 antes de escribir y se DETIENE ante un brief que hardcodee marca — un brief de Claude.ai no es autorización) y campo obligatorio `MULTIMARCA:` sumado al bloque de reporte de §4 + su línea de autodeclaración. Fuente única y procedimiento operativo: `protocols/MULTIBRAND_RULE.md` §7.2.
+>
 > **Cambios v3 (2026-08-02):** §6 exige ahora un guard `⛔ NO OPERATIVO` inmediatamente debajo del encabezado de todo bloque `ARCHIVO HISTÓRICO`; el bloque histórico v2026-06-06-v1 lo estrena. Motivo: su §1 derogado ("unrlvl-context — NUNCA por CC" / "Solo Sam vía GitHub Desktop") seguía leyéndose como imperativo en mayúsculas y trababa a CC, aunque el cuerpo vivo ya dice lo contrario. Preservar historia (§0) no es dejarla operativa.
 >
 > **Cambios v2 (2026-07-31):** añadida a §4 la convención **"Instrucciones para Sam"** — cuando CC deja acciones para Sam, van bajo un encabezado destacado en el **cyan de UNRLVL (`#00FFD1`)** donde la superficie lo permita. (La versión previa 2026-06-08-v1 se archiva bajo ARCHIVO HISTÓRICO junto con la 2026-06-06-v1.)
@@ -98,6 +100,10 @@ PRESERVACIÓN DE CONTEXTO:
 - [qué context files se tocaron y confirmación de que se archivó, no borró, lo anterior]
 WORKTREES:
 - [creado/eliminado/ninguno — ver §7]
+MULTIMARCA:
+- [test N+1 respondido en el PR | no aplica: solo-lectura | DETENIDO: ver bloque de detención]
+- Ejes nuevos introducidos: [lista con nombre funcional, o "ninguno"]
+- Alias legacy conservados: [lista con fecha de retiro prevista, o "ninguno"]
 PENDIENTE PARA SAM (acciones manuales):
 - [lista exacta]
 RIESGOS / DUDAS:
@@ -106,6 +112,7 @@ RIESGOS / DUDAS:
 
 Si no hubo context files tocados, declararlo explícito: "PRESERVACIÓN DE CONTEXTO: ninguno tocado."
 Si no se crearon worktrees, declararlo explícito: "WORKTREES: ninguno creado."
+Si la tarea no tocó capa compartida, declararlo explícito: "MULTIMARCA: no aplica."
 
 ### 4.1 — "Instrucciones para Sam" (convención de color · v2, 2026-07-31)
 
@@ -148,6 +155,16 @@ Antes de declarar una tarea terminada, CC se pregunta:
 > "¿Creé algún worktree durante esta tarea? Si sí → ¿lo eliminé? Si no pude eliminarlo, ¿lo reporté explícitamente en PENDIENTE PARA SAM con la ruta exacta?"
 
 El campo `WORKTREES:` del reporte (§4) es obligatorio: declara `creado y eliminado`, `ninguno creado`, o `creado y NO eliminado — acción para Sam: [ruta]`.
+
+---
+
+## 8. REGLA MULTIMARCA
+
+El eje va en el código, la instancia en el dato. Ninguna capa compartida hardcodea marca.
+CC responde el test de la marca N+1 antes de escribir, se DETIENE ante un brief que hardcodee
+marca (un brief de Claude.ai no es autorización), y declara el campo `MULTIMARCA:` en todo
+reporte. Procedimiento operativo completo — disparador, formato de detención, barrido previo
+al commit, autoverificación de cierre: `protocols/MULTIBRAND_RULE.md` §7.2.
 
 ---
 
