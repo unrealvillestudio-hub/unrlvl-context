@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.2 · 2026-08-04 · Mantenido por: Claude_
+_Versión: 1.3 · 2026-08-07 · Mantenido por: Claude_
 
 ---
 
@@ -72,6 +72,7 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 | `supabase_access_map.json` | `supabase_access_map.json` (raíz) | Topología de acceso: credencial → objeto → operación → intencional. Fuente de verdad para interpretar WARN del Security Advisor. | `supabase-auditor` bajo demanda |
 | `ecosystem_graph.json` | `ecosystem_graph.json` (raíz) | Topología de negocio: nodos LAB/APP/EF y edges de dependencia. | `ecosystem-updater` post-audit |
 | `ecosystem.json` | `ecosystem.json` (raíz) | Estado estructural completo del ecosistema. | HRD_ACTUALIZA |
+| `MULTIBRAND_RULE.md` | `protocols/MULTIBRAND_RULE.md` | Regla inviolable: eje en código, instancia en dato. Test de la marca N+1, patrones prohibidos, procedimiento de CC, deuda conocida. | Claude + Sam, bajo PR |
 
 > `supabase_access_map.json` y `ecosystem_graph.json` se enlazan por `caller.repo` ↔ nodos del graph. Se versionan por separado — no fusionar.
 
@@ -119,7 +120,7 @@ Cada archivo de un paquete de actualización se nombra con **prefijo de carpeta 
 
 ---
 
-_CAPABILITIES v1.2 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
+_CAPABILITIES v1.3 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
 
 ---
 

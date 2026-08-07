@@ -745,5 +745,13 @@
     "🆕 IID 2026-06-22 — subir IID/session_log.md (repo IID fundado)",
     "🆕 IID 2026-06-22 — Vertex: validar formato del JSON en primer run de embeddings",
     "🆕 IID 2026-06-22 — decidir destino de los 14 UNRLVL-* sin ejecutar + IID-* legacy voz Lucien"
-  ]
+  ],
+  "multibrand_rule": {
+    "_status": "INVIOLABLE — vigente desde 2026-08-07",
+    "_rule": "El EJE es del sistema y va en el CODIGO. La INSTANCIA es de la marca y va en el DATO. Ninguna capa compartida hardcodea brand_id, dominio, jurisdiccion ni vocabulario de cliente. Que hoy una sola marca use un eje NO lo convierte en suyo.",
+    "_source": "protocols/MULTIBRAND_RULE.md",
+    "_gate": "Test de la marca N+1 respondido en todo brief y PR que produzca codigo, migracion o siembra.",
+    "_order": "Migracion de hardcode existente: PR de codigo primero, DDL despues. Al reves rompe produccion.",
+    "_known_debt": "5 casos verificados el 2026-08-07 — ver anexo del protocolo."
+  }
 }
