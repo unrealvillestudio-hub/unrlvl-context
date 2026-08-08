@@ -3,23 +3,23 @@
     "schema": "unrlvl-brand-v1.2",
     "brand_id": "UnrealvilleStudio",
     "brand_slug": "Unrealville",
-    "blueprints_source": "BluePrints/brands/Unrealville/brand.json + BP_BRAND_UNRLVL_v1.2.json",
+    "blueprints_source": "BluePrints/brands/Unrealville/brand.json + BP_BRAND_UNRLVL_v1.3.json",
     "type": "studio",
-    "version": "1.2",
-    "last_updated": "2026-04-14",
-    "managed_by": "Claude / Unreal>ille Context System",
+    "version": "1.3",
+    "last_updated": "2026-08-07",
+    "managed_by": "Claude / Unrealville Context System",
     "context_path": "brands/UnrealvilleStudio/",
     "blueprints_path": "brands/Unrealville/"
   },
 
   "identity": {
-    "name": "Unreal>ille Studio",
-    "name_display": "UNREAL>ILLE STUDIO",
-    "name_logotype": "UNREAL>ILLE",
+    "name": "Unrealville Studio",
+    "name_display": ">UNREALVILLE STUDIO",
+    "name_logotype": ">UNREALVILLE",
     "name_studio_suffix": "STUDIO",
     "chevron": ">",
+    "chevron_position": "leading",
     "tagline": "Not for everyone.",
-    "tagline_alt": "Built different.",
     "brand_type": "Creative Studio — Brand Intelligence & Industrial Consistency",
     "model": "B2B inhouse — no abierto al público en esta fase",
     "audience": "Interno — Sam + PO + operadores del ecosistema",
@@ -48,10 +48,11 @@
     },
     "carbon":    { "hex": "#0F0F0F", "role": "Primary background. Footer background always." },
     "void":      { "hex": "#080808", "role": "Page background (deepest)" },
-    "graphite":  { "hex": "#1A1A1A", "role": "Secondary background / STUDIO suffix color." },
+    "graphite":  { "hex": "#1A1A1A", "role": "Secondary background / surface elevated. NUNCA para el texto STUDIO — STUDIO usa chalk_32." },
     "chalk":     { "hex": "#F2F0EC", "role": "Primary text on dark. Light logo fill." },
     "chalk_72":  { "rgba": "rgba(242,240,236,0.72)", "role": "Secondary text." },
-    "chalk_42":  { "rgba": "rgba(242,240,236,0.42)", "role": "Muted / STUDIO label." },
+    "chalk_42":  { "rgba": "rgba(242,240,236,0.42)", "role": "Muted." },
+    "chalk_32":  { "rgba": "rgba(242,240,236,0.32)", "role": "STUDIO suffix del logotipo — exclusivo." },
     "chalk_12":  { "rgba": "rgba(242,240,236,0.12)", "role": "Borders light." },
     "chalk_06":  { "rgba": "rgba(242,240,236,0.06)", "role": "Subtle borders / nav separator." },
     "error":     { "hex": "#FF4444", "role": "Errors / don'ts only." }
@@ -65,19 +66,21 @@
   },
 
   "logotype": {
-    "markup": "<span class=\"lt-logotype\"><span class=\"lt-un\">UNREAL</span><span class=\"lt-chevron\">></span><span class=\"lt-ille\">ILLE</span><span class=\"lt-studio\">STUDIO</span></span>",
+    "markup": "<span class=\"lt-logotype\"><span class=\"lt-chevron\">></span><span class=\"lt-un\">UNREALVILLE</span><span class=\"lt-studio\">STUDIO</span></span>",
     "chevron_color": "#00FFD1",
     "chevron_animation": "prompt-blink 1.1s step-end infinite",
     "chevron_transform": "scaleY(1.45) scaleX(0.72)",
     "studio_color": "rgba(242,240,236,0.32)",
-    "studio_rule": "SIEMPRE visualmente más apagado que UNREAL>ILLE — 0.32 opacity máximo.",
+    "studio_rule": "SIEMPRE visualmente más apagado que >UNREALVILLE — 0.32 opacity máximo.",
+    "chevron_position_rule": "El chevron ENCABEZA el nombre (>UNREALVILLE), nunca intercalado. El nombre lleva su propia v.",
+    "derogated_forms": "UNREAL>ILLE / Unreal>ille — DEROGADAS desde v1.3 (2026-08-07). Forma histórica únicamente; no usar en outputs nuevos.",
     "blink_rule": "El chevron > parpadea SIEMPRE en todo contexto — sin excepciones. No solo en hover, no solo en active — permanentemente.",
     "deprecated_animations": ["chevron-blink", "chev-listen"],
-    "css_complete": "@keyframes prompt-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }\n.lt-logotype { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; line-height: 1; white-space: nowrap; }\n.lt-un, .lt-ille { color: #F2F0EC; }\n.lt-chevron { color: #00FFD1; animation: prompt-blink 1.1s step-end infinite; display: inline-block; transform: scaleY(1.45) scaleX(0.72); transform-origin: center; letter-spacing: 0; margin: 0 -0.01em; }\n.lt-studio { color: rgba(242,240,236,0.32); font-size: 0.72em; letter-spacing: 0.14em; margin-left: 0.18em; }\n.lt-logotype.size-nav { font-size: 20px; }\n.lt-logotype.size-footer { font-size: 28px; }\n.lt-logotype.size-inline { font-size: 16px; }"
+    "css_complete": "@keyframes prompt-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }\n.lt-logotype { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; line-height: 1; white-space: nowrap; }\n.lt-un { color: #F2F0EC; }\n.lt-chevron { color: #00FFD1; animation: prompt-blink 1.1s step-end infinite; display: inline-block; transform: scaleY(1.45) scaleX(0.72); transform-origin: center; letter-spacing: 0; margin-right: 0.02em; }\n.lt-studio { color: rgba(242,240,236,0.32); font-size: 0.72em; letter-spacing: 0.14em; margin-left: 0.18em; vertical-align: baseline; }\n.lt-logotype.size-nav { font-size: 20px; }\n.lt-logotype.size-footer { font-size: 28px; }\n.lt-logotype.size-inline { font-size: 16px; }"
   },
 
   "footer": {
-    "version": "1.2",
+    "version": "1.3",
     "rule": "Aplica a TODOS los outputs — propios y de clientes, internos y externos.",
     "border_top": "2px solid #00FFD1 — siempre, sin excepciones.",
     "background": "#0F0F0F — independiente del fondo del documento.",
@@ -88,7 +91,7 @@
       "golden_rule": "En cualquier entregable PARA un cliente: Col 1 = logo del cliente. Siempre. Sin excepciones."
     },
     "col_2": { "format": "© [año] [Brand] — [Título] · [tipo] · [distribución]", "alignment": "center" },
-    "col_3": { "text": "Designed & Developed by Unreal>ille Studio", "language": "Siempre en inglés — invariable.", "font": "Bebas Neue" },
+    "col_3": { "text": "Designed & Developed by >UNREALVILLE STUDIO", "language": "Siempre en inglés — invariable.", "font": "Bebas Neue" },
     "address_line": "unrealvillestudio.com · North Miami, FL 33181"
   },
 
@@ -104,7 +107,7 @@
     "every_html_output": [
       "favicon <link> en <head> — primer elemento, antes de stylesheets",
       "@keyframes prompt-blink en <style> (NO chevron-blink ni chev-listen — deprecated)",
-      ".lt-chevron con animation prompt-blink 1.1s step-end",
+      ".lt-chevron AL FRENTE del nombre (>UNREALVILLE) con animation prompt-blink 1.1s step-end — NUNCA la forma derogada UNREAL>ILLE",
       ".lt-studio con color rgba(242,240,236,0.32) — visualmente mucho más apagado que el logotipo principal",
       "ICR badge visible en footer",
       ".lt-logotype.size-nav en header (20px)",

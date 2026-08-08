@@ -98,7 +98,7 @@ Retorna: `content` (texto decodificado de base64), `sha`, `size`.
 ```
 BluePrints/
   ├── brands/
-  │   ├── Unrealville/          ← Unreal>ille Studio
+  │   ├── Unrealville/          ← Unrealville Studio
   │   │   ├── BP_BRAND_UNRLVL_v1.2.json
   │   │   ├── BP_BRAND_UnrealilleStudio_v1_2.html
   │   │   ├── BP_BRAND_UnrealilleStudio_v1_2_EN.html

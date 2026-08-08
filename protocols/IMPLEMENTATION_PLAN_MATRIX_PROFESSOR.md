@@ -1,6 +1,6 @@
 # PLAN DE IMPLEMENTACIÓN
 ## DECISION_MATRIX + PROFESSOR SYSTEM
-## Unreal>ille Studio — Ecosistema UNRLVL
+## Unrealville Studio — Ecosistema UNRLVL
 _Generado: 2026-05-17 · Versión: 1.1 · Estado: Implementado — Sprints 1-4 completados_
 
 ---

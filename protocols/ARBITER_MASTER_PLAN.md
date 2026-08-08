@@ -6,7 +6,7 @@ _Estado: DISEÑADO — pendiente activación_
 
 ## ¿Qué es ARBITER?
 
-ARBITER es un **Decision Synthesis Engine** independiente. No es un lab de contenido, no es un agente conversacional, no es una extensión de Claude. Es infraestructura de toma de decisiones críticas para el ecosistema Unreal>ille.
+ARBITER es un **Decision Synthesis Engine** independiente. No es un lab de contenido, no es un agente conversacional, no es una extensión de Claude. Es infraestructura de toma de decisiones críticas para el ecosistema Unrealville.
 
 Su función: recibir una pregunta o decisión compleja, descomponerla por dimensión, debatirla entre modelos de AI heterogéneos, y sintetizar el resultado en un output estructurado, puntado y auditable — antes de que Sam o cualquier sistema actúe.
 

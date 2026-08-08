@@ -1,6 +1,6 @@
 # CONTENT PIPELINE SKILL
 ## UNRLVL · Versión canónica · v2.6
-**Propietario:** Unreal>ille Studio · Sam  
+**Propietario:** Unrealville Studio · Sam  
 **Estado:** ICR ✅ — R4B (Ready for Business)  
 **Ruta canónica:** `skills/content-pipeline/SKILL.md`  
 **Reemplaza:** v2.5 (2026-05-18)  
@@ -36,7 +36,7 @@
 
 ### ICR — Industrial Consistency Ready
 
-Estándar de calidad firma de Unreal>ille Studio. Una solución alcanza ICR cuando su output es verificablemente consistente bajo las mismas condiciones, sin supervisión manual constante.
+Estándar de calidad firma de Unrealville Studio. Una solución alcanza ICR cuando su output es verificablemente consistente bajo las mismas condiciones, sin supervisión manual constante.
 
 Una solución NO es ICR si:
 - Su output varía significativamente entre ejecuciones sin razón declarada
