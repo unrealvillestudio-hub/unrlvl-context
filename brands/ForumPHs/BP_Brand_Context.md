@@ -1,5 +1,21 @@
 # BP_Brand_Context — ForumPHs
-**Versión:** 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+**Versión:** 2026-08-08 · base previa 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+
+---
+
+## 🆕 POSICIÓN DE VOZ Y CONTENIDO (2026-08-08)
+
+**Posición ratificada con Ivette.** La voz publica el ESTÁNDAR, nunca instrumenta al lector: **se publica la pregunta, jamás la carta.** Asistir a los propietarios en su conflicto convertiría a la marca en parte del conflicto — y la Junta Directiva, que firma el contrato, es quien se pierde. Se enseña a VER los números; no se dirige contra quién ni hacia dónde actuar.
+
+**Familia de voces:** `fphs_educativa` (ENSEÑA cómo funciona el patrimonio) · `fphs_editorial` (REVELA cómo opera el oficio) · `fphs_conversion` **reactivada** (`abandoned` → `active`, eje de 13 claves, SIN calibrar: 11 topics / 0 filas).
+
+**`audience_frame` — eje del poder de contratación:** `decide` / `influye` / `general` (alias legacy `jd` / `doliente`). Reparto de los 18 topics: **9 `decide`** en conversión, **7 `influye` → `fphs_educativa`** (su ángulo ya era educativo), **2** quedan en conversión. DDL post-merge por Claude.ai: CHECK ampliado a los 5 valores + 18 filas migradas (`jd→decide`, `doliente→influye`).
+
+**Filtro de psycho-presets:** solo `PSY-URGENCY`, y calibrada por **dato patrimonial** — la urgencia se sostiene en la cifra del patrimonio, nunca en presión emocional.
+
+**Cableado de voces (2026-08-08):** `content_type_registry` + `creative_compatibility_rules` para `fphs_editorial` y `fphs_educativa`; las de `fphs_educativa` corregidas por criterio de Sam — educar como estrategia sí es UNRLVL, educar por pedagogía no.
+
+**Pendiente:** `fphs_conversion` sin calibrar · el ángulo `profesionalizar-sin-perder-el-control-doliente` está **mal planteado** (mezcla el frente del decisor con el del doliente y termina instrumentando) — reescribir.
 
 ---
 

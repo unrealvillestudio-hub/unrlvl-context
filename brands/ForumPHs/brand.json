@@ -1,6 +1,7 @@
 {
   "_meta": {
-    "version": "2026-05-09",
+    "version": "2026-08-08",
+    "previous": "2026-05-09",
     "maintained_by": "Claude",
     "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
   },
@@ -284,6 +285,22 @@
     { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo" },
     { "level": "info", "msg": "Supabase ForumPHs pendiente crear en cuenta IF (org: qybmxrjwrwurdgddgbnx)" }
   ],
+  "voice_and_content": {
+    "_update": "2026-08-08 — posición de voz ratificada con Ivette + reparto de topics + reactivación de fphs_conversion",
+    "position": "La voz publica el ESTÁNDAR, nunca instrumenta al lector: se publica la pregunta, jamás la carta. Asistir a los propietarios en su conflicto convertiría a la marca en parte del conflicto — y la JD, que firma el contrato, es quien se pierde. Se enseña a VER los números; no se dirige contra quién ni hacia dónde actuar.",
+    "voices": {
+      "fphs_educativa": "activa (v1.0, 2026-07-22) — ENSEÑA cómo funciona el patrimonio",
+      "fphs_editorial": "activa (v1.0) — REVELA cómo opera el oficio",
+      "fphs_conversion": "reactivada 2026-08-08 (abandoned→active), eje de 13 claves, SIN calibrar: 11 topics / 0 filas"
+    },
+    "audience_frame": "eje del poder de contratación: decide / influye / general (alias legacy jd / doliente). 18 topics repartidos 2026-08-08: 9 decide en conversión, 7 influye→fphs_educativa (ángulo ya educativo), 2 en conversión. DDL post-merge por Claude.ai: CHECK ampliado a 5 valores + 18 filas migradas (jd→decide, doliente→influye).",
+    "psycho_presets_filter": "solo PSY-URGENCY, calibrada por dato patrimonial (la urgencia se sostiene en la cifra del patrimonio, nunca en presión emocional)",
+    "wiring_2026-08-08": "content_type_registry + creative_compatibility_rules para fphs_editorial y fphs_educativa (las de fphs_educativa corregidas por Sam: educar como estrategia sí es UNRLVL, por pedagogía no)",
+    "pending": [
+      "fphs_conversion sin calibrar (11 topics, 0 filas)",
+      "ángulo 'profesionalizar-sin-perder-el-control-doliente' mal planteado — mezcla frente decisor y doliente, reescribir"
+    ]
+  },
   "identity": {
     "palette": {
       "amatista": "#5C3472",

@@ -1,5 +1,5 @@
 {
-  "_meta": { "version": "2026-05-20-v12", "maintained_by": "Claude", "previous": "2026-05-19-v11" },
+  "_meta": { "version": "2026-08-08-v1", "maintained_by": "Claude", "previous": "2026-05-20-v12" },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -118,10 +118,29 @@
       "active_version": "0.6",
       "maturity": "v0.6",
       "consumed_via": "L1.5 VOICE_GENOME_INJECTION (content-pipeline skill v2.6)",
-      "pending_milestone": "v1.0 mature — requiere 3-5 audios PO en contextos variados + 2-3 textos firmados + sesión validación"
+      "pending_milestone": "v1.0 mature — requiere 3-5 audios PO en contextos variados + 2-3 textos firmados + sesión validación",
+      "topics_status_2026-08-08": "activa con 0 topics — decisión de Sam: no hacer nada (estado, no pendiente accionable)"
     },
     "voice_genome_pending": {
       "po_b2b": "Patricia hablando a estilistas/distribuidoras — pendiente captura"
+    },
+    "editorial_voice": {
+      "voice_id": "nscf_editorial",
+      "version": "v1.0",
+      "active": true,
+      "activated": "2026-08-08",
+      "calibration": "Bucle Boids 10 turnos (chat), convergida (últimos 3 SÍ); el eje se reescribió 3 veces en vivo",
+      "signature_construction": "par cerrado con llave de diagnóstico — la firma de forma de esta voz",
+      "blog_topics": "4 topics sembrados en AUTHORITY (2026-08-08)",
+      "wiring": "fila propia en content_type_registry + creative_compatibility_rules (parte de las 14 filas de cableado de voces del ecosistema)",
+      "pending": [
+        "hueco de frecuencias — cadencia editorial por definir",
+        "header del blog NSCF — reescribir; arrastra la violación 'sin promesas vacías' del 2026-07-11 (la voz DEMUESTRA, no declara)"
+      ]
+    },
+    "professional_voice": {
+      "voice_id": "nscf_professional",
+      "status": "EN PAUSA (2026-08-08) — por decisión de Sam hasta que PO tenga lista esa línea de negocio; la bloquea el negocio, no el pipeline"
     }
   },
   "content_system": {
@@ -165,6 +184,8 @@
     {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
     {"level":"action",   "msg":"DY Fazza: decisión 200ml vs 400ml pendiente (KT-104)"},
     {"level":"warning",  "msg":"~11 productos con traducción EN parcial (title/meta) — no bloqueante"},
-    {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"}
+    {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"},
+    {"level":"info",     "msg":"nscf_editorial v1.0 activa (2026-08-08) — pendiente hueco de frecuencias (cadencia editorial por definir)"},
+    {"level":"info",     "msg":"Header del blog NSCF pendiente de reescritura — la voz DEMUESTRA, no declara (arrastra 'sin promesas vacías' 2026-07-11)"}
   ]
 }

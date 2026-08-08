@@ -1,5 +1,28 @@
 # ForumPHs — Session Log
 
+## 2026-08-08 — Posición ratificada con Ivette, reparto de topics y reactivación de `fphs_conversion`
+
+**Conducido por:** Sam × Claude.ai + CC (Actualiza). **Marca:** ForumPHs. Bloque ecosistémico en `brands/UnrealvilleStudio/session_log.md` (2026-08-08). Este PR sólo toca context files de `unrlvl-context`.
+
+### Posición de voz ratificada con Ivette
+La voz publica el ESTÁNDAR, nunca instrumenta al lector: **se publica la pregunta, jamás la carta.** Asistir a los propietarios en su conflicto convertiría a la marca en parte del conflicto — y la JD, que firma el contrato, es quien se pierde. Se enseña a VER los números; no se dirige contra quién ni hacia dónde actuar.
+
+### Reparto de los 18 topics (`audience_frame` en el eje del poder de contratación)
+- **9 `decide`** → quedan en conversión.
+- **9 `influye`** → **7 reclasificados a `fphs_educativa`** (su ángulo ya era educativo) + **2 quedan en conversión**.
+- El eje `audience_frame` pasó a `decide` / `influye` / `general` (alias legacy `jd` / `doliente`); DDL post-merge por Claude.ai amplió el CHECK a los cinco valores y migró las 18 filas (`jd→decide`, `doliente→influye`).
+
+### `fphs_conversion` reactivada
+`abandoned` → `active`, con eje de 13 claves, lista para arrancar. **Sin calibrar aún: 11 topics, 0 filas** (pendiente de sesión propia).
+
+### Filtro de psycho-presets
+Solo **`PSY-URGENCY`**, y calibrada por **dato patrimonial** — la urgencia se sostiene en la cifra del patrimonio, nunca en presión emocional. El resto de presets no aplican a esta voz.
+
+### Ángulo mal planteado — reescribir
+`profesionalizar-sin-perder-el-control-doliente` está mal planteado: mezcla el frente del decisor con el del doliente y termina instrumentando al lector. Hay que reescribirlo.
+
+---
+
 ## 2026-08-05 — Actualiza incremental (PR E): residuo de costo (`ops_cost_residual`), 6 flujos midiendo, BI re-diagnosticado
 
 **Alcance:** actualización incremental de context files (`ecosystem.json`, `AGENDA.md`, este log) + derivados

@@ -1,5 +1,27 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-06-16 (sesión 7)_
+_Actualizado: 2026-08-08 · base previa 2026-06-16 (sesión 7)_
+
+---
+
+## 2026-08-08 — Voz editorial `nscf_editorial` v1.0 activa + cableado de voces
+
+**Conducido por:** Sam × Claude.ai (calibración) + CC (Actualiza). **Marca:** NeuroneSCF. Bloque ecosistémico en `brands/UnrealvilleStudio/session_log.md` (2026-08-08). Este PR sólo toca context files; el cableado en DB (`content_type_registry` / `creative_compatibility_rules`) lo aplicó Claude.ai fuera de PR.
+
+### `nscf_editorial` v1.0 — calibrada y operativa
+- Bucle Boids de 10 turnos en chat, convergida (últimos 3 SÍ). El eje se reescribió 3 veces en vivo.
+- **Construcción propia hallada: el par cerrado con llave de diagnóstico** — la firma de forma de esta voz.
+- Activa en `brand_voice_genome` (v1.0). Fila propia en `content_type_registry` y en `creative_compatibility_rules` (parte de las 14 filas de cableado de voces del ecosistema; ver bloque ecosistémico).
+- **4 topics de blog sembrados en AUTHORITY.**
+
+### `nscf_professional` — EN PAUSA
+Por decisión de Sam, hasta que PO tenga lista esa línea de negocio. No es deuda del sistema: la bloquea el negocio, no el pipeline.
+
+### `po_consumer`
+Activa con 0 topics. Decisión registrada: **no hacer nada** (estado, no pendiente accionable).
+
+### Pendientes de marca
+- **Hueco de frecuencias NSCF** — cadencia editorial por definir.
+- **Header del blog NSCF** — pendiente; arrastra la violación de voz registrada el 2026-07-11 ("sin promesas vacías" en el header: la voz DEMUESTRA, no declara).
 
 ---
 
