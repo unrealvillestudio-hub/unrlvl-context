@@ -184,7 +184,9 @@ Nunca se omite. Si no aplica, se declara explícito — mismo criterio que `"WOR
 
 ---
 
-### 7.4 · Bloque para `.github/CLAUDE.md` (literal, se pega tal cual en cada repo)
+### 7.4 · Bloque para `.github/CLAUDE.md` — TEXTO CANÓNICO
+
+**Esta es la única redacción válida del bloque.** Se pega **byte-idéntica** en todos los repos: sin adaptar por repo, sin ampliar, sin resumir. Es el texto instalado el 2026-08-07 en los 16 repos; cualquier variante que aparezca en un brief o en otro documento queda derogada por esta. Si el bloque diverge entre repos, la regla ya falló.
 
 ```markdown
 ## REGLA MULTIMARCA — INVIOLABLE
@@ -202,6 +204,8 @@ existente: PR de código primero, DDL después. No aplica a artefactos exclusivo
 barrido previo al commit y checklist de PR:
 unrlvl-context/protocols/MULTIBRAND_RULE.md §7.2 — leerlo antes de tocar capa compartida.
 ```
+
+**Nota de grafía, para todo agente que lea este repo (BP_BRAND v1.3, 2026-08-07):** la marca se escribe `>UNREALVILLE` — chevron al frente, parpadeante, y la `v` en el nombre. En prosa: `Unrealville Studio`, sin chevron. La forma anterior `Unreal>ille` queda **DEROGADA**: el chevron ocupaba el lugar de la `v`, de modo que el nombre escrito no contenía su propia pronunciación y se leía como error de tecleo. **Markdown:** `>` abre blockquote al inicio de renglón — escribir la marca inline, o escapada (`\>UNREALVILLE`) si debe abrir línea; el backslash es escape de archivo, **nunca parte del nombre**, y jamás aparece en superficie renderizada. **Nunca se tocan por barrido:** `unrlvlStudio` (brandId), `unrealvillestudio.com` (dominio), nombres de repo y organización, rutas, claves de DB e identificadores.
 
 ---
 
