@@ -1,5 +1,38 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-08-08 — Regla multimarca, grafía v1.3, voz editorial NSCF y cableado de voces
+
+**Sesión larga (Sam × Claude.ai + CC). Tres frentes cerrados.** Bloque ecosistémico al tope; el detalle por marca vive en `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md`. Este PR sólo toca context files de `unrlvl-context`; el código de los ejes multimarca vive en el repo del carril (PR mergeado + DDL post-merge aplicado por Claude.ai). CC no mergea — Sam revisa, mergea y borra la rama.
+
+### 1. REGLA MULTIMARCA — inviolable, instalada en 16 repos
+`protocols/MULTIBRAND_RULE.md` creada. El EJE va en el CÓDIGO, la INSTANCIA en el DATO. Corolario: que hoy una sola marca use un eje NO lo convierte en suyo. Test de la marca N+1 obligatorio en todo brief y PR que produzca código, migración o siembra. CC puede DETENERSE ante un brief que hardcodee marca — un brief de Claude.ai no es autorización. Campo `MULTIMARCA:` añadido al reporte de CC_PROTOCOL §4. Bloque puntero en `.github/CLAUDE.md` de los 16 repos, byte-idéntico.
+
+### 2. EJES MULTIMARCA DEL CARRIL — PR mergeado + DDL aplicado
+Cuatro de los cinco casos del anexo §9 pagados:
+- `voice_by_destination` pasa a claves libres (`Object.keys`) en `iid-core/fanout.ts`.
+- `max_tokens` y `format_instruction` salen del ternario y viven en `content_type_registry` por `(content_type, voice_id)`, con `DESTINATION_TO_CONTENT_TYPE` y cascada voz → catálogo → default. Motivo: 640 tokens truncaban un carrusel de 7 láminas (~950).
+- `EMAIL → CANAL_NONE` en `CANAL_BY_PLATFORM`. Sin esto cada email caía a `INSTAGRAM_FEED` y generaba imagen: 58,7% del coste por pieza en la superficie donde además daña entregabilidad.
+- `AUDIENCE_FRAMES` migrado al eje del PODER sobre la contratación: `decide` / `influye` / `general`, con alias legacy `jd` / `doliente`, espejado en `content-watcher` gate 7.
+
+**DDL post-merge aplicado por Claude.ai:** CHECK de `intel.brand_topics.audience_frame` ampliado a los cinco valores; 18 filas de ForumPHs migradas (`jd→decide`, `doliente→influye`). Quinto caso pendiente: `OBJECTIVE_LABEL_TO_TAG`, PR propio.
+
+### 3. GRAFÍA DE MARCA — `>UNREALVILLE` (BP v1.3)
+El chevron pasa al frente. No fue estético: en `Unreal>ille` el chevron ocupaba el lugar de la `v` y el nombre escrito no contenía su propia pronunciación. Forma anterior DEROGADA. STUDIO en chalk 32%, alineado a la línea base. Prosa: `Unrealville Studio`, sin chevron. Regla Markdown: inline o escapado; el backslash es escape de archivo, nunca parte del nombre. Barridos completados por CC en `unrlvl-context`, `CoreProject`, `BluePrints` y `WebLab`. BP JSON declarado FUENTE, HTML como RENDER.
+
+### 4. NSCF — voz editorial calibrada y 100% operativa
+`nscf_editorial` v1.0 activa. Bucle Boids de 10 turnos en chat, convergida (últimos 3 SÍ). Eje reescrito 3 veces en vivo. Construcción propia hallada: **par cerrado con llave de diagnóstico**. 4 topics de blog sembrados en AUTHORITY. Fila propia en registry y compat. La sesión `nscf_professional` queda EN PAUSA por decisión de Sam hasta que PO tenga lista esa línea de negocio.
+
+### 5. FORUMPHS — posición ratificada con Ivette y reparto de topics
+La voz publica el ESTÁNDAR, nunca instrumenta al lector: se publica la pregunta, jamás la carta. Asistir a propietarios convertiría a la marca en parte del conflicto. Los 18 topics revisados: 9 `decide` en conversión; de los 9 `influye`, 7 reclasificados a `fphs_educativa` porque su ángulo ya era educativo; 2 quedan en conversión. Sesión `fphs_conversion` reactivada (`abandoned` → `active`) con eje de 13 claves, lista para arrancar.
+
+### 6. CABLEADO DE VOCES — 14 filas
+`content_type_registry` y `creative_compatibility_rules` para `nscf_editorial`, `nscf_conversion`, `fphs_editorial` y `fphs_educativa`. Corregidas por criterio de Sam las de `fphs_educativa`: educar por pedagogía no es UNRLVL; educar como estrategia sí.
+
+**PENDIENTES:** `fphs_conversion` sin calibrar (11 topics, 0 filas) · `OBJECTIVE_LABEL_TO_TAG` · `po_consumer` activa con 0 topics (decisión: no hacer nada) · SVG/PNG de BluePrints con grafía derogada (los regenera Sam) · dos carpetas duplicadas `brands/Unrealville/` y `brands/UnrealvilleStudio/` · hueco de frecuencias NSCF · header del blog NSCF.
+**PRÓXIMO GRUPO DE CALIBRACIÓN:** patriciaosorio.com + PatriciaOsorioConectando, D7Herbal, VizosSalón.
+
+---
+
 ## 2026-08-04 · CopyLab — el motor de voz nunca había leído los genomas
 
 **Conducido por:** Claude Opus 4.8 (chat, diagnóstico + decisiones + DB directa) + Claude Code (ejecución de PRs y verificación).

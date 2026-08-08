@@ -1,8 +1,23 @@
 # BP_BRAND_CONTEXT — Neurone South & Central Florida
 **Schema:** BP_BRAND_1.1  
-**Versión:** 2026-05-19-v1.0  
+**Versión:** 2026-08-08-v1.1 · base previa 2026-05-19-v1.0  
 **Fuentes:** BP_BRAND_NeuroneSCF_v1.0.json (historial WebLab 2026-03-23) + brand.json v11 + humanize_profiles + brand_voice_genome po_consumer v0.6 + Shopify B2C auditado 2026-05-19  
 **Mantenido por:** Claude / Unrealville Studio
+
+---
+
+## 🆕 VOZ EDITORIAL — `nscf_editorial` v1.0 (2026-08-08)
+
+`nscf_editorial` v1.0 quedó **activa y operativa**. Se calibró en un bucle Boids de 10 turnos en chat, convergido (últimos 3 SÍ), con el eje reescrito 3 veces en vivo.
+
+**Construcción propia de la voz: el par cerrado con llave de diagnóstico** — la firma de forma de `nscf_editorial`, el modo en que cierra y remata. No se hereda de `po_consumer` ni de la conversión: es de la voz editorial.
+
+- **4 topics de blog** sembrados en AUTHORITY.
+- **Cableado:** fila propia en `content_type_registry` y en `creative_compatibility_rules` (parte de las 14 filas de cableado de voces del ecosistema, 2026-08-08).
+- **`nscf_professional` EN PAUSA** por decisión de Sam hasta que Patricia Osorio tenga lista esa línea de negocio — la bloquea el negocio, no el pipeline.
+- **`po_consumer`**: activa con 0 topics; decisión registrada = no hacer nada.
+
+**Pendientes de marca:** hueco de frecuencias (cadencia editorial por definir) · header del blog NSCF, que arrastra la violación "sin promesas vacías" del 2026-07-11 (la voz DEMUESTRA, no declara).
 
 ---
 

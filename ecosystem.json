@@ -1,14 +1,19 @@
 {
   "_meta": {
-  "version": "2026-08-05-v1",
+  "version": "2026-08-08-v1",
   "maintained_by": "Claude — do not edit manually",
-  "previous": "2026-08-04-v1",
+  "previous": "2026-08-05-v1",
   "last_session": {
+    "date": "2026-08-08",
+    "conducted_by": "Claude Opus 4.8 (Claude Code) — HRD_ACTUALIZA 2026-08-08, context files + derivados · calibración Sam × Claude.ai · CC ejecuta rama+PR contra main, no mergea",
+    "status": "HRD_ACTUALIZA 2026-08-08 — Regla multimarca, grafía v1.3, voz editorial NSCF, cableado de voces. (1) REGLA MULTIMARCA instalada en 16 repos (protocols/MULTIBRAND_RULE.md; el EJE en el CÓDIGO, la INSTANCIA en el DATO; test de la marca N+1 obligatorio; campo MULTIMARCA: en el reporte de CC_PROTOCOL §4; bloque puntero byte-idéntico en .github/CLAUDE.md de los 16 repos) — ver nodo multibrand_rule. (2) 4 de 5 ejes multimarca del carril pagados (PR mergeado + DDL post-merge por Claude.ai): voice_by_destination a claves libres (Object.keys) en iid-core/fanout.ts; max_tokens+format_instruction del ternario a content_type_registry por (content_type, voice_id) con cascada voz→catálogo→default (640 tokens truncaban un carrusel de 7 láminas); EMAIL→CANAL_NONE en CANAL_BY_PLATFORM (evita imagen en email = 58,7% del coste por pieza + daña entregabilidad); AUDIENCE_FRAMES al eje del poder de contratación decide/influye/general con alias legacy jd/doliente, espejado en content-watcher gate 7; CHECK de intel.brand_topics.audience_frame ampliado a 5 valores + 18 filas FPHs migradas (jd→decide, doliente→influye). Quinto caso pendiente: OBJECTIVE_LABEL_TO_TAG (PR propio). (3) Grafía >UNREALVILLE (BP v1.3): chevron al frente, Unreal>ille DEROGADA; barridos CC en unrlvl-context/CoreProject/BluePrints/WebLab. (4) NSCF nscf_editorial v1.0 activa (par cerrado con llave de diagnóstico; 4 topics de blog en AUTHORITY); nscf_professional EN PAUSA (la bloquea el negocio de PO, no el sistema). (5) ForumPHs: posición ratificada con Ivette (publicar el estándar, nunca instrumentar) + reparto de 18 topics (9 decide en conversión, 7 influye→fphs_educativa, 2 en conversión) + fphs_conversion reactivada (abandoned→active, sin calibrar: 11 topics/0 filas). (6) 14 filas de cableado de voces (content_type_registry + creative_compatibility_rules para nscf_editorial, nscf_conversion, fphs_editorial, fphs_educativa). Sólo context files + derivados de unrlvl-context; el código de los ejes vive en el repo del carril. Detalle en brands/UnrealvilleStudio/session_log.md (2026-08-08)."
+  },
+  "previous_sessions": [
+  {
     "date": "2026-08-05",
     "conducted_by": "Claude Opus 4.8 (Claude Code) — Actualiza incremental (PR E), context files + derivados · MCP Supabase amlvyycfepwhiindxgzw (unrlvl-db) + tajuoqdbnsnzkhyqvdgs (forumphs-db) · verificación information_schema",
     "status": "Actualiza incremental (PR E) — sólo lo posterior al PR #31, VERIFICADO contra information_schema (la DB manda sobre el brief). Nuevos objetos de costo registrados en cost_instrumentation: tabla ops_cost_residual (residuo de brecha ledger↔Console por scope; 2 filas vigentes valid_to NULL: lab=document-factory 12,000% · lab=fie 3,500%) y vista v_cost_residual_vigente (residuos vigentes, valid_to IS NULL). Seis flujos ForumPHs midiendo en ops_generation_ledger: acta, fie_parse_pdf, icr_audit, image_curation, informe_fie, speaks_chat. Costo unitario verificado contra factura: acta ~$0,43 medido / ~$0,48 ajustado (residuo 12%) · suite FIE ~$0,38 (ledger 0,3672 vs Console 0,38, brecha 3,5%). Auditoría del acta cerrada: /api/qa, classifyRoles, /api/parse y PRE-FLIGHT (preflightDetector) verificados deterministas. BI ForumPHs re-diagnosticado (revisa el PR-B del 08-04): no era clave ni RLS — monthly_kpis, eeff_preliminar y mora_mensual están VACÍAS (0 filas en toda la DB forumphs-db, incluida PH Lefevre 75 Don Enrique); falta carga de datos, no código. Vencimiento 2026-08-31 (fin introductorio Sonnet 5): acta proyecta ~$0,72, suite FIE ~$0,57. Sólo context files + derivados de unrlvl-context; el código de BI/FIE vive en forumphs-document-factory (PRs #23/#24 ya mergeados y desplegados)."
   },
-  "previous_sessions": [
   {
     "date": "2026-08-04",
     "conducted_by": "Claude Opus 4.8 (Claude Code) — HRD_ACTUALIZA + BI + FIE · MCP Supabase amlvyycfepwhiindxgzw (verificación information_schema)",
@@ -595,7 +600,7 @@
   },
   "tables": {
     "intel": ["iid_agents (29)","brand_topics","iid_briefs","iid_content_queue (+ columna domain 2026-06-20)","iid_cron_runs","iid_findings","iid_research_raw","iid_scheduler_config","watcher_log","iid_seeds (rastro semillas humanas: source_url/handle/raw_signal/captured_by/neutral_topic/mapeo/lane/status + GRANT service_role, 25-jun)","watcher_rules (54 reglas enumeradas con código citable HR-*/IMG-*; columnas subject/sector/scope GENERATED brand/sector/gen; precedencia brand>sector>gen; params {{clave}} desde brand_topics.hard_rules, sin resolver→skipped_unresolved; 29-jul)","brand_sector (9 marcas→sectores RETAIL/LEGAL/PERSONA; UnrealvilleStudio sin sector=la casa; eje de herencia de reglas del watcher; 29-jul)"],
-    "content": ["orchestrator_jobs (+ domain 2026-06-20)","content_pieces (+ domain)","content_calendar","content_performance","brand_context_cache","brand_voices"]
+    "content": ["orchestrator_jobs (+ domain 2026-06-20)","content_pieces (+ domain)","content_calendar","content_performance","brand_context_cache","brand_voices","content_type_registry (+max_tokens, +format_instruction por (content_type, voice_id), 2026-08-08; sacan max_tokens/format_instruction del ternario del carril, cascada voz→catálogo→default; pareja con DESTINATION_TO_CONTENT_TYPE y CANAL_BY_PLATFORM/EMAIL→CANAL_NONE)"]
   },
   "vertex": {
     "status": "✅ DESBLOQUEADO 2026-06-22",
@@ -647,6 +652,20 @@
         "platforms": "linkedin, meta_fb, meta_ig",
         "purpose": "Tier1 = publish+internal (doble propósito)",
         "cadence_crescendo": "month_1 2x/sem → month_2 3x/sem → month_3plus 4x/sem por plataforma"
+      },
+      "NeuroneSCF": {
+        "voices_active": "nscf_editorial v1.0 (AUTHORITY, 4 topics de blog sembrados 2026-08-08; construcción propia = par cerrado con llave de diagnóstico) · nscf_conversion v1.0 (5 topics b2c, 2026-07-02)",
+        "voice_paused": "nscf_professional EN PAUSA por decisión de Sam hasta que PO tenga lista esa línea de negocio (la bloquea el negocio, no el pipeline)",
+        "voice_dormant": "po_consumer activa con 0 topics (decisión 2026-08-08: no hacer nada)",
+        "wiring_2026-08-08": "fila propia en content_type_registry + creative_compatibility_rules para nscf_editorial y nscf_conversion (parte de las 14 filas de cableado de voces)",
+        "pending": "hueco de frecuencias (cadencia editorial por definir) · header del blog NSCF"
+      },
+      "ForumPHs": {
+        "voices_active": "fphs_educativa · fphs_editorial (2 voces operables, 14 topics sembrados 2026-07-22) · fphs_conversion reactivada 2026-08-08 (abandoned→active, eje de 13 claves, SIN calibrar: 11 topics / 0 filas)",
+        "audience_frame_axis": "decide / influye / general (alias legacy jd / doliente). 18 topics repartidos 2026-08-08: 9 decide en conversión, 7 influye→fphs_educativa (ángulo ya educativo), 2 en conversión. DDL post-merge por Claude.ai: CHECK ampliado a 5 valores + 18 filas migradas (jd→decide, doliente→influye)",
+        "voice_position": "la voz publica el ESTÁNDAR, nunca instrumenta al lector (se publica la pregunta, jamás la carta). Filtro de psycho-presets: solo PSY-URGENCY, calibrada por dato patrimonial",
+        "wiring_2026-08-08": "content_type_registry + creative_compatibility_rules para fphs_editorial y fphs_educativa (las de fphs_educativa corregidas por Sam: educar como estrategia sí, por pedagogía no)",
+        "pending": "fphs_conversion sin calibrar · ángulo profesionalizar-sin-perder-el-control-doliente mal planteado, reescribir"
       }
     },
     "multibrand_case": "ai-cognition suscrito por Lucien (filosófico, lucien_*) Y UNRLVL (infraestructura, unrlvl_default). Ambos sibling_stagger=true. Es la prueba multimarca+voz del piloto.",
@@ -752,6 +771,7 @@
     "_source": "protocols/MULTIBRAND_RULE.md",
     "_gate": "Test de la marca N+1 respondido en todo brief y PR que produzca codigo, migracion o siembra.",
     "_order": "Migracion de hardcode existente: PR de codigo primero, DDL despues. Al reves rompe produccion.",
-    "_known_debt": "5 casos verificados el 2026-08-07 — ver anexo del protocolo."
+    "_known_debt": "5 casos verificados el 2026-08-07 — ver anexo del protocolo.",
+    "_debt_update_2026-08-08": "4 de 5 casos pagados (PR mergeado + DDL post-merge por Claude.ai): voice_by_destination a claves libres (Object.keys) · max_tokens+format_instruction del ternario a content_type_registry por (content_type, voice_id) · EMAIL→CANAL_NONE en CANAL_BY_PLATFORM · AUDIENCE_FRAMES al eje del poder de contratación decide/influye/general (alias legacy jd/doliente) + CHECK de intel.brand_topics.audience_frame a 5 valores + 18 filas FPHs migradas. Quinto pendiente: OBJECTIVE_LABEL_TO_TAG (PR propio)."
   }
 }
