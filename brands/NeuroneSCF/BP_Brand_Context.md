@@ -2,7 +2,7 @@
 **Schema:** BP_BRAND_1.1  
 **Versión:** 2026-05-19-v1.0  
 **Fuentes:** BP_BRAND_NeuroneSCF_v1.0.json (historial WebLab 2026-03-23) + brand.json v11 + humanize_profiles + brand_voice_genome po_consumer v0.6 + Shopify B2C auditado 2026-05-19  
-**Mantenido por:** Claude / Unreal>ille Studio
+**Mantenido por:** Claude / Unrealville Studio
 
 ---
 

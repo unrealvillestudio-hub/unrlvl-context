@@ -1,6 +1,6 @@
 # UNRLVL Ecosystem Vision Document
 > **Versión:** 4.0  
-> **Autor:** Sam — Unreal>ille Studio  
+> **Autor:** Sam — Unrealville Studio  
 > **Fecha:** ____________________  
 > **Base:** DB_VARIABLES_v6_4 (40 hojas, auditado en sesión 2026-03-25)  
 > **Propósito:** Documento maestro para la auditoría de DB_VARIABLES y migración a Supabase.
@@ -17,7 +17,7 @@
 
 ---
 
-## 1. UNREAL>ILLE STUDIO
+## 1. UNREALVILLE STUDIO
 
 ### 1.1 Misión y promesa de servicio
 > ¿Qué hace el Studio? ¿Qué garantiza a sus clientes?
@@ -26,7 +26,7 @@
 > Agencia / licencias / servicios gestionados / joint ventures...
 
 ### 1.3 La Signature UNRLVL
-> Cuando un output lleva la firma de Unreal>ille, implica que pasó por ICR QA
+> Cuando un output lleva la firma de Unrealville, implica que pasó por ICR QA
 > y que el Brand DNA fue correctamente inyectado y el HUMANIZE layer aplicado.
 
 ### 1.4 Objetivos estratégicos 2026
@@ -369,7 +369,7 @@ Diamond Details (ES + EN + VAL) · Vizos Cosmetics (es-FL + en-FL) · D7 Herbal 
 
 ### 4.1 Definición
 Industrial Consistency Ready = garantía de que cada output cumple el standard
-de Unreal>ille antes de ser entregado. Automatizado. El usuario/cliente
+de Unrealville antes de ser entregado. Automatizado. El usuario/cliente
 nunca ve un FAIL — el sistema simplemente regenera hasta que PASS.
 
 ### 4.2 Flujo de autovalidación

@@ -1,5 +1,5 @@
 # VOZ DE PATRICIA OSORIO — Artículos de Blog
-## Unreal>ille Studio · NeuroneSCF
+## Unrealville Studio · NeuroneSCF
 **Versión:** 1.0 · 2026-05-12
 **Ruta canónica:** `brands/NeuroneSCF/PO_VOICE_ARTICLES.md`
 **Aplica a:** Content Pipeline · Agents IID (WRITE, H+AIFE, HUMANIZE, QA) · Claude en sesión

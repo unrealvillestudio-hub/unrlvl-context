@@ -2,7 +2,7 @@
 ## UNRLVL · v1.0
 **Ubicación:** `skills/voice-reference-extractor/`  
 **Estado:** ICR ✅  
-**Propietario:** Unreal>ille Studio · Sam  
+**Propietario:** Unrealville Studio · Sam  
 **Última actualización:** 2026-06-05
 
 ---
