@@ -1,5 +1,50 @@
 # ForumPHs — Session Log
 
+## 2026-08-09 — fphs_conversion v1.1 sellada · las 4 voces normalizadas
+
+**Calibración `fphs_conversion` — sesión `e1c33c9b-6af5-42c2-9139-843f81d93a9f`**
+Convergida: 10 turnos, 7 SÍ / 3 NO, marcadores en 8-9-10 (exactamente la racha).
+`resulting_voice_id='fphs_conversion'`. Tres NO reales y repartidos (turnos 2, 3 y 7);
+cada uno cambió el genoma. Sin el problema de marcadores inflados de VizosSalon.
+
+**Genoma v1.1** — `application_constraints` migrado de `array` a `object` preservando
+íntegro el contenido de v1.0 (`dos_frentes`, `mapa_de_dominios`,
+`candado_confidencialidad_BI` verificados presentes tras la migración).
+Incorpora: eje de planteamiento (proyección a cinco años, no diagnóstico), mecanismo
+de conversión sin CTA, doctrina de lucir mostrando el artefacto, regla de escala por
+superficie, prohibición de elipsis, reglas de lengua y las decisiones de cierre.
+`prohibited_registers` de 9 a 12.
+
+**`signature_closer` — fallo silencioso corregido.** El carril lo estampa tras el PASS
+del Watcher; sin la clave, la pieza salía sin firma y solo quedaba un log. Ninguna de
+las tres voces activas de ForumPHs la tenía. Sembrada en las tres.
+
+**Decisiones de Sam (2026-08-09):** usted siempre en los dos frentes · la firma la
+estampa el sistema y el copy nunca la escribe · cierre de blog con enlace interno
+obligatorio · publicación se trata en sesión aparte de AIID.
+
+**`target_artifact` migrado a `surfaces[]`** en las tres sesiones de ForumPHs.
+`fphs_conversion` 4 superficies · `fphs_educativa` 5 · `fphs_editorial` 2.
+
+**`content_type_registry`:** sembradas `editorial_post`=3200 tk y `social_post`=900 tk
+para `fphs_conversion`, con `format_instruction` calibrada. Antes caía al default de
+social (640 tk, "pieza corta y filosa"), que contradice y trunca el post largo.
+
+**Idioma:** `intel.brand_topics.languages='{es}'` en las 32 filas. `brand_languages` y
+`brand_services` de `es-PA` a `es`.
+
+**`intel.watcher_rules`:** HR-FPHS-04 reescrita para que juez y Builder digan lo mismo —
+se prohíbe enumerar lo que la marca **ofrece**; mostrar lo que un entregable propio
+**contiene** es demostración y está permitido.
+
+**PENDIENTE, no cerrado hoy:** `fphs_educativa` y `fphs_editorial` cerraron su
+calibración con un NO como último veredicto y están activas en producción. Los turnos
+4, 8 y 9 de `fphs_conversion` tienen tu SÍ pero no cumplen dos reglas duras (año
+calendario el 4; tuteo el 8 y el 9; cierre sin enlace interno el 4): se corrigen antes
+de publicar. `brand_social_accounts` y `meta_accounts` en 0.
+
+---
+
 ## 2026-08-08 — Posición ratificada con Ivette, reparto de topics y reactivación de `fphs_conversion`
 
 **Conducido por:** Sam × Claude.ai + CC (Actualiza). **Marca:** ForumPHs. Bloque ecosistémico en `brands/UnrealvilleStudio/session_log.md` (2026-08-08). Este PR sólo toca context files de `unrlvl-context`.
