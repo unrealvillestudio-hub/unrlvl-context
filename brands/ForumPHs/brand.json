@@ -286,21 +286,23 @@
     { "level": "info", "msg": "Supabase ForumPHs pendiente crear en cuenta IF (org: qybmxrjwrwurdgddgbnx)" }
   ],
   "voice_and_content": {
-    "_update": "2026-08-09 — fphs_conversion v1.1 sellada (convergida 10 turnos, 7 SÍ/3 NO); application_constraints migrado de array a object en las 3 voces activas; signature_closer sembrada en las 3 (ninguna la tenía); target_artifact → surfaces[]. NOTA: este bloque describe las voces en PROSA; el genoma estructurado (application_constraints como object, versiones, active) vive en brand_voice_genome, no en este archivo. Detalle en session_log.md (2026-08-09). Previo: 2026-08-08 — posición de voz ratificada con Ivette + reparto de topics + reactivación de fphs_conversion",
+    "_update": "2026-08-09 (cont.) — las 3 voces activas de ForumPHs selladas en v1.1: fphs_educativa (11 turnos, control negativo el 11), fphs_editorial (16 turnos, control negativo el 14), fphs_conversion. CORRECCIÓN: los NO finales de educativa/editorial eran controles negativos deliberados, no convergencias fallidas (falso positivo por leer veredictos sin abrir notes_intent). content_type_registry: 7 filas completas para las 3 voces (5 de educativa/editorial existían con format_instruction/max_tokens NULL, pobladas por UPDATE). fphs_institucional sigue active=false (v0.5, application_constraints en object). NOTA: bloque en PROSA; el genoma estructurado vive en brand_voice_genome (DB). Detalle en session_log.md (2026-08-09 cont.). Previo: 2026-08-09 — fphs_conversion v1.1 sellada (convergida 10 turnos, 7 SÍ/3 NO); application_constraints migrado de array a object en las 3 voces activas; signature_closer sembrada en las 3 (ninguna la tenía); target_artifact → surfaces[]. Previo: 2026-08-08 — posición de voz ratificada con Ivette + reparto de topics + reactivación de fphs_conversion",
     "position": "La voz publica el ESTÁNDAR, nunca instrumenta al lector: se publica la pregunta, jamás la carta. Asistir a los propietarios en su conflicto convertiría a la marca en parte del conflicto — y la JD, que firma el contrato, es quien se pierde. Se enseña a VER los números; no se dirige contra quién ni hacia dónde actuar.",
     "voices": {
-      "fphs_educativa": "activa (v1.0, 2026-07-22) — ENSEÑA cómo funciona el patrimonio · application_constraints en object · signature_closer sembrada · surfaces[] 5 · PENDIENTE: convergió con NO final, recalibrar a 3 SÍ",
-      "fphs_editorial": "activa (v1.0) — REVELA cómo opera el oficio · application_constraints en object · signature_closer sembrada · surfaces[] 2 · PENDIENTE: convergió con NO final, recalibrar a 3 SÍ",
-      "fphs_conversion": "activa v1.1 sellada 2026-08-09 (convergida 10 turnos, 7 SÍ/3 NO; prohibited_registers 9→12; application_constraints en object; signature_closer sembrada; surfaces[] 4; content_type_registry editorial_post=3200/social_post=900) · PENDIENTE: corregir turnos 4/8/9 antes de publicar"
+      "fphs_educativa": "activa v1.1 sellada 2026-08-09 (11 turnos: 10 SÍ + 1 control negativo, convergencia 9-10-11; 7/7 territorios; 5 superficies; application_constraints en object; signature_closer sembrada; content_type_registry poblado)",
+      "fphs_editorial": "activa v1.1 sellada 2026-08-09 (16 turnos, racha 13-15-16 tras el control negativo del t14; 7/7 territorios; surfaces[] 2; application_constraints en object; signature_closer sembrada; content_type_registry poblado) · PENDIENTE: verificar datos regulatorios extranjeros del t16 antes de publicar esa pieza",
+      "fphs_conversion": "activa v1.1 sellada 2026-08-09 (convergida 10 turnos, 7 SÍ/3 NO; prohibited_registers 9→12; application_constraints en object; signature_closer sembrada; surfaces[] 4; content_type_registry editorial_post=3200/social_post=900) · PENDIENTE: corregir turnos 4/8/9 antes de publicar",
+      "fphs_institucional": "inactiva (active=false, v0.5) — application_constraints normalizado a object"
     },
     "audience_frame": "eje del poder de contratación: decide / influye / general (alias legacy jd / doliente). 18 topics repartidos 2026-08-08: 9 decide en conversión, 7 influye→fphs_educativa (ángulo ya educativo), 2 en conversión. DDL post-merge por Claude.ai: CHECK ampliado a 5 valores + 18 filas migradas (jd→decide, doliente→influye).",
     "psycho_presets_filter": "solo PSY-URGENCY, calibrada por dato patrimonial (la urgencia se sostiene en la cifra del patrimonio, nunca en presión emocional)",
     "wiring_2026-08-08": "content_type_registry + creative_compatibility_rules para fphs_editorial y fphs_educativa (las de fphs_educativa corregidas por Sam: educar como estrategia sí es UNRLVL, por pedagogía no)",
     "pending": [
-      "fphs_educativa y fphs_editorial convergidas con NO final — recalibrar a 3 SÍ consecutivos (activas en producción)",
-      "fphs_conversion — corregir turnos 4/8/9 antes de publicar (año calendario t4; tuteo t8/t9; cierre sin enlace interno t4)",
+      "auditar signature_closer en los genomas activos de las demás marcas — 7 de 11 no lo tenían al detectarse",
       "conectar cuentas de ForumPHs — brand_social_accounts y meta_accounts en 0 (sesión AIID aparte)",
-      "auditar signature_closer en los 11 genomas activos — 7 sin firma hoy",
+      "HR-FPHS-08: sin post_url ni slugs — la serie de artículos de apertura es su backlog; cada invitación es enlace muerto hasta que exista",
+      "fphs_conversion — corregir turnos 4/8/9 antes de publicar (año calendario t4; tuteo t8/t9)",
+      "fphs_editorial — verificar datos regulatorios extranjeros del turno 16 antes de publicar esa pieza",
       "ángulo 'profesionalizar-sin-perder-el-control-doliente' mal planteado — mezcla frente decisor y doliente, reescribir"
     ]
   },

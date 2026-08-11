@@ -1,5 +1,42 @@
 # ForumPHs — Session Log
 
+## 2026-08-09 (cont.) — las tres voces de ForumPHs selladas en v1.1
+
+**`fphs_educativa` v1.1** — sesión `a082116f-9cc4-4f96-97ae-65e23d45608e`
+Completada a 11 turnos (10 SÍ + 1 control negativo), convergencia en 9-10-11.
+**7 de 7 territorios probados**, 5 superficies cubiertas.
+
+**`fphs_editorial` v1.1** — sesión `e71bebdc-8e52-4b5f-9332-fb6e62f0d34f`
+Cerrada tras el control negativo del turno 14 con los turnos 15 y 16.
+16 turnos, racha legítima en 13-15-16. **7 de 7 territorios probados.**
+
+**CORRECCIÓN DE DIAGNÓSTICO — importante para el registro.** Los NO finales de
+ambas sesiones NO eran convergencias fallidas: eran **controles negativos
+deliberados** y el NO era el resultado esperado. Leer secuencias de veredictos sin
+abrir el `notes_intent` produjo un falso positivo en las dos voces. Lo que sí era
+cierto: una sesión sellada no puede terminar en un control, o el próximo lector lo
+interpreta como rechazo.
+
+**`content_type_registry`:** 5 filas de Educativa y Editorial **ya existían con
+`format_instruction` NULL y `max_tokens` NULL** — una fila vacía no declara ninguna
+regla y engaña a toda auditoría que cuente filas en vez de leer campos. Pobladas por
+UPDATE. Hoy hay 7 filas completas para las tres voces.
+
+**Reglas nuevas de marca (las tres voces):**
+- Prohibido "plata", va "dinero". Reapareció en dos voces distintas el mismo día:
+  toda corrección léxica que cruce de voz es de marca, no de voz.
+- La invitación **abre la pieza siguiente, nunca cierra la actual**. Toda pieza debe
+  ser concluyente en sí misma y además invitar.
+- Marca en el cuerpo vs marca en la firma: en Educativa y Editorial la marca **no
+  entra al cuerpo**; la firma la estampa el sistema.
+
+**PENDIENTE, sesión de cierre de AIID:** cuentas sociales en 0 · `HR-FPHS-08`
+cumplida a medias (sin `post_url` ni slugs, cada invitación es enlace muerto hasta
+que exista la serie de apertura) · verificar los datos de España, Chile y EEUU del
+turno 16 **solo si esa pieza se publica** (hoy es prueba de calibración).
+
+---
+
 ## 2026-08-09 — fphs_conversion v1.1 sellada · las 4 voces normalizadas
 
 **Calibración `fphs_conversion` — sesión `e1c33c9b-6af5-42c2-9139-843f81d93a9f`**
