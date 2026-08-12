@@ -245,4 +245,25 @@ Inventario abierto. No se cierra en un PR; se ordena por lo que bloquea.
 
 ---
 
+## 10. CONTRATO `surfaces[]` — forma canónica de `target_artifact`
+
+Fijado el 2026-08-09, tras encontrar **tres formas incompatibles conviviendo en la
+misma columna** `target_artifact`. La forma canónica es un objeto de contrato, no una
+etiqueta suelta — y es **eje**: vive en el código/contrato; sus valores son **instancia**
+y viven en el dato.
+
+- `surfaces[]` — enumera las **superficies del sistema** donde la voz puede publicar (p. ej. `meta_ig`, `editorial_post`). Enumera superficies, **no marcas**.
+- `excluded[]` — superficies vedadas a esta voz.
+- `signature_closer` — clave del genoma; el sistema la estampa **tras el PASS del Watcher**, el copy nunca la escribe. Se resuelve por `brand_id`/`voice_id` en runtime.
+- `declared_per_turn` — la superficie se declara por turno de calibración, contra el `surfaces[]` ya sembrado.
+
+### Test de la marca N+1 (respondido)
+
+1. **¿Sobrevive a otra marca de otro rubro y otro país?** Sí. `surfaces[]` enumera superficies del sistema, no marcas. `signature_closer` es una clave del genoma, resuelta por `brand_id`/`voice_id` en runtime.
+2. **¿El nombre describe la FUNCIÓN o el CASO?** Función. `surfaces`, `excluded`, `signature_closer`, `declared_per_turn`.
+3. **¿Eje o instancia?** La forma es eje y vive en el contrato. Los valores (`meta_ig`, `editorial_post`, el texto de la firma) son instancia y viven en dato.
+4. **¿Cuántas marcas hay en la enumeración?** Cero. Las claves con marca dentro (`blog_forumphs`, `email_propietarios`) ya son **filas** de `platform_canal_map`.
+
+---
+
 _Fin · MULTIBRAND_RULE v1.0 · regla inviolable · Unreal>ille Studio_
