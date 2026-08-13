@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-08-09 — Política de idioma aplicada
+
+Normalizado a `es`/`en` neutro internacional. Sin regionalismos, sin spanglish. Marca **bilingüe**: **EN primero, ES después** en todo, incluidas las firmas; ES y EN se generan por separado desde origen, nunca se traduce uno del otro.
+
+Firmas con variante `text_en` (idénticas a ES, resueltas **por voz**): `lucien_editorial` → `— Lucien Sael · Builder, Thinker, Operator`; `lucien_social` → `— luciensael.com`. La estampa el sistema tras el PASS del Watcher; el copy nunca la escribe; no sustituye al CTA cuando el genoma dice que el CTA cierra la pieza.
+
+_(Entrada del tramo 3 de la sesión 2026-08-09, registrada el 2026-08-13.)_
+
 ## 2026-06-02 — Genoma social (lucien_social v0.5) · Sam + Claude
 
 ### Resumen

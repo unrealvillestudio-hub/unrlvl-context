@@ -3,6 +3,12 @@
 
 ---
 
+## 2026-08-09 — Política de idioma aplicada
+
+Normalizado a `es` neutro internacional. Sin regionalismos, sin spanglish. Sin firma en esta marca todavía (pendiente en AGENDA — grupo de firmas restantes).
+
+_(Entrada del tramo 3 de la sesión 2026-08-09, registrada el 2026-08-13.)_
+
 ## 2026-03-22 — Estado inicial del sistema de contexto
 
 ### EN CURSO / CALIENTE

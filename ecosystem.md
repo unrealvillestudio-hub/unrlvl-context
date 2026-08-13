@@ -1,5 +1,5 @@
 # Unrealville Studio — Ecosistema
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage v74 · iid-core v47 · content-watcher v29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha ledger↔Console por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: sección propia + clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 (AUTHORITY, 4 topics) y `fphs_conversion` reactivada (abandoned→active) registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction` por (content_type, voice_id)) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro. Adición aditiva, historia preservada_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover actualizados al estado vivo 2026-06-24; secciones IID/genomas/NSCF preservadas del 2026-06-22 · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage v74 · iid-core v47 · content-watcher v29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha ledger↔Console por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: sección propia + clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 (AUTHORITY, 4 topics) y `fphs_conversion` reactivada (abandoned→active) registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction` por (content_type, voice_id)) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro · ACTUALIZA 2026-08-09-v3 (tramo 3, registrado 2026-08-13): dos secciones de política añadidas — «Política de idioma del ecosistema» (`es`|`en`, spanglish prohibido, EN→ES en bilingües, excepción `VAL`/`EN-UK` de DiamondDetails; normalización del 2026-08-09 en 11 columnas de 7 tablas) y «Firmas de marca (`signature_closer`)» (ForumPHs/NSCF/Lucien/UNRLVL sembradas, `null` declarado en `fphs_institucional`/`po_consumer`) — patrón de sección de política, como la Regla Multimarca; sin bump de `_meta.version` en el JSON (ecosystem.json no declara idioma ni firmas por marca, no se toca). Adición aditiva, historia preservada_
 
 ---
 
@@ -12,6 +12,45 @@ El **EJE** es del sistema y va en el **CÓDIGO**. La **INSTANCIA** es de la marc
 - **Orden de migración:** hardcode existente → PR de código primero, DDL después (al revés rompe producción).
 - **Deuda conocida:** 5 casos verificados el 2026-08-07 — ver anexo del protocolo.
 - **Deuda 2026-08-08:** 4 de 5 casos pagados (PR mergeado + DDL post-merge): `voice_by_destination` (Object.keys) · `max_tokens`+`format_instruction` en `content_type_registry` · `EMAIL→CANAL_NONE` · `AUDIENCE_FRAMES` a `decide`/`influye`/`general` (alias legacy `jd`/`doliente`) + CHECK `intel.brand_topics.audience_frame` a 5 valores + 18 filas FPHs migradas. Quinto pendiente: `OBJECTIVE_LABEL_TO_TAG` (PR propio).
+
+---
+
+## Política de idioma del ecosistema — vigente desde 2026-08-09
+
+Vocabulario controlado: **`es` | `en`**. Únicos valores válidos.
+
+- ES neutro internacional y EN neutro internacional, **sin regionalismos**, para todas las marcas.
+- **Spanglish prohibido para todas, sin excepción.**
+- En marcas bilingües (UnrealvilleStudio, LucienSael): **EN primero, ES después**, en todo — incluidas las firmas.
+- ES y EN se **generan por separado desde origen**. Nunca se traduce uno del otro.
+- Excepción legítima conservada: `VAL` (valenciano) y `EN-UK` en DiamondDetails, marca de Valencia. Son idiomas reales de esa marca, no variantes de deriva.
+- Ante una petición futura de regionalismo: **preguntar explícitamente antes de aceptarlo.**
+
+Normalizado el 2026-08-09 en **11 columnas de 7 tablas**. Variantes eliminadas: `es-ES`, `es-PA`, `es-FL`, `es-NEUTRO`, `en-FL`, `en-NEUTRO`, `en-US`, `en/FL`, `EN`, `ES`, `SPANG`.
+
+**El idioma no existe como entidad**: vive en columnas de texto libre sin catálogo, CHECK ni FK. Por eso la deriva reaparece con cada limpieza. Cura de raíz pendiente en AGENDA (catálogo `languages` con FK — DDL en capa compartida, brief propio con test N+1).
+
+---
+
+## Firmas de marca (`signature_closer`) — sembradas 2026-08-09
+
+Forma: `{text, text_en, rule}`. La estampa el sistema tras el PASS del Watcher; **el copy nunca la escribe.** Se resuelve **por voz**, no por marca.
+
+| Marca | Voz | ES | EN |
+|---|---|---|---|
+| ForumPHs | las 3 activas | `ForumPHs — Construiste tu patrimonio. Nosotros le construimos un sistema.` | — |
+| NeuroneSCF | `nscf_conversion` | `Neurone South & Central Florida — Ciencia capilar aplicada al clima de la Florida.` | `Neurone South & Central Florida — Hair science for the Florida climate.` |
+| NeuroneSCF | `nscf_editorial` | `Neurone South & Central Florida — HAIR INTELLIGENCE` | idéntica |
+| LucienSael | `lucien_editorial` | `— Lucien Sael · Builder, Thinker, Operator` | idéntica |
+| LucienSael | `lucien_social` | `— luciensael.com` | idéntica |
+| UnrealvilleStudio | `unrlvl_default` | `❯ Unrealville Studio` | idéntica |
+
+**`null` declarado** (decisión, no olvido): `fphs_institucional`, `po_consumer` v0.5 y v0.6.
+
+Reglas:
+- Una voz que no firma se escribe con `null` **explícito**. La clave ausente es indistinguible de un olvido — es lo que hizo que **7 de 11 genomas activos publicaran sin firma sin que nadie lo notara**.
+- La firma **no sustituye al CTA** cuando el genoma dice que el CTA cierra la pieza.
+- La firma se resuelve **por voz**, no por marca (precedente: Lucien firma distinto en editorial y en social).
 
 ---
 
