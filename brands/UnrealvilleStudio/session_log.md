@@ -1,5 +1,40 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-08-13 — Posicionamiento y web pública: tesis canónica de marca
+
+**Sesión de posicionamiento y web pública (Sam × Claude.ai + CC).** Este PR sólo toca context files de `unrlvl-context`; el código de la web vive en `CoreProject` (PR #3, rama `claude/brand-thesis-line-izafos`). CC no mergea — Sam revisa, mergea y borra la rama.
+
+### 1. Tesis canónica de marca — sellada
+- **EN:** _Brand is not how a business looks. It's how it works._
+- **ES:** _Marca no es cómo se ve un negocio. Es cómo funciona._
+- Nació de **descartar** la ampliación del tagline a "Business and Brand Intelligence Infrastructure": el problema era **comprensión, no alcance**; la corrección va en la **línea posterior, nunca dentro del nombre**.
+
+### 2. Discurso comercial — arquitectura fijada
+- Eje: **continuidad sin dependencia** (el contenido es una salida, no el eje).
+- Seis reglas duras de ejecución + cierre binario de tres preguntas.
+
+### 3. Regla multimarca — tensión resuelta
+- El propio posicionamiento violaba la regla multimarca en **lectura estrecha de "Brand"**; resuelto por la **acepción amplia** (marca = identidad de negocio). El **test de la marca N+1 resultó aplicable a artefactos no-código**.
+
+### 4. Web pública — PR #3 en `CoreProject` (`claude/brand-thesis-line-izafos`)
+- Tesis instalada en **4 puntos × 2 idiomas** de unrealvillestudio.com: hero (clase `.hero-thesis` + animación GSAP) · `meta description` + `og:description` · card w3 de `#why-unrlvl` · footer.
+- Corrección del **delay del cursor custom** (`.12` → `.42`).
+
+### 5. Decisiones conscientes de Sam (no pendientes)
+- KPI ficticios del bloque analytics se **conservan** hasta tener números publicables (momento que fija Sam).
+- "Vizos Salon" en la demo PSY y "SiteLab (Coming)" se dejan tal cual.
+- Cursor custom se conserva; **solo se corrige el arrastre**.
+
+### 6. Deuda abierta registrada
+- **Exportabilidad del genoma** (destilado en prosa + cláusula de salida) como prerequisito antes de usar el pitch de continuidad con un tercero.
+
+### 7. Hallazgo de gobernanza
+- CC operó con `CC_PROTOCOL.md` **bloqueado por egress**, sostenido solo por el bloque de `.github/CLAUDE.md`.
+
+### Notas
+- Cifra de trayectoria canónica confirmada: **+30 años**.
+- **8 learnings** en `professor_learnings`.
+
 ## 2026-08-08 — Regla multimarca, grafía v1.3, voz editorial NSCF y cableado de voces
 
 **Sesión larga (Sam × Claude.ai + CC). Tres frentes cerrados.** Bloque ecosistémico al tope; el detalle por marca vive en `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md`. Este PR sólo toca context files de `unrlvl-context`; el código de los ejes multimarca vive en el repo del carril (PR mergeado + DDL post-merge aplicado por Claude.ai). CC no mergea — Sam revisa, mergea y borra la rama.
