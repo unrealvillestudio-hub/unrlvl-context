@@ -35,6 +35,14 @@
 - Cifra de trayectoria canónica confirmada: **+30 años**.
 - **8 learnings** en `professor_learnings`.
 
+## 2026-08-09 — Política de idioma aplicada
+
+Normalizado a `es`/`en` neutro internacional. Sin regionalismos, sin spanglish. Marca **bilingüe**: **EN primero, ES después** en todo, incluidas las firmas; ES y EN se generan por separado desde origen, nunca se traduce uno del otro.
+
+Firma `unrlvl_default` con variante `text_en` (idéntica a ES): `❯ Unrealville Studio`. La estampa el sistema tras el PASS del Watcher; el copy nunca la escribe.
+
+_(Entrada del tramo 3 de la sesión 2026-08-09, registrada el 2026-08-13 tras el merge de los PRs #40 y #41; ubicada en su lugar cronológico, bajo el bloque 2026-08-13.)_
+
 ## 2026-08-08 — Regla multimarca, grafía v1.3, voz editorial NSCF y cableado de voces
 
 **Sesión larga (Sam × Claude.ai + CC). Tres frentes cerrados.** Bloque ecosistémico al tope; el detalle por marca vive en `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md`. Este PR sólo toca context files de `unrlvl-context`; el código de los ejes multimarca vive en el repo del carril (PR mergeado + DDL post-merge aplicado por Claude.ai). CC no mergea — Sam revisa, mergea y borra la rama.

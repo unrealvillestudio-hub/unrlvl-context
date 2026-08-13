@@ -1,7 +1,21 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-08-08 · base previa 2026-06-16 (sesión 7)_
+_Actualizado: 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)_
 
 ---
+
+## 2026-08-09 — Firmas sembradas y política de idioma aplicada
+
+`signature_closer` sembrado en `nscf_conversion` y `nscf_editorial` con variante bilingüe (`text` + `text_en`). Ninguna voz de NSCF lo tenía: las tres activas publicaban sin firma.
+
+**Reparto decidido con Sam e invertido** respecto de la propuesta inicial: conversión lleva la firma sustantiva ("Ciencia capilar aplicada al clima de la Florida"), editorial lleva el sello ("HAIR INTELLIGENCE"). Un nombre de línea no dice nada a quien no conoce la marca; en conversión el lector todavía no la conoce. "Florida" sobre "Miami" por consistencia con `neuronescflorida.com` y con el nombre de marca.
+
+**Idioma:** `voicelab_language` de `es-FL` a `es`; `icp` y `voicelab_compliance_rules` reescritos sin spanglish.
+
+**PENDIENTE:**
+- `po_consumer` sin firma (`null` declarado) — está bajo `brand_id='NeuroneSCF'` pero es voz de Patricia Osorio (aplica a `product_description_b2c`, `post_purchase`, `abandoned_cart`; NO aplica a B2B). **Asignación de marca a revisar.**
+- `nscf_professional` declarada con sesión `active` de 0 turnos y **sin genoma**.
+- `nscf_conversion` es v0.5 **activa sin calibrar**.
+- `nscf_editorial` con `target_artifact` en forma vieja y `channel:"Blog"` que no joinea contra `platform_canal_map` (clave real: `blog`).
 
 ## 2026-08-08 — Voz editorial `nscf_editorial` v1.0 activa + cableado de voces
 
