@@ -1,5 +1,93 @@
 # ForumPHs — Session Log
 
+## 2026-08-14 — Snapshot sembrado, voces verificadas, y el gap que la cuenta de filas escondía
+
+Sesión de validación del **carril async del AIID**; ForumPHs fue el banco de pruebas, no el fin.
+Ninguna mutación de producción salvo la siembra del snapshot. Detalle del carril en
+`IID/session_log.md` (2026-08-14).
+
+### Snapshot v2.4 sembrado y verificado
+
+`brand_cache_snapshots`, `built_at` **2026-08-14 21:16 UTC**, `built_by = manual_refresh`,
+versión **2.4**. Escrito por `CopyLab/api/brand-cache.js` v2.4
+(`https://unrlvl-copy-lab.vercel.app/api/brand-cache`), que hoy escribe con
+`SUPABASE_SERVICE_ROLE_KEY` vía `sbWriteHeaders()` — la función **lanza** si la key no está,
+en vez de degradar a anon en silencio — con `await upsertSnapshot(...)` y `res.ok` comprobado
+con throw nominal.
+
+Verificado **capa por capa**, no por presencia de la fila:
+
+| Capa | Filas |
+|---|---|
+| `creative_vectors` | 44 |
+| `tension_architectures` | 10 |
+| `aggro_presets` | 5 |
+| `creative_compatibility_rules` | 18 |
+| genomas | 3 |
+| `content_type_registry` | 24 |
+| `platform_canal_map` | 9 |
+| `pipeline_skills` | 12 |
+| brand | presente |
+
+ForumPHs es la marca **nueva** de las 9 con snapshot. Faltan 4 de 13 elegibles en el ecosistema
+(DiamondDetails, PatriciaOsorioPersonal, SamPublisher, UnrealvilleStores) y **ninguna fila de la
+tabla tiene `built_by='build_all'`**: el cron diario nunca corrió con éxito y, con
+`CACHE_TTL_HOURS = 4`, todos los snapshots están stale de forma permanente.
+
+### Las cuatro voces, verificadas en `brand_voice_genome`
+
+| voice_id | version | maturity | active | `signature_closer` | updated_at |
+|---|---|---|---|---|---|
+| `fphs_conversion` | 1.1 | v1.1 | ✅ true | presente | 2026-08-09 |
+| `fphs_educativa` | 1.1 | v1.1 | ✅ true | presente | 2026-08-10 |
+| `fphs_editorial` | 1.1 | v1.1 | ✅ true | presente | 2026-08-11 |
+| `fphs_institucional` | 0.5 | v0.5 | ⛔ false | presente | 2026-08-13 |
+
+**Corrección de registro:** `ecosystem.json` declaraba `fphs_conversion` "reactivada 2026-08-08,
+**SIN calibrar**: 11 topics / 0 filas". Era cierto **el 8 de agosto** y dejó de serlo **el 9**,
+cuando la voz se selló en v1.1 — y la ficha no se actualizó. Los 11 topics siguen siendo 11; lo
+que ya no es cierto es "sin calibrar".
+
+**`fphs_institucional` v0.5 se declara por primera vez.** Existía en la DB, inactiva, y no
+figuraba en ningún context file del repo. No opera: sin topics, sin fila en
+`content_type_registry`. Su `signature_closer` es `null` explícito, por la política de firmas
+del 2026-08-09.
+
+### El gap: `fphs_conversion` gobierna 22 de 32 topics con el motor creativo degradado
+
+`fphs_conversion` **no tiene fila en `creative_compatibility_rules` en ningún content_type**.
+Reparto verificado de los 32 topics activos (`intel.brand_topics.voice_by_destination`):
+
+- `fphs_conversion` → **11** en `editorial` + **11** en `social` = **22**
+- `fphs_educativa` → 14 · `fphs_editorial` → 7
+
+Consecuencia **por código**: `editorial_post` no tiene fila BASE (las cuatro existentes llevan
+`voice_id`: `fphs_editorial`, `fphs_educativa`, `lucien_editorial`, `nscf_editorial`), así que
+para esta voz `selectCompatRule` devuelve `source='none'`, `applyCreativeLogic` recibe
+`rule=null` y filtra **sólo** por `aggro_min/max` — quedan elegibles casi los 44 vectores
+creativos de e-commerce, sin criterio de genoma. En `social_post` sí existe fila BASE, así que
+degrada a `source='base'` con warn nominal: menos malo, igualmente degradado.
+
+**PENDIENTE (AGENDA P1):** sembrar `fphs_conversion` × `editorial_post` y × `social_post`, al
+nivel de criterio de las filas vecinas — leer el genoma, no improvisar.
+
+**Lo que hay que aprender de esto:** las 18 filas de `creative_compatibility_rules` del snapshot
+parecen una capa sembrada. Sólo cruzarlas contra *qué voz gobierna cuántos temas* destapa que la
+voz con más topics de la marca es exactamente la que no tiene ninguna. Contar filas no es
+auditar.
+
+### Registrado, no corregido
+
+- **`surfaces[]` ausente en los 3 genomas** (contrato §10 de `MULTIBRAND_RULE`). Conviven
+  vocabularios ad-hoc distintos: `canales`/`formatos`/`pipeline`/`fuente_de_verdad` en editorial
+  y educativa vs `mapa_de_dominios`/`dos_frentes`/`reglas_invariables`/
+  `candado_confidencialidad_BI` en conversion.
+- **`CARRIL_EDITORIAL_CANAL`** en `CopyLab/api/execute.ts` contiene `blog_forumphs`: un literal
+  de **esta marca** en capa compartida del ecosistema. Violación multimarca registrada con
+  comentario en el código; la corrección es PR aparte (AGENDA P2).
+
+---
+
 ## 2026-08-09 (cont.) — las tres voces de ForumPHs selladas en v1.1
 
 **`fphs_educativa` v1.1** — sesión `a082116f-9cc4-4f96-97ae-65e23d45608e`
