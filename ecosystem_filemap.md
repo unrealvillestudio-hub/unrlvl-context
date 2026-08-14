@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 y `fphs_conversion` reactivada registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction`) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro. Adición aditiva, historia preservada_
+_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 y `fphs_conversion` reactivada registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction`) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro · HRD_ACTUALIZA 2026-08-14 sincronizada desde `ecosystem.json` v2026-08-14-v1 (reconciliación de estado AIID/CopyLab, verificada por código y SQL): flujo Brand Cache actualizado al escritor y estado reales (`CopyLab/api/brand-cache.js` v2.4 → `brand_cache_snapshots` v2.4, 9 marcas, cron `build_all` nunca ejecutado) · voces de ForumPHs añadidas al bloque `brand_voice_genome` (3 en v1.1 activas + `fphs_institucional` v0.5 inactiva) · `audience_brief` stage 0 huérfano registrado en el flujo IID. Sólo campos presentes literalmente en el JSON. Adición aditiva, historia preservada_
 
 ---
 
@@ -25,6 +25,36 @@ brand-cache-builder EF
 
 CopyLab detecta: isV2 = Array.isArray(bc.creative_vectors)
 Modos: v2.0_zero_query | v1.x_partial | no_cache
+```
+
+**Estado verificado 2026-08-14 — `brand_cache_snapshots` v2.4**
+```
+ESCRITOR: CopyLab/api/brand-cache.js v2.4 (23.546 b)
+          https://unrlvl-copy-lab.vercel.app/api/brand-cache
+          await upsertSnapshot(...) · SUPABASE_SERVICE_ROLE_KEY vía sbWriteHeaders()
+          (LANZA si falta la key — no degrada a anon) · res.ok con throw nominal
+
+9 MARCAS CON SNAPSHOT (todas v2.4):
+  D7Herbal · ForumPHs (NUEVA · built_at 2026-08-14 21:16 UTC · manual_refresh)
+  LucienSael · NeuroneSCF · PatriciaOsorioConectando · PatriciaOsorioVizosSalon
+  UnrealvilleStudio · VivoseMask · VizosCosmetics
+
+FALTAN 4 de 13 elegibles (brands.status='active' AND type<>'system'):
+  DiamondDetails · PatriciaOsorioPersonal · SamPublisher · UnrealvilleStores
+
+⚠️ NINGUNA fila tiene built_by='build_all'
+   → el cron diario que brand-cache.js documenta NUNCA corrió con éxito
+   → con CACHE_TTL_HOURS = 4, TODOS los snapshots están stale de forma permanente
+
+CAPAS DEL SNAPSHOT DE FORUMPHS (verificadas una a una):
+  44 creative_vectors · 10 tension_architectures · 5 aggro_presets
+  18 creative_compatibility_rules · 3 genomas · 24 content_type_registry
+  9 platform_canal_map · 12 pipeline_skills · brand presente
+
+⚠️ EN EL CARRIL ASYNC ESTE CACHE NO SE LEE:
+   content-run-stage L1565 mete brandContext en previousOutputs, y CopyLab hace
+   req.previousOutputs.brandContext ?? await fetchBrandCache(brandId)
+   → el `??` corta antes. Ítem 2 del inventario de Fase B.
 ```
 
 ### Pipeline Orchestrator — End-to-End (OPERACIONAL 2026-05-29)
@@ -78,6 +108,29 @@ FLUJO COMPLETO:
     → content_pieces (awaiting_approval) → email content-approval@unrealvillestudio.com
     → Orchestrator (orchestrator-unrlvl.vercel.app, aprobación Sam)
     → approve-piece v14 (publish Meta + move-to-permanent)
+
+STAGE 0 DECLARADO Y NUNCA EJECUTADO (verificado 2026-08-14):
+  lab_configs → audience_brief · iid_stage_order = 0 · active = true
+                api_endpoint = https://unrlvl-context.vercel.app/api/brand-cache
+  ⚠️ content-dispatcher/index.ts dispara body {job_id, stage_order: 1} HARDCODEADO
+     → el stage 0 no se alcanza jamás
+  ⚠️ content-run-stage NO tiene rama para audience_brief
+     (la cadena L2233-2447 sólo cubre copylab / aife / imagelab / sociallab)
+     → caería al else de L2467 con isCritical=false, dejando el job en processing
+       SIN llamar a fireNextStage → STALL SILENCIOSO
+  Trampa latente, no fallo activo. O se cablea, o se desactiva en lab_configs.
+
+ALCANCE VERIFICADO DEL DESVÍO (content-run-stage/index.ts @ main, 167.492 b / 2.499 líneas):
+  L2201-2203  el stage lee lab_configs INCLUYENDO api_endpoint para todos los labs
+  L2233→L2252 rama copylab → buildFromGenome(...) LOCAL · api_endpoint cargado y NUNCA usado
+  L919→L1115  buildFromGenome → fetch("https://api.anthropic.com/v1/messages") directo
+              (L174 CLAUDE_MODEL_ID = "claude-sonnet-5")
+  L2424-2427  rama sociallab → runSocialLabDirect(...) → L1377, también directo
+  CONTRASTE:
+  L2310  aife     → execLab(lab.api_endpoint, ...) ✅
+  L2362  imagelab → execLab(lab.api_endpoint, ...) ✅
+  L2336  imagelab && canalForPlatform(platform1) === CANAL_NONE → salta imagen (email)
+  → de 4 labs invocados, 2 llaman al lab y 2 reconstruyen su motor
 
 AGENTES (intel.iid_agents, 29 = 28 research + 1 sentinela):
   └─ 1 core: IID-CORE
@@ -160,6 +213,15 @@ SamPublisher:
 
 UnrealvilleStudio:
   └─ unrlvl_default v1.0 — Defiant precision
+
+ForumPHs (verificado en brand_voice_genome 2026-08-14):
+  └─ fphs_conversion   v1.1 — ✅ active 2026-08-09 — signature_closer presente
+       22 de los 32 topics activos de la marca (11 editorial + 11 social)
+       ⚠️ SIN fila en creative_compatibility_rules en ningún content_type
+  └─ fphs_educativa    v1.1 — ✅ active 2026-08-10 — signature_closer presente — 14 topics
+  └─ fphs_editorial    v1.1 — ✅ active 2026-08-11 — signature_closer presente — 7 topics
+  └─ fphs_institucional v0.5 — ⛔ INACTIVE — declarada por primera vez 2026-08-14
+       sin topics · sin fila en content_type_registry · signature_closer null explícito
 
 Futuros: genoma social UNRLVL · lucien_video
 ```

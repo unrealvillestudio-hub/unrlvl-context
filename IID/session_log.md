@@ -287,6 +287,148 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-14 — Reconciliación de estado: CopyLab ya estaba listo y nadie lo había escrito
+
+**Objetivo declarado:** validar el **carril async del AIID**, no correr ForumPHs. ForumPHs fue el
+banco de pruebas, no el fin. La sesión terminó siendo de **descubrimiento**: los context files
+declaraban pendiente lo que estaba cerrado, cerrado lo que seguía abierto, y omitían lo que se
+descubrió. Ninguna mutación de producción salvo la siembra del snapshot de ForumPHs — todo lo
+demás fueron lecturas.
+
+**La corrección de encuadre de Sam.** Durante la sesión el trabajo derivó hacia "arreglar
+`buildFromGenome`". Sam lo reencuadró: **CopyLab es el generador único**; `buildFromGenome` deja
+de ser un camino a mejorar y pasa a ser un **donante** — se le extraen las capas de gobierno que
+sí aporta y se retira. La pregunta correcta no es "¿cómo hago que el motor local genere mejor?"
+sino "¿qué le falta al cable para que el lab que ya existe reciba lo que necesita?".
+
+### Lo que se descubrió: CopyLab v9.7 ya tiene el modo carril completo
+
+`CopyLab/api/execute.ts` (97.749 b, `main`). **Es el hecho más importante de la sesión y no
+estaba en ningún context file.**
+
+- **Contrato:** `interface BuilderInput { domain, voice_id, destination, platform, language,
+  psycho_preset, rules[], iid_brief, angle, audience_frame }` — **top-level**. Su presencia
+  activa el modo carril; su ausencia deja el modo UI intacto. Un endpoint, dos modos.
+- **Validación fail-fast**, sin defaults silenciosos: `COPYLAB_DESTINATION_REQUIRED`,
+  `COPYLAB_VOICE_ID_REQUIRED`, `COPYLAB_IID_BRIEF_REQUIRED`, `COPYLAB_VOICE_NOT_FOUND` (nombra
+  las voces disponibles, **nunca** cae a `[0]`), `COPYLAB_PSYCHO_PRESET_NOT_FOUND`,
+  `COPYLAB_LANGUAGE_UNRESOLVED`.
+- **Respuesta carril:** `{ status, title, body, signature, usage, meta:{ voice_id,
+  voice_version, language, psycho_preset, platform_key, copy_profile_id, humanize_profile_id,
+  rules_injected, rules_skipped, rules_count, creative_seed, cache_mode, layers_applied,
+  output_template_id, template_vars_unresolved(+_compliance) } }`.
+- **Techo de tokens por destino** (`maxTokensFor`): editorial 4000 · social 640 · UI 1600.
+- **La firma viaja sin estampar** (`deriveSignature`): la estampa el carril en `finalizePiece`,
+  post-Watcher PASS.
+
+**Conclusión:** el generador unificado que pedía la Fase 3 del Proyecto UNIFICACIÓN **ya
+existe**. Falta el **cable** (Fase B), no el diseño.
+
+### La desviación, con alcance verificado línea a línea
+
+Sobre `unrlvl-iid-functions/supabase/functions/content-run-stage/index.ts` (`main`, 167.492 b,
+2.499 líneas). La desviación sigue siendo cierta; esto la **precisa**:
+
+- `L2201-2203` — el stage lee `lab_configs` **incluyendo `api_endpoint`** para todos los labs.
+- `L2233` → `L2252` — rama `copylab`: llama a `buildFromGenome(...)` **local**.
+  `lab.api_endpoint` está cargado y **nunca se usa** en esa rama.
+- `L919` `buildFromGenome` → `L1115` `fetch("https://api.anthropic.com/v1/messages")` directo ·
+  `L174` `CLAUDE_MODEL_ID = "claude-sonnet-5"`.
+- `L2424-2427` — rama `sociallab`: `runSocialLabDirect(...)` → `L1377`, también directo a
+  `api.anthropic.com`.
+- **Contraste:** `L2310` aife → `execLab(lab.api_endpoint, ...)` ✅ · `L2362` imagelab →
+  `execLab(lab.api_endpoint, ...)` ✅ · `L2336` imagelab && `canalForPlatform(platform1) ===
+  CANAL_NONE` → salta imagen (email).
+
+De cuatro labs que el stage invoca, **dos llaman al lab y dos reconstruyen su motor**.
+
+### Los dos bloqueantes reales de la Fase B
+
+No son rediseño. Son dos líneas:
+
+1. **`execLab` no puede transportar `builder_input`.** Firma en `L442`:
+   `(endpoint, path, brandId, stage, params, previousOutputs, timeoutMs)`. CopyLab lo espera
+   top-level, hermano de `brandId`/`stage`/`params`/`previousOutputs` — **no** dentro de
+   `params`.
+2. **`previousOutputs.brandContext` impide que CopyLab lea su snapshot.** `L1565` mete
+   `brandContext` en el `po`; CopyLab hace
+   `req.previousOutputs.brandContext ?? await fetchBrandCache(brandId)` y **el `??` corta
+   antes**. CopyLab recibiría el `context_json` pobre y los 8 slices del motor creativo,
+   registro, canal y geomix caerían a query directa. **Correría otra vez amputado, por un
+   `??`.**
+
+Inventario completo (6 ítems) en `PROYECTO_COPYLAB_hereda_y_profilaxis.md` §"Fase B —
+inventario cerrado".
+
+### Siembra del snapshot de ForumPHs — la única mutación
+
+`brand_cache_snapshots` v2.4, `built_at` 2026-08-14 21:16 UTC, `manual_refresh`. Verificado con
+todas las capas pobladas: 44 `creative_vectors` · 10 `tension_architectures` · 5
+`aggro_presets` · 18 `creative_compatibility_rules` · 3 genomas · 24 `content_type_registry` ·
+9 `platform_canal_map` · 12 `pipeline_skills` · brand presente.
+
+**Hallazgo colateral:** ninguna fila de la tabla tiene `built_by='build_all'`. **El cron diario
+que `brand-cache.js` documenta nunca ha corrido con éxito.** Con `CACHE_TTL_HOURS = 4`, todos
+los snapshots están **stale de forma permanente**. Faltan 4 de 13 marcas elegibles:
+DiamondDetails, PatriciaOsorioPersonal, SamPublisher, UnrealvilleStores.
+
+### El gap cuantificado: 22 de 32 topics con el motor creativo degradado
+
+`fphs_conversion` **no tiene fila en `creative_compatibility_rules` en ningún content_type**, y
+gobierna 11 topics activos en `editorial` y 11 en `social` — **22 de los 32 topics activos** de
+ForumPHs. Como `editorial_post` **no tiene fila BASE** (las cuatro existentes llevan
+`voice_id`), `selectCompatRule` devuelve `source='none'`, `applyCreativeLogic` recibe
+`rule=null` y filtra sólo por `aggro_min/max`: quedan elegibles casi los 44 vectores de
+e-commerce. En `social_post` sí hay BASE, así que degrada a `source='base'` con warn nominal.
+
+Esto no lo destapó una auditoría de campos: lo destapó **contar filas contra topics**. Una
+tabla con 18 filas parece sembrada hasta que se pregunta *qué voz gobierna cuántos temas*.
+
+### Dos violaciones multimarca registradas (no corregidas)
+
+Corregirlas es PR de código aparte, y va **código primero, DDL después**. Se registran con
+comentario en el propio código:
+
+- **`CARRIL_EDITORIAL_CANAL`** en `CopyLab/api/execute.ts` — `blog_forumphs` es un literal de
+  marca en capa compartida. Lo agudo: **el eje correcto ya existe como dato** y el archivo lo
+  usa unas líneas más abajo (`platform_canal_map` + `resolveCanalBlockId`). El camino bueno y el
+  malo conviven en el mismo archivo.
+- **`SOURCES_MAP`** en `brand-context-builder/index.ts` — marcas y rutas de archivo como
+  código. Test N+1: meter una marca nueva exige tocar el archivo.
+
+### Otros hallazgos registrados
+
+- **`audience_brief` stage 0 huérfano.** Declarado en `lab_configs` con `iid_stage_order = 0` y
+  `active = true`, y **nunca se ejecuta**: `content-dispatcher` dispara
+  `{ job_id, stage_order: 1 }` **hardcodeado**. Y `content-run-stage` no tiene rama para él: si
+  se disparara caería al `else` de `L2467` con `isCritical=false`, dejando el job en
+  `processing` sin llamar a `fireNextStage` — **stall silencioso**. Trampa latente, no fallo
+  activo.
+- **Las cuatro voces de ForumPHs verificadas.** `fphs_conversion` v1.1 activa desde 2026-08-09
+  (la ficha decía "SIN calibrar: 11 topics / 0 filas" — era el estado del 08-08 y caducó al día
+  siguiente), `fphs_educativa` v1.1 (10-ago), `fphs_editorial` v1.1 (11-ago), las tres con
+  `signature_closer`. `fphs_institucional` v0.5 **inactiva** existía y no figuraba en ningún
+  context file.
+- **`await` de `upsertSnapshot` — ya estaba cerrado.** Se corrigió en `brand-cache.js` v2.1
+  (`await`, 31-jul) y v2.3 (`service_role` + fail-loud, 02-ago), **después** de que el documento
+  que lo pedía como condición previa se escribiera. Un pendiente puede morir sin que nadie
+  levante el acta.
+- **Vencimiento del introductorio de Sonnet 5 — cancelado.** Anthropic confirmó el 12-ago que
+  $2/M input · $10/M output es permanente. Las proyecciones (acta ~$0,72 · suite FIE ~$0,57)
+  conservan su cifra y pierden su fecha. Revisar `ops_lab_rates` por filas `previsto` sembradas
+  para el flip del 31-ago, antes de que el cron 38 las promueva solo.
+- **`getBrandContext` fail-silent** (`L419-429`): `if (!res.ok) return null` +
+  `catch { return null }`. Si `context-cache` falla, el Builder escribe sin genoma y sin gritar.
+
+### La lección de la sesión
+
+Tres de los pendientes que este Actualiza cierra **ya estaban cerrados en el código** y seguían
+abiertos en los context files; uno de los que estaba "cerrado" (el catálogo de vectores) seguía
+abierto, sólo que por otra razón que la escrita. **Un context file que no se reconcilia contra
+el código deja de describir el sistema y empieza a describir el recuerdo de una sesión.** El
+coste no es cosmético: se planifica Fase B como si faltara diseñar un generador que ya está en
+producción.
+
 ## 2026-08-01 — CopyLab Fase A cerrada (PRs #8–#13)
 
 CopyLab pasó de motor sin gobierno a lab con contrato. Cuatro contratos del modo carril: `builder_input` como transporte único, response con `title`/`body` separados, firma **sin estampar** y `usage` real, normalización de `brandContext` con supresión **por rebanada**, y disciplina fail-loud en `sb`/`sbArray`.
