@@ -1,6 +1,6 @@
 # MULTIBRAND RULE — UNRLVL
 
-**Versión:** v1.0 · **Creado:** 2026-08-07 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.1 · **Creado:** 2026-08-07 · **Actualizado:** 2026-08-16 (§11 Modelos y versiones · §12 Granularidad del eje) · **base previa:** v1.0 (2026-08-07), cuerpo conservado íntegro · **Naturaleza:** REGLA INVIOLABLE del ecosistema
 **Destino en el repo:** `protocols/MULTIBRAND_RULE.md`
 **Consumidores:** Claude.ai (chat), Claude Code (CC), Sam (revisión de PR)
 **Precedente:** `ecosystem.json → labs._note` — misma naturaleza, misma fuerza. Aquella regla nació de `buildFromGenome`; esta nace del hardcode de marca.
@@ -266,4 +266,74 @@ y viven en el dato.
 
 ---
 
-_Fin · MULTIBRAND_RULE v1.0 · regla inviolable · Unreal>ille Studio_
+## 11. MODELOS Y VERSIONES — no se hardcodean
+
+*(Sección añadida 2026-08-16.)*
+
+**El modelo es INSTANCIA, no eje.** El eje es *"con qué motor se genera este artefacto"*; **cuál**
+motor es un dato que cambia por precio, por disponibilidad y por calidad, y cambia **sin avisar**.
+Un identificador de modelo escrito en el código es la misma clase de error que un `brand_id`
+escrito en el código: convierte una decisión de negocio en un despliegue.
+
+**REGLA:** ninguna capa compartida hardcodea un identificador de modelo. Se resuelve en runtime,
+por la misma vía por la que ya se resuelve su precio.
+
+**Deuda conocida al instalar la regla (2026-08-16):**
+
+| Literal | Dónde |
+|---|---|
+| `claude-sonnet-5` | `content-run-stage` · `calibrate.ts` · `_craftModules.ts` |
+| `gemini-2.5-flash-image` | ImageLab |
+
+**El estado exacto, que es lo que hace la deuda tratable:** `ops_lab_rates` **ya resuelve el PRECIO
+por `model_id`** — la mitad del camino está hecha y la fuente única ya existe. **Lo que falta es que
+resuelva QUÉ MODELO.** No hay que inventar el mecanismo: hay que extenderlo.
+
+**Por qué no es cosmético.** El 2026-08-12 Anthropic canceló una subida de precio ya anunciada. Un
+ecosistema que resuelve el precio por dato absorbió el cambio consultando; uno que lo escribe habría
+necesitado un PR. Con el modelo pasa igual, y con más frecuencia.
+
+### Test de la marca N+1 (respondido)
+
+1. **¿Sobrevive a otra marca de otro rubro y otro país?** Sí — y además sobrevive a **otro proveedor
+   de modelo**, que es el eje que esta sección protege.
+2. **¿El nombre describe la FUNCIÓN o el CASO?** Función: *"qué motor genera este artefacto"*.
+3. **¿Eje o instancia?** El eje (que hay un motor resoluble) vive en el código; el `model_id` es
+   instancia y vive en el dato, junto a su tarifa.
+4. **¿Cuántas marcas hay en la enumeración?** Cero. Tampoco proveedores: `claude-sonnet-5` y
+   `gemini-2.5-flash-image` son **filas**, no ramas.
+
+---
+
+## 12. GRANULARIDAD DEL EJE — el eje correcto al nivel equivocado sigue siendo un bug
+
+*(Sección añadida 2026-08-16.)*
+
+Un eje puede ser **correcto en su nombre y equivocado en su granularidad**, y ese caso no lo detecta
+el test de la marca N+1 tal como está formulado: la enumeración no tiene marcas, la capa no
+hardcodea nada, y aun así el eje no puede expresar lo que el negocio necesita.
+
+**El caso que lo motivó — cadencia (2026-08-16).**
+
+- `brand_cadence.cadence_mode` puso el modo **por marca**. Pero una marca no publica igual en blog
+  que en Meta: el modo real es **por `(topic, plataforma)`**. Corregido con
+  `intel.brand_topic_platform_mode`.
+- `brand_rollout.max_rotation_weeks` puso la rotación **por marca**, cuando es **por clave**.
+
+Ninguno de los dos hardcodeaba nada. Los dos estaban mal.
+
+**LA PREGUNTA QUE SE AÑADE AL TEST:** *"¿a qué nivel varía este valor en la realidad, y a qué nivel
+lo puede expresar el esquema?"* Si el esquema es **más grueso** que la realidad, la única forma de
+expresar el caso real es una excepción — y **la primera excepción es donde vuelve a entrar la
+marca**, por la puerta de atrás.
+
+**Corolario operativo — los alias legacy se retiran CONTANDO.** Al corregir la granularidad quedan
+alias vivos a propósito, y no se retiran a ojo: se retiran contra un conteo que demuestre que ya
+nadie los alimenta. En el caso de cadencia, los tres alias (`brand_topics.cadence`,
+`brand_cadence.cadence_mode`/`.anchor`, `brand_rollout.max_rotation_weeks`) se retiran en el **paso
+3**, **contando** `class_source_counts` y `max_rotation_weeks_source` del reporte. **Un alias
+retirado sin conteo es una migración a ciegas.**
+
+---
+
+_Fin · MULTIBRAND_RULE v1.1 (base previa v1.0) · regla inviolable · Unreal>ille Studio_

@@ -315,8 +315,8 @@ lleva meses parado justamente por querer moverse entero; este plan existe para n
 | # | Fase | Entrega | Verificador | Riesgo |
 |---|---|---|---|---|
 | **0** | Fijar invariante + `enforced_by` + canónico de `CLAUDE.md` | deja de entrar conocimiento sin destino | revisión de Sam | nulo |
-| **1** | **L0** paridad EFs + **L1** barrido de deudas | capa ESTADO deja de narrarse | `diff` exit 0 · query vs AGENDA | **nulo** (read-only) |
-| **2** | **Depurar AGENDA** con el resultado de L1 | 160 KB → ~15 KB · **acá baja la carga de lectura** | tamaño + toda línea borrada reaparece | bajo |
+| **1** | ✅ **EJECUTADA 2026-08-16.** **L0** paridad EFs + **L1** barrido de deudas | capa ESTADO deja de narrarse | `diff` exit 0 · query vs AGENDA | **nulo** (read-only) |
+| **2** | ✅ **EJECUTADA 2026-08-16** (PR #44). **Depurar AGENDA** con el resultado de L1 | 160 KB → ~15 KB · **acá baja la carga de lectura** | tamaño + toda línea borrada reaparece | bajo |
 | **3** | Extraer REGLAS y MÉTODO: gotchas → `CLAUDE.md`/skills; 65 → aserciones | Professor recupera read path | cobertura: toda regla tiene artefacto | bajo |
 | **4** | **L2** linter + CI + juicio invocado desde manifiesto | escritura verificada sin leer el diff | check de Actions | medio |
 | **5** | `ecosystem.json` generado + graph derivado | fin de la deriva de contexto | diff regeneración | medio |
@@ -324,6 +324,26 @@ lleva meses parado justamente por querer moverse entero; este plan existe para n
 
 **La fase 2 devuelve el tiempo. Las fases 0 y 1 existen para que la 2 sea correcta y no una poda a
 ojo.**
+
+> ### ✅ FASES 1 Y 2 — EJECUTADAS (2026-08-16)
+>
+> Ambas corrieron en el PR #44. **Quien las opera es `skills/context-resolver/SKILL.md`**, escrito
+> exactamente para eso: este documento define **qué** hay que lograr, el skill define **cómo** se
+> hace y **cuándo** corre, y se carga en apertura para que no dependa de que alguien se acuerde.
+>
+> - **Fase 1** (`L1` barrido de deudas) → `context-resolver` **§3, paso 10-bis**, invocado desde
+>   `protocols/HRD_PROTOCOL.md` paso 10 (v1.4). Corre **antes** del archivado, en cada Actualiza.
+> - **Fase 2** (depurar AGENDA) → `context-resolver` **§2 y §6**. `AGENDA.md` 228.715 b → 168.984 b
+>   (−26 %); la cabecera de versiones y las notas de contexto bajaron a `historical_AGENDA.md` y a
+>   los skills de dominio, **sin perder una línea**.
+>
+> **Lo que la ejecución añadió al plan, y que este documento no anticipaba:** la **condición 4 de
+> archivado** (resuelto por vía alterna). Las tres condiciones originales verificaban la
+> **anotación**, no el **hecho** — y el barrido devolvía cero mientras cuatro ítems declarados
+> pendientes ya estaban resueltos. El plan era correcto; le faltaba admitir que el registro puede
+> estar equivocado en la dirección contraria.
+>
+> **Siguiente fase real: la 3** (extraer REGLAS y MÉTODO). Las fases 4-6 siguen intactas.
 
 ### Orden no negociable
 
