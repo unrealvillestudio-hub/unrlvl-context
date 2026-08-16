@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.10 · 2026-07-26 · Mantenido por: Claude_
+_Versión: 1.11 · 2026-08-16 · Mantenido por: Claude_
 
 ---
 
@@ -15,6 +15,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 
 | Skill | Ubicación | Cargar cuando... | Audiencia |
 |-------|-----------|-----------------|-----------| 
+| `context-resolver` | `skills/context-resolver/SKILL.md` | **CARGA EN APERTURA — siempre.** Archivado, verificación de estado contra fuente, y enrutamiento de qué se registra dónde. Ejecuta las fases 1–2 de `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md` | UNRLVL infra — transversal |
 | `shopify-auditor` | `skills/shopify-auditor/SKILL.md` | Audit, fix, onboarding de tienda Shopify | Servicio UNRLVL + clientes |
 | `shopify-mcp` | `skills/shopify-mcp/SKILL.md` | Trabajo directo en Shopify via conector MCP | Interno — NeuroneSCF (activo), futuras marcas |
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
@@ -40,6 +41,40 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.11
+
+**Cambios respecto a v1.10:**
+- `context-resolver` → skill nuevo · v1.0 · 2026-08-16 · **el procedimiento operable de las fases 1
+  y 2 de `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md`** — el documento que diagnosticó la capa de
+  conocimiento el 29-jul y escribió la cura en seis fases, de las cuales **ninguna de las fases 0,
+  1 y 2 se ejecutó**. Un plan por fases dice QUÉ hay que lograr, no CÓMO ni CUÁNDO corre; este
+  skill aporta eso y **se carga en apertura** para no depender de que alguien se acuerde — el mismo
+  fallo que el propio `ARQUITECTURA` §6 describe («el archivado se diseñó el 28-jun-2026 pero
+  estuvo tres semanas perdido porque ningún paso del protocolo lo invocaba»).
+- **Origen: los cuatro fantasmas del 2026-08-16.** El barrido de archivado devolvió cero por tercera
+  Actualiza consecutiva; la verificación contra Supabase y los repos encontró en una sola pasada
+  **cuatro ítems declarados pendientes que estaban resueltos** (PR #13 / los 6 módulos de runtime ·
+  `#45` los 4 bucles de Marisol · `5s` la limpieza de queue · la Fase 4 del dry-run). Ninguno estaba
+  marcado ✅ y ninguno lo habría estado nunca: **las tres condiciones de archivado verificaban la
+  ANOTACIÓN, no el HECHO.**
+- **Dos ejes nuevos que introduce el skill.** (1) **Condición 4 de archivado — resuelto por vía
+  alterna:** un ítem se archiva aunque no esté marcado ✅ si su objetivo declarado está satisfecho
+  en producción *verificado contra código o DB* (jamás contra context files), el mecanismo que lo
+  satisface es distinto del que el ítem especificaba, y queda constancia escrita de la vía real —
+  un archivado por vía alterna sin nota es peor que no archivar. (2) **Paso 10-bis — verificación
+  contra fuente:** corre ANTES del barrido de archivado en cada Actualiza, sobre los ítems abiertos
+  más viejos; se verifica el OBJETIVO, no la tarea. Vale más que el archivado en sí: el archivado
+  ordena el pasado, esto corrige el presente.
+- **Principio propio del skill:** *la fuente manda sobre el registro* — cuando un context file y la
+  DB (o el código) discrepan, gana la fuente y el context file se corrige. Corolario: **si un dato
+  se puede consultar, no se escribe.** El skill es **cero estado**: no guarda ningún hecho sobre el
+  ecosistema, solo cómo averiguarlo; si algún día contiene una lista de qué está cerrado, está roto.
+- **No es la fuente:** lo es `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md`. Este skill la ejecuta, y
+  se poda en cuanto empiece a repetir su contenido — quince copias de una regla producen quince
+  versiones divergentes, el antipatrón que ya costó caro con `_naming_rule`.
 
 ---
 
@@ -124,6 +159,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 ## REGLAS DE CARGA
 
 **Siempre activos (no requieren declaración):**
+- `context-resolver` — se carga en la apertura de sesión; método de archivado, verificación contra fuente y enrutamiento de conocimiento
 - `vercel` — infra base de todo el stack
 - `github-auditor` — acceso a repos en cualquier momento
 - `security` — se activa automáticamente en cualquier sesión con deploys

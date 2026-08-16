@@ -141,11 +141,17 @@ Si una entrada no puede llenar `VERIFICA`, es candidata a **EJECUTABLE**, no a H
 silencioso, la mayoría no son globales: pertenecen a un repo concreto y hoy viven en un párrafo de
 15 KB que se lee siempre o nunca.
 
-### 🔴 Bloqueo previo — resolver ANTES de escribir contenido
+### ✅ Bloqueo previo RESUELTO (2026-08-16)
 
-`/CLAUDE.md` (8,4 KB) vs `/.github/CLAUDE.md` (608 b): **canónico sin definir** (#35 + #39). Dos
-fuentes desincronizadas es el patrón que ya costó caro en este ecosistema. **No se escribe contenido
-nuevo hasta cerrar cuál es canónico.**
+**Canónico: `.github/CLAUDE.md`.** RESUELTO POR VÍA ALTERNA — el plan pedía elegir entre
+`/CLAUDE.md` y `/.github/CLAUDE.md`; la elección ya se había hecho con los hechos y sin
+declararse. Evidencia: (a) `MULTIBRAND_RULE` §7.0 punto 5 instaló el bloque de la regla en
+`.github/CLAUDE.md` de 16 repos y lo llama *"el más importante de todos — el único que no
+depende de que alguien se acuerde"*; (b) el 2026-08-13 CC operó con `CC_PROTOCOL.md` bloqueado
+por egress, **sostenido solo por el bloque de `.github/CLAUDE.md`** — prueba operativa de que
+es el que carga; (c) su tamaño pasó de 608 b (29-jul) a 1.972 b, exactamente el crecimiento
+del bloque multimarca. `/CLAUDE.md` (9.205 b) queda como **legacy**: no recibe contenido
+nuevo, se poda en PR aparte. Verificado el 2026-08-16. **Desbloquea la fase 3.**
 
 ### Contrato de `CLAUDE.md`
 
@@ -346,7 +352,7 @@ con L1 encadenado.
 
 | # | Decisión | Bloquea |
 |---|---|---|
-| D1 | Canónico de `CLAUDE.md`: `/CLAUDE.md` o `/.github/CLAUDE.md` | fase 3 |
+| D1 | ✅ **RESUELTO 2026-08-16 — `.github/CLAUDE.md` es el canónico.** Ver §4. | — |
 | D2 | ¿How2 como entradas en `skills/` (recomendado) o namespace propio? | fase 3 |
 | D3 | Taxonomía cerrada: las ~12 categorías canónicas | fase 3 |
 | D4 | ¿`ecosystem.json` generado rompe algún consumidor actual? | fase 5 |

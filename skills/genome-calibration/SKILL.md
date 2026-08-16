@@ -171,3 +171,15 @@ Primer genoma calibrado con este protocolo. Sirve de few-shot para futuras marca
 8. Aplicar reglas transversales (§8) y el techo de producción (§6) al prompt del generador.
 
 _Fin del Tratado v1.0 · genome-calibration · Unreal>ille IID_
+
+---
+
+## Decisiones de diseño (migradas de AGENDA.md, 2026-08-16)
+
+_Fragmento de `## Notas de contexto` de `AGENDA.md` clasificado como **DECISIÓN de método —
+calibración** en el reparto del 2026-08-16 (`protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md` §2).
+Texto íntegro, cortado y pegado — nada resumido, nada reescrito. Es un índice comprimido del
+método que este Tratado desarrolla; **la fuente sigue siendo el cuerpo del skill**, no esta
+sección._
+
+**Calibración de genoma — método (skill genome-calibration v1.0):** 2 ramas (Voz Extraída / Voz Diseñada) · 2 ejes (voz vs intención, no fundir) · triangulación de fuentes obligatoria · eje fundador embebido en material de arranque · bucle Boids (Claude propone, operador juzga SÍ/NO + porqué, converge 10+3SÍ) · destilación al genoma bajo HRD en el chat (quirúrgico, nunca en UI) · voces hermanas · reglas transversales (bilingüe reescritura no traducción; cita-por-destino; motor filosófico interno nunca se nombra) · techo de producción (voz constante, técnica variable con memoria). Anexo NSCF como ejemplar.

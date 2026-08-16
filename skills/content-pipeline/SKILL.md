@@ -668,3 +668,28 @@ VOICE GENOME (v2.6):
 *Voice genome system: L0 VOICE CHECK + L1.5 INJECTION + AUTO-CHECK puntos 17-24*  
 *Output separation: L5 OUTPUT_SEPARATION (product_description_b2c)*  
 *Compliance: L1 pre-filtro (hard) + L5 shaping (soft) + L7 QA*
+
+---
+
+## Decisiones de arquitectura del carril (migradas de AGENDA.md, 2026-08-16)
+
+_Fragmento de `## Notas de contexto` de `AGENDA.md` clasificado como **DECISIÓN de método —
+carril/pipeline** en el reparto del 2026-08-16 (`protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md` §2).
+Texto íntegro, cortado y pegado — nada resumido, nada reescrito._
+
+**Decisiones R4B congeladas (20-jun):** Scheduler EF+cron 1×/día ET. scheduled_for. Ventanas ET, jitter ±45min. Sibling-stagger ≥48h. Embeddings Vertex gemini-embedding-001 @768.
+
+---
+
+## Pruebas negativas del Watcher (rescatadas de DRYRUN_PLAN_IID_PILOT, 2026-08-16)
+
+_Rescatadas de `protocols/DRYRUN_PLAN_IID_PILOT.md` §2.3 antes de archivarlo
+(`protocols/archive/`). **Es el único test de regresión escrito del Watcher** — la premisa del
+documento murió (el `.limit(1)` se retiró, la queue está limpia), pero esta batería no. Texto
+íntegro, cortado y pegado._
+
+### 2.3 Pruebas negativas (forzar REJECT)
+4. Duplicar el texto de A en una marca hermana → segunda pieza REJECT gate 1, `failed_gate='similarity'`.
+5. Job UNRLVL con texto sin números (forzado) → REJECT gate 4.
+6. Job Lucien con tease de libro (forzado) → REJECT gate 6.
+7. Verificar: ninguna pieza REJECT generó email ni quedó como `awaiting_approval`.
