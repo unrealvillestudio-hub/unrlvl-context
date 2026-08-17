@@ -1,5 +1,6 @@
 # CONTENT PIPELINE SKILL
-## UNRLVL · Versión canónica · v2.6
+## UNRLVL · Versión canónica · v2.7
+_v2.7 · 2026-08-16 — añadido el patrón **lab-lee-nunca-construye** (constructor único de snapshots), los 3 headers del detector y el learning del GRANT. El cuerpo v2.6 se conserva íntegro debajo._
 **Propietario:** Unrealville Studio · Sam  
 **Estado:** ICR ✅ — R4B (Ready for Business)  
 **Ruta canónica:** `skills/content-pipeline/SKILL.md`  
@@ -668,6 +669,70 @@ VOICE GENOME (v2.6):
 *Voice genome system: L0 VOICE CHECK + L1.5 INJECTION + AUTO-CHECK puntos 17-24*  
 *Output separation: L5 OUTPUT_SEPARATION (product_description_b2c)*  
 *Compliance: L1 pre-filtro (hard) + L5 shaping (soft) + L7 QA*
+
+---
+
+## Patrón LAB-LEE-NUNCA-CONSTRUYE (2026-08-16)
+
+_Decisión de arquitectura del carril. Nace del frente de snapshots del 2026-08-16, donde **tres**
+implementaciones construían el snapshot de marca desalineadas entre sí._
+
+**LA REGLA:** el snapshot de marca lo construye **UN** constructor. Los labs lo **LEEN**. Un lab que
+construye su propio contexto es un lab que diverge del resto en silencio — y la divergencia no se ve
+hasta que dos labs producen piezas distintas para la misma marca.
+
+```
+                    ┌──────────────────────────────┐
+   cron jobid 51    │  EF brand-snapshot-builder   │   ← EL ÚNICO CONSTRUCTOR
+   0 */3 * * *  ───▶│  30 tablas · v1              │
+                    └──────────────┬───────────────┘
+                                   │ escribe
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │  public.brand_cache_snapshots│   ← la fuente que todos leen
+                    └──────────────┬───────────────┘
+                                   │ lee
+                  ┌────────────────┼────────────────┐
+                  ▼                                 ▼
+      CopyLab/api/brand-cache.js        unrlvl-context/api/brand-cache.js
+      v2.4 → v3.0  **LECTOR**           v1.2 → v2.0  **LECTOR**
+      (ninguno construye)               (ninguno construye)
+```
+
+**Lo que costaba el patrón anterior.** El constructor de `unrlvl-context` consultaba **8 tablas**
+frente a las 30 del canónico. Faltaban, entre otras, `brand_voice_genome` (el ADN ejecutable de
+voz), el motor creativo completo (`creative_vectors`, `tension_architectures`, `aggro_presets`,
+`creative_compatibility_rules`) y el cableado del registro (`pipeline_skills`,
+`content_type_registry`). **Todo caller de ese endpoint venía operando con contexto empobrecido sin
+que nada fallara** — que es la forma más cara de fallar.
+
+**Deuda abierta:** retirar `action=build_all` de CopyLab, que hoy responde **410 con puntero**.
+
+### Los 3 headers del detector
+
+El detector de capas del snapshot reporta bajo tres encabezados. Se nombran acá porque leer el
+`_debug` sin saber qué son lleva a diagnosticar la capa equivocada:
+
+| Header | Qué agrupa |
+|---|---|
+| `Layers` | las capas de contexto resueltas para la marca |
+| `Globals` | lo que aplica a **todas** las marcas y se hereda |
+| `Sentinels` | los centinelas de integridad de la construcción |
+
+### El learning del GRANT
+
+> **Una tabla creada sin `GRANT service_role` existe, responde a `information_schema`, y FALLA EN
+> RUNTIME.** El carril corre como `service_role`: sin el grant, la tabla es invisible **sólo para
+> quien la usa**. El síntoma se lee como "la tabla no existe" y no lo es — así que la investigación
+> arranca en el lugar equivocado y el DDL parece correcto porque lo es.
+>
+> **El GRANT va como paso fijo del DDL, no como recordatorio.** Verificado el 2026-08-16 al crear
+> `intel.content_embeddings` (`vector(768)` + HNSW + GRANT `service_role`).
+
+**Corolario de `Globals`:** las reglas globales `hard` **se heredan y GANAN** sobre las de marca.
+ForumPHs pasó de 9 a 11 reglas de compliance sin que nadie sembrara nada en la marca. Consecuencia
+de método: **contar las reglas efectivas de una marca leyendo sólo sus filas da un número menor que
+el real.**
 
 ---
 

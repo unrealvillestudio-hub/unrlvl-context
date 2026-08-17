@@ -1,5 +1,70 @@
 # ForumPHs — Session Log
 
+## 2026-08-16 — Cadencia al revés, 32/32 con regla propia, y el arranque del 22-ago
+
+Sesión de **siembra y corrección** sobre ForumPHs. El detalle del carril (Scheduler, snapshots,
+constructor único) vive en `IID/session_log.md` (2026-08-16); acá va lo que es de la marca.
+
+### Reglas creativas de `fphs_conversion` — sembradas
+
+Se cerró el gap que la cuenta de filas escondía desde el 2026-08-14: `fphs_conversion` no tenía
+fila en `creative_compatibility_rules` en **ningún** `content_type`. Sembradas al nivel de criterio
+de las filas vecinas, leyendo el genoma:
+
+| `content_type` | Vectores |
+|---|---|
+| `editorial_post` | **9** |
+| `social_post` | **7** |
+
+**Resultado: 32/32 topics con regla propia** — verificado contra la DB: las tres voces (`fphs_conversion`, `fphs_educativa`, `fphs_editorial`) tienen fila en `editorial_post` y `social_post`, y los 32 topics activos se reparten 11 conversión / 14 educativa / 7 editorial.
+
+> **Corrección de cifra (2026-08-16, contra la DB).** El brief decía *"22 de los 32 topics"* corrían degradados. Son **11 topics**, no 22: cada uno declara `voice_by_destination` con **dos** destinos, así que 11 topics × 2 destinos = **22 slots** — que es lo que la cifra contaba. El desglose original *"11 en editorial + 11 en social"* siempre fue exacto; el "22 de los 32" era la lectura equivocada de ese mismo número.
+
+Antes, esos **11 topics / 22 slots** corrían **degradados** — sin
+fila, `selectCompatRule` devolvía `source='none'`, `applyCreativeLogic` recibía `rule=null` y
+filtraba **sólo por `aggro_min/max`**, dejando elegibles casi los 44 `creative_vectors` de
+e-commerce. Eso se terminó.
+
+### Rollout y cadencia
+
+`rollout_started_at = **2026-08-22**`, con `max_rotation_weeks` **por clave** (`intel.brand_rollout`).
+
+**La cadencia estaba sembrada al revés.** Estaba **decreciente**: mucho al principio, menos después
+— exactamente el perfil que dispara el patrón de baneo, porque **el patrón de baneo es el ARRANQUE,
+no la frecuencia**. Corregida a **curva crescendo**.
+
+**Las tres voces con la misma curva, y es deliberado.** No es simplificación: si las tres arrancan
+con el mismo volumen, una diferencia de rendimiento en el mes 3 es atribuible a **la voz y al
+tema**, no al volumen. Igualar el volumen es lo que convierte el rollout en un experimento legible.
+
+| Superficie | Techo |
+|---|---|
+| Blog | `2x` |
+| LinkedIn | `2x` |
+| Meta | `3x` |
+| Email | `1x_month`, `anchor: day_5` (informe del día 5) |
+
+### Compliance — de 9 a 11 reglas
+
+ForumPHs pasa de **9 a 11 reglas**: gana las **2 globales `hard`**.
+
+### 🔴 Bloqueante con fecha — cuentas de Meta
+
+**ForumPHs no está en `meta_accounts`.** Esto **bloquea PUBLICAR el 22-ago**; **no bloquea
+programar** — el `content-scheduler` v2.1 ya está desplegado y puede colocar las piezas. La
+distinción importa: el rollout puede prepararse entero y quedar detenido sólo en el último paso.
+**Dueño: Sam.** Ítem abierto en `AGENDA.md → ## 🔵 Próximas semanas`.
+
+### Deuda que esta sesión deja anotada
+
+- **Vaciar `brand_topics.cadence` en los 32 rotativos** — **irreversible**, y va **después** del
+  paso 3 de cadencia, nunca antes. Lo ejecuta Claude.ai bajo HRD.
+- **Paso 3 de cadencia** — retirar los 3 alias legacy (`brand_topics.cadence`,
+  `brand_cadence.cadence_mode`/`.anchor`, `brand_rollout.max_rotation_weeks`) **contando**
+  `class_source_counts` y `max_rotation_weeks_source` del reporte, no a ojo.
+
+---
+
 ## 2026-08-14 — Snapshot sembrado, voces verificadas, y el gap que la cuenta de filas escondía
 
 Sesión de validación del **carril async del AIID**; ForumPHs fue el banco de pruebas, no el fin.

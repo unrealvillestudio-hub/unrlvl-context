@@ -1,5 +1,5 @@
 # Ecosystem Filemap — Unrealville Studio
-_Generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 y `fphs_conversion` reactivada registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction`) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro · HRD_ACTUALIZA 2026-08-14 sincronizada desde `ecosystem.json` v2026-08-14-v1 (reconciliación de estado AIID/CopyLab, verificada por código y SQL): flujo Brand Cache actualizado al escritor y estado reales (`CopyLab/api/brand-cache.js` v2.4 → `brand_cache_snapshots` v2.4, 9 marcas, cron `build_all` nunca ejecutado) · voces de ForumPHs añadidas al bloque `brand_voice_genome` (3 en v1.1 activas + `fphs_institucional` v0.5 inactiva) · `audience_brief` stage 0 huérfano registrado en el flujo IID. Sólo campos presentes literalmente en el JSON. Adición aditiva, historia preservada_
+_Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa: generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 y `fphs_conversion` reactivada registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction`) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro · HRD_ACTUALIZA 2026-08-14 sincronizada desde `ecosystem.json` v2026-08-14-v1 (reconciliación de estado AIID/CopyLab, verificada por código y SQL): flujo Brand Cache actualizado al escritor y estado reales (`CopyLab/api/brand-cache.js` v2.4 → `brand_cache_snapshots` v2.4, 9 marcas, cron `build_all` nunca ejecutado) · voces de ForumPHs añadidas al bloque `brand_voice_genome` (3 en v1.1 activas + `fphs_institucional` v0.5 inactiva) · `audience_brief` stage 0 huérfano registrado en el flujo IID. Sólo campos presentes literalmente en el JSON. Adición aditiva, historia preservada_
 
 ---
 
@@ -16,7 +16,35 @@ Sam/Claude → CopyLab UI (Orchestrator)
          → output → Shopify / Klaviyo
 ```
 
-### Brand Cache (OPERACIONAL)
+### Brand Cache — REESCRITO 2026-08-16 · UN SOLO CONSTRUCTOR (OPERACIONAL)
+```
+pg_cron jobid 51  (0 */3 * * *)
+   └─▶ EF brand-snapshot-builder v1        ← EL ÚNICO CONSTRUCTOR (30 tablas)
+          │  ACTIVE · verify_jwt: false
+          ▼
+       public.brand_cache_snapshots        ← la fuente que todos leen · 13/13 marcas
+          │
+          ├─▶ CopyLab/api/brand-cache.js         v2.4 → v3.0  LECTOR
+          └─▶ unrlvl-context/api/brand-cache.js  v1.2 → v2.0  LECTOR
+                                                  (ninguno construye)
+```
+**Patrón lab-lee-nunca-construye** — diagrama y porqué en `skills/content-pipeline/SKILL.md`.
+El lector de `unrlvl-context` consultaba **8 tablas** frente a las 30 del canónico: todo caller
+suyo venía operando con contexto empobrecido **sin que nada fallara**.
+
+**Deuda abierta:** retirar `action=build_all` de CopyLab — hoy responde **410 con puntero**. Tercer PR.
+
+### Content Scheduler (NUEVO 2026-08-16)
+```
+EF content-scheduler v2.1 · ACTIVE · verify_jwt: FALSE
+   auth: header x-cron-secret   (NO JWT)
+   ⚠️ con verify_jwt:true el gateway rechaza ANTES de llegar al código
+      → UNAUTHORIZED_NO_AUTH_HEADER · no hay código que lo arregle
+   cron: PENDIENTE DE ALTA (tras verificación con candidatas reales)
+   deuda: scheduledRows.push sin `voice`
+```
+
+### Brand Cache — flujo anterior, conservado (pre-2026-08-16)
 ```
 brand-cache-builder EF
   └─ action=build → brand_cache_snapshots (NeuroneSCF v2.0)
@@ -281,6 +309,10 @@ speaks_sessions · speaks_messages · speaks_leads · speaks_golden_pass
 iid_agents (29) · brand_topics · iid_content_queue (+ domain) · iid_findings
 iid_research_raw · iid_cron_runs · iid_briefs · iid_scheduler_config · watcher_log
 iid_seeds (semillas humanas del Sembrador: source_url/raw_signal/neutral_topic/mapeo/lane/status, 25-jun)
+brand_rollout (NUEVA 2026-08-16: rollout_started_at + max_rotation_weeks[alias legacy])
+brand_cadence (NUEVA 2026-08-16: cadence_mode/anchor son alias legacy, retiro en paso 3)
+brand_topic_platform_mode (NUEVA 2026-08-16: modo por (topic, plataforma) — granularidad correcta)
+content_embeddings (NUEVA 2026-08-16: vector(768) + HNSW + GRANT service_role · ⚠️ creada, NO cableada)
 watcher_rules (54 reglas por código HR-*/IMG-*: subject/sector/scope, precedencia brand>sector>gen, 29-jul) · brand_sector (9 marcas→RETAIL/LEGAL/PERSONA, UnrealvilleStudio sin sector, 29-jul)
 ```
 

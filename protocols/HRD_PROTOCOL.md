@@ -1,5 +1,5 @@
 # HRD — Hard Instructions Protocol
-_HRD Protocol v1.3 · UNRLVL Studio · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas)_
+_HRD Protocol v1.4 · UNRLVL Studio · 2026-08-16 (HRD_ACTUALIZA paso 10: **CONDICIÓN 4 — resuelto por vía alterna** + **paso 10-bis — verificación contra fuente**, ambos definidos en `skills/context-resolver/SKILL.md` §2 y §3; este protocolo los invoca, no los duplica. · base previa v1.3 · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas))_
 
 ---
 
@@ -96,6 +96,16 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
     1. Está marcado **✅ completado** (o su fila dice HECHO / CERRADO / RESUELTO).
     2. Han pasado **más de 30 días** desde que se completó.
     3. **NO es referencia activa** — ningún ítem abierto lo cita, ninguna nota de contexto depende de él, no se invoca en sesiones recientes.
+
+    **CONDICIÓN 4 — RESUELTO POR VÍA ALTERNA (añadida 2026-08-16).** Un ítem se archiva **aunque no esté marcado ✅** si cumple **4 + 3**: su objetivo declarado está satisfecho en producción **verificado contra código o DB** (jamás contra context files), el mecanismo que lo satisface es **distinto** del que el ítem especificaba, y queda **constancia escrita** de la vía real. **Parcial es abierto, sin excepción.**
+    → **Definición completa, formato obligatorio de la nota y el porqué de cada requisito: `skills/context-resolver/SKILL.md` §2 y §5.** Este protocolo la **invoca**; no la duplica — quince copias de una regla producen quince versiones divergentes.
+
+    **Por qué existe.** Las tres condiciones verificaban la **ANOTACIÓN**, no el **HECHO**. El 2026-08-16 aparecieron cuatro ítems declarados pendientes que estaban resueltos y que **nunca habrían estado marcados ✅**, porque el trabajo se hizo y nadie volvió a anotarlo. Sin la condición 4 habrían quedado retenidos indefinidamente mientras la AGENDA declaraba urgente un bloqueo inexistente.
+
+    **PASO 10-BIS — VERIFICACIÓN CONTRA FUENTE (añadido 2026-08-16).** Corre **ANTES** del barrido de archivado, en **cada** Actualiza, sobre los ítems abiertos **más viejos** (empezando por `FOCO INMEDIATO` y los bloqueantes declarados). Por cada ítem: leer el **objetivo**, no la tarea; formular la consulta que lo decide; ejecutarla **contra la fuente**; clasificar en CERRADO · CERRADO-VÍA ALTERNA · ABIERTO · **ABIERTO PARCIAL**; y **anotar el hallazgo esté cerrado o no**.
+    → **Procedimiento completo y mapa de dónde se pregunta cada cosa: `skills/context-resolver/SKILL.md` §3 y §4.**
+
+    **Vale más que el archivado en sí: el archivado ordena el pasado; el paso 10-bis corrige el presente.** El orden es inviolable — 10-bis **antes** que 10. Archivar sobre contenido no verificado produce una AGENDA impecablemente ordenada y **falsa**.
 
     **El tamaño del archivo NO es criterio.** Si `AGENDA.md` pesa 200 KB y todo está pendiente, no se archiva nada. Si pesa 40 KB y hay ítems cerrados hace 40 días sin referencias, se archivan. El criterio es del ÍTEM, nunca del archivo.
 

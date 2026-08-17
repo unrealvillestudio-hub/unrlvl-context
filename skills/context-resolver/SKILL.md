@@ -1,6 +1,6 @@
 # SKILL — context-resolver
 
-**Versión:** v1.0 · **Creado:** 2026-08-16 · **Naturaleza:** skill transversal, carga en apertura
+**Versión:** v1.1 · **Creado:** 2026-08-16 · **Actualizado:** 2026-08-16 (§2 categoría *"se declaró pero nunca se hizo"* · §4 trampa de `git show origin/main`) · **base previa:** v1.0 (2026-08-16, PR #44), cuerpo conservado íntegro · **Naturaleza:** skill transversal, carga en apertura
 **Destino en el repo:** `skills/context-resolver/SKILL.md`
 **Consumidores:** Claude.ai (chat) · Sam · CC (solo §7, formato de brief)
 **Se carga:** en la apertura de sesión, junto con `ecosystem.json`, `AGENDA.md`, `skills/INDEX.md`,
@@ -98,6 +98,28 @@ Un ítem se archiva **aunque no esté marcado ✅** si se cumplen las tres:
 
 **No aplica si el objetivo está satisfecho parcialmente. Parcial es abierto, sin excepción.**
 
+**Categoría propia — "SE DECLARÓ PERO NUNCA SE HIZO".** *(añadida 2026-08-16)*
+Al verificar contra fuente hay que comprobar **que la capacidad declarada EXISTA**, no sólo que el
+problema ya no se manifieste. Son preguntas distintas y se confunden con facilidad, porque un
+sistema que nunca hizo algo y un sistema que dejó de fallar **se ven igual desde el registro**.
+
+- **Caso `build_all` (2026-08-16).** La AGENDA decía *"el cron nunca ha corrido"* — o sea, un cron
+  roto. La consulta contra `cron.job` mostró que **el cron nunca existió**. No había nada que
+  depurar: había algo que crear. Un ítem que dice "falla" y una fuente que dice "no existe" **no
+  son el mismo pendiente y no se arreglan igual**.
+- **Caso `LAB-AUDIENCE-BRIEF` (2026-08-16).** Declarado en `lab_configs` con `active = true` e
+  `iid_stage_order = 0`. Parecía un stage vivo que no se alcanzaba. **La fila estaba malformada y
+  nunca funcionó**: no era una capacidad rota, era una capacidad **inexistente con etiqueta de
+  existente**. Se resolvió desactivándola (`active=false`, `supports_iid=false`).
+
+**La pregunta que la separa de las demás:** *"¿esto alguna vez funcionó?"* Si la respuesta es no,
+el ítem no describe una regresión ni una deuda — describe una **declaración sin respaldo**, y el
+trabajo real casi nunca es el que el ítem enuncia.
+
+> **Residuo obligatorio.** Desactivar una declaración falsa **quita la trampa, no el literal que la
+> rodea**: el `stage_order: 1` hardcodeado en `content-dispatcher` sigue ahí. Al cerrar por esta
+> categoría, **anotar qué queda vivo** — si no, se cierra de más.
+
 > **Por qué (c) no es formalidad.** La condición 4 sustituye un criterio duro ("¿tiene un ✅?") por
 > uno de juicio ("¿es esto lo mismo?"). Sin la nota se degrada en excusa para limpiar y se pierde el
 > rastro de por qué el sistema hace lo que hace. **Un archivado por vía alterna sin nota es peor que
@@ -165,6 +187,13 @@ Mapa de fuentes. **No memoriza respuestas — memoriza dónde vive la verdad.**
 - **Un `COUNT` que da 0 se verifica antes de concluir.** El 2026-08-16 un `si = 0` sobre 17 sesiones
   parecía indicar calibraciones vacías; el literal era minúscula y había 109 SÍ. Consulta mal
   escrita se parece a hallazgo.
+- **`old_str` se toma de `git show origin/main:[ruta]`, NUNCA de `main`.** *(trampa nueva,
+  2026-08-16 — learning del PR #44.)* El clon local va commits atrás: `main` es la referencia
+  **local**, y `origin/main` es la que Sam va a ver en el PR. Editar contra `main` produce
+  `str_replace` que matchean contra texto que **ya no está en el remoto** — o que no matchean y
+  parecen error del ancla cuando el error es la referencia. Precede a todo: `git fetch origin main`,
+  y **`git status` limpio antes de crear la rama**. Si un `str_replace` no matchea **exacto y una
+  sola vez**: detenerse y reportar el ancla y el texto encontrado. Nunca forzar.
 
 ---
 

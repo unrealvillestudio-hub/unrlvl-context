@@ -287,6 +287,114 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-16 — Tres constructores a uno, el cron que nunca existió, y un `verify_jwt` que no dejaba llegar al código
+
+Sesión de **construcción y corrección de diagnóstico**. Lo de marca vive en
+`brands/ForumPHs/session_log.md` (2026-08-16); acá va el carril.
+
+### Frente de snapshots — TRES constructores reducidos a UNO
+
+Había **tres** implementaciones construyendo el snapshot de marca, desalineadas entre sí:
+
+| Constructor | Tablas | Estado tras esta sesión |
+|---|---|---|
+| EF `brand-snapshot-builder` v1 | 30 | ✅ **el único constructor** |
+| `CopyLab/api/brand-cache.js` | 30 | v2.4 → **v3.0 LECTOR** |
+| `unrlvl-context/api/brand-cache.js` | 8 | v1.2 → **v2.0 LECTOR** |
+
+**Ninguno de los dos labs construye ya.** El eje —componer el contexto de una marca— es del
+sistema, no de cada lab que lo necesita. El de `unrlvl-context` era además el peor de los tres:
+consultaba **8 tablas** frente a las 30 del canónico, sin `brand_voice_genome` ni el motor
+creativo — o sea, todo caller suyo venía operando con contexto empobrecido y sin saberlo.
+
+**Deuda abierta:** retirar `action=build_all` de CopyLab, que hoy responde **410 con puntero**.
+Va en un **tercer PR**, no en éste.
+
+### El cron de `build_all` nunca existió
+
+La AGENDA declaraba, desde el 2026-08-14: *"el cron nunca ha corrido"*. Verificado contra
+`cron.job`, el diagnóstico era **incorrecto en su forma más cara**: no era un cron que fallaba,
+**era un cron ausente**. No había nada que depurar.
+
+Creado: **jobid 51**, `brand-snapshot-build-all-3h`, `0 */3 * * *`. Cobertura **9/13 → 13/13**.
+
+> **El método que lo encontró** es el de `skills/context-resolver/SKILL.md` §3: preguntarle al
+> sistema si el problema todavía existe, en vez de leer el ítem. Un ítem que dice "falla" y una
+> fuente que dice "no existe" no son el mismo pendiente, y no se arreglan igual.
+
+### `content-scheduler` v2.1 — y el gotcha que cuesta una tarde
+
+5e-1 cerrado por vía alterna: **construido** (PR #57), **corregido** (#59, #60), **desplegado v2.1**.
+
+> **⚠️ `verify_jwt: false`.** Se desplegó primero con `true` y **el gateway rechazaba antes de
+> llegar al código**: `UNAUTHORIZED_NO_AUTH_HEADER`. Este carril autentica por header
+> **`x-cron-secret`**, no por JWT. Con `verify_jwt: true` **no hay código que pueda arreglarlo** —
+> el request nunca llega. Se anota como gotcha porque el síntoma (401) apunta al lugar equivocado.
+
+**Deuda menor:** `scheduledRows.push` no lleva `voice`, así que la pieza recién colocada **no
+cuenta en el filtro por voz** de los grupos posteriores de la misma corrida.
+
+**Pendiente:** el **alta del cron**, tras verificación con candidatas reales.
+
+### Modelo de cadencia — corregido
+
+Tablas nuevas en `intel`: **`brand_rollout`**, **`brand_cadence`**, **`brand_topic_platform_mode`**.
+La última es el ajuste de **granularidad del eje**: el modo es por `(topic, plataforma)`, no por
+marca — regla instalada en `protocols/MULTIBRAND_RULE.md` → "Granularidad del eje".
+
+Quedan **3 alias legacy** vivos a propósito, para retirar en el **paso 3**: `brand_topics.cadence`,
+`brand_cadence.cadence_mode`/`.anchor` y `brand_rollout.max_rotation_weeks`. Se retiran
+**contando** `class_source_counts` y `max_rotation_weeks_source` del reporte — no a ojo.
+
+### El hallazgo del GRANT
+
+`intel.content_embeddings` creada: **`vector(768)`** (`gemini-embedding-001 @768`, **no 1536** como
+decía el spec original) + índice **HNSW** + **GRANT `service_role`**.
+
+> **El GRANT no es un detalle de checklist.** Una tabla creada sin él existe, responde a
+> `information_schema` y **falla en runtime** desde el carril, que corre como `service_role`. Es
+> exactamente la clase de fallo que se ve como "la tabla no existe" y no lo es. Va como paso fijo
+> del DDL, no como recordatorio.
+
+**5e-2 sigue ABIERTO.** La tabla existe; **los gates 1 y 5 del Watcher siguen resolviendo por
+`semanticSimilarity` contra Claude**. El cableado cambia **una llamada LLM por un operador `<=>`**
+— y hasta que ocurra, esto es **parcial, y parcial es abierto**.
+
+### El hallazgo de compliance
+
+Las reglas **globales `hard`** se heredan y **ganan** sobre las de marca. ForumPHs pasó de 9 a 11
+por herencia, sin que nadie sembrara nada en la marca. Consecuencia de método: **contar las reglas
+efectivas de una marca leyendo sólo sus filas da un número menor que el real.**
+
+### `LAB-AUDIENCE-BRIEF` — desactivado
+
+El stage 0 huérfano tenía tres salidas: cablearlo, desactivarlo, o dejarlo activo-y-muerto (la
+peor). Se tomó la segunda: **`active=false`, `supports_iid=false`**. La fila estaba **malformada y
+nunca funcionó**. Cadena IID: **CopyLab (1) → AIFE (2) → ImageLab (3) → SocialLab (4)**.
+
+> **Residuo, anotado para que no se dé por cerrado de más:** el `stage_order: 1` sigue
+> **hardcodeado** en `content-dispatcher`. Desactivar la fila quita la trampa, **no el literal**.
+
+### Regla nueva — no hardcodear modelos
+
+`claude-sonnet-5` literal en `content-run-stage`, `calibrate.ts` y `_craftModules.ts`;
+`gemini-2.5-flash-image` en ImageLab. **`ops_lab_rates` ya resuelve el PRECIO por `model_id`; lo que
+falta es que resuelva QUÉ MODELO.** Media vuelta dada, media pendiente. Instalada en
+`protocols/MULTIBRAND_RULE.md` → "Modelos y versiones".
+
+### Fase B — sin cambios esta sesión
+
+Los **6 ítems de cableado** de CopyLab siguen **abiertos y bloqueantes** del run 100 % del carril
+async. Nada de esta sesión los tocó. Se anota explícitamente para que el volumen de lo cerrado hoy
+no se lea como avance en ese frente.
+
+### 🔴 Seguridad — `IID_CRON_SECRET` repartido
+
+Vive en **4 lugares sin fuente única**, uno de ellos **en claro en `intel.iid_scheduler_config`**.
+**Rotarlo exige tocar los 4**, y no hay nada que garantice que se toquen los 4.
+
+---
+
 ## 2026-08-14 — Reconciliación de estado: CopyLab ya estaba listo y nadie lo había escrito
 
 **Objetivo declarado:** validar el **carril async del AIID**, no correr ForumPHs. ForumPHs fue el
