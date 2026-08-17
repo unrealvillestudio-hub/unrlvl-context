@@ -16,7 +16,11 @@ de las filas vecinas, leyendo el genoma:
 | `editorial_post` | **9** |
 | `social_post` | **7** |
 
-**Resultado: 32/32 topics con regla propia.** Antes, **22 de los 32** corrían **degradados** — sin
+**Resultado: 32/32 topics con regla propia** — verificado contra la DB: las tres voces (`fphs_conversion`, `fphs_educativa`, `fphs_editorial`) tienen fila en `editorial_post` y `social_post`, y los 32 topics activos se reparten 11 conversión / 14 educativa / 7 editorial.
+
+> **Corrección de cifra (2026-08-16, contra la DB).** El brief decía *"22 de los 32 topics"* corrían degradados. Son **11 topics**, no 22: cada uno declara `voice_by_destination` con **dos** destinos, así que 11 topics × 2 destinos = **22 slots** — que es lo que la cifra contaba. El desglose original *"11 en editorial + 11 en social"* siempre fue exacto; el "22 de los 32" era la lectura equivocada de ese mismo número.
+
+Antes, esos **11 topics / 22 slots** corrían **degradados** — sin
 fila, `selectCompatRule` devolvía `source='none'`, `applyCreativeLogic` recibía `rule=null` y
 filtraba **sólo por `aggro_min/max`**, dejando elegibles casi los 44 `creative_vectors` de
 e-commerce. Eso se terminó.
