@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.11 · 2026-08-16 · Mantenido por: Claude_
+_Versión: 1.12 · 2026-08-18 · Mantenido por: Claude_
 
 ---
 
@@ -41,6 +41,17 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.12
+
+**Cambios respecto a v1.11:**
+- `context-resolver` → **v1.1 → v1.2** · 2026-08-18 · **§2-bis REVISABLE SI** + **§3 alcance a ítems
+  cerrados** (PR #47). El skill sigue siendo **CERO ESTADO**: el campo vive en `AGENDA.md`, nunca aquí.
+- **Saneamiento:** los pies de `INDEX` y de `context-resolver` iban desfasados respecto a su cabecera
+  (decían v1.10 y v1.0) y usaban la grafía derogada. Corregidos a v1.12 y v1.2, con la grafía
+  canónica de BP v1.3.
 
 ---
 
@@ -225,4 +236,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.10 · Unreal>ille Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.12 · Unrealville Studio · Carga obligatoria en apertura de sesión_

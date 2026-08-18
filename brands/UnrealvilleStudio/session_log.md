@@ -1,5 +1,30 @@
 # Session Log — UnrealvilleStudio
 
+## 2026-08-18 — REVISABLE SI: condición de reapertura
+
+**Sesión Sam × Claude.ai.** Origen: evaluación de un documento externo (Growth Origin, *"Dos IAs, una carpeta"*). De cinco piezas candidatas sobrevivió **UNA**; el resto se descartó por reconstruir el destino prohibido *"todos lo leen siempre"* (`ARQUITECTURA` regla dura 3) o por existir ya en forma superior.
+
+### INSTALADO (PR #47, mergeado)
+`skills/context-resolver/SKILL.md` **v1.1 → v1.2**.
+- **§2-bis REVISABLE SI — condición de reapertura**, con **filtro duro** (solo se acepta si la condición es una CONSULTA EJECUTABLE contra la fuente; si no se puede formular, no se escribe) y **pregunta obligatoria ítem por ítem** al proponer cierre.
+- **§3 paso 10-bis** extiende alcance a ítems **CERRADOS** con el campo: si la consulta dispara, el ítem se **REABRE**.
+- **§10** dos líneas nuevas de checklist.
+
+### POR QUÉ IMPORTA
+El paso 10-bis verificaba solo lo abierto. Ahora verifica también lo cerrado. **Cero artefactos nuevos** — extiende un procedimiento que ya corre en cada Actualiza, que es lo que evita que sea Professor otra vez.
+
+### DESCARTADO CONSCIENTEMENTE (no pendiente)
+La **contra-tesis antes del eje fundador**. No hay marca a punto de sellar eje; se escribe cuando haya caso real, misma política que `voice-editorial` y `voice-professional` en INDEX.
+
+### PROFESSOR
+2 learnings, ambos aprobados por Sam.
+- `87b51779` — REVISABLE SI · governance · rs 5
+- `275ba2af` — evaluación de método externo · governance · rs 4
+
+### NO SE TOCA
+- **`AGENDA.md`:** nada quedó abierto, y AGENDA es solo ítems abiertos + decisiones pendientes.
+- **`ecosystem.json`:** cero cambio estructural; tocarlo obligaría a regenerar `ecosystem.md` y `ecosystem_filemap.md` por nada.
+
 ## 2026-08-13 — Posicionamiento y web pública: tesis canónica de marca
 
 **Sesión de posicionamiento y web pública (Sam × Claude.ai + CC).** Este PR sólo toca context files de `unrlvl-context`; el código de la web vive en `CoreProject` (PR #3, rama `claude/brand-thesis-line-izafos`). CC no mergea — Sam revisa, mergea y borra la rama.
