@@ -353,5 +353,5 @@ hecho y sin declarar. Canónico: `.github/CLAUDE.md`.** Evidencia:
 
 ---
 
-_Fin · context-resolver v1.0 · ejecuta las fases 1–2 de `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md`
-· método, cero estado · Unreal>ille Studio_
+_Fin · context-resolver v1.2 · ejecuta las fases 1–2 de `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md`
+· método, cero estado · Unrealville Studio_
