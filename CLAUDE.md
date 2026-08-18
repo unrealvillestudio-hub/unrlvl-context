@@ -1,4 +1,10 @@
 # CLAUDE.md — unrlvl-context
+
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
 _Contexto persistente para Claude Code. No editar manualmente._
 
 ---
@@ -204,10 +210,10 @@ Formato estándar: `chore: session update YYYY-MM-DD-vN`
 
 ## Estado actual (2026-07-31)
 - ✅ LIVE — todos los endpoints operacionales
-- ✅ `ecosystem.json` **v2026-07-31-v1** — instrumentación de costo end-to-end (capa `ops_*`, 16 migraciones M-0..M-16); desvío `buildFromGenome` marcado ⚠️ DESVIACIÓN (ver `labs._note` / `labs_wiring`)
+- ✅ `ecosystem.json` **v2026-07-31-v1** — instrumentación de costo end-to-end (capa `ops_*`, 16 migraciones M-0..M-16); desvío `generadorLocal` marcado ⚠️ DESVIACIÓN (ver `labs._note` / `labs_wiring`)
 - ✅ IID carril con costo medido: **$0,0681 por pieza publicada** (imagen 59 %); fuente única de tarifa `ops_lab_rates` (cero literales)
 - ✅ `SESSION_PROTOCOL.md` **v17** — corregido el punto de push de CC (CC sí pushea ramas de PR a `unrlvl-context`; sólo `main` y merge restringidos); Paso 1 confirma que los labs son apps del ecosistema
-- ✅ `IID/session_log.md` — entrada 2026-07-31 al tope (instrumentación de costo + desvío buildFromGenome)
+- ✅ `IID/session_log.md` — entrada 2026-07-31 al tope (instrumentación de costo + desvío el generador local)
 - ✅ Professor + Skills INDEX.md — ver `skills/INDEX.md` (índice vivo)
 
 > **Anterior (2026-05-29):** LIVE · `ecosystem.json` v21 (portal fulfillment NSCF) · Professor v1.0 (54 learnings, 42 aprobados) · Skills INDEX 15 skills · `brands/NeuroneSCF/session_log.md` sesión 2026-05-29.

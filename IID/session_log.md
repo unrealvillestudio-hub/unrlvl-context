@@ -1,4 +1,10 @@
 # IID — Intelligence Insights Developers
+
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
 ### Documento fundacional + session_log del repo IID de UNRLVL
 _Fundado: 2026-06-22 · Mantenido por Sam (push) + Claude (redacción) · Marca raíz: UnrealvilleStudio · Multimarca_
 
@@ -156,7 +162,7 @@ LucienSael era **la única marca de 10 sin perfiles de copy y humanización.** M
                      │   selecciona UNA pieza pendiente de la queue
                      ▼
 7. content-run-stage (deploy build _50 al 17-jul; era v37 al fundarse este doc) — EL ORQUESTADOR DE PRODUCCIÓN:
-     ├─ Builder buildFromGenome (stage 1): lee brand_topics + brand_voice_genome,
+     ├─ Builder el generador local (stage 1): lee brand_topics + brand_voice_genome,
      │     arma el prompt jerárquico, llama a CopyLab
      ├─ AIFE filter (aife-filter EF): control de calidad/seguridad de marca
      ├─ ImageLab: genera imagen (Vertex) → sube a Storage unrlvl-media (CDN)
@@ -174,9 +180,9 @@ LucienSael era **la única marca de 10 sin perfiles de copy y humanización.** M
 ```
 
 ### Los tres PromptBuilders (historia importante)
-En el diagnóstico de junio se descubrieron **tres PromptBuilders distintos** conviviendo: el de CopyLab (front), el de CopyLab (`api/execute.ts`), y el del propio IID (versión degradada que NO leía el genoma). La corrección fue `buildFromGenome` dentro de content-run-stage, con jerarquía de prompt canónica de 6 capas: instrucción arriba → hard rules → brand voice (genoma) → brand+audience context → creative direction → guidance/reference. Se evaluó y RECHAZÓ la idea de una "capa LLM rewriter" a favor de `formatForEngine()` determinístico por motor + jerarquía estructural.
+En el diagnóstico de junio se descubrieron **tres PromptBuilders distintos** conviviendo: el de CopyLab (front), el de CopyLab (`api/execute.ts`), y el del propio IID (versión degradada que NO leía el genoma). La corrección fue `generadorLocal` dentro de content-run-stage, con jerarquía de prompt canónica de 6 capas: instrucción arriba → hard rules → brand voice (genoma) → brand+audience context → creative direction → guidance/reference. Se evaluó y RECHAZÓ la idea de una "capa LLM rewriter" a favor de `formatForEngine()` determinístico por motor + jerarquía estructural.
 
-> **Nota 2026-07-31 (ver §9 y `ecosystem.json`):** `buildFromGenome` resolvió la fragmentación del prompt, pero al hacerlo **reconstruyó el motor de CopyLab localmente** en `content-run-stage` en vez de llamar a CopyLab por su `api_endpoint` (`lab_configs` lo declara y nadie lo invoca; igual con sociallab / `runSocialLabDirect`). Tiene gobierno pero ningún ángulo creativo. Es un **⚠️ DESVÍO a corregir, NO arquitectura** — converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B). Regla de nomenclatura inviolable: ningún carril construye el motor de un lab existente; lo llama por su endpoint. Ver `ecosystem.json → labs._note` / `labs_wiring`.
+> **Nota 2026-07-31 (ver §9 y `ecosystem.json`):** `generadorLocal` resolvió la fragmentación del prompt, pero al hacerlo **reconstruyó el motor de CopyLab localmente** en `content-run-stage` en vez de llamar a CopyLab por su `api_endpoint` (`lab_configs` lo declara y nadie lo invoca; igual con sociallab / `runSocialLabDirect`). Tiene gobierno pero ningún ángulo creativo. Es un **⚠️ DESVÍO a corregir, NO arquitectura** — converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B). Regla de nomenclatura inviolable: ningún carril construye el motor de un lab existente; lo llama por su endpoint. Ver `ecosystem.json → labs._note` / `labs_wiring`.
 
 ### La jerarquía del prompt (canónica)
 1. Instrucción (identidad del builder: "construyes la pieza ENCARNANDO el genoma")
@@ -266,7 +272,7 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 - **Abril 2026** — Nace UNRLVL-IID como #7 del roadmap (post Cost Layer, depende de schema intel.*). Sam articula el doble uso (investigación = posicionamiento). Visión de red de agentes especializados.
 - **15-jun** — Replanteamiento. Diagnóstico de 3 bugs: brand_id=null en todos los jobs, voice="lucien" sin resolver a genoma, el builder IID nunca leía brand_voice_genome. Se descubre el encaje a la fuerza de Lucien. Se crea `intel.brand_topics` (la marca declara, no el agente). Se crean los 14 UNRLVL-* en 3 tiers. Causa raíz adicional: `claude-sonnet-4-20250514` (retirado 15-jun) hardcodeado en 24 EFs.
-- **16-17 jun** — Builder convergido + Watcher LIVE. buildFromGenome (cirugía in-place). Watcher como stage 5, 6 gates, similitud semántica vía Claude (no pgvector aún). Primeras piezas UNRLVL+Lucien a awaiting_approval. Se corrige: imagelab hardcodeado a fal.ai (debía usar lab_configs→Vertex); email mudo por RESEND_API_KEY de NSCF (correcto: RESEND_UNRLVL_KEY); evidence gate usaba has_numbers boolean (caricatura del contrato de marca). Sam aclara: "matemático" para UNRLVL = profundidad de comprensión de la maquinaria, no dígitos literales.
+- **16-17 jun** — Builder convergido + Watcher LIVE. el generador local (cirugía in-place). Watcher como stage 5, 6 gates, similitud semántica vía Claude (no pgvector aún). Primeras piezas UNRLVL+Lucien a awaiting_approval. Se corrige: imagelab hardcodeado a fal.ai (debía usar lab_configs→Vertex); email mudo por RESEND_API_KEY de NSCF (correcto: RESEND_UNRLVL_KEY); evidence gate usaba has_numbers boolean (caricatura del contrato de marca). Sam aclara: "matemático" para UNRLVL = profundidad de comprensión de la maquinaria, no dígitos literales.
 - **18-jun** — Lote A. 5 bugs de calidad de output. content-run-stage v34→v35, approve-piece v13→v14. Firmas de cierre desde genoma.
 - **19-jun** — Genoma v1.0 de Lucien por muestreo (8/10). core_move de reactivo/léxico → generativo/constructor. Principio madre: el angle es territorio, no mirada; codificar el core_move como receta literal colapsa la voz en fórmula. Cadencia poblada (Interpretación A).
 - **20-jun** — R4B Chat 2 (DDL, v36, v37, content-watcher v1) + arquitectura híbrida de la queue (Chat 1). Hallazgo: la queue tenía 3 generaciones conviviendo; el supuesto del spec R4B era falso.
@@ -404,7 +410,7 @@ descubrió. Ninguna mutación de producción salvo la siembra del snapshot de Fo
 demás fueron lecturas.
 
 **La corrección de encuadre de Sam.** Durante la sesión el trabajo derivó hacia "arreglar
-`buildFromGenome`". Sam lo reencuadró: **CopyLab es el generador único**; `buildFromGenome` deja
+`generadorLocal`". Sam lo reencuadró: **CopyLab es el generador único**; `generadorLocal` deja
 de ser un camino a mejorar y pasa a ser un **donante** — se le extraen las capas de gobierno que
 sí aporta y se retira. La pregunta correcta no es "¿cómo hago que el motor local genere mejor?"
 sino "¿qué le falta al cable para que el lab que ya existe reciba lo que necesita?".
@@ -438,9 +444,9 @@ Sobre `unrlvl-iid-functions/supabase/functions/content-run-stage/index.ts` (`mai
 2.499 líneas). La desviación sigue siendo cierta; esto la **precisa**:
 
 - `L2201-2203` — el stage lee `lab_configs` **incluyendo `api_endpoint`** para todos los labs.
-- `L2233` → `L2252` — rama `copylab`: llama a `buildFromGenome(...)` **local**.
+- `L2233` → `L2252` — rama `copylab`: llama a `generadorLocal(...)` **local**.
   `lab.api_endpoint` está cargado y **nunca se usa** en esa rama.
-- `L919` `buildFromGenome` → `L1115` `fetch("https://api.anthropic.com/v1/messages")` directo ·
+- `L919` `generadorLocal` → `L1115` `fetch("https://api.anthropic.com/v1/messages")` directo ·
   `L174` `CLAUDE_MODEL_ID = "claude-sonnet-5"`.
 - `L2424-2427` — rama `sociallab`: `runSocialLabDirect(...)` → `L1377`, también directo a
   `api.anthropic.com`.
@@ -545,7 +551,7 @@ El harness destapó dos defectos vivos que se habían mergeado: el desajuste de 
 
 Estado final: `main` @ `e7d517c`, 23 tests verdes, dos goldens anclados a `da182aa` (43.056 b), CI en GitHub Actions — antes no había nada verificando ningún PR.
 
-Pendiente Fase B: mapa `destination`/`platform` → `content_type` (hoy toda pieza cae en `social_post` por el default del pack), no-repeat de vectores muerto (`buildPreviousOutputs` nunca setea `last_creative_vector`), `brandContext` del stage, y retiro de `buildFromGenome`.
+Pendiente Fase B: mapa `destination`/`platform` → `content_type` (hoy toda pieza cae en `social_post` por el default del pack), no-repeat de vectores muerto (`buildPreviousOutputs` nunca setea `last_creative_vector`), `brandContext` del stage, y retiro de `generadorLocal`.
 
 **Versiones de EFs corregidas en `ecosystem.json`.** El registro vivo `edge_functions` estaba desfasado: `content-run-stage`, `iid-core`, `content-watcher` y `content-dispatcher` decían v57/v36/v18/v36; las reales son **74/47/29/47**, verificadas con `list_edge_functions` (el contador `version` coincide exacto con el sufijo de `entrypoint_path` — **ése es el marcador confiable de versión**). Se corrigieron **solo las 4 entradas del registro vivo**; las menciones fechadas (p.ej. `key_changes_2026-07-25`, que dice v52) **no se tocan**: son historia — registran qué era cierto ese día y explican por qué el registro vivo subió (la EF se redeployó varias veces entre esa fecha y hoy). Regla #1 del repo.
 
@@ -555,19 +561,19 @@ Hallazgo que abre frente propio: `src/lib/buildCopyPrompt.ts` (21.799 b) es un *
 
 **Estado:** persistido en `ecosystem.json` v2026-08-01-v1 (+ derivados) y este log. Rama `ctx/labs-son-apps`; PR contra `main` abierto por CC. **CC no mergea.**
 
-**Qué se registró.** La regla de nomenclatura de los labs pasa a ser texto canónico e **INVIOLABLE** en `ecosystem.json → labs._note`: cuando Sam dice **CopyLab, ImageLab, SocialLab, VideoLab, VoiceLab, WebLab, AgentLab o BlueprintLab** se refiere SIEMPRE a **estas apps** —repo propio, UI para trabajo humano, modo dual `sync` (UI) + `async` (carril)—, **nunca** a un servicio genérico, una función, un stage del pipeline ni un módulo interno. Un lab es una aplicación con **superficie humana**; el motor que lleva dentro es intercambiable, el lab no. Si un carril necesita la capacidad de un lab, **lo llama por su `api_endpoint`** — no construye su propio motor. Precedente vivo: `buildFromGenome`, motor duplicado dentro de `content-run-stage` que dejó a CopyLab fuera del carril async durante meses (ver la entrada del 2026-07-31, *el desvío buildFromGenome*).
+**Qué se registró.** La regla de nomenclatura de los labs pasa a ser texto canónico e **INVIOLABLE** en `ecosystem.json → labs._note`: cuando Sam dice **CopyLab, ImageLab, SocialLab, VideoLab, VoiceLab, WebLab, AgentLab o BlueprintLab** se refiere SIEMPRE a **estas apps** —repo propio, UI para trabajo humano, modo dual `sync` (UI) + `async` (carril)—, **nunca** a un servicio genérico, una función, un stage del pipeline ni un módulo interno. Un lab es una aplicación con **superficie humana**; el motor que lleva dentro es intercambiable, el lab no. Si un carril necesita la capacidad de un lab, **lo llama por su `api_endpoint`** — no construye su propio motor. Precedente vivo: `generadorLocal`, motor duplicado dentro de `content-run-stage` que dejó a CopyLab fuera del carril async durante meses (ver la entrada del 2026-07-31, *el desvío el generador local*).
 
 **Unificación `_naming_rule` → `_note`.** La clave `_naming_rule` (introducida el 2026-07-31) existía **sólo** en `ecosystem.json` — barrido del árbol + `grep`: ningún `api/*.js` la consumía. Se **eliminó** y su contenido, reescrito, vive ahora dentro de `labs._note`. Una sola fuente de la regla.
 
-**Contradicción del `flow` corregida.** En `iid_subsystem.pipeline.flow`, el fragmento `Builder buildFromGenome ⚠️DESVIACIÓN` se reemplazó por una nota que lo nombra **desvío a corregir, NO arquitectura**, describe el síntoma (el stage `copylab` ignora su `api_endpoint` de `lab_configs` y usa un motor local; lo mismo `sociallab`/`runSocialLabDirect`) y remite a `labs_wiring`, que sí declara la arquitectura correcta.
+**Contradicción del `flow` corregida.** En `iid_subsystem.pipeline.flow`, el fragmento `Builder el generador local ⚠️DESVIACIÓN` se reemplazó por una nota que lo nombra **desvío a corregir, NO arquitectura**, describe el síntoma (el stage `copylab` ignora su `api_endpoint` de `lab_configs` y usa un motor local; lo mismo `sociallab`/`runSocialLabDirect`) y remite a `labs_wiring`, que sí declara la arquitectura correcta.
 
-**Brief de CopyLab persistido.** `PROYECTO_COPYLAB_hereda_y_profilaxis.md` (raíz) recoge las tres fases: **A** — las 5 capas de gobierno que el generador único hereda de CopyLab (de ellas, voz-por-destino y reglas del Watcher son **portación real**), más 2 correcciones propias (`packInstructions` fuerza CTA; idioma ignorado) y 2 abiertas (falta el `await` de `upsertSnapshot`; catálogo de 44 vectores aún monoindustria); **B** — `execLab` en el stage `copylab`, `buildFromGenome` se retira **sólo** con las 5 capas presentes y una corrida verificada; **C** — SocialLab, mismo patrón. Principio de cierre: **ningún carril construye el motor de un lab que ya existe.**
+**Brief de CopyLab persistido.** `PROYECTO_COPYLAB_hereda_y_profilaxis.md` (raíz) recoge las tres fases: **A** — las 5 capas de gobierno que el generador único hereda de CopyLab (de ellas, voz-por-destino y reglas del Watcher son **portación real**), más 2 correcciones propias (`packInstructions` fuerza CTA; idioma ignorado) y 2 abiertas (falta el `await` de `upsertSnapshot`; catálogo de 44 vectores aún monoindustria); **B** — `execLab` en el stage `copylab`, `generadorLocal` se retira **sólo** con las 5 capas presentes y una corrida verificada; **C** — SocialLab, mismo patrón. Principio de cierre: **ningún carril construye el motor de un lab que ya existe.**
 
 **Confirmación de nomenclatura** añadida a la respuesta de apertura de `HRD_PROTOCOLO_ACTUALIZACION` (los labs son apps del ecosistema, no servicios genéricos).
 
 **Pendiente dedicado nuevo — discrepancia estático↔repo.** El `ecosystem.json`/`AGENDA.md` **servidos por Vercel** difieren en bytes de los de `main`. Diagnóstico parcial de esta sesión: el árbol de trabajo local está en **CRLF** (`core.autocrlf=true`) y el blob de git en **LF** (`ecosystem.json`: blob 48.180 b / árbol 48.890 b, delta exacto = 1 CR por línea) — normalización de fin de línea, esperada en Windows y **no** corrupción. **Pero** los tamaños del brief (54.681 / 172.440) no coinciden ni con el blob ni con el árbol local, así que **falta confirmar contra el estático realmente servido por Vercel**. Se deja como **ventana dedicada**, no resuelta en este PR.
 
-## 2026-07-31 — Instrumentación de costo end-to-end, el Builder lee las reglas que lo juzgan, y el desvío buildFromGenome identificado
+## 2026-07-31 — Instrumentación de costo end-to-end, el Builder lee las reglas que lo juzgan, y el desvío el generador local identificado
 
 **Estado:** aplicado y verificado en producción. **16 migraciones**, todas desplegadas y verificadas:
 
@@ -597,7 +603,7 @@ Confirma con dato lo que era estimación: **full_scan nunca fue el riesgo; la im
 
 **Coste de prueba separado** (para no contaminar la línea de producción): `source_app='iid-carril-test'` — 40 asientos / $0,6030, distinguible de $1,0626 de producción y $2,7192 de línea base. El eje `source_app` (M-7) es lo que permite aislar el costo de las pruebas del costo real.
 
-**El hallazgo mayor — el desvío `buildFromGenome`.** El carril async escribe con `buildFromGenome`, **motor local en `content-run-stage`**, mientras `lab_configs` declara `copylab → unrlvl-copy-lab.vercel.app` y **nunca lo invoca**. Lo mismo con sociallab (`runSocialLabDirect`). Prueba comparativa del 31-jul con CopyLab entero: **ninguno gana completo** — CopyLab tiene motor creativo y cero gobierno; `buildFromGenome` tiene gobierno y ningún ángulo. **CopyLab es el ganador porque es el lab:** UI, modo dual, superficie humana. La regla de nomenclatura inviolable queda fijada (ver `ecosystem.json → labs._note` y `labs_wiring`): **ningún carril construye el motor de un lab existente — lo llama por su `api_endpoint`.** `buildFromGenome` es el precedente del desvío, marcado en `ecosystem.json` con ⚠️ DESVIACIÓN a corregir (NO arquitectura). La corrección converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B).
+**El hallazgo mayor — el desvío `generadorLocal`.** El carril async escribe con `generadorLocal`, **motor local en `content-run-stage`**, mientras `lab_configs` declara `copylab → unrlvl-copy-lab.vercel.app` y **nunca lo invoca**. Lo mismo con sociallab (`runSocialLabDirect`). Prueba comparativa del 31-jul con CopyLab entero: **ninguno gana completo** — CopyLab tiene motor creativo y cero gobierno; `generadorLocal` tiene gobierno y ningún ángulo. **CopyLab es el ganador porque es el lab:** UI, modo dual, superficie humana. La regla de nomenclatura inviolable queda fijada (ver `ecosystem.json → labs._note` y `labs_wiring`): **ningún carril construye el motor de un lab existente — lo llama por su `api_endpoint`.** `generadorLocal` es el precedente del desvío, marcado en `ecosystem.json` con ⚠️ DESVIACIÓN a corregir (NO arquitectura). La corrección converge con el Proyecto UNIFICACIÓN (BLOQUEANTE R4B).
 
 **En §4:** los dos modelos de filo, el canon de idiomas con la excepción de PatriciaOsorioConectando (aprendizaje del Professor 6-jul), y la política de hashtags y firma de LucienSael.
 
@@ -606,7 +612,7 @@ Confirma con dato lo que era estimación: **full_scan nunca fue el riesgo; la im
 **Estado:** tres frentes cerrados sobre el mismo patrón de fondo. Tres PRs en `unrlvl-iid-functions` (A y B) + esta doc en `unrlvl-context` (C). CC no mergea; deploy manual posterior.
 
 **El patrón, repetido tres veces esta sesión.** El dato existía; el consumidor no lo consultaba.
-1. **M-9 (PR #48, MERGEADO):** P3 (27-jul) migró el Watcher a `intel.watcher_rules`, pero el Builder siguió leyendo `topic.hard_rules` → prescriptor y juez sobre catálogos distintos. 7 de 8 piezas rechazadas por reglas que el Builder nunca vio. Ahora `buildFromGenome` recibe las MISMAS reglas que el juez (misma precedencia, filtradas a las imperativas) con el **código visible**: si el Watcher cita `HR-LUC-07` y el Builder lo tenía, incumplió; si no lo tenía, falló el sistema.
+1. **M-9 (PR #48, MERGEADO):** P3 (27-jul) migró el Watcher a `intel.watcher_rules`, pero el Builder siguió leyendo `topic.hard_rules` → prescriptor y juez sobre catálogos distintos. 7 de 8 piezas rechazadas por reglas que el Builder nunca vio. Ahora `generadorLocal` recibe las MISMAS reglas que el juez (misma precedencia, filtradas a las imperativas) con el **código visible**: si el Watcher cita `HR-LUC-07` y el Builder lo tenía, incumplió; si no lo tenía, falló el sistema.
 2. **M-12·A (PR #49):** `injectRuleParams` resolvía `{{filo}}` sólo contra `hard_rules` → Lucien (filo-de-voz, en el genoma) no era juzgado por su propio filo. Ahora `intel.rule_param_sources` declara las fuentes por dato; el resolvedor recorre por precedencia (topic 30 > genoma 10) y el valor viaja **crudo** (el juez es multilingüe). Ver §4 → *El filo — dos modelos*.
 3. **M-12·B (PR #50):** `public.brand_languages` existía (9 marcas, hasta 3 idiomas) y el carril nunca la leía. Ahora el idioma es **eje ortogonal** del fan-out: una fila por (plataforma × voz × idioma), transportada por `brand_topics.languages` → `iid_content_queue.language` → `builder_input.language` → IDIOMA OBLIGATORIO del Builder. Retrocompat total: `NULL` → comportamiento de hoy. Ver §4 → *El canon de idiomas*.
 
@@ -660,7 +666,7 @@ Confirma con dato lo que era estimación: **full_scan nunca fue el riesgo; la im
 
 **Diagnóstico mayor (bloqueante R4B):** 3 generadores de brand-cache desalineados + 2 generadores de texto duplicados; capa creativa de CopyLab nunca ejecutada en el carril. Ver proyecto de unificación (abajo).
 
-**Hallazgo:** el Builder del carril async es buildFromGenome LOCAL en content-run-stage (no CopyLab externo, que queda como lab sync/duplicado). El watcher juzga copy, no imagen.
+**Hallazgo:** el Builder del carril async es el generador local LOCAL en content-run-stage (no CopyLab externo, que queda como lab sync/duplicado). El watcher juzga copy, no imagen.
 
 **Professor:** 6 learnings capturados (approved_by_sam), session_date 2026-07-25.
 
@@ -1819,14 +1825,14 @@ Diseño técnico D1–D4: DDL de `intel.calibration_sessions` + endpoint `/api/c
 - Celda 4 (Watcher en imagen/video): gate visual COMPLETO dentro del eje B, CON similitud visual entre hermanas desde ya (Sam rechazó acotarlo).
 - Principio: los objetivos NO son compartimentos estancos — familia base + préstamo de otras como vehículo.
 
-**DECISIÓN — Ruta B confirmada:** portar el motor creativo (creative_vectors 44 + tension_architectures 10 + aggro_presets 5 + psycho_presets 10) al Builder interno buildFromGenome, con selección DETERMINÍSTICA por brand_topics (no el pickRandom del CopyLab externo). Ruta A descartada: CopyLab usa pickRandom uniforme (genera patrón), psycho solo en email, modelo retirado, perdería features del Builder. Ruta B elimina 1 de los 3 sistemas de generación.
+**DECISIÓN — Ruta B confirmada:** portar el motor creativo (creative_vectors 44 + tension_architectures 10 + aggro_presets 5 + psycho_presets 10) al Builder interno el generador local, con selección DETERMINÍSTICA por brand_topics (no el pickRandom del CopyLab externo). Ruta A descartada: CopyLab usa pickRandom uniforme (genera patrón), psycho solo en email, modelo retirado, perdería features del Builder. Ruta B elimina 1 de los 3 sistemas de generación.
 
 **MODELO DE DOS CAPAS REFLEJADAS (confirmado por Sam):** Builder = capa prescriptiva (inyecta criterio antes de generar, pide pero no verifica). Watcher = capa validadora (juzga después, único con dientes, rechaza). Lo que el Builder prescribe, el Watcher valida → el eje B AÑADE 2 gates al Watcher:
 - Gate 7 — coherencia objetivo↔estímulo (que pieza de autoridad no contenga lenguaje de conversión). Debe ser LLM (determinístico daría falsos positivos).
 - Gate 8 — similitud VISUAL entre hermanas (extiende R1 del ANTISPAM_CONTRACT al plano visual; el contrato solo cubría texto).
 
 **FACTIBILIDAD (CC informe #5, read-only contra código vivo):**
-- Ruta B: ✅ factible, aditiva no estructural. buildFromGenome ya arma prompt por capas; añadir vector/tensión/aggro/psycho = 3 capas más. applyCreativeLogic de CopyLab (~40 líneas) portable; solo reemplazar pickRandom por selector con memoria. Features del Builder (título/firma/cifras/hard_rules) NO se rompen (verificado).
+- Ruta B: ✅ factible, aditiva no estructural. el generador local ya arma prompt por capas; añadir vector/tensión/aggro/psycho = 3 capas más. applyCreativeLogic de CopyLab (~40 líneas) portable; solo reemplazar pickRandom por selector con memoria. Features del Builder (título/firma/cifras/hard_rules) NO se rompen (verificado).
 - 3 fixes de higiene: triviales (1 función / 1 línea / 1 línea).
 - Gate 7: ✅ factible, LLM, ~30 líneas, mismo patrón que gate4.
 - Gate 8: ⚠️ factible pero GREENFIELD — estrena toda la infra de embeddings (ver decisión embeddings). Modelo Vertex multimodalembedding@001, tabla+índice HNSW nuevos.
@@ -1856,7 +1862,7 @@ Diseño técnico D1–D4: DDL de `intel.calibration_sessions` + endpoint `/api/c
 **HALLAZGO DE GOBERNANZA (primer orden):** NO existe fuente versionada de NINGUNA EF del IID en toda la org (29 repos escaneados, todas las ramas). supabase/functions/ solo existe para nscf-* y fphs-formalize. Las EF del IID (iid-core, iid-process, content-dispatcher, content-run-stage, content-watcher, aife-filter) viven SOLO en el deploy de Supabase. Tell: las versionadas conservan entrypoint .../source/supabase/functions/<slug>/index.ts; las del IID tienen .../source/index.ts plano (deploy directo vía MCP/CLI). Esto explica el drift de versiones. ES DEUDA: el corazón del IID no tiene fuente de verdad recuperable.
 
 **El psycho/tension layer NO toca el texto IID hoy (doble bypass):**
-- Hay DOS sistemas de generación: el Builder interno `buildFromGenome` (que usa el IID) y el CopyLab externo (unrlvl-copy-lab.vercel.app). El IID tiene CopyLab configurado en lab_configs pero lo SALTEA — genera in-process con buildFromGenome.
+- Hay DOS sistemas de generación: el Builder interno `generadorLocal` (que usa el IID) y el CopyLab externo (unrlvl-copy-lab.vercel.app). El IID tiene CopyLab configurado en lab_configs pero lo SALTEA — genera in-process con el generador local.
 - Todo el aparato psico/tensión rico vive en el CopyLab externo: `psycho_presets` (10, multimodal: injection_copy/visual/video), `aggro_presets` (5 niveles WHISPER→FULL_AGGRO), `tension_architectures` (curvas T1-T10). El Builder interno NO lee ninguna.
 - El `psycho_preset` (etiqueta de iid-core) solo viaja a ImageLab y SOLO modula imagen — y ahí está DOBLEMENTE roto: (1) mismatch de ID (iid-core emite `curiosity_gap`, la tabla tiene `PSY-CURIOSITY`); (2) mismatch de columna (ImageLab línea 238 lee `visual_injection`, la columna real es `injection_visual`). → ni siquiera la imagen recibe psycho.
 - CopyLab externo está en modelo RETIRADO `claude-sonnet-4-20250514` (fallaría si se revive).
@@ -1878,7 +1884,7 @@ Diseño técnico D1–D4: DDL de `intel.calibration_sessions` + endpoint `/api/c
 
 **Estado de la matriz:** construida y validada conceptualmente por Sam (100% de acuerdo). Queda fijar las celdas "a veces/según" (psycho-puente, psycho-comunidad en ads) celda por celda en la sesión del eje B. La matriz NO se implementa aún — es el corazón del eje B, no un preámbulo. Implementarla bien = reconectar Fase 3.
 
-**Decisión de arquitectura pendiente (eje B):** para llevar psycho/tensión al texto IID — Ruta A (re-rutear a CopyLab externo) vs Ruta B (portar el motor a buildFromGenome con selección DETERMINÍSTICA por brand_topics, no el pickRandom actual de CopyLab). Claude recomienda Ruta B (determinística encaja con marca↔tema/antibaneo). Tres arreglos de higiene previos: unificar IDs psycho (iid-core emita PSY-*), corregir ImageLab línea 238, sacar CopyLab del modelo retirado.
+**Decisión de arquitectura pendiente (eje B):** para llevar psycho/tensión al texto IID — Ruta A (re-rutear a CopyLab externo) vs Ruta B (portar el motor al generador local con selección DETERMINÍSTICA por brand_topics, no el pickRandom actual de CopyLab). Claude recomienda Ruta B (determinística encaja con marca↔tema/antibaneo). Tres arreglos de higiene previos: unificar IDs psycho (iid-core emita PSY-*), corregir ImageLab línea 238, sacar CopyLab del modelo retirado.
 
 **Versiones EF verificadas vivas:** iid-core v21 · iid-process v19 · content-dispatcher v26 · content-run-stage v41.
 

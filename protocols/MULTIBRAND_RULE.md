@@ -1,9 +1,15 @@
 # MULTIBRAND RULE — UNRLVL
 
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
+
 **Versión:** v1.1 · **Creado:** 2026-08-07 · **Actualizado:** 2026-08-16 (§11 Modelos y versiones · §12 Granularidad del eje) · **base previa:** v1.0 (2026-08-07), cuerpo conservado íntegro · **Naturaleza:** REGLA INVIOLABLE del ecosistema
 **Destino en el repo:** `protocols/MULTIBRAND_RULE.md`
 **Consumidores:** Claude.ai (chat), Claude Code (CC), Sam (revisión de PR)
-**Precedente:** `ecosystem.json → labs._note` — misma naturaleza, misma fuerza. Aquella regla nació de `buildFromGenome`; esta nace del hardcode de marca.
+**Precedente:** `ecosystem.json → labs._note` — misma naturaleza, misma fuerza. Aquella regla nació de `generadorLocal`; esta nace del hardcode de marca.
 
 ---
 
