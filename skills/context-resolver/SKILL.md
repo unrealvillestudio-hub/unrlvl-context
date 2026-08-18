@@ -1,6 +1,6 @@
 # SKILL — context-resolver
 
-**Versión:** v1.1 · **Creado:** 2026-08-16 · **Actualizado:** 2026-08-16 (§2 categoría *"se declaró pero nunca se hizo"* · §4 trampa de `git show origin/main`) · **base previa:** v1.0 (2026-08-16, PR #44), cuerpo conservado íntegro · **Naturaleza:** skill transversal, carga en apertura
+**Versión:** v1.2 · **Creado:** 2026-08-16 · **Actualizado:** 2026-08-18 (§2-bis REVISABLE SI · §3 alcance extendido a cerrados) · **base previa:** v1.1 (2026-08-16: §2 categoría *"se declaró pero nunca se hizo"* · §4 trampa de `git show origin/main`; sobre v1.0, 2026-08-16, PR #44), cuerpo conservado íntegro · **Naturaleza:** skill transversal, carga en apertura
 **Destino en el repo:** `skills/context-resolver/SKILL.md`
 **Consumidores:** Claude.ai (chat) · Sam · CC (solo §7, formato de brief)
 **Se carga:** en la apertura de sesión, junto con `ecosystem.json`, `AGENDA.md`, `skills/INDEX.md`,
@@ -132,6 +132,24 @@ nada cumple, se declara *"sin ítems archivables en esta pasada"* y se cierra. E
 
 ---
 
+## 2-bis. REVISABLE SI — CONDICIÓN DE REAPERTURA
+
+Una decisión sin condición de revisión se vuelve dogma; con condición, es una hipótesis con fecha
+de caducidad.
+
+**FORMA.** Al cerrar un ítem, se le cuelga una línea `REVISABLE SI: [consulta que lo reabre]` en la
+misma fila de `AGENDA.md`. Vive en `AGENDA.md`, **NUNCA en este skill** (cero estado, §1).
+
+**FILTRO DURO.** Solo se acepta si es una **CONSULTA EJECUTABLE** contra la fuente (§4). *"Si cambia
+el mercado"* no es una condición: es una opinión. Si no se puede formular la consulta, **NO SE
+ESCRIBE** y el ítem se cierra sin campo. Es el mismo filtro que `enforced_by` en ARQUITECTURA §8.
+
+**PREGUNTA OBLIGATORIA.** Al proponer el cierre de cualquier ítem, Claude.ai pregunta a Sam, **ítem
+por ítem**: *"¿REVISABLE SI? — sí (¿cuál es la consulta?) / no (dogma declarado)"*. No depende de que
+Sam se acuerde: es paso del procedimiento. Un **"no" es respuesta válida** y se anota como tal.
+
+---
+
 ## 3. PASO 10-BIS — VERIFICACIÓN CONTRA FUENTE
 
 *(Es la fase 1 de ARQUITECTURA — "L1 barrido de deudas" — hecha procedimiento.)*
@@ -142,6 +160,11 @@ archivado ordena el pasado; esto corrige el presente.
 **Alcance por pasada:** los ítems abiertos **más viejos**, empezando por los que encabezan el
 archivo (`FOCO INMEDIATO`, bloqueantes declarados). Un ítem con más de tres semanas abierto y sin
 movimiento es sospechoso por definición.
+
+**ALCANCE ADICIONAL — ítems CERRADOS con `REVISABLE SI`.** En la misma pasada se ejecuta la consulta
+de cada ítem cerrado que lleve el campo (§2-bis). Si la consulta dispara, el ítem **SE REABRE** con
+nota de por qué. El paso 10-bis verifica ítems abiertos contra la fuente; esto verifica los cerrados.
+Misma regla de oro: **se le pregunta al sistema, no al archivo.**
 
 **Procedimiento, por ítem:**
 
@@ -318,6 +341,8 @@ hecho y sin declarar. Canónico: `.github/CLAUDE.md`.** Evidencia:
 [ ] Paso 10-bis corrido sobre los ítems abiertos más viejos
 [ ] Hallazgos anotados (cerrados Y abiertos verificados)
 [ ] Las 4 condiciones aplicadas ítem por ítem
+[ ] Preguntado "¿REVISABLE SI?" en cada cierre propuesto
+[ ] Consultas REVISABLE SI de ítems cerrados ejecutadas; reaperturas anotadas
 [ ] Lista propuesta a Sam — STOP hasta aprobación ítem por ítem
 [ ] Notas de vía alterna escritas para todo archivado por condición 4
 [ ] Todo lo que se escribe clasificado según §6
