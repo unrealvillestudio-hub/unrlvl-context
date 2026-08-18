@@ -237,6 +237,6 @@ Nunca iniciar desde el producto. Siempre desde la observación del problema. La 
 
 ---
 
-_SKILL copylab-reference v1.1 · Unreal>ille Studio · CopyLab v8.0_  
+_SKILL copylab-reference v1.1 · Unrealville Studio · CopyLab v8.0_  
 _AGGRO = estándar base · Humanize = capa universal · AIFE = filtro público_  
 _PO voice actualizada 2026-05-18 · NeuroneSCF personas actualizadas 2026-05-18_

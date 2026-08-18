@@ -1,5 +1,5 @@
 # DECISION_MATRIX v1.0
-_Unreal>ille Studio · Operativo desde: 2026-05-17_
+_Unrealville Studio · Operativo desde: 2026-05-17_
 _Backend: Supabase `professor_weights` + `professor_veto_rules` + `professor_decision_criteria`_
 _Documento: `knowledge/ecosystem/decision-matrix/DECISION_MATRIX.md`_
 
@@ -173,5 +173,5 @@ Lección: Cuando skill no está disponible y output va a cliente externo, DECLAR
 
 ---
 
-_DECISION_MATRIX.md · Unreal>ille Studio · knowledge/ecosystem/decision-matrix/_
+_DECISION_MATRIX.md · Unrealville Studio · knowledge/ecosystem/decision-matrix/_
 _Backend: Supabase amlvyycfepwhiindxgzw · tablas professor_*_

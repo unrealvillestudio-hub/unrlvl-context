@@ -176,4 +176,4 @@ Para R4B (Ready for Business, listo para publicar):
 6. **Agentes + scheduler** (§6) — hasta R4B.
 7. **Cerrar** con Professor + Actualiza (rama + PR).
 
-_Fin del orquestador v1.1 · r4b-genome-calibration · delega la voz a genome-calibration + familia voice · Unreal>ille IID_
+_Fin del orquestador v1.1 · r4b-genome-calibration · delega la voz a genome-calibration + familia voice · Unrealville IID_

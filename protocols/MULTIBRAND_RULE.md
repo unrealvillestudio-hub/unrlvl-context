@@ -336,4 +336,4 @@ retirado sin conteo es una migración a ciegas.**
 
 ---
 
-_Fin · MULTIBRAND_RULE v1.1 (base previa v1.0) · regla inviolable · Unreal>ille Studio_
+_Fin · MULTIBRAND_RULE v1.1 (base previa v1.0) · regla inviolable · Unrealville Studio_

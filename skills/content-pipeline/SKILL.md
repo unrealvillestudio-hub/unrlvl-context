@@ -663,7 +663,7 @@ VOICE GENOME (v2.6):
 
 ---
 
-*CONTENT PIPELINE SKILL v2.6 · Unreal>ille Studio · 2026-05-19*  
+*CONTENT PIPELINE SKILL v2.6 · Unrealville Studio · 2026-05-19*  
 *Motor: 9 layers principales (L0-L7 + L1.5) + 3 capas Creative Engine (L14/L15/L16)*  
 *Sequence awareness: L0 + L5 SEQUENCE RULE + AUTO-CHECK puntos 16*  
 *Voice genome system: L0 VOICE CHECK + L1.5 INJECTION + AUTO-CHECK puntos 17-24*  

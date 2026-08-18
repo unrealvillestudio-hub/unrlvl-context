@@ -670,5 +670,5 @@ el usuario no puede nombrar qué es diferente, pero lo siente. Esa sensación ES
 
 ---
 
-_ui-ux-layer CORE v3.1 · Unreal>ille Studio · 2026-05-22_
+_ui-ux-layer CORE v3.1 · Unrealville Studio · 2026-05-22_
 _Extensiones: motion.md · 3d-spatial.md · mobile-ux.md · design-tokens.md · a11y.md_

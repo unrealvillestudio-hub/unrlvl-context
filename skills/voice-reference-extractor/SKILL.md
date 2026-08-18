@@ -283,6 +283,6 @@ Ver: `skills/content-pipeline/SKILL.md` → LAYER 1.5 VOICE_GENOME_INJECTION.
 
 ---
 
-*voice-reference-extractor v1.0 · Unreal>ille Studio · 2026-06-05*  
+*voice-reference-extractor v1.0 · Unrealville Studio · 2026-06-05*  
 *Pipeline: ffmpeg → Whisper → Tesseract → consolidado .md + .json*  
 *Idiomas por defecto: es (Whisper) + spa+eng (Tesseract)*

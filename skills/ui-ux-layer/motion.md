@@ -452,4 +452,4 @@ COMPOSITE LAYERS:
 
 ---
 
-_motion.md v1.0 · ui-ux-layer extension · Unreal>ille Studio · 2026-05-21_
+_motion.md v1.0 · ui-ux-layer extension · Unrealville Studio · 2026-05-21_

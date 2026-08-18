@@ -301,4 +301,4 @@ Antes de cualquier sesión de procesamiento:
 
 ---
 
-_SKILL image-processing v1.0 · Unreal>ille Studio · ImageLab + LoRA Prep_
+_SKILL image-processing v1.0 · Unrealville Studio · ImageLab + LoRA Prep_

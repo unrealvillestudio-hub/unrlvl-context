@@ -1702,7 +1702,7 @@ ecosystem_graph.json            ← raíz del repo (Sprint 1)
 
 ---
 
-_AYRA_MASTER_PLAN.md · Unreal>ille Studio · v3.3 · 2026-05-13_
+_AYRA_MASTER_PLAN.md · Unrealville Studio · v3.3 · 2026-05-13_
 _v2.1 → v3.0: MCP Layer · Arquitectura Cron · Compute Estimado · graph_validate · ayra.digests · ayra.compute_budget_
 _v3.0 → v3.1: UNRLVL-OPS cost interface · api/cost-export.ts · separación responsabilidades_
 _v3.1 → v3.2: Audit completo GitHub(23 repos)+Vercel(23 proyectos)+Supabase(53 EFs, 9 schemas) · EcosystemGraph con datos reales_

@@ -641,6 +641,6 @@ Los labs hacen fetch directo — no más Google Sheets como intermediario.
 
 ---
 
-*Documento generado por Claude — Unreal>ille Studio*
+*Documento generado por Claude — Unrealville Studio*
 *v4.0 — Basado en auditoría real de DB_VARIABLES_v6_4 (40 hojas, 2026-03-25)*
 *Hallazgos nuevos vs v3.0: HUMANIZE F2.5 · IMAGELAB_PRESETS · Channel_Prompt_Rules · Output_Templates (16) · Canal_Blocks (13 canales) · Delivery_Format_Blocks · Meta_ES/VAL · K>Neurone · DV_Canales/Formatos/Idiomas*

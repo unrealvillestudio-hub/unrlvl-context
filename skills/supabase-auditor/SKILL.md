@@ -203,5 +203,5 @@ El map desactualizado es PEOR que no tener map: genera confianza falsa. Por eso 
 
 ---
 
-_Supabase Auditor SKILL v1.0 · Unreal>ille Studio · 2026-06-03_
+_Supabase Auditor SKILL v1.0 · Unrealville Studio · 2026-06-03_
 _Ubicación canónica: `skills/supabase-auditor/SKILL.md`_

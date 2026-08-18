@@ -1,5 +1,5 @@
 # CHECKPOINT RULES v1.0
-_Unreal>ille Studio · 2026-05-17_
+_Unrealville Studio · 2026-05-17_
 
 ---
 
@@ -63,4 +63,4 @@ El checkpoint es **completamente silencioso** salvo score = 5.
 
 ---
 
-_CHECKPOINT_RULES.md · Unreal>ille Studio · knowledge/ecosystem/professor/_
+_CHECKPOINT_RULES.md · Unrealville Studio · knowledge/ecosystem/professor/_

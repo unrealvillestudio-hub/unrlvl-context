@@ -195,5 +195,5 @@ Antes de considerar cualquier pieza de contenido terminada en voz de Patricia, h
 
 ---
 
-*PO_VOICE_ARTICLES v1.0 · 2026-05-12 · Unreal>ille Studio para NeuroneSCF*
+*PO_VOICE_ARTICLES v1.0 · 2026-05-12 · Unrealville Studio para NeuroneSCF*
 *Generado desde sesión de trabajo real — no es un documento teórico*

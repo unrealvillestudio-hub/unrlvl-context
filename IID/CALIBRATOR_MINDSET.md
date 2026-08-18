@@ -210,4 +210,4 @@ Decisión de Sam: **un skill primario que carga secundarios a necesidad.** Separ
 - **D7Herbal conversión** (`d7herbal_conversion` v1.0): sesión 10-jul, bucle fb0b08ab (10 turnos persistidos en `intel.calibration_turns`).
 - **ForumPHs conversión** (`fphs_conversion` v1.0): sesión 17-jul, recalibración quirúrgica + turnos 1-3 del bucle (sesión `e1c33c9b`) + 2 documentos BI reales.
 
-_Fin — CALIBRATOR_MINDSET.md · insumo de diseño · Unreal>ille IID · 2026-07-17_
+_Fin — CALIBRATOR_MINDSET.md · insumo de diseño · Unrealville IID · 2026-07-17_
