@@ -1,4 +1,10 @@
 # IID OUTPUT QUALITY — LOTE A — Spec de ejecución para Claude Code
+
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
 ### Cirugía in-place sobre `content-run-stage` + un ajuste de cron. Cubre #5h, #5j, #5k, #5l.
 _Versión 1.0 · 2026-06-18 · Autor: Claude (chat) · Ejecutor: Claude Code · Marca: LucienSael + UnrealvilleStudio (piloto) · Ruta B (UPDATE in-place, presenta cambio, Sam confirma; CC NO auto-mergea)_
 
@@ -69,7 +75,7 @@ Tras un run de prueba: `assets.image.url` empieza por `https://amlvyycfepwhiindx
 ### 3.1 Qué se rompió
 El title viaja embebido como primera línea del cuerpo. Como ambas hermanas parten del mismo finding, el title las relaciona aunque el cuerpo diverja (similitud 0.07) → antiautobaneo comprometido.
 
-### 3.2 Qué debe hacer el Builder (stage 1, `buildFromGenome`)
+### 3.2 Qué debe hacer el Builder (stage 1, `generadorLocal`)
 - El prompt del Builder debe instruir generar un **title propio**, derivado del ángulo+genoma de ESA marca, **NO** copiado del title del finding crudo. El title debe poder diferir completamente entre Lucien y UNRLVL para el mismo finding.
 - Persistir el title como **campo separado**: `assets.copy.title`.
 - `assets.copy` pasa de `{ raw, aife_filtered }` a `{ title, raw, aife_filtered }`.
@@ -165,7 +171,7 @@ Sam aprueba en <7 días siempre; 12 da margen. Las piezas publicadas (reutilizab
 
 ## 8. ORDEN DE TRABAJO PARA CC
 
-1. Leer la EF `content-run-stage` deployada (fuente de verdad; ESZIP no legible → reproducir/localizar por comportamiento). Localizar: (a) call-site del stage imagelab, (b) `buildFromGenome` stage 1, (c) INSERT/UPDATE de `assets`, (d) bloque de envío Resend.
+1. Leer la EF `content-run-stage` deployada (fuente de verdad; ESZIP no legible → reproducir/localizar por comportamiento). Localizar: (a) call-site del stage imagelab, (b) `generadorLocal` stage 1, (c) INSERT/UPDATE de `assets`, (d) bloque de envío Resend.
 2. Implementar #5j (§2): upload a `unrlvl-media/temp/`, URL pública en `assets.image.url`, `storage_path` nuevo, sin base64.
 3. Implementar #5h (§3): `assets.copy.title` separado, divergente por marca, body sin title duplicado.
 4. Implementar #5k (§4): mapa `BRAND_SIGNATURE`, firma como última línea fuera de markdown.

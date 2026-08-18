@@ -1,5 +1,11 @@
 # Ecosystem Filemap — Unrealville Studio
-_Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa: generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (buildFromGenome) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 y `fphs_conversion` reactivada registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction`) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro · HRD_ACTUALIZA 2026-08-14 sincronizada desde `ecosystem.json` v2026-08-14-v1 (reconciliación de estado AIID/CopyLab, verificada por código y SQL): flujo Brand Cache actualizado al escritor y estado reales (`CopyLab/api/brand-cache.js` v2.4 → `brand_cache_snapshots` v2.4, 9 marcas, cron `build_all` nunca ejecutado) · voces de ForumPHs añadidas al bloque `brand_voice_genome` (3 en v1.1 activas + `fphs_institucional` v0.5 inactiva) · `audience_brief` stage 0 huérfano registrado en el flujo IID. Sólo campos presentes literalmente en el JSON. Adición aditiva, historia preservada_
+
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
+_Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa: generado desde ecosystem.json v2026-06-24-v1 · No editar manualmente · ImageLab v7 (migración Imagen→Gemini) + BGRemover + labs/ImageLab/ actualizados al 2026-06-24; resto preservado de la versión anterior · regla de nomenclatura de labs y corrección del flow (el generador local) sincronizadas desde ecosystem.json v2026-08-01-v1 · versiones del registro edge_functions sincronizadas al estado real (list_edge_functions) 2026-08-01: content-run-stage build _74 · iid-core v47 · content-watcher build _29 · content-dispatcher v47 (menciones fechadas preservadas) · capa de instrumentación de costo (ops_*) 2ª ola sincronizada desde ecosystem.json v2026-08-04-v1: ops_services (20) · ops_credits · billable en ops_costs+ops_generation_ledger · ops_token_sessions→ops_token_sessions_retired · v_cost_pivot 31 col · capa de costo 3ª ola sincronizada desde ecosystem.json v2026-08-05-v1: ops_cost_residual + v_cost_residual_vigente (residuo de brecha por scope: document-factory 12% · fie 3,5%) · REGLA MULTIMARCA instalada 2026-08-07: protocols/MULTIBRAND_RULE.md listado y clave `multibrand_rule` sincronizada desde ecosystem.json (adición aditiva, sin bump de _meta.version) · HRD_ACTUALIZA 2026-08-08 sincronizada desde ecosystem.json v2026-08-08-v1: `nscf_editorial` v1.0 y `fphs_conversion` reactivada registradas en `brand_topics.subscriptions` · `content_type_registry` (+`max_tokens`, +`format_instruction`) listada en tables.content · `multibrand_rule` 4/5 casos pagados (pendiente `OBJECTIVE_LABEL_TO_TAG`) · HRD_ACTUALIZA 2026-08-13 sincronizada desde ecosystem.json v2026-08-13-v1: sesión de posicionamiento y web pública (tesis canónica de marca sellada; la web vive en `CoreProject`, PR #3) — ningún nodo del JSON cambia salvo `_meta` (`version`→2026-08-13-v1, `previous`→2026-08-08-v1, `last_session` 2026-08-08 movido a `previous_sessions`); el cuerpo de este derivado se conserva íntegro · HRD_ACTUALIZA 2026-08-14 sincronizada desde `ecosystem.json` v2026-08-14-v1 (reconciliación de estado AIID/CopyLab, verificada por código y SQL): flujo Brand Cache actualizado al escritor y estado reales (`CopyLab/api/brand-cache.js` v2.4 → `brand_cache_snapshots` v2.4, 9 marcas, cron `build_all` nunca ejecutado) · voces de ForumPHs añadidas al bloque `brand_voice_genome` (3 en v1.1 activas + `fphs_institucional` v0.5 inactiva) · `audience_brief` stage 0 huérfano registrado en el flujo IID. Sólo campos presentes literalmente en el JSON. Adición aditiva, historia preservada_
 
 ---
 
@@ -128,7 +134,7 @@ FLUJO COMPLETO:
     → iid-process → iid_findings → iid_content_queue (brand_id + domain)
     → content-dispatcher v36 (jobid 29, cada 30min, .limit(5) DISPATCH_LIMIT + lee scheduled_for)
     → content-run-stage v57 (deploy 2026-07-29):
-         ├─ Builder buildFromGenome ⚠️DESVIACIÓN (motor LOCAL; lee brand_topics + brand_voice_genome — debe llamar a CopyLab por su api_endpoint, no reconstruir su motor)
+         ├─ Builder CopyLab (execLab + builder_input; endpoint desde lab_configs) ✅ A1 lo cableó, A3 retiró el generador local
          ├─ AIFE filter
          ├─ ImageLab → Vertex (gemini-2.5-flash-image, migrado 24-jun) → Storage unrlvl-media (CDN)
          ├─ SocialLab(runSocialLabDirect) ⚠️DESVIACIÓN (motor LOCAL; debe llamar a SocialLab por su api_endpoint)
@@ -148,12 +154,10 @@ STAGE 0 DECLARADO Y NUNCA EJECUTADO (verificado 2026-08-14):
        SIN llamar a fireNextStage → STALL SILENCIOSO
   Trampa latente, no fallo activo. O se cablea, o se desactiva en lab_configs.
 
-ALCANCE VERIFICADO DEL DESVÍO (content-run-stage/index.ts @ main, 167.492 b / 2.499 líneas):
+ALCANCE DEL DESVÍO — HISTÓRICO (levantado 2026-08-14; la rama copylab ya no aplica):
   L2201-2203  el stage lee lab_configs INCLUYENDO api_endpoint para todos los labs
-  L2233→L2252 rama copylab → buildFromGenome(...) LOCAL · api_endpoint cargado y NUNCA usado
-  L919→L1115  buildFromGenome → fetch("https://api.anthropic.com/v1/messages") directo
-              (L174 CLAUDE_MODEL_ID = "claude-sonnet-5")
-  L2424-2427  rama sociallab → runSocialLabDirect(...) → L1377, también directo
+  rama copylab → execLab(lab.api_endpoint, ..., builder_input) ✅ desde A1; el generador local se borró en A3
+  L2424-2427  rama sociallab → runSocialLabDirect(...) → L1377, fetch directo — SIGUE PENDIENTE
   CONTRASTE:
   L2310  aife     → execLab(lab.api_endpoint, ...) ✅
   L2362  imagelab → execLab(lab.api_endpoint, ...) ✅

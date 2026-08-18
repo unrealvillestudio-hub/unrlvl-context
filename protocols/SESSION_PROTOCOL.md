@@ -1,4 +1,10 @@
 # PROTOCOLO DE SESIÓN — Unrealville Studio
+
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
 **Versión:** 2026-07-31-v17 | **Mantenido por:** Claude
 
 > **Cambios v17 (2026-07-31):** (1) **Corregido el punto de push de CC a `unrlvl-context`** según la instrucción de Sam del 29-jul, que revoca la redacción de v16 ("CC nunca pushea a `unrlvl-context`"): **CC SÍ pushea ramas de PR** a `unrlvl-context`; la restricción es **sólo `main` y el merge** (regla vigente en `protocols/CC_PROTOCOL.md` → "Flujo de entrega de context files"). (2) **Añadida al Paso 1 de carga** la confirmación de que **los labs son apps del ecosistema** (CopyLab/ImageLab/SocialLab/VideoLab = repo + UI + modo dual), nunca servicios genéricos.
@@ -84,7 +90,7 @@ El PAT (`GH_PAT`) vive en Vercel Environment Variables — nunca en el chat.
 
 Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprendizajes pendientes de aprobación."`
 
-**Confirmación de nomenclatura (Paso 1, añadida v17):** los labs son **apps del ecosistema** — cuando Sam dice **CopyLab / ImageLab / SocialLab / VideoLab** se refiere a **estas apps** (repo + UI + modo dual sync/async), **nunca a un servicio genérico**. Ningún carril reconstruye el motor de un lab existente: lo llama por su `api_endpoint` (`lab_configs`). Precedente del desvío a corregir: `buildFromGenome` (motor local en `content-run-stage` que reconstruye CopyLab en vez de invocarlo; igual `runSocialLabDirect` por SocialLab). Ver `ecosystem.json → labs._note` / `labs_wiring`.
+**Confirmación de nomenclatura (Paso 1, añadida v17):** los labs son **apps del ecosistema** — cuando Sam dice **CopyLab / ImageLab / SocialLab / VideoLab** se refiere a **estas apps** (repo + UI + modo dual sync/async), **nunca a un servicio genérico**. Ningún carril reconstruye el motor de un lab existente: lo llama por su `api_endpoint` (`lab_configs`). Precedente del desvío a corregir: `generadorLocal` (motor local en `content-run-stage` que reconstruye CopyLab en vez de invocarlo; igual `runSocialLabDirect` por SocialLab). Ver `ecosystem.json → labs._note` / `labs_wiring`.
 
 ### Paso 2 — Pregunta
 > *"Hola Sam, ¿con qué marca y proyecto vamos a trabajar?"*

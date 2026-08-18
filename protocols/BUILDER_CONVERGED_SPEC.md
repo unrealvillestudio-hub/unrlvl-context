@@ -1,17 +1,23 @@
 # BUILDER CONVERGIDO — Spec de ejecución para Claude Code
-### Reescritura in-place de `callClaudeDirect → buildFromGenome()` dentro de `content-run-stage`
+
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
+### Reescritura in-place de `callClaudeDirect → generadorLocal()` dentro de `content-run-stage`
 _Versión 1.0 · 2026-06-16 · Autor: Claude (chat) · Ejecutor: Claude Code · Marca: LucienSael + UnrealvilleStudio (piloto)_
 
 ---
 
-> **ESTADO 2026-08-01 — SUPERSEDIDA PARCIALMENTE.** Esta spec creó `buildFromGenome`, que sigue vivo y en producción. CopyLab Fase A (PRs #8–#13) trasladó su gobierno al lab vía el contrato `builder_input`; Fase B retira `buildFromGenome` del carril. **Los parámetros de modelo de §3 están caducados y NO deben seguirse:** `claude-sonnet-4-20250514` está retirado, `temperature` con cualquier valor no-default hace fallar a Sonnet 5 con 400, y los techos vigentes son 4000 editorial / 640 social. La lógica de resolución de §2 (marca, tema, voz híbrida por destino, genoma) sigue siendo canónica y es la que Fase B extrae a `buildBuilderInput()`.
+> **ESTADO 2026-08-01 — SUPERSEDIDA PARCIALMENTE.** Esta spec creó `generadorLocal`, que sigue vivo y en producción. CopyLab Fase A (PRs #8–#13) trasladó su gobierno al lab vía el contrato `builder_input`; Fase B retira `generadorLocal` del carril. **Los parámetros de modelo de §3 están caducados y NO deben seguirse:** `claude-sonnet-4-20250514` está retirado, `temperature` con cualquier valor no-default hace fallar a Sonnet 5 con 400, y los techos vigentes son 4000 editorial / 640 social. La lógica de resolución de §2 (marca, tema, voz híbrida por destino, genoma) sigue siendo canónica y es la que Fase B extrae a `buildBuilderInput()`.
 
 ---
 
 ## 0. CONTEXTO Y DECISIÓN DE ARQUITECTURA
 
 **Decisión tomada (Sam, 2026-06-16): A1 — cirugía in-place.**
-NO se crea EF nueva. Se reescribe **solo** la función `callClaudeDirect` (stage 1 = copylab) dentro de la EF `content-run-stage`, renombrándola a `buildFromGenome`. El resto de la máquina de stages (aife, imagelab, sociallab, email Resend, logging) queda **intacto**.
+NO se crea EF nueva. Se reescribe **solo** la función `callClaudeDirect` (stage 1 = copylab) dentro de la EF `content-run-stage`, renombrándola a `generadorLocal`. El resto de la máquina de stages (aife, imagelab, sociallab, email Resend, logging) queda **intacto**.
 
 **Por qué importa:** el "builder convergido" del que habla `ecosystem.json` es conceptual (un solo builder que lee `intel.brand_topics` e inyecta `brand_voice_genome`), no una topología nueva. Mínimo blast radius.
 
@@ -32,7 +38,7 @@ NO se crea EF nueva. Se reescribe **solo** la función `callClaudeDirect` (stage
 
 ### SÍ se toca
 - La rama `if (lab.lab_key === "copylab")` dentro de `runStage()` en `content-run-stage`.
-- La función `callClaudeDirect` → se reemplaza por `buildFromGenome`.
+- La función `callClaudeDirect` → se reemplaza por `generadorLocal`.
 - Se añaden 2 helpers nuevos: `resolveVoiceDestination()` y `loadBrandTopic()` + `loadVoiceGenome()`.
 
 ### NO se toca (fuera de alcance, NO modificar)
@@ -109,11 +115,11 @@ Si no hay genoma activo → `failed`, `errorMsg = "sin brand_voice_genome activo
 
 ---
 
-## 3. CONSTRUCCIÓN DEL PROMPT (`buildFromGenome`)
+## 3. CONSTRUCCIÓN DEL PROMPT (`generadorLocal`)
 
 Reemplaza la firma vieja. Nueva firma sugerida:
 ```ts
-async function buildFromGenome(
+async function generadorLocal(
   brandId: string,
   domain: string,
   format: string,
@@ -191,7 +197,7 @@ CC debe poder afirmar, con query/log concreto, que tras el deploy:
 
 1. Leer la EF `content-run-stage` v25 deployada (fuente de verdad, no git si hay drift).
 2. Añadir helpers `loadBrandTopic`, `loadVoiceGenome`, `resolveVoiceDestination`.
-3. Reescribir la rama `copylab` para llamar `buildFromGenome` en vez de `callClaudeDirect`.
+3. Reescribir la rama `copylab` para llamar `generadorLocal` en vez de `callClaudeDirect`.
 4. Matar el fallback silencioso `?? "UnrealvilleStudio"`.
 5. Persistir `voice_id` real + `builder_meta`.
 6. Deploy a la EF viva (es inerte hasta que el dispatcher con `.limit(1)` dispare un job de prueba controlado — patrón preview/live aceptado).

@@ -1,5 +1,11 @@
 # PROYECTO CopyLab — el generador hereda, no reconstruye · profilaxis del desvío
 
+> **Nota A3 (2026-08-18).** El generador local de `content-run-stage` —el motor de escritura que vivía
+> dentro de la EF— se retiró; el generador del carril es CopyLab, vía `execLab` + `builder_input`. Las
+> menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
+> aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
+
+
 _Persiste el brief de CopyLab (sesión previa) · Rama `ctx/labs-son-apps` · v2026-08-01-v1_
 _Documento de plan. No es fuente de verdad de estado — el estado vive en `ecosystem.json`, `IID/session_log.md` §9 y `AGENDA.md`._
 
@@ -7,7 +13,7 @@ _Documento de plan. No es fuente de verdad de estado — el estado vive en `ecos
 
 ## Contexto en una frase
 
-El carril async **no llama a CopyLab**: arma el copy con `buildFromGenome`, un motor **local** dentro de
+El carril async **no llama a CopyLab**: arma el copy con `generadorLocal`, un motor **local** dentro de
 `content-run-stage`, mientras `lab_configs` declara `copylab → unrlvl-copy-lab.vercel.app` y nunca lo
 invoca (lo mismo con `sociallab` / `runSocialLabDirect`). Eso es una **⚠️ DESVIACIÓN a corregir, NO
 arquitectura** (ver `ecosystem.json → labs._note`, `iid_subsystem.pipeline.flow` y `labs_wiring`). Este
@@ -21,9 +27,9 @@ duplicado.
 
 ## Fase A — el generador hereda las 5 capas de gobierno
 
-La corrección no puede degradar la calidad: `buildFromGenome` **sí** aporta gobierno (lo que no aporta es
+La corrección no puede degradar la calidad: `generadorLocal` **sí** aporta gobierno (lo que no aporta es
 ángulo creativo, que es justamente lo que tiene CopyLab). Por eso el generador unificado debe **heredar
-las 5 capas de gobierno** antes de que `buildFromGenome` pueda retirarse.
+las 5 capas de gobierno** antes de que `generadorLocal` pueda retirarse.
 
 De esas 5 capas, **dos son portación real** — código de gobierno que se trae desde/hacia CopyLab en este
 frente, no algo que ya estuviera resuelto:
@@ -66,10 +72,10 @@ El stage `copylab` del carril deja de usar el motor local y pasa a **`execLab`**
 `api_endpoint` de `lab_configs` (`unrlvl-copy-lab.vercel.app /api/execute`), como ya se hace con ImageLab
 (el único lab que hoy el carril invoca de verdad por su endpoint).
 
-**Condición de retiro — dura:** `buildFromGenome` se retira **sólo** cuando (a) las **5 capas de gobierno**
+**Condición de retiro — dura:** `generadorLocal` se retira **sólo** cuando (a) las **5 capas de gobierno**
 están heredadas y verificadas en el generador unificado, y (b) hay una **corrida verificada** end-to-end
 que confirma paridad de gobierno + ángulo. Hasta entonces, el motor local se conserva: la calibración
-sigue con `buildFromGenome` y **no** se bloquea por este frente.
+sigue con `generadorLocal` y **no** se bloquea por este frente.
 
 ---
 
@@ -98,7 +104,7 @@ que es BLOQUEANTE de R4B — pero la calibración no depende de ella.
 **Fase A ejecutada y cerrada** en los PRs #8–#13 (CopyLab @ `main` `e7d517c`). El **diagnóstico de este
 documento se mantiene como registro** — no se reescribe. El **estado vigente** de CopyLab vive en
 `knowledge/ecosystem/labs/COPYLAB_NOTES.md`; la **continuación** (Fase B: `execLab` en el stage `copylab`,
-retiro seguro de `buildFromGenome`) va al handoff de Fase B.
+retiro seguro de `generadorLocal`) va al handoff de Fase B.
 
 ---
 
@@ -156,8 +162,8 @@ Verificado por código. Ninguno es rediseño; todos son cableado:
    esos ya los tiene el carril (viajan EN el `builder_input`, y `brand_topic_id` sale de
    `loadBrandTopic`), así que se escriben desde el carril sin pedírselos al lab.
 6. **Ledger.** `logGen` para copylab pasa a leer `usage.input_tokens` / `usage.output_tokens`
-   de la respuesta de CopyLab, no de `buildFromGenome`.
+   de la respuesta de CopyLab, no de `generadorLocal`.
 
-**Condición de retiro de `buildFromGenome` — sin cambios:** sólo tras corrida verificada
+**Condición de retiro de `generadorLocal` — sin cambios:** sólo tras corrida verificada
 end-to-end con paridad de gobierno + ángulo. Se retira en un PR posterior, nunca en el mismo
 que introduce el cable.
