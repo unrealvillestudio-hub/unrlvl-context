@@ -170,7 +170,7 @@ Primer genoma calibrado con este protocolo. Sirve de few-shot para futuras marca
 7. Verificar voces hermanas (§7) — ¿una o varias voice_id?
 8. Aplicar reglas transversales (§8) y el techo de producción (§6) al prompt del generador.
 
-_Fin del Tratado v1.0 · genome-calibration · Unreal>ille IID_
+_Fin del Tratado v1.0 · genome-calibration · Unrealville IID_
 
 ---
 

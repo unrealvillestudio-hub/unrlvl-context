@@ -76,4 +76,4 @@ Las radiografías individuales viven en CoreProject como referencia histórica.
 ---
 
 *Audit completado en una sola sesión — 2026-04-02*
-*Claude Sonnet 4.6 · Unreal>ille Studio*
+*Claude Sonnet 4.6 · Unrealville Studio*

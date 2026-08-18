@@ -326,5 +326,5 @@ trg_auto_calc_session_cost — auto-calcula cost_usd al insertar sesión
 
 ---
 
-_SKILL cost-layer v1.0 · Unreal>ille Studio · UNRLVL-OPS extension_
+_SKILL cost-layer v1.0 · Unrealville Studio · UNRLVL-OPS extension_
 _Schema deployado en Supabase public.* al 2026-04-24_

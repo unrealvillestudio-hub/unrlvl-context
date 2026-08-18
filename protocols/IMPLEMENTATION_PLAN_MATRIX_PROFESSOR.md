@@ -496,5 +496,5 @@ ORDER BY platform, created_at;
 
 ---
 
-_IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md · Unreal>ille Studio · v1.1 · 2026-05-17_
+_IMPLEMENTATION_PLAN_MATRIX_PROFESSOR.md · Unrealville Studio · v1.1 · 2026-05-17_
 _v1.0 → v1.1: Cache Strategy añadida (professor_cache + TTLs) · professor-get-context v3 · Sprints 1-4 completados_

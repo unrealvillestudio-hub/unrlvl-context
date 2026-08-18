@@ -381,4 +381,4 @@ useEffect(() => {
 
 ---
 
-_3d-spatial.md v1.0 · ui-ux-layer extension · Unreal>ille Studio · 2026-05-21_
+_3d-spatial.md v1.0 · ui-ux-layer extension · Unrealville Studio · 2026-05-21_

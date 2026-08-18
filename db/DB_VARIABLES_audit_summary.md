@@ -81,4 +81,4 @@
 | **Fase 5** | Conectar labs — actualizar código de cada lab para leer de Supabase | — |
 
 ---
-*Claude — Unreal>ille Studio · 2026-03-25 · unrlvl-context/db/DB_VARIABLES_audit_summary.md*
+*Claude — Unrealville Studio · 2026-03-25 · unrlvl-context/db/DB_VARIABLES_audit_summary.md*

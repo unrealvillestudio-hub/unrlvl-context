@@ -388,4 +388,4 @@ INSERT INTO public.agents (
 
 ---
 
-_SKILL agent-builder v1.0 · Unreal>ille Studio · AgentLab · Supabase-first_
+_SKILL agent-builder v1.0 · Unrealville Studio · AgentLab · Supabase-first_

@@ -516,4 +516,4 @@ CC desplegó las EFs al proyecto Supabase **vivo** (no rama aislada), razonando 
 - Marketing B2B = $0 ads en fase lanzamiento presencial.
 
 ---
-_Unreal>ille · NeuroneSCF · 2026-06-16 sesión 7_
+_Unrealville · NeuroneSCF · 2026-06-16 sesión 7_

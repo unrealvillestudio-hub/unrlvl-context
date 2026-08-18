@@ -1,5 +1,5 @@
 # PROFESSOR PROTOCOL v1.0
-_Unreal>ille Studio · Operativo desde: 2026-05-17_
+_Unrealville Studio · Operativo desde: 2026-05-17_
 _Documento: `knowledge/ecosystem/professor/PROFESSOR_PROTOCOL.md`_
 
 ---
@@ -132,4 +132,4 @@ FINAL
 
 ---
 
-_PROFESSOR_PROTOCOL.md · Unreal>ille Studio · knowledge/ecosystem/professor/_
+_PROFESSOR_PROTOCOL.md · Unrealville Studio · knowledge/ecosystem/professor/_

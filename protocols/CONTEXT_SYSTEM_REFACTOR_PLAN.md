@@ -361,4 +361,4 @@ Detectadas al cotejar este plan + custom instructions contra el ecosystem.json r
 3. **AGENDA ↔ JSON:** desincronización documentada en Mejora 5 (no re-explicar aquí).
 
 ---
-_Anexo de seguridad · Unreal>ille Studio · 2026-06-03 · ampliado 2026-06-29_
+_Anexo de seguridad · Unrealville Studio · 2026-06-03 · ampliado 2026-06-29_

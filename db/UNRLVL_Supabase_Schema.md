@@ -678,4 +678,4 @@ stakeholders                  [1:N brands — opcional]
 6. **GeoMix** para VizosCosmetics, PatriciaOsorio*, NeuroneCosmetics, VivoseMask
 
 ---
-*Claude — Unreal>ille Studio · 2026-03-25 · unrlvl-context/db/UNRLVL_Supabase_Schema.md*
+*Claude — Unrealville Studio · 2026-03-25 · unrlvl-context/db/UNRLVL_Supabase_Schema.md*

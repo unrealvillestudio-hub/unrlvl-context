@@ -443,4 +443,4 @@ La OPS app tiene un usuario muy específico: admin de campo del edificio, en mov
 
 ---
 
-_mobile-ux.md v1.0 · ui-ux-layer extension · Unreal>ille Studio · 2026-05-21_
+_mobile-ux.md v1.0 · ui-ux-layer extension · Unrealville Studio · 2026-05-21_

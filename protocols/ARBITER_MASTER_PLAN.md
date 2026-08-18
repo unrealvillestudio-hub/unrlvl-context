@@ -389,5 +389,5 @@ Sam puede leer y editar en lenguaje humano. Estructura:
 
 ---
 
-_ARBITER v1.0 Master Plan · Unreal>ille Studio · 2026-05-24_
+_ARBITER v1.0 Master Plan · Unrealville Studio · 2026-05-24_
 _Siguiente acción: Sam activa implementación post-Ayra Sprint 0_

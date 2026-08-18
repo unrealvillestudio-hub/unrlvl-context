@@ -265,4 +265,4 @@ Se documentan aquí porque afectan a toda calibración mientras existan:
 4. **`objective_by_platform` NULL en todas las marcas** → gate 7 informativo hasta poblarlo.
 5. **AIFE no corre dentro del bucle** (§5.2) — un texto convergido no está filtrado.
 
-_Fin · voice-craft v1.0 · capa primaria compartida · Unreal>ille IID_
+_Fin · voice-craft v1.0 · capa primaria compartida · Unrealville IID_

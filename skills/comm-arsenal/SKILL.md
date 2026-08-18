@@ -402,4 +402,4 @@ Mismo aviso que `voice-craft` §10: **este skill no cambia el runtime.** `/api/c
 
 Para que el arsenal llegue al carril automático hay que inyectarlo en `_genomePromptBuilder.ts` — sprint de código, no de documentación. Mientras tanto, la calidad del generador y la de este skill **divergen**: cuanto mejor sea este documento, mayor la brecha entre lo que se escribe en chat y lo que produce el pipeline.
 
-_Fin · comm-arsenal v1.0 · el cuerpo de técnicas · hermano de voice-craft · Unreal>ille IID_
+_Fin · comm-arsenal v1.0 · el cuerpo de técnicas · hermano de voice-craft · Unrealville IID_

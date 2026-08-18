@@ -220,5 +220,5 @@ Supabase:get_advisors (type=security)
 
 ---
 
-_SKILL security v1.1 · Unreal>ille Studio · Supabase + Vercel_
+_SKILL security v1.1 · Unrealville Studio · Supabase + Vercel_
 _v1.1 corrige drift detectado en sesión de seguridad 2026-06-03. Fuente de verdad de acceso: supabase_access_map.json_

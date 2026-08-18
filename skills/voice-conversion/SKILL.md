@@ -119,4 +119,4 @@ Cuatro voces de conversión ya calibradas. **Se leen como MECANISMO, nunca como 
 | `fphs_conversion` v1.0 | resultado medible del sistema | el administrador reactivo que nunca midió | reencuadre patrimonial; frontera dura: la JD decide, FPHs prepara |
 | `po_consumer` v0.6 | ⚠️ **en revisión** (#72) | — | declara autoridad ("+35 años") → viola la regla dura. No usar como ejemplar hasta corregir. |
 
-_Fin · voice-conversion v1.0 · perfil secundario · invoca voice-craft · Unreal>ille IID_
+_Fin · voice-conversion v1.0 · perfil secundario · invoca voice-craft · Unrealville IID_
