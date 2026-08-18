@@ -714,7 +714,7 @@ Cron 11:00 UTC (7:00am ET). `digestBuilder` consulta Supabase (ayra.jobs, ayra.d
 
 [Dashboard] [Responder decisiones]
 ---
-*Ayra · Unreal>ille Studio · Próximo digest mañana 07:00am*
+*Ayra · Unrealville Studio · Próximo digest mañana 07:00am*
 ```
 
 ### 8.3 Sección Signal (cuando activo por marca)
