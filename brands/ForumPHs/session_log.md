@@ -1,5 +1,37 @@
 # ForumPHs — Session Log
 
+## 2026-08-18 — El eje `decide`/`influye` llega a la marca, y el CTA se queda atrás
+
+Sesión de **carril**; el detalle completo vive en `IID/session_log.md` (2026-08-18). Acá va lo que
+es de ForumPHs.
+
+### Lo sembrado
+
+- **`HR-FPHS-10` migrada al eje canónico `decide`/`influye`**, con su `instruction` propia
+  (`intel.watcher_rules.instruction`, columna nueva de esta sesión). La regla venía juzgando contra
+  el vocabulario viejo.
+- **`creative_compatibility_rules`** — `fphs_conversion` y `fphs_editorial` × `email_divulgacion`,
+  heredando el perfil de `editorial_post`.
+- **`intel.brand_topic_platform_mode`** — **135 filas**, `cadence_mode: rotating`. El `anchor` queda
+  en **NULL deliberadamente**: lo rotativo no ancla día, y dejarlo vacío es la declaración, no un
+  olvido.
+
+### 🔴 BLOQUEANTE DEL 22-AGO — `AUDIENCE_CTA` con claves legacy
+
+`audience_frame` migró **en la columna** a `decide`/`influye`. **`AUDIENCE_CTA` en CopyLab no
+migró:** sigue en `jd`/`doliente` y por eso **resuelve a cadena vacía**. Consecuencia medible:
+**18 topics activos de ForumPHs con el escritor sin instrucción de CTA**. Nada falla, nada avisa —
+el CTA simplemente no está.
+
+**Prohibido reponer alias.** Mapear `influye → doliente` no repara: pediría **el CTA que el juez, ya
+migrado, rechaza**. La cura es migrar al consumidor, no revivir el vocabulario. Va en **handoff
+propio**; la regla general quedó escrita en `protocols/MULTIBRAND_RULE.md` **§13**.
+
+### Sigue abierto de antes
+
+- **Cuentas Meta de ForumPHs** — `meta_accounts` sin fila. **Bloquea publicar el 22-ago**, no
+  programar. Dueño: Sam.
+
 ## 2026-08-16 — Cadencia al revés, 32/32 con regla propia, y el arranque del 22-ago
 
 Sesión de **siembra y corrección** sobre ForumPHs. El detalle del carril (Scheduler, snapshots,

@@ -293,6 +293,101 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-18 — El carril async cerrado end-to-end: CopyLab es el generador y el motor local ya no existe
+
+Sesión de **cierre de carril**. Lo que es de marca vive en `brands/ForumPHs/session_log.md`
+(2026-08-18); acá va el carril.
+
+### Lo que se mergeó
+
+En `unrlvl-iid-functions`: **#62** (recolección de `source_urls` en `iid-research`) · **#63**
+(`FUENTES DEL HALLAZGO` a los gates 4 y 6, `PIECE_TEXT_CAP` a 2500) · **#64** (A1, el cable de
+CopyLab + B1 `claims` y hardcode de marca + B2 parser del juez) · **#65** (observabilidad:
+`builder_dispatch`, `api_key_ref` `EXTERNAL:`) · **#66** (C1, brief de escritura: `claims`,
+`mechanism`, `case_example`) · **#67** (techo `STRUCTURE_MAX_TOKENS` 12000 y fail-loud
+`STRUCTURE_TRUNCATED`) · **#68** (A3, el retiro del generador local; su contraparte documental es
+`unrlvl-context` **#51**) · **#69** y **#70** (D1 casos múltiples, D2 modo escritura) · **#71**
+(guarda de casos sin título e instrumentación) · **#73** (G1-A auditoría + G1-B plataforma al juez).
+
+En `CopyLab`: **#26** (A2, canal por `platform_canal_map`) · **#27** y **#28** (claims) · **#29** y
+**#30** (D1 y D2, contraparte de los de arriba) · **#31** (G1-C, techo aplicado).
+
+### CopyLab es el generador efectivo del carril — verificado en producción
+
+`builder_meta.generator: "copylab"` · **diez capas aplicadas** · `cache_mode: v2.0_per_slice` ·
+`output_template_id: SMPC_full` · ledger asentando `api_key_ref: EXTERNAL:copylab`.
+
+**El generador local está retirado del ecosistema.** El `grep -ri` de su identificador da **cero**
+sobre los tres repos.
+
+> **Nota de nomenclatura.** El brief de esta sesión nombra el literal del identificador retirado.
+> Acá se escribe `generadorLocal`, que es la sustitución que A3 instaló (`unrlvl-context` #51) en
+> todos los context files; el literal queda en el cuerpo de aquel PR. Escribirlo acá habría
+> invalidado la misma verificación que este párrafo reporta.
+
+### Mediciones
+
+| Corrida | Piezas | PASS |
+|---|---|---|
+| 15-ago — línea base | 12 | 0 |
+| 18-ago — 63 piezas / 4 dominios | 63 | 1 |
+| 18-ago — post-techos | 48 | 0 |
+
+Sobre esas 48 piezas, medido **por `gate_detail`** y nunca por `failed_gate`:
+
+| Gate | Rechazo |
+|---|---|
+| `objective_stimulus` | **79 %** |
+| `hard_rules` | 43 piezas |
+| `evidence` | 7 |
+| `duplication` | 4 |
+
+**El contrafáctico del informe de auditoría:** sin `objective_stimulus` bloqueante y sin
+`HR-GEN-08`, **17 de 48 pasaban (35 %)**.
+
+### DDL aplicada en producción
+
+| Objeto | Cambio |
+|---|---|
+| `intel.iid_findings` | `claims` jsonb · `mechanism` text · `case_example` jsonb · `case_examples` jsonb |
+| `intel.iid_agents` | `brand_id` text |
+| `intel.iid_research_raw` | `structure_output_raw` text |
+| `intel.watcher_rules` | `instruction` text |
+| `public.content_type_registry` | `platform` text, y los 2 índices únicos reemplazados por **4 parciales** — uno por nivel de la cascada |
+
+### Siembras (Claude.ai, SQL bajo HRD)
+
+- **`intel.iid_agents.brand_id`** — 15 agentes: los 14 `UNRLVL-*` a UnrealvilleStudio y
+  `LUCIEN-BEHAVIORAL-SCIENCE` a LucienSael. Los 15 `IID-*` genéricos quedan en **NULL a propósito**.
+- **`creative_compatibility_rules`** — `fphs_conversion` y `fphs_editorial` × `email_divulgacion`,
+  heredando el perfil de `editorial_post`.
+- **`intel.brand_topic_platform_mode`** — **135 filas** para ForumPHs, `cadence_mode: rotating`,
+  `anchor` en **NULL deliberadamente**.
+- **`intel.watcher_rules.instruction`** — `HR-GEN-08`, `HR-UNRLVL-03`, `HR-GEN-03`, `HR-GEN-01`.
+- **`HR-GEN-08`** — `meta_fb` y `meta_ig` pasan a formato corto, con la evidencia en `notes`.
+- **`HR-FPHS-10`** — migrada al eje canónico `decide`/`influye` + `instruction`.
+- **`content_type_registry`** — 6 filas BASE por plataforma: linkedin 700 · meta_ig 500 ·
+  meta_fb 320 · tiktok 150 · x 100 · blog 1400.
+
+### Lo que queda abierto, y por qué muerde
+
+- **`AUDIENCE_CTA` en CopyLab sigue con claves legacy** — bloqueante del **22-ago**. 18 topics
+  activos de ForumPHs con el escritor **sin instrucción de CTA**. **Prohibido reponer alias**: la
+  regla general quedó escrita en `protocols/MULTIBRAND_RULE.md` **§13**. Handoff propio.
+- **`audience_frame` no llega al `ctx` del juez** — mismo camino que G1-B. Bloqueante del 22-ago.
+- **`objective_stimulus` no tiene taxonomía como dato.** El gate rechaza al 79 % inventando la suya
+  (REACH, RETENTION, RESOLVE — **ninguna de las tres existe en el sistema**). Debe resolverse por
+  marca y plataforma, en tabla.
+- **`evidence_required` sigue sin leerse. NO se cierra**, aunque el resto de su frente sí.
+- **El RPC `intel.match_content_embeddings` no está migrado.** `duplication` compara texto por LLM
+  mientras se pagan embeddings a Vertex que **nadie consulta** (47 filas).
+- **`sociallab` sigue armando su post con `runSocialLabDirect`** — el último lab del carril que
+  construye el motor de un lab existente en vez de llamarlo por su endpoint (regla LABS). De los
+  cuatro labs invocados, **tres llaman al lab**.
+- **`MODEL` hardcodeado** en `iid-research` e `iid-process`, línea 6 · **`stop_reason: "refusal"`**
+  en `iid-process`, misma clase que el truncado · **`search_config` no leído**
+  (`evidence_required`, `hard_rule`, `dev_depth`).
+
 ## 2026-08-16 — Tres constructores a uno, el cron que nunca existió, y un `verify_jwt` que no dejaba llegar al código
 
 Sesión de **construcción y corrección de diagnóstico**. Lo de marca vive en
