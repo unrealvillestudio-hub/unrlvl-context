@@ -6,7 +6,7 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
-**Versión:** v1.1 · **Creado:** 2026-08-07 · **Actualizado:** 2026-08-16 (§11 Modelos y versiones · §12 Granularidad del eje) · **base previa:** v1.0 (2026-08-07), cuerpo conservado íntegro · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.2 · **Creado:** 2026-08-07 · **Actualizado:** 2026-08-18 (§13 Migrar el eje sin migrar a sus consumidores) · 2026-08-16 (§11 Modelos y versiones · §12 Granularidad del eje) · **base previa:** v1.1 (2026-08-16) y v1.0 (2026-08-07), cuerpo conservado íntegro · **Naturaleza:** REGLA INVIOLABLE del ecosistema
 **Destino en el repo:** `protocols/MULTIBRAND_RULE.md`
 **Consumidores:** Claude.ai (chat), Claude Code (CC), Sam (revisión de PR)
 **Precedente:** `ecosystem.json → labs._note` — misma naturaleza, misma fuerza. Aquella regla nació de `generadorLocal`; esta nace del hardcode de marca.
@@ -342,4 +342,49 @@ retirado sin conteo es una migración a ciegas.**
 
 ---
 
-_Fin · MULTIBRAND_RULE v1.1 (base previa v1.0) · regla inviolable · Unrealville Studio_
+## 13. MIGRAR EL EJE SIN MIGRAR A SUS CONSUMIDORES DEJA EL SISTEMA PEOR QUE ANTES DE MIGRAR
+
+*(Sección añadida 2026-08-18.)*
+
+Una migración de eje **no termina en la columna**. Mientras quede un consumidor leyendo el
+vocabulario viejo, el sistema no está *a medio migrar*: está **peor que antes de migrar**. Antes,
+todas las capas compartían un vocabulario equivocado y el resultado era, al menos, **coherente**.
+Después, cada capa habla un idioma distinto — y el desacuerdo **no falla**: resuelve a vacío.
+
+**El caso que lo motivó — `audience_frame` (2026-08-18).**
+
+| Capa | Estado tras la migración | Efecto |
+|---|---|---|
+| La columna | migrada a `decide` / `influye` | ✅ |
+| `AUDIENCE_CTA` (CopyLab) | quedó en `jd` / `doliente` | resuelve a **cadena vacía**: el escritor trabaja **sin instrucción de CTA** |
+| `HR-FPHS-10` (juez) | juzgaba contra el vocabulario **extinto** | rechazaba contra claves que ya no existían |
+
+**18 topics activos** afectados. Ninguna de las tres capas emitió un error.
+
+**COROLARIO — reponer alias no repara si la semántica cambió.** El reflejo ante una migración rota
+es mapear el nombre viejo al nuevo. Acá habría **empeorado** el fallo: `influye → doliente` habría
+hecho que el escritor pidiera **el CTA que el juez, ya migrado, rechaza**. Un alias repara cuando el
+valor es **el mismo con otro nombre**. Si cambió la **semántica**, el alias fabrica un desacuerdo
+con apariencia de arreglo — y lo fabrica en silencio, que es lo peor que puede pasarle a una
+migración.
+
+**LA PREGUNTA QUE SE AÑADE AL TEST:** *"¿quién más lee este eje, y en qué vocabulario lo lee hoy?"*
+La migración **no se declara hecha** hasta que esa lista esté vacía. Enumerar los consumidores es
+**parte del DDL**, no un seguimiento posterior: el momento de escribirlos es cuando se escribe el
+`ALTER`, porque después nadie sabe contra qué contar.
+
+### Test de la marca N+1 (respondido)
+
+1. **¿Sobrevive a otra marca de otro rubro y otro país?** Sí — la regla es sobre el **procedimiento**
+   de migración, no sobre el contenido del eje. Y el eje migrado también: `decide`/`influye` describe
+   el **poder del lector sobre la contratación**, que es universal; `jd`/`doliente` era vocabulario de
+   una jurisdicción.
+2. **¿El nombre describe la FUNCIÓN o el CASO?** Función: *migrar un eje y a sus consumidores*.
+3. **¿Eje o instancia?** El procedimiento es eje y vive en esta regla. `audience_frame` y sus valores
+   son instancia y viven en el dato.
+4. **¿Cuántas marcas hay en la enumeración?** Cero. ForumPHs es la marca donde el fallo se **midió**,
+   no un término del contrato.
+
+---
+
+_Fin · MULTIBRAND_RULE v1.2 (base previa v1.1, cuerpo conservado íntegro) · regla inviolable · Unrealville Studio_

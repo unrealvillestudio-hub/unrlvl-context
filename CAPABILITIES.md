@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.3 · 2026-08-07 · Mantenido por: Claude_
+_Versión: 1.4 · 2026-08-18 · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude_
 
 ---
 
@@ -65,6 +65,25 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 
 ---
 
+## CARRIL ASYNC DEL AIID — capacidades nuevas (2026-08-18)
+
+El carril async está **cerrado end-to-end** y su generador es **CopyLab**, invocado por su
+`api_endpoint` (`execLab` + `builder_input`); el generador local se retiró. Detalle en
+`IID/session_log.md` (2026-08-18). Cuatro capacidades nuevas, todas invocables desde el carril:
+
+| Capacidad | Qué hace | Cómo se reconoce |
+|---|---|---|
+| **Procedencia del hallazgo** | `iid-research` recolecta `source_urls` y el hallazgo llega a los gates 4 y 6 con su bloque `FUENTES DEL HALLAZGO`. **Fail-loud:** un research sin fuentes corta con `RESEARCH_NO_SOURCES` en vez de escribir sin respaldo. | `intel.iid_findings` con procedencia · error nominal `RESEARCH_NO_SOURCES` |
+| **Brief de escritura** | El escritor ya no recibe sólo el hallazgo: recibe `claims`, `mechanism` y `case_examples` como campos propios. Los casos son **múltiples**, no uno. | columnas `claims` / `mechanism` / `case_example` / `case_examples` en `intel.iid_findings` |
+| **`statement` vs `instruction`** | Una regla del Watcher tiene **dos lecturas separadas**: `statement` es lo que el **juez** evalúa, `instruction` es lo que el **escritor** debe hacer. Con **fallback**: sin `instruction`, se usa el `statement`. | columna `instruction` en `intel.watcher_rules` |
+| **Techo de generación por plataforma** | El límite de longitud se resuelve por **cascada de cinco niveles**, y el nivel que ganó queda declarado en la respuesta — no hay que adivinarlo. Filas BASE por plataforma en `content_type_registry` (`platform` es columna). | `max_tokens_source` en la respuesta · `content_type_registry.platform` |
+
+> **Regla de lectura del carril:** las métricas de gates se leen por **`gate_detail`**, nunca por
+> `failed_gate`. `failed_gate` reporta el primero que cortó, no todos los que rechazaron: leerlo
+> como si fuera el total da cifras más chicas que la realidad.
+
+---
+
 ## ARTEFACTOS CONSULTABLES (fuentes de verdad — leer antes de asumir estado)
 
 | Artefacto | Ruta | Qué contiene | Actualizado por |
@@ -120,7 +139,7 @@ Cada archivo de un paquete de actualización se nombra con **prefijo de carpeta 
 
 ---
 
-_CAPABILITIES v1.3 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
+_CAPABILITIES v1.4 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
 
 ---
 
