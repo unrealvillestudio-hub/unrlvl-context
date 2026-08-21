@@ -1,5 +1,115 @@
 # ForumPHs — Session Log
 
+## 2026-08-20/21 — Las primeras piezas de ForumPHs que pasan, y el canal por donde salen
+
+Sesión de **carril**; el detalle completo de la reparación (G1, G2-A/E/F, Brief 6) vive en
+`IID/session_log.md` (2026-08-20/21). Acá va lo que es de ForumPHs — que en esta sesión es
+casi todo, porque **ForumPHs fue la marca sobre la que se midió la reparación**: es la que entra
+a publicar el **22-ago**.
+
+> Cifras verificadas contra la DB al cierre (21-ago ~21:00 UTC), medidas sobre `gate_detail`.
+
+### 🟢 El canal Meta existe — el bloqueante del 22-ago que quedaba por cerrar
+
+`public.meta_accounts` tenía **cero filas** para la marca. Estaba abierto desde el 2026-08-16 con
+la anotación *"bloquea publicar el 22-ago, no programar"*, y era el único bloqueante de **canal**.
+
+Fila sembrada el **21-ago 20:28 UTC**:
+
+| Campo | Valor |
+|---|---|
+| `brand_id` | `ForumPHs` |
+| `page_id` | `1184045168120977` |
+| `ig_user_id` | `17841429192605028` |
+| `ad_account_id` | `NULL` — la marca **no** hace ads todavía; el NULL es la declaración, no un olvido |
+| `system_token` | presente `[token en Supabase — no exponer en repo]` |
+
+**Canal operativo end-to-end.** Con esto ForumPHs queda como cuarta marca con cuentas Meta
+conectadas, junto a `LucienSael`, `NeuroneSCF` y `UnrealvilleStudio`. **Se retira de pendientes.**
+
+### 🟢 6 agentes IID propios — la Vía A de la marca
+
+Hasta esta sesión ForumPHs consumía el carril **sin agentes propios**: 6 filas nuevas en
+`intel.iid_agents`, todas `brand_id: ForumPHs`, `is_active: true`, creadas el 21-ago 20:39 UTC.
+
+| Agente | Tier | Dominio | Voz | Frecuencia |
+|---|---|---|---|---|
+| `FPHS-CUOTA-POR-DENTRO` | tier1 | `la-cuota-por-dentro` | `fphs_educativa` | weekly |
+| `FPHS-ASAMBLEA` | tier1 | `la-asamblea-que-no-entiendo` | `fphs_educativa` | weekly |
+| `FPHS-ACTA-INSTRUMENTO` | tier2 | `el-acta-como-instrumento` | `fphs_educativa` | biweekly |
+| `FPHS-RENDICION-JD` | tier2 | `rendir-cuentas-sin-sudar-jd` | `fphs_conversion` | biweekly |
+| `FPHS-RENDICION-DOLIENTE` | tier2 | `rendir-cuentas-sin-sudar-doliente` | `fphs_editorial` | biweekly |
+| `FPHS-CUOTA-EXTRA-JD` | tier2 | `la-cuota-extraordinaria-que-viene-jd` | `fphs_conversion` | biweekly |
+
+Reparto por voz: **3 educativa · 2 conversión · 1 editorial** — coherente con la posición de voz
+de la marca (se publica el estándar, nunca la carta). Los dos `tier1` son los dominios de mayor
+volumen de duda del propietario; los `tier2` van quincenales.
+
+**El requisito que llevan los briefs: 2+ casos con fuente.** Es la corrección aguas arriba del
+gate `evidence`, que en la corrida de esta sesión rechazó **62 veces** por piezas sin con qué
+sustentarse. El hallazgo pobre no lo arregla ni el escritor ni el juez: se arregla en el brief del
+agente. Todavía **no rindió** — estos 6 agentes no habían corrido al cierre (`last_run_at: NULL`).
+
+> **Para que existieran hizo falta arreglar la tabla.** `iid_agents_default_voice_check`
+> **enumeraba las voces del ecosistema** dentro de la restricción, así que ninguna voz de ForumPHs
+> era admisible y dar de alta una marca exigía `ALTER TABLE`. Corregido al eje —la restricción sólo
+> pide que la voz exista y no esté vacía—. Detalle en `IID/session_log.md`.
+
+### 🟢 Vía C — 6 semillas, 27 piezas, y las primeras PASS de la marca
+
+**Primer PASS de la historia de ForumPHs: 21-ago 13:38 UTC.**
+
+| | |
+|---|---|
+| Semillas (`intel.iid_seeds`, `lane: standard`) | **6**, despachadas 10:17–10:20 UTC, las 6 con `finding_id` |
+| Piezas (`intel.iid_content_queue`) | **27**, sobre **6 dominios** |
+| Juicios (`intel.watcher_log`) | **187** sobre 27 piezas (el exceso: reintentos de G2-F + variantes por destino) |
+| PASS | **9 juicios sobre 8 piezas distintas** |
+| **Ratio final por pieza** | **7 de 27 = 25,9 %** (último veredicto de cada pieza) |
+
+El brief declara **~22–24 %**; la diferencia es el corte temporal, no el dato. Lo que importa:
+**la marca venía de 0 % sostenido.**
+
+Rechazos por gate, sobre los 178 REJECT: `hard_rules` **114** · `evidence` **62** ·
+`duplication` **2**.
+
+Los 6 dominios de la corrida son los mismos 6 de los agentes nuevos: desglose de la cuota,
+límites de competencia de la asamblea, validez del acta, rendición de cuentas (lado JD y lado
+propietario) y cuota extraordinaria.
+
+**Ninguna pieza está aprobada.** `approval_status` sigue en 0 aprobadas sobre las 27: el PASS del
+Watcher habilita, no publica. La aprobación es de Sam.
+
+### El camino de la marca al 90 %
+
+Diagnóstico de la sesión, en orden de rendimiento esperado: **(1)** material de research —los
+briefs con 2+ casos con fuente, ya sembrados, sin rendir aún—; **(2)** el sprint de **override**,
+que hoy no existe y deja al juez sin apelación; **(3)** la **varianza del juez**, sin medir. Los
+tres van a AGENDA v2026-08-21-v1.
+
+### Las tres voces siguen en v1.1
+
+Sin cambios en esta sesión, verificado: `fphs_conversion`, `fphs_educativa` y `fphs_editorial` en
+**v1.1 activas**; `fphs_institucional` **v0.5 inactiva**. Lo que cambió no fue la voz — fue lo que
+el carril le pasa al juez para juzgarla.
+
+### 🔴 Sigue abierto — y ahora con diagnóstico
+
+- **`AUDIENCE_CTA` con claves legacy** (bloqueante declarado el 18-ago). `audience_frame` migró en
+  la columna a `decide`/`influye` y `AUDIENCE_CTA` quedó en `jd`/`doliente`, resolviendo a cadena
+  vacía. **Esta sesión le puso número al daño:** el `gate_detail` de la corrida muestra al gate7
+  fallando exactamente ahí — *"la pieza no contiene CTA ni cierre orientado a decisión/contratación
+  ... el frente `decide` exige que el cierre habilite esa decisión"*. El escritor no omite el CTA:
+  **nunca se lo pidieron.** Prohibido reponer alias (`MULTIBRAND_RULE.md` §13).
+- **`HR-FPHS-08` — la serie de apertura del blog.** La regla exige enlace interno a artículo
+  publicado; `applies_when` ya la acota a `blog_forumphs`, pero **no hay artículos que enlazar**.
+  Sigue siendo el backlog de la marca — y ahora hay diagnóstico del mecanismo: ver la inspección de
+  `forumphs-com` en el PR de este Actualiza (**no existe ruta `/blog`**; el sitio es un
+  `index.html` estático de una sola página). Va a AGENDA como ítem (e).
+- **`fphs_conversion`** — corregir turnos 4/8/9 antes de publicar (año calendario t4; tuteo t8/t9).
+- **`fphs_editorial`** — verificar datos regulatorios extranjeros del turno 16 antes de publicar
+  esa pieza.
+
 ## 2026-08-18 — El eje `decide`/`influye` llega a la marca, y el CTA se queda atrás
 
 Sesión de **carril**; el detalle completo vive en `IID/session_log.md` (2026-08-18). Acá va lo que

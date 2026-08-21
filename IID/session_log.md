@@ -293,6 +293,202 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-20/21 — Reparación integral del carril: el juez deja de juzgar a ciegas, la regla declara dónde aplica, y el escritor tiene una segunda oportunidad
+
+Tres días de **reparación**, no de construcción: el carril ya corría end-to-end desde el 18-ago
+(CopyLab generador, cuatro labs, ledger asentando). Lo que no funcionaba era el **juicio** — 0 %
+de PASS sostenido — y la causa no era una, eran seis, cada una tapando a la siguiente. Se
+atacaron en orden de dependencia: primero darle al juez el contexto que le faltaba (G1), después
+volver informativo lo que rechazaba sin criterio (G2-A), después convertir la aplicabilidad de una
+regla en dato (G2-E), y por último dejar que el escritor corrija cuando el rechazo es corregible
+(G2-F). El resultado se midió sobre ForumPHs, que es la marca que entra a publicar el 22-ago.
+
+Lo que es de marca vive en `brands/ForumPHs/session_log.md` (2026-08-20/21); acá va el carril.
+
+> **Base de las cifras.** Todo número de esta entrada está verificado contra la DB al cierre de la
+> sesión (21-ago ~21:00 UTC) y medido sobre `gate_detail`, nunca sobre `failed_gate` — la regla que
+> quedó abierta el 18-ago. Donde una cifra viene del brief y no de la DB, se dice.
+
+### G1 — El juez juzgaba una pieza sin saber dónde se publica
+
+Tres cortes del mismo defecto: el Watcher recibía el texto y **no** el contexto de publicación,
+así que juzgaba contra un destino imaginario.
+
+- **G1-B — contexto de publicación al `ctx` del juez.** `audience_frame` y `platform_key` viajan
+  ahora al juez. Verificado en `gate_detail`: los gates `evidence`, `hard_rules` y
+  `objective_stimulus` asientan `platform_key` y `audience_frame` en cada juicio
+  (`"audience_frame": "decide"`, `"platform_key": "blog_forumphs"`). Era el ítem que el 18-ago
+  quedó abierto como *«`audience_frame` al `ctx` del juez — mismo camino que G1-B»*. **Cerrado.**
+- **G1-C — el techo se aplica.** El techo de tokens por destino existía en `execute.ts` desde
+  v9.7 y **no se estaba aplicando** en el carril. Ahora sí.
+- **G1-D — presupuesto de longitud al escritor.** El escritor recibe el presupuesto en vez de
+  descubrirlo por truncado. Ratio medido en la sesión: **3:1** entre lo que el escritor producía y
+  lo que el destino admite (cifra del brief, no remedida acá).
+
+**Por qué importa más de lo que parece:** un juez sin destino no rechaza *mal*, rechaza *sin
+poder acertar*. Cada uno de los tres cortes elimina una clase entera de rechazo que no era del
+escritor.
+
+### G2-A — `objective_stimulus` (gate7) pasa a informativo, pero deja constancia
+
+El gate7 rechazaba al **79 %** inventando su propia taxonomía (REACH / RETENTION / RESOLVE —
+ninguna de las tres existe en el sistema). Estaba abierto sin fecha desde el 18-ago.
+
+La reparación **no** lo apaga: lo vuelve `blocking: false` **conservando el veredicto** en
+`gate_detail` con `would_reject`. Verificado en producción:
+
+```json
+"objective_stimulus": {
+  "blocking": false, "informative": true, "would_reject": true,
+  "criteria": ["objetivo_estimulo", "audience_frame"],
+  "objective": "TRUST", "objective_label": "jd__convertir_profundo",
+  "stimulus_source": "declared", "audience_frame": "decide",
+  "verdict": "FALLA: audience_frame — ..."
+}
+```
+
+**El patrón es el aporte, no el gate.** Un gate que se apaga deja de medir; un gate informativo
+con `would_reject` **sigue midiendo mientras deja pasar** — y el día que su taxonomía viva en
+tabla, volver a `blocking: true` es un flip, no una reconstrucción. `cadence` y `sibling_window`
+ya declaraban `would_reject` con el mismo patrón; ahora son tres. La taxonomía de
+`objective_stimulus` como dato en tabla **sigue abierta** — esto compra tiempo, no la resuelve.
+
+### G2-E — `applies_when`: la aplicabilidad de una regla es dato, y se filtra antes del juez
+
+Columna nueva `intel.watcher_rules.applies_when` (jsonb). Antes, **toda** regla activa se le
+mandaba al LLM y era el LLM quien decidía si aplicaba — con lo que una regla de blog se evaluaba
+contra un post de Meta y a veces la daba por violada. Ahora el filtro es **determinístico y
+previo**: la regla declara dónde vive y el carril la descarta antes de gastar un token.
+
+Sembradas en esta pasada — 4 reglas, verificadas en DB:
+
+| Regla | `applies_when` |
+|---|---|
+| `HR-FPHS-08` (`blog_enlace_interno`) | `{"platform_in": ["blog_forumphs"]}` |
+| `HR-GEN-08` (`desarrollo_con_ejemplos`) | `{"platform_not_in": ["meta_fb","meta_ig","x","tiktok"]}` |
+| `HR-FPHS-11` (`cifra_de_fuente_declarada`) | `{"exempt_if_piece_matches": "imagin\|supongamos\|caso t[ií]pico\|escenario"}` |
+| `HR-GEN-02` (`dato_fabricado`) | `{"exempt_if_piece_matches": "imagin\|supongamos\|caso t[ií]pico\|escenario"}` |
+
+**Es la Regla Multimarca aplicada al juicio.** El eje —"una regla puede no aplicar"— va en el
+código; la instancia —"esta regla no aplica en Meta"— va en el dato. Antes, la única forma de que
+una regla no aplicara en una plataforma era **no escribirla**, o escribir la excepción dentro del
+`statement` y confiar en que el LLM la leyera. La marca N+1 hereda el mecanismo sin tocar código.
+
+### La doctrina del escenario declarado
+
+Las dos filas `exempt_if_piece_matches` de arriba son una **doctrina**, no un parche de regex.
+
+`HR-GEN-02` (dato fabricado) y `HR-FPHS-11` (cifra sin fuente declarada) existen para impedir que
+la pieza invente números y los presente como hechos. Pero un contenido educativo **necesita**
+ilustrar con cifras: *"imaginemos un PH de 80 unidades con una cuota de $95"*. Sin la excepción,
+enseñar era indistinguible de mentir, y el gate rechazaba correctamente una pieza que estaba bien.
+
+La doctrina: **el escenario declarado no es un dato fabricado — es una hipótesis marcada como
+tal.** Lo que la regla persigue es la cifra que se hace pasar por real; una cifra que se anuncia
+como supuesto no engaña a nadie. La marca (`imaginemos`, `supongamos`, `caso típico`, `escenario`)
+es lo que separa una de otra, y por eso vive en el dato: cada marca la calibra en su idioma y su
+registro.
+
+### G2-F — Bucle de reparación acotado: un reintento, dirigido
+
+Un rechazo del juez terminaba la vida de la pieza. Ahora, cuando el rechazo es **corregible**, el
+carril devuelve el veredicto al escritor con la violación concreta y pide **una** corrección —
+**un solo reintento, dirigido**, y si vuelve a fallar, se acabó.
+
+Verificado en el ledger: `output_type: "repair"`, lab `copylab`, **19 asientos** entre las
+17:59 y las 18:32 UTC del 21-ago, **$0,7146**. El asiento propio es deliberado: la reparación
+cuesta y **se ve** — no se esconde dentro del costo del `post`.
+
+**Acotado es la palabra.** Sin techo, un bucle de reparación es un bucle de gasto: el escritor
+corrige, el juez rechaza por otra cosa, y el par se persigue hasta agotar el presupuesto. Uno
+dirigido convierte el rechazo en información sin convertirlo en deuda.
+
+### Brief 6 — El carril completo asienta costo, y lo desconocido se declara NULL
+
+Tres `output_kind` nuevos en `public.ops_output_kinds` (sembrados 21-ago 20:52 UTC):
+
+| `output_kind` | lab | Unidad |
+|---|---|---|
+| `research` | `iid-research` | por invocación, con `usage` real |
+| `finding_process` | `iid-process` | por hallazgo |
+| `embedding` | `watcher` | caracteres embebidos (Vertex `gemini-embedding-001`, 768d) |
+
+Y el RPC `public.ops_log_generation` extendido a **27 argumentos**, el último `p_billable` —
+la facturabilidad deja de inferirse del `output_type` y pasa a declararse en el asiento.
+
+**Estado real al cierre:** `embedding` ya asienta (**56 filas** desde el 18-ago, $0,0034) y
+`repair` también (19 filas, arriba). **`research` y `finding_process` tienen el kind sembrado y
+cero filas** — las tres capas del IID se instrumentaron, pero los asientos de investigación y
+proceso entran en la próxima corrida. No es un fallo: es el orden en que se desplegó.
+
+> ⚠️ **Corrección pendiente de una sola línea.** La `description` de `finding_process` dice
+> *"Asienta por hallazgo"* y la unidad acordada es **por invocación**. Va a AGENDA como ítem (j).
+
+**Costo desconocido = NULL, nunca 0.** La regla de la sesión. Un costo que no se pudo resolver
+se asienta `NULL`, no cero: cero es una afirmación ("esto fue gratis") y `NULL` es la verdad
+("no lo sabemos"). Un cero falso se suma en silencio a todos los promedios y no vuelve a
+detectarse jamás; un `NULL` aparece en cualquier conteo que lo busque.
+
+**Política de costos: precio de lista.** El costo se asienta al precio público del proveedor, sin
+descuentos, créditos ni tarifas negociadas. El motivo es que el ledger sirve para **decidir**
+—cuánto cuesta una pieza, qué lab conviene, qué margen deja una marca— y una tarifa negociada
+contamina esa decisión con una condición que puede vencer. El descuento es un hecho de tesorería,
+no de arquitectura.
+
+### Deuda declarada por CC en esta sesión — `web_search` server-side
+
+Las búsquedas server-side de `iid-research` **no se asientan**. Anthropic las cobra aparte
+(**$0,01 por búsqueda**) y las reporta en `usage.server_tool_use`, que hoy el carril ignora. Con
+seis semillas por corrida y varias búsquedas por semilla, no es ruido. **CC lo declara como deuda,
+no lo repara** — no estaba en el encargo. Va a AGENDA como ítem (i).
+
+### El `CHECK` multimarca de `iid_agents`
+
+`iid_agents_default_voice_check` **enumeraba voces**. Una tabla compartida con la lista de voces
+del ecosistema escrita dentro de la restricción: alta de marca nueva = ALTER TABLE. Corregido al
+eje: la restricción ahora sólo exige que la voz **exista y no esté vacía**.
+
+```
+CHECK ((default_voice IS NOT NULL) AND (length(TRIM(BOTH FROM default_voice)) > 0))
+```
+
+Es exactamente `MULTIBRAND_RULE.md` §8 en una restricción de base de datos: el eje —"un agente
+tiene voz"— en el esquema; la instancia —"la voz es `fphs_educativa`"— en la fila. Sin esto, los 6
+agentes de ForumPHs no se podían dar de alta.
+
+### La corrida: Vía C sobre ForumPHs, y las primeras PASS de la marca
+
+**6 semillas → 6 hallazgos → 27 piezas → las primeras PASS de ForumPHs.** Verificado:
+
+- **6 `intel.iid_seeds`**, `lane: standard`, `status: dispatched`, despachadas entre las 10:17 y
+  las 10:20 UTC del 21-ago, **las 6 con `finding_id`** — ninguna se perdió en el camino.
+- **27 filas en `intel.iid_content_queue`**, `brand_id: ForumPHs`, **6 dominios**.
+- **`intel.watcher_log`: 187 juicios sobre 27 piezas distintas** (el exceso son los reintentos de
+  G2-F y las variantes por destino). **9 juicios PASS sobre 8 piezas distintas.**
+- **Ratio final por pieza: 7 de 27 = 25,9 %** midiendo el **último** veredicto de cada pieza. El
+  brief declara ~22–24 %; la diferencia es el corte temporal, no el dato. **De 0 % a un cuarto en
+  tres días.**
+
+Rechazos por gate (sobre los 178 juicios REJECT): `hard_rules` **114** · `evidence` **62** ·
+`duplication` **2**. El gate7, ya informativo, no figura — pero sigue midiendo con `would_reject`.
+
+### El camino al 90 %, diagnosticado
+
+El 25 % no es el techo del sistema; es lo que rinde el sistema **sin las tres piezas que faltan**.
+Diagnóstico de la sesión, en orden de rendimiento esperado:
+
+1. **Material de research.** `evidence` rechaza 62 veces porque la pieza no tiene con qué
+   sustentarse. No es un problema del escritor ni del juez: es que el hallazgo llega pobre. Los
+   briefs de los 6 agentes nuevos ya piden **2+ casos con fuente** — la corrección está sembrada
+   aguas arriba y todavía no rindió.
+2. **Override.** Un juez sin apelación es un juez que se equivoca en firme. El sprint de override
+   —y su learning de cierre— es el ítem (b) de la AGENDA.
+3. **Varianza del juez.** El mismo texto juzgado dos veces no siempre da el mismo veredicto. Hasta
+   medirla no se sabe qué parte del 75 % restante es pieza mala y qué parte es juez inestable.
+
+**La afirmación que esta sesión sí deja probada:** el carril produce piezas que pasan. Lo que
+queda es subir el rendimiento, no demostrar que puede.
+
 ## 2026-08-18 — El carril async cerrado end-to-end: CopyLab es el generador y el motor local ya no existe
 
 Sesión de **cierre de carril**. Lo que es de marca vive en `brands/ForumPHs/session_log.md`
