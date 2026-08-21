@@ -1,14 +1,19 @@
 {
   "_meta": {
-    "version": "2026-08-18-v1",
+    "version": "2026-08-21-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-08-16-v1",
+    "previous": "2026-08-18-v1",
     "last_session": {
-      "date": "2026-08-18",
-      "conducted_by": "Claude Opus 5 (Claude Code) — HRD_ACTUALIZA 2026-08-18, sólo context files · sesión Sam × Claude.ai · Professor cerrado ANTES de este Actualiza (9 learnings en public.professor_learnings, session_date 2026-08-18, approved_by_sam=true) · CC ejecuta rama+PR contra main, no mergea",
-      "status": "HRD_ACTUALIZA 2026-08-18 — Carril async del AIID CERRADO END-TO-END. Ninguna mutación de producción en esta pasada: sólo context files (el código y las DDL se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) COPYLAB ES EL GENERADOR EFECTIVO DEL CARRIL, verificado en producción: builder_meta.generator='copylab', diez capas aplicadas, cache_mode='v2.0_per_slice', output_template_id='SMPC_full' y el ledger asentando api_key_ref='EXTERNAL:copylab'. (2) EL GENERADOR LOCAL (generadorLocal en los context files) ESTÁ RETIRADO DEL ECOSISTEMA — el grep de su identificador da cero sobre los tres repos. (3) CORRECCIÓN DE UNA AFIRMACIÓN VENCIDA: labs_wiring.imagelab declaraba ser el ÚNICO lab que el carril invoca por su endpoint. Dejó de serlo con el cable de CopyLab: hoy son TRES de cuatro (copylab, aife, imagelab) y el que falta es sociallab, que sigue armando su post con runSocialLabDirect. (4) MEDICIONES, sobre gate_detail y nunca sobre failed_gate: 15-ago línea base 12 piezas / 0 PASS · 18-ago 63 piezas / 4 dominios / 1 PASS · 18-ago post-techos 48 piezas / 0 PASS. Sobre esas 48: objective_stimulus rechaza el 79%, hard_rules 43 piezas, evidence 7, duplication 4. Contrafáctico del informe de auditoría: sin objective_stimulus bloqueante y sin HR-GEN-08, pasaban 17 de 48 (35%). (5) BLOQUEANTE CON FECHA (22-ago): AUDIENCE_CTA en CopyLab quedó con las claves legacy jd/doliente mientras audience_frame migró en la columna a decide/influye; resuelve a cadena vacía y deja 18 topics activos de ForumPHs con el escritor SIN instrucción de CTA. Prohibido reponer alias. (6) REGLA NUEVA — migrar un eje en la columna sin migrar a sus consumidores deja el sistema PEOR que antes de migrar: protocols/MULTIBRAND_RULE.md §13. (7) EXCEPCIÓN DECLARADA, decidida por Sam en sesión: ecosystem.md y ecosystem_filemap.md NO se regeneran completos (no existe generador en el repo; regenerar a mano es reescribir con interpretación y borra historia, CC_PROTOCOL §0). Se aplica el precedente del 2026-08-13: nota de sincronización en la cabecera, cuerpo íntegro, commit separado. La regeneración real queda abierta en AGENDA sin fecha. Detalle en IID/session_log.md y brands/ForumPHs/session_log.md (2026-08-18)."
+      "date": "2026-08-20/21",
+      "conducted_by": "Claude Opus 5 (Claude Code) — HRD_ACTUALIZA 2026-08-20/21, sólo context files · sesión Sam × Claude.ai · Professor cerrado ANTES de este Actualiza (12 learnings, ids en DB) · CC ejecuta rama+PR contra main, no mergea",
+      "status": "HRD_ACTUALIZA 2026-08-20/21 — REPARACION INTEGRAL DEL CARRIL AIID EN TRES DIAS. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL y la corrida se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) EL HECHO DE LA SESION: el carril paso de 0% de PASS sostenido a 25,9% por pieza en ForumPHs (7 de 27, midiendo el ULTIMO veredicto de cada pieza sobre gate_detail, nunca sobre failed_gate). Tres dias de reparacion, no de construccion: el carril ya corria end-to-end desde el 18-ago; lo que no funcionaba era el JUICIO, y la causa no era una sino seis, cada una tapando a la siguiente. (2) G1-B/C/D — el juez juzgaba sin saber donde se publica: audience_frame y platform_key viajan ahora al ctx del juez (era el item abierto del 18-ago, verificado en gate_detail), el techo de tokens por destino se aplica (existia en execute.ts v9.7 y no se aplicaba en el carril), y el escritor recibe presupuesto de longitud en vez de descubrirlo por truncado (ratio 3:1 medido). (3) G2-A — objective_stimulus (gate7) pasa a informativo CONSERVANDO EL VEREDICTO en would_reject: blocking=false, informative=true. Rechazaba al 79% inventando su propia taxonomia (REACH/RETENTION/RESOLVE, ninguna existe en el sistema). Un gate apagado deja de medir; uno informativo con would_reject sigue midiendo mientras deja pasar, y volver a bloquear el dia que su taxonomia viva en tabla es un flip, no una reconstruccion. La taxonomia como dato sigue ABIERTA. (4) G2-E — intel.watcher_rules.applies_when (jsonb): la aplicabilidad de una regla es DATO y se filtra deterministicamente ANTES del juez. Antes se le mandaba toda regla activa al LLM y era el LLM quien decidia si aplicaba. 4 reglas sembradas: HR-FPHS-08 (platform_in), HR-GEN-08 (platform_not_in), HR-FPHS-11 y HR-GEN-02 (exempt_if_piece_matches). Es la Regla Multimarca aplicada al juicio: el eje en el codigo, la instancia en el dato. (5) G2-F — bucle de reparacion ACOTADO A 1 REINTENTO DIRIGIDO, con asiento propio output_type='repair' en el ledger (19 filas, $0,7146 el 21-ago). Sin techo, un bucle de reparacion es un bucle de gasto. (6) BRIEF 6 — el carril completo asienta costo: kinds nuevos research (iid-research), finding_process (iid-process) y embedding (watcher) en ops_output_kinds, y RPC ops_log_generation extendido a 27 ARGUMENTOS con p_billable (la facturabilidad se declara, deja de inferirse del output_type). Regla: COSTO DESCONOCIDO = NULL, NUNCA 0 — un cero falso se suma en silencio a todos los promedios y no vuelve a detectarse; un NULL aparece en cualquier conteo que lo busque. Estado real: embedding ya asienta (56 filas desde el 18-ago) y repair tambien; research y finding_process tienen el kind sembrado y CERO filas, entran en la proxima corrida. (7) DOCTRINA NUEVA — EL ESCENARIO DECLARADO NO ES UN DATO FABRICADO. HR-GEN-02 y HR-FPHS-11 persiguen la cifra que se hace pasar por real; un contenido educativo necesita ilustrar con cifras, y sin excepcion ensenar era indistinguible de mentir. Una hipotesis marcada como tal no engana a nadie, y la marca que la distingue (imaginemos, supongamos, caso tipico, escenario) vive en el DATO (exempt_if_piece_matches), no en el codigo. (8) POLITICA DE COSTOS: PRECIO DE LISTA — sin descuentos, creditos ni tarifas negociadas. El ledger sirve para DECIDIR y una tarifa negociada contamina la decision con una condicion que puede vencer; el descuento es un hecho de tesoreria, no de arquitectura. (9) FORUMPHS — Via C: 6 semillas -> 6 hallazgos -> 27 piezas -> LAS PRIMERAS PASS DE LA MARCA (21-ago 13:38 UTC); canal Meta OPERATIVO end-to-end (meta_accounts sembrada 21-ago 20:28 UTC, era el bloqueante de canal del 22-ago abierto desde el 2026-08-16); 6 AGENTES IID PROPIOS activos (Via A, briefs con requisito 2+ casos con fuente, sin correr aun); 3 voces en v1.1 activas. Ninguna de las 27 piezas esta aprobada: el PASS del Watcher habilita, no publica. (10) CHECK MULTIMARCA DE iid_agents CORREGIDO AL EJE: iid_agents_default_voice_check ENUMERABA las voces del ecosistema, asi que alta de marca nueva = ALTER TABLE; ahora solo exige que la voz exista y no este vacia. Sin esto, los 6 agentes de ForumPHs no se podian dar de alta. (11) DEUDA DECLARADA POR CC: las busquedas server-side de iid-research NO se asientan — Anthropic las cobra aparte ($0,01 por busqueda) y las reporta en usage.server_tool_use, que el carril ignora. CC lo declara, no lo repara: no estaba en el encargo. Va a AGENDA como item (i). (12) CAMINO AL 90% DIAGNOSTICADO: material de research (evidence rechazo 62 veces por piezas sin con que sustentarse) + override (item b) + varianza del juez (sin medir). El 25,9% no es el techo del sistema. (13) EXCEPCION DECLARADA, TERCERA APLICACION: ecosystem.md y ecosystem_filemap.md NO se regeneran completos (no existe generador en el repo; regenerar a mano es reescribir con interpretacion y borra historia, CC_PROTOCOL §0). Precedente del 2026-08-13: nota de sincronizacion en cabecera, cuerpo integro, commit separado. La regeneracion real sigue abierta sin fecha. Detalle en IID/session_log.md y brands/ForumPHs/session_log.md (2026-08-20/21)."
     },
     "previous_sessions": [
+      {
+        "date": "2026-08-18",
+        "conducted_by": "Claude Opus 5 (Claude Code) — HRD_ACTUALIZA 2026-08-18, sólo context files · sesión Sam × Claude.ai · Professor cerrado ANTES de este Actualiza (9 learnings en public.professor_learnings, session_date 2026-08-18, approved_by_sam=true) · CC ejecuta rama+PR contra main, no mergea",
+        "status": "HRD_ACTUALIZA 2026-08-18 — Carril async del AIID CERRADO END-TO-END. Ninguna mutación de producción en esta pasada: sólo context files (el código y las DDL se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) COPYLAB ES EL GENERADOR EFECTIVO DEL CARRIL, verificado en producción: builder_meta.generator='copylab', diez capas aplicadas, cache_mode='v2.0_per_slice', output_template_id='SMPC_full' y el ledger asentando api_key_ref='EXTERNAL:copylab'. (2) EL GENERADOR LOCAL (generadorLocal en los context files) ESTÁ RETIRADO DEL ECOSISTEMA — el grep de su identificador da cero sobre los tres repos. (3) CORRECCIÓN DE UNA AFIRMACIÓN VENCIDA: labs_wiring.imagelab declaraba ser el ÚNICO lab que el carril invoca por su endpoint. Dejó de serlo con el cable de CopyLab: hoy son TRES de cuatro (copylab, aife, imagelab) y el que falta es sociallab, que sigue armando su post con runSocialLabDirect. (4) MEDICIONES, sobre gate_detail y nunca sobre failed_gate: 15-ago línea base 12 piezas / 0 PASS · 18-ago 63 piezas / 4 dominios / 1 PASS · 18-ago post-techos 48 piezas / 0 PASS. Sobre esas 48: objective_stimulus rechaza el 79%, hard_rules 43 piezas, evidence 7, duplication 4. Contrafáctico del informe de auditoría: sin objective_stimulus bloqueante y sin HR-GEN-08, pasaban 17 de 48 (35%). (5) BLOQUEANTE CON FECHA (22-ago): AUDIENCE_CTA en CopyLab quedó con las claves legacy jd/doliente mientras audience_frame migró en la columna a decide/influye; resuelve a cadena vacía y deja 18 topics activos de ForumPHs con el escritor SIN instrucción de CTA. Prohibido reponer alias. (6) REGLA NUEVA — migrar un eje en la columna sin migrar a sus consumidores deja el sistema PEOR que antes de migrar: protocols/MULTIBRAND_RULE.md §13. (7) EXCEPCIÓN DECLARADA, decidida por Sam en sesión: ecosystem.md y ecosystem_filemap.md NO se regeneran completos (no existe generador en el repo; regenerar a mano es reescribir con interpretación y borra historia, CC_PROTOCOL §0). Se aplica el precedente del 2026-08-13: nota de sincronización en la cabecera, cuerpo íntegro, commit separado. La regeneración real queda abierta en AGENDA sin fecha. Detalle en IID/session_log.md y brands/ForumPHs/session_log.md (2026-08-18)."
+      },
       {
         "date": "2026-08-16",
         "conducted_by": "Claude Opus 5 (Claude Code) — HRD_ACTUALIZA 2026-08-16, solo context files y derivados · sesión Sam × Claude.ai · Professor capturado ANTES del Actualiza (15 learnings aprobados por Sam el 2026-08-16) · CC ejecuta rama+PR contra main, no mergea",
@@ -241,7 +246,86 @@
       "name": "ForumPHs",
       "type": "brand",
       "market": "Panama",
-      "status": "active"
+      "status": "active",
+      "domain": "forumphs.com",
+      "meta_accounts": {
+        "status": "✅ OPERATIVO end-to-end — sembrado 2026-08-21 20:28 UTC · era el bloqueante de canal del 22-ago, abierto desde el 2026-08-16",
+        "brand_id": "ForumPHs",
+        "page_id": "1184045168120977",
+        "ig_user_id": "17841429192605028",
+        "ad_account_id": null,
+        "ad_account_note": "NULL deliberado — la marca no hace ads todavia; el NULL es la declaracion, no un olvido",
+        "system_token": "[token en Supabase — no exponer en repo]"
+      },
+      "iid_agents": {
+        "status": "✅ 6 agentes propios activos — creados 2026-08-21 20:39 UTC (Via A)",
+        "count": 6,
+        "all_active": true,
+        "last_run_at": null,
+        "brief_requirement": "2+ casos con fuente — correccion aguas arriba del gate evidence, sembrada y sin rendir aun",
+        "agents": [
+          {
+            "name": "FPHS-CUOTA-POR-DENTRO",
+            "tier": "tier1",
+            "domain": "la-cuota-por-dentro",
+            "default_voice": "fphs_educativa",
+            "run_frequency": "weekly"
+          },
+          {
+            "name": "FPHS-ASAMBLEA",
+            "tier": "tier1",
+            "domain": "la-asamblea-que-no-entiendo",
+            "default_voice": "fphs_educativa",
+            "run_frequency": "weekly"
+          },
+          {
+            "name": "FPHS-ACTA-INSTRUMENTO",
+            "tier": "tier2",
+            "domain": "el-acta-como-instrumento",
+            "default_voice": "fphs_educativa",
+            "run_frequency": "biweekly"
+          },
+          {
+            "name": "FPHS-RENDICION-JD",
+            "tier": "tier2",
+            "domain": "rendir-cuentas-sin-sudar-jd",
+            "default_voice": "fphs_conversion",
+            "run_frequency": "biweekly"
+          },
+          {
+            "name": "FPHS-RENDICION-DOLIENTE",
+            "tier": "tier2",
+            "domain": "rendir-cuentas-sin-sudar-doliente",
+            "default_voice": "fphs_editorial",
+            "run_frequency": "biweekly"
+          },
+          {
+            "name": "FPHS-CUOTA-EXTRA-JD",
+            "tier": "tier2",
+            "domain": "la-cuota-extraordinaria-que-viene-jd",
+            "default_voice": "fphs_conversion",
+            "run_frequency": "biweekly"
+          }
+        ],
+        "check_fix": "iid_agents_default_voice_check enumeraba las voces del ecosistema (alta de marca = ALTER TABLE); corregido al eje 2026-08-21 — solo exige que la voz exista y no este vacia. Sin eso, estos 6 agentes no se podian dar de alta."
+      },
+      "voices": {
+        "fphs_conversion": "v1.1 activa",
+        "fphs_educativa": "v1.1 activa",
+        "fphs_editorial": "v1.1 activa",
+        "fphs_institucional": "v0.5 INACTIVA",
+        "_note": "Sin cambios en la sesion 2026-08-20/21; verificado en public.brand_voice_genome. Lo que cambio no fue la voz, sino lo que el carril le pasa al juez para juzgarla."
+      },
+      "r4b_status": {
+        "state": "contenido + canal LISTOS",
+        "publicacion_desde": "2026-08-22",
+        "rollout_started_at": "2026-08-22",
+        "contenido": "Via C corrida 2026-08-21: 6 semillas -> 6 hallazgos -> 27 piezas sobre 6 dominios -> primeras PASS de la marca (21-ago 13:38 UTC). Ratio final por pieza 7/27 = 25,9%.",
+        "canal": "meta_accounts sembrada — ver meta_accounts arriba",
+        "aprobacion": "0 de 27 piezas aprobadas — el PASS del Watcher habilita, no publica. La aprobacion es de Sam.",
+        "bloqueante_abierto": "AUDIENCE_CTA en CopyLab con claves legacy (jd/doliente) mientras audience_frame migro a decide/influye: resuelve a cadena vacia y deja 18 topics activos sin instruccion de CTA. Prohibido reponer alias — MULTIBRAND_RULE.md §13."
+      },
+      "_update_2026-08-21": "Nodo ampliado en el HRD_ACTUALIZA 2026-08-20/21. Antes de esta pasada el nodo declaraba solo id/name/type/market/status; esas cinco claves se conservan intactas y todo lo demas es ADICION. Detalle en brands/ForumPHs/session_log.md e IID/session_log.md (2026-08-20/21)."
     },
     {
       "id": "SamPublisher",
