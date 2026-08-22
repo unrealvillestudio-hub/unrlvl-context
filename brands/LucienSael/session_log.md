@@ -2,6 +2,41 @@
 
 ---
 
+## 2026-08-22 (3) — Corrección: la divergencia 1 ya estaba resuelta, en el dato
+
+La entrada (2) de hoy cerró la divergencia de firma y dejó la de **pesos tipográficos** declarada
+como abierta. **Era incorrecta.** CC verificó `public.brand_typography` de **ForumPHs**, no de
+**LucienSael**, y arrastró el diagnóstico anterior sin comprobarlo contra el registro de la marca.
+
+**Ya estaba resuelta.** El cambio entró por **UPDATE directo el 22-ago bajo HRD**, con el ok de Sam,
+**no por DDL** — por eso la migración `20260822160000` no figura en el registry.
+
+`css_import` vigente del rol **`display`**, verificado con la DB a la vista:
+
+```
+https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap
+```
+
+Cubre **300 · 600 · 300i · 600i** — lo que §02 declara para display.
+
+**El ruling de fondo, y es lo que importa más que el import:** *«los pesos van según el largo, no
+cerrados»*. La lista de §02 **no es un contrato cerrado**: se sirve el peso que el largo del texto
+pide. Eso disuelve la divergencia como contradicción — no era el documento contra la DB, era una
+lista leída como enumeración exhaustiva cuando nunca lo fue.
+
+**Estado verificado de los otros dos roles**, anotado para que nadie lo reabra:
+`body` = `Crimson+Pro:wght@400;500` · `mono` = `JetBrains+Mono:wght@400`. **No se tocaron y no hace
+falta que se toquen**: bajo el ruling, no llevar cada peso declarado no es una divergencia.
+
+**La migración `20260822160000` NO se aplica** — duplicaría lo que ya está en el dato. Se
+**reclasifica como documento de la decisión**.
+
+> Con esto, **las dos divergencias que `IDENTITY_ASSETS.md` abrió al incorporar el documento están
+> cerradas**: la de firma por ruling (entrada (2)) y la de pesos por dato + ruling (esta). El
+> documento canónico y la DB dejaron de contradecirse.
+
+---
+
 ## 2026-08-22 (2) — Ruling de Sam: el slogan no es la firma · §04/§05 corregidos
 
 Sam resolvió la **divergencia 2** que la entrada anterior de hoy dejó abierta —«queda para Sam, no

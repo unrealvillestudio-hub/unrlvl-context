@@ -32,6 +32,18 @@ Salen de **9 filas nuevas de `intel.approval_calibration`** (21-ago 23:54 → 22
 
 Y una cuarta, de encaje: **los caracteres no se ahorran.** Los presupuestos de longitud existen por **encaje de plataforma**, jamás por economía. La métrica que importa es **el pliegue** — FB ~3 líneas antes de *Ver más*, IG ~125 caracteres antes de *más*: **la primera línea carga sola o la pieza no abre.**
 
+### 🔧 Corrección post-cierre — respuesta de Sam al reporte de CC (22-ago, mismo día)
+
+Cuatro puntos que CC dejó abiertos en el reporte, resueltos por Sam. Se registran acá porque **dos de ellos vencen afirmaciones de este mismo bloque**.
+
+1. **`publishing_state` como clave nueva — APROBADO.** El argumento de comparabilidad se sostiene: `status` sigue siendo `active` en las 9 marcas y el eje se preserva; la instancia gana su dimensión propia. **No se mueve a `status`.**
+2. **Divergencia 1 de Lucien (pesos tipográficos) — YA ESTABA RESUELTA, en el dato.** El chequeo de CC miró el registro equivocado (`brand_typography` de ForumPHs, no de LucienSael). El `css_import` del rol `display` es hoy `Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600`, aplicado por **UPDATE directo el 22-ago bajo HRD** con el ok de Sam. Por eso la migración `20260822160000` **no figura en el registry: el cambio entró por dato, no por DDL**. **No se aplica** —duplicaría— y se **reclasifica como documento de la decisión**. Ruling de fondo: *«los pesos van según el largo, no cerrados»* — la lista de §02 no es un contrato cerrado. Detalle en `brands/LucienSael/session_log.md` (2026-08-22 (3)).
+3. **La regla de voz ya no depende de la memoria — `HR-FPHS-15`.** Vive en `intel.watcher_rules` desde el 22-ago 18:02:25 UTC: `blocking`, `active`, `scope: brand`, `brand_id: ForumPHs`, `plane: text`, `kind: requirement`, con `instruction` para el escritor y para el bucle de reparación. **La próxima corrida la aplica el juez.** Y con eso queda clara la distinción que faltaba: **la de voz es regla porque es verificable sobre el texto; las de título y texto son prompt porque son criterios de oficio.** Ver ítem 11 de la Fase 3.
+4. **Alias legacy de presets (`LANDING`/`META`/`TIKTOK`/`WEB`) — retiro sin fecha con barrido multimarca, APROBADO.** Quedan documentadas como **filas muertas** hasta ese barrido.
+
+> **Los otros dos riesgos que CC nombró están donde deben:** `publisher-cron` y **juicio visual del Watcher** son **Fase 3** de esta misma agenda.
+
+
 ### 📌 Doctrina de método — dos horas de forense, dos reglas
 
 - **Un PR mergeado captura la rama AL MOMENTO DEL MERGE.** Los commits posteriores a esa misma rama van a *preview* y **jamás a `main`**, aunque el PR siga figurando como mergeado. Le pasó al corte D del Brief 8 (reparado en `ImageLab` #13). **La verdad del deploy es el sha del deployment de PRODUCCIÓN en Vercel**, no el estado del PR en GitHub.
@@ -59,7 +71,7 @@ Cuatro fases, **en este orden**. Lo que no está en una fase arrastra abajo, sin
 8. **`publisher-cron` de `public.scheduled_posts`.** Hoy la publicación es **manual-asistida** (`published_by: claude-mcp-manual`): las filas `pending_publish` esperan a que alguien las levante. Es la diferencia entre **poder publicar** y **estar publicando**.
 9. **Digest EF — matar los 522 correos.** Email **sólo de piezas PASS** + **un resumen por corrida**, no un correo por pieza. El override se registra en `intel.approval_calibration`. **Fecha visible** en el correo.
 10. **UI de calibración / Orchestrator.** Fecha de llegada en las tarjetas · orden por **más reciente** · filtro de corridas superadas.
-11. **El título al genoma.** Las **3 reglas de Sam** viven hoy sólo en `approval_calibration` y en Professor. Van al **prompt de título del carril** y a **`intel.watcher_rules`**. Mientras dependan de la memoria del escritor, van a volver a fallar — la de voz ya falló tres veces.
+11. **El título al genoma — PARCIALMENTE CERRADO el 22-ago.** La regla de **voz** ya salió de la memoria: **`HR-FPHS-15`** vive en `intel.watcher_rules` desde el 22-ago 18:02:25 UTC (`blocking`, `active`, `scope: brand`, con `instruction` para escritor y reparación). Lo que queda de este ítem son **las otras dos** —*el título cierra la idea solo* y *el texto conduce*—, que **necesitan prompt, no regla**: son criterios de oficio, no comprobaciones verificables sobre el texto. Van al **prompt de título del carril** y al genoma, en el brief de esta fase. _(Redacción previa, derogada el mismo día: «Las 3 reglas de Sam viven hoy sólo en `approval_calibration` y en Professor. Van al prompt de título del carril y a `intel.watcher_rules`. Mientras dependan de la memoria del escritor, van a volver a fallar — la de voz ya falló tres veces.» El diagnóstico era correcto; el estado quedó vencido.)_
 12. **Los fixes del incidente.** (a) **`callClaude` loguea el body del error** antes de tirar. (b) **`compose-step` después de `regenerate`** — hoy una pieza regenerada no vuelve a componerse. (c) **Protocolo del commit colgante:** verificar el **sha del deployment de producción** post-merge, como paso obligatorio de entrega.
 13. **Juicio visual — el punto ciego que queda de ImageLab.** El Watcher juzga el texto de la pieza, **no la imagen**. Es el único punto del carril donde una pieza puede publicarse con una violación legal **que ningún gate puede ver**.
 14. **Check determinístico de integridad ortográfica pre-juicio** (regex es-sin-tildes). El defecto de diacríticos es **intermitente** y el Watcher no lo ve. Un defecto mecánico **no se juzga, se detecta** — no es una regla LLM.

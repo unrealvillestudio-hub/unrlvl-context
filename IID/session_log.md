@@ -409,9 +409,25 @@ drenaje es ítem de Fase 1.
 
 Ventana 21-ago 23:54 → 22-ago 09:40 UTC, todas `evaluated_by: sam`: **3 `approved`, 6 `rejected`**.
 De ahí salen las **tres reglas de Sam** (títulos · texto · voz FPHs), detalladas en
-`brands/ForumPHs/session_log.md`. Las tres **todavía no están en el sistema**: viven en la tabla de
-calibración y en Professor. Llevarlas al **prompt de título** y a **`intel.watcher_rules`** es ítem
-de AGENDA (Fase 3) — mientras dependan de la memoria del escritor, van a volver a fallar.
+`brands/ForumPHs/session_log.md`.
+
+**Corrección al cierre (Sam, 22-ago):** la de **voz ya no depende de la memoria**.
+**`HR-FPHS-15` existe en `intel.watcher_rules` desde el 22-ago 18:02:25 UTC** —
+`severity: blocking`, `active: true`, `scope: brand`, `brand_id: ForumPHs`, `plane: text`,
+`kind: requirement`— con `statement` y con `instruction` propia para el escritor y para el bucle de
+reparación: *«"cuota extraordinaria" completo en cada aparición… si la repetición suena pesada,
+reformulá la oración, no recortes el término»*. **La próxima corrida la aplica el juez.**
+
+Y una distinción que la sesión dejó clara: **no las tres van al mismo sitio.** La de voz es
+verificable sobre el texto → **es regla**. Las otras dos —*el título cierra la idea solo* y *el texto
+conduce*— son criterios de **oficio**, no comprobaciones: **necesitan prompt, no regla**, y van en el
+brief de **Fase 3** de la AGENDA.
+
+> **⛔ No operativo — redacción previa de este párrafo, derogada el 22-ago:** *«Las tres todavía no
+> están en el sistema: viven en la tabla de calibración y en Professor. Llevarlas al prompt de
+> título y a `intel.watcher_rules` es ítem de AGENDA (Fase 3) — mientras dependan de la memoria del
+> escritor, van a volver a fallar.»* El diagnóstico era correcto; la afirmación de estado quedó
+> vencida el mismo día.
 
 ### 🕳️ Puntos ciegos que esta sesión dejó nombrados
 

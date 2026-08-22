@@ -51,9 +51,9 @@ juez ve. Esa es la otra mitad del Brief 8 (abajo).
 
 ### 📐 Las 3 reglas de calibración de Sam — la doctrina nueva
 
-Nacen de esta sesión, sobre piezas reales, y **las tres van al genoma y al prompt del carril**
-(hoy viven sólo en `intel.approval_calibration` y en Professor; llevarlas al prompt y a
-`intel.watcher_rules` es ítem de AGENDA, Fase 3):
+Nacen de esta sesión, sobre piezas reales. **No van las tres al mismo sitio** —y esa distinción se
+aclaró al cierre del día—: la de **voz** es verificable sobre el texto, así que **es regla**; las de
+**título** y **texto** son criterios de **oficio**, no comprobaciones, así que **son prompt**.
 
 1. **Regla de títulos — el título cierra la idea SOLO.** Sin exigir la imagen ni el caption para
    entenderse. El caso que la fijó: *«Es la prueba…»* — ¿de qué? Título trunco sobre una imagen
@@ -63,8 +63,21 @@ Nacen de esta sesión, sobre piezas reales, y **las tres van al genoma y al prom
    → movida concreta. **Si el lector puede cerrar con «sí, ¿y qué?», la pieza no está terminada.**
    Explicar mecánica sin dirección no es comunicar.
 3. **Regla de voz FPHs — «la cuota extraordinaria» SIEMPRE completa.** Jamás «la extraordinaria».
-   Es la **tercera vez** que Sam la reitera: mientras dependa de la memoria del escritor va a
-   volver a fallar. Va al genoma **y** como watcher rule.
+   Era la **tercera vez** que Sam la reiteraba. **Ya no depende de la memoria:** es
+   **`HR-FPHS-15`** en `intel.watcher_rules` desde el **22-ago 18:02:25 UTC** —
+   `severity: blocking` · `active: true` · `scope: brand` · `brand_id: ForumPHs` · `plane: text` ·
+   `kind: requirement`— con `instruction` propia para el escritor y para el bucle de reparación:
+   *«escribí "cuota extraordinaria" completo en cada aparición, incluso si se repite en el mismo
+   párrafo… si la repetición suena pesada, reformulá la oración, no recortes el término»*.
+   **La próxima corrida la aplica el juez, no la memoria.**
+
+**Las otras dos siguen en Professor y en `approval_calibration`, y ahí está bien:** necesitan
+**prompt**, no regla. Van en el brief de **Fase 3** de la AGENDA.
+
+> **⛔ No operativo — redacción previa de la cabecera de esta sección, derogada el 22-ago:** *«las
+> tres van al genoma y al prompt del carril (hoy viven sólo en `intel.approval_calibration` y en
+> Professor; llevarlas al prompt y a `intel.watcher_rules` es ítem de AGENDA, Fase 3)»*. Metía las
+> tres en el mismo saco y quedó vencida el mismo día para la de voz.
 
 Complemento de la sesión, también doctrina: **los caracteres no se ahorran.** Los presupuestos de
 longitud existen por **encaje de plataforma**, jamás por economía (mil caracteres son décimas de

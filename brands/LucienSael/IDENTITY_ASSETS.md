@@ -51,13 +51,18 @@ tablas tienen que reflejar lo que dice el documento:
 | qué | dónde vive en la DB | estado al 2026-08-22 |
 |---|---|---|
 | Paleta (8 roles) | `public.brand_palette` | ✅ los 8 roles y los 8 hex coinciden exactamente |
-| Tipografía (3 familias) | `public.brand_typography` | ⚠️ familias correctas, **pesos no** — ver abajo |
+| Tipografía (3 familias) | `public.brand_typography` | ✅ **RESUELTO 2026-08-22** por ruling de Sam — entró por **dato**, no por DDL; ver abajo |
 | Composición sobre imagen | `public.imagelab_overlay_tokens` | sembrada en BRIEF 8 con `display`/`body` + franja `ember` |
 | Firma de cierre | `public.brand_voice_genome.application_constraints.signature_closer` | ✅ **RESUELTO 2026-08-22** por ruling de Sam — manda la DB; el documento se corrigió (§04/§05) |
 
 ### Dos divergencias detectadas al incorporar el documento
 
-> **Estado al 2026-08-22:** la **1 sigue abierta**; la **2 quedó RESUELTA** por ruling de Sam — ver el bloque de resolución al final de esta sección. El texto original de ambas se conserva íntegro.
+> **Estado al 2026-08-22 (corregido al cierre):** **las dos quedaron RESUELTAS** por ruling de Sam —
+> cada una con su bloque de resolución debajo. El texto original de ambas se conserva íntegro.
+>
+> _La redacción previa de esta línea decía «la **1 sigue abierta**»: era **incorrecta**. CC verificó
+> `brand_typography` de **ForumPHs**, no de **LucienSael**, y arrastró el diagnóstico anterior sin
+> comprobarlo contra el registro de la marca. Corregido con la DB a la vista._
 
 **1 · Los pesos declarados no están en el `css_import`.**
 §02 declara display «300 · 300i · 600i», body «300 · 300i · 400 · 400i · 600i» y mono «300 · 400 ·
@@ -65,6 +70,27 @@ tablas tienen que reflejar lo que dice el documento:
 Con eso es **imposible componer la marca con los pesos de su propia identidad**: el compositor elige
 el peso más cercano disponible y no avisa. Corrección propuesta (aditiva y reversible) en
 `unrlvl-iid-functions`, migración `20260822160000`.
+
+> #### ✅ RESOLUCIÓN de la divergencia 1 — ruling de Sam, 2026-08-22
+>
+> **Ya estaba resuelta en el dato.** El cambio entró por **UPDATE directo el 22-ago bajo HRD**, con el
+> ok de Sam, **no por DDL** — por eso la migración `20260822160000` no figura en el registry.
+>
+> **`css_import` vigente del rol `display`** (verificado contra `public.brand_typography` el 22-ago):
+> `https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap`
+> — cubre 300, 600, 300i y 600i, que es lo que §02 declara para display.
+>
+> **El ruling de fondo:** *«los pesos van según el largo, no cerrados»*. La lista de §02 **no es un
+> contrato cerrado**: se sirve el peso que el largo del texto pide. Eso disuelve la divergencia como
+> contradicción — no era el documento contra la DB, era una lista leída como enumeración exhaustiva
+> cuando nunca lo fue.
+>
+> **Estado verificado de los otros dos roles** (mismo chequeo, 22-ago), para que nadie lo reabra:
+> `body` = `Crimson+Pro:wght@400;500` · `mono` = `JetBrains+Mono:wght@400`. **No se tocaron y no hace
+> falta que se toquen**: bajo el ruling, no llevar cada peso declarado no es una divergencia.
+>
+> **La migración `20260822160000` NO se aplica** — duplicaría lo que ya está en el dato. Se
+> **reclasifica como documento de la decisión**.
 
 **2 · La firma que se estampa no es la del documento.**
 §04 dice que la frase «I build worlds. Some of them survive.» es la firma permanente y que
@@ -107,8 +133,12 @@ del propio documento bajo bloques `⛔ No operativo`.
 del sistema, así que no hay migración que hacer — sólo dejó de haber dos fuentes canónicas diciendo
 cosas distintas.
 
-> **La divergencia 1 (pesos tipográficos) sigue abierta.** La corrección aditiva propuesta en
-> `unrlvl-iid-functions`, migración `20260822160000`, **no se aplicó**.
+> **La divergencia 1 también quedó resuelta** — ver su bloque de resolución arriba.
+>
+> **⛔ No operativo — redacción previa de esta nota, derogada el 2026-08-22:** *«La divergencia 1
+> (pesos tipográficos) sigue abierta. La corrección aditiva propuesta en `unrlvl-iid-functions`,
+> migración `20260822160000`, no se aplicó.»* Era **incorrecta**: el cambio ya había entrado **por
+> dato** el mismo día. La migración no se aplica y se reclasifica como documento de la decisión.
 
 ---
 
