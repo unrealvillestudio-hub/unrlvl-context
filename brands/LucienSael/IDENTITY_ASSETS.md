@@ -53,9 +53,11 @@ tablas tienen que reflejar lo que dice el documento:
 | Paleta (8 roles) | `public.brand_palette` | ✅ los 8 roles y los 8 hex coinciden exactamente |
 | Tipografía (3 familias) | `public.brand_typography` | ⚠️ familias correctas, **pesos no** — ver abajo |
 | Composición sobre imagen | `public.imagelab_overlay_tokens` | sembrada en BRIEF 8 con `display`/`body` + franja `ember` |
-| Firma de cierre | `public.brand_voice_genome.application_constraints.signature_closer` | ⚠️ **contradice al documento** — ver abajo |
+| Firma de cierre | `public.brand_voice_genome.application_constraints.signature_closer` | ✅ **RESUELTO 2026-08-22** por ruling de Sam — manda la DB; el documento se corrigió (§04/§05) |
 
-### ⚠️ Dos divergencias detectadas al incorporar el documento
+### Dos divergencias detectadas al incorporar el documento
+
+> **Estado al 2026-08-22:** la **1 sigue abierta**; la **2 quedó RESUELTA** por ruling de Sam — ver el bloque de resolución al final de esta sección. El texto original de ambas se conserva íntegro.
 
 **1 · Los pesos declarados no están en el `css_import`.**
 §02 declara display «300 · 300i · 600i», body «300 · 300i · 400 · 400i · 600i» y mono «300 · 400 ·
@@ -80,6 +82,33 @@ cosas distintas, y **la decisión es de Sam**, no del sistema:
 
 Lo que no puede quedar es la contradicción viva: es exactamente lo que un documento canónico existe
 para impedir.
+
+#### ✅ RESOLUCIÓN de la divergencia 2 — ruling de Sam, 2026-08-22
+
+**Manda la decisión del 09-ago. El documento es lo que se corrige.**
+
+- **«I build worlds. Some of them survive.» es el SLOGAN**, no la firma. Sigue siendo permanente,
+  invariable y sin explicación — en **las superficies propias de Lucien**: footer web, byline
+  editorial, email.
+- **La FIRMA de una pieza distribuida —posts y ads— es `— Lucien Sael · Builder, Thinker, Operator`**,
+  que es el `signature_closer` de `lucien_editorial` (y `— luciensael.com` en `lucien_social`). La
+  estampa el sistema tras el PASS del Watcher; el copy nunca la escribe; no sustituye al CTA cuando
+  el genoma dice que el CTA cierra la pieza.
+- **Los tres títulos no son un rango corporativo.** «Builder, Thinker, Operator» nombran lo que hace.
+  La prohibición de fondo del documento se mantiene intacta: **nunca** «CEO», «Founder»,
+  «Strategist», «Consultant».
+
+**Qué cambió y dónde:** `lucien-sael-brand-identity-v1.html` §04 lleva ahora el ruling en cabecera de
+sección —gobierna todo el documento, incluidas las menciones de §03— y §04/§05 quedan reescritos
+distinguiendo slogan de firma. **Nada se borró:** las redacciones v1.0 derogadas se conservan dentro
+del propio documento bajo bloques `⛔ No operativo`.
+
+**Qué NO cambia:** `signature_closer` en la DB **no se toca**. La contradicción se resolvió a favor
+del sistema, así que no hay migración que hacer — sólo dejó de haber dos fuentes canónicas diciendo
+cosas distintas.
+
+> **La divergencia 1 (pesos tipográficos) sigue abierta.** La corrección aditiva propuesta en
+> `unrlvl-iid-functions`, migración `20260822160000`, **no se aplicó**.
 
 ---
 
