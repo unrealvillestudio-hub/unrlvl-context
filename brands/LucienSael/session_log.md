@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-08-22 (2) — Ruling de Sam: el slogan no es la firma · §04/§05 corregidos
+
+Sam resolvió la **divergencia 2** que la entrada anterior de hoy dejó abierta —«queda para Sam, no
+se tocó nada»— y la resolvió **a favor del sistema**:
+
+- **«I build worlds. Some of them survive.» es el SLOGAN.** Permanente, invariable, sin explicación,
+  en las **superficies propias de Lucien**: footer web, byline editorial, email.
+- **La FIRMA de una pieza distribuida —posts y ads— es `— Lucien Sael · Builder, Thinker, Operator`.**
+  Es el `signature_closer` de `lucien_editorial` (`lucien_social` cierra con `— luciensael.com`),
+  la **decisión del 2026-08-09** que sigue vigente. La estampa el sistema tras el PASS del Watcher;
+  el copy nunca la escribe.
+- **Los tres títulos no son rango corporativo:** nombran lo que hace. La prohibición de fondo del
+  documento se mantiene intacta — nunca «CEO», «Founder», «Strategist», «Consultant».
+
+**Corregido el documento, no la DB.** `signature_closer` **no se tocó**: no había migración que
+hacer, sólo dos fuentes canónicas diciendo cosas distintas. En
+`lucien-sael-brand-identity-v1.html`, §04 lleva ahora el ruling en cabecera de sección —**gobierna
+todo el documento**, incluidas las menciones de §03— y §04/§05 quedan reescritos distinguiendo
+slogan de firma. **Nada se borró:** las redacciones v1.0 derogadas se conservan dentro del propio
+documento bajo bloques `⛔ No operativo`, y en `IDENTITY_ASSETS.md` el texto original de la
+divergencia queda íntegro con un bloque de resolución debajo.
+
+**Sigue abierta la divergencia 1** (pesos tipográficos): la corrección aditiva propuesta en
+`unrlvl-iid-functions`, migración `20260822160000`, **no se aplicó**.
+
+---
+
 ## 2026-08-22 — Identidad visual incorporada como fuente canónica
 
 Entra `lucien-sael-brand-identity-v1.html` (Brand Identity System v1.0) a `brands/LucienSael/` junto
