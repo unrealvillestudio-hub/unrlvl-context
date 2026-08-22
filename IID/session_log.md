@@ -293,6 +293,140 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-22 — EL PRIMER PUBLISH DE LA HISTORIA DEL SISTEMA: el carril entrega, el día que el proveedor de texto se cayó
+
+**12:44:41 UTC en Facebook. 12:45:06 UTC en Instagram.** Dos piezas de ForumPHs, con título
+gobernado, imagen compuesta y sello de marca, en un canal público. Es la primera vez —desde que el
+IID existe— que algo recorre el carril entero y **sale**. Todo lo anterior murió en la DB.
+
+Y salió el día que el tanque de texto se secó a dos horas del estreno.
+
+Lo que es de marca vive en `brands/ForumPHs/session_log.md` (2026-08-22); acá va el carril.
+
+> **Base de las cifras.** Los ids de publicación están verificados contra Meta (`fb_get_posts` /
+> `ig_get_media`) y contra `assets.publication` en `content.content_pieces`. Los PRs, contra el
+> historial de los tres repos. Los cron, contra `cron.job`.
+
+### 🧱 BRIEF 8 — el título entra al carril, en tres PRs sobre tres repos
+
+Hasta hoy el título era un accesorio: se generaba si sobraba, nadie lo juzgaba y el compositor lo
+pedía sin garantía de recibirlo. Brief 8 lo convierte en **parte gobernada de la pieza**, y para eso
+había que tocar los tres eslabones a la vez.
+
+| Corte | Repo · PR | Qué cambia |
+|---|---|---|
+| **A** | `CopyLab` **#35** — *«el título se escribe: obligatorio, con oficio y con presupuesto»* | El título deja de ser opcional. El escritor lo produce **con oficio** (es una pieza de redacción, no una etiqueta) y **con presupuesto de caracteres**, igual que el cuerpo. |
+| **B/C** | `unrlvl-iid-functions` **#78** — *«el juez ve el título y el título tiene presupuesto»* (merge 08:02:45 UTC) | **El juez ve el título.** Antes juzgaba el cuerpo y el título pasaba sin que nada lo mirara — el mismo defecto de clase que G1: juzgar con parte del objeto oculta. |
+| **D** | `ImageLab` **#12** — *«BRIEF 7 + BRIEF 8 · D: la franja de identidad»* (merge 08:02:36 UTC) | La **franja de identidad `edge_left`**, `full_bleed`, **por el lado corto**, en el `primary` de la marca. Identifica sin competir con la escena. |
+
+**Por qué el título en la imagen y el título juzgado tienen que ser el mismo dato:** el compositor
+estampa lo que el juez aprobó, o el sistema publica dos mensajes distintos —uno auditado y otro no—
+sobre la misma pieza.
+
+Dos protecciones que se sostuvieron bajo presión de deadline:
+
+- **`OVERLAY_TEXT_MISSING` protegió por diseño.** Sin título gobernado, el compositor **no compone**.
+  Hubo tentación de saltarlo con el reloj encima; la regla aguantó y esa es la prueba de que sirve.
+- **El compositor lee `copy.title` del JOB** (`orchestrator_jobs.assets`), **no** de
+  `content_pieces.assets`. Para intervención manual, el dato viaja **por el job** — quedó anotado
+  porque costó descubrirlo en caliente.
+
+### 🔬 Forense del commit colgante — la D se fugó del merge
+
+La franja de identidad estaba mergeada y **no aparecía en producción**. Una hora de forense para una
+causa que no estaba en el código:
+
+> **Un PR mergeado captura la rama AL MOMENTO DEL MERGE.** Los commits que se empujan **después** a
+> esa misma rama van a *preview* y **jamás a `main`**, aunque GitHub siga mostrando el PR como
+> mergeado y la rama como actualizada.
+
+Eso le pasó al corte D del Brief 8. La reparación fue `ImageLab` **#13** (merge **10:45:00 UTC**),
+sobre la misma rama `claude/image-compositor-deterministic-o6ymv2`.
+
+**La regla que queda:** la verdad del deploy **no** es el estado del PR en GitHub — es el **sha del
+deployment de PRODUCCIÓN en Vercel**. Verificarlo post-merge pasa a ser paso obligatorio del
+protocolo de entrega (ítem de AGENDA, Fase 3).
+
+### 🚨 El incidente del 400 — y la exoneración de #35
+
+Poco después de mergear `CopyLab` **#35**, `callClaude` empezó a devolver **400 de forma súbita y
+sistemática**. La hipótesis obvia —el PR recién mergeado— consumió otra hora.
+
+**No era #35. Era el crédito de Anthropic agotado.** #35 queda **exonerado**.
+
+Dos cosas de esto, y las dos son de método:
+
+1. **Un 400 súbito y sistemático con código sin cambios puede ser saldo, no bug.** Revisar el saldo
+   **ANTES** de cazar código.
+2. **`callClaude` debe loguear el body del error antes de tirar.** Anthropic **nombra la causa ahí**.
+   La ceguera de hoy costó una hora de forense sobre un error que venía con su propia explicación
+   adjunta. Fix en AGENDA, Fase 3.
+
+### 🔤 Vocabulario de canal en `imagelab_presets` — FEED, no LANDING/META
+
+Dos vocabularios de canal conviven en la tabla:
+
+- **Filas viejas:** `LANDING` · `META` · `TIKTOK` · `WEB`.
+- **Lo que ImageLab realmente consulta** (verificado en logs `[sb]`): `FACEBOOK_FEED` ·
+  `INSTAGRAM_FEED` · `INSTAGRAM_STORY` · `BLOG_FEATURED` · `LINKEDIN_FEED` · `EMAIL_HEADER`.
+
+Una siembra copiada de las filas existentes produce presets que **el código nunca lee** — y como no
+hay preset, ImageLab cae al builder genérico **sin avisar**: el síntoma no es un error, es una
+imagen que no se parece a la marca. Fue exactamente la causa de la escena fuera de tema que Sam
+rechazó. Sembradas las 6 filas `FEED` de ForumPHs; las 4 viejas se conservan.
+
+> **Regla:** toda siembra de presets usa **el canal que el código consulta, verificado en logs** —
+> jamás copiado de filas existentes. Es la misma clase de defecto que `AUDIENCE_CTA` con claves
+> legacy: un eje migrado en la columna sin migrar a sus consumidores (`MULTIBRAND_RULE.md` §13).
+
+### 🆘 La publicación de emergencia — títulos extractivos y compositor de cómputo propio
+
+Con el saldo de texto en cero y el estreno a dos horas, no había forma de **generar** títulos nuevos.
+La salida:
+
+- **Título extractivo como recurso de emergencia.** Un título tomado **verbatim o casi-verbatim del
+  cuerpo ya juzgado** hereda la gobernanza de ese cuerpo; con **aprobación humana explícita** es
+  legítimo. **Jamás un título inventado sin juez ni humano** — la excepción es la herencia, no la
+  improvisación.
+- **El compositor no necesita al proveedor de texto.** Es **cómputo propio**: tipografía, franja,
+  scrim y encaje se resuelven en casa. Con el texto ya aprobado y Vertex vivo, el único eslabón
+  caído era el que ya no hacía falta.
+
+**Lo que esto dice de la arquitectura:** *tener herramientas no es tener infraestructura.* La
+infraestructura es la que **amortigua la falla de un proveedor** — y hoy amortiguó una caída total
+del generador de texto a dos horas del primer lanzamiento de la historia del sistema.
+
+### 📅 Los 6 agentes de ForumPHs, ya en cron
+
+`cron.job` **52–63**: research + process por agente. Weekly los dos `tier1`
+(`FPHS-CUOTA-POR-DENTRO` lunes, `FPHS-ASAMBLEA` jueves), biweekly los cuatro `tier2`.
+**21 corridas/mes.** Tres agentes ya rindieron su primer `last_run_at` el 22-ago
+(`FPHS-ASAMBLEA` y `FPHS-CUOTA-POR-DENTRO` 07:25, `FPHS-ACTA-INSTRUMENTO` 10:01); los otros tres
+esperan su fecha de calendario. **La ola 2 va a producir más rápido de lo que hoy se revisa** — el
+drenaje es ítem de Fase 1.
+
+### 🧭 Calibración — 9 filas nuevas en `intel.approval_calibration`
+
+Ventana 21-ago 23:54 → 22-ago 09:40 UTC, todas `evaluated_by: sam`: **3 `approved`, 6 `rejected`**.
+De ahí salen las **tres reglas de Sam** (títulos · texto · voz FPHs), detalladas en
+`brands/ForumPHs/session_log.md`. Las tres **todavía no están en el sistema**: viven en la tabla de
+calibración y en Professor. Llevarlas al **prompt de título** y a **`intel.watcher_rules`** es ítem
+de AGENDA (Fase 3) — mientras dependan de la memoria del escritor, van a volver a fallar.
+
+### 🕳️ Puntos ciegos que esta sesión dejó nombrados
+
+- **Diacríticos perdidos** — defecto **intermitente** del generador (mismo `raw`, misma corrida,
+  unas piezas bien y otras sin una sola tilde). El Watcher **no lo ve**. Corrección acordada:
+  **check determinístico** pre-juicio (regex es-sin-tildes), **no** una regla LLM — un defecto
+  mecánico no se juzga, se detecta.
+- **Claims normativos plausibles pero falsos para la jurisdicción** — el caso del voto ponderado
+  (ver el log de ForumPHs). Ni el Watcher ni la doctrina los detectan. Requiere **research con
+  verificación contra fuente primaria** y **gate experto humano** en piezas con afirmaciones legales.
+- **`compose-step` después de `regenerate`** — hoy una pieza regenerada no vuelve a componerse
+  automáticamente. En AGENDA, Fase 3.
+
+---
+
 ## 2026-08-20/21 — Reparación integral del carril: el juez deja de juzgar a ciegas, la regla declara dónde aplica, y el escritor tiene una segunda oportunidad
 
 Tres días de **reparación**, no de construcción: el carril ya corría end-to-end desde el 18-ago

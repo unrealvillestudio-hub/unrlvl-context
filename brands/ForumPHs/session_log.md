@@ -1,5 +1,134 @@
 # ForumPHs — Session Log
 
+## 2026-08-22 — ForumPHs al aire: el PRIMER PUBLISH DE LA HISTORIA DEL SISTEMA
+
+El 22-ago a las **12:44:41 UTC** ForumPHs publicó en Facebook, y **veinticinco segundos después**
+en Instagram. No son las primeras piezas de ForumPHs: son **las primeras del ecosistema entero**.
+Es la primera vez que algo recorre el carril completo —research → escritura → juicio del Watcher →
+aprobación de Sam → composición visual → publicación— y **sale a un canal público**. Todo lo
+anterior, desde que el IID existe, murió en la DB.
+
+> Cifras e ids verificados contra Meta (`fb_get_posts` / `ig_get_media`) y contra
+> `content.content_pieces` al cierre del 22-ago. El detalle de carril vive en `IID/session_log.md`
+> (2026-08-22); acá va lo que es de ForumPHs.
+
+### 🚀 Las dos piezas que salieron
+
+| | Facebook | Instagram |
+|---|---|---|
+| **id de publicación** | `1184045168120977_122131069905355949` | `17943396402322068` |
+| **permalink** | `facebook.com/122130904671355949/posts/122131069905355949` | `instagram.com/p/DcV8VVlHLR9/` |
+| **sellado en Meta** | 2026-08-22 **12:44:41 UTC** | 2026-08-22 **12:45:06 UTC** |
+| **pieza** | `987c1631-c569-49b8-a03d-aa6b33adad96` | `8cdaddb1-b158-4bb4-b44e-43b98f2199d1` |
+| **dominio · voz** | `la-cuota-por-dentro` · `fphs_educativa` | `el-acta-como-instrumento` · `fphs_educativa` |
+| **título (calibrado por Sam)** | «Una cuota que nunca sube en años no es buena señal.» | «El acta es la única prueba de lo que su asamblea aprobó.» |
+
+Ambas llevan `assets.publication` estampado en `content.content_pieces`
+(`published_by: "claude-mcp-manual"`, `published_at: 2026-08-22`) y ambas quedaron en
+`status: published`. **La publicación fue manual-asistida, no automática:** el `publisher-cron`
+de `public.scheduled_posts` todavía **no existe** — las filas `pending_publish` de la tabla siguen
+esperando a que alguien las levante. Queda en AGENDA (Fase 3) y es la diferencia entre *poder
+publicar* y *estar publicando*.
+
+**Mecánica validada end-to-end** (y anotada como learning de ops): `fb_publish_photo` toma el
+parámetro **`url`**, no `photo_url`; en IG el camino es `ig_create_container` → `ig_publish_container`.
+Nada de esto estaba probado antes de hoy.
+
+### 🎨 La imagen: escena bajo preset + tipografía de marca + el distintivo
+
+Lo que salió no es una imagen genérica con texto encima. Es el **stack visual completo del Brief 8**
+aplicado por primera vez en producción:
+
+- **Escena bajo preset** — generada por ImageLab con el preset del canal real, no un roll libre.
+- **Titular en EB Garamond** — la `display` de la marca (`public.brand_typography`, rol `display`),
+  compuesta por el compositor de cómputo propio, no por el modelo de imagen.
+- **Franja de identidad lila `#5C3472`** — el `primary` de ForumPHs (`public.brand_palette`),
+  en modo `edge_left`, `full_bleed`, `width_pct: 1.8` sobre `imagelab_overlay_tokens`. Va **por el
+  lado corto**, que es la decisión de Brief 8: la franja identifica sin competir con la escena.
+
+El titular en la imagen **no es decorativo**: es el título gobernado de la pieza, el mismo que el
+juez ve. Esa es la otra mitad del Brief 8 (abajo).
+
+### 📐 Las 3 reglas de calibración de Sam — la doctrina nueva
+
+Nacen de esta sesión, sobre piezas reales, y **las tres van al genoma y al prompt del carril**
+(hoy viven sólo en `intel.approval_calibration` y en Professor; llevarlas al prompt y a
+`intel.watcher_rules` es ítem de AGENDA, Fase 3):
+
+1. **Regla de títulos — el título cierra la idea SOLO.** Sin exigir la imagen ni el caption para
+   entenderse. El caso que la fijó: *«Es la prueba…»* — ¿de qué? Título trunco sobre una imagen
+   perfecta = rechazo. Un título que necesita el resto de la pieza para significar algo no es un
+   título, es media frase.
+2. **Regla de texto — el texto CONDUCE.** `stake` (qué está en juego para el lector) → instrumento
+   → movida concreta. **Si el lector puede cerrar con «sí, ¿y qué?», la pieza no está terminada.**
+   Explicar mecánica sin dirección no es comunicar.
+3. **Regla de voz FPHs — «la cuota extraordinaria» SIEMPRE completa.** Jamás «la extraordinaria».
+   Es la **tercera vez** que Sam la reitera: mientras dependa de la memoria del escritor va a
+   volver a fallar. Va al genoma **y** como watcher rule.
+
+Complemento de la sesión, también doctrina: **los caracteres no se ahorran.** Los presupuestos de
+longitud existen por **encaje de plataforma**, jamás por economía (mil caracteres son décimas de
+centavo). La métrica editorial que importa es **el pliegue**: FB ~3 líneas antes de *Ver más*, IG
+~125 caracteres antes de *más*. **La primera línea carga sola o la pieza no abre.**
+
+### 🗳️ El dominio `la-asamblea-que-no-entiendo` — rechazado de lote y regenerado
+
+El hallazgo del dominio estaba **envenenado en origen**: afirmaba **voto ponderado por cuota de
+participación**, que es **falso para Panamá**. La **Ley 284/2022** establece **un voto por unidad
+inmobiliaria** (las mayorías se computan sobre la totalidad de unidades); el coeficiente gobierna
+propiedad y gastos, **no el voto**. El escritor generalizó desde regímenes donde sí hay voto
+ponderado (CO/ES).
+
+Lo grave no es el error: es que **nada lo vio**. Una pieza del dominio llegó a estar **aprobada por
+Sam** el 21-ago por calidad de texto, y hubo que **revertir la aprobación** el mismo día tras el
+fact-check legal. Ni el Watcher ni la doctrina detectan **claims normativos plausibles pero falsos
+para la jurisdicción**.
+
+- **Política de lote aprobada por Sam:** rechazo **de oficio** de todo el dominio en esa corrida
+  (3 piezas asentadas en `approval_calibration`: `email_propietarios`, `linkedin`, `meta_fb`).
+- **Regenerado esta madrugada:** `FPHS-ASAMBLEA` corrió el **22-ago 07:25:20 UTC** con el brief
+  bajo **requisito legal** — toda afirmación normativa verificada contra **fuente primaria panameña**.
+- **Corrección sistémica pendiente:** **gate experto (Ivette)** pre-publish en piezas con
+  afirmaciones legales. En AGENDA, Fase 1.
+
+### ✅ El resto del día, en corto
+
+- **`approval_calibration`: 9 filas nuevas** en la ventana 21-ago 23:54 → 22-ago 09:40 UTC
+  (3 `approved`, 6 `rejected`), todas `evaluated_by: sam`. Es el corpus con el que se calibra el
+  juez, y hoy creció más que en cualquier día previo.
+- **Diacríticos perdidos** — una pieza salió sin tildes ni eñes en **todo** el texto («quinto ano»).
+  Defecto **intermitente** del generador: la misma corrida produjo piezas correctas con el mismo
+  `raw`. El Watcher **no lo detecta** — gap de regla. Corrección acordada: **check determinístico**
+  de integridad ortográfica pre-juicio (regex es-sin-tildes), **no** una regla LLM.
+- **Escena fuera de tema** — un roll bajo preset produjo *drone cargando rack de servidores* y
+  engranajes: vocabulario tech ajeno a la marca (parecía UNRLVL). La escena de ForumPHs habla de
+  **patrimonio, edificio, copropiedad**. Texto y título se conservaron; sólo se rehízo la imagen.
+- **Nota terminológica resuelta** — «fondo de reserva» **confirmado** como término correcto de uso
+  frente a «Fondo para Imprevistos» (Ley 284). Cierra la observación abierta sobre las piezas 1 y 4.
+- **6 agentes Vía A ya en cron** — `cron.job` **52–63**: research + process por agente, weekly para
+  los dos `tier1` y biweekly para los cuatro `tier2`. **21 corridas/mes.** Tres agentes ya tienen
+  `last_run_at` (`FPHS-ASAMBLEA` y `FPHS-CUOTA-POR-DENTRO` el 22-ago 07:25, `FPHS-ACTA-INSTRUMENTO`
+  el 22-ago 10:01); los tres de rendición/cuota-extra siguen en `NULL`.
+
+### 🔴 Lo que ForumPHs deja abierto (Fase 1 de la agenda)
+
+1. **Sprint de override hasta >90 % de PASS** — el 25,9 % del 21-ago no es el techo.
+2. **Drenaje de la ola 2** — las 21 corridas/mes ya están en cron y van a producir material más
+   rápido de lo que hoy se revisa.
+3. **Blog data-driven en `forumphs-com` — DECIDIDO.** Deja de ser «mecanismo por definir»: el blog
+   se construye. Desbloquea `HR-FPHS-08` (`blog_enlace_interno`), que hoy exige enlazar artículos
+   que no existen.
+4. **Klaviyo para `email_propietarios`** — hay piezas aprobadas esperando canal.
+5. **Gate experto de Ivette** — ver el dominio asamblea, arriba.
+
+> **Lo que esta sesión demostró de arquitectura:** el tanque de texto se secó a dos horas del
+> estreno (ver el incidente del 400 en `IID/session_log.md`) y **el lanzamiento salió igual**, con
+> títulos, imágenes y sello de marca. Con el texto ya aprobado, Vertex vivo y un compositor de
+> cómputo propio, la caída de un proveedor **se amortiguó**. Tener herramientas no es tener
+> infraestructura; hoy se vio la diferencia.
+
+---
+
 ## 2026-08-20/21 — Las primeras piezas de ForumPHs que pasan, y el canal por donde salen
 
 Sesión de **carril**; el detalle completo de la reparación (G1, G2-A/E/F, Brief 6) vive en
