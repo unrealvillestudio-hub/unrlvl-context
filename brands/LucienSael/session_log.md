@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-08-22 — Identidad visual incorporada como fuente canónica
+
+Entra `lucien-sael-brand-identity-v1.html` (Brand Identity System v1.0) a `brands/LucienSael/` junto
+con los dos logotipos en SVG, y un `IDENTITY_ASSETS.md` que declara el estatus canónico y el mapa
+documento → tablas. Los SVG se extrajeron del propio documento (§03) y se convirtieron a **trazados**:
+los inline del HTML resuelven las letras con `@import` de Google Fonts y, como archivo suelto, caen a
+Georgia sin avisar.
+
+Dos divergencias detectadas al contrastar el documento con la DB, ambas anotadas en
+`IDENTITY_ASSETS.md`:
+
+1. **Pesos tipográficos.** El documento declara display 300/300i/600i, body 300…600i y mono
+   300/400/700; los `css_import` vigentes traen 400;500;600 · 400;500 · 400. Hoy la marca no se puede
+   componer con los pesos de su propia identidad. Corrección aditiva propuesta en
+   `unrlvl-iid-functions` (migración `20260822160000`), sin aplicar.
+2. **Firma de cierre.** §04/§05 dicen que «I build worlds. Some of them survive.» reemplaza todo
+   título; `lucien_editorial` estampa `— Lucien Sael · Builder, Thinker, Operator`, que es la
+   **decisión del 2026-08-09** registrada más abajo en este mismo log. Documento y decisión se
+   contradicen — **queda para Sam**, no se tocó nada.
+
+La siembra de `imagelab_overlay_tokens` de la marca (BRIEF 8) se corrigió contra el documento: peso
+de titular 500 → **300** y tracking 0 → **.01em**, que es lo que declara §02. Verificado rasterizando
+en 1:1, 4:5 y 9:16.
+
+---
+
 ## 2026-08-09 — Política de idioma aplicada
 
 Normalizado a `es`/`en` neutro internacional. Sin regionalismos, sin spanglish. Marca **bilingüe**: **EN primero, ES después** en todo, incluidas las firmas; ES y EN se generan por separado desde origen, nunca se traduce uno del otro.
