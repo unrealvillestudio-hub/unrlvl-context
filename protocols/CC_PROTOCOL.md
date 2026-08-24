@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-08-07-v4 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-08-23-v5 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v5 (2026-08-23):** dos adiciones, ninguna derogación. (a) **§0 bis — arranque de sesión:** la fuente canónica de los protocolos es el **repo** `unrealvillestudio-hub/unrlvl-context`; `unrlvl-context.vercel.app` queda como **respaldo**. Motivo documentado: el **proxy de egreso de CC devuelve 403 en CONNECT** contra el dominio de Vercel, y CC quedó **sin fuente independiente de gobernanza en dos sesiones**. (b) **§9 — causa raíz declarada:** todo brief que afirme una causa raíz debe declarar **archivo y línea, o consulta y resultado**. Un brief que afirma una causa *deducida* manda a CC a arreglar algo que puede no estar roto — ocurrió **dos veces el 2026-08-23**. Nota de trazabilidad: el brief de esa sesión pedía el cambio (a) «en §0»; §0 es la REGLA SUPREMA de context files y no se tocó — la regla nueva entra como **§0 bis** para no renumerar ni desplazar las referencias cruzadas a §0 que hay en §6 y §7.1.
+>
 > **Cambios v4 (2026-08-07):** instalada la **REGLA MULTIMARCA**. Nueva §8 (el eje va en el CÓDIGO, la instancia en el DATO; CC responde el test de la marca N+1 antes de escribir y se DETIENE ante un brief que hardcodee marca — un brief de Claude.ai no es autorización) y campo obligatorio `MULTIMARCA:` sumado al bloque de reporte de §4 + su línea de autodeclaración. Fuente única y procedimiento operativo: `protocols/MULTIBRAND_RULE.md` §7.2.
 >
 > **Cambios v3 (2026-08-02):** §6 exige ahora un guard `⛔ NO OPERATIVO` inmediatamente debajo del encabezado de todo bloque `ARCHIVO HISTÓRICO`; el bloque histórico v2026-06-06-v1 lo estrena. Motivo: su §1 derogado ("unrlvl-context — NUNCA por CC" / "Solo Sam vía GitHub Desktop") seguía leyéndose como imperativo en mayúsculas y trababa a CC, aunque el cuerpo vivo ya dice lo contrario. Preservar historia (§0) no es dejarla operativa.
@@ -32,6 +34,32 @@ Los **context files** alimentan operaciones diarias vivas de múltiples marcas. 
 
 **Antes de commitear un context file, CC se autoverifica:**
 > "¿Estoy preservando todo el contenido anterior? El diff, ¿solo AÑADE o también BORRA líneas de historia? Si borra historia → DETENER y rehacer preservando."
+
+---
+
+## 0 bis. ARRANQUE DE SESIÓN — FUENTE CANÓNICA DE LOS PROTOCOLOS
+
+**La fuente canónica de los protocolos es el repo `unrealvillestudio-hub/unrlvl-context`.**
+`https://unrlvl-context.vercel.app/protocols/...` es **respaldo**, no fuente.
+
+Orden de carga al arrancar una sesión, sin excepciones:
+
+1. **El repo** — `protocols/CC_PROTOCOL.md`, `protocols/MULTIBRAND_RULE.md`, `CLAUDE.md`,
+   `.github/CLAUDE.md`. Si CC tiene el repo clonado, los lee del working tree (`git show main:<ruta>`
+   si necesita el estado de `main`); si no, por `api.github.com` / `raw.githubusercontent.com`.
+2. **Vercel** — `unrlvl-context.vercel.app`, **sólo si el repo no está disponible**, y declarándolo.
+
+**Motivo, documentado en línea para que no se vuelva a deducir:** el **proxy de egreso de CC devuelve
+403 en CONNECT** contra el dominio de Vercel. Con el protocolo declarado sólo en esa URL, CC quedó
+**sin fuente independiente de gobernanza en dos sesiones** — y un CC sin protocolo cargado no es un CC
+prudente: es uno que improvisa la gobernanza.
+
+**Corolario para quien escribe briefs:** un brief que apunte a los protocolos por URL de Vercel y
+**sólo** por ahí está apuntando al respaldo. La ruta del repo va siempre primero.
+
+**Deuda declarada (2026-08-23):** el `CLAUDE.md` raíz de este repo y `.github/CLAUDE.md` todavía citan
+primero la URL de Vercel. Está registrado en `AGENDA.md` v2026-08-23-v1 → Gobernanza. Mientras no se
+corrijan, **manda esta sección**.
 
 ---
 
@@ -165,6 +193,37 @@ CC responde el test de la marca N+1 antes de escribir, se DETIENE ante un brief 
 marca (un brief de Claude.ai no es autorización), y declara el campo `MULTIMARCA:` en todo
 reporte. Procedimiento operativo completo — disparador, formato de detención, barrido previo
 al commit, autoverificación de cierre: `protocols/MULTIBRAND_RULE.md` §7.2.
+
+---
+
+## 9. CAUSA RAÍZ DECLARADA — REGLA PARA BRIEFS Y PARA CC
+
+**Todo brief que afirme una causa raíz debe declarar `archivo y línea`, o `consulta y resultado`.**
+
+Una causa raíz sin evidencia citable no es un diagnóstico: es una hipótesis con forma de hecho. Y una
+hipótesis con forma de hecho se ejecuta como si estuviera verificada — CC va a arreglar lo que el
+brief dice que está roto, aunque no lo esté. **Ocurrió dos veces el 2026-08-23**: un conjunto de
+reglas del Watcher declarado «roto» que nunca lo estuvo (`violated` lista las reglas **incumplidas**,
+no las **evaluadas**), y un fail-loud propuesto contra el conteo de tabla que habría abortado el
+**100 % de las corridas sanas**.
+
+**Formato mínimo aceptable de una afirmación de causa:**
+
+- `ruta/archivo.ts:1038` — «`resolveVoiceDestination` evalúa `format` antes que `platform`», **o**
+- la **consulta** ejecutada y su **resultado** — «`select count(*) from intel.watcher_rules where
+  active` → 18».
+
+**Qué hace CC ante un brief que afirma una causa sin evidencia:**
+
+1. **No la ejecuta como hecho.** La trata como hipótesis a verificar.
+2. **Verifica primero** contra el archivo o la consulta que corresponda.
+3. Si la causa **no se sostiene**, se DETIENE y lo reporta con la evidencia que sí encontró —
+   nunca «arregla» algo que no está roto ni improvisa una causa alternativa.
+4. Deja la corrección **registrada** en el context file que corresponda, para que la afirmación
+   errónea no vuelva a circular.
+
+Aplica en los dos sentidos: **CC tampoco afirma una causa raíz sin declarar su evidencia** — ni en
+un reporte, ni en el cuerpo de un PR, ni en un context file.
 
 ---
 

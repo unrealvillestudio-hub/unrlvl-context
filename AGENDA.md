@@ -1,4 +1,6 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-08-23 · v2026-08-23-v1 (ACTUALIZA 2026-08-23 — **EL REGISTRO DE LA VOZ, EL CONJUNTO DE REGLAS DEL JUEZ Y CINCO EJES NUEVOS.** Sólo context files; el código, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado ANTES: **20 learnings** en `public.professor_learnings`, `session_date = 2026-08-23`, todos con `approved_by_sam = true`. **BLOQUEANTE DE TODO LO DEMÁS: no existe eje de colocación de piezas producidas** — `content-scheduler` programa **antes** de generar (selecciona `orchestrator_status='pending'`), `scheduled_posts` es tabla sin endpoint ni `piece_id`, ya escrita por el carril **114 ms** después de crear la pieza y **ningún cron la lee**, y `approve-piece` publica de inmediato sin programar: **el ecosistema produce contenido y no tiene forma de decidir cuándo sale.** Opción A recomendada: modo de colocación en `content-scheduler`, que ya sabe de cadencia, gate de rollout, stagger de hermanas y ventanas. Cierran: **registro de lenguaje** (los 12 `angle` de `influye`/`decide` de ForumPHs pasaron de tuteo a **usted** contra `HR-FPHS-07`, conservando ángulo, cifras y stake — 0 tuteo y 0 voseo en los 32 dominios; la corrida siguiente dio 0 marcas de tuteo, 10 de usted y **PASS**, contra 16 y 7 marcas de voseo en las dos piezas previas) · **PR #79 WATCHER-01** mergeado y **desplegado por CLI**: `content-watcher` **v36 → v37**, `2026-08-23 16:14:08 UTC`, `--no-verify-jwt`, con `sortRulesByCode` (orden determinista) y `evaluated_codes` (qué reglas vio el juez, consultable) · **`instruction` sembrada en 6 reglas activas** (`HR-FPHS-09`, `HR-FPHS-12`, `HR-FPHS-14`, `HR-GEN-04`, `HR-GEN-06`, `HR-GEN-07`) — antes el juez rechazaba por directivas que el escritor nunca recibió; `HR-RETAIL-01` queda sin `instruction` **a propósito** (sector retail, no aplica a ForumPHs) · **blog en `forumphs.com/blog`** (PR #1 BLOG-01 + BLOG-UI-01, HTML servido por función serverless, SEO-first, **dos artículos publicados**) · **menú móvil** (PR #3) y **encabezado del blog sin desborde** (PR #4) en `forumphs-com` · **bandeja de calibración** (PR #20) y **bandeja de publicación en solo lectura** (PR #21) en el Orchestrator. **CINCO EJES NUEVOS EN PRODUCCIÓN:** `intel.brand_publish_channels` · `content.content_pieces.slug` · `intel.brand_topics.theme_key`/`public_label` (32 dominios en 5 temas) · `content.content_pieces.discarded_at`/`discarded_reason` · `intel.pipeline_cutoffs`. **CORRECCIÓN DE CIFRA:** el ratio de PASS es **18,5 %**, no el 25,9 % que esta AGENDA venía declarando desde el 2026-08-21 — las menciones anteriores se conservan como registro y quedan anotadas en línea. **SEIS AFIRMACIONES ERRÓNEAS DE CLAUDE.AI registradas explícitamente** (el conjunto de reglas del Watcher nunca estuvo roto — `violated` lista sólo las incumplidas, no las evaluadas, y el piso real era 18, no 22; la barra del 18,5 % era correcta; el fail-loud contra el conteo de tabla habría abortado el 100 % de las corridas sanas; `scope` = `'ecosistema'` no aplica a ninguna pieza **en silencio**; la bandeja no muestra rechazadas porque **una pieza sólo existe si el Watcher dio PASS**; `content-scheduler` no recibe piezas aprobadas). Regla nueva de gobernanza al `CC_PROTOCOL.md` (**§9**): **todo brief que afirme una causa raíz debe declarar archivo y línea, o consulta y resultado.** Y **§0 bis**: la **fuente canónica de los protocolos es el repo**, `unrlvl-context.vercel.app` es **respaldo** — el proxy de egreso de CC devuelve **403 en CONNECT** contra el dominio de Vercel y dejó a CC sin fuente independiente de gobernanza en dos sesiones. Datos del día: **14 piezas descartadas** (todas anteriores al corte de las 16:14:08 UTC) · **costo de la ola del 21–22 de agosto $21,99 / 27 piezas** · la bandeja **mostraba 489 pendientes y había 15**. **EXCEPCIÓN DECLARADA, quinta aplicación:** `ecosystem.md` y `ecosystem_filemap.md` **NO se regeneran completos** — ver el bloque de excepción abajo. Detalle en `brands/ForumPHs/session_log.md` (2026-08-23).) · cabecera anterior (v2026-08-22-v1) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
+
 _Actualizada: 2026-08-22 · v2026-08-22-v1 (ACTUALIZA 2026-08-22 — **EL PRIMER PUBLISH DE LA HISTORIA DEL SISTEMA.** Sólo context files; el código, las DDL, la corrida y la publicación se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado ANTES: **11 learnings**, `session_date` 2026-08-22, `approved_by_sam: true`, ids en DB. **ForumPHs al aire** — FB `1184045168120977_122131069905355949` (12:44:41 UTC) e IG `17943396402322068` (12:45:06 UTC), con títulos calibrados por Sam, imágenes compuestas (escena bajo preset + EB Garamond + franja lila `#5C3472` `edge_left`) y captions reescritos bajo la doctrina nueva. Es la primera vez que una pieza recorre el carril completo —research → escritura → juicio → aprobación de Sam → composición → publicación— y **sale a un canal público**. El camino del día: **Brief 8 en tres PRs** (`CopyLab` #35 el título se escribe con oficio y presupuesto · `unrlvl-iid-functions` #78 el juez ve el título · `ImageLab` #12 franja de identidad `edge_left` por el lado corto) · **forense del commit colgante** (el corte D se fugó del merge — un PR mergeado captura la rama AL MOMENTO del merge — reparado en `ImageLab` #13; la verdad del deploy es el **sha del deployment de producción**, no el estado del PR) · **incidente del 400 = crédito de Anthropic agotado, no bug: `CopyLab` #35 EXONERADO** · **fix de vocabulario de canal en `imagelab_presets`** (el código consulta `FACEBOOK_FEED`/`INSTAGRAM_FEED`/…, no `LANDING`/`META`) · **publicación de emergencia** con títulos extractivos y compositor de cómputo propio · **9 filas nuevas de `approval_calibration`** de las que salen **las 3 reglas de Sam** (el título cierra la idea solo · el texto CONDUCE: stake → instrumento → movida · «la cuota extraordinaria» siempre completa). Dominio `la-asamblea-que-no-entiendo`: **rechazado de lote** por afirmación legal falsa para Panamá (Ley 284/2022 — un voto por unidad, no voto ponderado) y **regenerado esta madrugada** por el agente con requisito legal. **LA COLUMNA VERTEBRAL DE ESTA AGENDA ES EL ROADMAP DE SAM POST-RECARGA, EN CUATRO FASES:** (1) terminar FPHs · (2) NSCF, UNRLVL y Lucien al aire + presupuestos de publicación por marca · (3) carril end-to-end · (4) Ads. Todo lo previo se conserva íntegro debajo, y arrastra sin fase asignada lo que ya venía abierto. **EXCEPCIÓN DECLARADA, cuarta aplicación:** `ecosystem.md` y `ecosystem_filemap.md` **NO se regeneran completos** — ver el bloque de excepción abajo. Detalle en `IID/session_log.md` y `brands/ForumPHs/session_log.md` (2026-08-22).) · cabecera anterior (v2026-08-21-v1) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
 
 _Actualizada: 2026-08-21 · v2026-08-21-v1 (ACTUALIZA 2026-08-20/21 — REPARACIÓN INTEGRAL DEL CARRIL AIID EN TRES DÍAS. Sólo context files; el código, las DDL y la corrida se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado ANTES: **12 learnings** con sus ids en DB. **El carril pasó de 0 % sostenido a 25,9 % de PASS por pieza en ForumPHs** — 7 de 27, midiendo el último veredicto de cada pieza sobre `gate_detail`. Cierran: **G1-B/C/D** (el juez recibe el contexto de publicación —`audience_frame` + `platform_key` en el `ctx`, que era el ítem abierto del 18-ago—; el techo de tokens por destino se aplica; el escritor recibe presupuesto de longitud, ratio 3:1 medido) · **G2-A** (`objective_stimulus`/gate7 pasa a informativo **conservando el veredicto** en `would_reject`: deja pasar sin dejar de medir; rechazaba al 79 % con taxonomía inventada) · **G2-E** (`intel.watcher_rules.applies_when` — la aplicabilidad de una regla es dato y se filtra **determinísticamente antes** del juez; 4 reglas sembradas) · **G2-F** (bucle de reparación **acotado a 1 reintento dirigido**, con asiento propio `repair` en el ledger: 19 filas, $0,7146) · **Brief 6** (kinds `research`/`finding_process`/`embedding` + RPC `ops_log_generation` a **27 argumentos** con `p_billable`; **costo desconocido = NULL, nunca 0**). Doctrina nueva: **el escenario declarado no es dato fabricado** — una hipótesis marcada como tal no engaña, y la marca que la distingue vive en el dato (`exempt_if_piece_matches`), no en el código. Política de costos: **precio de lista**. ForumPHs: **Vía C** 6 semillas → 6 hallazgos → 27 piezas → **las primeras PASS de la marca** (21-ago 13:38 UTC) · **canal Meta operativo end-to-end** (`meta_accounts` sembrada — era el bloqueante de canal del 22-ago) · **6 agentes IID propios** (Vía A, briefs con requisito **2+ casos con fuente**) · `CHECK` multimarca de `iid_agents` corregido al eje (enumeraba voces: alta de marca = ALTER TABLE). Camino al 90 % diagnosticado: material de research + override + varianza del juez. Abre, en orden de prioridad: **(a) ImageLab — fix inmediato** (render de texto Gemini corrupto en imágenes de producción + violación **HR-LEGAL-01 dentro de la imagen**: el Watcher **no juzga imágenes**, así que el fix de render y el juicio visual van juntos) · (b) **sprint de Override hasta >90 % PASS** · (c) **Digest EF** (matar los 522 correos) · (d) UI Orchestrator/calibración · (e) blog de forumphs.com — **inspeccionado en esta pasada: no existe ruta `/blog`** · (f) VideoLab · (g) SocialLab + reparto Scheduler↔SocialLab · (h) SignalLab · (i) asiento de `web_search` server-side (**deuda declarada por CC**) · (j) descripción del kind `finding_process` · (k) EF de cierre de sesión · (l) `runSocialLabDirect`. **EXCEPCIÓN DECLARADA, tercera aplicación:** `ecosystem.md` y `ecosystem_filemap.md` **NO se regeneran completos** — ver el bloque de excepción abajo. Detalle en `IID/session_log.md` y `brands/ForumPHs/session_log.md` (2026-08-20/21).) · cabecera anterior (v2026-08-18-v1) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
@@ -6,6 +8,161 @@ _Actualizada: 2026-08-21 · v2026-08-21-v1 (ACTUALIZA 2026-08-20/21 — REPARACI
 _Actualizada: 2026-08-18 · v2026-08-18-v1 (ACTUALIZA 2026-08-18 — CARRIL ASYNC DEL AIID CERRADO END-TO-END. Sólo context files; el código y las DDL se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. **CopyLab es el generador efectivo del carril**, verificado en producción (`builder_meta.generator: "copylab"`, diez capas, `cache_mode: v2.0_per_slice`, `output_template_id: SMPC_full`, ledger con `api_key_ref: EXTERNAL:copylab`) y **el generador local está retirado del ecosistema**. Cierran: Fase B de CopyLab · retiro del generador local · procedencia en las tres capas · violación multimarca de `CARRIL_EDITORIAL_CANAL` · hardcode de marca en `iid-research`/`iid-process` · parser de `iid-process` · falso positivo del parser del juez. **NO cierra `evidence_required`**, que sigue sin leerse. Abre con **bloqueante del 22-ago**: `AUDIENCE_CTA` en CopyLab con claves legacy — 18 topics activos de ForumPHs con el escritor sin instrucción de CTA, **prohibido reponer alias** — y `audience_frame` al `ctx` del juez. Abre sin fecha: taxonomía de `objective_stimulus` como dato · migración del RPC `intel.match_content_embeddings` · medir siempre sobre `gate_detail` · `sociallab` con `runSocialLabDirect` · `search_config` no leído · `MODEL` hardcodeado · `stop_reason: "refusal"` · políticas de escritura como dato · regeneración real de `ecosystem.md`/`ecosystem_filemap.md`. Regla nueva: `protocols/MULTIBRAND_RULE.md` **§13** — migrar un eje en la columna sin migrar a sus consumidores deja el sistema peor que antes de migrar. Detalle en `IID/session_log.md` y `brands/ForumPHs/session_log.md` (2026-08-18).) · cabecera anterior (v2026-08-16-v2) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
 
 ---
+
+## 🗓️ ACTUALIZA 2026-08-23-v1 — El registro de la voz, el conjunto de reglas del juez y cinco ejes nuevos
+
+_(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md` (2026-08-23). Sólo context files de `unrlvl-context`; el código, las DDL, los deploys y las corridas se ejecutaron **antes** de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado **antes**: **20 learnings** en `public.professor_learnings`, `session_date = 2026-08-23`, todos con `approved_by_sam = true`. CC no mergea — Sam revisa, mergea y borra la rama. Lo previo se conserva íntegro debajo.)_
+
+### 🛑 BLOQUEANTE DE TODO LO DEMÁS — el eje de colocación de piezas producidas
+
+**No existe.** No es un defecto de una EF: es un eje que el ecosistema nunca construyó, y lo tapaba
+el hecho de que hasta el 22-ago no había piezas que colocar. Los cuatro hechos que lo demuestran:
+
+- **`content-scheduler` programa ANTES de generar** — selecciona `orchestrator_status='pending'`, es
+  decir, trabajo por hacer. No es el colocador de lo ya producido, aunque el nombre lo sugiera.
+- **`scheduled_posts` es tabla sin endpoint y sin `piece_id`** — el carril la escribe **114 ms**
+  después de crear la pieza, y **ningún cron la lee**. Escribe en un buzón que nadie abre.
+- **`approve-piece` publica de inmediato** — sin programar. Aprobar y publicar son el mismo acto,
+  así que no hay dónde meter una decisión de cuándo.
+- **Consecuencia:** el ecosistema **produce contenido y no tiene forma de decidir cuándo sale.**
+  Todo lo demás de esta agenda —drenaje, cadencia, presupuestos por marca, ads— asume que existe
+  este eje.
+
+**Opción A, recomendada: modo de colocación en `content-scheduler`.** Es el único componente que ya
+sabe de **cadencia**, **gate de rollout**, **stagger de hermanas** y **ventanas** — reconstruir eso
+en un componente nuevo es duplicar el eje, no crearlo. **Toca una EF → verificación explícita previa**
+(la vía de despliegue de EFs es un cuello de botella declarado abajo).
+
+### 🟢 Cerrado — se retira de pendientes
+
+- **Registro de lenguaje — el voseo se fue de los `angle`.** Los **12 `angle`** de los frentes
+  `influye` y `decide` de ForumPHs estaban en **tuteo**, contra `HR-FPHS-07`, que exige **usted**.
+  Reescritos a usted **conservando ángulo, cifras y stake** — el `angle` es el eje estructural
+  anti-duplicación; tocarlo de fondo habría cambiado de qué habla la marca, no cómo lo dice.
+  Verificado sobre los **32 dominios**: **0 pronombres de tuteo, 0 desinencias de voseo.** La corrida
+  siguiente del mismo dominio dio **0 marcas de tuteo, 10 de usted y PASS**; las dos piezas
+  anteriores tenían **16 y 7 marcas de voseo y cero de usted**. **La regla de fondo:** `HR-FPHS-07`
+  rige **la instrucción al escritor**, no sólo el texto entregado — una regla que sólo se aplica al
+  juicio llega tarde.
+- **Conjunto de reglas del Watcher — PR #79 (WATCHER-01).** Mergeado y **desplegado por CLI**:
+  `content-watcher` **v36 → v37**, `2026-08-23 16:14:08 UTC`, con `--no-verify-jwt`. Aporta
+  **`sortRulesByCode`** (orden determinista: sin orden estable, dos juicios sobre el mismo texto no
+  son comparables) y **`evaluated_codes`** (qué reglas **vio** el juez, consultable).
+- **`instruction` sembrada en 6 reglas activas** — `HR-FPHS-09`, `HR-FPHS-12`, `HR-FPHS-14`,
+  `HR-GEN-04`, `HR-GEN-06`, `HR-GEN-07`. Antes el juez **rechazaba por directivas que el escritor
+  nunca recibió**. `HR-RETAIL-01` se dejó **sin `instruction` a propósito**: es sector retail, no
+  aplica a ForumPHs, y sembrarle instrucción sería fabricar aplicabilidad donde no la hay.
+- **Blog en `forumphs.com/blog`.** PR #1 (BLOG-01) y BLOG-UI-01 mergeados. HTML servido por **función
+  serverless**, **SEO-first**, **dos artículos publicados**. Cierra el ítem «blog data-driven en
+  `forumphs-com`» de la Fase 1 del 22-ago y desbloquea `HR-FPHS-08` (`blog_enlace_interno`), que
+  exigía enlazar artículos publicados cuando no había artículos que enlazar.
+- **Menú móvil** (PR #3) y **encabezado del blog sin desborde** (PR #4) en `forumphs-com`.
+- **Bandeja de calibración** (PR #20) y **bandeja de publicación en solo lectura** (PR #21) en el
+  Orchestrator. Cubre parte del ítem «UI de calibración / Orchestrator» de la Fase 3.
+
+### 🆕 Ejes nuevos en producción
+
+| Objeto | Qué es |
+|---|---|
+| `intel.brand_publish_channels` | **Canal por el que una marca entrega sus piezas.** Proveedor y config **como dato**: el eje es «una marca publica por algún canal»; cuál canal es instancia |
+| `content.content_pieces.slug` | **URL estable.** Backfill **idéntico** a `pieceSlug()`. **Cambiarlo rompe URLs indexadas** |
+| `intel.brand_topics.theme_key` / `public_label` | **Agrupación pública por encima del dominio.** 32 dominios en **5 temas** |
+| `content.content_pieces.discarded_at` / `discarded_reason` | **Tercera salida de la bandeja.** Descartar **NO** entra al corpus |
+| `intel.pipeline_cutoffs` | **Cortes del flujo, con alcance.** `scope NULL` = ecosistema; texto = `brand_id` |
+
+### ❌ Correcciones a afirmaciones erróneas de Claude.ai
+
+Seis afirmaciones que llegaron a CC **con forma de causa raíz** y no lo eran. Se registran porque una
+causa deducida manda a arreglar algo que puede no estar roto, y **ocurrió dos veces el 2026-08-23**.
+
+| Se afirmó | Es falso porque |
+|---|---|
+| El conjunto de reglas del Watcher estaba **roto** | **Nunca lo estuvo.** `violated` lista sólo las **incumplidas**, no las **evaluadas**. El piso real era **18**, no 22 |
+| El **18,5 %** se midió contra una **barra más laxa** | La barra era **correcta** |
+| El fail-loud debía comparar contra el **conteo de tabla** | Habría **abortado el 100 % de las corridas sanas** |
+| El `scope` de un corte puede ser `'ecosistema'` | Se compara contra **`brand_id`**; la palabra literal **no aplica a ninguna pieza, en silencio** |
+| La bandeja **muestra rechazadas** y son el corpus más útil | **Una pieza sólo existe si el Watcher dio PASS.** Los rechazos nunca llegan a ser pieza |
+| `content-scheduler` puede **recibir una pieza aprobada** | Programa **antes** de generar: selecciona `orchestrator_status='pending'` |
+
+### 🔴 Defectos localizados, sin arreglar
+
+- **`resolveVoiceDestination` (`content-run-stage:1038`) evalúa `format` antes que `platform`.**
+  `job.format` llega como `"post"`, así que `destination` resuelve **siempre** a `'social'` — incluso
+  en blog, email y LinkedIn. **Hoy no contamina** porque **cero reglas activas usan `destination_in`**;
+  el día que una lo use, contamina en silencio.
+- **`approve-piece` escribe `status:'approved'`, que el CHECK de `content_pieces` rechaza.** Falla
+  **en silencio**.
+- **29 filas inertes en `scheduled_posts`** — sin `piece_id` y sin consumidor.
+- **Calibrar rechazos es imposible:** la pieza sólo existe si el Watcher dio PASS.
+- **401 en `iid_findings` / `iid_agents` desde el navegador.** **Decisión tomada: endpoint
+  server-side, NO `GRANT` a `anon`** — es inteligencia de marca, y abrirla al rol anónimo la publica.
+- **Sin contador de reprocesos por fila de cola** ni sello de **quién resetea**.
+
+### 📏 Medición pendiente
+
+- **Varianza del juez** — 10 juicios sobre el mismo texto con el Watcher **v37**. Sin esto no se sabe
+  qué parte del rechazo es pieza mala y qué parte es juez inestable.
+- **Replay del corpus congelado** y **ratio real**.
+- **CORRECCIÓN DE CIFRA — el ratio de PASS es 18,5 %, no 25,9 %.** Esta AGENDA venía declarando
+  **25,9 %** desde el 2026-08-21. **El valor medido es 18,5 %.** Las menciones anteriores se
+  **conservan** como registro de lo que se afirmó entonces (`CC_PROTOCOL.md` §0: la historia no se
+  borra) y quedan **anotadas en línea** con un puntero a este bloque.
+
+### 📧 Klaviyo — canal declarado y NO operativo
+
+Cuenta creada. **`KLAVIYO_API_KEY` en Supabase Secrets** (no en el repo). Lista **`VWwDjP`** sembrada
+en `intel.brand_publish_channels` con **`active = false`**.
+
+**Pendiente:** autenticación **DKIM/SPF** de `envios.forumphs.com` con **routing Dynamic**, **CNAMEs
+en DNS**, y **brief EMAIL-01**.
+
+> **El canal se activa cuando la autenticación complete. No antes.** Un canal de email activo sin
+> DKIM/SPF no falla ruidosamente: entrega a spam, que es peor que no entregar.
+
+### 📝 Contenido
+
+- **Drenar los 3 `iid_research_raw` pendientes** — corridas para **`administracion`**, **`patrimonio`**
+  y **`derechos-y-regimen`**. ⚠️ `iid-process` **encadena el fan-out** vía `callIIDCore`: **crea filas
+  de cola, así que gasta juicios.** No es una corrida barata.
+- **Regla *un dominio, un artículo de blog*** — canibalización SEO.
+- **ImageLab:** `Gemini 429` y `OVERLAY_TEXT_MISSING`.
+
+### 🏛️ Gobernanza
+
+- **Allowlist de egreso de CC:** `unrlvl-context.vercel.app` · `*.vercel.app` · `*.supabase.co` ·
+  `api.github.com` · `raw.githubusercontent.com`.
+- **`CC_PROTOCOL` debe apuntar al repo primero y a Vercel como respaldo** — **cerrado en este
+  Actualiza** (`CC_PROTOCOL.md` **§0 bis**). El proxy de egreso de CC devuelve **403 en CONNECT**
+  contra el dominio de Vercel, y CC quedó **sin fuente independiente de gobernanza en dos sesiones**.
+  **Queda abierto el mismo puntero en `CLAUDE.md` (raíz) y `.github/CLAUDE.md`**, que siguen citando
+  primero la URL de Vercel: se declaran acá y no se tocaron en esta pasada (`CC_PROTOCOL.md` §5 —
+  CC ejecuta sólo la tarea encargada).
+- **Regla nueva `CC_PROTOCOL.md` §9 — causa raíz declarada.** Todo brief que afirme una causa raíz
+  debe declarar **archivo y línea, o consulta y resultado**. Un brief que afirma una causa **deducida**
+  manda a CC a arreglar algo que puede no estar roto — ocurrió **dos veces** el 2026-08-23.
+- **PROV-01 — sello de procedencia en la pieza:** versión de EF, conjunto de reglas, versión del
+  `angle`. Sin eso, un veredicto no se puede reproducir seis semanas después.
+- **Vía confiable de despliegue de Edge Functions** — **cuello de botella estructural** con **9 EFs**
+  en el carril. Es lo que convierte «tocar una EF» en un ítem de riesgo.
+
+### 💾 Deuda anterior — seguridad de `unrlvl-db`
+
+**4 tablas sin RLS · 12 vistas `SECURITY DEFINER` · 8 funciones ejecutables por `anon` vía
+`/rest/v1/rpc/`.** Vive desde antes de esta sesión y sigue abierta.
+
+### ⚠️ Excepción declarada al HRD_ACTUALIZA — regeneración de derivados (quinta aplicación)
+
+El brief pide regenerar `ecosystem.md` y `ecosystem_filemap.md` **completos** al tocar `ecosystem.json`.
+**No se hizo, y se declara** — el motivo es el mismo de las cuatro veces anteriores (2026-08-13,
+2026-08-18, 2026-08-21, 2026-08-22) y no ha cambiado: **no existe generador en el repo**, así que
+«regenerar» a mano no es regenerar, es reescribir con interpretación —justo lo que la instrucción
+*«cero interpretación»* busca impedir— y **borra historia**, que es la regla suprema del
+`CC_PROTOCOL.md` §0. Ambos archivos llevan cuerpo acumulado que **no es derivable** del JSON.
+
+Se aplica el precedente: **nota de sincronización en la cabecera** declarando exactamente qué cambió
+en `ecosystem.json` v2026-08-23-v1, **cuerpo íntegro**, en **commit separado**.
+
+_Más todo lo abierto de los briefs anteriores (v2026-08-22-v1 y previos), conservado íntegro debajo._
 
 ## 🗓️ ACTUALIZA 2026-08-22-v1 — El primer publish de la historia del sistema · el roadmap de Sam en cuatro fases
 
@@ -43,7 +200,7 @@ Cuatro fases, **en este orden**. Lo que no está en una fase arrastra abajo, sin
 
 #### FASE 1 — Terminar ForumPHs
 
-1. **Sprint de override hasta >90 % de PASS.** El 25,9 % del 21-ago no es el techo del sistema. Un juez sin apelación es un juez que se equivoca en firme. Al cerrar: **learning obligatorio al Professor — «how to >90 % passed»**.
+1. **Sprint de override hasta >90 % de PASS.** El 25,9 % del 21-ago [corregido 2026-08-23: el valor medido es **18,5 %** — ver ACTUALIZA 2026-08-23-v1, «Medición pendiente». El texto original se conserva como registro] no es el techo del sistema. Un juez sin apelación es un juez que se equivoca en firme. Al cerrar: **learning obligatorio al Professor — «how to >90 % passed»**.
 2. **Drenaje de la ola 2.** Las **21 corridas/mes** ya están en cron y van a producir material más rápido de lo que hoy se revisa. Sin drenaje, la cola se vuelve el cuello de botella que el 90 % de PASS iba a destrabar.
 3. **Blog data-driven en `forumphs-com` — DECIDIDO.** Deja de ser «mecanismo por definir»: **el blog se construye**. Hoy el repo es un `index.html` estático de una sola página, sin ruta `/blog`, sin CMS y sin fetch a base de datos — **no hay punto natural de inserción, hay que crearlo**. Desbloquea `HR-FPHS-08` (`blog_enlace_interno`), que exige enlazar artículos publicados cuando **no hay artículos que enlazar**.
 4. **Klaviyo para `email_propietarios`.** Hay piezas aprobadas esperando canal desde el 21-ago.
@@ -94,7 +251,7 @@ _Más todo lo abierto de los briefs anteriores (v2026-08-21-v1 y previos), conse
 
 _(Bloque al tope. Detalle en `IID/session_log.md` y `brands/ForumPHs/session_log.md` (2026-08-20/21). Sólo context files de `unrlvl-context`; el código, las DDL y la corrida se ejecutaron **antes** de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado **antes**: **12 learnings**, ids en DB. CC no mergea — Sam revisa, mergea y borra la rama. Lo previo se conserva íntegro debajo.)_
 
-**El hecho de la sesión** — el carril pasó de **0 % de PASS sostenido** a **25,9 % por pieza** en ForumPHs (7 de 27, midiendo el **último** veredicto de cada pieza sobre `gate_detail`). Tres días de reparación, no de construcción: el carril ya corría end-to-end desde el 18-ago; lo que no funcionaba era el **juicio**, y la causa no era una sino seis, cada una tapando a la siguiente.
+**El hecho de la sesión** — el carril pasó de **0 % de PASS sostenido** a **25,9 % por pieza** en ForumPHs (7 de 27, midiendo el **último** veredicto de cada pieza sobre `gate_detail`) [corregido 2026-08-23: el valor medido es **18,5 %** — ver ACTUALIZA 2026-08-23-v1, «Medición pendiente». El texto original se conserva como registro]. Tres días de reparación, no de construcción: el carril ya corría end-to-end desde el 18-ago; lo que no funcionaba era el **juicio**, y la causa no era una sino seis, cada una tapando a la siguiente.
 
 ### 🟢 Cerrado — se retira de pendientes
 
@@ -148,7 +305,7 @@ El costo se asienta al **precio público del proveedor**: sin descuentos, crédi
 
 ### 🔵 Estado del camino al 90 %
 
-El 25,9 % **no es el techo del sistema**: es lo que rinde sin las tres piezas que faltan. En orden de rendimiento esperado: **(1) material de research** —`evidence` rechazó 62 veces por piezas sin con qué sustentarse; los briefs de los 6 agentes nuevos ya piden **2+ casos con fuente** y todavía no rindieron— · **(2) override**, el ítem (b) · **(3) varianza del juez**, sin medir: hasta medirla no se sabe qué parte del 74 % restante es pieza mala y qué parte es juez inestable.
+El 25,9 % [corregido 2026-08-23: el valor medido es **18,5 %** — ver ACTUALIZA 2026-08-23-v1, «Medición pendiente». El texto original se conserva como registro] **no es el techo del sistema**: es lo que rinde sin las tres piezas que faltan. En orden de rendimiento esperado: **(1) material de research** —`evidence` rechazó 62 veces por piezas sin con qué sustentarse; los briefs de los 6 agentes nuevos ya piden **2+ casos con fuente** y todavía no rindieron— · **(2) override**, el ítem (b) · **(3) varianza del juez**, sin medir: hasta medirla no se sabe qué parte del 74 % restante es pieza mala y qué parte es juez inestable.
 
 ### ⚠️ Excepción declarada al HRD_ACTUALIZA — regeneración de derivados (tercera aplicación)
 

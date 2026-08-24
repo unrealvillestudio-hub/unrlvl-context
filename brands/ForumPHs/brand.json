@@ -1,7 +1,9 @@
 {
   "_meta": {
-    "version": "2026-08-09",
-    "previous": "2026-08-08",
+    "version": "2026-08-23",
+    "previous": "2026-08-09",
+    "_previous_chain": "2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "_update_2026-08-23": "HRD_ACTUALIZA 2026-08-23. ADICIONES: publish_channels (blog operativo + email declarado y NO operativo) · public_themes (5 temas públicos) · voice_and_content.register (usted; HR-FPHS-07 rige la INSTRUCCIÓN al escritor, no sólo el texto entregado) · voice_and_content._resolved_2026-08-23. Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-08-23).",
     "maintained_by": "Claude",
     "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
   },
@@ -285,6 +287,41 @@
     { "level": "warning", "msg": "Ratio personal/ingresos 80.1% en Feb — necesita al menos 1 PH nuevo" },
     { "level": "info", "msg": "Supabase ForumPHs pendiente crear en cuenta IF (org: qybmxrjwrwurdgddgbnx)" }
   ],
+  "publish_channels": {
+    "_source": "intel.brand_publish_channels (NUEVA 2026-08-23) — canal por el que la marca entrega sus piezas. Proveedor y config COMO DATO: el eje es «una marca publica por algún canal»; cuál canal es instancia (MULTIBRAND_RULE).",
+    "_created": "2026-08-23",
+    "blog": {
+      "status": "✅ OPERATIVO desde 2026-08-23",
+      "provider": "vercel_html",
+      "url": "https://forumphs.com/blog",
+      "repo": "unrealvillestudio-hub/forumphs-com",
+      "entrega": "HTML servido por función serverless — SEO-first",
+      "prs": "PR #1 (BLOG-01) + BLOG-UI-01 mergeados · PR #3 menú móvil · PR #4 encabezado del blog sin desborde",
+      "articulos_publicados": 2,
+      "menu_label": "Sin tecnicismos",
+      "h1": "Hablemos sin tecnicismos",
+      "url_rule": "La URL es FIJA en /blog. El rótulo del menú («Sin tecnicismos») y el H1 («Hablemos sin tecnicismos») son de marca; la ruta NO cambia con ellos.",
+      "desbloquea": "HR-FPHS-08 (blog_enlace_interno) — exigía enlazar artículos publicados cuando no había artículos que enlazar",
+      "regla_seo": "UN DOMINIO, UN ARTÍCULO DE BLOG — canibalización SEO. Ver AGENDA.md v2026-08-23-v1 → Contenido.",
+      "slug": "content.content_pieces.slug (NUEVA 2026-08-23) es la URL estable. Backfill IDÉNTICO a pieceSlug(); cambiarlo ROMPE URLs indexadas."
+    },
+    "email": {
+      "status": "⛔ DECLARADO Y NO OPERATIVO — active = false en intel.brand_publish_channels",
+      "provider": "klaviyo",
+      "list_id": "VWwDjP",
+      "api_key": "[KLAVIYO_API_KEY en Supabase Secrets — no exponer en repo]",
+      "sending_domain": "envios.forumphs.com",
+      "pendiente": "autenticación DKIM/SPF de envios.forumphs.com con routing Dynamic · CNAMEs en DNS · brief EMAIL-01",
+      "regla_de_activacion": "El canal se activa CUANDO LA AUTENTICACIÓN COMPLETE, no antes. Un canal de email activo sin DKIM/SPF no falla ruidosamente: entrega a spam, que es peor que no entregar.",
+      "destino_previsto": "email_propietarios — hay piezas aprobadas esperando canal desde el 21-ago"
+    }
+  },
+  "public_themes": {
+    "_source": "intel.brand_topics.theme_key / public_label (NUEVAS 2026-08-23) — agrupación pública POR ENCIMA del dominio. 32 dominios en 5 temas.",
+    "count": 5,
+    "theme_keys": ["dinero-y-cuotas", "asamblea-y-actas", "administracion", "patrimonio", "derechos-y-regimen"],
+    "_note": "El dominio sigue siendo el eje anti-duplicación del carril; el tema es lo que ve el lector. Son dos capas distintas, no dos nombres de la misma."
+  },
   "voice_and_content": {
     "_update": "2026-08-09 (cont.) — las 3 voces activas de ForumPHs selladas en v1.1: fphs_educativa (11 turnos, control negativo el 11), fphs_editorial (16 turnos, control negativo el 14), fphs_conversion. CORRECCIÓN: los NO finales de educativa/editorial eran controles negativos deliberados, no convergencias fallidas (falso positivo por leer veredictos sin abrir notes_intent). content_type_registry: 7 filas completas para las 3 voces (5 de educativa/editorial existían con format_instruction/max_tokens NULL, pobladas por UPDATE). fphs_institucional sigue active=false (v0.5, application_constraints en object). NOTA: bloque en PROSA; el genoma estructurado vive en brand_voice_genome (DB). Detalle en session_log.md (2026-08-09 cont.). Previo: 2026-08-09 — fphs_conversion v1.1 sellada (convergida 10 turnos, 7 SÍ/3 NO); application_constraints migrado de array a object en las 3 voces activas; signature_closer sembrada en las 3 (ninguna la tenía); target_artifact → surfaces[]. Previo: 2026-08-08 — posición de voz ratificada con Ivette + reparto de topics + reactivación de fphs_conversion",
     "position": "La voz publica el ESTÁNDAR, nunca instrumenta al lector: se publica la pregunta, jamás la carta. Asistir a los propietarios en su conflicto convertiría a la marca en parte del conflicto — y la JD, que firma el contrato, es quien se pierde. Se enseña a VER los números; no se dirige contra quién ni hacia dónde actuar.",
@@ -297,6 +334,17 @@
     "audience_frame": "eje del poder de contratación: decide / influye / general (alias legacy jd / doliente). 18 topics repartidos 2026-08-08: 9 decide en conversión, 7 influye→fphs_educativa (ángulo ya educativo), 2 en conversión. DDL post-merge por Claude.ai: CHECK ampliado a 5 valores + 18 filas migradas (jd→decide, doliente→influye).",
     "psycho_presets_filter": "solo PSY-URGENCY, calibrada por dato patrimonial (la urgencia se sostiene en la cifra del patrimonio, nunca en presión emocional)",
     "wiring_2026-08-08": "content_type_registry + creative_compatibility_rules para fphs_editorial y fphs_educativa (las de fphs_educativa corregidas por Sam: educar como estrategia sí es UNRLVL, por pedagogía no)",
+    "register": {
+      "regla": "USTED. Los angle de los frentes influye y decide van en USTED — ni tuteo ni voseo.",
+      "norma": "HR-FPHS-07",
+      "alcance": "HR-FPHS-07 rige LA INSTRUCCIÓN AL ESCRITOR, no sólo el texto entregado. Una regla que sólo se aplica al juicio llega tarde: el escritor la incumple porque nunca la recibió, y el juez lo castiga por algo que el sistema le ocultó.",
+      "correccion_2026-08-23": "Los 12 angle de los frentes influye y decide estaban redactados en TUTEO. Reescritos a usted CONSERVANDO ángulo, cifras y stake — el angle es el eje estructural anti-duplicación; tocarlo de fondo habría cambiado de qué habla la marca, no cómo lo dice.",
+      "verificacion": "0 pronombres de tuteo y 0 desinencias de voseo en los 32 dominios. La corrida siguiente del mismo dominio: 0 marcas de tuteo, 10 de usted, PASS. Las dos piezas anteriores del mismo dominio: 16 y 7 marcas de voseo, cero de usted."
+    },
+    "_resolved_2026-08-23": [
+      "HR-FPHS-08 (sin post_url ni slugs) — RESUELTO: el blog existe en forumphs.com/blog con 2 artículos publicados, y content_pieces.slug da URL estable. El ítem se conserva en pending como registro de lo que estuvo abierto.",
+      "fphs_conversion turnos 8/9 (tuteo) — misma clase de defecto que la corrección de registro del 2026-08-23; el turno 4 (año calendario) sigue abierto."
+    ],
     "pending": [
       "auditar signature_closer en los genomas activos de las demás marcas — 7 de 11 no lo tenían al detectarse",
       "conectar cuentas de ForumPHs — brand_social_accounts y meta_accounts en 0 (sesión AIID aparte)",

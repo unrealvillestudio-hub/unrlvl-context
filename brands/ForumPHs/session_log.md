@@ -1,5 +1,116 @@
 # ForumPHs — Session Log
 
+## 2026-08-23 — El registro de la voz, el conjunto de reglas del juez y los cinco ejes nuevos
+
+Sesión de reparación y de corrección de afirmaciones. No hubo publicación nueva: lo que se movió
+fue el **registro de lenguaje** de los 32 dominios, el **conjunto de reglas** que el Watcher ejecuta
+y **cinco ejes nuevos** en producción que le faltaban al carril para poder colocar lo que produce.
+
+> Cifras verificadas contra producción al cierre del 2026-08-23. El detalle de carril vive en
+> `IID/session_log.md`; acá va lo que es de ForumPHs.
+
+---
+
+### ✅ Lo que se arregló y quedó verificado en producción
+
+**1. Registro de lenguaje — el voseo se fue de los `angle`.**
+Los **12 `angle`** de los frentes `influye` y `decide` de ForumPHs estaban redactados en **tuteo**,
+contra `HR-FPHS-07`, que exige **usted**. Se reescribieron a usted **conservando ángulo, cifras y
+stake** — no es una pasada de estilo: el `angle` es el eje estructural anti-duplicación, y cambiarlo
+de fondo habría movido de qué habla la marca, no cómo lo dice.
+
+Verificado sobre los **32 dominios**: **0 pronombres de tuteo** y **0 desinencias de voseo**.
+La corrida siguiente del mismo dominio produjo **0 marcas de tuteo, 10 de usted y PASS**; las dos
+piezas anteriores del mismo dominio tenían **16 y 7 marcas de voseo y cero de usted**.
+
+La lección, que es de sistema y no de esta marca: **`HR-FPHS-07` rige la instrucción al escritor,
+no sólo el texto entregado.** Una regla que sólo se aplica al juicio llega tarde — el escritor la
+incumple porque nunca la recibió, y el juez la castiga por algo que el sistema le ocultó.
+
+**2. Conjunto de reglas del Watcher — PR #79 (WATCHER-01) mergeado y desplegado.**
+`content-watcher` **v36 → v37**, desplegado **por CLI** el **2026-08-23 16:14:08 UTC**, con
+`--no-verify-jwt`. Aporta dos cosas:
+
+- **`sortRulesByCode`** — orden determinista de las reglas. Sin orden estable, dos juicios sobre el
+  mismo texto no son comparables entre sí.
+- **`evaluated_codes`** — qué reglas **vio** el juez, consultable. Antes sólo se sabía qué reglas
+  **incumplió**, que no es lo mismo (ver la tabla de correcciones abajo).
+
+**3. `instruction` sembrada en 6 reglas activas** — `HR-FPHS-09`, `HR-FPHS-12`, `HR-FPHS-14`,
+`HR-GEN-04`, `HR-GEN-06`, `HR-GEN-07`. Antes el juez rechazaba **por directivas que el escritor
+nunca recibió**. Es el mismo defecto que el punto 1, en seis reglas más.
+`HR-RETAIL-01` se dejó **sin `instruction` a propósito**: es sector `RETAIL`, no aplica a ForumPHs
+y sembrarle instrucción sería fabricar aplicabilidad donde no la hay.
+
+**4. Blog en `forumphs.com/blog` — al aire.** PR #1 (BLOG-01) y BLOG-UI-01 mergeados. El HTML lo
+sirve una **función serverless**, SEO-first. **Dos artículos publicados.** Cierra el bloqueante que
+`HR-FPHS-08` (`blog_enlace_interno`) arrastraba desde que existe: exigía enlazar artículos publicados
+cuando no había artículos que enlazar.
+
+**5. Menú móvil (PR #3) y encabezado del blog sin desborde (PR #4)** en `forumphs-com`.
+
+**6. Bandeja de calibración (PR #20) y bandeja de publicación en solo lectura (PR #21)** en el
+Orchestrator.
+
+---
+
+### ❌ Correcciones a afirmaciones erróneas de Claude.ai — registradas explícitamente
+
+Seis afirmaciones que llegaron a CC como causa raíz y **no lo eran**. Se registran porque una causa
+deducida manda a arreglar algo que puede no estar roto — y dos veces el 2026-08-23 mandó exactamente ahí.
+
+| Se afirmó | Es falso porque |
+|---|---|
+| El conjunto de reglas del Watcher estaba **roto** | **Nunca lo estuvo.** `violated` lista sólo las **incumplidas**, no las **evaluadas**. El piso real era **18**, no 22 |
+| El **18,5 %** se midió contra una **barra más laxa** | La barra era **correcta** |
+| El fail-loud debía comparar contra el **conteo de tabla** | Habría **abortado el 100 % de las corridas sanas** |
+| El `scope` de un corte puede ser `'ecosistema'` | Se compara contra **`brand_id`**; la palabra literal no aplica a ninguna pieza, **en silencio** |
+| La bandeja **muestra rechazadas** y son el corpus más útil | **Una pieza sólo existe si el Watcher dio PASS.** Los rechazos nunca llegan a ser pieza |
+| `content-scheduler` puede **recibir una pieza aprobada** | Programa **antes** de generar: selecciona `orchestrator_status='pending'` |
+
+**La regla que sale de acá y que va al `CC_PROTOCOL`:** todo brief que afirme una causa raíz debe
+declarar **archivo y línea, o consulta y resultado**. Sin eso es una hipótesis, y una hipótesis con
+forma de causa se ejecuta como si fuera un hecho.
+
+---
+
+### 🆕 Ejes nuevos en producción
+
+| Objeto | Qué es |
+|---|---|
+| `intel.brand_publish_channels` | **Canal por el que una marca entrega sus piezas.** Proveedor y config **como dato** — el eje es "una marca publica por algún canal"; qué canal, es instancia |
+| `content.content_pieces.slug` | **URL estable.** Backfill **idéntico** a `pieceSlug()`; cambiarlo **rompe URLs indexadas** |
+| `intel.brand_topics.theme_key` / `public_label` | **Agrupación pública por encima del dominio.** 32 dominios en **5 temas** |
+| `content.content_pieces.discarded_at` / `discarded_reason` | **Tercera salida de la bandeja.** Descartar **no** entra al corpus |
+| `intel.pipeline_cutoffs` | **Cortes del flujo, con alcance.** `scope NULL` = ecosistema; texto = `brand_id`. La palabra literal `'ecosistema'` **no es un valor válido** — ver la tabla de correcciones |
+
+---
+
+### 📊 Datos del día
+
+- **14 piezas descartadas**, todas anteriores al corte de las **16:14:08 UTC**.
+- **Costo de la ola del 21–22 de agosto: $21,99 / 27 piezas.**
+- La bandeja **mostraba 489 pendientes; había 15**.
+
+---
+
+### 🔴 Lo que queda abierto de esta marca
+
+- **El eje de colocación de piezas producidas no existe** — es el bloqueante de todo lo demás, y es
+  de ecosistema, no de ForumPHs. Ver `AGENDA.md` v2026-08-23-v1.
+- **Klaviyo declarado y no operativo.** Cuenta creada, `KLAVIYO_API_KEY` en Supabase Secrets, lista
+  `VWwDjP` sembrada en `brand_publish_channels` con **`active = false`**. Falta la autenticación
+  **DKIM/SPF** de `envios.forumphs.com` con routing **Dynamic** y los CNAMEs en DNS. **El canal se
+  activa cuando la autenticación complete, no antes.**
+- **Drenar los 3 `iid_research_raw` pendientes** — corridas para `administracion`, `patrimonio` y
+  `derechos-y-regimen`. Ojo: `iid-process` encadena el fan-out vía `callIIDCore` y **crea filas de
+  cola**, así que **gasta juicios**.
+- **Regla *un dominio, un artículo de blog*** — canibalización SEO.
+- **ImageLab:** `Gemini 429` y `OVERLAY_TEXT_MISSING`.
+- **Calibrar rechazos sigue siendo imposible:** la pieza sólo existe si el Watcher dio PASS.
+
+---
+
 ## 2026-08-22 — ForumPHs al aire: el PRIMER PUBLISH DE LA HISTORIA DEL SISTEMA
 
 El 22-ago a las **12:44:41 UTC** ForumPHs publicó en Facebook, y **veinticinco segundos después**
