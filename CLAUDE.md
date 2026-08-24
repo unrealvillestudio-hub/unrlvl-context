@@ -110,10 +110,31 @@ Proxy para operaciones Cloudflare.
 | Archivo | Descripción | Mantener via |
 |---|---|---|
 | `ecosystem.json` | Estado completo del ecosistema — brands, labs, infra, EFs, agenda | HRD_ACTUALIZA |
-| `ecosystem.md` | Versión legible de ecosystem.json | Regenerar con ecosystem.json |
-| `ecosystem_filemap.md` | Mapa de todos los archivos del ecosistema | Regenerar con ecosystem.json |
+| `ecosystem.md` | Versión legible de ecosystem.json | **Nota de sincronización, cuerpo íntegro** — ver abajo |
+| `ecosystem_filemap.md` | Mapa de todos los archivos del ecosistema | **Nota de sincronización, cuerpo íntegro** — ver abajo |
 | `ecosystem_graph.json` | Grafo de nodos y edges del ecosistema (ground truth from code audit) | Sesiones de auditoría |
 | `AGENDA.md` | Agenda de próximas sesiones priorizada | HRD_ACTUALIZA |
+
+#### Los derivados NO se regeneran completos — se sincronizan
+
+Cuando cambia `ecosystem.json`, `ecosystem.md` y `ecosystem_filemap.md` se actualizan así:
+**nota de sincronización en la cabecera** declarando exactamente qué nodos cambiaron en el JSON,
+**cuerpo íntegro**, en **commit separado**.
+
+**Por qué, y no es una excepción:** **no existe generador en el repo** —verificado el 2026-08-23—,
+así que «regenerar» a mano no es regenerar: es **reescribir con interpretación**, justo lo que la
+instrucción *«cero interpretación»* busca impedir, y **borra historia**, que es la regla suprema
+(`protocols/CC_PROTOCOL.md` §0). Ambos archivos llevan además **cuerpo acumulado que no es derivable
+del JSON** —flujos, tablas de estado, notas fechadas—: una regeneración literal los vaciaría.
+
+**Registro del cambio de instrucción.** Esta tabla decía antes *«Regenerar con ecosystem.json»*, y el
+brief de cada `Actualiza` pedía regenerarlos **completos**. Eso obligó a declarar una excepción en
+**cinco Actualizas seguidas** —13, 18, 21, 22 y 23 de agosto de 2026—, siempre con el mismo motivo y
+siempre resuelta igual. Cuando la excepción es la práctica en cada aplicación, **la práctica es la
+regla**: queda escrita acá para que el brief no vuelva a pedir lo que no se puede hacer sin romper §0.
+
+**La regeneración real sigue abierta sin fecha** en `AGENDA.md`. Si algún día existe generador en el
+repo, esta regla se revisa **entonces**, no antes.
 
 ### Estructura de brands
 ```
@@ -202,7 +223,9 @@ Al ejecutar `Actualiza`, los archivos que pueden cambiar:
 1. `brands/MARCA/session_log.md` — siempre
 2. `ecosystem.json` — si cambió algún estado del ecosistema
 3. `AGENDA.md` — si cambió la agenda
-4. `ecosystem.md` + `ecosystem_filemap.md` — si cambió ecosystem.json
+4. `ecosystem.md` + `ecosystem_filemap.md` — si cambió `ecosystem.json`: **nota de sincronización en
+   cabecera con cuerpo íntegro, en commit separado.** NO se regeneran completos — ver «Los derivados
+   NO se regeneran completos» arriba
 
 ### Naming de archivos — EXACTO
 Los nombres deben ser exactamente como están en el repo:
