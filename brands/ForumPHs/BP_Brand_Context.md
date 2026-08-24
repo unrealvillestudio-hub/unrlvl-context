@@ -1,5 +1,55 @@
 # BP_Brand_Context — ForumPHs
-**Versión:** 2026-08-08 · base previa 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+**Versión:** 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+
+---
+
+## 🆕 CANALES, REGISTRO Y TEMAS PÚBLICOS (2026-08-23)
+
+_Adición al tope. Nada de lo anterior se borra — la sección de 2026-08-08 sigue vigente inmediatamente debajo._
+
+### Registro de lenguaje — USTED, y la regla vale para la instrucción
+
+**Los `angle` de los frentes `influye` y `decide` van en USTED.** Ni tuteo ni voseo. La norma es
+`HR-FPHS-07`, y lo que se corrigió el 2026-08-23 no fue el texto entregado sino **de dónde salía**:
+
+> **`HR-FPHS-07` rige la INSTRUCCIÓN AL ESCRITOR, no sólo el texto entregado.**
+
+Una regla que sólo se aplica en el juicio llega tarde: el escritor la incumple porque **nunca la
+recibió**, y el juez lo castiga por algo que el sistema le ocultó. Los **12 `angle`** de esos dos
+frentes estaban en tuteo y se reescribieron a usted **conservando ángulo, cifras y stake** — el
+`angle` es el eje estructural anti-duplicación, y tocarlo de fondo habría cambiado **de qué** habla
+la marca, no **cómo** lo dice.
+
+**Verificado:** 0 pronombres de tuteo y 0 desinencias de voseo en los **32 dominios**. La corrida
+siguiente del mismo dominio dio **0 marcas de tuteo, 10 de usted y PASS**; las dos piezas anteriores
+tenían **16 y 7 marcas de voseo y cero de usted**.
+
+### Canales de publicación — el canal es dato
+
+Viven en `intel.brand_publish_channels`: el eje es *«una marca publica por algún canal»*; **cuál**
+canal es instancia.
+
+| Canal | Estado | Detalle |
+|---|---|---|
+| **Blog** | ✅ **OPERATIVO** desde 2026-08-23 | `forumphs.com/blog`, provider **`vercel_html`**. HTML servido por función serverless, **SEO-first**. **2 artículos publicados.** Desbloquea `HR-FPHS-08` (`blog_enlace_interno`) |
+| **Email** | ⛔ **DECLARADO Y NO OPERATIVO** | **Klaviyo**, lista **`VWwDjP`**, `active = false`. Falta **DKIM/SPF** de `envios.forumphs.com` con routing **Dynamic** y los CNAMEs en DNS. **Se activa cuando la autenticación complete, no antes** — un canal de email activo sin DKIM/SPF no falla ruidosamente: entrega a spam |
+
+**Superficie del blog, fijada:** rótulo del menú **«Sin tecnicismos»** · H1 **«Hablemos sin
+tecnicismos»** · **URL fija en `/blog`**. El rótulo y el H1 son decisiones de marca; **la ruta no
+cambia con ellos**, y `content.content_pieces.slug` da la URL estable de cada pieza — **cambiarlo
+rompe URLs indexadas**.
+
+**Regla editorial del blog:** *un dominio, un artículo* — canibalización SEO.
+
+### Los 5 temas públicos
+
+`intel.brand_topics.theme_key` / `public_label` agrupan **por encima del dominio**: **32 dominios en
+5 temas**.
+
+`dinero-y-cuotas` · `asamblea-y-actas` · `administracion` · `patrimonio` · `derechos-y-regimen`
+
+El **dominio** sigue siendo el eje anti-duplicación del carril; el **tema** es lo que ve el lector.
+Son dos capas, no dos nombres de la misma cosa.
 
 ---
 
