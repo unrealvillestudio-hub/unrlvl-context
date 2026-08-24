@@ -2,7 +2,13 @@
 
 La fuente de verdad de cómo debe comportarse CC en TODOS los repos del ecosistema es:
 **`unrlvl-context/protocols/CC_PROTOCOL.md`**
-https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md
+
+**La fuente canónica es el repo `unrealvillestudio-hub/unrlvl-context`. Vercel es respaldo.**
+Orden de carga (`CC_PROTOCOL.md` §0 bis): **(1)** el repo — working tree, o `api.github.com` /
+`raw.githubusercontent.com`; **(2)** `https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md`,
+**sólo si el repo no está disponible**, y declarándolo. Motivo: el proxy de egreso de CC devuelve
+**403 en CONNECT** contra el dominio de Vercel, y eso dejó a CC sin fuente independiente de
+gobernanza en dos sesiones (2026-08-23).
 
 CC lo carga y lo obedece antes de tocar nada. Este archivo NO duplica reglas: si algo
 parece contradecirlo, manda el protocolo.

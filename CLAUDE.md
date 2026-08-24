@@ -12,7 +12,23 @@ _Contexto persistente para Claude Code. No editar manualmente._
 ## ⛔ GOBERNANZA CC — NIVEL CRÍTICO (leer ANTES de tocar nada)
 
 Antes de cualquier acción en este repositorio, Claude Code DEBE cargar y obedecer el protocolo central:
-**`https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md`** (cargar con `Vercel:web_fetch_vercel_url` o `curl`).
+**`protocols/CC_PROTOCOL.md`**.
+
+**La fuente canónica es este repo — `unrealvillestudio-hub/unrlvl-context`. Vercel es respaldo.**
+Orden de carga, sin excepciones (`CC_PROTOCOL.md` §0 bis):
+
+1. **El repo.** Si CC lo tiene clonado, lee `protocols/CC_PROTOCOL.md` del working tree
+   (`git show main:protocols/CC_PROTOCOL.md` si necesita el estado de `main`); si no, por
+   `api.github.com` o `raw.githubusercontent.com`.
+2. **Vercel** — `https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md` (con
+   `Vercel:web_fetch_vercel_url` o `curl`), **sólo si el repo no está disponible**, y declarándolo.
+
+> **Por qué el orden importa, y no se deduce:** el proxy de egreso de CC devuelve **403 en CONNECT**
+> contra el dominio de Vercel. Con el protocolo declarado sólo en esa URL, CC quedó **sin fuente
+> independiente de gobernanza en dos sesiones** (2026-08-23). Un CC sin protocolo cargado no es un CC
+> prudente: es uno que improvisa la gobernanza.
+
+Lo mismo aplica a `protocols/MULTIBRAND_RULE.md` y a cualquier otro protocolo de `protocols/`.
 
 **Este repo es CRÍTICO — el sistema nervioso del ecosistema. Reglas reforzadas:**
 
