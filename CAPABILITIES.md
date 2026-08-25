@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.4 · 2026-08-18 · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude_
+_Versión: 1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude_
 
 ---
 
@@ -62,6 +62,32 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 | **content-pipeline** | TODO texto público (blog, producto, ad, social, landing, email). Incluye voice_genome L0/L1.5 + AIFE Layer 2. | "copy/texto/post/contenido". `skills/content-pipeline/SKILL.md` |
 | **CopyLab (carril)** | Motor de voz por genoma (el inyector lee el genoma de la marca); `content_type` por doble eje + `canal_block` real; escritor del cache en `service_role` (persiste). Objetos DB: `content_type_registry`, `platform_canal_map`, `creative_compatibility_rules.voice_id`. | Detalle: `brands/UnrealvilleStudio/session_log.md` (2026-08-04) + AGENDA `v2026-08-04-v2` |
 | **Professor** | learnings + checkpoint (cada 10 msgs, silencioso) + decision-matrix | "Professor / anota / checkpoint". Proxy `/api/professor` PENDIENTE → fallback Supabase SQL. |
+
+---
+
+## CARRIL — CAPACIDADES NUEVAS (2026-08-25)
+
+_Adición al tope del bloque de carril. La sección de 2026-08-18 sigue vigente inmediatamente debajo._
+
+El carril **coloca y publica solo** desde el 2026-08-25 (`5e9f03ef`, Facebook, 13:13 UTC, drenada por
+el cron **`content-placement-poll`**, jobid 66, `*/15`). Seis capacidades nuevas, todas invocables:
+
+| Capacidad | Qué hace | Cómo se reconoce |
+|---|---|---|
+| **Modo `placement` de `content-scheduler`** | El eje de colocación que faltaba. Toma una pieza **ya producida y aprobada** y le calcula una **franja** contra la cadencia real de la marca (`1x_week`, `month_1`) con `planSchedule`; el cron drena la franja. Es lo contrario del modo previo, que programaba **antes** de generar. | `content-scheduler` **v5** · `scheduled_posts.piece_id` · `orchestrator_jobs.status = 'awaiting_publish'` · cron `content-placement-poll` (jobid 66) |
+| **`gate9Language`** | Gate lingüístico del Watcher. **Informativo hoy** — marca, no bloquea. Tasa medida: **1 error en 11 de 22 piezas (50 %)**. ⚠️ **Revisar sus marcas antes de promoverlo a bloqueante**: un gate que marca la mitad del corpus o encontró un problema masivo o está mal calibrado, y no se sabe cuál sin mirar las marcas. | `content-watcher` **v43** · marcas en `gate_detail` |
+| **Corrector determinista pre-juicio** | Aplica `fix_replacement` **antes** de que el juez lea la pieza: lo que una regla sabe reparar sola, no llega al juicio. ⚠️ `verify_pattern` es **POSIX**, `fix_replacement` es **ECMAScript** (`$1`, nunca `\1`) — ver `HRD_PROTOCOL.md` **HRD-R08**. | `intel.watcher_rules.verify_pattern` / `.fix_replacement` · 4 reglas con patrón, `HR-FPHS-15` con reemplazo |
+| **Retención por desacuerdo** | Una pieza rechazada **ya no se destruye**: queda **retenida con la prueba de su inocencia al lado**, y una persona arbitra. Estados nuevos `challenged` y `deferred`. Primer arbitraje: **2026-08-25 14:36:41**, `decided_by: sam`. | `judge-arbitration` **v2** (`verify_jwt: true`) · `intel.judge_calibration` · `content_pieces.pass_type` / `.challenged_at` / `.deferred_until` / `.deferred_reason` |
+| **Edición con registro de diff** | Editar una pieza **deja rastro**: qué cambió, cuándo y quién. La edición no borra el texto juzgado. | `piece-edit` **v2** (`verify_jwt: true`) · `intel.piece_edits` · `content_pieces.edited_at` / `.edited_by` |
+| **Backfill de embeddings de `content-watcher`** | Puebla el corpus de embeddings hacia atrás. Corrido el 2026-08-25: **cero piezas vivas sin embedding en 21 días** — el gate deja de degradarse a LLM. | `content-watcher` **v43** · 🔴 el parámetro es **`days`**, **NO `window_days`** |
+
+> 🔴 **`judge-arbitration` y `piece-edit` van con `verify_jwt: true`** — es su primera capa de defensa,
+> y la asimetría con el resto del carril es **deliberada**: a esas dos las invoca **una persona desde
+> una sesión**. El resto usa `--no-verify-jwt` porque lo llama el **cron vía `pg_net`**, que no lleva
+> JWT. No uniformar sin entender esto.
+
+> **Regla de lectura que no cambia:** las métricas de gates se leen por **`gate_detail`**, nunca por
+> `failed_gate`.
 
 ---
 
