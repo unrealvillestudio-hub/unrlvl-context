@@ -1,5 +1,205 @@
 # ForumPHs — Session Log
 
+## 2026-08-25 — El carril publica solo, y el diagnóstico del ratio se movió del material al juez
+
+En una línea: **el carril de ForumPHs pasó de producir contenido que nadie podía publicar a publicar
+solo**, y el diagnóstico del ratio se movió **del material al juez** — el material sale limpio desde
+PROC-01; lo que fallaba eran las reglas.
+
+> Cifras verificadas contra producción al cierre del 2026-08-25. El detalle de carril vive en
+> `IID/session_log.md`; acá va lo que es de ForumPHs. Professor se cerró **antes** de este Actualiza:
+> **9 learnings** en `public.professor_learnings`, `session_date = 2026-08-25`, los nueve con
+> `approved_by_sam = true`.
+
+---
+
+### 🟢 Los cinco hitos, con su verificación
+
+| Hito | Verificación |
+|---|---|
+| **Primera publicación automática del ecosistema** | `5e9f03ef` salió **sola** en Facebook el **2026-08-25 13:13 UTC**. Franja calculada por `planSchedule` contra la cadencia real (`1x_week`, `month_1`), drenada por el **cron 66**. Nadie la tocó |
+| **Primer arbitraje humano del juez** | `judge_calibration`, **2026-08-25 14:36:41**, `decided_by: sam`, desde la sesión |
+| **Primera retención** | **2 piezas salvadas** que el día anterior se habrían destruido — con la prueba de su inocencia al lado |
+| **PROC-01 en producción** | **15 hallazgos nuevos**, **cero** con ley numerada, **cero** con año calendario. Antes: **3 de 5 contaminados** |
+| **Corpus de embeddings completo** | Backfill corrido: **cero piezas vivas sin embedding en 21 días**. El gate deja de degradarse a LLM |
+
+**Por qué el primero es el que importa.** Hasta el 24-ago, publicar era un acto de Sam: el `PASS` del
+Watcher habilitaba, la aprobación de Sam publicaba, y las dos cosas ocurrían en el mismo instante.
+El 25-ago la pieza `5e9f03ef` fue **colocada en una franja** por `planSchedule` —contra la cadencia
+declarada de la marca, no contra un reloj arbitrario— y **drenada por un cron**. Es la diferencia
+entre un sistema que produce y un sistema que **opera**.
+
+**Por qué la retención importa tanto como la publicación.** El día anterior, una pieza que el juez
+rechazaba se destruía. El 25-ago, dos piezas rechazadas quedaron **retenidas con la prueba de su
+inocencia al lado** — y el arbitraje de Sam las salvó. La lección de sistema: **un veredicto no es
+una sentencia si el sistema no guarda el desacuerdo.** Sin `judge_calibration` y sin estado
+`challenged`, el error del juez es indistinguible de la culpa de la pieza.
+
+---
+
+### ⚖️ Lo que se movió en las reglas del Watcher — 50 activas
+
+El diagnóstico del ratio cambió de sujeto. Con PROC-01 en producción el **material sale limpio**
+(15 hallazgos, cero ley numerada, cero año calendario, contra 3 de 5 contaminados antes). Lo que
+fallaba eran **las reglas**.
+
+**Reformuladas como test, sin imperativo:**
+
+- **`HR-LEGAL-01` y `HR-LEGAL-02`** — reescritas con la forma `INCUMPLE… CUMPLE…`. Una regla
+  redactada como orden le pide al juez que **obedezca**; una redactada como test le pide que
+  **decida**. Sólo la segunda es evaluable.
+
+**Reescritas sin idioma cableado:**
+
+- **`HR-GEN-05` / `HR-GEN-06` / `HR-GEN-07`** — ya no nombran el castellano: refieren al **"idioma
+  declarado de la pieza"**. Los ejemplos castellanos migraron a `instruction`, que es donde
+  corresponde: el `statement` es lo que el **juez** evalúa, la `instruction` es lo que el **escritor**
+  recibe. Es la Regla Multimarca aplicada al conjunto de reglas — **el eje va en el código de la regla,
+  la instancia (el idioma) en el dato de la pieza.**
+
+**Nuevas:**
+
+- **`HR-GEN-09`** — ambigüedad que **invierte el sentido**. Nace del título que Sam rechazó: no era
+  un título malo, era un título que **decía lo contrario de lo que quería decir**, y ninguna regla
+  del conjunto lo veía.
+- **`HR-FPHS-16`** — **sin enlaces salientes**; exime el dominio propio. Es la contraparte ejecutable
+  de la política de enlaces de la marca (ver `BP_Brand_Context.md`): la fuente **se nombra**, nunca
+  se enlaza.
+
+**Ampliada y luego reescrita — el caso que enseña:**
+
+- **`HR-FPHS-11`** — primero se amplió a **tres orígenes de cifra**, y después hubo que **reescribirla**.
+  Dos defectos, los dos instructivos:
+  1. la **enumeración de fuentes excluía diarios *de hecho*** — enumerar es una forma de excluir sin
+     querer;
+  2. exigía al juez una **correspondencia URL↔nombre que no puede verificar** — el juez lee texto, no
+     navega. **Una regla que pide una verificación imposible no es estricta: es ruido**, y su veredicto
+     no significa nada.
+
+**Reescrita con distinción gramatical — 9 casos probados, 9 correctos:**
+
+- **`HR-FPHS-15`** — ahora distingue **sustantivo** de **adjetivo**: `la extraordinaria` **incumple**
+  (la marca exige la cuota nombrada completa), `asamblea extraordinaria` **cumple** (ahí
+  «extraordinaria» califica a «asamblea», no sustituye a «cuota extraordinaria»). Probada contra
+  **9 casos**, **9 correctos**. Lleva además `fix_replacement`.
+
+**Trabajo de esquema sobre el conjunto:**
+
+- **10 reglas con `condition` sembrada** — la aplicabilidad se resuelve **antes** del juez, como dato.
+- **`HR-LUC-02` y `HR-UNRLVL-03` corregidas a `kind='prohibition'`** — estaban mal clasificadas.
+- **4 reglas con `verify_pattern`**; `HR-FPHS-15` además con `fix_replacement`.
+
+> **La regla de motor que salió de acá y subió a `HRD_PROTOCOL.md`:** `verify_pattern` se evalúa en
+> **POSIX** (auditable con `SELECT … ~*`) y `fix_replacement` en **ECMAScript** (`$1`, **nunca** `\1`).
+> Son dos motores distintos en la misma fila. Verificar contra el motor **donde se ejecuta**, no donde
+> es cómodo probar. Queda documentado en el `COMMENT ON COLUMN` de cada columna.
+
+---
+
+### 🧩 Los seis ángulos de ForumPHs — aprobados por Sam el 2026-08-25
+
+Sembrados en los **32 dominios** de `intel.brand_topics.angles`. La decisión editorial completa vive
+en `BP_Brand_Context.md`; acá queda la matriz y el registro de por qué.
+
+| Ángulo | educativa | editorial | conversión | Qué hace |
+|---|:---:|:---:|:---:|---|
+| `expertise` | ✅ | — | ✅ | Explica el mecanismo por dentro |
+| `artefacto` | ✅ | ✅ | ✅ | Muestra qué contiene un documento bien hecho |
+| `pregunta` | ✅ | ✅ | ✅ | El lector pregunta lo equivocado; se cambia el marco |
+| `consecuencia` | — | ✅ | ✅ | El efecto que todavía no se ve |
+| `contraste` | ✅ | ✅ | — | Dos formas de hacerlo: una sostiene, otra no |
+| `secuencia` | ✅ | ✅ | — | El orden en que las cosas se detonan |
+
+**El criterio de las ausencias es lo que hay que preservar** — las casillas vacías no son huecos por
+llenar, son decisiones:
+
+- **`expertise` no va a editorial** porque `HR-FPHS-09` reserva a editorial **revelar la práctica**,
+  no enseñar qué es.
+- **`consecuencia` no va a educativa** porque ahí se vuelve **alarmismo con bata de profesor**.
+- **`contraste` y `secuencia` no van a conversión** porque **construyen** hacia una comprensión, y
+  conversión debe **mover a decidir**.
+
+**Lo que esto abre en números:** **15 combinaciones ángulo-voz** contra **la única** que el ecosistema
+usó en **25 días y 250 filas**. La diversidad de ángulos deja de ser una aspiración y pasa a ser
+`intel.brand_topics.angles` — dato, no criterio del escritor.
+
+---
+
+### 🗄️ Mutaciones de esquema y de datos que tocan a la marca
+
+**Esquema:**
+
+- `watcher_rules` **+`condition`** / **+`verify_pattern`** / **+`fix_replacement`** / **+`enforced_on`**
+- `content_pieces` **+`pass_type`** / **+`challenged_at`** / **+`edited_at`** / **+`edited_by`** /
+  **+`deferred_until`** / **+`deferred_reason`**
+- `scheduled_posts` **+`piece_id`** — la tabla deja de ser un buzón que nadie abre
+- `brand_topics` **+`angles`**
+- **Tablas nuevas:** `intel.judge_calibration` · `intel.piece_edits`
+- **CHECK de `content_pieces.status`** ampliado con **`challenged`** y **`deferred`**
+- **CHECK de `orchestrator_jobs.status`** con **`awaiting_publish`**
+
+**Datos:**
+
+- **29 filas de `scheduled_posts` borradas** — residuo del código retirado. Cinco de ellas eran de
+  **LucienSael** y se rescataron antes del borrado:
+  `brands/LucienSael/corpus/2026-07-30_zugzwang_set.md`.
+- Finding **`9eea20a3`** saneado a mano.
+- **32 dominios de ForumPHs con `angles` sembrados.**
+- **3 canales Meta/LinkedIn** en `brand_publish_channels` con `provider_platform`.
+
+**Cron nuevo:** **`content-placement-poll`** — `jobid 66`, `*/15`, **activo**. Es el que drenó
+`5e9f03ef`.
+
+---
+
+### 🚀 Lo desplegado
+
+`unrlvl-iid-functions`: PRs **#80, #81, #82, #83, #84, #85, #86, #87, #88, #91, #92**
+`Orchestrator`: PRs **#21, #22**
+
+**Edge Functions desplegadas** (versión real = número final de `entrypoint_path`):
+
+| EF | Versión |
+|---|---|
+| `content-run-stage` | **92** |
+| `content-watcher` | **43** |
+| `content-scheduler` | **5** |
+| `iid-core` | **54** |
+| `iid-process` | **47** |
+| `approve-piece` | **39** |
+| `judge-arbitration` | **2** |
+| `piece-edit` | **2** |
+
+🔴 **`judge-arbitration` y `piece-edit` van con `verify_jwt: true`** — es su primera capa de defensa.
+El resto del carril usa `--no-verify-jwt` porque lo llama el **cron vía `pg_net`**, que no lleva JWT.
+La asimetría es deliberada y hay que conservarla: las dos EF nuevas las invoca **una persona desde una
+sesión**, no un cron.
+
+> **La otra regla de gobernanza que salió de acá:** **mergear no despliega, y un merge puede quedarse
+> corto.** Se verifica el **commit** tras el merge, no sólo que el PR aparezca cerrado. Subió a
+> `HRD_PROTOCOL.md`.
+
+---
+
+### 🔻 Lo que queda abierto, con su evidencia
+
+- **Barrido de los 8 `statement` imperativos** de las 50 reglas activas — nace de la pregunta de Sam
+  al ver la reformulación de `HR-LEGAL-01/02`. Si dos reglas estaban redactadas como orden, ¿cuántas
+  más? Ocho.
+- **Regla de correspondencia con la fuente** (FIX-01 §4.5) — **aplazada por decisión de Sam**.
+- **Promoción del gate lingüístico**: hoy es informativo y marca **1 error en 11 de 22** piezas.
+  **Tasa del 50 %** — revisar **sus marcas** antes de bloquear con él. Un gate que marca la mitad del
+  corpus o encontró un problema masivo o está mal calibrado, y no se sabe cuál sin mirar las marcas.
+- **Imagen inconsistente** en **blog (2 de 4)** y **LinkedIn (1 de 2)**.
+- **Aviso obsoleto en la bandeja de publicación del Orchestrator** — el texto dice que no existe el eje
+  de colocación. Existe y funcionó. **Va en PR propio del repo `Orchestrator`**, no en `unrlvl-context`.
+- **Las 5 piezas destruidas** el día anterior a la retención — **irrecuperables**.
+- Klaviyo **DKIM/SPF** de `envios.forumphs.com` · seguridad de `unrlvl-db` · **deuda de claves
+  Supabase** (ver AGENDA).
+
+---
+
+
 ## 2026-08-23 — El registro de la voz, el conjunto de reglas del juez y los cinco ejes nuevos
 
 Sesión de reparación y de corrección de afirmaciones. No hubo publicación nueva: lo que se movió

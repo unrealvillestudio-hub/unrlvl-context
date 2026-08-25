@@ -1,5 +1,64 @@
 # BP_Brand_Context — ForumPHs
-**Versión:** 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+**Versión:** 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+
+---
+
+## 🆕 LOS SEIS ÁNGULOS Y LA POLÍTICA DE ENLACES (2026-08-25)
+
+_Adición al tope. Nada de lo anterior se borra — la sección de 2026-08-23 sigue vigente inmediatamente debajo._
+
+### Los seis ángulos de ForumPHs — y qué voz admite cada uno
+
+**Aprobados por Sam el 2026-08-25.** Sembrados en los **32 dominios** de `intel.brand_topics.angles`.
+
+Un **ángulo** no es un tema ni un formato: es **desde dónde se agarra** un tema. El dominio dice
+*de qué* habla la pieza; el ángulo dice *por dónde entra*. Son ejes independientes, y por eso el
+mismo dominio puede producir seis piezas que no se repiten.
+
+| Ángulo | educativa | editorial | conversión | Qué hace |
+|---|:---:|:---:|:---:|---|
+| `expertise` | ✅ | — | ✅ | Explica el mecanismo por dentro |
+| `artefacto` | ✅ | ✅ | ✅ | Muestra qué contiene un documento bien hecho |
+| `pregunta` | ✅ | ✅ | ✅ | El lector pregunta lo equivocado; se cambia el marco |
+| `consecuencia` | — | ✅ | ✅ | El efecto que todavía no se ve |
+| `contraste` | ✅ | ✅ | — | Dos formas de hacerlo: una sostiene, otra no |
+| `secuencia` | ✅ | ✅ | — | El orden en que las cosas se detonan |
+
+#### El criterio de las ausencias — esto es lo que hay que preservar
+
+Las casillas vacías **no son huecos por llenar**. Cada una es una decisión editorial con motivo, y
+llenarlas «para completar la matriz» rompería la separación de voces de la marca:
+
+- **`expertise` no va a editorial.** `HR-FPHS-09` reserva a editorial **revelar la práctica** — cómo
+  se hace de verdad, qué se ve desde adentro del oficio. No **enseñar qué es**. Un `expertise` en
+  editorial convierte la columna de opinión en una clase, y la marca pierde el único lugar donde
+  toma posición.
+- **`consecuencia` no va a educativa.** Ahí se vuelve **alarmismo con bata de profesor**: la
+  autoridad del registro didáctico prestada a un texto cuyo motor es el miedo a lo que todavía no se
+  ve. La consecuencia es legítima cuando la marca **opina** o cuando **mueve a decidir**; no cuando
+  enseña.
+- **`contraste` y `secuencia` no van a conversión.** Los dos **construyen** hacia una comprensión —
+  el lector termina entendiendo algo. Conversión debe **mover a decidir**. Un texto que construye y
+  un texto que empuja tienen curvas incompatibles: el primero se gana el derecho a la conclusión, el
+  segundo la pide desde el principio.
+
+**Lo que la matriz abre, en números:** **15 combinaciones ángulo-voz** contra **la única** que el
+ecosistema usó en **25 días y 250 filas**. La diversidad deja de depender del criterio del escritor
+en cada corrida y pasa a ser **dato** (`intel.brand_topics.angles`).
+
+### Política de enlaces — la fuente se nombra, nunca se enlaza
+
+**Regla de marca:** en toda pieza pública de ForumPHs, **la fuente se nombra y nunca se enlaza.**
+No hay enlaces salientes. La única excepción es el **dominio propio**.
+
+- **Dónde vive la procedencia verificable:** en **`source_url` del hallazgo**, no en el cuerpo de la
+  pieza. Quien audita la afirmación tiene la URL en el dato; quien lee la pieza tiene el nombre de
+  quien lo dijo.
+- **Por qué:** **el lector termina de leer en la pieza.** Un enlace saliente en una pieza de marca
+  es una invitación a irse, y la marca paga el research para retener, no para derivar tráfico a un
+  tercero. Nombrar la fuente da la misma credibilidad sin el costo.
+- **Cómo se hace cumplir:** `HR-FPHS-16` (**nueva el 2026-08-25**) — sin enlaces salientes, exime el
+  dominio propio. La política es de marca; la regla es su forma ejecutable.
 
 ---
 
