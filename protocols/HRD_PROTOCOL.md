@@ -1,5 +1,5 @@
 # HRD — Hard Instructions Protocol
-_HRD Protocol v1.4 · UNRLVL Studio · 2026-08-16 (HRD_ACTUALIZA paso 10: **CONDICIÓN 4 — resuelto por vía alterna** + **paso 10-bis — verificación contra fuente**, ambos definidos en `skills/context-resolver/SKILL.md` §2 y §3; este protocolo los invoca, no los duplica. · base previa v1.3 · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas))_
+_HRD Protocol v1.5 · UNRLVL Studio · 2026-08-25 (**dos reglas globales nuevas, ninguna derogación**: **HRD-R08 — verificar contra el motor donde se ejecuta, no donde es cómodo probar** (`verify_pattern` en POSIX, `fix_replacement` en ECMAScript: `$1`, nunca `\1`; documentado en el `COMMENT ON COLUMN` de cada columna) y **HRD-R09 — mergear no despliega, y un merge puede quedarse corto** (se verifica el COMMIT tras el merge, no que el PR aparezca cerrado). Las dos nacen de errores cometidos el 2026-08-24/25 y quedan escritas para que no se repitan. · base previa v1.4 · 2026-08-16 (HRD_ACTUALIZA paso 10: **CONDICIÓN 4 — resuelto por vía alterna** + **paso 10-bis — verificación contra fuente**, ambos definidos en `skills/context-resolver/SKILL.md` §2 y §3; este protocolo los invoca, no los duplica. · base previa v1.3 · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas))_
 
 ---
 
@@ -35,6 +35,18 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 **HRD-R06** — Acción no pedida → prohibida. Si el comando no la pide, no se hace.
 
 **HRD-R07** — HRD apunta a otro protocolo → ese protocolo hereda el status inviolable. Ambos son HRD.
+
+**HRD-R08** — **Verificar contra el motor donde se ejecuta, no donde es cómodo probar.** Un patrón, una expresión o una consulta se valida en el **runtime que la va a correr**, no en el que está a mano. Dos columnas de la misma fila pueden hablar dialectos distintos.
+
+> **El caso que la origina (2026-08-24/25).** `intel.watcher_rules.verify_pattern` se evalúa en **POSIX** —es auditable desde SQL con `SELECT … ~*`— y `intel.watcher_rules.fix_replacement` se evalúa en **ECMAScript**, donde la referencia de grupo es **`$1`** y **nunca** `\1`. Están en la misma fila, se escriben en el mismo acto, y **no son el mismo lenguaje**. Probar el reemplazo en el motor equivocado da un patrón que "funciona" en la prueba y falla en producción, en silencio.
+>
+> **Cómo se cumple:** antes de escribir un patrón, responder *¿quién lo ejecuta?* — Postgres, el runtime de la EF, el navegador — y probarlo **ahí**. Cuando una columna tiene un motor propio, ese motor se declara en su `COMMENT ON COLUMN`, que es donde el próximo lo va a buscar.
+
+**HRD-R09** — **Mergear no despliega, y un merge puede quedarse corto.** Un PR cerrado no es un cambio en producción, y no es garantía de que **todo** el cambio haya entrado. Se verifica el **commit** resultante tras el merge — no el estado del PR.
+
+> **Por qué las dos mitades.** (a) **Mergear ≠ desplegar:** una Edge Function se despliega **aparte y explícitamente** tras el merge; hasta entonces `main` tiene el código y producción tiene el anterior. La verdad del deploy es la **versión real de la EF** (`entrypoint_path` / `get_edge_function`), no el estado del PR. (b) **Un merge puede quedarse corto:** un PR mergeado captura la rama **al momento del merge** — lo empujado después queda fuera y el PR igual aparece cerrado y verde. Ya ocurrió (el «commit colgante» de ImageLab, 2026-08-22) y volvió a ocurrir el 2026-08-24/25.
+>
+> **Cómo se cumple:** tras cada merge, comparar el **commit de `main`** contra lo que el PR decía entregar, y —si el cambio toca una EF— consultar su **versión desplegada** antes de declararla en un context file. Declarar «desplegado» sin ese chequeo es afirmar una causa sin evidencia, que es lo que `CC_PROTOCOL.md` §9 prohíbe.
 
 ---
 
