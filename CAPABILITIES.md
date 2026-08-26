@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude_
+_Versión: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude_
 
 ---
 
@@ -88,6 +88,33 @@ el cron **`content-placement-poll`**, jobid 66, `*/15`). Seis capacidades nuevas
 
 > **Regla de lectura que no cambia:** las métricas de gates se leen por **`gate_detail`**, nunca por
 > `failed_gate`.
+
+### 🆕 Adición 2026-08-26 — lo que el primer run del carril completo dejó invocable
+
+_Se suma a las seis capacidades de arriba, que siguen vigentes sin cambio._
+
+| Capacidad | Qué hace | Cómo se reconoce |
+|---|---|---|
+| **Ángulos por dominio** | El **ángulo** de una pieza dejó de ser criterio del escritor en cada corrida y pasa a ser **dato**. Un dominio dice *de qué* habla la pieza; el ángulo dice *por dónde entra*. Sembrado en los **32 dominios** de ForumPHs con **seis ángulos** (`expertise`, `artefacto`, `pregunta`, `consecuencia`, `contraste`, `secuencia`) y **matriz por voz**. Medido: **2 ángulos distintos en un run** contra **uno solo en 250 filas**, y donde un dominio dio dos hallazgos cada uno recibió ángulo distinto — las parejas que antes se rechazaban entre sí | `intel.brand_topics.angles` · matriz y **criterio de las ausencias** en `brands/ForumPHs/BP_Brand_Context.md` · 🔴 **`iid_content_queue_angle_check` fue ELIMINADO** (enumeraba ocho ángulos y bloqueó el primer run diverso); tiene `COMMENT` de por qué no vuelve |
+| **Aplazamiento por duplicación** | Una pieza que choca con el corpus **ya no se destruye: se aplaza**, con fecha y motivo. Es lo que hizo que 12 de las 14 piezas limpias del run existan | `content_pieces.deferred_until` / `.deferred_reason` · `deferred` en el CHECK de `content_pieces.status` |
+| **Retención por desacuerdo** *(ya declarada; se anota su uso medido)* | Estado `challenged` operativo en run real | `content_pieces.status = 'challenged'` |
+| **Arbitraje del juez con tasas medidas** | El arbitraje dejó de ser un caso suelto: **9 arbitrajes en un run** (ocho `rule_failed`, uno `judge_was_right`) dan **tasa de falso positivo medida, no estimada** — `HR-FPHS-15` **100 %**, `HR-FPHS-13` **100 %**, `HR-LEGAL-01` **75 %**. Una regla con falso positivo medido **se reescribe, no se discute** | `intel.judge_calibration` · `judge-arbitration` **v2** (`verify_jwt: true`) |
+| **Edición con diff** *(ya declarada; se anota su uso medido)* | Junto al arbitraje, **rescató 5 piezas** (`assisted`) del run | `intel.piece_edits` · `piece-edit` **v2** |
+| **`pass_type` — `clean` / `assisted`** | Distingue **la pieza que salió bien sola** de **la que se rescató**. Sin esto, un ratio de aprovechamiento no dice si el sistema mejoró o si alguien trabajó más. Del run: **14 `clean` (51,9 %)** + **5 `assisted` (18,5 %)** = **19 aprovechables (70,4 %)** | `content_pieces.pass_type` |
+| **Backfill de embeddings** *(ya declarada; se precisa el parámetro)* | Corrido sobre el **corpus completo**: cero piezas vivas sin embedding en 21 d. El **gate de duplicación deja de degradarse a LLM** | `content-watcher` **v44** · 🔴 el parámetro es **`days`**, **NO `window_days`** |
+| **Backfill de firma** | Repone la firma en piezas que el sistema no firmó. Resultado verificado: **23 de 23 vivas con firma, cero duplicadas** — el «cero duplicadas» es la mitad que importa, porque un backfill de firma mal hecho **firma dos veces** | 18 piezas corregidas · el arreglo de raíz es **SIGN-01**, en `content-run-stage` **v93** |
+
+> 🔴 **Lo que NO se puede invocar todavía, y hay que saberlo antes de intentarlo: publicar solo.**
+> El drenaje **da por publicada** una pieza con un `200` de SocialLab **sin verificar el efecto** —
+> **cero publicaciones automáticas reales hasta hoy** (**PUB-01**). El **cron 66
+> `content-placement-poll` está APAGADO** hasta que eso cierre. El carril **coloca**; todavía no se
+> puede afirmar que **publica**. Regla de lectura: **`HRD-R11` — el éxito se comprueba contra el
+> efecto, no contra el código HTTP.**
+
+> ⚠️ **Y una advertencia sobre el juicio de lo que sale:** el **texto adaptado por plataforma no pasa
+> por el juez** (`content-run-stage:3134-3136`). Verificado: `social.adapted` **reintrodujo una cita
+> de ley** que `aife_filtered` ya no tenía. **El juez aprueba un texto y sale otro** — no dar por
+> juzgado lo que se publica en un canal social.
 
 ---
 

@@ -1,5 +1,126 @@
 # ForumPHs — Session Log
 
+## 2026-08-25 (checkpoint 2) — De 21 piezas, una sola falló por contenido
+
+En una línea: **se corrió el primer run sobre el carril completo, el ratio limpio pasó de 6,7 % a
+12,5 % a 51,9 % en un día, y el diagnóstico se movió definitivamente** — de las 21 piezas generadas,
+**una sola tenía un defecto de contenido real**. Todo lo demás que se perdió fue **instrumento**.
+
+> Cifras verificadas contra producción. Continúa el checkpoint anterior del mismo día, que se
+> conserva íntegro debajo. Professor se cerró **antes** de este Actualiza: **10 learnings** en
+> `public.professor_learnings`, `session_date = 2026-08-25`, los diez con `approved_by_sam = true`
+> — **19 en total de esta sesión** contando el checkpoint anterior. **SMA no se consultó.**
+
+---
+
+### 📈 El run del 2026-08-25 — 27 filas generadas · 21 piezas creadas · 6 nunca llegaron a pieza
+
+| Resultado | Piezas | % |
+|---|---|---|
+| **Limpias** (`pass_type='clean'`: 12 aplazadas + 2 aprobadas) | **14** | **51,9 %** |
+| Rescatadas por arbitraje o edición (`assisted`) | 5 | 18,5 % |
+| **Aprovechables** | **19** | **70,4 %** |
+| Perdidas | 8 | 29,6 % |
+
+**El hallazgo del día no es el 51,9 %: es de qué está hecho el 29,6 % que se perdió.** De las 21
+piezas, **una sola falló por contenido** — citaba artículos por número. Las demás pérdidas fueron
+del instrumento: una firma que el sistema no puso, un truncamiento que el juez no podía ver, reglas
+disparando falsos positivos. Durante 25 días el sospechoso fue el material; ya no lo es.
+
+**Rechazos de Sam: 4, y 3 eran defectos del sistema.** Dos por la firma ausente, uno por el
+truncamiento invisible al juez. **Uno solo era contenido malo.**
+
+⚠️ **La proyección con SIGN-01 desplegado —63 % limpio, 81,5 % aprovechable— es proyección, no
+medición.** `content-run-stage` **v93** se desplegó a las **23:51 UTC**; el run generó entre las
+**17:10 y las 19:41**. **Ninguna pieza de este run pasó por los arreglos de SIGN-01.** Se anota así
+para que la próxima sesión no la lea como número medido.
+
+---
+
+### 🎯 Ángulos — 2 distintos en un run, contra uno solo en 250 filas
+
+Los seis ángulos aprobados por Sam se sembraron en los **32 dominios** de `intel.brand_topics.angles`
+(matriz ángulo↔voz y el criterio de las ausencias en `BP_Brand_Context.md`). El run usó **dos**:
+`artefacto` y `pregunta`.
+
+**Dónde se ve que la diversidad ya no depende del escritor:** donde un dominio tuvo **dos hallazgos**,
+**cada uno recibió ángulo distinto** — que son exactamente **las parejas que antes se rechazaban entre
+sí** por duplicación. El ángulo pasó de criterio del escritor en cada corrida a **dato**.
+
+🔴 **Y lo que casi lo impide: `iid_content_queue_angle_check`.** Un `CHECK` viejo que **enumeraba ocho
+ángulos genéricos** y **bloqueó el primer run con ángulos diversos** — el run que existía justamente
+para probar que el ángulo es dato. **Se eliminó, con un `COMMENT` que explica por qué no vuelve.** El
+código de la sesión estaba limpio: la enumeración vivía en el esquema. De ahí sale **HRD-R12**.
+
+---
+
+### ⚖️ El juez, con tasas medidas por primera vez
+
+**9 arbitrajes** — ocho `rule_failed`, uno `judge_was_right`. Con nueve casos hay **tasa de falso
+positivo medida, no estimada**:
+
+| Regla | Falso positivo |
+|---|---|
+| `HR-FPHS-15` | **100 %** |
+| `HR-FPHS-13` | **100 %** |
+| `HR-LEGAL-01` | **75 %** |
+
+**Lo que esto cambia:** una regla con 100 % de falso positivo medido ya no se discute, se reescribe.
+Y sólo se puede medir porque el sistema **guarda el desacuerdo** (`intel.judge_calibration`). Sin
+arbitraje, esas nueve piezas se habrían perdido y las tres reglas seguirían pareciendo sanas.
+
+---
+
+### 🗄️ Mutaciones de datos y de reglas
+
+- 🔴 **`iid_content_queue_angle_check` ELIMINADO** — con `COMMENT` de por qué no vuelve.
+- **32 dominios con `angles` sembrados** — seis ángulos, matriz por voz.
+- `brand_topics` +`angles` · `content_pieces` +`deferred_until`/`deferred_reason` · CHECK de `status`
+  ampliado con `deferred`.
+- **Backfill de firma** — 18 piezas. Resultado verificado: **23 de 23 vivas con firma, cero
+  duplicadas**.
+- **Backfill de embeddings** — corpus completo, **cero piezas vivas sin embedding en 21 d**. El gate
+  de duplicación **deja de degradarse a LLM**.
+- **`HR-FPHS-11` reescrita** — su enumeración de fuentes **excluía diarios *de hecho***: una regla que
+  lista orígenes válidos deja fuera los que nadie pensó al escribirla.
+- **`HR-FPHS-15` reescrita con el criterio de Sam** — **sustantivo sí, adjetivo no**: *«la
+  extraordinaria»* incumple; *«asamblea extraordinaria»* cumple.
+- **`HR-FPHS-16` nueva** — sin enlaces salientes (exime el dominio propio).
+- **`HR-FPHS-11` y `HR-NSCF-08` con `condition`** — cubren el **defecto B en `kind='proof'`**, que el
+  barrido de `requirement` **no alcanzaba**.
+- 🔴 **Cron 66 `content-placement-poll`: APAGADO** hasta PUB-01.
+
+---
+
+### 🚀 Desplegado
+
+`unrlvl-iid-functions` **#92, #93** · `Orchestrator` **#23**.
+
+`content-run-stage` **93** (23:51 UTC) · `content-watcher` **44** (23:13 UTC) · `iid-core` **54** ·
+`iid-process` **47** · `content-scheduler` **5** · `approve-piece` **39** · `judge-arbitration` **2** ·
+`piece-edit` **2** *(las dos con `verify_jwt: true`)*. Versión real = número final de
+`entrypoint_path`.
+
+---
+
+### 🔻 Lo que queda abierto, con su evidencia
+
+- 🔴 **PUB-01 — el drenaje da por publicado con un 200 de SocialLab sin verificar el efecto.**
+  **Cero publicaciones automáticas reales hasta hoy.** Es la mitad que faltaba del hito del
+  checkpoint anterior: el carril **coloca**, pero todavía no se puede afirmar que **publica**. Cron
+  66 apagado hasta cerrarlo. De acá sale **HRD-R11**.
+- 🔴 **El texto adaptado por plataforma no pasa por el juez** — `content-run-stage:3134-3136`.
+  **Verificado, no deducido:** `social.adapted` **reintrodujo una cita de ley** que `aife_filtered`
+  ya no tenía. El juez aprueba un texto y sale otro.
+- 🔴 **`deno check` antes de dar por bueno un PR** — **50 tests en verde sobre un archivo que no
+  compilaba**, porque la suite extrae bloques por sentinelas. De acá sale **HRD-R10**.
+- **Tres reglas con falso positivo alto y dato suficiente para reescribirlas** — las de la tabla de
+  arriba.
+- **SocialLab podría ser mayormente mockup** — **sospecha de Sam**, anotada como sospecha. Encaja con
+  el 200 sin publicación. Verificar **antes** de construir encima.
+
+---
+
 ## 2026-08-25 — El carril publica solo, y el diagnóstico del ratio se movió del material al juez
 
 En una línea: **el carril de ForumPHs pasó de producir contenido que nadie podía publicar a publicar

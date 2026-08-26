@@ -1,5 +1,5 @@
 # BP_Brand_Context — ForumPHs
-**Versión:** 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+**Versión:** 2026-08-26 · base previa 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
 
 ---
 
@@ -59,6 +59,34 @@ No hay enlaces salientes. La única excepción es el **dominio propio**.
   tercero. Nombrar la fuente da la misma credibilidad sin el costo.
 - **Cómo se hace cumplir:** `HR-FPHS-16` (**nueva el 2026-08-25**) — sin enlaces salientes, exime el
   dominio propio. La política es de marca; la regla es su forma ejecutable.
+
+### «La cuota extraordinaria» — el criterio de `HR-FPHS-15`, tal como lo fijó Sam
+
+**La regla no prohíbe la palabra: prohíbe una función gramatical de la palabra.**
+
+> **«Extraordinaria» como SUSTANTIVO incumple. Como ADJETIVO, cumple.**
+
+| Uso | Ejemplo | Veredicto |
+|---|---|---|
+| **Sustantivo** — la palabra sola ocupa el lugar de la cosa | *«la extraordinaria»*, *«convocaron a la extraordinaria»* | ❌ **incumple** |
+| **Adjetivo** — la palabra califica al sustantivo que sí está | *«asamblea extraordinaria»*, *«la cuota extraordinaria»* | ✅ **cumple** |
+
+**Por qué la marca lo sostiene.** *«La extraordinaria»* es **jerga de gremio**: la entiende quien ya
+está adentro y deja afuera al propietario, que es precisamente el lector que ForumPHs quiere. El
+adjetivo, en cambio, es lenguaje técnico correcto y necesario — hay asambleas ordinarias y
+extraordinarias, y cuotas ordinarias y extraordinarias. **Borrar el adjetivo empobrecería la pieza
+sin ganar claridad; borrar el sustantivo elíptico la abre.**
+
+**Cómo llegó a este estado.** La regla se reescribió el 2026-08-25 con este criterio y se probó sobre
+**9 casos: 9 correctos**. Es además la primera regla con `fix_replacement` (⚠️ ECMAScript — `$1`,
+nunca `\1`; ver `HRD-R08`), así que **el corrector determinista la repara antes de que el juez lea la
+pieza**.
+
+⚠️ **Y aun así arrastra 100 % de falso positivo medido** en los 9 arbitrajes del run del 2026-08-25.
+El criterio es correcto; **lo que falla es su detección**, que no distingue las dos funciones tan bien
+como el criterio las distingue. Está anotado en `AGENDA.md` como una de las tres reglas a reescribir
+con dato suficiente. **No es contradicción: el criterio de marca es esto, y la regla todavía no lo
+ejecuta bien.**
 
 ---
 
