@@ -1,8 +1,9 @@
 {
   "_meta": {
-    "version": "2026-08-23",
-    "previous": "2026-08-09",
-    "_previous_chain": "2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "version": "2026-08-26",
+    "previous": "2026-08-23",
+    "_previous_chain": "2026-08-26 ← 2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ADICIONES: publish_channels.blog.theme + publish_channels.blog.fonts_href + publish_channels.blog._nota_2026-08-26 (verificación de ruta) · publish_channels.linkedin (canal NUEVO, INACTIVO) · angulos_de_conversion (el ángulo objecion entra en los 11 dominios de conversión) · content_angles_catalogo (catálogo NUEVO intel.content_angles, 10 ángulos) · estado_2026-08-26. Nada removido. Verificado con execute_sql el 2026-08-27 (HRD-R13). Detalle en brands/ForumPHs/session_log.md (2026-08-26) y en IID/session_log.md (2026-08-26).",
     "_update_2026-08-23": "HRD_ACTUALIZA 2026-08-23. ADICIONES: publish_channels (blog operativo + email declarado y NO operativo) · public_themes (5 temas públicos) · voice_and_content.register (usted; HR-FPHS-07 rige la INSTRUCCIÓN al escritor, no sólo el texto entregado) · voice_and_content._resolved_2026-08-23. Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-08-23).",
     "maintained_by": "Claude",
     "chat_rule": "Un chat por marca — este contexto es solo para sesiones ForumPHs"
@@ -303,7 +304,41 @@
       "url_rule": "La URL es FIJA en /blog. El rótulo del menú («Sin tecnicismos») y el H1 («Hablemos sin tecnicismos») son de marca; la ruta NO cambia con ellos.",
       "desbloquea": "HR-FPHS-08 (blog_enlace_interno) — exigía enlazar artículos publicados cuando no había artículos que enlazar",
       "regla_seo": "UN DOMINIO, UN ARTÍCULO DE BLOG — canibalización SEO. Ver AGENDA.md v2026-08-23-v1 → Contenido.",
-      "slug": "content.content_pieces.slug (NUEVA 2026-08-23) es la URL estable. Backfill IDÉNTICO a pieceSlug(); cambiarlo ROMPE URLs indexadas."
+      "slug": "content.content_pieces.slug (NUEVA 2026-08-23) es la URL estable. Backfill IDÉNTICO a pieceSlug(); cambiarlo ROMPE URLs indexadas.",
+      "_nota_2026-08-26": "Ruta VERIFICADA contra forumphs.com el 2026-08-26: el enlace del header dice «Sin tecnicismos» y la ruta es /blog. En intel.brand_publish_channels el canal se llama blog_forumphs y sus claves son blog_label (rótulo de marca) y blog_path (URL indexada), desacopladas a propósito — mismo eje que UNRLVL (Field Notes → /blog) y Lucien (Writing → /blog).",
+      "theme": {
+        "_source": "intel.brand_publish_channels.config.theme — sembrado 2026-08-26. Tokens de BluePrints/brands/ForumPHs/BP_BRAND_ForumPHs_v1.0.json, paleta Amatista Carbon. El renderizador deja de cablear paleta: la lee como dato.",
+        "name": "Amatista Carbon",
+        "bg": "#0E1018",
+        "surface_1": "#1C2233",
+        "surface_2": "#3A1F4A",
+        "text": "#F0EDE8",
+        "text_2": "rgba(240,237,232,0.72)",
+        "text_3": "#6B6460",
+        "accent": "#C4622D",
+        "accent_2": "#5C3472",
+        "warn": "#C4622D",
+        "line": "rgba(240,237,232,0.12)",
+        "line_soft": "rgba(240,237,232,0.06)",
+        "font_display": "EB Garamond",
+        "font_serif": "Cormorant Garamond",
+        "font_sans": "DM Sans",
+        "_mapeo": "carbon_d=bg · carbon=surface_1 · am_d=surface_2 · parch=text · stone=text_3 · terra=accent (acento y wordmark PHs) · am=accent_2 institucional",
+        "_cinzel": "Cinzel es utility (labels) y NO tiene token propio en el renderizador: viaja en fonts_href para que esté disponible."
+      },
+      "fonts_href": "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500;600;700&display=swap",
+      "locale": "es-PA",
+      "items_per_page": 10,
+      "related_count": 3
+    },
+    "linkedin": {
+      "_created": "2026-08-26",
+      "status": "⛔ DECLARADO Y NO OPERATIVO — active = false en intel.brand_publish_channels",
+      "provider": "linkedin_org",
+      "page_url": "https://www.linkedin.com/company/forumphs/",
+      "locale": "es-PA",
+      "nota_inactivo": "INACTIVO por decisión de Sam del 2026-08-26: LinkedIn queda fuera para TODAS las marcas hasta segunda orden. No es falta de dominio ni de contenido — falta la app de organización con permiso de publicación y su token, que NO pasa por Meta MCP porque es API propia.",
+      "regla_de_activacion": "se activa cuando exista token de organización Y el publicador entienda este canal"
     },
     "email": {
       "status": "⛔ DECLARADO Y NO OPERATIVO — active = false en intel.brand_publish_channels",
@@ -373,5 +408,39 @@
       "bi_nav_animation": "border-pulse infinite desde apertura · fill terra en activo · fill green en back-btn",
       "cta_primary": "WhatsApp green #25D366 · wa-pulse animation"
     }
+  },
+  "angulos_de_conversion": {
+    "_source": "intel.brand_topics.angles — el ángulo «objecion» entra el 2026-08-26 en los 11 dominios de conversión. VERIFICADO con execute_sql el 2026-08-27: son exactamente 11.",
+    "_created": "2026-08-26",
+    "_por_que_solo_en_conversion": "«objecion» es ángulo de VENTA: entra desde lo que el lector ya piensa en contra, dicho antes que él. La definición del catálogo dice que sirve a voces que MUEVEN A UNA DECISIÓN. Por eso NO entra en los dominios editoriales — no es olvido, es el límite del ángulo.",
+    "_terna_previa": "Los 11 ya llevaban expertise · artefacto · pregunta · consecuencia, sembrados el 2026-08-25. «objecion» SE SUMA, no reemplaza: los 11 quedan con 5 ángulos.",
+    "dominios": [
+      "el-futuro-de-tu-patrimonio-jd",
+      "el-informe-que-si-existe-jd",
+      "el-momento-del-cambio-doliente",
+      "el-momento-del-cambio-jd",
+      "la-cuota-extraordinaria-que-viene-jd",
+      "la-jd-que-hereda-un-desastre-jd",
+      "las-cuatro-preguntas-que-nadie-calcula-jd",
+      "mi-unidad-vale-menos-y-no-lo-sabes-jd",
+      "profesionalizar-sin-perder-el-control-doliente",
+      "profesionalizar-sin-perder-el-control-jd",
+      "rendir-cuentas-sin-sudar-jd"
+    ]
+  },
+  "content_angles_catalogo": {
+    "_source": "intel.content_angles — tabla NUEVA 2026-08-26. 10 ángulos, los diez active. Los seis que Sam aprobó el 2026-08-25 para ForumPHs dejan de vivir sólo en brand_topics.angles: ahora hay CATÁLOGO CON CONTRATO, compartido por todo el ecosistema.",
+    "_created": "2026-08-26",
+    "_el_contrato": "Cada ángulo declara su LÍMITE en su propia definition, y el límite es lo que lo hace utilizable sin criterio del escritor: «consecuencia» avisa que linda con urgencia y miedo y que una voz que prohíbe escasez o FOMO NO debería declararlo · «caso» y «dato» EXIGEN fuente real (un caso inventado convierte el ángulo en fabricación) · «expertise» exige credencial propia. El ángulo dejó de ser criterio del escritor en cada corrida y pasa a ser DATO.",
+    "angulos": ["artefacto", "caso", "consecuencia", "contraste", "dato", "error", "expertise", "objecion", "pregunta", "secuencia"],
+    "_multimarca": "Es catálogo del ECOSISTEMA, no de ForumPHs: el eje va en el código (una marca elige ángulos de un catálogo), la instancia en el dato (cuáles elige cada dominio). Test de la marca N+1: lo pasa por construcción."
+  },
+  "estado_2026-08-26": {
+    "rollout": "ForumPHs sigue con rollout_started_at 2026-08-22 — PRIMERA marca del ecosistema en entrar al Scheduler. Hoy DEJA DE SER LA ÚNICA: UnrealvilleStudio, LucienSael y NeuroneSCF entran con rollout_started_at 2026-08-26.",
+    "pub_01": "CERRADO — content-scheduler v6, PR #98. El drenaje comprueba el EFECTO contra la fila de scheduled_posts, no el código HTTP. Es lo que faltaba del hito del 2026-08-22: el carril colocaba, ahora verifica que publicó.",
+    "blog_01_pr_1": "forumphs-com #6 — discarded_at filtrado en las TRES rutas, 410 en artículo descartado, paquete SEO completo.",
+    "blog_01_pr_2": "unrlvl-blog #1 (repo NUEVO) — el renderizador SALE de forumphs-com: blog_path como dato, router propio, tema y copia por canal. Lo que era código de una marca pasa a ser eje del ecosistema.",
+    "falsos_positivos_medidos": "Sobre los 9 arbitrajes de intel.judge_calibration, recontado el 2026-08-27: HR-FPHS-15 3/3 = 100% · HR-FPHS-13 2/2 = 100% · HR-LEGAL-01 3/4 = 75%. ES LA CONDICIÓN PARA ENCENDER EL CRON 66.",
+    "linkedin": "Pasa a INACTIVO por decisión de Sam del 2026-08-26 — fuera para TODAS las marcas hasta segunda orden."
   }
 }

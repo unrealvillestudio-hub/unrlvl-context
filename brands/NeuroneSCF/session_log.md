@@ -1,5 +1,62 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)_
+_Actualizado: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)_
+
+---
+
+## 2026-08-26 — NeuroneSCF entra al Scheduler · sólo los 5 dominios sociales
+
+`rollout_started_at = 2026-08-26`, `max_rotation_weeks 3`. **Tercera marca del ecosistema en entrar
+al Scheduler**, el mismo día que UnrealvilleStudio y LucienSael.
+
+> Verificado contra producción el 2026-08-27 con la herramienta (HRD-R13). Detalle del carril en
+> `IID/session_log.md` (2026-08-26).
+
+### Sembrado
+
+- **`intel.brand_publish_channels` — 5 canales:** `meta_fb`, `meta_ig`, `tiktok` y `blog` activos;
+  **`email` INACTIVO** por decisión explícita de Sam hasta segunda orden — **los flows de Klaviyo no
+  están configurados**.
+- **El blog de NSCF vive DENTRO de Shopify** — `provider = 'shopify_blog'`, no `vercel_html`. Se
+  resuelve por la API de Shopify y **no** por render del sitio: es un camino de publicación distinto
+  del de ForumPHs y UNRLVL, y por eso **no lleva `theme` ni `fonts_href`** — el tema lo pone Shopify.
+- **`intel.brand_cadence` — 12 filas.** El blog arranca `1x_month` con **techo 20 y no 3**: los 4
+  dominios editoriales sobre `1x_month` dan R=0,23/semana y **17,4 semanas por turno**. Es
+  aritmética, no mala configuración — mismo caso que bloqueó el `email_propietarios` de ForumPHs en
+  agosto. Con el techo de Meta el grupo entero se rechazaría.
+- **`intel.brand_topic_platform_mode` — 19 filas.**
+- **Ángulos en los 9 dominios:** los 5 sociales bajo `nscf_conversion` — `chlorine-sun`,
+  `color-fade`, `damage-repair`, `fine-fragile`, `frizz-humidity` — y los 4 editoriales bajo
+  `nscf_editorial` — `color-intelligence`, `hair-science`, `miami-hair`, `rituals`. **`objecion`
+  entra sólo en `color-fade` y `fine-fragile`**: es ángulo de venta y va donde hay decisión que
+  mover.
+- **`tiktok` y `email` quedaban fuera** del genoma `nscf_conversion` hasta que existiera proveedor;
+  `tiktok` ya lo tiene (`tiktok_business`, con OAuth pendiente de PO), `email` no.
+
+### Los 4 dominios de blog no declaran canal publicable
+
+`rollout` sólo cubre **los 5 dominios sociales**. Los 4 editoriales están sembrados y activos, pero
+**su canal `blog` es `shopify_blog`** y el drenaje todavía no lo atiende: existe la cadencia, existe
+el techo calculado, **no existe el publicador**.
+
+### Corregido fuera del repo — en el tema de esta tienda
+
+Firma canónica de **UNRLVL** en el tema Shopify de NSCF: `snippets/unrlvl-signature.liquid`,
+checksum final `51c2af2e…`, y dirección **12951 Biscayne Blvd, Suite 1 · North Miami, FL 33181** en
+`sections/nc-footer.liquid`. Es la dirección legal de Prestige Beauty Global Distribution que este
+`brand.json` ya declara en `addresses.legal_prestige` — **ahora con `Suite 1`**, que la clave del
+JSON no lleva. Anotado, no corregido.
+
+### Abre
+
+- 🟠 **Marca con venta real detrás.** El propio canal `meta_fb` lo deja escrito: *revisar el adaptado
+  antes de aprobar mientras el conteo de hashtags del genoma no sea regla del Watcher* — que es
+  exactamente **P5** de `AGENDA.md`. En NSCF el costo de un adaptado malo no es reputacional: es
+  una venta.
+- 🟠 **`email` inactivo** hasta que los flows de Klaviyo existan. Arrastra la deuda DKIM/SPF.
+- 🟡 **El handle del blog lleva sufijo `-1`** — `hair-intelligence-1`. Hay o hubo un blog previo con
+  el handle limpio. **Revisar antes de publicar por API:** un handle duplicado es contenido duplicado
+  y URL fea para SEO.
+- 🟡 **OAuth de TikTok for Business** pendiente (PO).
 
 ---
 

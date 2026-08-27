@@ -293,6 +293,157 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-08-26 — Carril IID: PUB-01, P3 y RESEARCH-01 cerrados; tres marcas sembradas
+
+En una línea: **los tres bloqueantes rojos del 2026-08-25 quedan cerrados y verificados en
+producción, el Scheduler pasa de una marca a cuatro, y dos marcas nuevas producen su primer material
+real.** El costo de la sesión también se dice sin adorno: **dos divergencias entre producción y
+`main` por despliegues fuera de orden**, la segunda silenciosa, que se llevó **tres corridas de
+research completas**.
+
+> Cifras verificadas contra producción el 2026-08-26/27 con la herramienta, no deducidas
+> (HRD-R13). Professor se cerró **antes** de este Actualiza: **15 learnings** en
+> `public.professor_learnings`, `session_date = 2026-08-26`, los quince con
+> `approved_by_sam = true`. **Orden cumplido: Professor → Actualiza.** **SMA no se consultó** — Sam
+> no lo mencionó. Sólo context files: el código, las DDL, los deploys y las corridas se ejecutaron
+> **antes** de este Actualiza, en sus propios PRs y bajo HRD. CC no mergea — Sam revisa, mergea y
+> borra la rama. Lo previo se conserva íntegro debajo.
+
+### 🟢 Cerrado y verificado en producción
+
+- **PUB-01 — `content-scheduler` v6.** El drenaje comprueba **el EFECTO contra la fila de
+  `scheduled_posts`**, no el código HTTP. `publishAndVerify` con cuatro veredictos —
+  `PUBLISH_UNVERIFIABLE`, `PUBLISH_UNPROVEN`, `PUBLISH_FAILED`, `PUBLISH_NOOP` — y
+  `recordPublicationProof` guardando `assets.publication`. **PR #98.** Es la aplicación literal de
+  **HRD-R11**: un `200` no es una publicación.
+- **P3 — `content-run-stage` v94.** El juez recibe **`social.adapted`**, no `aife_filtered`.
+  `pickJudgedText`, `syncJudgedAdapted`, y `adapted_pre_judgment` guardado **como evidencia sin
+  firmar**. **PR #99.** Cierra el rojo *«el juez aprueba un texto y sale otro»*.
+- **RESEARCH-01 — `iid-research` v45 · `iid-process` v48.** Techo por **cascada** sobre
+  `intel.iid_research_ceilings` (fila BASE, `max_tokens = 16000`, `agent_name` y `brand_id` nulos —
+  default **declarado como dato**, no literal) y **`truncated` como columna GENERADA** desde
+  `stop_reason`: `NOT (stop_reason IS DISTINCT FROM 'max_tokens')`. **PRs #100 y #101.**
+- **BLOG-01 PR-1** — `forumphs-com` **#6**: `discarded_at` filtrado en las **tres** rutas, **410** en
+  artículo descartado, paquete SEO completo.
+- **BLOG-01 PR-2** — repo **nuevo** `unrlvl-blog` **#1**: renderizador extraído, `blog_path` **como
+  dato** con router propio, tema y copia por canal.
+- **BP-01/02/03** — `BluePrints` **#2 y #3**: blueprint de LucienSael creado (JSON + HTML + 2 SVG
+  vectorizados); `BP_BRAND_UNRLVL` a **v1.5**.
+
+### 📊 Los números medidos, contra los del brief
+
+Verificado con `execute_sql` contra `amlvyycfepwhiindxgzw` el 2026-08-27. **Donde el brief y la
+medición discrepan manda la medición** — es exactamente lo que HRD-R13 viene a impedir que se
+repita:
+
+| Objeto | Medido | Decía el brief |
+|---|---|---|
+| `intel.brand_rollout` sembradas hoy | **3** | 3 ✅ |
+| `intel.brand_cadence` sembradas hoy | **39** (Lucien 15 · NSCF 12 · UNRLVL 12) | 33 ⚠️ |
+| `intel.brand_publish_channels` sembrados hoy | **14** (Lucien 5 · NSCF 5 · UNRLVL 4) | 14 ✅ |
+| `intel.brand_topic_platform_mode` sembradas hoy | **63** (UNRLVL 24 · Lucien 20 · NSCF 19) | 63 ✅ |
+| `intel.content_angles` (catálogo nuevo) | **10**, todos `active` | 10 ✅ |
+| Dominios con `angles` en las marcas nuevas | **19** (NSCF 9 · UNRLVL 6 · Lucien 4) | 19 ✅ |
+| Dominios de ForumPHs que suman `objecion` | **11** | 11 ✅ |
+| `iid-process` en producción | **49** | 48 ⚠️ |
+
+Las dos discrepancias se anotan, no se corrigen a mano: **39 filas de cadencia** contra las 33
+declaradas, y **`iid-process` v49** contra la v48 que dejó RESEARCH-01. La v49 es **posterior** al
+brief; qué la desplegó **no consta en esta sesión** y queda abierto en `AGENDA.md`.
+
+### 🌱 Lo sembrado — tres marcas entran al Scheduler
+
+`rollout_started_at = 2026-08-26` para **UnrealvilleStudio**, **LucienSael** y **NeuroneSCF**;
+ForumPHs sigue con el suyo del **2026-08-22**. Cuatro marcas en el carril donde ayer había una.
+
+- **`intel.content_angles` es catálogo nuevo:** diez ángulos con `label` y `definition`, y con **el
+  límite escrito en la propia definición** — `consecuencia` avisa que linda con urgencia y miedo y
+  que una voz que prohíbe escasez **no debería declararlo**; `caso` y `dato` exigen fuente real;
+  `expertise` exige credencial propia. El ángulo dejó de ser criterio del escritor: es **dato con
+  contrato**.
+- **`objecion` entra en los 11 dominios de conversión de ForumPHs** — los `-jd` y los `-doliente`,
+  con la terna `expertise · artefacto · pregunta · consecuencia` ya sembrada el 25-ago. Es ángulo de
+  venta: sirve a voces que mueven a una decisión, y por eso **no** entra en los editoriales.
+- **`theme` y `fonts_href` como dato del canal**, en `brand_publish_channels.config`, para ForumPHs
+  (*Amatista Carbon*), UnrealvilleStudio (*VOID SYSTEM*) y LucienSael (*EMBER SYSTEM*). El
+  renderizador deja de cablear paleta: la lee.
+- **`blog_label` y `blog_path` desacoplados a propósito** — UNRLVL rotula *Field Notes* y sirve en
+  `/blog`; Lucien rotula *Writing* y sirve en `/blog`; ForumPHs rotula *Sin tecnicismos* y sirve en
+  `/blog`. El rótulo es de marca, la ruta es URL indexada.
+- **UNRLVL pasa de 14 agentes a 6.** Verificado: `intel.iid_agents` con `brand_id =
+  'UnrealvilleStudio'` devuelve **6 filas, las 6 activas**.
+
+### 🧹 Limpieza
+
+8 agentes fantasma de UNRLVL · **170 + 3** filas de cola fallida · **268** `orchestrator_jobs` ·
+**71** findings de un carril que ya no existe. `public.scheduled_posts` quedó **en cero filas**:
+el residuo se fue entero.
+
+### 🖊️ Corregido fuera del repo
+
+Firma canónica de UNRLVL en el tema Shopify de NSCF — `snippets/unrlvl-signature.liquid`, checksum
+final `51c2af2e…` — y dirección **12951 Biscayne Blvd, Suite 1 · North Miami, FL 33181** en
+`sections/nc-footer.liquid`. **Nota:** la dirección ahora lleva `Suite 1`, que
+`brands/UnrealvilleStudio/brand.json` **no** declara; queda anotado, no se toca el JSON sin Sam.
+
+### 🆕 Primer material real de dos marcas nuevas
+
+Los dos memos salieron **íntegros**, `stop_reason = 'end_turn'`, `truncated = false`,
+`max_tokens = 16000` con `max_tokens_source = 'base'` — la cascada de RESEARCH-01 funcionando:
+
+| Agente | Caracteres | `output_tokens` | Hora UTC |
+|---|---|---|---|
+| `LUCIEN-BEHAVIORAL-SCIENCE` | **25.162** | 7.587 | 23:33:35 |
+| `UNRLVL-AI-COGNITION-TECH` | **24.897** | 7.365 | 23:33:33 |
+
+Y **las dos primeras piezas de LucienSael de esta sesión** — `blog` y `meta_ig`, ambas
+`pass_type = 'clean'` en `awaiting_approval`, creadas 2026-08-27 00:00:58 y 00:00:59 UTC.
+**Precisión sobre el brief:** no son las dos primeras piezas de la historia de la marca — ya había
+**dos** del 2026-07-31 (`x` y `tiktok`), también `clean` en `awaiting_approval`. Sí son **el primer
+research de la historia de Lucien** y **el primer material producido bajo el carril completo**.
+
+### 💸 El costo de la sesión, dicho sin adorno
+
+**Dos divergencias entre producción y `main` por despliegues fuera de orden. La segunda fue
+silenciosa** — la EF seguía devolviendo `200`, guardando el memo y marcando el truncamiento: todo
+parecía correcto y **el arreglo no estaba puesto**. El rastro quedó en `intel.iid_research_raw` y es
+inapelable:
+
+| Hora UTC | Agente | `stop_reason` | `max_tokens` | `truncated` |
+|---|---|---|---|---|
+| 18:05:59 | `UNRLVL-SIGNAL-LEARNING-LOOPS` | `max_tokens` | `NULL` | ✅ |
+| 19:01:10 | `UNRLVL-SIGNAL-LEARNING-LOOPS` | `max_tokens` | `5200` (`agent`) | ✅ |
+| 19:03:06 | `UNRLVL-SIGNAL-LEARNING-LOOPS` | `end_turn` | `16000` (`base`) | ❌ |
+| 23:06:56 | `UNRLVL-AI-COGNITION-TECH` | `max_tokens` | `NULL` | ✅ |
+| 23:07:01 | `LUCIEN-BEHAVIORAL-SCIENCE` | `max_tokens` | `NULL` | ✅ |
+| 23:33:33 / 23:33:35 | ambos | `end_turn` | `16000` (`base`) | ❌ |
+
+**Tres corridas de research completas perdidas.** De aquí sale **HRD-R14**, y de las cuatro
+afirmaciones sin verificar de la misma jornada sale **HRD-R13**.
+
+### 🔻 Abre — con su evidencia medida
+
+- 🔴 **P1 · `judged_source` llega NULL.** Medido: las **4** piezas vivas de LucienSael tienen
+  `assets.watcher` presente y `assets.watcher.judged_source` **NULL** — incluidas las dos que
+  corrieron sobre `content-run-stage` **v94**. **No se puede afirmar que el juez leyó el adaptado**,
+  que es lo único que P3 vino a garantizar. **Bloquea toda generación nueva.**
+- 🔴 **P2 · Las tres reglas con falso positivo medido.** Recontado sobre `intel.judge_calibration`,
+  **9 arbitrajes**: `HR-FPHS-15` **3/3 = 100 %** · `HR-FPHS-13` **2/2 = 100 %** · `HR-LEGAL-01`
+  **3/4 = 75 %**. **Es la condición para encender el cron 66.**
+- 🟠 **P3 · `IID_FANOUT_EMPTY`** en un finding de LucienSael: *«1 suscriptor activo pero 0 encolado
+  en `domain=behavioral-science`»*. El fail-loud funcionó; **falta la causa**. Reportado por el
+  brief; no se localizó su fila en esta pasada — se anota como **pendiente de localizar**, no como
+  medido.
+- 🟠 **P4 · El fan-out encola para plataformas sin proveedor.** Medido en `intel.iid_content_queue`,
+  lote `2026-08-26 23:57:26.167661+00`: **3 filas `failed`** (`tiktok`, `x`, `meta_fb`) y **1
+  `complete`** (`meta_ig`). El fan-out **no mira si el canal está activo**.
+- 🟠 **P5 · El adaptador no lee el genoma.** El conteo de hashtags por plataforma es **campo del
+  genoma** y no regla del Watcher: el juez **no puede medirlo** aunque ahora lo vea.
+- ⚠️ **`iid-process` v49 sin origen conocido** — la medición dice 49, el brief dice 48. Qué
+  desplegó la v49 y cuándo **no consta**.
+
+---
+
 ## 2026-08-22 — EL PRIMER PUBLISH DE LA HISTORIA DEL SISTEMA: el carril entrega, el día que el proveedor de texto se cayó
 
 **12:44:41 UTC en Facebook. 12:45:06 UTC en Instagram.** Dos piezas de ForumPHs, con título

@@ -1,0 +1,158 @@
+{
+  "_meta": {
+    "schema": "unrlvl-brand-v1.2",
+    "brand_id": "LucienSael",
+    "version": "2026-08-26-v1",
+    "previous": null,
+    "_previous_chain": "2026-08-26-v1 — PRIMERA version. Este archivo NACE hoy: la marca ya tenia carpeta en unrlvl-context (BP_Brand_Person_id.md, IDENTITY_ASSETS.md, session_log.md, los dos SVG y el HTML de identidad) pero NO tenia brand.json. Ninguna clave anterior se borra porque no habia ninguna.",
+    "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. Refleja lo SEMBRADO hoy en produccion y VERIFICADO con execute_sql el 2026-08-27 (HRD-R13): intel.brand_rollout (1 fila) · intel.brand_publish_channels (5 canales) · intel.brand_cadence (15 filas) · intel.brand_topic_platform_mode (20 filas) · angles en los 4 dominios desde el catalogo nuevo intel.content_angles. Detalle en brands/LucienSael/session_log.md (2026-08-26) y en IID/session_log.md (2026-08-26).",
+    "maintained_by": "Claude",
+    "context_path": "brands/LucienSael/",
+    "blueprints_path": "BluePrints/brands/LucienSael/",
+    "chat_rule": "Un chat por marca — este contexto es solo para sesiones LucienSael",
+    "source_of_truth": "La DB manda sobre este archivo. Este JSON es el espejo legible de intel.brand_topics, intel.brand_cadence, intel.brand_publish_channels e intel.brand_rollout; si divergen, gana la DB y se corrige aqui."
+  },
+
+  "brand": {
+    "id": "LucienSael",
+    "name": "Lucien Sael",
+    "domain": "luciensael.com",
+    "identity_system": "EMBER SYSTEM",
+    "status": "active",
+    "language_default": "en",
+    "languages_supported": ["en", "es"],
+    "language_rule": "Marca BILINGUE: EN primero, ES despues en todo, firmas incluidas. ES y EN se generan por separado desde origen — nunca se traduce uno del otro. Politica aplicada 2026-08-09.",
+    "slogan": {
+      "text": "I build worlds. Some of them survive.",
+      "rule": "SLOGAN, no firma. Permanente, invariable, sin explicacion, y solo en las superficies PROPIAS de Lucien: footer web, byline editorial, email. Ruling de Sam 2026-08-22."
+    },
+    "titles": {
+      "canonical": "Builder, Thinker, Operator",
+      "rule": "No son rango corporativo: nombran lo que hace. PROHIBIDO SIEMPRE: CEO, Founder, Strategist, Consultant."
+    }
+  },
+
+  "rollout": {
+    "_source": "intel.brand_rollout — verificado 2026-08-27",
+    "rollout_started_at": "2026-08-26",
+    "max_rotation_weeks": 3,
+    "notes": "Arranque fijado por Sam 2026-08-26. Nota de la fila en DB: 'Solo meta_fb y meta_ig: el genoma lucien_social excluye LinkedIn por diseno y declara X como publicacion manual sin API.' ATENCION: esa nota quedo DESACTUALIZADA en la misma sesion — Sam decidio despues que X va por API y el canal se sembro activo. Divergencia anotada, no corregida a mano.",
+    "orden": "Tercera marca del ecosistema en entrar al Scheduler, el mismo dia que UnrealvilleStudio y NeuroneSCF; cuatro dias despues de ForumPHs."
+  },
+
+  "publish_channels": {
+    "_source": "intel.brand_publish_channels — 5 filas sembradas 2026-08-26, las cinco active=true. Proveedor y config COMO DATO (MULTIBRAND_RULE).",
+    "meta_fb": {
+      "provider": "meta_graph",
+      "active": true,
+      "provider_platform": "FACEBOOK",
+      "locale": "en-US",
+      "credentials": "public.meta_accounts, brand_id=LucienSael — fuente unica, no se duplica aqui",
+      "nota": "El genoma lucien_social declara este canal como NO verificado end-to-end: el primer publish requiere comprobacion manual del efecto."
+    },
+    "meta_ig": {
+      "provider": "meta_graph",
+      "active": true,
+      "provider_platform": "INSTAGRAM",
+      "locale": "en-US",
+      "credentials": "public.meta_accounts, brand_id=LucienSael",
+      "nota": "Solo caption y texto en pantalla: el guion hablado pertenece a un futuro lucien_video."
+    },
+    "x": {
+      "provider": "x_api",
+      "active": true,
+      "locale": "en-US",
+      "nota": "Sembrado por decision de Sam 2026-08-26: X va por API, NO manual. El genoma lucien_social todavia dice publicacion manual y hay que corregirlo. Escribir en X requiere plan de pago."
+    },
+    "tiktok": {
+      "provider": "tiktok_business",
+      "active": true,
+      "locale": "en-US",
+      "nota": "Solo capa de texto: caption y texto en pantalla. El guion hablado pertenece a un futuro lucien_video."
+    },
+    "blog": {
+      "provider": "vercel_html",
+      "active": true,
+      "locale": "en-US",
+      "base_url": "https://luciensael.com",
+      "blog_path": "/blog",
+      "blog_label": "Writing",
+      "site_name": "Lucien Sael",
+      "url_rule": "blog_label es el ROTULO de marca; blog_path es la URL indexada. Desacoplados a proposito.",
+      "nota_ruta": "Verificado 2026-08-26 contra luciensael.com. OJO: hoy sirve HTML estatico con extension .html — COLISION a resolver antes de BLOG-01 PR-3, junto con los 301.",
+      "nota_drenaje": "Mismo caso que UNRLVL: el sitio debe LEER LA DB para que el blog publique. Ese mecanismo falta en WebLab; sembrar el canal no lo crea."
+    }
+  },
+
+  "theme": {
+    "_source": "intel.brand_publish_channels.config.theme del canal blog — sembrado 2026-08-26. Tokens del BP entregado por Sam: lucien-sael-brand-identity-v1.html.",
+    "name": "EMBER SYSTEM",
+    "tokens": {
+      "bg": "#0D0D0B",
+      "surface_1": "#1C1C1A",
+      "surface_2": "#2E2E2B",
+      "text": "#EDE8DF",
+      "text_2": "#C4BDB0",
+      "text_3": "#4A4A45",
+      "accent": "#D4622A",
+      "accent_2": "rgba(212,98,42,0.20)",
+      "warn": "#B8922A",
+      "line": "rgba(237,232,223,0.12)",
+      "line_soft": "rgba(237,232,223,0.06)",
+      "font_display": "Cormorant Garamond",
+      "font_serif": "Crimson Pro",
+      "font_sans": "JetBrains Mono"
+    },
+    "nombres_del_sistema": "obsidian=bg · carbon=surface_1 · smoke=surface_2 · bone=text · parchment=text_2 · ash=text_3 · ember=accent · gold=warn",
+    "fonts_href": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Crimson+Pro:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400;700&display=swap",
+    "logotipo": "Lucien en Cormorant Garamond 300 recto color bone; Sael en italica color ember.",
+    "pendiente": "El BP todavia NO esta en el repo BluePrints: falta subirlo junto con los dos SVG."
+  },
+
+  "domains": {
+    "_source": "intel.brand_topics — 4 dominios, los 4 activos, los 4 con angles sembrados 2026-08-26 desde el catalogo intel.content_angles.",
+    "_nota_angulos": "NINGUN dominio de Lucien declara 'expertise'. No es olvido: la definicion del catalogo dice que ese angulo exige credencial propia, y Lucien no se apoya en credencial. El limite del angulo esta en el catalogo, no en el escritor.",
+    "_voces": "Todos: social=lucien_social, editorial=lucien_editorial. Social a x/meta_fb/meta_ig/tiktok; editorial a blog.",
+    "ai-cognition": { "priority": 100, "angles": ["pregunta", "contraste", "error"] },
+    "ai-identity": { "priority": 100, "angles": ["pregunta", "contraste", "consecuencia", "error"] },
+    "behavioral-science": { "priority": 100, "angles": ["consecuencia", "contraste", "secuencia", "error"] },
+    "human-essence": { "priority": 90, "angles": ["pregunta", "contraste", "consecuencia", "error"] }
+  },
+
+  "cadence": {
+    "_source": "intel.brand_cadence — 15 filas sembradas 2026-08-26 (5 plataformas x 3 fases). Volumen TOTAL por marca/plataforma: los 4 dominios ROTAN dentro de estos slots, NO multiplican.",
+    "x":       { "month_1": "2x_week", "month_2": "3x_week", "month_3plus": "4x_week", "max_rotation_weeks": 3, "nota": "Terreno primario de Lucien segun su genoma." },
+    "meta_fb": { "month_1": "2x_week", "month_2": "3x_week", "month_3plus": "4x_week", "max_rotation_weeks": 3 },
+    "meta_ig": { "month_1": "2x_week", "month_2": "3x_week", "month_3plus": "4x_week", "max_rotation_weeks": 3 },
+    "tiktok":  { "month_1": "1x_week", "month_2": "2x_week", "month_3plus": "3x_week", "max_rotation_weeks": [5, 3, 3], "nota": "TECHO 5 en month_1. Arranca mas bajo que X porque depende de VideoLab." },
+    "blog":    { "month_1": "1x_week", "month_2": "1x_week", "month_3plus": "2x_week", "max_rotation_weeks": [5, 5, 3], "nota": "TECHO 5 Y NO 3: formato largo. 4 rotativos sobre R=1 dan 4,0 semanas por turno; con el techo de Meta el grupo entero se rechazaria con ROTATION_WINDOW_EXCEEDED. El techo editorial de un blog no es el de Instagram." }
+  },
+
+  "voices": {
+    "lucien_editorial": {
+      "signature_closer": "— Lucien Sael · Builder, Thinker, Operator",
+      "rule": "La FIRMA de una pieza distribuida —posts y ads— la estampa EL SISTEMA tras el PASS del Watcher. El copy nunca la escribe. Decision del 2026-08-09, ratificada por el ruling de Sam del 2026-08-22."
+    },
+    "lucien_social": {
+      "signature_closer": "— luciensael.com",
+      "divergencia_abierta": "El genoma declara X como publicacion manual sin API; la DB ya lo tiene como x_api activo por decision de Sam del 2026-08-26. Pendiente de corregir EN EL GENOMA."
+    }
+  },
+
+  "estado_2026-08-26": {
+    "primer_research": "LUCIEN-BEHAVIORAL-SCIENCE, 2026-08-26 23:33:35 UTC — memo INTEGRO de 25.162 caracteres, stop_reason=end_turn, truncated=false, max_tokens=16000 con max_tokens_source=base. PRIMER RESEARCH DE LA HISTORIA DE LA MARCA.",
+    "piezas_vivas": "4, las cuatro pass_type=clean en awaiting_approval: blog y meta_ig del 2026-08-27 00:00 UTC (esta sesion) y x y tiktok del 2026-07-31. CORRECCION AL BRIEF: las dos de hoy NO son las dos primeras piezas de la marca — ya habia dos.",
+    "agentes": "1 — LUCIEN-BEHAVIORAL-SCIENCE (tier1, default_voice=lucien, activo)."
+  },
+
+  "alerts": [
+    { "level": "blocking", "msg": "judged_source NULL en las 4 piezas vivas, las dos nuevas incluidas, pese a correr sobre content-run-stage v94. No se puede afirmar que el juez leyo el adaptado. Bloquea toda generacion nueva — P1 de AGENDA.md" },
+    { "level": "critical", "msg": "El fan-out encola para plataformas sin proveedor: lote 2026-08-26 23:57:26.167661+00 dio 3 filas failed (tiktok, x, meta_fb) y 1 complete (meta_ig). El fan-out no mira si el canal esta activo — P4" },
+    { "level": "warning", "msg": "IID_FANOUT_EMPTY en un finding de la marca: 1 suscriptor activo pero 0 encolado en domain=behavioral-science. El fail-loud funciono; falta la causa — P3" },
+    { "level": "warning", "msg": "lucien_social declara X como publicacion manual y la DB ya dice API. Divergencia documento-dato, pendiente en el genoma" },
+    { "level": "warning", "msg": "Colision de /blog/: luciensael.com sirve hoy HTML estatico con extension .html. Resolver antes de BLOG-01 PR-3, junto con los 301" },
+    { "level": "warning", "msg": "Divergencia 1 del 2026-08-22 SIGUE ABIERTA: pesos tipograficos. La correccion aditiva propuesta en unrlvl-iid-functions, migracion 20260822160000, NO se aplico" },
+    { "level": "info", "msg": "El drenaje no atiende vercel_html: el sitio debe renderizar desde la DB como forumphs.com. Falta ese mecanismo en WebLab" },
+    { "level": "info", "msg": "El BP de marca todavia no esta en BluePrints: falta subirlo junto con los dos SVG" }
+  ]
+}

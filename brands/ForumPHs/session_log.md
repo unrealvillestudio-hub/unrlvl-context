@@ -1,5 +1,69 @@
 # ForumPHs — Session Log
 
+## 2026-08-26 — ForumPHs deja de ser la única marca del carril · `objecion` en los 11 dominios de conversión
+
+**ForumPHs fue la primera marca del ecosistema en entrar al Scheduler el 2026-08-22. Hoy dejó de ser
+la única:** UnrealvilleStudio, LucienSael y NeuroneSCF entran con `rollout_started_at = 2026-08-26`.
+Lo que se probó acá durante cuatro días es ahora el camino de cuatro marcas.
+
+> Verificado contra producción el 2026-08-27 con la herramienta (HRD-R13). Detalle del carril, los
+> cierres de PUB-01 / P3 / RESEARCH-01 y el costo de la sesión en `IID/session_log.md` (2026-08-26).
+> Professor cerrado **antes**: **15 learnings**, `session_date = 2026-08-26`, los quince con
+> `approved_by_sam = true`. **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+### Lo que cambió en esta marca
+
+- **`objecion` entra en los 11 dominios de conversión.** Verificado, son exactamente **11**:
+  `el-futuro-de-tu-patrimonio-jd` · `el-informe-que-si-existe-jd` · `el-momento-del-cambio-doliente`
+  · `el-momento-del-cambio-jd` · `la-cuota-extraordinaria-que-viene-jd` ·
+  `la-jd-que-hereda-un-desastre-jd` · `las-cuatro-preguntas-que-nadie-calcula-jd` ·
+  `mi-unidad-vale-menos-y-no-lo-sabes-jd` · `profesionalizar-sin-perder-el-control-doliente` ·
+  `profesionalizar-sin-perder-el-control-jd` · `rendir-cuentas-sin-sudar-jd`. Los once quedan con la
+  terna `expertise · artefacto · pregunta · consecuencia` del 25-ago **más** `objecion`. **No entra
+  en los editoriales:** es ángulo de venta, y la definición del catálogo lo dice — *sirve a voces que
+  mueven a una decisión*.
+- **`intel.content_angles` es catálogo nuevo** — 10 ángulos, los diez `active`, con `label` y
+  `definition`. Los seis ángulos que Sam aprobó el 25-ago para ForumPHs dejan de vivir sólo en
+  `brand_topics.angles`: ahora hay **catálogo con contrato**, y el contrato incluye el límite —
+  `consecuencia` avisa que linda con urgencia y miedo, `caso` y `dato` exigen fuente real,
+  `expertise` exige credencial propia.
+- **`theme` *Amatista Carbon* y `fonts_href` como dato del canal**, en
+  `brand_publish_channels.config` de `blog_forumphs`: `carbon_d` `#0E1018` = fondo, `carbon`
+  `#1C2233` = superficie, `am_d` `#3A1F4A` = superficie 2, `parch` `#F0EDE8` = texto, `stone`
+  `#6B6460` = texto 3, **`terra` `#C4622D` = acento y wordmark PHs**, `am` `#5C3472` = acento
+  institucional. EB Garamond display, Cormorant Garamond editorial, DM Sans cuerpo y UI. **Cinzel es
+  utility** (labels) y no tiene token propio en el renderizador: **viaja en `fonts_href`** para que
+  esté disponible. El renderizador deja de cablear paleta: la lee.
+- **Ruta verificada contra el sitio vivo el 2026-08-26:** el enlace del header dice *Sin tecnicismos*
+  y la ruta es `/blog`. **`blog_label` y `blog_path` desacoplados a propósito.**
+- **`linkedin` pasa a INACTIVO** por decisión de Sam del 2026-08-26 — *LinkedIn queda fuera para
+  **todas** las marcas hasta segunda orden*. No es falta de dominio ni de contenido: falta la app de
+  organización con permiso de publicación y su token.
+
+### Lo que ForumPHs le presta al resto
+
+- **PUB-01 cerrado** (`content-scheduler` **v6**, PR #98) es lo que faltaba del hito del 22-ago: el
+  carril **colocaba** y ahora **verifica que publicó**, contra la fila de `scheduled_posts` y no
+  contra el `200`.
+- **BLOG-01 PR-1** — `forumphs-com` **#6**: `discarded_at` filtrado en las **tres** rutas, **410** en
+  artículo descartado, paquete SEO completo.
+- **BLOG-01 PR-2** — el renderizador **sale de `forumphs-com`** al repo nuevo `unrlvl-blog` (**#1**),
+  con `blog_path` como dato, router propio, y tema y copia por canal. Lo que era código de una marca
+  pasa a ser eje del ecosistema; la instancia queda en el dato. **Test de la marca N+1: lo pasa por
+  construcción.**
+
+### Abre — lo de esta marca dentro de lo general
+
+- 🔴 **P2 · las tres reglas con falso positivo medido** son suyas o la afectan directo: `HR-FPHS-15`
+  **3/3 = 100 %** · `HR-FPHS-13` **2/2 = 100 %** · `HR-LEGAL-01` **3/4 = 75 %**, sobre los 9
+  arbitrajes de `intel.judge_calibration`. **Es la condición para encender el cron 66.**
+- 🟡 **`SIG-01` y `SEO-01`** en `CoreProject` y `forumphs-com`.
+- 🟡 **BLOG-01 PR-3 y PR-4**, con la **colisión de `/blog/` en dos marcas** y los **301 del `.html`**.
+- 🟡 **Corrector `fix_replacement` sólo en `HR-FPHS-15`.**
+- 🟡 **`fphs_conversion` turno 4** (año calendario) sigue abierto.
+
+---
+
 ## 2026-08-25 (checkpoint 2) — De 21 piezas, una sola falló por contenido
 
 En una línea: **se corrió el primer run sobre el carril completo, el ratio limpio pasó de 6,7 % a

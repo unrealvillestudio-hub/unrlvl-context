@@ -6,6 +6,75 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
+## 2026-08-26 — UnrealvilleStudio entra al Scheduler · de 14 agentes a 6
+
+**Segunda marca del ecosistema en entrar al Scheduler**, cuatro días después de ForumPHs.
+`rollout_started_at = 2026-08-26`, `max_rotation_weeks 3`.
+
+> Verificado contra producción el 2026-08-27 con la herramienta (HRD-R13). Detalle del carril en
+> `IID/session_log.md` (2026-08-26).
+
+### Sembrado
+
+- **`intel.brand_publish_channels` — 4 canales:** `meta_fb`, `meta_ig` y `blog` activos; **`linkedin`
+  INACTIVO** por decisión de Sam del 2026-08-26 — *LinkedIn queda fuera para **todas** las marcas
+  hasta segunda orden*. No es falta de dominio ni de contenido: **falta la app de organización con
+  permiso de publicación y su token**, que no pasa por Meta MCP porque es API propia.
+- **`intel.brand_cadence` — 12 filas** (4 plataformas × 3 fases). El blog arranca `1x_week` con
+  **techo 7 y no 3**: 6 rotativos sobre R=1 dan 6,0 semanas por turno.
+- **`intel.brand_topic_platform_mode` — 24 filas**, el volumen mayor de las tres marcas.
+- **Ángulos en los 6 dominios activos:** `ai-cognition-tech` (`pregunta · contraste · consecuencia ·
+  dato`) · `ai-industrialization` (`secuencia · consecuencia · contraste · dato`) ·
+  `algorithm-mechanics` (`artefacto · secuencia · expertise · dato`) · `brand-voice-systems`
+  (`artefacto · expertise · contraste · objecion`) · `cro-psychology` (`pregunta · consecuencia ·
+  contraste · objecion`) · `signal-learning-loops` (`secuencia · artefacto · pregunta · dato`).
+  **`system-proof` sigue `active = false` y sin ángulos** — no se tocó.
+- **`theme` VOID SYSTEM y `fonts_href`** en `config` del canal `blog`, de
+  `BluePrints/brands/Unrealville/BP_BRAND_UNRLVL_v1.3.json`: `void` `#080808` = fondo, `carbon`
+  `#0F0F0F` = superficie, `chalk` `#F2F0EC` = texto, **`cyan` `#00FFD1` = único acento**; Bebas Neue
+  display, Libre Baskerville cuerpo, Space Mono etiquetas. **`warn` no existe en el BP** y queda
+  como default declarado, no inventado.
+- **`blog_label` es *Field Notes*; `blog_path` es `/blog`.** Desacoplados a propósito: el rótulo es
+  de marca, la ruta es URL indexada.
+
+### De 14 agentes a 6
+
+**8 agentes fantasma eliminados.** Verificado: `intel.iid_agents` con `brand_id =
+'UnrealvilleStudio'` devuelve **6 filas, las 6 activas** — `UNRLVL-AI-COGNITION-TECH`,
+`UNRLVL-AI-INDUSTRIALIZATION`, `UNRLVL-ALGORITHM-MECHANICS` (tier2), `UNRLVL-BRAND-VOICE-SYSTEMS`,
+`UNRLVL-CRO-PSYCHOLOGY` y `UNRLVL-SIGNAL-LEARNING-LOOPS`. Uno por dominio activo, sin sobrantes.
+
+### Primer memo íntegro
+
+`UNRLVL-AI-COGNITION-TECH`, 2026-08-26 **23:33:33 UTC**: **24.897 caracteres**,
+`stop_reason = 'end_turn'`, `truncated = false`, `max_tokens = 16000` (`base`).
+
+**Y el rastro del costo, que es de esta marca:** `UNRLVL-SIGNAL-LEARNING-LOOPS` corrió **tres veces**
+—18:05:59 truncada con `max_tokens` NULL, 19:01:10 truncada con `5200` de `agent`, 19:03:06 íntegra
+con `16000` de `base`—, y `UNRLVL-AI-COGNITION-TECH` corrió truncada a las 23:06:56 antes de la
+buena. **De ahí sale HRD-R14.**
+
+### Corregido fuera del repo
+
+Firma canónica de UNRLVL en el tema Shopify de NSCF: `snippets/unrlvl-signature.liquid`, checksum
+final `51c2af2e…`, y dirección **12951 Biscayne Blvd, Suite 1 · North Miami, FL 33181** en
+`sections/nc-footer.liquid`.
+
+> ⚠️ **Divergencia anotada, no corregida.** `brands/UnrealvilleStudio/brand.json` declara
+> `contact.hq.display` como `12951 Biscayne Blvd · North Miami, FL 33181` — **sin `Suite 1`**. El
+> tema de NSCF ya lo lleva. No se toca el `brand.json` sin Sam: el número de suite es dato legal, no
+> redacción.
+
+### Abre
+
+- 🟠 **El drenaje no atiende `vercel_html`.** El canal `blog` está activo, pero el sitio **debe
+  renderizar desde la DB** como hace `forumphs.com`, y **ese mecanismo falta en WebLab**. Sembrar el
+  canal no lo crea.
+- 🟠 **`linkedin` inactivo** hasta que exista la app de organización con su token.
+- 🟡 **`Suite 1` en `brand.json`** — decisión de Sam.
+
+---
+
 ## 2026-08-18 — REVISABLE SI: condición de reapertura
 
 **Sesión Sam × Claude.ai.** Origen: evaluación de un documento externo (Growth Origin, *"Dos IAs, una carpeta"*). De cinco piezas candidatas sobrevivió **UNA**; el resto se descartó por reconstruir el destino prohibido *"todos lo leen siempre"* (`ARQUITECTURA` regla dura 3) o por existir ya en forma superior.

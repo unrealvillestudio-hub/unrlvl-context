@@ -1,5 +1,11 @@
 {
-  "_meta": { "version": "2026-08-08-v1", "maintained_by": "Claude", "previous": "2026-05-20-v12" },
+  "_meta": {
+    "version": "2026-08-26-v1",
+    "maintained_by": "Claude",
+    "previous": "2026-08-08-v1",
+    "_previous_chain": "2026-08-26-v1 <- 2026-08-08-v1 <- 2026-05-20-v12. Ninguna clave anterior se borra: esta pasada es ADICION.",
+    "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ADICIONES: rollout · publish_channels · domains · cadence · estado_2026-08-26; alerts AMPLIADO (no reemplazado). Nada removido. Refleja lo SEMBRADO en produccion y VERIFICADO con execute_sql el 2026-08-27 (HRD-R13). Detalle en brands/NeuroneSCF/session_log.md (2026-08-26) y en IID/session_log.md (2026-08-26)."
+  },
   "brand": {
     "id": "NeuroneSCF",
     "name": "Neurone South & Central Florida",
@@ -21,7 +27,9 @@
       },
       "oauth_scopes": "read_apps + read_locales + write_translations + write_legal_policies (reinstalado 2026-05-09)"
     },
-    "b2b": { "internal_domain": "nj5ybc-n1.myshopify.com" },
+    "b2b": {
+      "internal_domain": "nj5ybc-n1.myshopify.com"
+    },
     "note": "Conector MCP en INFRA-SHOPIFY-MCP (studio). brand_id='NeuroneSCF' para ambas tiendas."
   },
   "addresses": {
@@ -56,33 +64,92 @@
     "strategy_doc": "neurone_kits_strategy_v4.html",
     "pricing_decision": "Todos los kits 1-3.3 a precio ÓPTIMO. Kit SOS a precio DESEADO — uso controlado Mes 3+.",
     "kits_base": [
-      {"sku":"NSCF-KT-101",   "price_po":99.99,  "margin_real":0.555},
-      {"sku":"NSCF-KT-101P",  "price_po":99.99,  "margin_real":0.519},
-      {"sku":"NSCF-KT-102",   "price_po":99.99,  "margin_real":0.533},
-      {"sku":"NSCF-KT-102P",  "price_po":109.99, "margin_real":0.542},
-      {"sku":"NSCF-KT-103",   "price_po":99.99,  "margin_real":0.533},
-      {"sku":"NSCF-KT-103P",  "price_po":109.99, "margin_real":0.542},
-      {"sku":"NSCF-KT-103V",  "price_po":84.99,  "margin_real":0.480},
-      {"sku":"NSCF-KT-103VP", "price_po":99.99,  "margin_real":0.522},
-      {"sku":"NSCF-KT-104",   "price_po":179.99, "margin_real":0.470, "status":"APROBADO uso controlado Mes 3+"}
+      {
+        "sku": "NSCF-KT-101",
+        "price_po": 99.99,
+        "margin_real": 0.555
+      },
+      {
+        "sku": "NSCF-KT-101P",
+        "price_po": 99.99,
+        "margin_real": 0.519
+      },
+      {
+        "sku": "NSCF-KT-102",
+        "price_po": 99.99,
+        "margin_real": 0.533
+      },
+      {
+        "sku": "NSCF-KT-102P",
+        "price_po": 109.99,
+        "margin_real": 0.542
+      },
+      {
+        "sku": "NSCF-KT-103",
+        "price_po": 99.99,
+        "margin_real": 0.533
+      },
+      {
+        "sku": "NSCF-KT-103P",
+        "price_po": 109.99,
+        "margin_real": 0.542
+      },
+      {
+        "sku": "NSCF-KT-103V",
+        "price_po": 84.99,
+        "margin_real": 0.48
+      },
+      {
+        "sku": "NSCF-KT-103VP",
+        "price_po": 99.99,
+        "margin_real": 0.522
+      },
+      {
+        "sku": "NSCF-KT-104",
+        "price_po": 179.99,
+        "margin_real": 0.47,
+        "status": "APROBADO uso controlado Mes 3+"
+      }
     ],
     "kits_derivados": [
-      {"sku":"NSCF-KT-101T",  "price_po":109.99, "margin_real":0.555},
-      {"sku":"NSCF-KT-102T",  "price_po":109.99, "margin_real":0.531},
-      {"sku":"NSCF-KT-103VT", "price_po":94.99,  "margin_real":0.490}
+      {
+        "sku": "NSCF-KT-101T",
+        "price_po": 109.99,
+        "margin_real": 0.555
+      },
+      {
+        "sku": "NSCF-KT-102T",
+        "price_po": 109.99,
+        "margin_real": 0.531
+      },
+      {
+        "sku": "NSCF-KT-103VT",
+        "price_po": 94.99,
+        "margin_real": 0.49
+      }
     ]
   },
   "tracking": {
     "meta_pixel": {
       "status": "✅ LIVE",
       "id": "1348252664025025",
-      "events": ["PageView", "ViewContent", "AddToCart", "InitiateCheckout"]
+      "events": [
+        "PageView",
+        "ViewContent",
+        "AddToCart",
+        "InitiateCheckout"
+      ]
     },
     "klaviyo": {
       "status": "✅ LIVE",
       "public_key": "UNF8Ee",
       "templates_count": 10,
-      "flows_pending": ["abandoned_cart", "post_purchase", "review_request", "welcome"]
+      "flows_pending": [
+        "abandoned_cart",
+        "post_purchase",
+        "review_request",
+        "welcome"
+      ]
     },
     "gtm": {
       "status": "✅ INSTALADO",
@@ -146,10 +213,19 @@
   "content_system": {
     "skill_version": "v2.6",
     "creative_engine_version": "v9.0",
-    "content_types_active": ["email_sequence", "product_description_b2c"],
+    "content_types_active": [
+      "email_sequence",
+      "product_description_b2c"
+    ],
     "templates_active": [
-      {"id": "prompt_Email_Sequence", "version": "1.0"},
-      {"id": "prompt_Product_Description_B2C", "version": "1.2"}
+      {
+        "id": "prompt_Email_Sequence",
+        "version": "1.0"
+      },
+      {
+        "id": "prompt_Product_Description_B2C",
+        "version": "1.2"
+      }
     ],
     "restore_therapy_plus_v4": {
       "status": "GENERADO — pendiente aplicar a Shopify",
@@ -158,8 +234,20 @@
     }
   },
   "klaviyo_templates": {
-    "templates_es": ["Tm3JWE", "QVANPy", "UwszQw", "S6ZDHq", "TTrxdT"],
-    "templates_en": ["X57LJu", "Ws6J7R", "SedUug", "U2DMYK", "XBvyZH"],
+    "templates_es": [
+      "Tm3JWE",
+      "QVANPy",
+      "UwszQw",
+      "S6ZDHq",
+      "TTrxdT"
+    ],
+    "templates_en": [
+      "X57LJu",
+      "Ws6J7R",
+      "SedUug",
+      "U2DMYK",
+      "XBvyZH"
+    ],
     "copy_status": "PENDIENTE deploy — flujo R4B listo · deploy cuando flows UI estén configurados"
   },
   "blog": {
@@ -169,23 +257,291 @@
     "status": "LIVE ✅ ES+EN",
     "pending": "Reescritura 4 artículos con L0+L3 HUMANIZE EMOTIONAL",
     "articles": [
-      {"id": 613706334535, "pilar": "Color Intelligence", "handle_es": "color-capilar-se-va-rapido-miami", "handle_en": "why-hair-color-fades-faster-miami"},
-      {"id": 613706662215, "pilar": "Hair Science", "handle_es": "cabello-seco-acondicionador-reconstruccion", "handle_en": "conditioner-dry-hair-reconstruction"},
-      {"id": 613706694983, "pilar": "Miami Hair", "handle_es": "sal-cloro-sol-cabello-miami", "handle_en": "salt-chlorine-sun-miami-hair-protocol"},
-      {"id": 613706727751, "pilar": "Rituals", "handle_es": "rutina-capilar-sur-florida-protocolo", "handle_en": "hair-ritual-south-florida"}
+      {
+        "id": 613706334535,
+        "pilar": "Color Intelligence",
+        "handle_es": "color-capilar-se-va-rapido-miami",
+        "handle_en": "why-hair-color-fades-faster-miami"
+      },
+      {
+        "id": 613706662215,
+        "pilar": "Hair Science",
+        "handle_es": "cabello-seco-acondicionador-reconstruccion",
+        "handle_en": "conditioner-dry-hair-reconstruction"
+      },
+      {
+        "id": 613706694983,
+        "pilar": "Miami Hair",
+        "handle_es": "sal-cloro-sol-cabello-miami",
+        "handle_en": "salt-chlorine-sun-miami-hair-protocol"
+      },
+      {
+        "id": 613706727751,
+        "pilar": "Rituals",
+        "handle_es": "rutina-capilar-sur-florida-protocolo",
+        "handle_en": "hair-ritual-south-florida"
+      }
     ]
   },
   "alerts": [
-    {"level":"blocking", "msg":"Autorización marca Neurone US pendiente — bloquea lanzamiento"},
-    {"level":"critical",  "msg":"TikTok Pixel DUPLICADO en theme.liquid — resolver antes de cualquier ads"},
-    {"level":"warning",  "msg":"GTM + GA4: verificación pendiente en GTM Preview / GA4 DebugView"},
-    {"level":"warning",  "msg":"WABA pendiente de completar — Patricia en Step 1"},
-    {"level":"warning",  "msg":"Logos/Assets sin confirmar de Neurone Cosmética"},
-    {"level":"warning",  "msg":"Video PO Kit SOS no grabado — asset urgente TikTok"},
-    {"level":"action",   "msg":"DY Fazza: decisión 200ml vs 400ml pendiente (KT-104)"},
-    {"level":"warning",  "msg":"~11 productos con traducción EN parcial (title/meta) — no bloqueante"},
-    {"level":"info",     "msg":"Social Media Agent: sin acceso a session_log.md — fix pendiente"},
-    {"level":"info",     "msg":"nscf_editorial v1.0 activa (2026-08-08) — pendiente hueco de frecuencias (cadencia editorial por definir)"},
-    {"level":"info",     "msg":"Header del blog NSCF pendiente de reescritura — la voz DEMUESTRA, no declara (arrastra 'sin promesas vacías' 2026-07-11)"}
-  ]
+    {
+      "level": "blocking",
+      "msg": "Autorización marca Neurone US pendiente — bloquea lanzamiento"
+    },
+    {
+      "level": "critical",
+      "msg": "TikTok Pixel DUPLICADO en theme.liquid — resolver antes de cualquier ads"
+    },
+    {
+      "level": "warning",
+      "msg": "GTM + GA4: verificación pendiente en GTM Preview / GA4 DebugView"
+    },
+    {
+      "level": "warning",
+      "msg": "WABA pendiente de completar — Patricia en Step 1"
+    },
+    {
+      "level": "warning",
+      "msg": "Logos/Assets sin confirmar de Neurone Cosmética"
+    },
+    {
+      "level": "warning",
+      "msg": "Video PO Kit SOS no grabado — asset urgente TikTok"
+    },
+    {
+      "level": "action",
+      "msg": "DY Fazza: decisión 200ml vs 400ml pendiente (KT-104)"
+    },
+    {
+      "level": "warning",
+      "msg": "~11 productos con traducción EN parcial (title/meta) — no bloqueante"
+    },
+    {
+      "level": "info",
+      "msg": "Social Media Agent: sin acceso a session_log.md — fix pendiente"
+    },
+    {
+      "level": "info",
+      "msg": "nscf_editorial v1.0 activa (2026-08-08) — pendiente hueco de frecuencias (cadencia editorial por definir)"
+    },
+    {
+      "level": "info",
+      "msg": "Header del blog NSCF pendiente de reescritura — la voz DEMUESTRA, no declara (arrastra 'sin promesas vacías' 2026-07-11)"
+    },
+    {
+      "level": "blocking",
+      "msg": "Los 4 dominios editoriales no tienen publicador: su canal es shopify_blog y el drenaje todavia no lo atiende. Existe la cadencia y el techo calculado; no existe el publicador"
+    },
+    {
+      "level": "critical",
+      "msg": "MARCA CON VENTA REAL DETRAS: revisar el adaptado antes de aprobar mientras el conteo de hashtags del genoma no sea regla del Watcher (P5 de AGENDA.md). Aqui el costo de un adaptado malo es una venta, no reputacion"
+    },
+    {
+      "level": "warning",
+      "msg": "email INACTIVO por decision de Sam 2026-08-26 hasta que los flows de Klaviyo existan. Arrastra la deuda DKIM/SPF"
+    },
+    {
+      "level": "warning",
+      "msg": "El handle del blog lleva sufijo -1 (hair-intelligence-1): hay o hubo un blog previo con el handle limpio. Revisar antes de publicar por API — handle duplicado es contenido duplicado y URL fea para SEO"
+    },
+    {
+      "level": "info",
+      "msg": "DIVERGENCIA ANOTADA: addresses.legal_prestige dice 12951 Biscayne Blvd sin Suite 1; el tema Shopify ya lleva Suite 1. Decide Sam"
+    }
+  ],
+  "rollout": {
+    "_source": "intel.brand_rollout — verificado 2026-08-27",
+    "rollout_started_at": "2026-08-26",
+    "max_rotation_weeks": 3,
+    "alcance": "SOLO los 5 dominios sociales. Los 4 de blog no declaran canal publicable que el drenaje atienda.",
+    "notes": "Arranque fijado por Sam 2026-08-26. tiktok y email quedaban fuera hasta que existiera proveedor; tiktok ya lo tiene, email no."
+  },
+  "publish_channels": {
+    "_source": "intel.brand_publish_channels — 5 filas sembradas 2026-08-26. Proveedor y config COMO DATO (MULTIBRAND_RULE).",
+    "meta_fb": {
+      "provider": "meta_graph",
+      "active": true,
+      "provider_platform": "FACEBOOK",
+      "locale": "es-US",
+      "credentials": "public.meta_accounts, brand_id=NeuroneSCF",
+      "nota": "MARCA CON VENTA REAL DETRAS: revisar el adaptado antes de aprobar mientras el conteo de hashtags del genoma no sea regla del Watcher."
+    },
+    "meta_ig": {
+      "provider": "meta_graph",
+      "active": true,
+      "provider_platform": "INSTAGRAM",
+      "locale": "es-US",
+      "credentials": "public.meta_accounts, brand_id=NeuroneSCF",
+      "nota": "El genoma nscf_conversion tambien declara tiktok y email: quedan fuera hasta que exista proveedor que los drene."
+    },
+    "tiktok": {
+      "provider": "tiktok_business",
+      "active": true,
+      "locale": "es-US",
+      "nota": "Solo capa de texto, igual que Lucien.",
+      "pendiente": "OAuth TikTok for Business (PO)"
+    },
+    "blog": {
+      "provider": "shopify_blog",
+      "active": true,
+      "locale": "es-US",
+      "base_url": "https://neuronescflorida.com",
+      "blog_path": "/blogs/hair-intelligence-1",
+      "blog_label": "Hair Intelligence",
+      "shopify_blog_handle": "hair-intelligence-1",
+      "site_name": "Neurone South & Central Florida",
+      "nota": "El blog vive DENTRO de Shopify: proveedor distinto de vercel_html, se resuelve por la API de Shopify y NO por render del sitio. Por eso este canal NO lleva theme ni fonts_href — el tema lo pone Shopify.",
+      "nota_handle": "El handle lleva sufijo -1: hay o hubo un blog previo con el handle limpio. Revisar antes de publicar por API — un handle duplicado es contenido duplicado y URL fea para SEO."
+    },
+    "email": {
+      "provider": "klaviyo",
+      "active": false,
+      "locale": "es-US",
+      "secret_ref": "KLAVIYO_API_KEY",
+      "nota_inactivo": "INACTIVO por decision explicita de Sam 2026-08-26 hasta segunda orden: los flows de Klaviyo no estan configurados. Arrastra ademas la deuda DKIM/SPF."
+    }
+  },
+  "domains": {
+    "_source": "intel.brand_topics — 9 dominios, los 9 activos, los 9 con angles sembrados 2026-08-26 desde el catalogo intel.content_angles.",
+    "_nota_objecion": "objecion entra SOLO en color-fade y fine-fragile. Es angulo de venta y va donde hay decision que mover; la definicion del catalogo lo dice.",
+    "_sociales": "5 dominios bajo nscf_conversion, a meta_fb/meta_ig/tiktok.",
+    "_editoriales": "4 dominios bajo nscf_editorial, a blog. Sembrados y activos, PERO su canal es shopify_blog y el drenaje todavia no lo atiende: existe la cadencia, existe el techo calculado, NO existe el publicador.",
+    "chlorine-sun": {
+      "priority": 90,
+      "destino": "social",
+      "voz": "nscf_conversion",
+      "angles": [
+        "secuencia",
+        "expertise",
+        "artefacto",
+        "dato"
+      ]
+    },
+    "color-fade": {
+      "priority": 100,
+      "destino": "social",
+      "voz": "nscf_conversion",
+      "angles": [
+        "contraste",
+        "expertise",
+        "secuencia",
+        "objecion"
+      ]
+    },
+    "damage-repair": {
+      "priority": 100,
+      "destino": "social",
+      "voz": "nscf_conversion",
+      "angles": [
+        "secuencia",
+        "expertise",
+        "artefacto",
+        "dato"
+      ]
+    },
+    "fine-fragile": {
+      "priority": 90,
+      "destino": "social",
+      "voz": "nscf_conversion",
+      "angles": [
+        "pregunta",
+        "expertise",
+        "contraste",
+        "objecion"
+      ]
+    },
+    "frizz-humidity": {
+      "priority": 100,
+      "destino": "social",
+      "voz": "nscf_conversion",
+      "angles": [
+        "pregunta",
+        "artefacto",
+        "secuencia",
+        "dato"
+      ]
+    },
+    "color-intelligence": {
+      "priority": 100,
+      "destino": "editorial",
+      "voz": "nscf_editorial",
+      "angles": [
+        "expertise",
+        "dato",
+        "contraste",
+        "secuencia"
+      ]
+    },
+    "hair-science": {
+      "priority": 90,
+      "destino": "editorial",
+      "voz": "nscf_editorial",
+      "angles": [
+        "expertise",
+        "dato",
+        "secuencia",
+        "pregunta"
+      ]
+    },
+    "miami-hair": {
+      "priority": 100,
+      "destino": "editorial",
+      "voz": "nscf_editorial",
+      "angles": [
+        "dato",
+        "caso",
+        "contraste",
+        "consecuencia"
+      ]
+    },
+    "rituals": {
+      "priority": 90,
+      "destino": "editorial",
+      "voz": "nscf_editorial",
+      "angles": [
+        "secuencia",
+        "artefacto",
+        "expertise",
+        "pregunta"
+      ]
+    }
+  },
+  "cadence": {
+    "_source": "intel.brand_cadence — 12 filas sembradas 2026-08-26 (4 plataformas x 3 fases). Volumen TOTAL por marca/plataforma: los dominios ROTAN dentro de estos slots, NO multiplican.",
+    "meta_fb": {
+      "month_1": "2x_week",
+      "month_2": "3x_week",
+      "month_3plus": "4x_week",
+      "max_rotation_weeks": 3,
+      "nota": "Volumen mayoritario de la cadencia legacy: 3 de los 5 dominios sociales declaraban 2x_week. 5 rotativos sobre R=2 dan 2,5 semanas."
+    },
+    "meta_ig": {
+      "month_1": "2x_week",
+      "month_2": "3x_week",
+      "month_3plus": "4x_week",
+      "max_rotation_weeks": 3,
+      "nota": "Identica a meta_fb."
+    },
+    "tiktok": {
+      "month_1": "2x_week",
+      "month_2": "3x_week",
+      "month_3plus": "4x_week",
+      "max_rotation_weeks": 3
+    },
+    "blog": {
+      "month_1": "1x_month",
+      "month_2": "2x_month",
+      "month_3plus": "2x_month",
+      "max_rotation_weeks": [
+        20,
+        10,
+        10
+      ],
+      "nota": "TECHO 20 Y NO 3: los 4 dominios editoriales sobre 1x_month dan R=0,23/semana y 17,4 semanas por turno. Es ARITMETICA, no mala configuracion — mismo caso que bloqueo el email_propietarios de ForumPHs en agosto. Con el techo de Meta el grupo entero se rechazaria. El editorial NO crece con la curva: es fondo, no frecuencia."
+    }
+  },
+  "estado_2026-08-26": {
+    "entrada_al_scheduler": "Tercera marca del ecosistema, el mismo dia que UnrealvilleStudio y LucienSael.",
+    "corregido_fuera_del_repo": "Firma canonica de UNRLVL en el tema Shopify de esta tienda: snippets/unrlvl-signature.liquid, checksum final 51c2af2e. Y direccion 12951 Biscayne Blvd, Suite 1 · North Miami, FL 33181 en sections/nc-footer.liquid — es la direccion legal de Prestige Beauty Global Distribution que addresses.legal_prestige ya declara, AHORA CON Suite 1, que la clave del JSON no lleva. Anotado, no corregido."
+  }
 }
