@@ -2,6 +2,74 @@
 
 ---
 
+## 2026-08-26 — Primer research de la historia de Lucien · la marca entra al Scheduler
+
+**Lo que ocurrió hoy, medido:** LucienSael entra al Scheduler con `rollout_started_at = 2026-08-26`,
+corre **el primer research de su historia** y produce **dos piezas nuevas**, ambas `clean`.
+
+> Verificado contra producción el 2026-08-27 con la herramienta (HRD-R13). Detalle del carril en
+> `IID/session_log.md` (2026-08-26). Entra además `brands/LucienSael/brand.json` — la marca no tenía
+> config en el repo de contexto — y `BP_Brand_Context.md` remitiendo a `BluePrints/brands/LucienSael/`.
+
+### Sembrado
+
+- **`intel.brand_rollout`** — `rollout_started_at 2026-08-26`, `max_rotation_weeks 3`.
+- **`intel.brand_publish_channels` — 5 canales**, los cinco `active = true`: `meta_fb`, `meta_ig`,
+  `x`, `tiktok` y `blog`. **X va por API por decisión de Sam**, no manual: el genoma `lucien_social`
+  todavía dice *publicación manual* y **hay que corregirlo** — escribir en X requiere plan de pago.
+- **`intel.brand_cadence` — 15 filas** (5 plataformas × 3 fases). El blog arranca `1x_week` con
+  **techo 5** y no 3: 4 dominios rotativos sobre R=1 dan 4,0 semanas por turno, y con el techo de
+  Meta el grupo entero se rechazaría con `ROTATION_WINDOW_EXCEEDED`. **El techo editorial de un blog
+  no es el de Instagram.**
+- **`intel.brand_topic_platform_mode` — 20 filas.**
+- **Ángulos en los 4 dominios**, del catálogo nuevo `intel.content_angles`: `ai-cognition`
+  (`pregunta · contraste · error`), `ai-identity` y `human-essence`
+  (`pregunta · contraste · consecuencia · error`), `behavioral-science`
+  (`consecuencia · contraste · secuencia · error`). **Ninguno declara `expertise`** — Lucien no se
+  apoya en credencial propia, y la definición del catálogo lo dice explícitamente.
+- **`theme` EMBER SYSTEM y `fonts_href`** en `config` del canal `blog`, tomados del BP entregado por
+  Sam (`lucien-sael-brand-identity-v1.html`): `obsidian` `#0D0D0B` = fondo, `bone` `#EDE8DF` = texto,
+  `ember` `#D4622A` = acento, `gold` `#B8922A` = aviso; Cormorant Garamond display, Crimson Pro
+  editorial, JetBrains Mono UI.
+
+### Primer research
+
+`LUCIEN-BEHAVIORAL-SCIENCE`, 2026-08-26 **23:33:35 UTC**: memo **íntegro** de **25.162 caracteres**,
+`stop_reason = 'end_turn'`, `truncated = false`, `max_tokens = 16000` con
+`max_tokens_source = 'base'`. **La corrida anterior del mismo agente, a las 23:07:01, salió
+truncada con `max_tokens` NULL** — la divergencia silenciosa de la jornada.
+
+### Primeras dos piezas de esta sesión
+
+`blog` y `meta_ig`, ambas `pass_type = 'clean'` en `awaiting_approval`, creadas 2026-08-27 00:00:58
+y 00:00:59 UTC.
+
+> **Corrección al brief, y no es un detalle.** El brief las llama *«las dos primeras piezas de
+> LucienSael»*. **No lo son:** ya existían **dos** del 2026-07-31 (`x` y `tiktok`), también `clean`
+> en `awaiting_approval`, que siguen vivas. Lo que sí es primero de la historia de la marca es **el
+> research**. Se corrige acá porque un log que exagera un hito deja de servir para medir el
+> siguiente.
+
+### Abre — de esta marca
+
+- 🔴 **`judged_source` NULL en las 4 piezas vivas**, las dos nuevas incluidas, pese a correr sobre
+  `content-run-stage` **v94**. No se puede afirmar que el juez leyó el adaptado. **Bloquea toda
+  generación nueva** (P1 de `AGENDA.md`).
+- 🟠 **El fan-out encoló para plataformas sin proveedor** — lote `23:57:26.167661+00`: **3 filas
+  `failed`** (`tiktok`, `x`, `meta_fb`) y **1 `complete`** (`meta_ig`). El fan-out no mira si el
+  canal está activo (P4).
+- 🟠 **`IID_FANOUT_EMPTY`** — *«1 suscriptor activo pero 0 encolado en
+  `domain=behavioral-science`»*. El fail-loud funcionó; falta la causa (P3).
+- 🟠 **`lucien_social` declara X como publicación manual** y la DB ya dice API. Divergencia
+  documento ↔ dato, pendiente de corregir en el genoma.
+- 🟡 **Colisión de `/blog/`** — hoy `luciensael.com` sirve HTML estático con extensión `.html`. A
+  resolver **antes de BLOG-01 PR-3**, junto con los 301.
+- 🟡 **Sigue abierta la divergencia 1** de la entrada del 2026-08-22 (pesos tipográficos): la
+  corrección aditiva propuesta en `unrlvl-iid-functions`, migración `20260822160000`, **no se
+  aplicó**.
+
+---
+
 ## 2026-08-22 (2) — Ruling de Sam: el slogan no es la firma · §04/§05 corregidos
 
 Sam resolvió la **divergencia 2** que la entrada anterior de hoy dejó abierta —«queda para Sam, no

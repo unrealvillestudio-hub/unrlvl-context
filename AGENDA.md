@@ -1,7 +1,138 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-08-26 · v2026-08-26-v2 (ACTUALIZA 2026-08-26 — **LOS TRES ROJOS CERRADOS, Y EL HILO DEL QUE CUELGA TODO LO DEMÁS LLEGA NULL.** Sólo context files; el código, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado ANTES: **15 learnings** en `public.professor_learnings`, `session_date = 2026-08-26`, los quince con `approved_by_sam = true` — **orden cumplido: Professor → Actualiza**. **SMA no se consultó** (Sam no lo mencionó). **CERRADO Y VERIFICADO EN PRODUCCIÓN:** **PUB-01** — `content-scheduler` **v6** (PR #98), el drenaje comprueba el EFECTO contra la fila de `scheduled_posts` y no el código HTTP, con `publishAndVerify` (`PUBLISH_UNVERIFIABLE`/`PUBLISH_UNPROVEN`/`PUBLISH_FAILED`/`PUBLISH_NOOP`) y `recordPublicationProof` guardando `assets.publication` — aplicación literal de HRD-R11 · **P3** — `content-run-stage` **v94** (PR #99), el juez recibe `social.adapted` y no `aife_filtered`, con `pickJudgedText`, `syncJudgedAdapted` y `adapted_pre_judgment` como evidencia sin firmar · **RESEARCH-01** — `iid-research` **v45** e `iid-process` **v48** (PRs #100 y #101), techo por cascada sobre `intel.iid_research_ceilings` (fila BASE 16000, default DECLARADO COMO DATO) y `truncated` como columna GENERADA desde `stop_reason` · **BLOG-01 PR-1** `forumphs-com` #6 (`discarded_at` en las tres rutas, 410 en descartado, paquete SEO) · **BLOG-01 PR-2** repo NUEVO `unrlvl-blog` #1 (renderizador extraído, `blog_path` como dato con router propio) · **BP-01/02/03** `BluePrints` #2 y #3 (blueprint de LucienSael creado; `BP_BRAND_UNRLVL` a v1.5). **TRES MARCAS ENTRAN AL SCHEDULER** — UnrealvilleStudio, LucienSael y NeuroneSCF con `rollout_started_at 2026-08-26`: cuatro marcas donde ayer había una. **UNRLVL PASA DE 14 AGENTES A 6.** **SEMBRADO Y MEDIDO (HRD-R13, `execute_sql` 2026-08-27):** `brand_rollout` **3** · `brand_cadence` **39** (el brief decía 33 — ⚠️ manda la medición) · `brand_publish_channels` **14** · `brand_topic_platform_mode` **63** · `intel.content_angles` **catálogo NUEVO de 10 ángulos, con el LÍMITE escrito en cada definición** · ángulos en **19** dominios de las marcas nuevas · **`objecion` en los 11 dominios de conversión de ForumPHs** (ángulo de venta: no entra en los editoriales) · `theme` y `fonts_href` **como dato del canal** en ForumPHs (Amatista Carbon), UNRLVL (VOID SYSTEM) y Lucien (EMBER SYSTEM). **LIMPIEZA:** 8 agentes fantasma de UNRLVL · 170+3 filas de cola fallida · 268 `orchestrator_jobs` · 71 findings de un carril que ya no existe; `scheduled_posts` quedó en **cero filas**. **PRIMER MATERIAL REAL DE DOS MARCAS NUEVAS:** memos íntegros (`end_turn`, `truncated=false`, `max_tokens=16000` de `base`) — `LUCIEN-BEHAVIORAL-SCIENCE` **25.162** caracteres y `UNRLVL-AI-COGNITION-TECH` **24.897** — y **dos piezas nuevas de LucienSael** (`blog` y `meta_ig`), ambas `clean` en `awaiting_approval`. ⚠️ **CORRECCIÓN AL BRIEF:** no son las dos primeras piezas de la marca — ya había dos del 2026-07-31; sí es **el primer research de su historia**. **ABRE:** 🔴 **P1 `judged_source` llega NULL** en las **4** piezas vivas de Lucien, las dos nuevas incluidas, pese a `content-run-stage` v94: no se puede afirmar que el juez leyó el adaptado, que es lo único que P3 vino a garantizar — **bloquea toda generación nueva** · 🔴 **P2 las tres reglas con falso positivo MEDIDO** sobre 9 arbitrajes (`HR-FPHS-15` 100 % · `HR-FPHS-13` 100 % · `HR-LEGAL-01` 75 %) — **condición para encender el cron 66** · 🟠 **P3 `IID_FANOUT_EMPTY`** (fail-loud funcionó, falta la causa; fila no localizada en esta pasada) · 🟠 **P4 el fan-out encola para plataformas sin proveedor** (3 `failed` + 1 `complete` en el lote de las 23:57) · 🟠 **P5 el adaptador no lee el genoma** (el conteo de hashtags es campo del genoma, no regla del Watcher) · 🟡 `SIG-01`/`SEO-01` · BLOG-01 PR-3 y PR-4 con la colisión de `/blog/` y los 301 · propagar `truncated` a `iid_findings` · `deno.land` bloqueado en el entorno de CC · `fix_replacement` sólo en `HR-FPHS-15` · 8 `statement` imperativos · `SUPABASE_SERVICE_ROLE_KEY` en 15 de 17 EF · 4 ERROR-level en `unrlvl-db` · handle `hair-intelligence-1` · perfiles duplicados de Vizos · ⚠️ **`iid-process` v49 sin origen conocido** (medido 49, brief 48) · ⚠️ **`Suite 1`** en la dirección de UNRLVL. **COSTO DE LA SESIÓN, SIN ADORNO:** dos divergencias entre producción y `main` por despliegues fuera de orden; **la segunda fue silenciosa y se llevó tres corridas de research completas**. **GOBERNANZA:** `HRD_PROTOCOL.md` **v1.7** con **dos reglas globales nuevas, ninguna derogación** — **HRD-R13** (una lectura de estado caduca dentro de la misma sesión; grepear no es leer; una hipótesis razonada no sustituye una medición) y **HRD-R14** (el orden merge → deploy no es ceremonia y su violación es SILENCIOSA: CC no despliega, Sam despliega desde `main` después del merge). **TEST DE LA MARCA N+1: no aplica** — este brief no produce código, migración ni siembra; se declara para que la ausencia no se lea como omisión. **DERIVADOS:** `ecosystem.md` y `ecosystem_filemap.md` **se sincronizan, no se regeneran** — regla escrita en `CLAUDE.md` desde el 2026-08-23. Detalle en `IID/session_log.md` (2026-08-26).) · cabecera anterior (v2026-08-26-v1) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
+
 _Actualizada: 2026-08-26 · v2026-08-26-v1 (ACTUALIZA CHECKPOINT 2 · SESIÓN 2026-08-25 — **EL RATIO LIMPIO PASÓ DE 6,7 % A 51,9 % EN UN DÍA, Y DE 21 PIEZAS UNA SOLA FALLÓ POR CONTENIDO.** Sólo context files; el código, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado ANTES: **10 learnings** en `public.professor_learnings`, `session_date = 2026-08-25`, los diez con `approved_by_sam = true` — **19 en total de esta sesión** contando el checkpoint anterior. **SMA no se consultó.** **EL RUN DEL 2026-08-25:** 27 filas generadas · 21 piezas creadas · 6 nunca llegaron a pieza. **14 limpias (51,9 %)** · 5 rescatadas por arbitraje o edición (18,5 %) · **19 aprovechables (70,4 %)** · 8 perdidas (29,6 %). **EL DIAGNÓSTICO SE MOVIÓ DEFINITIVAMENTE: de 21 piezas generadas, una sola tenía un defecto de contenido real. Todo lo demás que se perdió fue instrumento.** **ÁNGULOS: 2 DISTINTOS** (`artefacto`, `pregunta`) contra **uno solo en las 250 filas previas**; donde un dominio tuvo dos hallazgos, cada uno recibió ángulo distinto — justo las parejas que antes se rechazaban entre sí. **ARBITRAJES DEL JUEZ: 9** — ocho `rule_failed`, uno `judge_was_right`; tasas de falso positivo **medidas**: `HR-FPHS-15` 100 % · `HR-FPHS-13` 100 % · `HR-LEGAL-01` 75 %. **RECHAZOS DE SAM: 4, Y 3 ERAN DEFECTOS DEL SISTEMA** — 2 por una firma que el sistema no puso, 1 por un truncamiento que el juez no podía ver; sólo 1 era contenido malo (citaba artículos por número). **PROYECCIÓN con SIGN-01 desplegado: 63 % limpio · 81,5 % aprovechable — es PROYECCIÓN, NO MEDICIÓN:** el deploy de `content-run-stage` v93 (23:51 UTC) fue **posterior** a la generación del run (17:10–19:41), así que **ninguna pieza de este run pasó por los arreglos de SIGN-01**. **DESPLIEGUES:** `unrlvl-iid-functions` **#92, #93** · `Orchestrator` **#23**; EFs (versión real = número final de `entrypoint_path`) `content-run-stage` **93** (23:51 UTC) · `content-watcher` **44** (23:13 UTC) · `iid-core` **54** · `iid-process` **47** · `content-scheduler` **5** · `approve-piece` **39** · `judge-arbitration` **2** · `piece-edit` **2** (las dos con `verify_jwt: true`). **MUTACIONES DE DATOS:** **`iid_content_queue_angle_check` ELIMINADO** — enumeraba ocho ángulos genéricos y **bloqueó el primer run con ángulos diversos**; se eliminó con `COMMENT` explicando por qué no vuelve · **32 dominios de ForumPHs con `angles` sembrados**, seis ángulos, matriz por voz · `brand_topics` +`angles` · `content_pieces` +`deferred_until`/`deferred_reason` · CHECK de `status` con `deferred` · **backfill de firma** (18 piezas → **23 de 23 vivas con firma, cero duplicadas**) · **backfill de embeddings** (corpus completo, cero piezas vivas sin embedding en 21 d: el gate de duplicación deja de degradarse a LLM) · `HR-FPHS-11` reescrita (la enumeración de fuentes excluía diarios *de hecho*) · `HR-FPHS-15` reescrita con el criterio de Sam (**sustantivo sí, adjetivo no**) · **`HR-FPHS-16` nueva** (sin enlaces salientes) · `HR-FPHS-11` y `HR-NSCF-08` con `condition` (defecto B en `kind='proof'`, que el barrido de `requirement` no cubría) · **cron 66 `content-placement-poll` APAGADO** hasta PUB-01. **GOBERNANZA:** `HRD_PROTOCOL.md` **v1.6** con **tres reglas globales nuevas, ninguna derogación** — **HRD-R10** (verificar fragmentos no es verificar el archivo: 50 tests en verde sobre `content-run-stage` mientras el archivo **no compilaba**, porque la suite extrae bloques por sentinelas; un `deno check` lo habría cazado) · **HRD-R11** (el éxito se comprueba contra el **efecto**, no contra el código HTTP: un 200 de SocialLab no es una publicación) · **HRD-R12** (el test de la marca N+1 barre también los **CHECKs existentes**, no sólo el código que se escribe: la enumeración puede estar en el esquema — es exactamente lo que pasó con `iid_content_queue_angle_check`). **BARRIDO DE ARCHIVADO EJECUTADO** — pedido explícito de Sam: **5 bloques** bajan a `historical_AGENDA.md` (4 de cabecera + el incidente `content-dispatcher-poll` del 17-jul), y **8 candidatos evaluados quedan RETENIDOS con su motivo declarado**. **ABRE, con su evidencia:** 🔴 **PUB-01** (el drenaje da por publicado con un 200 de SocialLab sin verificar el efecto — **cero publicaciones automáticas reales hasta hoy**; cron 66 apagado) · 🔴 **el texto adaptado por plataforma no pasa por el juez** (`content-run-stage:3134-3136`; verificado: `social.adapted` reintrodujo una cita de ley que `aife_filtered` no tenía) · 🔴 **`deno check` antes de dar por bueno un PR** · tres reglas con tasa de falso positivo alta y dato suficiente para reescribirlas · **SocialLab podría ser mayormente mockup** (sospecha de Sam, encaja con el 200 sin publicación) · barrido de los 8 `statement` imperativos · regla de correspondencia con la fuente (aplazada) · promoción del gate lingüístico (marca el 50 %) · deuda de claves Supabase (15 de 17 EF) · imagen inconsistente en blog y LinkedIn · Klaviyo DKIM/SPF · seguridad de `unrlvl-db`. **TEST DE LA MARCA N+1: no aplica** — este brief no produce código, migración ni siembra; se declara para que la ausencia no se lea como omisión. **DERIVADOS:** `ecosystem.md` y `ecosystem_filemap.md` **se sincronizan, no se regeneran** — regla escrita en `CLAUDE.md` desde el 2026-08-23. Detalle en `brands/ForumPHs/session_log.md` (2026-08-25).) · cabecera anterior (v2026-08-25-v1) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
 
 _Actualizada: 2026-08-25 · v2026-08-25-v1 (ACTUALIZA 2026-08-24/25 — **EL CARRIL PUBLICA SOLO, Y EL DIAGNÓSTICO DEL RATIO SE MOVIÓ DEL MATERIAL AL JUEZ.** Sólo context files; el código, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado ANTES: **9 learnings** en `public.professor_learnings`, `session_date = 2026-08-25`, los nueve con `approved_by_sam = true`. **CINCO HITOS:** **primera publicación automática del ecosistema** — `5e9f03ef` salió **sola** en Facebook el 2026-08-25 **13:13 UTC**, con la franja calculada por `planSchedule` contra la cadencia real (`1x_week`, `month_1`) y drenada por el **cron 66**; nadie la tocó · **primer arbitraje humano del juez** (`judge_calibration`, 2026-08-25 14:36:41, `decided_by: sam`) · **primera retención** — 2 piezas salvadas que el día anterior se habrían destruido, con la prueba de su inocencia al lado · **PROC-01 en producción** — 15 hallazgos nuevos, **cero** con ley numerada y **cero** con año calendario, contra 3 de 5 contaminados antes · **corpus de embeddings completo** — backfill corrido, cero piezas vivas sin embedding en 21 días, y el gate deja de degradarse a LLM. **EL BLOQUEANTE DE TODO LO DEMÁS DEL 2026-08-23 QUEDA CERRADO:** el eje de colocación existe, es el modo `placement` de `content-scheduler` (Opción A, la recomendada), y funcionó. **DESPLIEGUES:** `unrlvl-iid-functions` **#80, #81, #82, #83, #84, #85, #86, #87, #88, #91, #92** y `Orchestrator` **#21, #22**; EFs `content-run-stage` **92** · `content-watcher` **43** · `content-scheduler` **5** · `iid-core` **54** · `iid-process` **47** · `approve-piece` **39** · `judge-arbitration` **2** · `piece-edit` **2** — las dos últimas con **`verify_jwt: true`**, su primera capa de defensa, asimetría **deliberada** frente al resto del carril, que usa `--no-verify-jwt` porque lo llama el cron vía `pg_net`, que no lleva JWT. **REGLAS DEL WATCHER (50 activas):** `HR-LEGAL-01`/`HR-LEGAL-02` reformuladas **como test** (`INCUMPLE…CUMPLE…`), sin imperativo · `HR-GEN-05`/`06`/`07` reescritas **sin idioma cableado** (refieren al *idioma declarado de la pieza*; los ejemplos castellanos migraron a `instruction`) · **`HR-GEN-09` nueva** (ambigüedad que **invierte el sentido**, nace del título que Sam rechazó) · **`HR-FPHS-16` nueva** (sin enlaces salientes; exime el dominio propio) · `HR-FPHS-11` ampliada a tres orígenes de cifra **y luego reescrita** (la enumeración de fuentes excluía diarios *de hecho*, y exigía al juez una correspondencia URL↔nombre que **no puede verificar**) · `HR-FPHS-15` reescrita distinguiendo **sustantivo** (`la extraordinaria` → incumple) de **adjetivo** (`asamblea extraordinaria` → cumple), **9 casos probados, 9 correctos** · 10 reglas con `condition` sembrada · `HR-LUC-02` y `HR-UNRLVL-03` corregidas a `kind='prohibition'` · 4 reglas con `verify_pattern`, `HR-FPHS-15` además con `fix_replacement`. **ESQUEMA:** `watcher_rules` +`condition`/`verify_pattern`/`fix_replacement`/`enforced_on` · `content_pieces` +`pass_type`/`challenged_at`/`edited_at`/`edited_by`/`deferred_until`/`deferred_reason` · `scheduled_posts` +`piece_id` · `brand_topics` +`angles` · **tablas nuevas** `intel.judge_calibration` e `intel.piece_edits` · CHECK de `content_pieces.status` con `challenged` y `deferred` · CHECK de `orchestrator_jobs.status` con `awaiting_publish`. **DATOS:** 29 filas de `scheduled_posts` borradas (residuo del código retirado; **5 eran de LucienSael y se rescataron** a `brands/LucienSael/corpus/2026-07-30_zugzwang_set.md`) · finding `9eea20a3` saneado a mano · **32 dominios de ForumPHs con `angles` sembrados** · 3 canales Meta/LinkedIn en `brand_publish_channels` con `provider_platform` · **cron nuevo `content-placement-poll`** (jobid 66, `*/15`, activo). **LOS SEIS ÁNGULOS DE FORUMPHS** aprobados por Sam: `expertise` · `artefacto` · `pregunta` · `consecuencia` · `contraste` · `secuencia`, con su matriz ángulo-voz y **el criterio de las ausencias** — **15 combinaciones ángulo-voz** contra **la única** que el ecosistema usó en 25 días y 250 filas. **GOBERNANZA:** `HRD_PROTOCOL.md` **v1.5** con dos reglas globales nuevas — **HRD-R08** (verificar contra el motor donde se ejecuta: `verify_pattern` POSIX, `fix_replacement` ECMAScript, `$1` nunca `\1`) y **HRD-R09** (mergear no despliega, y un merge puede quedarse corto: se verifica el **commit**, no el estado del PR). **ABRE, con su evidencia:** barrido de los **8 `statement` imperativos** de las 50 reglas activas · regla de correspondencia con la fuente (FIX-01 §4.5), **aplazada por decisión de Sam** · promoción del **gate lingüístico** (marca 1 error en **11 de 22** piezas, **tasa del 50 %** — revisar sus marcas antes de bloquear) · **deuda de claves Supabase** (15 de 17 EF leen `SUPABASE_SERVICE_ROLE_KEY`, marcada `DEPRECATED`; 13 sobreviven porque la usan contra PostgREST, donde ambas generaciones valen — **las 15 caen el día que Supabase la retire**) · **aviso obsoleto en la bandeja de publicación del Orchestrator** (dice que no existe el eje de colocación; es falso desde el 25-ago — **va en PR propio del repo `Orchestrator`**) · imagen inconsistente en blog (2 de 4) y LinkedIn (1 de 2) · Klaviyo DKIM/SPF · seguridad de `unrlvl-db` · las **5 piezas destruidas**, irrecuperables. **DERIVADOS:** `ecosystem.md` y `ecosystem_filemap.md` **se sincronizan, no se regeneran** — desde el 2026-08-23 eso **ya no es una excepción declarada sino la regla escrita** en `CLAUDE.md` («Los derivados NO se regeneran completos — se sincronizan»), tras cinco aplicaciones seguidas de la misma excepción. La regeneración real sigue abierta **sin fecha**. Detalle en `brands/ForumPHs/session_log.md` (2026-08-25).) · cabecera anterior (v2026-08-23-v1) conservada íntegra inmediatamente debajo, y todo el historial de cabeceras en historical_AGENDA.md_
+
+---
+
+## 🗓️ ACTUALIZA 2026-08-26-v2 — Los tres rojos cerrados, y el hilo del que cuelga todo lo demás llega NULL
+
+_(Bloque al tope. Detalle del carril en `IID/session_log.md` (2026-08-26); por marca en `brands/LucienSael/`, `brands/UnrealvilleStudio/`, `brands/NeuroneSCF/` y `brands/ForumPHs/session_log.md` (2026-08-26). Sólo context files de `unrlvl-context`; el código, las DDL, los deploys y las corridas se ejecutaron **antes** de este Actualiza, en sus propios PRs y bajo HRD. Professor cerrado **antes**: **15 learnings** en `public.professor_learnings`, `session_date = 2026-08-26`, los quince con `approved_by_sam = true` — **orden cumplido: Professor → Actualiza**. **SMA no se consultó** — Sam no lo mencionó. **Test de la marca N+1: no aplica** — este brief no produce código, migración ni siembra; se declara para que la ausencia no se lea como omisión. **DERIVADOS:** `ecosystem.md` y `ecosystem_filemap.md` **se sincronizan, no se regeneran** — regla escrita en `CLAUDE.md` desde el 2026-08-23. CC no mergea — Sam revisa, mergea y borra la rama. Lo previo se conserva íntegro debajo.)_
+
+### 🟢 Cerrado y verificado en producción
+
+- **PUB-01** — `content-scheduler` **v6** (PR #98). El drenaje comprueba **el EFECTO** contra la fila
+  de `scheduled_posts`, no el código HTTP. `publishAndVerify` con cuatro veredictos —
+  `PUBLISH_UNVERIFIABLE`, `PUBLISH_UNPROVEN`, `PUBLISH_FAILED`, `PUBLISH_NOOP` — y
+  `recordPublicationProof` guardando `assets.publication`. Aplicación literal de **HRD-R11**.
+- **P3** — `content-run-stage` **v94** (PR #99). El juez recibe **`social.adapted`**, no
+  `aife_filtered`. `pickJudgedText`, `syncJudgedAdapted`, `adapted_pre_judgment` como evidencia sin
+  firmar.
+- **RESEARCH-01** — `iid-research` **v45**, `iid-process` **v48** (PRs #100 y #101). Techo por
+  cascada sobre `intel.iid_research_ceilings` (fila BASE `max_tokens = 16000`, `agent_name` y
+  `brand_id` nulos: default **declarado como dato**) y **`truncated` como columna GENERADA** desde
+  `stop_reason`.
+- **BLOG-01 PR-1** — `forumphs-com` **#6**: `discarded_at` filtrado en las tres rutas, **410** en
+  artículo descartado, paquete SEO completo.
+- **BLOG-01 PR-2** — repo **nuevo** `unrlvl-blog` **#1**: renderizador extraído, `blog_path` como
+  dato con router propio, tema y copia por canal.
+- **BP-01/02/03** — `BluePrints` **#2 y #3**: blueprint de LucienSael creado (JSON + HTML + 2 SVG
+  vectorizados); `BP_BRAND_UNRLVL` a **v1.5**.
+- **Tres marcas entran al Scheduler** — UnrealvilleStudio, LucienSael y NeuroneSCF con
+  `rollout_started_at = 2026-08-26`. Cuatro marcas donde ayer había una. **UNRLVL pasa de 14 agentes
+  a 6.**
+
+### 📊 Lo medido contra lo declarado — dos discrepancias
+
+Verificado con `execute_sql` el 2026-08-27 (**HRD-R13**). **Donde el brief y la medición discrepan
+manda la medición**, y la discrepancia se anota en vez de corregirse a mano:
+
+| Objeto | Medido | Brief |
+|---|---|---|
+| `brand_rollout` sembradas hoy | 3 | 3 ✅ |
+| `brand_cadence` sembradas hoy | **39** (Lucien 15 · NSCF 12 · UNRLVL 12) | 33 ⚠️ |
+| `brand_publish_channels` sembrados hoy | 14 | 14 ✅ |
+| `brand_topic_platform_mode` sembradas hoy | 63 | 63 ✅ |
+| `intel.content_angles` (catálogo nuevo) | 10 | 10 ✅ |
+| Dominios con `angles` en las marcas nuevas | 19 | 19 ✅ |
+| Dominios de ForumPHs que suman `objecion` | 11 | 11 ✅ |
+| `iid-process` servida en producción | **49** | 48 ⚠️ |
+
+### 🔴 P1 — `judged_source` llega NULL
+
+**Medido:** las **4** piezas vivas de LucienSael tienen `assets.watcher` presente y
+`assets.watcher.judged_source` **NULL** — **incluidas las dos que corrieron sobre
+`content-run-stage` v94**. **No se puede afirmar que el juez leyó el adaptado**, que es lo único que
+P3 vino a garantizar.
+
+**Bloquea toda generación nueva:** cada pieza que salga hoy repite el agujero, **ahora en dos
+marcas**. Es el hilo del que cuelga el resto — sin él, P3 está cerrado en el código y **abierto en
+la evidencia**.
+
+### 🔴 P2 — Las tres reglas con falso positivo medido
+
+Recontado sobre `intel.judge_calibration`, **9 arbitrajes**: `HR-FPHS-15` **3/3 = 100 %** ·
+`HR-FPHS-13` **2/2 = 100 %** · `HR-LEGAL-01` **3/4 = 75 %**. Ya no es impresión: es dato suficiente
+para reescribirlas. En `HR-FPHS-15` **el criterio de marca es correcto** (sustantivo sí, adjetivo
+no) y **lo que falla es su detección**.
+
+**Es la condición para encender el cron 66.**
+
+### 🟠 P3 — `IID_FANOUT_EMPTY`
+
+En un finding de LucienSael: *«1 suscriptor activo pero 0 encolado en
+`domain=behavioral-science`»*. **El fail-loud funcionó; falta la causa.** Reportado por el brief —
+**su fila no se localizó en esta pasada**, y se anota como pendiente de localizar, no como medido
+(HRD-R13).
+
+### 🟠 P4 — El fan-out encola para plataformas sin proveedor
+
+**Medido** en `intel.iid_content_queue`, lote `2026-08-26 23:57:26.167661+00`: **3 filas `failed`**
+(`tiktok`, `x`, `meta_fb`) y **1 `complete`** (`meta_ig`). **El fan-out no mira si el canal está
+activo.** Encolar contra un canal sin proveedor no es un fallo del proveedor: es una pregunta que no
+se hizo antes de encolar.
+
+### 🟠 P5 — El adaptador no lee el genoma
+
+El **conteo de hashtags por plataforma** es **campo del genoma** y **no regla del Watcher**: el juez
+**no puede medirlo** aunque ahora lo vea. P3 le dio al juez el texto correcto; esto le falta el
+criterio. Pesa especialmente en **NeuroneSCF**, la única marca del carril con **venta real detrás**.
+
+### 🟡 Abierto, sin bloquear
+
+- **`SIG-01` y `SEO-01`** en `CoreProject` y `forumphs-com`.
+- **BLOG-01 PR-3 y PR-4** — con la **colisión de `/blog/` en dos marcas** (UNRLVL y Lucien; Lucien
+  sirve hoy `.html` estático) y los **301 del `.html`**.
+- **Propagar `truncated` a `iid_findings`** — hoy la columna generada vive sólo en
+  `iid_research_raw`.
+- **`deno.land` bloqueado en el entorno de CC** — hace depender **HRD-R10** de Sam.
+- **Corrector `fix_replacement` sólo en `HR-FPHS-15`.**
+- **8 `statement` imperativos** en las reglas activas del Watcher.
+- **`SUPABASE_SERVICE_ROLE_KEY` en 15 de 17 EF** — marcada `DEPRECATED`; el fallo está **aplazado
+  por el consumidor, no resuelto en el emisor**.
+- **4 ERROR-level en `unrlvl-db`.**
+- **Handle `hair-intelligence-1`** con sufijo en Shopify — handle duplicado es contenido duplicado.
+- **Perfiles duplicados de Vizos** en Miami Beach.
+- ⚠️ **`iid-process` v49 sin origen conocido** — la medición dice 49, el brief dice 48. **Qué
+  desplegó la v49 y cuándo no consta.** Es exactamente la clase de hueco que **HRD-R14** viene a
+  cerrar.
+- ⚠️ **`Suite 1` en la dirección de UNRLVL** — el tema Shopify de NSCF ya lleva *12951 Biscayne
+  Blvd, **Suite 1***; `brands/UnrealvilleStudio/brand.json` dice la dirección **sin** el número de
+  suite. Dato legal, no redacción: **decide Sam**.
+- ⚠️ **`lucien_social` declara X como publicación manual** y la DB ya lo tiene como `x_api` activo.
+  Divergencia documento ↔ dato, pendiente **en el genoma**.
+
+### 💸 El costo de la sesión, dicho sin adorno
+
+**Dos divergencias entre producción y `main` por despliegues fuera de orden. La segunda fue
+silenciosa** — la EF seguía devolviendo `200`, guardando el memo y marcando el truncamiento: todo
+parecía correcto y **el arreglo no estaba puesto**. **Se llevó tres corridas de research completas.**
+El rastro quedó en `intel.iid_research_raw`, con `max_tokens` en `NULL` donde la cascada debía haber
+escrito `16000` con `max_tokens_source = 'base'`.
+
+### 📜 Gobernanza — `HRD_PROTOCOL.md` v1.7
+
+**Dos reglas globales nuevas, ninguna derogación:**
+
+- **HRD-R13 — Una lectura de estado caduca dentro de la misma sesión.** Ninguna lectura previa vale
+  como afirmación presente en un chat que muta producción durante horas. **Grepear no es leer** — un
+  literal puede vivir dentro de un comentario. **Una hipótesis razonada no sustituye una medición.**
+  *Origen: cuatro afirmaciones sin verificar el 2026-08-26.*
+- **HRD-R14 — El orden merge → deploy no es ceremonia; su violación es silenciosa.** **CC no
+  despliega.** Sam despliega desde `main`, después del merge. Si hace falta un deploy para probar,
+  **se pide**. *Origen: `iid-research` v44 revirtió RESEARCH-01 y todo parecía correcto.*
 
 ---
 

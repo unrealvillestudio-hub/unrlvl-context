@@ -5,13 +5,20 @@
     "brand_slug": "Unrealville",
     "blueprints_source": "BluePrints/brands/Unrealville/brand.json + BP_BRAND_UNRLVL_v1.3.json",
     "type": "studio",
-    "version": "1.3",
+    "version": "2026-08-26-v1",
     "last_updated": "2026-08-07",
     "managed_by": "Claude / Unrealville Context System",
     "context_path": "brands/UnrealvilleStudio/",
-    "blueprints_path": "brands/Unrealville/"
+    "blueprints_path": "brands/Unrealville/",
+    "previous": "1.3 (2026-08-07)",
+    "_previous_chain": "2026-08-26-v1 <- 1.3 (2026-08-07) <- 1.2. Ninguna clave anterior se borra: esta pasada es ADICION. Las claves _meta.version 1.3 y _meta.last_updated 2026-08-07 se conservan abajo en _meta._archivo_version_1_3.",
+    "_archivo_version_1_3": {
+      "version": "1.3",
+      "last_updated": "2026-08-07",
+      "nota": "Estado del archivo antes del HRD_ACTUALIZA 2026-08-26. Se conserva por trazabilidad (CC_PROTOCOL 0)."
+    },
+    "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ADICIONES: rollout · publish_channels · theme_blog · domains · cadence · estado_2026-08-26 · alerts. Nada removido. Refleja lo SEMBRADO en produccion y VERIFICADO con execute_sql el 2026-08-27 (HRD-R13). Detalle en brands/UnrealvilleStudio/session_log.md (2026-08-26) y en IID/session_log.md (2026-08-26)."
   },
-
   "identity": {
     "name": "Unrealville Studio",
     "name_display": ">UNREALVILLE STUDIO",
@@ -24,9 +31,11 @@
     "model": "B2B inhouse — no abierto al público en esta fase",
     "audience": "Interno — Sam + PO + operadores del ecosistema",
     "language_default": "en",
-    "languages_supported": ["en", "es"]
+    "languages_supported": [
+      "en",
+      "es"
+    ]
   },
-
   "contact": {
     "web": "unrealvillestudio.com",
     "web_status": "LIVE — 2026-04-10",
@@ -41,30 +50,76 @@
     },
     "operated_from": "España / Panamá (próximamente)"
   },
-
   "colors": {
-    "cyan":      { "hex": "#00FFD1", "rgb": "0,255,209", "role": "Primary accent — THE only accent color. Chevron, footer border, ICR text, highlights, tags, blink animation.",
-      "variants": { "cyan_20": "rgba(0,255,209,0.20)", "cyan_08": "rgba(0,255,209,0.08)", "cyan_03": "rgba(0,255,209,0.03)" }
+    "cyan": {
+      "hex": "#00FFD1",
+      "rgb": "0,255,209",
+      "role": "Primary accent — THE only accent color. Chevron, footer border, ICR text, highlights, tags, blink animation.",
+      "variants": {
+        "cyan_20": "rgba(0,255,209,0.20)",
+        "cyan_08": "rgba(0,255,209,0.08)",
+        "cyan_03": "rgba(0,255,209,0.03)"
+      }
     },
-    "carbon":    { "hex": "#0F0F0F", "role": "Primary background. Footer background always." },
-    "void":      { "hex": "#080808", "role": "Page background (deepest)" },
-    "graphite":  { "hex": "#1A1A1A", "role": "Secondary background / surface elevated. NUNCA para el texto STUDIO — STUDIO usa chalk_32." },
-    "chalk":     { "hex": "#F2F0EC", "role": "Primary text on dark. Light logo fill." },
-    "chalk_72":  { "rgba": "rgba(242,240,236,0.72)", "role": "Secondary text." },
-    "chalk_42":  { "rgba": "rgba(242,240,236,0.42)", "role": "Muted." },
-    "chalk_32":  { "rgba": "rgba(242,240,236,0.32)", "role": "STUDIO suffix del logotipo — exclusivo." },
-    "chalk_12":  { "rgba": "rgba(242,240,236,0.12)", "role": "Borders light." },
-    "chalk_06":  { "rgba": "rgba(242,240,236,0.06)", "role": "Subtle borders / nav separator." },
-    "error":     { "hex": "#FF4444", "role": "Errors / don'ts only." }
+    "carbon": {
+      "hex": "#0F0F0F",
+      "role": "Primary background. Footer background always."
+    },
+    "void": {
+      "hex": "#080808",
+      "role": "Page background (deepest)"
+    },
+    "graphite": {
+      "hex": "#1A1A1A",
+      "role": "Secondary background / surface elevated. NUNCA para el texto STUDIO — STUDIO usa chalk_32."
+    },
+    "chalk": {
+      "hex": "#F2F0EC",
+      "role": "Primary text on dark. Light logo fill."
+    },
+    "chalk_72": {
+      "rgba": "rgba(242,240,236,0.72)",
+      "role": "Secondary text."
+    },
+    "chalk_42": {
+      "rgba": "rgba(242,240,236,0.42)",
+      "role": "Muted."
+    },
+    "chalk_32": {
+      "rgba": "rgba(242,240,236,0.32)",
+      "role": "STUDIO suffix del logotipo — exclusivo."
+    },
+    "chalk_12": {
+      "rgba": "rgba(242,240,236,0.12)",
+      "role": "Borders light."
+    },
+    "chalk_06": {
+      "rgba": "rgba(242,240,236,0.06)",
+      "role": "Subtle borders / nav separator."
+    },
+    "error": {
+      "hex": "#FF4444",
+      "role": "Errors / don'ts only."
+    }
   },
-
   "typography": {
-    "display": { "family": "Bebas Neue",        "source": "Google Fonts", "role": "Logotype, headings, STUDIO suffix, section titles, signature." },
-    "mono":    { "family": "Space Mono",         "source": "Google Fonts", "role": "Labels, metadata, tags, badges, code, footer credits." },
-    "body":    { "family": "Libre Baskerville",  "source": "Google Fonts", "role": "Long-form body copy, editorial text." },
+    "display": {
+      "family": "Bebas Neue",
+      "source": "Google Fonts",
+      "role": "Logotype, headings, STUDIO suffix, section titles, signature."
+    },
+    "mono": {
+      "family": "Space Mono",
+      "source": "Google Fonts",
+      "role": "Labels, metadata, tags, badges, code, footer credits."
+    },
+    "body": {
+      "family": "Libre Baskerville",
+      "source": "Google Fonts",
+      "role": "Long-form body copy, editorial text."
+    },
     "google_fonts_import": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap"
   },
-
   "logotype": {
     "markup": "<span class=\"lt-logotype\"><span class=\"lt-chevron\">></span><span class=\"lt-un\">UNREALVILLE</span><span class=\"lt-studio\">STUDIO</span></span>",
     "chevron_color": "#00FFD1",
@@ -75,10 +130,12 @@
     "chevron_position_rule": "El chevron ENCABEZA el nombre (>UNREALVILLE), nunca intercalado. El nombre lleva su propia v.",
     "derogated_forms": "UNREAL>ILLE / Unreal>ille — DEROGADAS desde v1.3 (2026-08-07). Forma histórica únicamente; no usar en outputs nuevos.",
     "blink_rule": "El chevron > parpadea SIEMPRE en todo contexto — sin excepciones. No solo en hover, no solo en active — permanentemente.",
-    "deprecated_animations": ["chevron-blink", "chev-listen"],
+    "deprecated_animations": [
+      "chevron-blink",
+      "chev-listen"
+    ],
     "css_complete": "@keyframes prompt-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }\n.lt-logotype { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; line-height: 1; white-space: nowrap; }\n.lt-un { color: #F2F0EC; }\n.lt-chevron { color: #00FFD1; animation: prompt-blink 1.1s step-end infinite; display: inline-block; transform: scaleY(1.45) scaleX(0.72); transform-origin: center; letter-spacing: 0; margin-right: 0.02em; }\n.lt-studio { color: rgba(242,240,236,0.32); font-size: 0.72em; letter-spacing: 0.14em; margin-left: 0.18em; vertical-align: baseline; }\n.lt-logotype.size-nav { font-size: 20px; }\n.lt-logotype.size-footer { font-size: 28px; }\n.lt-logotype.size-inline { font-size: 16px; }"
   },
-
   "footer": {
     "version": "1.3",
     "rule": "Aplica a TODOS los outputs — propios y de clientes, internos y externos.",
@@ -90,18 +147,36 @@
       "rule_client_outputs": "Logo del CLIENTE + sub-descriptor — NUNCA el logo de Unrealville en este slot.",
       "golden_rule": "En cualquier entregable PARA un cliente: Col 1 = logo del cliente. Siempre. Sin excepciones."
     },
-    "col_2": { "format": "© [año] [Brand] — [Título] · [tipo] · [distribución]", "alignment": "center" },
-    "col_3": { "text": "Designed & Developed by >UNREALVILLE STUDIO", "language": "Siempre en inglés — invariable.", "font": "Bebas Neue" },
+    "col_2": {
+      "format": "© [año] [Brand] — [Título] · [tipo] · [distribución]",
+      "alignment": "center"
+    },
+    "col_3": {
+      "text": "Designed & Developed by >UNREALVILLE STUDIO",
+      "language": "Siempre en inglés — invariable.",
+      "font": "Bebas Neue"
+    },
     "address_line": "unrealvillestudio.com · North Miami, FL 33181"
   },
-
   "assets": {
     "path_base_blueprints": "brands/Unrealville/assets/",
-    "favicon":    { "file": "UNRLVL_Favicon.svg",    "note": "Solo chevron >. prompt-blink embedded. Embed como base64 data URI en <head> de CADA output HTML." },
-    "logo_dark":  { "file": "UNRLVL_Logo_drk.svg",   "bg": "transparent", "text_fill": "#1A1A1A", "use_on": "fondos claros" },
-    "logo_light": { "file": "UNRLVL_Logo_lght.svg",  "bg": "transparent", "text_fill": "#F2F0EC", "use_on": "fondos oscuros" }
+    "favicon": {
+      "file": "UNRLVL_Favicon.svg",
+      "note": "Solo chevron >. prompt-blink embedded. Embed como base64 data URI en <head> de CADA output HTML."
+    },
+    "logo_dark": {
+      "file": "UNRLVL_Logo_drk.svg",
+      "bg": "transparent",
+      "text_fill": "#1A1A1A",
+      "use_on": "fondos claros"
+    },
+    "logo_light": {
+      "file": "UNRLVL_Logo_lght.svg",
+      "bg": "transparent",
+      "text_fill": "#F2F0EC",
+      "use_on": "fondos oscuros"
+    }
   },
-
   "output_standards": {
     "_mandatory_checklist": "Claude DEBE verificar todos los items antes de entregar cualquier output HTML",
     "every_html_output": [
@@ -115,7 +190,6 @@
       "Footer: Col1=logo propio O logo cliente (ver footer.golden_rule), Col2=derechos, Col3=firma EN"
     ]
   },
-
   "web_pending": [
     "Cloudflare setup",
     "Redirect rules",
@@ -123,12 +197,206 @@
     "Formulario contacto → Profiler Agent",
     "Sección Psycho Layer como diferenciador"
   ],
-
   "repo": {
     "blueprints_repo": "unrealvillestudio-hub/BluePrints",
     "blueprints_path": "brands/Unrealville/",
     "context_repo": "unrealvillestudio-hub/unrlvl-context",
     "context_path": "brands/UnrealvilleStudio/",
     "note": "Folder en BluePrints es 'Unrealville'. Folder en context system es 'UnrealvilleStudio'. Ambos son la misma marca."
-  }
+  },
+  "rollout": {
+    "_source": "intel.brand_rollout — verificado 2026-08-27",
+    "rollout_started_at": "2026-08-26",
+    "max_rotation_weeks": 3,
+    "orden": "Segunda marca del ecosistema en entrar al Scheduler, cuatro dias despues de ForumPHs.",
+    "notes": "Arranque fijado por Sam 2026-08-26. max_rotation_weeks=3 es respaldo; la fuente fina es intel.brand_cadence con el mismo valor, sin divergencia."
+  },
+  "publish_channels": {
+    "_source": "intel.brand_publish_channels — 4 filas sembradas 2026-08-26. Proveedor y config COMO DATO (MULTIBRAND_RULE).",
+    "meta_fb": {
+      "provider": "meta_graph",
+      "active": true,
+      "provider_platform": "FACEBOOK",
+      "locale": "en-US",
+      "credentials": "public.meta_accounts, brand_id=UnrealvilleStudio — fuente unica, no se duplica aqui"
+    },
+    "meta_ig": {
+      "provider": "meta_graph",
+      "active": true,
+      "provider_platform": "INSTAGRAM",
+      "locale": "en-US",
+      "credentials": "public.meta_accounts, brand_id=UnrealvilleStudio",
+      "nota": "Camino de publicacion en dos pasos: crear contenedor y luego publicarlo."
+    },
+    "linkedin": {
+      "provider": "linkedin_org",
+      "active": false,
+      "locale": "en-US",
+      "nota_inactivo": "INACTIVO por decision de Sam 2026-08-26: LinkedIn queda fuera para TODAS las marcas hasta segunda orden. No es falta de dominio ni de contenido: falta la app de organizacion con permiso de publicacion y su token, que no pasa por Meta MCP porque es API propia.",
+      "regla_de_activacion": "se activa cuando exista token de organizacion Y el publicador entienda este canal"
+    },
+    "blog": {
+      "provider": "vercel_html",
+      "active": true,
+      "locale": "en-US",
+      "base_url": "https://unrealvillestudio.com",
+      "blog_path": "/blog",
+      "blog_label": "Field Notes",
+      "site_name": "Unrealville Studio",
+      "url_rule": "blog_label es el ROTULO de marca; blog_path es la URL indexada. Desacoplados a proposito — verificado 2026-08-26 contra el sitio vivo: el header dice Field Notes y la ruta es /blog.",
+      "nota_drenaje": "El drenaje NO atiende vercel_html: el sitio debe RENDERIZAR DESDE LA DB como forumphs.com. Falta ese mecanismo en WebLab; sembrar el canal no lo crea."
+    }
+  },
+  "theme_blog": {
+    "_source": "intel.brand_publish_channels.config.theme del canal blog — sembrado 2026-08-26. Tokens de BluePrints/brands/Unrealville/BP_BRAND_UNRLVL_v1.3.json.",
+    "name": "VOID SYSTEM",
+    "tokens": {
+      "bg": "#080808",
+      "surface_1": "#0F0F0F",
+      "surface_2": "#1A1A1A",
+      "text": "#F2F0EC",
+      "text_2": "rgba(242,240,236,0.72)",
+      "text_3": "rgba(242,240,236,0.42)",
+      "accent": "#00FFD1",
+      "accent_2": "rgba(0,255,209,0.20)",
+      "warn": "#B9A36B",
+      "line": "rgba(242,240,236,0.12)",
+      "line_soft": "rgba(242,240,236,0.06)",
+      "font_display": "Bebas Neue",
+      "font_serif": "Libre Baskerville",
+      "font_sans": "Space Mono"
+    },
+    "nombres_del_sistema": "void=bg · carbon=surface_1 · graphite=surface_2 · chalk=text · cyan=accent (UNICO acento)",
+    "fonts_href": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap",
+    "_nota_warn": "warn NO existe en el BP: queda como default DECLARADO, no inventado. Si el BP algun dia lo define, manda el BP.",
+    "_relacion_con_colors": "La clave colors de este archivo sigue siendo la fuente de marca completa (variantes, roles, reglas del logotipo). theme_blog es el SUBCONJUNTO que el renderizador del blog consume como dato. No se reemplazan: conviven."
+  },
+  "domains": {
+    "_source": "intel.brand_topics — 7 dominios, 6 activos con angles sembrados 2026-08-26 desde el catalogo intel.content_angles.",
+    "_voces": "Todos: social=unrlvl_default, editorial=unrlvl_default. Ambos destinos a linkedin/meta_fb/meta_ig.",
+    "ai-cognition-tech": {
+      "priority": 100,
+      "active": true,
+      "angles": [
+        "pregunta",
+        "contraste",
+        "consecuencia",
+        "dato"
+      ]
+    },
+    "ai-industrialization": {
+      "priority": 100,
+      "active": true,
+      "angles": [
+        "secuencia",
+        "consecuencia",
+        "contraste",
+        "dato"
+      ]
+    },
+    "algorithm-mechanics": {
+      "priority": 100,
+      "active": true,
+      "angles": [
+        "artefacto",
+        "secuencia",
+        "expertise",
+        "dato"
+      ]
+    },
+    "brand-voice-systems": {
+      "priority": 100,
+      "active": true,
+      "angles": [
+        "artefacto",
+        "expertise",
+        "contraste",
+        "objecion"
+      ]
+    },
+    "cro-psychology": {
+      "priority": 100,
+      "active": true,
+      "angles": [
+        "pregunta",
+        "consecuencia",
+        "contraste",
+        "objecion"
+      ]
+    },
+    "signal-learning-loops": {
+      "priority": 100,
+      "active": true,
+      "angles": [
+        "secuencia",
+        "artefacto",
+        "pregunta",
+        "dato"
+      ]
+    },
+    "system-proof": {
+      "priority": 100,
+      "active": false,
+      "angles": null,
+      "nota": "active=false y SIN angles. No se toco."
+    }
+  },
+  "cadence": {
+    "_source": "intel.brand_cadence — 12 filas sembradas 2026-08-26 (4 plataformas x 3 fases). Volumen TOTAL por marca/plataforma: los 6 dominios ROTAN dentro de estos slots, NO multiplican.",
+    "meta_fb": {
+      "month_1": "2x_week",
+      "month_2": "3x_week",
+      "month_3plus": "4x_week",
+      "max_rotation_weeks": 3,
+      "nota": "6 dominios rotativos sobre R=2 dan 3,0 semanas por turno: EN EL LIMITE EXACTO del techo."
+    },
+    "meta_ig": {
+      "month_1": "2x_week",
+      "month_2": "3x_week",
+      "month_3plus": "4x_week",
+      "max_rotation_weeks": 3,
+      "nota": "Identica a meta_fb: los 6 dominios declaran las dos superficies."
+    },
+    "linkedin": {
+      "month_1": "2x_week",
+      "month_2": "3x_week",
+      "month_3plus": "4x_week",
+      "max_rotation_weeks": 3,
+      "nota": "Cadencia sembrada aunque el canal esta INACTIVO."
+    },
+    "blog": {
+      "month_1": "1x_week",
+      "month_2": "1x_week",
+      "month_3plus": "2x_week",
+      "max_rotation_weeks": [
+        7,
+        7,
+        4
+      ],
+      "nota": "TECHO 7 Y NO 3: el blog es formato largo y su volumen es la mitad del de redes. 6 rotativos sobre R=1 dan 6,0 semanas; con el techo de Meta el grupo entero se rechazaria con ROTATION_WINDOW_EXCEEDED. El techo editorial de un blog no es el de Instagram."
+    }
+  },
+  "estado_2026-08-26": {
+    "agentes": "6, los 6 activos — DE 14 A 6: se eliminaron 8 agentes fantasma. UNRLVL-AI-COGNITION-TECH, UNRLVL-AI-INDUSTRIALIZATION, UNRLVL-ALGORITHM-MECHANICS (tier2), UNRLVL-BRAND-VOICE-SYSTEMS, UNRLVL-CRO-PSYCHOLOGY, UNRLVL-SIGNAL-LEARNING-LOOPS. Uno por dominio activo, sin sobrantes.",
+    "primer_memo_integro": "UNRLVL-AI-COGNITION-TECH, 2026-08-26 23:33:33 UTC — 24.897 caracteres, stop_reason=end_turn, truncated=false, max_tokens=16000 (base).",
+    "costo_de_la_sesion": "UNRLVL-SIGNAL-LEARNING-LOOPS corrio TRES veces: 18:05:59 truncada con max_tokens NULL, 19:01:10 truncada con 5200 de agent, 19:03:06 integra con 16000 de base. UNRLVL-AI-COGNITION-TECH corrio truncada a las 23:06:56 antes de la buena. De ahi sale HRD-R14."
+  },
+  "alerts": [
+    {
+      "level": "warning",
+      "msg": "El drenaje no atiende vercel_html: el canal blog esta activo pero el sitio debe renderizar desde la DB como forumphs.com. Falta ese mecanismo en WebLab"
+    },
+    {
+      "level": "warning",
+      "msg": "linkedin INACTIVO hasta que exista la app de organizacion con permiso de publicacion y su token"
+    },
+    {
+      "level": "warning",
+      "msg": "DIVERGENCIA ANOTADA, NO CORREGIDA: contact.hq.display de este archivo dice 12951 Biscayne Blvd sin Suite 1; el tema Shopify de NSCF (sections/nc-footer.liquid) ya lleva 12951 Biscayne Blvd, Suite 1. El numero de suite es dato legal, no redaccion — decide Sam"
+    },
+    {
+      "level": "info",
+      "msg": "Firma canonica de UNRLVL corregida fuera del repo en el tema Shopify de NSCF: snippets/unrlvl-signature.liquid, checksum final 51c2af2e"
+    }
+  ]
 }
