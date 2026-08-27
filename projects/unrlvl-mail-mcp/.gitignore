@@ -1,0 +1,11 @@
+.next/
+node_modules/
+.env
+.env.local
+.vercel
+next-env.d.ts
+
+# Los repos MCP hermanos (unrlvl-meta-mcp, unrlvl-shopify-mcp) no llevan lockfile:
+# Vercel instala desde package.json. Se mantiene la consistencia.
+package-lock.json
+tsconfig.tsbuildinfo
