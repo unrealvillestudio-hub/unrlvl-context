@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude_
+_Versión: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
 
 ---
 
@@ -51,6 +51,22 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 | `Meta` (UNRLVL Meta) | publicar IG/FB, ads, insights, audiencias | `list_brands` primero. brand_id mapping: ver ecosystem. Solo FB+IG existen (no LinkedIn/X aún). |
 | `Shopify` (Unrealville Studio) | productos, colecciones, temas, órdenes, GraphQL | B2C + B2B. `list_brands` para ver tiendas conectadas. |
 | `Vercel` | deploys, proyectos, logs, **web_fetch_vercel_url** (= acceso al proxy gh) | La vía para TODA URL de Vercel y para leer repos. |
+| `Mail` (unrlvl-mail-mcp) | leer buzones de correo de clientes | **SOLO LECTURA.** `list_brand_mailboxes` → `search_messages` → `get_message`. Carpetas `INBOX`/`SENT`/`SPAM`, **papelera excluida**, **sin persistencia del contenido**. Schema `mail` en `unrlvl-db` con el rol dedicado `mail_mcp` (NO `service_role`). ⚠️ **No está dado de alta como conector en Claude.ai** — hasta ese paso, no aparece en tools. |
+
+### Estado de autenticación de los MCPs — medido el 2026-08-28
+
+| MCP | En el código | En Vercel (`ssoProtection`) | Tools que mutan |
+|---|---|---|---|
+| `unrlvl-supabase-mcp` | ❌ **sin autenticación** (SEC-01) | ✅ `true` (`all_except_custom_domains`) | **3** — `execute_sql`, `apply_migration`, `deploy_edge_function` |
+| `unrlvl-meta-mcp` | ❌ **sin autenticación** (SEC-01) · además **SEC-02** en `api/upload.ts` | ✅ `true` (`all_except_custom_domains`) | **9** |
+| `unrlvl-shopify-mcp` | ❌ **sin autenticación** (SEC-01) | ✅ `true` (`all_except_custom_domains`) | **4** |
+| `unrlvl-mail-mcp` | ⏳ pendiente del merge de **MCP-AUTH-01** | ✅ `true` (`all_except_custom_domains`) | **0** — sólo lectura |
+
+**Los tres de SEC-01 no leen ninguna cabecera de credencial** (`req.json()` → `handleRpc` → `callTool`, sin tocar `req.headers`) y declaran `Access-Control-Allow-Origin: *`.
+
+**La protección de Vercel es mitigación, no cierre.** `all_except_custom_domains` **no cubre un dominio propio**: el día que uno de estos MCPs reciba un dominio, la protección desaparece sin que nadie toque nada. El cierre correcto es **MCP-AUTH-01 extendido a los tres** — entregado, pendiente de merge, `MCP_AUTH_TOKEN`, deploy y **verificación de 401**.
+
+**Agravante sistémico:** en la DB que alcanza `execute_sql` viven `shopify_stores` y `meta_accounts`, **con los tokens de los otros dos**. Un solo endpoint abierto no expone un MCP: expone los tres.
 
 ---
 
