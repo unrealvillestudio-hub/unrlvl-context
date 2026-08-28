@@ -1,5 +1,76 @@
 # ForumPHs — Session Log
 
+## 2026-08-28 — El buzón de ForumPHs entra al MCP · una DB de la marca fuera del mapa · y el formulario que nadie mira
+
+> Verificado contra producción el **2026-08-28** con `execute_sql` y `list_projects` (HRD-R13).
+> Professor cerrado **antes**: **9 learnings**, `session_date = 2026-08-28`, los nueve
+> `approved_by_sam = true`. **SMA no se consultó.** Detalle transversal en
+> `brands/UnrealvilleStudio/session_log.md` (2026-08-28). Lo previo se conserva íntegro debajo.
+
+### `forumphs507@gmail.com` dado de alta en el MCP de correo
+
+**Primera de las tres marcas del alcance declarado por Sam** (ForumPHs, NeuroneSCF,
+UnrealvilleStudio; ninguna otra entra). Medido en `mail.mailboxes`:
+
+- `brand_id = ForumPHs` · `address = forumphs507@gmail.com` · `provider = google_oauth` ·
+  `active = true`.
+- Autorización viva (`revoked_at IS NULL`), `signed_at = 2026-08-28`, titular declarado **Samuel
+  Moreno Mendoza (creador y titular de la cuenta)**.
+
+⚠️ **El `document_path` dice literalmente `PENDIENTE DE FIRMA`** — alta técnica de prueba, **se
+reemplaza por el documento firmado por Ivette**. La compuerta técnica funciona (hay fila viva, luego
+hay token), pero **lo que la compuerta representa todavía no existe en papel**. Es el hueco de esta
+alta, y se anota como tal.
+
+**Alcance de la lectura, y es técnico, no contractual:** carpetas `INBOX` / `SENT` / `SPAM`,
+**papelera excluida**, **sin persistencia** de contenido, asunto, remitente, destinatario, adjuntos
+ni identificadores. El MCP **no puede** enviar, responder, reenviar, borrar, mover, archivar ni
+etiquetar: el permiso concedido no incluye esas capacidades.
+
+⚠️ **Advertencia que aplica a este buzón:** **MAIL-01** — el MCP **no verifica de quién es el buzón
+que lee** (estampa la dirección desde la base, no desde el proveedor). Hoy ocurrió en producción con
+otras dos marcas. Hasta que exista `assertMailboxIdentity()`, **una lectura de este buzón no es
+prueba de que el contenido sea de este buzón**.
+
+### 🔴 MAIL-03 — `forumphs-db` entra en pausa, y no está en el mapa
+
+Aviso de Supabase del **28-ago**: más de **7 días sin actividad**. Supabase pausa los proyectos
+inactivos del plan gratuito.
+
+**Medido con `list_projects`:** la cuenta de Supabase de UNRLVL (org `tnqcrwmfxesiqxlhuzri`) contiene
+**`unrlvl-db` y `XMMs`, y nada más**. **`forumphs-db` no está ahí.** Hay una base de datos **de esta
+marca, fuera del ecosistema, sin dueño declarado ni dependencias conocidas** — y a punto de pausarse.
+
+⚠️ **Dos matices medidos frente al brief** (HRD-R13):
+
+1. **`forumphs-db` sí aparece mencionada** —en prosa— en `ecosystem.json` y en `AGENDA.md`, con su
+   ref **`tajuoqdbnsnzkhyqvdgs`**, desde la verificación del **2026-08-05** contra su
+   `information_schema`. Lo que **no** tiene es **nodo propio**: el bloque `supabase` declara
+   únicamente `main`. La afirmación exacta no es «no figura», es **«figura como mención y no como
+   nodo»**.
+2. **`XMMs` no aparece en `ecosystem.json` en absoluto.** Son **dos** proyectos sin declarar, no uno.
+
+**Lo que importa para ForumPHs:** el re-diagnóstico de BI del **04-ago** ya había medido que
+`monthly_kpis`, `eeff_preliminar` y `mora_mensual` estaban **vacías en toda `forumphs-db`** —falta
+carga de datos, no código—. Si la DB se pausa, **ese frente deja de existir sin que nadie lo decida**.
+
+### 🟠 FPHS-FORM — El formulario de `forumphs.com` no tiene anti-spam, y su aviso cae en SPAM
+
+Dos defectos que se multiplican entre sí:
+
+1. **El formulario no tiene anti-spam** — recibe prospección en frío sin filtro alguno.
+2. **`noreply@forumphs.com` no pasa los filtros de Gmail** — la notificación de que llegó algo cae
+   en **SPAM**.
+
+**Un propietario real preguntando por una cuota extraordinaria aterriza en el mismo sitio que el
+spam, y nadie mira ese sitio.** Para una administradora de PH, un formulario silenciosamente roto no
+es una molestia de marketing: es una consulta de propietario perdida.
+
+Encaja con el **DKIM/SPF de Klaviyo** ya abierto: es el mismo problema de **autenticación de correo
+saliente**, en otro remitente. Conviene cerrarlos juntos.
+
+---
+
 ## 2026-08-26 — ForumPHs deja de ser la única marca del carril · `objecion` en los 11 dominios de conversión
 
 **ForumPHs fue la primera marca del ecosistema en entrar al Scheduler el 2026-08-22. Hoy dejó de ser
