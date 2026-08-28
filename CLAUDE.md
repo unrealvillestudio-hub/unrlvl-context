@@ -28,7 +28,16 @@ Orden de carga, sin excepciones (`CC_PROTOCOL.md` §0 bis):
 > independiente de gobernanza en dos sesiones** (2026-08-23). Un CC sin protocolo cargado no es un CC
 > prudente: es uno que improvisa la gobernanza.
 
-Lo mismo aplica a `protocols/MULTIBRAND_RULE.md` y a cualquier otro protocolo de `protocols/`.
+Lo mismo aplica a `protocols/MULTIBRAND_RULE.md`, a `protocols/MAIL_PRIVACY_RULE.md` y a cualquier
+otro protocolo de `protocols/`.
+
+> **`protocols/MAIL_PRIVACY_RULE.md` (2026-08-28) — carga obligatoria** antes de cualquier tarea que
+> lea un buzón de cliente con `unrlvl-mail-mcp`, que toque el schema `mail`, o que escriba en un
+> context file un ítem cuya evidencia no se pueda trazar a una vía independiente. De la lectura de
+> correo de clientes **sale una respuesta en el chat y desaparece**: nada va a context files, ni a
+> Professor, ni a AGENDA, ni a un `session_log` — **ni la mención de que se leyó algo**. Es la
+> **fuente canónica**; lo demás apunta ahí y no duplica. Se incumplió **dos veces en un solo día**
+> mientras vivía repartida en tres copias sin fuente.
 
 **Este repo es CRÍTICO — el sistema nervioso del ecosistema. Reglas reforzadas:**
 
@@ -178,6 +187,7 @@ protocols/
   SESSION_PROTOCOL.md       ← Protocolo de sesión (HRD_PROTOCOLO_ACTUALIZACION, etc.)
   HRD_PROTOCOL.md           ← Protocolo HRD completo
   CC_PROTOCOL.md            ← Protocolo de Claude Code (gobernanza CC)
+  MAIL_PRIVACY_RULE.md      ← Lo que se lee de un buzón de cliente no se escribe en ningún sitio
   ECOSYSTEM_AUDIT.md        ← Protocolo de auditoría
   AYRA_MASTER_PLAN.md       ← Plan maestro Ayra
   ...
