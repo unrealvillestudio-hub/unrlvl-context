@@ -1,19 +1,28 @@
 {
   "_meta": {
-    "version": "2026-08-26-v2",
+    "version": "2026-08-27-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-08-26-v1",
+    "previous": "2026-08-26-v2",
+    "previous_chain": [
+      "2026-08-26-v2",
+      "2026-08-26-v1"
+    ],
     "last_session": {
-      "date": "2026-08-26",
-      "conducted_by": "Claude Code — HRD_ACTUALIZA 2026-08-26, solo context files · sesion Sam x Claude.ai · Professor cerrado ANTES de este Actualiza (15 learnings en public.professor_learnings, session_date 2026-08-26, los quince con approved_by_sam=true; ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · CC ejecuta rama+PR contra main, no mergea",
-      "status": "HRD_ACTUALIZA 2026-08-26 — LOS TRES ROJOS CERRADOS, Y EL HILO DEL QUE CUELGA TODO LO DEMAS LLEGA NULL. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) CERRADO Y VERIFICADO EN PRODUCCION: PUB-01 — content-scheduler v6 (PR #98), el drenaje comprueba EL EFECTO contra la fila de scheduled_posts y no el codigo HTTP, con publishAndVerify (cuatro veredictos: PUBLISH_UNVERIFIABLE, PUBLISH_UNPROVEN, PUBLISH_FAILED, PUBLISH_NOOP) y recordPublicationProof guardando assets.publication. Es la aplicacion literal de HRD-R11. P3 — content-run-stage v94 (PR #99), el juez recibe social.adapted y NO aife_filtered, con pickJudgedText, syncJudgedAdapted y adapted_pre_judgment guardado como EVIDENCIA SIN FIRMAR. RESEARCH-01 — iid-research v45 e iid-process v48 (PRs #100 y #101), techo por CASCADA sobre intel.iid_research_ceilings (fila BASE max_tokens=16000 con agent_name y brand_id nulos: el default es DATO DECLARADO, no literal) y truncated como COLUMNA GENERADA desde stop_reason. BLOG-01 PR-1 — forumphs-com #6: discarded_at filtrado en las TRES rutas, 410 en articulo descartado, paquete SEO completo. BLOG-01 PR-2 — repo NUEVO unrlvl-blog #1: renderizador extraido, blog_path como dato con router propio, tema y copia por canal. BP-01/02/03 — BluePrints #2 y #3: blueprint de LucienSael creado (JSON + HTML + 2 SVG vectorizados); BP_BRAND_UNRLVL a v1.5. (2) TRES MARCAS ENTRAN AL SCHEDULER: UnrealvilleStudio, LucienSael y NeuroneSCF con rollout_started_at 2026-08-26. Cuatro marcas donde ayer habia una (ForumPHs sigue con el suyo del 2026-08-22). UNRLVL PASA DE 14 AGENTES A 6. (3) SEMBRADO Y MEDIDO con execute_sql el 2026-08-27 (HRD-R13), y DONDE EL BRIEF Y LA MEDICION DISCREPAN MANDA LA MEDICION: brand_rollout 3 (brief 3) · brand_cadence 39 = Lucien 15 + NSCF 12 + UNRLVL 12 (BRIEF DECIA 33 — DISCREPANCIA ANOTADA, NO CORREGIDA A MANO) · brand_publish_channels 14 (brief 14) · brand_topic_platform_mode 63 (brief 63) · intel.content_angles catalogo NUEVO de 10 angulos, los diez active (brief 10) · angles en 19 dominios de las marcas nuevas (brief 19) · objecion en los 11 dominios de conversion de ForumPHs (brief 11). EL CATALOGO DE ANGULOS LLEVA EL LIMITE ESCRITO EN CADA DEFINITION, y eso es lo que lo hace utilizable sin criterio del escritor: consecuencia avisa que linda con urgencia y miedo y que una voz que prohibe escasez NO deberia declararlo · caso y dato EXIGEN fuente real (un caso inventado convierte el angulo en fabricacion) · expertise exige credencial propia, y por eso NINGUN dominio de Lucien lo declara. theme y fonts_href pasan a ser DATO DEL CANAL en brand_publish_channels.config: ForumPHs (Amatista Carbon), UnrealvilleStudio (VOID SYSTEM) y LucienSael (EMBER SYSTEM). El renderizador deja de cablear paleta: la lee. NeuroneSCF NO lleva theme porque su blog vive DENTRO de Shopify (provider shopify_blog): el tema lo pone Shopify. (4) LIMPIEZA: 8 agentes fantasma de UNRLVL · 170+3 filas de cola fallida · 268 orchestrator_jobs · 71 findings de un carril que ya no existe. public.scheduled_posts quedo en CERO FILAS. (5) PRIMER MATERIAL REAL DE DOS MARCAS NUEVAS: memos INTEGROS con stop_reason=end_turn, truncated=false y max_tokens=16000 de fuente base — LUCIEN-BEHAVIORAL-SCIENCE 25.162 caracteres (23:33:35 UTC) y UNRLVL-AI-COGNITION-TECH 24.897 (23:33:33 UTC) — y DOS PIEZAS NUEVAS DE LUCIENSAEL (blog y meta_ig), ambas pass_type=clean en awaiting_approval. CORRECCION AL BRIEF: NO son las dos primeras piezas de la marca — ya habia dos del 2026-07-31 (x y tiktok), tambien clean y vivas; SI es el PRIMER RESEARCH DE LA HISTORIA DE LUCIEN. (6) EL COSTO DE LA SESION, DICHO SIN ADORNO: dos divergencias entre produccion y main por despliegues FUERA DE ORDEN. LA SEGUNDA FUE SILENCIOSA — la EF seguia devolviendo 200, guardando el memo y marcando el truncamiento: todo parecia correcto y el arreglo NO ESTABA PUESTO. Se llevo TRES CORRIDAS DE RESEARCH COMPLETAS. El rastro quedo en intel.iid_research_raw con max_tokens en NULL donde la cascada debia haber escrito 16000 con max_tokens_source=base. (7) GOBERNANZA: HRD_PROTOCOL.md v1.7 con DOS reglas globales nuevas, ninguna derogacion, las dos nacidas de errores de esta sesion. HRD-R13: UNA LECTURA DE ESTADO CADUCA DENTRO DE LA MISMA SESION — en un chat que muta produccion durante horas ninguna lectura previa vale como afirmacion presente; GREPEAR NO ES LEER (un literal puede vivir dentro de un comentario, y el literal 5200 de iid-research aparecio exactamente asi); y una hipotesis razonada NO SUSTITUYE UNA MEDICION. Origen: cuatro afirmaciones sin verificar el 2026-08-26. HRD-R14: EL ORDEN MERGE -> DEPLOY NO ES CEREMONIA, Y SU VIOLACION ES SILENCIOSA — CC no despliega; Sam despliega desde main, despues del merge; si hace falta un deploy para probar, SE PIDE. Origen: iid-research v44 revirtio RESEARCH-01 y la EF siguio devolviendo 200. Un deploy que rompe se ve en el minuto uno; uno FUERA DE ORDEN deja el sistema funcionando con el codigo de ayer y nada se queja. Es simetrica de HRD-R09: mergear no despliega, y desplegar sin haber mergeado tampoco vale. (8) ABRE, con su evidencia: P1 judged_source LLEGA NULL en las CUATRO piezas vivas de LucienSael, las dos nuevas incluidas, PESE A CORRER SOBRE content-run-stage v94 — no se puede afirmar que el juez leyo el adaptado, que es lo unico que P3 vino a garantizar, y BLOQUEA TODA GENERACION NUEVA porque cada pieza que salga hoy repite el agujero, ahora en dos marcas · P2 las tres reglas con falso positivo MEDIDO sobre los 9 arbitrajes de intel.judge_calibration: HR-FPHS-15 3/3=100%, HR-FPHS-13 2/2=100%, HR-LEGAL-01 3/4=75% — ES LA CONDICION PARA ENCENDER EL CRON 66 · P3 IID_FANOUT_EMPTY en un finding de LucienSael (1 suscriptor activo pero 0 encolado en domain=behavioral-science): el fail-loud funciono, falta la causa; su fila NO SE LOCALIZO en esta pasada y se anota como pendiente de localizar, no como medido · P4 el fan-out ENCOLA PARA PLATAFORMAS SIN PROVEEDOR: lote 2026-08-26 23:57:26.167661+00 con 3 filas failed (tiktok, x, meta_fb) y 1 complete (meta_ig) — el fan-out no mira si el canal esta activo · P5 el adaptador NO LEE EL GENOMA: el conteo de hashtags por plataforma es CAMPO DEL GENOMA y no regla del Watcher, asi que el juez no puede medirlo aunque ahora lo vea. (9) DISCREPANCIA ABIERTA: iid-process se sirve en produccion como v49 y el brief declara v48. Que desplego la v49 y cuando NO CONSTA en esta sesion. Es exactamente la clase de hueco que HRD-R14 viene a cerrar. (10) TEST DE LA MARCA N+1: NO APLICA — este Actualiza no produce codigo, migracion ni siembra. Se declara para que la ausencia no se lea como omision. (11) DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23. No existe generador en el repo. La regeneracion real sigue abierta SIN FECHA. Detalle en IID/session_log.md (2026-08-26).",
-      "_registro_anterior_conservado": {
-        "date": "2026-08-25",
-        "conducted_by": "Claude Code — HRD_ACTUALIZA CHECKPOINT 2 de la sesion 2026-08-25, solo context files · sesion Sam x Claude.ai · Professor cerrado ANTES de este Actualiza (10 learnings en public.professor_learnings, session_date 2026-08-25, los diez con approved_by_sam=true; 19 EN TOTAL de esta sesion contando el checkpoint anterior) · SMA no se consulto · CC ejecuta rama+PR contra main, no mergea",
-        "status": "HRD_ACTUALIZA CHECKPOINT 2 (sesion 2026-08-25) — DE 21 PIEZAS, UNA SOLA FALLO POR CONTENIDO: EL RESTO QUE SE PERDIO FUE INSTRUMENTO. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). Continua el checkpoint anterior, ya mergeado. (1) EL RUN DEL 2026-08-25, primer run sobre el carril completo: 27 filas generadas, 21 piezas creadas, 6 nunca llegaron a pieza. 14 LIMPIAS (pass_type=clean: 12 aplazadas + 2 aprobadas) = 51,9% · 5 rescatadas por arbitraje o edicion (assisted) = 18,5% · 19 APROVECHABLES = 70,4% · 8 perdidas = 29,6%. El ratio limpio paso de 6,7% a 12,5% a 51,9% EN UN DIA. (2) EL DIAGNOSTICO SE MOVIO DEFINITIVAMENTE, y es el hallazgo del dia: de las 21 piezas generadas UNA SOLA tenia un defecto de contenido real (citaba articulos por numero). TODO LO DEMAS QUE SE PERDIO FUE INSTRUMENTO: una firma que el sistema no puso, un truncamiento que el juez no podia ver, reglas disparando falsos positivos. Durante 25 dias el sospechoso fue el material; ya no lo es. (3) ANGULOS: 2 DISTINTOS en el run (artefacto, pregunta) contra UNO SOLO en las 250 filas previas. Donde un dominio tuvo dos hallazgos, cada uno recibio angulo distinto — justo las parejas que antes se rechazaban entre si por duplicacion. El angulo dejo de ser criterio del escritor en cada corrida y pasa a ser DATO. (4) ARBITRAJES DEL JUEZ: 9 — ocho rule_failed, uno judge_was_right. Con nueve casos hay TASA DE FALSO POSITIVO MEDIDA, NO ESTIMADA: HR-FPHS-15 100% · HR-FPHS-13 100% · HR-LEGAL-01 75%. Una regla con falso positivo medido ya no se discute, se reescribe — y solo se puede medir porque el sistema GUARDA EL DESACUERDO (intel.judge_calibration). (5) RECHAZOS DE SAM: 4, Y 3 ERAN DEFECTOS DEL SISTEMA — 2 por la firma ausente, 1 por el truncamiento invisible al juez. Solo 1 era contenido malo. (6) PROYECCION CON SIGN-01 DESPLEGADO: 63% limpio, 81,5% aprovechable. ES PROYECCION, NO MEDICION: el deploy de content-run-stage v93 (23:51 UTC) fue POSTERIOR a la generacion del run (17:10-19:41), asi que NINGUNA pieza de este run paso por los arreglos de SIGN-01. Se anota asi para que la proxima sesion no la lea como numero medido. (7) MUTACIONES DE DATOS: iid_content_queue_angle_check ELIMINADO — enumeraba OCHO ANGULOS GENERICOS y BLOQUEO EL PRIMER RUN CON ANGULOS DIVERSOS, el run que existia justamente para probar que el angulo es dato; se elimino con un COMMENT que explica por que no vuelve. 32 dominios de ForumPHs con angles sembrados (seis angulos, matriz por voz). brand_topics +angles · content_pieces +deferred_until/+deferred_reason · CHECK de content_pieces.status ampliado con deferred. BACKFILL DE FIRMA: 18 piezas, resultado verificado 23 de 23 vivas con firma y CERO DUPLICADAS (el cero duplicadas es la mitad que importa: un backfill de firma mal hecho firma dos veces). BACKFILL DE EMBEDDINGS: corpus completo, cero piezas vivas sin embedding en 21 dias — el gate de duplicacion deja de degradarse a LLM. HR-FPHS-11 reescrita (la enumeracion de fuentes excluia diarios DE HECHO). HR-FPHS-15 reescrita con el criterio de Sam: SUSTANTIVO SI, ADJETIVO NO — la extraordinaria incumple, asamblea extraordinaria cumple. HR-FPHS-16 nueva: sin enlaces salientes. HR-FPHS-11 y HR-NSCF-08 con condition, que cubren el defecto B en kind=proof, no alcanzado por el barrido de requirement. CRON 66 content-placement-poll: APAGADO hasta PUB-01. (8) DESPLIEGUES: unrlvl-iid-functions #92, #93 · Orchestrator #23. EFs (version real = numero final de entrypoint_path): content-run-stage 93 (23:51 UTC) · content-watcher 44 (23:13 UTC) · iid-core 54 · iid-process 47 · content-scheduler 5 · approve-piece 39 · judge-arbitration 2 · piece-edit 2 (las dos con verify_jwt: true). (9) GOBERNANZA: HRD_PROTOCOL.md v1.6 con TRES reglas globales nuevas, ninguna derogacion, las tres nacidas de errores de esta sesion. HRD-R10: VERIFICAR FRAGMENTOS NO ES VERIFICAR EL ARCHIVO — la suite de content-run-stage dio 50 archivos en verde sobre un archivo que NO COMPILABA; no fallo la suite, hizo lo que sabe hacer: los tests extraen bloques por sentinelas, asi que un error de sintaxis entre dos sentinelas es invisible para los cincuenta a la vez. Un deno check lo habria cazado. HRD-R11: EL EXITO SE COMPRUEBA CONTRA EL EFECTO, NO CONTRA EL CODIGO HTTP — un 200 es \"el otro lado recibio la llamada\", nunca \"el otro lado hizo la cosa\". HRD-R12: EL TEST DE LA MARCA N+1 BARRE TAMBIEN LOS CHECK EXISTENTES, no solo el codigo que se escribe — la enumeracion puede estar en el esquema, puesta hace meses por alguien que no esta en la sesion. (10) BARRIDO DE ARCHIVADO EJECUTADO, pedido explicito de Sam: 5 bloques bajan a historical_AGENDA.md integros y sin reescribir — 4 de cabecera (v2026-08-23-v1, v2026-08-22-v1, v2026-08-21-v1, v2026-08-18-v1; son metadata, mismo criterio que las migraciones del 16 y el 21 de agosto) y 1 item (INCIDENTE RESUELTO 17-jul content-dispatcher-poll: cerrado con efecto medido — el cron 29 paso de 3859 fallos consecutivos a succeeded sostenido —, 40 dias, cero referencias activas verificadas por barrido). 8 CANDIDATOS EVALUADOS QUEDAN RETENIDOS con su motivo declarado en la migracion. Criterio aplicado tal cual lo pidio Sam: EN LA DUDA, SE QUEDA — un item archivado por error desaparece de la vista, uno sin archivar solo ocupa espacio. (11) ABRE, con su evidencia: PUB-01 — el drenaje DA POR PUBLICADO con un 200 de SocialLab SIN VERIFICAR EL EFECTO, y hay CERO PUBLICACIONES AUTOMATICAS REALES hasta hoy; el cron 66 queda apagado. Es la mitad que faltaba del hito del checkpoint anterior: el carril COLOCA, pero todavia no se puede afirmar que PUBLICA · EL TEXTO ADAPTADO POR PLATAFORMA NO PASA POR EL JUEZ (content-run-stage:3134-3136), verificado y no deducido: social.adapted REINTRODUJO UNA CITA DE LEY que aife_filtered ya no tenia, o sea el juez aprueba un texto y sale otro · deno check (o parseo del archivo completo) antes de dar por bueno un PR · tres reglas con tasa de falso positivo alta y dato suficiente para reescribirlas · SOCIALLAB PODRIA SER MAYORMENTE MOCKUP, sospecha de Sam anotada como sospecha, que encaja con el 200 sin publicacion — verificar ANTES de construir encima · barrido de los 8 statement imperativos · regla de correspondencia con la fuente, aplazada por decision de Sam · promocion del gate linguistico, que marca el 50% · deuda de claves Supabase (15 de 17 EF) · imagen inconsistente en blog y LinkedIn · Klaviyo DKIM/SPF · seguridad de unrlvl-db. (12) TEST DE LA MARCA N+1: NO APLICA — este Actualiza no produce codigo, migracion ni siembra. Se declara para que la ausencia no se lea como omision. (13) DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23. No existe generador en el repo. La regeneracion real sigue abierta SIN FECHA."
-      }
+      "date": "2026-08-27",
+      "conducted_by": "Sam x Claude.ai + CC — HRD_ACTUALIZA 2026-08-27, solo context files · Professor cerrado ANTES de este Actualiza (el brief declara 12 learnings en public.professor_learnings con session_date 2026-08-27 y approved_by_sam=true; MEDIDO con execute_sql el 2026-08-28: 24, los veinticuatro aprobados, en DOS lotes de 12 — 17:17:51 y 23:49:52 UTC; el brief conto SU lote. Manda la medicion, HRD-R13, y la discrepancia se anota, no se corrige a mano. ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · CC ejecuta rama+PR contra main, no mergea",
+      "status": "HRD_ACTUALIZA 2026-08-27 — EL CARRIL NO FUE EL PROBLEMA DE HOY. TRES MCPs DEL ECOSISTEMA ESTABAN EN INTERNET SIN AUTENTICACION. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) SEC-01 — unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp NO LEEN NINGUNA CABECERA DE CREDENCIAL: van de req.json() a handleRpc a callTool sin tocar req.headers, y los tres declaran Access-Control-Allow-Origin: *. Tools que MUTAN: supabase 3 (execute_sql, apply_migration, deploy_edge_function), meta 9, shopify 4. AGRAVANTE SISTEMICO: en esa misma DB viven shopify_stores y meta_accounts CON LOS TOKENS DE LOS OTROS DOS — un solo endpoint abierto no expone un MCP, expone los tres. (2) SEC-02 — unrlvl-meta-mcp/api/upload.ts es un SEGUNDO endpoint publico sin autenticar: sube archivos arbitrarios al bucket unrlvl-media con la SERVICE_ROLE_KEY y x-upsert: true, y acepta una url remota que EL SERVIDOR DESCARGA (vector SSRF), mas sobrescritura de assets de marca en brand/{brand_id}/. (3) DISCREPANCIA MEDIDA CONTRA EL BRIEF, Y ES BUENA NOTICIA: el brief declara unrlvl-supabase-mcp con passwordProtection false, ssoProtection false y trustedIps false (cero proteccion en codigo y cero en infraestructura). MEDIDO en la API de Vercel el 2026-08-28: LOS CUATRO proyectos MCP tienen ssoProtection true (all_except_custom_domains), unrlvl-supabase-mcp y unrlvl-mail-mcp incluidos — LA MITIGACION INMEDIATA QUE PEDIA EL BRIEF YA ESTA APLICADA. Lo que NO cambia: el codigo sigue sin leer cabecera de credencial, y all_except_custom_domains NO CUBRE UN DOMINIO PROPIO. El cierre correcto sigue siendo MCP-AUTH-01 extendido a los tres, no la casilla de Vercel. (4) ENTREGADO: unrlvl-mail-mcp, MCP de correo de clientes SOLO LECTURA, de punta a punta — schema mail aislado (2 tablas + 1 funcion SECURITY DEFINER, REVOKE sobre anon/authenticated/service_role/PUBLIC, RLS habilitada sin politicas como defensa redundante, search_path fijo), ROL DEDICADO mail_mcp en vez de service_role (radio de dano: service_role la tienen ~15 EFs), y REPO PROPIO extraido de unrlvl-context con git subtree split (30 archivos en la raiz). VERIFICADO EN PRODUCCION el 2026-08-28 (HRD-R13): schema mail aplicado con sus 2 tablas · rol mail_mcp existe · has_schema_privilege sobre mail da FALSE para service_role, anon y authenticated (el aislamiento no es una intencion, es un permiso) · 1 funcion SECURITY DEFINER · mail.mailboxes y mail.authorizations en CERO FILAS: el sistema esta completo y todavia no tiene un solo buzon dado de alta. (5) CORRECCION DE UNA CIFRA DE AGENDA: donde el bloque del 26-ago dice 4 ERROR-level en unrlvl-db, la remedicion con get_advisors del 2026-08-28 da 16 ERROR y 39 WARN (+10 INFO). Los 16 = 12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS (ops_client_terms, ops_rate_transitions, ops_credits, ops_cost_residual). Los 39 WARN = 23 function_search_path_mutable + 8 anon_security_definer_function_executable + 6 authenticated_security_definer_function_executable + 2 extension_in_public. EL DATO VIEJO NO SE BORRA: SE ANOTA LA REMEDICION CON SU FECHA. (6) LEGAL: las paginas legales de unrealvillestudio.com del 28-abr identificaban al responsable del tratamiento como Unrealville Studio LLC, ENTIDAD QUE NO EXISTE, y estaban HUERFANAS (cero href desde ambos footers). Se sustituyen por Samuel Moreno Mendoza, empresario individual. Sin LLC ni nombre ficticio registrados en Florida, Sam firma COMO PERSONA FISICA documentos con clausula de indemnidad que dan acceso a buzones de clientes. (7) GOOGLE CLOUD: proyecto nuevo unrlvl-mail-mcp (project number 212509698390), sin organizacion, cuenta unrealvillestudio@gmail.com, Gmail API habilitada, pantalla de consentimiento External creada, scope gmail.readonly declarado, OAuth Client ID creado (Web application, redirect http://localhost:8080/). PUBLICACION EN PRODUCTION PENDIENTE de que las paginas legales esten vivas. (8) ABRE: SEC-01 y SEC-02 en rojo · MCP-AUTH-01 entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde) pendiente de merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401 · paginas legales en PR en CoreProject · sin entidad registrada en Florida · ALTA DEL CONECTOR de unrlvl-mail-mcp en Claude.ai (sin ese paso el sistema esta completo y es inutil) · 003_drop_brand_oauth_tokens.sql · PR de limpieza de projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md · legal/a (3 bytes, commit 3a03a9f). TEST DE LA MARCA N+1: no aplica — pasada de solo context files, sin codigo, migracion ni siembra; se declara para que la ausencia no se lea como omision. DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23; el brief pedia regenerarlos completos y CC LO DECLARA en vez de sincronizar parcial, como el propio brief §3 autoriza. Detalle en brands/UnrealvilleStudio/session_log.md (2026-08-27)."
     },
     "previous_sessions": [
+      {
+        "date": "2026-08-26",
+        "conducted_by": "Claude Code — HRD_ACTUALIZA 2026-08-26, solo context files · sesion Sam x Claude.ai · Professor cerrado ANTES de este Actualiza (15 learnings en public.professor_learnings, session_date 2026-08-26, los quince con approved_by_sam=true; ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · CC ejecuta rama+PR contra main, no mergea",
+        "status": "HRD_ACTUALIZA 2026-08-26 — LOS TRES ROJOS CERRADOS, Y EL HILO DEL QUE CUELGA TODO LO DEMAS LLEGA NULL. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) CERRADO Y VERIFICADO EN PRODUCCION: PUB-01 — content-scheduler v6 (PR #98), el drenaje comprueba EL EFECTO contra la fila de scheduled_posts y no el codigo HTTP, con publishAndVerify (cuatro veredictos: PUBLISH_UNVERIFIABLE, PUBLISH_UNPROVEN, PUBLISH_FAILED, PUBLISH_NOOP) y recordPublicationProof guardando assets.publication. Es la aplicacion literal de HRD-R11. P3 — content-run-stage v94 (PR #99), el juez recibe social.adapted y NO aife_filtered, con pickJudgedText, syncJudgedAdapted y adapted_pre_judgment guardado como EVIDENCIA SIN FIRMAR. RESEARCH-01 — iid-research v45 e iid-process v48 (PRs #100 y #101), techo por CASCADA sobre intel.iid_research_ceilings (fila BASE max_tokens=16000 con agent_name y brand_id nulos: el default es DATO DECLARADO, no literal) y truncated como COLUMNA GENERADA desde stop_reason. BLOG-01 PR-1 — forumphs-com #6: discarded_at filtrado en las TRES rutas, 410 en articulo descartado, paquete SEO completo. BLOG-01 PR-2 — repo NUEVO unrlvl-blog #1: renderizador extraido, blog_path como dato con router propio, tema y copia por canal. BP-01/02/03 — BluePrints #2 y #3: blueprint de LucienSael creado (JSON + HTML + 2 SVG vectorizados); BP_BRAND_UNRLVL a v1.5. (2) TRES MARCAS ENTRAN AL SCHEDULER: UnrealvilleStudio, LucienSael y NeuroneSCF con rollout_started_at 2026-08-26. Cuatro marcas donde ayer habia una (ForumPHs sigue con el suyo del 2026-08-22). UNRLVL PASA DE 14 AGENTES A 6. (3) SEMBRADO Y MEDIDO con execute_sql el 2026-08-27 (HRD-R13), y DONDE EL BRIEF Y LA MEDICION DISCREPAN MANDA LA MEDICION: brand_rollout 3 (brief 3) · brand_cadence 39 = Lucien 15 + NSCF 12 + UNRLVL 12 (BRIEF DECIA 33 — DISCREPANCIA ANOTADA, NO CORREGIDA A MANO) · brand_publish_channels 14 (brief 14) · brand_topic_platform_mode 63 (brief 63) · intel.content_angles catalogo NUEVO de 10 angulos, los diez active (brief 10) · angles en 19 dominios de las marcas nuevas (brief 19) · objecion en los 11 dominios de conversion de ForumPHs (brief 11). EL CATALOGO DE ANGULOS LLEVA EL LIMITE ESCRITO EN CADA DEFINITION, y eso es lo que lo hace utilizable sin criterio del escritor: consecuencia avisa que linda con urgencia y miedo y que una voz que prohibe escasez NO deberia declararlo · caso y dato EXIGEN fuente real (un caso inventado convierte el angulo en fabricacion) · expertise exige credencial propia, y por eso NINGUN dominio de Lucien lo declara. theme y fonts_href pasan a ser DATO DEL CANAL en brand_publish_channels.config: ForumPHs (Amatista Carbon), UnrealvilleStudio (VOID SYSTEM) y LucienSael (EMBER SYSTEM). El renderizador deja de cablear paleta: la lee. NeuroneSCF NO lleva theme porque su blog vive DENTRO de Shopify (provider shopify_blog): el tema lo pone Shopify. (4) LIMPIEZA: 8 agentes fantasma de UNRLVL · 170+3 filas de cola fallida · 268 orchestrator_jobs · 71 findings de un carril que ya no existe. public.scheduled_posts quedo en CERO FILAS. (5) PRIMER MATERIAL REAL DE DOS MARCAS NUEVAS: memos INTEGROS con stop_reason=end_turn, truncated=false y max_tokens=16000 de fuente base — LUCIEN-BEHAVIORAL-SCIENCE 25.162 caracteres (23:33:35 UTC) y UNRLVL-AI-COGNITION-TECH 24.897 (23:33:33 UTC) — y DOS PIEZAS NUEVAS DE LUCIENSAEL (blog y meta_ig), ambas pass_type=clean en awaiting_approval. CORRECCION AL BRIEF: NO son las dos primeras piezas de la marca — ya habia dos del 2026-07-31 (x y tiktok), tambien clean y vivas; SI es el PRIMER RESEARCH DE LA HISTORIA DE LUCIEN. (6) EL COSTO DE LA SESION, DICHO SIN ADORNO: dos divergencias entre produccion y main por despliegues FUERA DE ORDEN. LA SEGUNDA FUE SILENCIOSA — la EF seguia devolviendo 200, guardando el memo y marcando el truncamiento: todo parecia correcto y el arreglo NO ESTABA PUESTO. Se llevo TRES CORRIDAS DE RESEARCH COMPLETAS. El rastro quedo en intel.iid_research_raw con max_tokens en NULL donde la cascada debia haber escrito 16000 con max_tokens_source=base. (7) GOBERNANZA: HRD_PROTOCOL.md v1.7 con DOS reglas globales nuevas, ninguna derogacion, las dos nacidas de errores de esta sesion. HRD-R13: UNA LECTURA DE ESTADO CADUCA DENTRO DE LA MISMA SESION — en un chat que muta produccion durante horas ninguna lectura previa vale como afirmacion presente; GREPEAR NO ES LEER (un literal puede vivir dentro de un comentario, y el literal 5200 de iid-research aparecio exactamente asi); y una hipotesis razonada NO SUSTITUYE UNA MEDICION. Origen: cuatro afirmaciones sin verificar el 2026-08-26. HRD-R14: EL ORDEN MERGE -> DEPLOY NO ES CEREMONIA, Y SU VIOLACION ES SILENCIOSA — CC no despliega; Sam despliega desde main, despues del merge; si hace falta un deploy para probar, SE PIDE. Origen: iid-research v44 revirtio RESEARCH-01 y la EF siguio devolviendo 200. Un deploy que rompe se ve en el minuto uno; uno FUERA DE ORDEN deja el sistema funcionando con el codigo de ayer y nada se queja. Es simetrica de HRD-R09: mergear no despliega, y desplegar sin haber mergeado tampoco vale. (8) ABRE, con su evidencia: P1 judged_source LLEGA NULL en las CUATRO piezas vivas de LucienSael, las dos nuevas incluidas, PESE A CORRER SOBRE content-run-stage v94 — no se puede afirmar que el juez leyo el adaptado, que es lo unico que P3 vino a garantizar, y BLOQUEA TODA GENERACION NUEVA porque cada pieza que salga hoy repite el agujero, ahora en dos marcas · P2 las tres reglas con falso positivo MEDIDO sobre los 9 arbitrajes de intel.judge_calibration: HR-FPHS-15 3/3=100%, HR-FPHS-13 2/2=100%, HR-LEGAL-01 3/4=75% — ES LA CONDICION PARA ENCENDER EL CRON 66 · P3 IID_FANOUT_EMPTY en un finding de LucienSael (1 suscriptor activo pero 0 encolado en domain=behavioral-science): el fail-loud funciono, falta la causa; su fila NO SE LOCALIZO en esta pasada y se anota como pendiente de localizar, no como medido · P4 el fan-out ENCOLA PARA PLATAFORMAS SIN PROVEEDOR: lote 2026-08-26 23:57:26.167661+00 con 3 filas failed (tiktok, x, meta_fb) y 1 complete (meta_ig) — el fan-out no mira si el canal esta activo · P5 el adaptador NO LEE EL GENOMA: el conteo de hashtags por plataforma es CAMPO DEL GENOMA y no regla del Watcher, asi que el juez no puede medirlo aunque ahora lo vea. (9) DISCREPANCIA ABIERTA: iid-process se sirve en produccion como v49 y el brief declara v48. Que desplego la v49 y cuando NO CONSTA en esta sesion. Es exactamente la clase de hueco que HRD-R14 viene a cerrar. (10) TEST DE LA MARCA N+1: NO APLICA — este Actualiza no produce codigo, migracion ni siembra. Se declara para que la ausencia no se lea como omision. (11) DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23. No existe generador en el repo. La regeneracion real sigue abierta SIN FECHA. Detalle en IID/session_log.md (2026-08-26).",
+        "_registro_anterior_conservado": {
+          "date": "2026-08-25",
+          "conducted_by": "Claude Code — HRD_ACTUALIZA CHECKPOINT 2 de la sesion 2026-08-25, solo context files · sesion Sam x Claude.ai · Professor cerrado ANTES de este Actualiza (10 learnings en public.professor_learnings, session_date 2026-08-25, los diez con approved_by_sam=true; 19 EN TOTAL de esta sesion contando el checkpoint anterior) · SMA no se consulto · CC ejecuta rama+PR contra main, no mergea",
+          "status": "HRD_ACTUALIZA CHECKPOINT 2 (sesion 2026-08-25) — DE 21 PIEZAS, UNA SOLA FALLO POR CONTENIDO: EL RESTO QUE SE PERDIO FUE INSTRUMENTO. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). Continua el checkpoint anterior, ya mergeado. (1) EL RUN DEL 2026-08-25, primer run sobre el carril completo: 27 filas generadas, 21 piezas creadas, 6 nunca llegaron a pieza. 14 LIMPIAS (pass_type=clean: 12 aplazadas + 2 aprobadas) = 51,9% · 5 rescatadas por arbitraje o edicion (assisted) = 18,5% · 19 APROVECHABLES = 70,4% · 8 perdidas = 29,6%. El ratio limpio paso de 6,7% a 12,5% a 51,9% EN UN DIA. (2) EL DIAGNOSTICO SE MOVIO DEFINITIVAMENTE, y es el hallazgo del dia: de las 21 piezas generadas UNA SOLA tenia un defecto de contenido real (citaba articulos por numero). TODO LO DEMAS QUE SE PERDIO FUE INSTRUMENTO: una firma que el sistema no puso, un truncamiento que el juez no podia ver, reglas disparando falsos positivos. Durante 25 dias el sospechoso fue el material; ya no lo es. (3) ANGULOS: 2 DISTINTOS en el run (artefacto, pregunta) contra UNO SOLO en las 250 filas previas. Donde un dominio tuvo dos hallazgos, cada uno recibio angulo distinto — justo las parejas que antes se rechazaban entre si por duplicacion. El angulo dejo de ser criterio del escritor en cada corrida y pasa a ser DATO. (4) ARBITRAJES DEL JUEZ: 9 — ocho rule_failed, uno judge_was_right. Con nueve casos hay TASA DE FALSO POSITIVO MEDIDA, NO ESTIMADA: HR-FPHS-15 100% · HR-FPHS-13 100% · HR-LEGAL-01 75%. Una regla con falso positivo medido ya no se discute, se reescribe — y solo se puede medir porque el sistema GUARDA EL DESACUERDO (intel.judge_calibration). (5) RECHAZOS DE SAM: 4, Y 3 ERAN DEFECTOS DEL SISTEMA — 2 por la firma ausente, 1 por el truncamiento invisible al juez. Solo 1 era contenido malo. (6) PROYECCION CON SIGN-01 DESPLEGADO: 63% limpio, 81,5% aprovechable. ES PROYECCION, NO MEDICION: el deploy de content-run-stage v93 (23:51 UTC) fue POSTERIOR a la generacion del run (17:10-19:41), asi que NINGUNA pieza de este run paso por los arreglos de SIGN-01. Se anota asi para que la proxima sesion no la lea como numero medido. (7) MUTACIONES DE DATOS: iid_content_queue_angle_check ELIMINADO — enumeraba OCHO ANGULOS GENERICOS y BLOQUEO EL PRIMER RUN CON ANGULOS DIVERSOS, el run que existia justamente para probar que el angulo es dato; se elimino con un COMMENT que explica por que no vuelve. 32 dominios de ForumPHs con angles sembrados (seis angulos, matriz por voz). brand_topics +angles · content_pieces +deferred_until/+deferred_reason · CHECK de content_pieces.status ampliado con deferred. BACKFILL DE FIRMA: 18 piezas, resultado verificado 23 de 23 vivas con firma y CERO DUPLICADAS (el cero duplicadas es la mitad que importa: un backfill de firma mal hecho firma dos veces). BACKFILL DE EMBEDDINGS: corpus completo, cero piezas vivas sin embedding en 21 dias — el gate de duplicacion deja de degradarse a LLM. HR-FPHS-11 reescrita (la enumeracion de fuentes excluia diarios DE HECHO). HR-FPHS-15 reescrita con el criterio de Sam: SUSTANTIVO SI, ADJETIVO NO — la extraordinaria incumple, asamblea extraordinaria cumple. HR-FPHS-16 nueva: sin enlaces salientes. HR-FPHS-11 y HR-NSCF-08 con condition, que cubren el defecto B en kind=proof, no alcanzado por el barrido de requirement. CRON 66 content-placement-poll: APAGADO hasta PUB-01. (8) DESPLIEGUES: unrlvl-iid-functions #92, #93 · Orchestrator #23. EFs (version real = numero final de entrypoint_path): content-run-stage 93 (23:51 UTC) · content-watcher 44 (23:13 UTC) · iid-core 54 · iid-process 47 · content-scheduler 5 · approve-piece 39 · judge-arbitration 2 · piece-edit 2 (las dos con verify_jwt: true). (9) GOBERNANZA: HRD_PROTOCOL.md v1.6 con TRES reglas globales nuevas, ninguna derogacion, las tres nacidas de errores de esta sesion. HRD-R10: VERIFICAR FRAGMENTOS NO ES VERIFICAR EL ARCHIVO — la suite de content-run-stage dio 50 archivos en verde sobre un archivo que NO COMPILABA; no fallo la suite, hizo lo que sabe hacer: los tests extraen bloques por sentinelas, asi que un error de sintaxis entre dos sentinelas es invisible para los cincuenta a la vez. Un deno check lo habria cazado. HRD-R11: EL EXITO SE COMPRUEBA CONTRA EL EFECTO, NO CONTRA EL CODIGO HTTP — un 200 es \"el otro lado recibio la llamada\", nunca \"el otro lado hizo la cosa\". HRD-R12: EL TEST DE LA MARCA N+1 BARRE TAMBIEN LOS CHECK EXISTENTES, no solo el codigo que se escribe — la enumeracion puede estar en el esquema, puesta hace meses por alguien que no esta en la sesion. (10) BARRIDO DE ARCHIVADO EJECUTADO, pedido explicito de Sam: 5 bloques bajan a historical_AGENDA.md integros y sin reescribir — 4 de cabecera (v2026-08-23-v1, v2026-08-22-v1, v2026-08-21-v1, v2026-08-18-v1; son metadata, mismo criterio que las migraciones del 16 y el 21 de agosto) y 1 item (INCIDENTE RESUELTO 17-jul content-dispatcher-poll: cerrado con efecto medido — el cron 29 paso de 3859 fallos consecutivos a succeeded sostenido —, 40 dias, cero referencias activas verificadas por barrido). 8 CANDIDATOS EVALUADOS QUEDAN RETENIDOS con su motivo declarado en la migracion. Criterio aplicado tal cual lo pidio Sam: EN LA DUDA, SE QUEDA — un item archivado por error desaparece de la vista, uno sin archivar solo ocupa espacio. (11) ABRE, con su evidencia: PUB-01 — el drenaje DA POR PUBLICADO con un 200 de SocialLab SIN VERIFICAR EL EFECTO, y hay CERO PUBLICACIONES AUTOMATICAS REALES hasta hoy; el cron 66 queda apagado. Es la mitad que faltaba del hito del checkpoint anterior: el carril COLOCA, pero todavia no se puede afirmar que PUBLICA · EL TEXTO ADAPTADO POR PLATAFORMA NO PASA POR EL JUEZ (content-run-stage:3134-3136), verificado y no deducido: social.adapted REINTRODUJO UNA CITA DE LEY que aife_filtered ya no tenia, o sea el juez aprueba un texto y sale otro · deno check (o parseo del archivo completo) antes de dar por bueno un PR · tres reglas con tasa de falso positivo alta y dato suficiente para reescribirlas · SOCIALLAB PODRIA SER MAYORMENTE MOCKUP, sospecha de Sam anotada como sospecha, que encaja con el 200 sin publicacion — verificar ANTES de construir encima · barrido de los 8 statement imperativos · regla de correspondencia con la fuente, aplazada por decision de Sam · promocion del gate linguistico, que marca el 50% · deuda de claves Supabase (15 de 17 EF) · imagen inconsistente en blog y LinkedIn · Klaviyo DKIM/SPF · seguridad de unrlvl-db. (12) TEST DE LA MARCA N+1: NO APLICA — este Actualiza no produce codigo, migracion ni siembra. Se declara para que la ausencia no se lea como omision. (13) DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23. No existe generador en el repo. La regeneracion real sigue abierta SIN FECHA."
+        }
+      },
       {
         "date": "2026-08-25",
         "conducted_by": "Claude Code — HRD_ACTUALIZA 2026-08-24/25, solo context files · sesion Sam x Claude.ai · Professor cerrado ANTES de este Actualiza (9 learnings en public.professor_learnings, session_date 2026-08-25, los nueve con approved_by_sam=true) · CC ejecuta rama+PR contra main, no mergea",
@@ -707,7 +716,29 @@
             "nscf_integrity_log — log de integridad (drafts fantasma marcados voided_test, GRANT service_role)"
           ],
           "grants_2026-07-25": "service_role recibió GRANT sobre 3 tablas de public (bloqueante latente del fan-out, migración grant_service_role_public_iid_carril): psycho_presets (SELECT), scheduled_posts (SELECT+INSERT), ops_generation_ledger (SELECT+UPDATE). Las tablas en intel y content ya tenían los grants; el hueco era solo en public."
-        }
+        },
+        "mail": {
+          "tables": 2,
+          "_note": "NUEVO 2026-08-27. Buzones de correo de clientes, solo lectura. Consumidor unico: unrlvl-mail-mcp con el rol mail_mcp. VERIFICADO EN PRODUCCION el 2026-08-28.",
+          "tables_list": [
+            "mail.mailboxes — un buzon por marca y direccion (brand_id text REFERENCES public.brands(id); provider SIN CHECK a proposito, el mapa de adaptadores vive en el codigo con fail-loud MAIL_PROVIDER_UNSUPPORTED — precedente iid_content_queue_angle_check, HRD-R12). 0 filas al 2026-08-28.",
+            "mail.authorizations — el documento firmado por el titular del buzon. Sin fila viva (revoked_at IS NULL) no hay credencial resoluble: el papel firmado deja de ser archivo y pasa a ser compuerta. ON DELETE RESTRICT. 0 filas al 2026-08-28."
+          ],
+          "functions": [
+            "mail.resolve_credential(uuid) — SECURITY DEFINER, search_path fijo (mail, vault, pg_temp). UNICO camino al token: verifica buzon activo + autorizacion viva antes de leer vault. Fail-loud: MAILBOX_NOT_AUTHORIZED / MAIL_CREDENTIAL_UNRESOLVED."
+          ],
+          "role": "mail_mcp — rol dedicado con LOGIN. GRANT USAGE sobre el schema, SELECT sobre las 2 tablas, EXECUTE sobre resolve_credential. NO recibe INSERT/UPDATE/DELETE, ni USAGE en vault, ni acceso a public. POR QUE UN ROL PROPIO y no service_role: service_role la tienen ~15 Edge Functions; si las credenciales de buzon fueran legibles con esa clave, el radio de dano seria todo el carril.",
+          "exposed_schemas": "mail NO figura en Settings -> API -> Exposed schemas. Queda FUERA de la API REST de Supabase. Se verifica en el panel: no hay consulta SQL que lo refleje de forma fiable.",
+          "rls": "RLS habilitada en las 2 tablas SIN POLITICAS — defensa redundante y gratis. Los advisors la reportan como INFO rls_enabled_no_policy, y es deliberado: el acceso lo cierra el REVOKE, no una politica.",
+          "aislamiento_verificado_2026-08-28": "has_schema_privilege(service_role, mail, USAGE) = false · anon = false · authenticated = false. El aislamiento no es una intencion, es un permiso.",
+          "limite_declarado": "Esto aisla del plano de aplicacion, NO del titular del proyecto: el rol postgres y el editor SQL del panel siguen alcanzando mail. Eso es Sam, y es aceptable.",
+          "migraciones": [
+            "001_mail_schema.sql",
+            "002_role_mail_mcp.sql",
+            "003_drop_brand_oauth_tokens.sql (PENDIENTE — PR propio; barrido cerrado: 31 repos y cero referencias en codigo, cero FK, cero vistas dependientes, 0 filas)"
+          ]
+        },
+        "_conteo_2026-08-28": "MEDIDO con execute_sql el 2026-08-28 (HRD-R13) — 18 schemas en unrlvl-db, tablas entre parentesis: auth (23) · content (6) · crm (13) · cron (2) · extensions (0) · fph (22) · graphql (0) · graphql_public (0) · intel (27) · mail (2, NUEVO 2026-08-27) · net (2) · pgbouncer (0) · public (106) · realtime (2) · shopify (6) · storage (8) · supabase_migrations (1) · vault (1). NOTA: el campo schemas.public.tables de este archivo dice 80 y es de una medicion anterior; se conserva y se anota aca la remedicion con su fecha (public: 106 al 2026-08-28). Como el total_active de edge_functions, este es un DATO CONSULTABLE que por context-resolver §1 no deberia vivir en un context file: se registra para trazabilidad de la sesion, y la fuente de verdad es la DB."
       },
       "edge_functions": {
         "total_active": 106,
@@ -767,14 +798,16 @@
       "blockers": [
         "NeuroneSCF no en meta_accounts — pendiente",
         "fb_get_page_insights métricas deprecadas Graph API v21"
-      ]
+      ],
+      "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. EN CODIGO: SIN AUTENTICACION (SEC-01) — no lee ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declara Access-Control-Allow-Origin: *. La proteccion de Vercel es la MITIGACION, no el cierre: all_except_custom_domains NO cubre un dominio propio. Cierre correcto: MCP-AUTH-01 extendido. DISCREPANCIA ANOTADA (HRD-R13): el brief del 2026-08-27 declaraba ssoProtection false para unrlvl-supabase-mcp; la medicion del 2026-08-28 da true en los cuatro proyectos MCP. 9 tools que MUTAN. Ademas SEC-02: api/upload.ts es un SEGUNDO endpoint publico sin autenticar — sube al bucket unrlvl-media con SERVICE_ROLE_KEY y x-upsert: true, y descarga una url remota (SSRF + sobrescritura de assets de marca en brand/{brand_id}/)."
     },
     {
       "id": "INFRA-SHOPIFY-MCP",
       "name": "Shopify MCP",
       "url": "https://unrlvl-shopify-mcp.vercel.app/api/mcp/mcp",
       "vercel_id": "prj_jEiyzkET1fSk5IgHxkaSNVnTLCoB",
-      "status": "ACTIVE ✅ — B2C token real shpat_ · OAuth callback live · write_orders ✅"
+      "status": "ACTIVE ✅ — B2C token real shpat_ · OAuth callback live · write_orders ✅",
+      "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. EN CODIGO: SIN AUTENTICACION (SEC-01) — no lee ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declara Access-Control-Allow-Origin: *. La proteccion de Vercel es la MITIGACION, no el cierre: all_except_custom_domains NO cubre un dominio propio. Cierre correcto: MCP-AUTH-01 extendido. DISCREPANCIA ANOTADA (HRD-R13): el brief del 2026-08-27 declaraba ssoProtection false para unrlvl-supabase-mcp; la medicion del 2026-08-28 da true en los cuatro proyectos MCP. 4 tools que MUTAN."
     },
     {
       "id": "INFRA-NSCF-DISPATCH",
@@ -791,7 +824,8 @@
       "url": "https://unrlvl-supabase-mcp.vercel.app/api/mcp/mcp",
       "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP",
       "status": "ACTIVE v1.2.1 ✅",
-      "github_protection": "⚠️ branch protection bloqueada — repo privado en GitHub Free"
+      "github_protection": "⚠️ branch protection bloqueada — repo privado en GitHub Free",
+      "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. EN CODIGO: SIN AUTENTICACION (SEC-01) — no lee ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declara Access-Control-Allow-Origin: *. La proteccion de Vercel es la MITIGACION, no el cierre: all_except_custom_domains NO cubre un dominio propio. Cierre correcto: MCP-AUTH-01 extendido. DISCREPANCIA ANOTADA (HRD-R13): el brief del 2026-08-27 declaraba ssoProtection false para unrlvl-supabase-mcp; la medicion del 2026-08-28 da true en los cuatro proyectos MCP. 3 tools que MUTAN: execute_sql, apply_migration, deploy_edge_function. AGRAVANTE: en esta DB viven shopify_stores y meta_accounts con los tokens de los otros dos MCPs."
     },
     {
       "id": "INFRA-WEB",
@@ -799,6 +833,28 @@
       "url": "https://unrealvillestudio.com",
       "vercel_id": "prj_UQdvfhgMuBxX0zqyx1JrVFPRrvSN",
       "status": "LIVE EN+ES"
+    },
+    {
+      "id": "INFRA-MAIL-MCP",
+      "name": "Mail MCP (correo de clientes, solo lectura)",
+      "url": "https://unrlvl-mail-mcp.vercel.app/api/mcp/mcp",
+      "repo": "unrealvillestudio-hub/unrlvl-mail-mcp",
+      "vercel_id": "prj_QTvsrv6Ab1lrin6ZdsD79Zw15DK3",
+      "status": "DESPLEGADO · SIN AUTENTICAR hasta merge de MCP-AUTH-01 · sin buzones dados de alta",
+      "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. La mitigacion inmediata que pedia el brief (activar Vercel Authentication) YA ESTA APLICADA. En codigo: pendiente del merge de MCP-AUTH-01 y de MCP_AUTH_TOKEN en el entorno.",
+      "tools": [
+        "list_brand_mailboxes",
+        "search_messages",
+        "get_message"
+      ],
+      "alcance": "SOLO LECTURA. Carpetas INBOX / SENT / SPAM, PAPELERA EXCLUIDA. Sin persistencia de contenido de los mensajes.",
+      "db": "schema mail en unrlvl-db (amlvyycfepwhiindxgzw), con el rol dedicado mail_mcp. NO usa service_role.",
+      "verificado_2026-08-28": "mail.mailboxes 0 filas · mail.authorizations 0 filas — el sistema esta completo y todavia no tiene un solo buzon dado de alta.",
+      "blockers": [
+        "ALTA DEL CONECTOR en Claude.ai — pendiente. Sin ese paso el sistema esta completo y es inutil.",
+        "MCP_AUTH_TOKEN en el entorno de Vercel — pendiente del merge de MCP-AUTH-01.",
+        "Publicacion en Production del proyecto de Google Cloud — pendiente de que las paginas legales esten vivas."
+      ]
     }
   ],
   "staging_workflow": {
@@ -1231,26 +1287,17 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
-    "🔴 P1 — judged_source LLEGA NULL. Las dos piezas nuevas de LucienSael salieron con assets.watcher.judged_source vacio PESE A CORRER SOBRE content-run-stage v94 (medido: son las 4 piezas vivas de la marca, no solo las dos). NO SE PUEDE AFIRMAR QUE EL JUEZ LEYO EL ADAPTADO, que es lo unico que P3 vino a garantizar. BLOQUEA TODA GENERACION NUEVA: cada pieza que salga hoy repite el agujero, ahora en dos marcas. Es el hilo del que cuelga el resto — P3 esta cerrado en el codigo y ABIERTO EN LA EVIDENCIA",
-    "🔴 P2 — LAS TRES REGLAS CON FALSO POSITIVO MEDIDO. HR-FPHS-15 3/3 = 100%, HR-FPHS-13 2/2 = 100%, HR-LEGAL-01 3/4 = 75%, sobre los 9 arbitrajes de intel.judge_calibration. En HR-FPHS-15 el criterio de marca es correcto (sustantivo si, adjetivo no) y lo que falla es su DETECCION. ES LA CONDICION PARA ENCENDER EL CRON 66",
-    "🟠 P3 — IID_FANOUT_EMPTY en un finding de LucienSael: «1 suscriptor activo pero 0 encolado en domain=behavioral-science». El fail-loud funciono; FALTA LA CAUSA. Reportado por el brief: su fila NO se localizo en esta pasada, y se anota como pendiente de localizar, NO como medido (HRD-R13)",
-    "🟠 P4 — EL FAN-OUT ENCOLA PARA PLATAFORMAS SIN PROVEEDOR. Medido en intel.iid_content_queue, lote 2026-08-26 23:57:26.167661+00: 3 filas failed (tiktok, x, meta_fb) y 1 complete (meta_ig). El fan-out NO MIRA SI EL CANAL ESTA ACTIVO. Encolar contra un canal sin proveedor no es un fallo del proveedor: es una pregunta que no se hizo antes de encolar",
-    "🟠 P5 — EL ADAPTADOR NO LEE EL GENOMA. El conteo de hashtags por plataforma es CAMPO DEL GENOMA y no regla del Watcher: el juez NO PUEDE MEDIRLO aunque ahora lo vea. P3 le dio al juez el texto correcto; esto le falta el criterio. Pesa especialmente en NeuroneSCF, la unica marca del carril con VENTA REAL DETRAS",
-    "🟡 SIG-01 y SEO-01 en CoreProject y forumphs-com",
-    "🟡 BLOG-01 PR-3 y PR-4 — con la colision de /blog/ en dos marcas (UNRLVL y Lucien; Lucien sirve hoy .html estatico) y los 301 del .html",
-    "🟡 Propagar truncated a iid_findings — hoy la columna generada vive solo en iid_research_raw",
-    "🟡 deno.land BLOQUEADO en el entorno de CC — hace depender HRD-R10 de Sam",
-    "🟡 Corrector fix_replacement solo en HR-FPHS-15",
-    "🟡 Barrido de los 8 statement imperativos de las reglas activas del Watcher",
-    "🟡 SUPABASE_SERVICE_ROLE_KEY en 15 de 17 EF — marcada DEPRECATED; el fallo esta APLAZADO POR EL CONSUMIDOR, NO RESUELTO EN EL EMISOR",
-    "🟡 4 ERROR-level en unrlvl-db",
-    "🟡 Handle hair-intelligence-1 con sufijo en Shopify — handle duplicado es contenido duplicado y URL fea para SEO",
-    "🟡 Perfiles duplicados de Vizos en Miami Beach",
-    "⚠️ iid-process v49 SIN ORIGEN CONOCIDO — la medicion dice 49, el brief dice 48. Que desplego la v49 y cuando NO CONSTA. Es exactamente la clase de hueco que HRD-R14 viene a cerrar",
-    "⚠️ «Suite 1» en la direccion de UNRLVL — el tema Shopify de NSCF ya lleva «12951 Biscayne Blvd, Suite 1» y brands/UnrealvilleStudio/brand.json dice la direccion SIN el numero de suite. Dato legal, no redaccion: DECIDE SAM",
-    "⚠️ lucien_social declara X como publicacion manual y la DB ya lo tiene como x_api activo. Divergencia documento-dato, pendiente EN EL GENOMA",
-    "⚠️ El drenaje no atiende vercel_html — UNRLVL y Lucien tienen canal blog activo pero el sitio debe RENDERIZAR DESDE LA DB como forumphs.com. Falta ese mecanismo en WebLab",
-    "⚠️ Los 4 dominios editoriales de NeuroneSCF no tienen publicador — su canal es shopify_blog y el drenaje todavia no lo atiende"
+    "🔴 SEC-01 — TRES MCPs SIN AUTENTICACION EN CODIGO. unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp no leen ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declaran Access-Control-Allow-Origin: *. Tools que mutan: 3 / 9 / 4. AGRAVANTE: en esa DB viven shopify_stores y meta_accounts con los tokens de los otros dos. MITIGACION YA APLICADA (Vercel Authentication activa en los cuatro proyectos, medido 2026-08-28) — NO ES EL CIERRE: all_except_custom_domains no cubre un dominio propio. CIERRE: MCP-AUTH-01 extendido a los tres",
+    "🔴 SEC-02 — unrlvl-meta-mcp/api/upload.ts, segundo endpoint publico sin autenticar: sube al bucket unrlvl-media con SERVICE_ROLE_KEY y x-upsert: true, y descarga una url remota. SSRF + sobrescritura de assets de marca en brand/{brand_id}/",
+    "🟠 MCP-AUTH-01 — entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde). PENDIENTE: merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401. Hasta el 401 verificado, el patron esta escrito y no esta en pie",
+    "🟠 ALTA DEL CONECTOR — unrlvl-mail-mcp no esta dado de alta como conector en Claude.ai. Sin ese paso el sistema esta completo y es INUTIL. Se mide solo: mail.mailboxes en 0 filas",
+    "🟠 PAGINAS LEGALES de unrealvillestudio.com — PR en curso en CoreProject. Las del 28-abr nombraban Unrealville Studio LLC (entidad que no existe) y estaban huerfanas: cero href desde ambos footers. Se sustituyen por Samuel Moreno Mendoza, empresario individual. El mismo PR borra legal/a",
+    "🟠 SIN LLC NI NOMBRE FICTICIO registrados en Florida. Sam firma como persona fisica documentos con clausula de indemnidad que dan acceso a buzones de clientes",
+    "🟠 PUBLICACION EN PRODUCTION del proyecto de Google Cloud unrlvl-mail-mcp — pendiente de que las paginas legales esten vivas",
+    "🟡 003_drop_brand_oauth_tokens.sql — pendiente, PR propio. Barrido cerrado: 31 repos y cero referencias en codigo; cero FK, cero vistas dependientes; 0 filas",
+    "🟡 PR DE LIMPIEZA — sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context, ya extraido el repo. Son andamio de traslado, no context files",
+    "🟡 unrlvl-db — 16 ERROR y 39 WARN medidos el 2026-08-28 (12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS). La AGENDA del 26-ago decia 4: el dato viejo no se borra, se anota la remedicion",
+    "⚠️ LOS ROJOS Y NARANJAS DEL CARRIL SIGUEN ABIERTOS y no se tocaron en esta pasada — P1 judged_source NULL (bloquea toda generacion nueva), P2 las tres reglas con falso positivo medido (condicion para encender el cron 66), P3 IID_FANOUT_EMPTY, P4 el fan-out encola para plataformas sin proveedor, P5 el adaptador no lee el genoma. Su detalle integro esta en next_session_agenda_archivo_2026-08-26-v2 y en el bloque del 26-ago de AGENDA.md"
   ],
   "multibrand_rule": {
     "_status": "INVIOLABLE — vigente desde 2026-08-07",
@@ -1320,5 +1367,160 @@
       "🆕 IID 2026-06-22 — Vertex: validar formato del JSON en primer run de embeddings",
       "🆕 IID 2026-06-22 — decidir destino de los 14 UNRLVL-* sin ejecutar + IID-* legacy voz Lucien"
     ]
-  }
+  },
+  "security": {
+    "_note": "Deuda de seguridad transversal del ecosistema. Clave NUEVA el 2026-08-27. Lo cerrado no se borra: se marca cerrado con su fecha y su evidencia.",
+    "SEC-01": {
+      "titulo": "Tres MCPs sin autenticacion en codigo",
+      "severidad": "ROJO",
+      "detectado": "2026-08-27",
+      "afecta": [
+        "unrlvl-supabase-mcp",
+        "unrlvl-meta-mcp",
+        "unrlvl-shopify-mcp"
+      ],
+      "hecho": "No leen ninguna cabecera de credencial: van de req.json() a handleRpc a callTool sin tocar req.headers. Los tres declaran Access-Control-Allow-Origin: *.",
+      "tools_que_mutan": {
+        "unrlvl-supabase-mcp": 3,
+        "unrlvl-meta-mcp": 9,
+        "unrlvl-shopify-mcp": 4
+      },
+      "tools_que_mutan_supabase": [
+        "execute_sql",
+        "apply_migration",
+        "deploy_edge_function"
+      ],
+      "agravante_sistemico": "En la DB que alcanza execute_sql viven shopify_stores y meta_accounts CON LOS TOKENS DE LOS OTROS DOS. Un solo endpoint abierto no expone un MCP: expone los tres.",
+      "estado_infraestructura_2026-08-28": "MEDIDO en la API de Vercel: los CUATRO proyectos MCP (los tres de SEC-01 mas unrlvl-mail-mcp) tienen passwordProtection false, ssoProtection TRUE (all_except_custom_domains) y trustedIps false. La mitigacion inmediata que pedia el brief YA ESTA APLICADA. DISCREPANCIA CON EL BRIEF ANOTADA (HRD-R13): el brief declaraba ssoProtection false para unrlvl-supabase-mcp.",
+      "por_que_no_esta_cerrado": "La casilla de Vercel es mitigacion, no cierre: (a) el codigo sigue sin leer cabecera de credencial, y (b) all_except_custom_domains NO protege un dominio propio — el dia que uno de estos MCPs reciba un dominio, la proteccion desaparece sin que nadie toque nada.",
+      "cierre_correcto": "Extender el patron de MCP-AUTH-01 a los tres. MCP-AUTH-01 esta entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde) y PENDIENTE de merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401.",
+      "estado": "ABIERTO"
+    },
+    "SEC-02": {
+      "titulo": "unrlvl-meta-mcp/api/upload.ts — segundo endpoint publico sin autenticar",
+      "severidad": "ROJO",
+      "detectado": "2026-08-27",
+      "afecta": [
+        "unrlvl-meta-mcp"
+      ],
+      "hecho": "Sube archivos arbitrarios al bucket unrlvl-media con la SERVICE_ROLE_KEY y x-upsert: true. Acepta una url remota que EL SERVIDOR DESCARGA.",
+      "vectores": [
+        "SSRF por la url remota que descarga el servidor",
+        "Sobrescritura de assets de marca en brand/{brand_id}/ — x-upsert: true convierte una subida en un reemplazo silencioso"
+      ],
+      "estado": "ABIERTO"
+    },
+    "MCP-AUTH-01": {
+      "titulo": "Patron de autenticacion para los MCPs del ecosistema",
+      "severidad": "NARANJA",
+      "entregado_por": "CC — rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde",
+      "pendiente": [
+        "merge",
+        "MCP_AUTH_TOKEN en el entorno de Vercel",
+        "deploy",
+        "verificacion de 401"
+      ],
+      "nota": "Hasta el 401 verificado, el patron esta escrito y no esta en pie.",
+      "estado": "ABIERTO"
+    },
+    "ejes_declarados": {
+      "_note": "Ejes DECLARADOS aca, INTRODUCIDOS en el PR MCP-AUTH-01. Esta pasada de Actualiza no introduce ejes: solo los registra.",
+      "MCP_AUTH_TOKEN": "Credencial que el MCP exige en la cabecera. El eje va en el CODIGO, el valor en el ENTORNO — nunca en el repo.",
+      "MCP_ALLOWED_ORIGINS": "Origenes permitidos, en el dato. Sustituye al Access-Control-Allow-Origin: * cableado en los tres MCPs."
+    },
+    "unrlvl_db_advisors": {
+      "_note": "CORRECCION DE UNA CIFRA DE AGENDA. El bloque del 26-ago declara 4 ERROR-level en unrlvl-db. El dato viejo NO se borra: se anota la remedicion con su fecha.",
+      "remedido": "2026-08-28 con get_advisors (type=security)",
+      "ERROR": 16,
+      "WARN": 39,
+      "INFO": 10,
+      "ERROR_desglose": {
+        "security_definer_view": [
+          "v_client_terms_vigente",
+          "v_cost_unified",
+          "v_iid_piece_cost",
+          "v_iid_funnel",
+          "v_model_efficiency",
+          "v_cost_por_dimension",
+          "v_rate_gaps",
+          "v_cost_pivot",
+          "v_reconciliacion",
+          "v_cost_by_brand_lab",
+          "v_client_margin",
+          "v_cost_residual_vigente"
+        ],
+        "rls_disabled_in_public": [
+          "ops_client_terms",
+          "ops_rate_transitions",
+          "ops_credits",
+          "ops_cost_residual"
+        ]
+      },
+      "WARN_desglose": {
+        "function_search_path_mutable": 23,
+        "anon_security_definer_function_executable": 8,
+        "authenticated_security_definer_function_executable": 6,
+        "extension_in_public": 2
+      },
+      "estado": "ABIERTO"
+    },
+    "legal": {
+      "paginas_legales_unrealvillestudio_com": "Las paginas del 28-abr identificaban al responsable del tratamiento como Unrealville Studio LLC, ENTIDAD QUE NO EXISTE, y estaban HUERFANAS (cero href desde ambos footers). Se sustituyen por Samuel Moreno Mendoza, empresario individual. PR en curso en CoreProject; el mismo PR borra legal/a (archivo basura de 3 bytes, commit 3a03a9f).",
+      "entidad": "Sin LLC ni nombre ficticio registrados en Florida. Sam firma COMO PERSONA FISICA documentos con clausula de indemnidad que dan acceso a buzones de clientes.",
+      "representante_UE_art27_RGPD": "RETIRADO de los documentos legales: las marcas con mercado Espana declaradas en ecosystem.json no tienen entidad legal, contrato ni servicio prestado por UNRLVL. REVISABLE SI — consulta que reabre el item: select brand_id, market from public.brands where market ilike '%espa%' or market ilike '%europ%' or market ilike '%EU%'; Si alguna de esas filas pasa a tener contrato firmado o canal de venta activo, el item SE REABRE.",
+      "estado": "ABIERTO"
+    }
+  },
+  "_repos_nuevos_2026-08-27": {
+    "unrlvl-mail-mcp": {
+      "repo": "unrealvillestudio-hub/unrlvl-mail-mcp",
+      "created": "2026-08-27",
+      "extraido_de": "unrlvl-context — projects/unrlvl-mail-mcp/, con git subtree split",
+      "archivos_en_raiz": 30,
+      "verificado_2026-08-28": "El repo existe y es privado; pushed_at 2026-08-27T23:34:36Z. 30 archivos, medidos con git ls-files sobre projects/unrlvl-mail-mcp en la rama de este PR.",
+      "que_es": "MCP de correo de clientes, SOLO LECTURA. Tres tools: list_brand_mailboxes, search_messages, get_message. Carpetas INBOX / SENT / SPAM, papelera excluida, sin persistencia de contenido.",
+      "multimarca": "El eje va en el codigo, la instancia en el dato: el buzon, la marca y el proveedor son filas de mail.mailboxes. provider SIN CHECK a proposito — el mapa de adaptadores vive en lib/providers/index.ts con fail-loud MAIL_PROVIDER_UNSUPPORTED (precedente iid_content_queue_angle_check, HRD-R12). Test de la marca N+1 documentado en docs/TEST_MARCA_N1.md del repo.",
+      "abierto": "ALTA DEL CONECTOR en Claude.ai · MCP_AUTH_TOKEN pendiente del merge de MCP-AUTH-01 · 003_drop_brand_oauth_tokens.sql en PR propio · PR de limpieza para sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context (son andamio de traslado, no context files: su historia queda en el PR)."
+    }
+  },
+  "google_cloud": {
+    "_note": "Proyectos de Google Cloud del ecosistema. Clave NUEVA el 2026-08-27. NINGUN client secret vive en este repo ni vivira. El Client ID SI puede aparecer: no es secreto.",
+    "unrlvl-mail-mcp": {
+      "project_number": "212509698390",
+      "created": "2026-08-27",
+      "organizacion": "ninguna — proyecto sin organizacion",
+      "cuenta": "unrealvillestudio@gmail.com",
+      "apis_habilitadas": [
+        "Gmail API"
+      ],
+      "pantalla_de_consentimiento": "External — creada",
+      "scopes": [
+        "gmail.readonly"
+      ],
+      "oauth_client": "Client ID creado — Web application, redirect http://localhost:8080/. El client secret NO esta en el repo (CC_PROTOCOL §3).",
+      "publicacion": "PENDIENTE — Production bloqueada hasta que las paginas legales esten vivas. El orden no es burocratico: Google pide las URLs y tienen que resolver."
+    }
+  },
+  "next_session_agenda_archivo_2026-08-26-v2": [
+    "🔴 P1 — judged_source LLEGA NULL. Las dos piezas nuevas de LucienSael salieron con assets.watcher.judged_source vacio PESE A CORRER SOBRE content-run-stage v94 (medido: son las 4 piezas vivas de la marca, no solo las dos). NO SE PUEDE AFIRMAR QUE EL JUEZ LEYO EL ADAPTADO, que es lo unico que P3 vino a garantizar. BLOQUEA TODA GENERACION NUEVA: cada pieza que salga hoy repite el agujero, ahora en dos marcas. Es el hilo del que cuelga el resto — P3 esta cerrado en el codigo y ABIERTO EN LA EVIDENCIA",
+    "🔴 P2 — LAS TRES REGLAS CON FALSO POSITIVO MEDIDO. HR-FPHS-15 3/3 = 100%, HR-FPHS-13 2/2 = 100%, HR-LEGAL-01 3/4 = 75%, sobre los 9 arbitrajes de intel.judge_calibration. En HR-FPHS-15 el criterio de marca es correcto (sustantivo si, adjetivo no) y lo que falla es su DETECCION. ES LA CONDICION PARA ENCENDER EL CRON 66",
+    "🟠 P3 — IID_FANOUT_EMPTY en un finding de LucienSael: «1 suscriptor activo pero 0 encolado en domain=behavioral-science». El fail-loud funciono; FALTA LA CAUSA. Reportado por el brief: su fila NO se localizo en esta pasada, y se anota como pendiente de localizar, NO como medido (HRD-R13)",
+    "🟠 P4 — EL FAN-OUT ENCOLA PARA PLATAFORMAS SIN PROVEEDOR. Medido en intel.iid_content_queue, lote 2026-08-26 23:57:26.167661+00: 3 filas failed (tiktok, x, meta_fb) y 1 complete (meta_ig). El fan-out NO MIRA SI EL CANAL ESTA ACTIVO. Encolar contra un canal sin proveedor no es un fallo del proveedor: es una pregunta que no se hizo antes de encolar",
+    "🟠 P5 — EL ADAPTADOR NO LEE EL GENOMA. El conteo de hashtags por plataforma es CAMPO DEL GENOMA y no regla del Watcher: el juez NO PUEDE MEDIRLO aunque ahora lo vea. P3 le dio al juez el texto correcto; esto le falta el criterio. Pesa especialmente en NeuroneSCF, la unica marca del carril con VENTA REAL DETRAS",
+    "🟡 SIG-01 y SEO-01 en CoreProject y forumphs-com",
+    "🟡 BLOG-01 PR-3 y PR-4 — con la colision de /blog/ en dos marcas (UNRLVL y Lucien; Lucien sirve hoy .html estatico) y los 301 del .html",
+    "🟡 Propagar truncated a iid_findings — hoy la columna generada vive solo en iid_research_raw",
+    "🟡 deno.land BLOQUEADO en el entorno de CC — hace depender HRD-R10 de Sam",
+    "🟡 Corrector fix_replacement solo en HR-FPHS-15",
+    "🟡 Barrido de los 8 statement imperativos de las reglas activas del Watcher",
+    "🟡 SUPABASE_SERVICE_ROLE_KEY en 15 de 17 EF — marcada DEPRECATED; el fallo esta APLAZADO POR EL CONSUMIDOR, NO RESUELTO EN EL EMISOR",
+    "🟡 4 ERROR-level en unrlvl-db",
+    "🟡 Handle hair-intelligence-1 con sufijo en Shopify — handle duplicado es contenido duplicado y URL fea para SEO",
+    "🟡 Perfiles duplicados de Vizos en Miami Beach",
+    "⚠️ iid-process v49 SIN ORIGEN CONOCIDO — la medicion dice 49, el brief dice 48. Que desplego la v49 y cuando NO CONSTA. Es exactamente la clase de hueco que HRD-R14 viene a cerrar",
+    "⚠️ «Suite 1» en la direccion de UNRLVL — el tema Shopify de NSCF ya lleva «12951 Biscayne Blvd, Suite 1» y brands/UnrealvilleStudio/brand.json dice la direccion SIN el numero de suite. Dato legal, no redaccion: DECIDE SAM",
+    "⚠️ lucien_social declara X como publicacion manual y la DB ya lo tiene como x_api activo. Divergencia documento-dato, pendiente EN EL GENOMA",
+    "⚠️ El drenaje no atiende vercel_html — UNRLVL y Lucien tienen canal blog activo pero el sitio debe RENDERIZAR DESDE LA DB como forumphs.com. Falta ese mecanismo en WebLab",
+    "⚠️ Los 4 dominios editoriales de NeuroneSCF no tienen publicador — su canal es shopify_blog y el drenaje todavia no lo atiende"
+  ]
 }

@@ -6,6 +6,213 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
+## 2026-08-27 — El MCP de correo de punta a punta, y tres MCPs del ecosistema que estaban en internet sin autenticación
+
+**El carril no fue el problema de hoy.** Se construyó el MCP de correo de clientes completo —schema,
+rol, repo, migraciones— y en el camino se encontró que **tres MCPs del ecosistema no autentican a
+nadie**.
+
+> Verificado contra producción el **2026-08-28** con `execute_sql`, `get_advisors` y la API de Vercel
+> (HRD-R13: una lectura de estado caduca dentro de la misma sesión). Donde el brief y la medición
+> discrepan, **manda la medición** y la discrepancia se anota, no se corrige a mano.
+
+### `unrlvl-mail-mcp` — el MCP de correo, de punta a punta
+
+MCP de **correo de clientes, sólo lectura**. Tres tools: `list_brand_mailboxes`, `search_messages`,
+`get_message`. Carpetas `INBOX` / `SENT` / `SPAM`, **papelera excluida**, **sin persistencia del
+contenido** de los mensajes.
+
+**Schema `mail`, aislado a propósito.** Dos tablas y una función:
+
+- `mail.mailboxes` — un buzón por marca y dirección. `brand_id text REFERENCES public.brands(id)`:
+  el brief decía `brands(brand_id)` y **esa columna no existe** — la PK de `public.brands` es
+  `id text`, y la convención del ecosistema (32 constraints vivas, dos de ellas desde otro schema)
+  es `brand_id text REFERENCES brands(id)`. Se siguió la convención verificada, no el nombre
+  supuesto.
+- `mail.authorizations` — el documento firmado por el titular. **El papel firmado deja de ser
+  archivo y pasa a ser compuerta:** sin una fila viva (`revoked_at IS NULL`), `resolve_credential`
+  **no devuelve token**. `ON DELETE RESTRICT`: la trazabilidad de quién autorizó qué no es
+  descartable.
+- `mail.resolve_credential(uuid)` — `SECURITY DEFINER` con `search_path` fijo, para no repetir la
+  deuda `function_search_path_mutable`. **Único camino al token.** Fail-loud:
+  `MAILBOX_NOT_AUTHORIZED` / `MAIL_CREDENTIAL_UNRESOLVED`.
+
+**`provider` va SIN CHECK, y es deliberado.** El precedente es `iid_content_queue_angle_check`, que
+enumeró ocho ángulos en el esquema, **bloqueó el primer run diverso del 25-ago** y hubo que
+eliminarlo (HRD-R12). El mapa de adaptadores vive en el código (`lib/providers/index.ts`), explícito
+y con fail-loud `MAIL_PROVIDER_UNSUPPORTED` sobre lo desconocido.
+
+**Rol dedicado `mail_mcp`, y no `service_role`.** El motivo es radio de daño: `service_role` la
+tienen **~15 Edge Functions**; si las credenciales de buzón fueran legibles con esa clave, el radio
+sería **todo el carril**. Con el `REVOKE` sobre el schema, esas 15 EFs no pueden leer `mail`
+**porque no tienen permiso**, no porque una política se lo pida.
+
+**`mail` NO figura en *Exposed schemas*** — queda fuera de la API REST de Supabase.
+
+**Medido en producción el 2026-08-28:**
+
+| Comprobación | Resultado |
+|---|---|
+| Schema `mail` | aplicado · **2 tablas** |
+| Funciones `SECURITY DEFINER` en `mail` | **1** |
+| Rol `mail_mcp` | **existe** |
+| `has_schema_privilege('service_role','mail','USAGE')` | **`false`** |
+| `has_schema_privilege('anon','mail','USAGE')` | **`false`** |
+| `has_schema_privilege('authenticated','mail','USAGE')` | **`false`** |
+| `mail.mailboxes` | **0 filas** |
+| `mail.authorizations` | **0 filas** |
+
+**El aislamiento no es una intención: es un permiso.** Y las dos últimas filas dicen lo otro que hay
+que decir — **el sistema está completo y todavía no tiene un solo buzón dado de alta**.
+
+**Límite honesto y declarado:** esto aísla del plano de aplicación, **no del titular del proyecto**.
+El rol `postgres` y el editor SQL del panel siguen alcanzando `mail`. Eso es Sam, y es aceptable.
+
+**Repo propio.** `unrealvillestudio-hub/unrlvl-mail-mcp`, extraído de `unrlvl-context` con
+`git subtree split`, **30 archivos** en la raíz. Verificado: el repo existe, es privado,
+`pushed_at 2026-08-27T23:34:36Z`.
+
+### 🔴 SEC-01 — Tres MCPs sin autenticación en código
+
+`unrlvl-supabase-mcp`, `unrlvl-meta-mcp` y `unrlvl-shopify-mcp` **no leen ninguna cabecera de
+credencial**: van de `req.json()` a `handleRpc` a `callTool` **sin tocar `req.headers`**. Los tres
+declaran `Access-Control-Allow-Origin: *`.
+
+| MCP | Tools que **mutan** | Cuáles |
+|---|---|---|
+| `unrlvl-supabase-mcp` | **3** | `execute_sql`, `apply_migration`, `deploy_edge_function` |
+| `unrlvl-meta-mcp` | **9** | publicación y gestión de ads / IG / FB |
+| `unrlvl-shopify-mcp` | **4** | escritura sobre las tiendas |
+
+**Agravante sistémico:** en la misma DB que alcanza `execute_sql` viven **`shopify_stores` y
+`meta_accounts`, con los tokens de los otros dos**. Un solo endpoint abierto no expone un MCP:
+expone los tres.
+
+**⚠️ Discrepancia con el brief, medida el 2026-08-28, y es buena noticia.** El brief declara
+`unrlvl-supabase-mcp` con `passwordProtection: false`, `ssoProtection: false`, `trustedIps: false`
+—*cero protección en código y cero en infraestructura*—. Medido en la API de Vercel, **los cuatro
+proyectos MCP tienen `ssoProtection: true` (`all_except_custom_domains`)**, `unrlvl-supabase-mcp` y
+`unrlvl-mail-mcp` incluidos: **la mitigación inmediata que pedía el brief ya está aplicada**.
+
+**Lo que eso no arregla, y por eso SEC-01 sigue abierto:**
+
+1. El código **sigue sin leer una sola cabecera de credencial**. La casilla de Vercel es una puerta
+   delante de la casa; la casa sigue sin cerradura.
+2. `all_except_custom_domains` **no cubre un dominio propio**. El día que uno de estos MCPs reciba un
+   dominio, la protección desaparece **sin que nadie toque nada**.
+
+**El cierre correcto sigue siendo MCP-AUTH-01 extendido a los tres.**
+
+### 🔴 SEC-02 — `unrlvl-meta-mcp/api/upload.ts`
+
+Segundo endpoint público sin autenticar. Sube archivos arbitrarios al bucket `unrlvl-media` con la
+**`SERVICE_ROLE_KEY`** y **`x-upsert: true`**, y acepta una **`url` remota que el servidor
+descarga**: vector **SSRF**, más **sobrescritura de assets de marca** en `brand/{brand_id}/`.
+`x-upsert: true` es lo que convierte una subida en un reemplazo silencioso.
+
+### 🟠 MCP-AUTH-01 — entregado, sin cerrar
+
+Rama `claude/mcp-auth-01-cxzbrs`, commit `0decb6e`, **44 tests en verde**. Pendiente: **merge** ·
+`MCP_AUTH_TOKEN` en Vercel · **deploy** · **verificación de 401**. Hasta el 401 verificado, el patrón
+está escrito y no está en pie.
+
+### Entidad legal — lo que decían las páginas públicas
+
+Las páginas legales de `unrealvillestudio.com` del **28-abr** identificaban al responsable del
+tratamiento como **«Unrealville Studio LLC», entidad que no existe**, y estaban **huérfanas**: **cero
+`href` desde ambos footers**. Un documento legal que nadie puede alcanzar no protege a nadie, y uno
+que nombra una entidad inexistente tampoco. Se sustituyen por **Samuel Moreno Mendoza, empresario
+individual**. PR en curso en `CoreProject`; el mismo PR borra `legal/a`, un archivo basura de 3 bytes
+(commit `3a03a9f`).
+
+**Sin LLC ni nombre ficticio registrados en Florida**, Sam firma **como persona física** documentos
+con **cláusula de indemnidad** que dan acceso a buzones de clientes. No es una observación de estilo:
+es quién responde si algo sale mal.
+
+**Representante en la UE (art. 27 RGPD) — retirado, con su condición de reapertura escrita.** Las
+marcas con mercado España declaradas en `ecosystem.json` no tienen entidad legal, contrato ni
+servicio prestado por UNRLVL. La consulta que **reabre** el ítem:
+
+```sql
+select brand_id, market from public.brands
+where market ilike '%espa%' or market ilike '%europ%' or market ilike '%EU%';
+```
+
+Si alguna de esas filas pasa a tener **contrato firmado o canal de venta activo**, el ítem **se
+reabre**.
+
+### Google Cloud — proyecto nuevo `unrlvl-mail-mcp`
+
+Project number **`212509698390`**, **sin organización**, cuenta `unrealvillestudio@gmail.com`.
+**Gmail API habilitada** · pantalla de consentimiento **External** creada · scope **`gmail.readonly`**
+declarado · **OAuth Client ID creado** (Web application, redirect `http://localhost:8080/`).
+**Publicación en Production PENDIENTE** de que las páginas legales estén vivas — el orden no es
+burocrático: Google pide las URLs y tienen que resolver.
+
+> El **client secret no está en ningún archivo de este repo, ni lo estará**. Tampoco la contraseña de
+> `mail_mcp` ni el `MCP_AUTH_TOKEN`. El **Client ID sí** puede aparecer: no es secreto.
+
+### 📊 Lo medido contra lo declarado
+
+| Objeto | Medido (2026-08-28) | Brief |
+|---|---|---|
+| `professor_learnings` · `session_date = 2026-08-27` | **24**, los 24 aprobados, en **dos lotes de 12** (17:17:51 y 23:49:52 UTC) | 12 ⚠️ |
+| `unrlvl-supabase-mcp` · `ssoProtection` | **`true` (`all_except_custom_domains`)** | `false` ⚠️ |
+| `unrlvl-mail-mcp` · `ssoProtection` | **`true`** — mitigación ya aplicada | (pedida) ⚠️ |
+| `unrlvl-meta-mcp` / `unrlvl-shopify-mcp` · `ssoProtection` | `true` | `true` ✅ |
+| `unrlvl-db` · advisors de seguridad | **16 ERROR · 39 WARN** (+10 INFO) | 16 · 39 ✅ |
+| Repo `unrlvl-mail-mcp` · archivos en raíz | **30** | 30 ✅ |
+
+**Los 24 learnings no son un error del brief:** hubo **dos cierres de Professor** en el mismo
+`session_date`, de 12 cada uno. El brief contó el suyo. No hay learning perdido ni duplicado.
+
+### ✅ Corrección de una cifra de AGENDA — `unrlvl-db`
+
+Donde el bloque del **26-ago** dice *«4 ERROR-level en `unrlvl-db`»*, la remedición con
+`get_advisors` da **16 ERROR y 39 WARN**. **El dato viejo no se borra: se anota la remedición con su
+fecha.**
+
+- **12 vistas `SECURITY DEFINER`** en `public`: `v_client_terms_vigente`, `v_cost_unified`,
+  `v_iid_piece_cost`, `v_iid_funnel`, `v_model_efficiency`, `v_cost_por_dimension`, `v_rate_gaps`,
+  `v_cost_pivot`, `v_reconciliacion`, `v_cost_by_brand_lab`, `v_client_margin`,
+  `v_cost_residual_vigente`.
+- **4 tablas `ops_*` sin RLS**: `ops_client_terms`, `ops_rate_transitions`, `ops_credits`,
+  `ops_cost_residual`.
+- **39 WARN**: 23 `function_search_path_mutable` · 8 `anon_security_definer_function_executable` ·
+  6 `authenticated_security_definer_function_executable` · 2 `extension_in_public`.
+
+### Abre
+
+**🔴 Rojos**
+
+- **SEC-01** — los tres MCPs sin autenticación en código. Mitigación aplicada, **cierre pendiente**.
+- **SEC-02** — `upload.ts` público con `SERVICE_ROLE_KEY`, `x-upsert: true` y SSRF.
+
+**🟠 Naranjas**
+
+- **MCP-AUTH-01** — merge, `MCP_AUTH_TOKEN`, deploy, **verificación de 401**.
+- **Páginas legales** — PR en curso en `CoreProject`.
+- **Sin entidad registrada en Florida.**
+- **Alta del conector** — `unrlvl-mail-mcp` no está dado de alta en Claude.ai. **Sin ese paso el
+  sistema está completo y es inútil.**
+- **Publicación en Production** del proyecto de Google Cloud, atada a las páginas legales.
+
+**🟡 Amarillos**
+
+- `003_drop_brand_oauth_tokens.sql` — PR propio. Barrido cerrado: **31 repos, cero referencias**;
+  cero FK, cero vistas dependientes; **0 filas**.
+- **PR de limpieza** — sacar `projects/unrlvl-mail-mcp/` y `projects/UNRLVL_MAIL_MCP_HANDOFF.md` de
+  `unrlvl-context`. Son **andamio de traslado, no context files**: su historia queda en el PR.
+- `MCP_AUTH_TOKEN` en el entorno de `unrlvl-mail-mcp`, pendiente del merge.
+- `legal/a` — 3 bytes, se borra en el PR legal.
+
+> **Los rojos y naranjas del carril siguen abiertos y no se tocaron hoy** — P1 `judged_source` NULL,
+> P2 las tres reglas con falso positivo medido, P3 `IID_FANOUT_EMPTY`, P4 el fan-out sin proveedor,
+> P5 el adaptador que no lee el genoma. Su detalle íntegro está en el bloque del 26-ago de
+> `AGENDA.md` y en `IID/session_log.md` (2026-08-26).
+
+---
+
 ## 2026-08-26 — UnrealvilleStudio entra al Scheduler · de 14 agentes a 6
 
 **Segunda marca del ecosistema en entrar al Scheduler**, cuatro días después de ForumPHs.
