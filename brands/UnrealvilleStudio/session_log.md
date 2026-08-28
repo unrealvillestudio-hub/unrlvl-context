@@ -140,10 +140,9 @@ ecosistema**; detalle en `brands/ForumPHs/session_log.md`).
 **SEC-02** (`upload.ts`). ✅ **Cerrado el mismo día:** las dos autorizaciones quedaron **firmadas**
 —Ivette Flores y Patricia Osorio C.—, con el PDF pendiente de subir.
 
-> _Corregido el 2026-08-28 por **MAIL-PRIV-01**: de esta lista se retiró un ítem que procedía de la
-> lectura de un buzón de cliente, y dos se reescribieron sin su procedencia. **Los tres defectos del
-> MCP —MAIL-01, MAIL-02, MAIL-04— se conservan íntegros:** son defectos de **nuestro propio código**
-> y no contienen correspondencia._
+> _Corregido el 2026-08-28 por **MAIL-PRIV-01**: de esta lista se retiró un ítem y dos se
+> reescribieron. **Los tres defectos del MCP —MAIL-01, MAIL-02, MAIL-04— se conservan íntegros:**
+> son defectos de **nuestro propio código** y no contienen correspondencia._
 
 **🟡 Amarillos** — retirar `oauthplayground` de los redirect URIs · TikTok Shop de NSCF ·
 `003_drop_brand_oauth_tokens.sql` · **PR de limpieza** para sacar `projects/unrlvl-mail-mcp/` y el
