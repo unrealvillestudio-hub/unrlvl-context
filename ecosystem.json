@@ -1,18 +1,24 @@
 {
   "_meta": {
-    "version": "2026-08-27-v1",
+    "version": "2026-08-28-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-08-26-v2",
+    "previous": "2026-08-27-v1",
     "previous_chain": [
+      "2026-08-27-v1",
       "2026-08-26-v2",
       "2026-08-26-v1"
     ],
     "last_session": {
-      "date": "2026-08-27",
-      "conducted_by": "Sam x Claude.ai + CC — HRD_ACTUALIZA 2026-08-27, solo context files · Professor cerrado ANTES de este Actualiza (el brief declara 12 learnings en public.professor_learnings con session_date 2026-08-27 y approved_by_sam=true; MEDIDO con execute_sql el 2026-08-28: 24, los veinticuatro aprobados, en DOS lotes de 12 — 17:17:51 y 23:49:52 UTC; el brief conto SU lote. Manda la medicion, HRD-R13, y la discrepancia se anota, no se corrige a mano. ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · CC ejecuta rama+PR contra main, no mergea",
-      "status": "HRD_ACTUALIZA 2026-08-27 — EL CARRIL NO FUE EL PROBLEMA DE HOY. TRES MCPs DEL ECOSISTEMA ESTABAN EN INTERNET SIN AUTENTICACION. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) SEC-01 — unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp NO LEEN NINGUNA CABECERA DE CREDENCIAL: van de req.json() a handleRpc a callTool sin tocar req.headers, y los tres declaran Access-Control-Allow-Origin: *. Tools que MUTAN: supabase 3 (execute_sql, apply_migration, deploy_edge_function), meta 9, shopify 4. AGRAVANTE SISTEMICO: en esa misma DB viven shopify_stores y meta_accounts CON LOS TOKENS DE LOS OTROS DOS — un solo endpoint abierto no expone un MCP, expone los tres. (2) SEC-02 — unrlvl-meta-mcp/api/upload.ts es un SEGUNDO endpoint publico sin autenticar: sube archivos arbitrarios al bucket unrlvl-media con la SERVICE_ROLE_KEY y x-upsert: true, y acepta una url remota que EL SERVIDOR DESCARGA (vector SSRF), mas sobrescritura de assets de marca en brand/{brand_id}/. (3) DISCREPANCIA MEDIDA CONTRA EL BRIEF, Y ES BUENA NOTICIA: el brief declara unrlvl-supabase-mcp con passwordProtection false, ssoProtection false y trustedIps false (cero proteccion en codigo y cero en infraestructura). MEDIDO en la API de Vercel el 2026-08-28: LOS CUATRO proyectos MCP tienen ssoProtection true (all_except_custom_domains), unrlvl-supabase-mcp y unrlvl-mail-mcp incluidos — LA MITIGACION INMEDIATA QUE PEDIA EL BRIEF YA ESTA APLICADA. Lo que NO cambia: el codigo sigue sin leer cabecera de credencial, y all_except_custom_domains NO CUBRE UN DOMINIO PROPIO. El cierre correcto sigue siendo MCP-AUTH-01 extendido a los tres, no la casilla de Vercel. (4) ENTREGADO: unrlvl-mail-mcp, MCP de correo de clientes SOLO LECTURA, de punta a punta — schema mail aislado (2 tablas + 1 funcion SECURITY DEFINER, REVOKE sobre anon/authenticated/service_role/PUBLIC, RLS habilitada sin politicas como defensa redundante, search_path fijo), ROL DEDICADO mail_mcp en vez de service_role (radio de dano: service_role la tienen ~15 EFs), y REPO PROPIO extraido de unrlvl-context con git subtree split (30 archivos en la raiz). VERIFICADO EN PRODUCCION el 2026-08-28 (HRD-R13): schema mail aplicado con sus 2 tablas · rol mail_mcp existe · has_schema_privilege sobre mail da FALSE para service_role, anon y authenticated (el aislamiento no es una intencion, es un permiso) · 1 funcion SECURITY DEFINER · mail.mailboxes y mail.authorizations en CERO FILAS: el sistema esta completo y todavia no tiene un solo buzon dado de alta. (5) CORRECCION DE UNA CIFRA DE AGENDA: donde el bloque del 26-ago dice 4 ERROR-level en unrlvl-db, la remedicion con get_advisors del 2026-08-28 da 16 ERROR y 39 WARN (+10 INFO). Los 16 = 12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS (ops_client_terms, ops_rate_transitions, ops_credits, ops_cost_residual). Los 39 WARN = 23 function_search_path_mutable + 8 anon_security_definer_function_executable + 6 authenticated_security_definer_function_executable + 2 extension_in_public. EL DATO VIEJO NO SE BORRA: SE ANOTA LA REMEDICION CON SU FECHA. (6) LEGAL: las paginas legales de unrealvillestudio.com del 28-abr identificaban al responsable del tratamiento como Unrealville Studio LLC, ENTIDAD QUE NO EXISTE, y estaban HUERFANAS (cero href desde ambos footers). Se sustituyen por Samuel Moreno Mendoza, empresario individual. Sin LLC ni nombre ficticio registrados en Florida, Sam firma COMO PERSONA FISICA documentos con clausula de indemnidad que dan acceso a buzones de clientes. (7) GOOGLE CLOUD: proyecto nuevo unrlvl-mail-mcp (project number 212509698390), sin organizacion, cuenta unrealvillestudio@gmail.com, Gmail API habilitada, pantalla de consentimiento External creada, scope gmail.readonly declarado, OAuth Client ID creado (Web application, redirect http://localhost:8080/). PUBLICACION EN PRODUCTION PENDIENTE de que las paginas legales esten vivas. (8) ABRE: SEC-01 y SEC-02 en rojo · MCP-AUTH-01 entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde) pendiente de merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401 · paginas legales en PR en CoreProject · sin entidad registrada en Florida · ALTA DEL CONECTOR de unrlvl-mail-mcp en Claude.ai (sin ese paso el sistema esta completo y es inutil) · 003_drop_brand_oauth_tokens.sql · PR de limpieza de projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md · legal/a (3 bytes, commit 3a03a9f). TEST DE LA MARCA N+1: no aplica — pasada de solo context files, sin codigo, migracion ni siembra; se declara para que la ausencia no se lea como omision. DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23; el brief pedia regenerarlos completos y CC LO DECLARA en vez de sincronizar parcial, como el propio brief §3 autoriza. Detalle en brands/UnrealvilleStudio/session_log.md (2026-08-27)."
+      "date": "2026-08-28",
+      "conducted_by": "Sam x Claude.ai + CC — HRD_ACTUALIZA 2026-08-28, solo context files · Professor cerrado ANTES de este Actualiza (9 learnings en public.professor_learnings, session_date 2026-08-28, los nueve con approved_by_sam=true; MEDIDO y COINCIDE con el brief, un solo lote a las 16:16:37 UTC. ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · BASE main: el PR #63 (Actualiza del 27-ago) se mergeo el 2026-08-28 16:26:40 UTC · CC ejecuta rama+PR contra main, no mergea",
+      "status": "HRD_ACTUALIZA 2026-08-28 — EL MCP DE CORREO LEE. Y LO QUE COSTO LLEGAR NO FUE GOOGLE: FUE QUE EL SISTEMA NO VERIFICABA DE QUIEN ERA LO QUE DEVOLVIA. Ninguna mutacion de produccion en esta pasada: solo context files. (1) unrlvl-mail-mcp OPERATIVO DE PUNTA A PUNTA. TRES BUZONES dados de alta y activos, medidos en mail.mailboxes el 2026-08-28, los tres provider=google_oauth: ForumPHs/forumphs507@gmail.com · UnrealvilleStudio/unrealvillestudio@gmail.com · NeuroneSCF/neuronescflorida@gmail.com. ALCANCE DECLARADO POR SAM: SOLO ESAS TRES MARCAS. (2) MCP-AUTH-01 MERGEADO Y DESPLEGADO — PR #1 del repo unrlvl-mail-mcp, merge 350de4a. VERIFICADO DESDE FUERA el 2026-08-28: 401 con {\"error\":{\"code\":\"MCP_UNAUTHORIZED\"}} y cabecera WWW-Authenticate: Bearer. En el codigo, lib/auth.ts compara en TIEMPO CONSTANTE y NO DEGRADA A ABIERTO si falta MCP_AUTH_TOKEN: sin la variable el servidor falla. (3) CONECTOR DADO DE ALTA en Claude.ai, con Authentication: None y cabecera Authorization: Bearer, porque el servidor usa TOKEN ESTATICO y no OAuth. Las tres tools aparecen en la sesion: esa es la prueba. (4) APP DE GOOGLE EN PRODUCTION — branding completo, dominio unrealvillestudio.com autorizado, scope gmail.readonly, SIN evaluacion CASA y coste cero. (5) PAGINAS LEGALES PUBLICADAS. /legal/privacy verificada EN VIVO: 200, v1.1 con fecha 28 de agosto de 2026, entidad Samuel Moreno Mendoza sole proprietor, y el footer enlaza /legal/privacy, /legal/terms y /es/legal/privacidad — YA NO ESTAN HUERFANAS. Su §04 documenta el acceso de solo lectura al buzon con la clausula de LIMITED USE de Google: eso es lo que desbloqueo Production. legal/a borrado (PR #8). (6) VERCEL AUTHENTICATION RETIRADA de unrlvl-mail-mcp (medido ssoProtection: false) porque BLOQUEABA TAMBIEN AL CONECTOR, que no lleva sesion de Vercel. El andamio se retira PORQUE EL CODIGO YA AUTENTICA, que es el orden correcto. SE MANTIENE ENCENDIDA en unrlvl-supabase-mcp (medido true), que sigue SIN AUTENTICACION EN CODIGO (SEC-01). (7) BUCKET PRIVADO mail-authorizations creado a las 11:07:42 UTC (public=false, 10 MB, application/pdf + image/jpeg + image/png). LOS CINCO BUCKETS QUE YA EXISTIAN NO SERVIAN: unrlvl-media y product-assets son PUBLICOS. Y DOS POLITICAS RLS NUEVAS en el schema mail, medidas: mail_mcp_select_mailboxes y mail_mcp_select_authorizations, ambas SELECT y ambas para el rol mail_mcp. (8) ABRE, Y ES LO QUE IMPORTA DEL DIA. MAIL-01 (ROJO): EL MCP NO VERIFICA DE QUIEN ES EL BUZON QUE LEE. lib/tools.ts estampa address DESDE LA BASE, no desde el proveedor, asi que una credencial mal atada DEVUELVE CORREO AJENO CON LA ETIQUETA CORRECTA ENCIMA. OCURRIO HOY EN PRODUCCION: NeuroneSCF sirvio la bandeja de UnrealvilleStudio, SIN ERROR NI ALERTA. Verificado contra el codigo desplegado: address: mailbox.address en CUATRO puntos (lib/tools.ts:126,133,159,166) y CERO apariciones de assertMailboxIdentity, getProfile o MAILBOX_IDENTITY_MISMATCH en todo el repo. Arreglo: assertMailboxIdentity() contrastando users.getProfile contra mail.mailboxes.address, y codigo nuevo MAILBOX_IDENTITY_MISMATCH. MAIL-02 (ROJO): LA CACHE DE ACCESS TOKEN NO SE INVALIDA AL ROTAR LA CREDENCIAL. Verificado: accessTokenCache va SOLO por session.mailbox_id (google_oauth.ts:145,151,199), TTL de expires_in ?? 3600, y NADA en la clave depende del refresh token; vault.update_secret no la toca. TRES ROTACIONES SEGUIDAS siguieron sirviendo el buzon anterior hasta que un redeploy vacio la cache. Rotar una credencial es RUTINA, no excepcion. Arreglo: clave = mailbox_id + huella del refresh token. MAIL-03 (ROJO): forumphs-db ENTRA EN PAUSA Y NO ESTA EN EL MAPA. Aviso de Supabase del 28-ago, +7 dias sin actividad. MEDIDO con list_projects: la cuenta de Supabase de UNRLVL (org tnqcrwmfxesiqxlhuzri) contiene unrlvl-db y XMMs, Y NADA MAS — forumphs-db NO ESTA AHI. Hay una base de datos de cliente FUERA DEL ECOSISTEMA, sin dueno declarado ni dependencias conocidas. DOS MATICES MEDIDOS FRENTE AL BRIEF (HRD-R13): (a) forumphs-db SI aparece mencionada en prosa en ecosystem.json y en AGENDA.md, con su ref tajuoqdbnsnzkhyqvdgs — lo que NO tiene es NODO PROPIO, porque el bloque supabase declara unicamente main; la afirmacion exacta no es \"no figura\" sino \"figura como mencion y no como nodo\". (b) XMMs NO APARECE EN ecosystem.json EN ABSOLUTO: son DOS proyectos sin declarar, no uno, y el segundo si esta dentro de la cuenta de UNRLVL. MAIL-04 (NARANJA): CODIGOS DE ERROR AGRUPADOS Y UN LOG CIEGO POR OMISION. Verificado: errors.ts declara MAIL_TOKEN_REVOKED y nada mas para esta familia; invalid_grant se mapea explicito (google_oauth.ts:186-188) y EL MISMO CODIGO SE REUTILIZA COMO CAJON DE SASTRE para cualquier otro fallo del canje (:225); no existen MAIL_CLIENT_CONFIG_INVALID ni MAIL_TOKEN_EXCHANGE_FAILED. COSTO TRES ITERACIONES. Y route.ts llama a logOp en sus DOS puntos (:151, :159) SIN mailbox_id, aunque el campo EXISTE en OpLog (lib/log.ts:16) y se serializa (:27): el dato estaba disponible y no se paso. NSCF-PAY (NARANJA): cobro de Shopify rechazado por fondos insuficientes. Mercury declina con la tarjeta terminada en 5823; Shopify falla el cobro de $39,00 USD de PRO-Neurone SCFlorida (pro.neuronescflorida.com). Shopify reintenta y despues SUSPENDE. Revisar el saldo de Mercury: puede haber mas cobros en cola contra la misma tarjeta. FPHS-FORM (NARANJA): el formulario de forumphs.com NO TIENE ANTI-SPAM y su notificacion CAE EN SPAM (noreply@forumphs.com no pasa los filtros de Gmail). Un propietario real preguntando por una cuota extraordinaria aterriza en el mismo sitio que la prospeccion en frio, y nadie mira ese sitio. Encaja con el DKIM/SPF de Klaviyo ya abierto. AUTORIZACIONES (NARANJA): titular de la cuenta de NSCF SIN DECLARAR (holder_name dice literalmente PENDIENTE DE CONFIRMAR); documentos sin firmar en ForumPHs y NeuroneSCF (document_path dice PENDIENTE DE FIRMA); UnrealvilleStudio va como AUTOTITULAR, correcto y DEFINITIVO. AMARILLOS: retirar developers.google.com/oauthplayground de los redirect URIs · TikTok Shop de NSCF a medio completar · 003_drop_brand_oauth_tokens.sql · PR de limpieza de projects/unrlvl-mail-mcp/ y el HANDOFF (ya no son solo andamio: son una copia que puede divergir del repo real). (9) EL PATRON DEL DIA: los tres defectos son LA MISMA CLASE DE FALLO — el sistema AFIRMA algo que no COMPRUEBA. MAIL-01 afirma de quien es el correo; MAIL-02 afirma que el token es el vigente; MAIL-04 afirma cual fue la causa del fallo. NINGUNO ROMPE: LOS TRES MIENTEN EN SILENCIO, que es la forma cara, y es el mismo diagnostico que HRD-R11 dejo escrito para el carril el 25-ago. (10) TEST DE LA MARCA N+1: NO APLICA — sin codigo, migracion ni siembra. Se declara para que la ausencia no se lea como omision. (11) DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23; el brief pedia regenerarlos completos y CC LO DECLARA, como el propio brief §3 autoriza. Detalle en brands/UnrealvilleStudio/session_log.md, brands/ForumPHs/session_log.md y brands/NeuroneSCF/session_log.md (2026-08-28)."
     },
     "previous_sessions": [
+      {
+        "date": "2026-08-27",
+        "conducted_by": "Sam x Claude.ai + CC — HRD_ACTUALIZA 2026-08-27, solo context files · Professor cerrado ANTES de este Actualiza (el brief declara 12 learnings en public.professor_learnings con session_date 2026-08-27 y approved_by_sam=true; MEDIDO con execute_sql el 2026-08-28: 24, los veinticuatro aprobados, en DOS lotes de 12 — 17:17:51 y 23:49:52 UTC; el brief conto SU lote. Manda la medicion, HRD-R13, y la discrepancia se anota, no se corrige a mano. ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · CC ejecuta rama+PR contra main, no mergea",
+        "status": "HRD_ACTUALIZA 2026-08-27 — EL CARRIL NO FUE EL PROBLEMA DE HOY. TRES MCPs DEL ECOSISTEMA ESTABAN EN INTERNET SIN AUTENTICACION. Ninguna mutacion de produccion en esta pasada: solo context files (el codigo, las DDL, los deploys y las corridas se ejecutaron antes de este Actualiza, en sus propios PRs y bajo HRD). (1) SEC-01 — unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp NO LEEN NINGUNA CABECERA DE CREDENCIAL: van de req.json() a handleRpc a callTool sin tocar req.headers, y los tres declaran Access-Control-Allow-Origin: *. Tools que MUTAN: supabase 3 (execute_sql, apply_migration, deploy_edge_function), meta 9, shopify 4. AGRAVANTE SISTEMICO: en esa misma DB viven shopify_stores y meta_accounts CON LOS TOKENS DE LOS OTROS DOS — un solo endpoint abierto no expone un MCP, expone los tres. (2) SEC-02 — unrlvl-meta-mcp/api/upload.ts es un SEGUNDO endpoint publico sin autenticar: sube archivos arbitrarios al bucket unrlvl-media con la SERVICE_ROLE_KEY y x-upsert: true, y acepta una url remota que EL SERVIDOR DESCARGA (vector SSRF), mas sobrescritura de assets de marca en brand/{brand_id}/. (3) DISCREPANCIA MEDIDA CONTRA EL BRIEF, Y ES BUENA NOTICIA: el brief declara unrlvl-supabase-mcp con passwordProtection false, ssoProtection false y trustedIps false (cero proteccion en codigo y cero en infraestructura). MEDIDO en la API de Vercel el 2026-08-28: LOS CUATRO proyectos MCP tienen ssoProtection true (all_except_custom_domains), unrlvl-supabase-mcp y unrlvl-mail-mcp incluidos — LA MITIGACION INMEDIATA QUE PEDIA EL BRIEF YA ESTA APLICADA. Lo que NO cambia: el codigo sigue sin leer cabecera de credencial, y all_except_custom_domains NO CUBRE UN DOMINIO PROPIO. El cierre correcto sigue siendo MCP-AUTH-01 extendido a los tres, no la casilla de Vercel. (4) ENTREGADO: unrlvl-mail-mcp, MCP de correo de clientes SOLO LECTURA, de punta a punta — schema mail aislado (2 tablas + 1 funcion SECURITY DEFINER, REVOKE sobre anon/authenticated/service_role/PUBLIC, RLS habilitada sin politicas como defensa redundante, search_path fijo), ROL DEDICADO mail_mcp en vez de service_role (radio de dano: service_role la tienen ~15 EFs), y REPO PROPIO extraido de unrlvl-context con git subtree split (30 archivos en la raiz). VERIFICADO EN PRODUCCION el 2026-08-28 (HRD-R13): schema mail aplicado con sus 2 tablas · rol mail_mcp existe · has_schema_privilege sobre mail da FALSE para service_role, anon y authenticated (el aislamiento no es una intencion, es un permiso) · 1 funcion SECURITY DEFINER · mail.mailboxes y mail.authorizations en CERO FILAS: el sistema esta completo y todavia no tiene un solo buzon dado de alta. (5) CORRECCION DE UNA CIFRA DE AGENDA: donde el bloque del 26-ago dice 4 ERROR-level en unrlvl-db, la remedicion con get_advisors del 2026-08-28 da 16 ERROR y 39 WARN (+10 INFO). Los 16 = 12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS (ops_client_terms, ops_rate_transitions, ops_credits, ops_cost_residual). Los 39 WARN = 23 function_search_path_mutable + 8 anon_security_definer_function_executable + 6 authenticated_security_definer_function_executable + 2 extension_in_public. EL DATO VIEJO NO SE BORRA: SE ANOTA LA REMEDICION CON SU FECHA. (6) LEGAL: las paginas legales de unrealvillestudio.com del 28-abr identificaban al responsable del tratamiento como Unrealville Studio LLC, ENTIDAD QUE NO EXISTE, y estaban HUERFANAS (cero href desde ambos footers). Se sustituyen por Samuel Moreno Mendoza, empresario individual. Sin LLC ni nombre ficticio registrados en Florida, Sam firma COMO PERSONA FISICA documentos con clausula de indemnidad que dan acceso a buzones de clientes. (7) GOOGLE CLOUD: proyecto nuevo unrlvl-mail-mcp (project number 212509698390), sin organizacion, cuenta unrealvillestudio@gmail.com, Gmail API habilitada, pantalla de consentimiento External creada, scope gmail.readonly declarado, OAuth Client ID creado (Web application, redirect http://localhost:8080/). PUBLICACION EN PRODUCTION PENDIENTE de que las paginas legales esten vivas. (8) ABRE: SEC-01 y SEC-02 en rojo · MCP-AUTH-01 entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde) pendiente de merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401 · paginas legales en PR en CoreProject · sin entidad registrada en Florida · ALTA DEL CONECTOR de unrlvl-mail-mcp en Claude.ai (sin ese paso el sistema esta completo y es inutil) · 003_drop_brand_oauth_tokens.sql · PR de limpieza de projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md · legal/a (3 bytes, commit 3a03a9f). TEST DE LA MARCA N+1: no aplica — pasada de solo context files, sin codigo, migracion ni siembra; se declara para que la ausencia no se lea como omision. DERIVADOS: ecosystem.md y ecosystem_filemap.md SE SINCRONIZAN, NO SE REGENERAN — regla escrita en CLAUDE.md desde el 2026-08-23; el brief pedia regenerarlos completos y CC LO DECLARA en vez de sincronizar parcial, como el propio brief §3 autoriza. Detalle en brands/UnrealvilleStudio/session_log.md (2026-08-27)."
+      },
       {
         "date": "2026-08-26",
         "conducted_by": "Claude Code — HRD_ACTUALIZA 2026-08-26, solo context files · sesion Sam x Claude.ai · Professor cerrado ANTES de este Actualiza (15 learnings en public.professor_learnings, session_date 2026-08-26, los quince con approved_by_sam=true; ORDEN CUMPLIDO: Professor -> Actualiza) · SMA no se consulto (Sam no lo menciono) · CC ejecuta rama+PR contra main, no mergea",
@@ -736,7 +742,13 @@
             "001_mail_schema.sql",
             "002_role_mail_mcp.sql",
             "003_drop_brand_oauth_tokens.sql (PENDIENTE — PR propio; barrido cerrado: 31 repos y cero referencias en codigo, cero FK, cero vistas dependientes, 0 filas)"
-          ]
+          ],
+          "rls_policies_2026-08-28": [
+            "mail_mcp_select_mailboxes — SELECT, rol mail_mcp, sobre mail.mailboxes. NUEVA el 2026-08-28.",
+            "mail_mcp_select_authorizations — SELECT, rol mail_mcp, sobre mail.authorizations. NUEVA el 2026-08-28."
+          ],
+          "_rls_nota_2026-08-28": "El campo `rls` de arriba (RLS habilitada SIN politicas, del 2026-08-27) queda VENCIDO y se conserva: desde el 2026-08-28 hay DOS politicas SELECT para el rol mail_mcp, medidas en pg_policies. El acceso lo sigue cerrando el REVOKE; las politicas son la segunda capa.",
+          "filas_2026-08-28": "mail.mailboxes 3 filas (las tres active, provider google_oauth) · mail.authorizations 3 filas, ninguna revocada. El 2026-08-27 ambas estaban en CERO: hoy el sistema lee de verdad."
         },
         "_conteo_2026-08-28": "MEDIDO con execute_sql el 2026-08-28 (HRD-R13) — 18 schemas en unrlvl-db, tablas entre parentesis: auth (23) · content (6) · crm (13) · cron (2) · extensions (0) · fph (22) · graphql (0) · graphql_public (0) · intel (27) · mail (2, NUEVO 2026-08-27) · net (2) · pgbouncer (0) · public (106) · realtime (2) · shopify (6) · storage (8) · supabase_migrations (1) · vault (1). NOTA: el campo schemas.public.tables de este archivo dice 80 y es de una medicion anterior; se conserva y se anota aca la remedicion con su fecha (public: 106 al 2026-08-28). Como el total_active de edge_functions, este es un DATO CONSULTABLE que por context-resolver §1 no deberia vivir en un context file: se registra para trazabilidad de la sesion, y la fuente de verdad es la DB."
       },
@@ -777,7 +789,26 @@
         "rows_SamPublisher": [
           "sam_personal v0.5 — Meta(FB) + LinkedIn — personal public voice + vocero Lucien/UNRLVL — active (creado 2026-06-02)"
         ]
+      },
+      "storage_buckets_2026-08-28": {
+        "_note": "MEDIDO con execute_sql sobre storage.buckets el 2026-08-28. SEIS buckets: cinco previos mas mail-authorizations.",
+        "mail-authorizations": "NUEVO 2026-08-28 11:07:42 UTC. public=false. Limite 10 MB (10485760). MIME: application/pdf, image/jpeg, image/png. Guarda el documento firmado por el titular del buzon.",
+        "_por_que_uno_nuevo": "Los cinco buckets que ya existian NO SERVIAN: unrlvl-media (public=true) y product-assets (public=true) son PUBLICOS, y un documento firmado por el titular de un buzon no vive en un bucket publico. Los otros tres son privados pero de proposito ajeno: nscf-licenses, iid-expert-uploads, brand-intel.",
+        "inventario": [
+          "product-assets (public)",
+          "unrlvl-media (public)",
+          "nscf-licenses (privado)",
+          "iid-expert-uploads (privado)",
+          "brand-intel (privado)",
+          "mail-authorizations (privado, NUEVO)"
+        ]
       }
+    },
+    "_proyectos_no_declarados_2026-08-28": {
+      "_note": "MAIL-03. MEDIDO con list_projects el 2026-08-28: la cuenta de Supabase de UNRLVL (org tnqcrwmfxesiqxlhuzri) contiene EXACTAMENTE dos proyectos, unrlvl-db y XMMs. Este bloque `supabase` declara unicamente `main` (unrlvl-db).",
+      "forumphs-db": "ref tajuoqdbnsnzkhyqvdgs. AVISO DE PAUSA de Supabase el 2026-08-28: +7 dias sin actividad. NO esta en la cuenta de UNRLVL: es una base de datos de CLIENTE, fuera del ecosistema, SIN DUENO DECLARADO ni dependencias conocidas. MATIZ MEDIDO FRENTE AL BRIEF (HRD-R13): el brief dice que no figura en ecosystem.json; SI figura MENCIONADA EN PROSA aca y en AGENDA.md, con su ref, desde la verificacion del 2026-08-05 contra su information_schema. Lo que NO tiene es NODO PROPIO.",
+      "XMMs": "ref puoybldykxqvhvtnwrld, ACTIVE_HEALTHY, creado 2026-03-31, DENTRO de la cuenta de UNRLVL. NO APARECE EN ecosystem.json EN ABSOLUTO. Son DOS proyectos sin declarar, no uno — y este es el que si esta adentro.",
+      "estado": "ABIERTO"
     }
   },
   "infrastructure": [
@@ -825,7 +856,8 @@
       "vercel_id": "prj_svtqNxIlwRvzMFYKmnOCAyK7GcQP",
       "status": "ACTIVE v1.2.1 ✅",
       "github_protection": "⚠️ branch protection bloqueada — repo privado en GitHub Free",
-      "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. EN CODIGO: SIN AUTENTICACION (SEC-01) — no lee ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declara Access-Control-Allow-Origin: *. La proteccion de Vercel es la MITIGACION, no el cierre: all_except_custom_domains NO cubre un dominio propio. Cierre correcto: MCP-AUTH-01 extendido. DISCREPANCIA ANOTADA (HRD-R13): el brief del 2026-08-27 declaraba ssoProtection false para unrlvl-supabase-mcp; la medicion del 2026-08-28 da true en los cuatro proyectos MCP. 3 tools que MUTAN: execute_sql, apply_migration, deploy_edge_function. AGRAVANTE: en esta DB viven shopify_stores y meta_accounts con los tokens de los otros dos MCPs."
+      "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. EN CODIGO: SIN AUTENTICACION (SEC-01) — no lee ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declara Access-Control-Allow-Origin: *. La proteccion de Vercel es la MITIGACION, no el cierre: all_except_custom_domains NO cubre un dominio propio. Cierre correcto: MCP-AUTH-01 extendido. DISCREPANCIA ANOTADA (HRD-R13): el brief del 2026-08-27 declaraba ssoProtection false para unrlvl-supabase-mcp; la medicion del 2026-08-28 da true en los cuatro proyectos MCP. 3 tools que MUTAN: execute_sql, apply_migration, deploy_edge_function. AGRAVANTE: en esta DB viven shopify_stores y meta_accounts con los tokens de los otros dos MCPs.",
+      "auth_2026-08-28": "MEDIDO 2026-08-28: CONSERVA Vercel Authentication ENCENDIDA (ssoProtection: true, all_except_custom_domains) COMO UNICA PROTECCION, hasta que su propio MCP-AUTH este mergeado. Es lo contrario de unrlvl-mail-mcp, donde el andamio se retiro PORQUE el codigo ya autentica: aca el andamio es lo unico que hay. SEC-01 sigue ABIERTO."
     },
     {
       "id": "INFRA-WEB",
@@ -840,7 +872,7 @@
       "url": "https://unrlvl-mail-mcp.vercel.app/api/mcp/mcp",
       "repo": "unrealvillestudio-hub/unrlvl-mail-mcp",
       "vercel_id": "prj_QTvsrv6Ab1lrin6ZdsD79Zw15DK3",
-      "status": "DESPLEGADO · SIN AUTENTICAR hasta merge de MCP-AUTH-01 · sin buzones dados de alta",
+      "status": "OPERATIVO ✅ — desplegado y AUTENTICADO (MCP_AUTH_TOKEN, MCP-AUTH-01 mergeado) · Vercel Authentication RETIRADA · conector dado de alta en Claude.ai · 3 buzones activos",
       "auth_2026-08-27": "VERIFICADO 2026-08-28 en la API de Vercel — passwordProtection: false · ssoProtection: TRUE (all_except_custom_domains) · trustedIps: false. La mitigacion inmediata que pedia el brief (activar Vercel Authentication) YA ESTA APLICADA. En codigo: pendiente del merge de MCP-AUTH-01 y de MCP_AUTH_TOKEN en el entorno.",
       "tools": [
         "list_brand_mailboxes",
@@ -851,6 +883,22 @@
       "db": "schema mail en unrlvl-db (amlvyycfepwhiindxgzw), con el rol dedicado mail_mcp. NO usa service_role.",
       "verificado_2026-08-28": "mail.mailboxes 0 filas · mail.authorizations 0 filas — el sistema esta completo y todavia no tiene un solo buzon dado de alta.",
       "blockers": [
+        "MAIL-01 (ROJO) — el MCP no verifica de quien es el buzon que lee. Ver security.MAIL-01.",
+        "MAIL-02 (ROJO) — la cache de access token no se invalida al rotar la credencial. Ver security.MAIL-02.",
+        "MAIL-04 (NARANJA) — codigos de error agrupados y logOp sin mailbox_id. Ver security.MAIL-04.",
+        "Documentos de autorizacion sin firmar en ForumPHs y NeuroneSCF; titular de NSCF sin declarar.",
+        "Retirar developers.google.com/oauthplayground de los redirect URIs del cliente OAuth."
+      ],
+      "_status_anterior_2026-08-27": "DESPLEGADO · SIN AUTENTICAR hasta merge de MCP-AUTH-01 · sin buzones dados de alta",
+      "auth_2026-08-28": "MCP-AUTH-01 MERGEADO Y DESPLEGADO — PR #1 del repo unrlvl-mail-mcp, merge 350de4a. VERIFICADO DESDE FUERA el 2026-08-28: 401 con {\"error\":{\"code\":\"MCP_UNAUTHORIZED\"}} y WWW-Authenticate: Bearer. lib/auth.ts compara en TIEMPO CONSTANTE y NO DEGRADA A ABIERTO si falta MCP_AUTH_TOKEN: sin la variable el servidor falla. VERCEL AUTHENTICATION RETIRADA (medido ssoProtection: false, antes true): bloqueaba tambien al conector, que no lleva sesion de Vercel. El andamio se retira PORQUE EL CODIGO YA AUTENTICA — primero la cerradura, despues quitar la puerta.",
+      "conector_claude_ai": "DADO DE ALTA el 2026-08-28, con Authentication: None y cabecera Authorization: Bearer, porque el servidor usa TOKEN ESTATICO y no OAuth. Las tres tools aparecen en sesion: esa es la prueba.",
+      "buzones_2026-08-28": [
+        "ForumPHs — forumphs507@gmail.com (google_oauth, active). Autorizacion: PENDIENTE DE FIRMA — alta tecnica, se reemplaza por el documento firmado por Ivette.",
+        "UnrealvilleStudio — unrealvillestudio@gmail.com (google_oauth, active). Autorizacion: AUTOTITULAR, cuenta propia, sin documento de terceros. Correcto y DEFINITIVO.",
+        "NeuroneSCF — neuronescflorida@gmail.com (google_oauth, active). Autorizacion: PENDIENTE DE FIRMA; titular PENDIENTE DE CONFIRMAR."
+      ],
+      "alcance_declarado_por_sam": "SOLO tres marcas: ForumPHs, NeuroneSCF y UnrealvilleStudio. Ninguna otra del ecosistema entra.",
+      "_blockers_anteriores_2026-08-27": [
         "ALTA DEL CONECTOR en Claude.ai — pendiente. Sin ese paso el sistema esta completo y es inutil.",
         "MCP_AUTH_TOKEN en el entorno de Vercel — pendiente del merge de MCP-AUTH-01.",
         "Publicacion en Production del proyecto de Google Cloud — pendiente de que las paginas legales esten vivas."
@@ -1287,17 +1335,21 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
-    "🔴 SEC-01 — TRES MCPs SIN AUTENTICACION EN CODIGO. unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp no leen ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declaran Access-Control-Allow-Origin: *. Tools que mutan: 3 / 9 / 4. AGRAVANTE: en esa DB viven shopify_stores y meta_accounts con los tokens de los otros dos. MITIGACION YA APLICADA (Vercel Authentication activa en los cuatro proyectos, medido 2026-08-28) — NO ES EL CIERRE: all_except_custom_domains no cubre un dominio propio. CIERRE: MCP-AUTH-01 extendido a los tres",
-    "🔴 SEC-02 — unrlvl-meta-mcp/api/upload.ts, segundo endpoint publico sin autenticar: sube al bucket unrlvl-media con SERVICE_ROLE_KEY y x-upsert: true, y descarga una url remota. SSRF + sobrescritura de assets de marca en brand/{brand_id}/",
-    "🟠 MCP-AUTH-01 — entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde). PENDIENTE: merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401. Hasta el 401 verificado, el patron esta escrito y no esta en pie",
-    "🟠 ALTA DEL CONECTOR — unrlvl-mail-mcp no esta dado de alta como conector en Claude.ai. Sin ese paso el sistema esta completo y es INUTIL. Se mide solo: mail.mailboxes en 0 filas",
-    "🟠 PAGINAS LEGALES de unrealvillestudio.com — PR en curso en CoreProject. Las del 28-abr nombraban Unrealville Studio LLC (entidad que no existe) y estaban huerfanas: cero href desde ambos footers. Se sustituyen por Samuel Moreno Mendoza, empresario individual. El mismo PR borra legal/a",
-    "🟠 SIN LLC NI NOMBRE FICTICIO registrados en Florida. Sam firma como persona fisica documentos con clausula de indemnidad que dan acceso a buzones de clientes",
-    "🟠 PUBLICACION EN PRODUCTION del proyecto de Google Cloud unrlvl-mail-mcp — pendiente de que las paginas legales esten vivas",
-    "🟡 003_drop_brand_oauth_tokens.sql — pendiente, PR propio. Barrido cerrado: 31 repos y cero referencias en codigo; cero FK, cero vistas dependientes; 0 filas",
-    "🟡 PR DE LIMPIEZA — sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context, ya extraido el repo. Son andamio de traslado, no context files",
-    "🟡 unrlvl-db — 16 ERROR y 39 WARN medidos el 2026-08-28 (12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS). La AGENDA del 26-ago decia 4: el dato viejo no se borra, se anota la remedicion",
-    "⚠️ LOS ROJOS Y NARANJAS DEL CARRIL SIGUEN ABIERTOS y no se tocaron en esta pasada — P1 judged_source NULL (bloquea toda generacion nueva), P2 las tres reglas con falso positivo medido (condicion para encender el cron 66), P3 IID_FANOUT_EMPTY, P4 el fan-out encola para plataformas sin proveedor, P5 el adaptador no lee el genoma. Su detalle integro esta en next_session_agenda_archivo_2026-08-26-v2 y en el bloque del 26-ago de AGENDA.md"
+    "🔴 MAIL-01 — EL MCP DE CORREO NO VERIFICA DE QUIEN ES EL BUZON QUE LEE. lib/tools.ts estampa address desde la base y no desde el proveedor: una credencial mal atada devuelve CORREO AJENO CON LA ETIQUETA CORRECTA ENCIMA. OCURRIO EN PRODUCCION el 2026-08-28 (NeuroneSCF sirvio la bandeja de UnrealvilleStudio, sin error ni alerta). Arreglo: assertMailboxIdentity() con users.getProfile contra mail.mailboxes.address + codigo MAILBOX_IDENTITY_MISMATCH",
+    "🔴 MAIL-02 — LA CACHE DE ACCESS TOKEN NO SE INVALIDA AL ROTAR LA CREDENCIAL. Clave = mailbox_id a secas, TTL 1 h, y vault.update_secret no la toca. Tres rotaciones seguidas sirvieron el buzon anterior hasta que un redeploy vacio la cache. Arreglo: clave = mailbox_id + huella del refresh token",
+    "🔴 MAIL-03 — forumphs-db ENTRA EN PAUSA Y NO ESTA EN EL MAPA. Medido: la cuenta de UNRLVL solo tiene unrlvl-db y XMMs. Hay una DB de cliente fuera del ecosistema sin dueno declarado; y XMMs, que SI esta dentro, no figura en ecosystem.json. Son dos proyectos sin declarar",
+    "🟠 MAIL-04 — CODIGOS DE ERROR AGRUPADOS Y logOp SIN mailbox_id. Separar MAIL_TOKEN_REVOKED / MAIL_CLIENT_CONFIG_INVALID / MAIL_TOKEN_EXCHANGE_FAILED, loguear el campo error de Google, y pasar mailbox_id en las dos llamadas de route.ts",
+    "🟠 NSCF-PAY — cobro de Shopify de $39,00 USD rechazado por fondos insuficientes (Mercury, tarjeta terminada en 5823, PRO-Neurone SCFlorida). Shopify reintenta y despues SUSPENDE. Revisar el saldo: puede haber mas cobros en cola contra la misma tarjeta",
+    "🟠 FPHS-FORM — el formulario de forumphs.com no tiene anti-spam y su notificacion cae en SPAM (noreply@forumphs.com no pasa los filtros de Gmail). Un propietario real preguntando por una cuota extraordinaria aterriza donde nadie mira. Encaja con el DKIM/SPF de Klaviyo",
+    "🟠 AUTORIZACIONES DE BUZON — titular de NSCF sin declarar (PENDIENTE DE CONFIRMAR) y documentos sin firmar en ForumPHs y NeuroneSCF (PENDIENTE DE FIRMA). UnrealvilleStudio va como AUTOTITULAR: correcto y definitivo",
+    "🟠 SEC-01 — sigue ABIERTO en unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp. En supabase-mcp la Vercel Authentication es la UNICA proteccion. Extender el patron de MCP-AUTH-01, ya probado en unrlvl-mail-mcp",
+    "🟠 SEC-02 — unrlvl-meta-mcp/api/upload.ts, endpoint publico sin autenticar con SERVICE_ROLE_KEY, x-upsert: true y descarga de url remota (SSRF)",
+    "🟡 Retirar developers.google.com/oauthplayground de los redirect URIs del cliente OAuth de unrlvl-mail-mcp",
+    "🟡 TikTok Shop — alta de vendedor de NSCF a medio completar",
+    "🟡 003_drop_brand_oauth_tokens.sql — pendiente, PR propio",
+    "🟡 PR de limpieza — sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context. Ya no son solo andamio: son una copia que puede divergir del repo real",
+    "🟡 unrlvl-db — 16 ERROR y 39 WARN medidos el 2026-08-28 (12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS)",
+    "⚠️ LOS ROJOS Y NARANJAS DEL CARRIL SIGUEN ABIERTOS y no se tocaron en esta pasada — P1 judged_source NULL, P2 las tres reglas con falso positivo medido, P3 IID_FANOUT_EMPTY, P4 el fan-out sin proveedor, P5 el adaptador que no lee el genoma. Su detalle integro esta en next_session_agenda_archivo_2026-08-26-v2 y en el bloque del 26-ago de AGENDA.md"
   ],
   "multibrand_rule": {
     "_status": "INVIOLABLE — vigente desde 2026-08-07",
@@ -1394,7 +1446,8 @@
       "estado_infraestructura_2026-08-28": "MEDIDO en la API de Vercel: los CUATRO proyectos MCP (los tres de SEC-01 mas unrlvl-mail-mcp) tienen passwordProtection false, ssoProtection TRUE (all_except_custom_domains) y trustedIps false. La mitigacion inmediata que pedia el brief YA ESTA APLICADA. DISCREPANCIA CON EL BRIEF ANOTADA (HRD-R13): el brief declaraba ssoProtection false para unrlvl-supabase-mcp.",
       "por_que_no_esta_cerrado": "La casilla de Vercel es mitigacion, no cierre: (a) el codigo sigue sin leer cabecera de credencial, y (b) all_except_custom_domains NO protege un dominio propio — el dia que uno de estos MCPs reciba un dominio, la proteccion desaparece sin que nadie toque nada.",
       "cierre_correcto": "Extender el patron de MCP-AUTH-01 a los tres. MCP-AUTH-01 esta entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde) y PENDIENTE de merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401.",
-      "estado": "ABIERTO"
+      "estado": "ABIERTO",
+      "_update_2026-08-28": "SIGUE ABIERTO en los tres MCPs. unrlvl-supabase-mcp CONSERVA Vercel Authentication encendida (medido ssoProtection: true) COMO UNICA PROTECCION. El contraste con unrlvl-mail-mcp es el que importa: alli el andamio se retiro PORQUE el codigo ya autentica; aca el andamio ES lo unico que hay."
     },
     "SEC-02": {
       "titulo": "unrlvl-meta-mcp/api/upload.ts — segundo endpoint publico sin autenticar",
@@ -1421,7 +1474,9 @@
         "verificacion de 401"
       ],
       "nota": "Hasta el 401 verificado, el patron esta escrito y no esta en pie.",
-      "estado": "ABIERTO"
+      "estado": "CERRADO EN unrlvl-mail-mcp (2026-08-28) · ABIERTO en unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp",
+      "_estado_anterior_2026-08-27": "ABIERTO",
+      "cierre_2026-08-28": "PR #1 del repo unrlvl-mail-mcp, merge 350de4a. MCP_AUTH_TOKEN puesto en Vercel, desplegado y VERIFICADO DESDE FUERA: 401 MCP_UNAUTHORIZED con WWW-Authenticate: Bearer. lib/auth.ts compara en tiempo constante y NO degrada a abierto si falta la variable. El \"pendiente\" de ayer —merge, env var, deploy, verificacion de 401— queda cumplido en sus cuatro pasos."
     },
     "ejes_declarados": {
       "_note": "Ejes DECLARADOS aca, INTRODUCIDOS en el PR MCP-AUTH-01. Esta pasada de Actualiza no introduce ejes: solo los registra.",
@@ -1468,8 +1523,62 @@
       "paginas_legales_unrealvillestudio_com": "Las paginas del 28-abr identificaban al responsable del tratamiento como Unrealville Studio LLC, ENTIDAD QUE NO EXISTE, y estaban HUERFANAS (cero href desde ambos footers). Se sustituyen por Samuel Moreno Mendoza, empresario individual. PR en curso en CoreProject; el mismo PR borra legal/a (archivo basura de 3 bytes, commit 3a03a9f).",
       "entidad": "Sin LLC ni nombre ficticio registrados en Florida. Sam firma COMO PERSONA FISICA documentos con clausula de indemnidad que dan acceso a buzones de clientes.",
       "representante_UE_art27_RGPD": "RETIRADO de los documentos legales: las marcas con mercado Espana declaradas en ecosystem.json no tienen entidad legal, contrato ni servicio prestado por UNRLVL. REVISABLE SI — consulta que reabre el item: select brand_id, market from public.brands where market ilike '%espa%' or market ilike '%europ%' or market ilike '%EU%'; Si alguna de esas filas pasa a tener contrato firmado o canal de venta activo, el item SE REABRE.",
+      "estado": "ABIERTO",
+      "_update_2026-08-28": "PAGINAS LEGALES PUBLICADAS. /legal/privacy verificada en vivo el 2026-08-28: 200, v1.1 con fecha 28 de agosto de 2026, entidad Samuel Moreno Mendoza sole proprietor, y el footer enlaza /legal/privacy, /legal/terms y /es/legal/privacidad — YA NO ESTAN HUERFANAS. legal/a borrado (PR #8). SIGUE ABIERTO: sin LLC ni nombre ficticio registrados en Florida."
+    },
+    "MAIL-01": {
+      "titulo": "El MCP de correo no verifica de quien es el buzon que lee",
+      "severidad": "ROJO",
+      "detectado": "2026-08-28",
+      "afecta": [
+        "unrlvl-mail-mcp"
+      ],
+      "hecho": "lib/tools.ts estampa `address` DESDE LA FILA DE LA BASE, nunca desde el proveedor. Una credencial mal atada devuelve correo ajeno CON LA ETIQUETA CORRECTA ENCIMA.",
+      "ocurrio_en_produccion": "SI, el 2026-08-28: NeuroneSCF sirvio la bandeja de UnrealvilleStudio. Sin error, sin alerta, sin nada raro en la respuesta. No fallo: mintio.",
+      "verificado_2026-08-28": "Contra el codigo desplegado (repo unrlvl-mail-mcp, 350de4a): `address: mailbox.address` en CUATRO puntos — lib/tools.ts:126, :133, :159, :166 — y CERO apariciones de assertMailboxIdentity, getProfile o MAILBOX_IDENTITY_MISMATCH en todo el repo.",
+      "arreglo": "assertMailboxIdentity() contrastando users.getProfile contra mail.mailboxes.address, y codigo nuevo MAILBOX_IDENTITY_MISMATCH. La etiqueta debe salir de quien la puede probar, no de quien la declara.",
       "estado": "ABIERTO"
-    }
+    },
+    "MAIL-02": {
+      "titulo": "La cache de access token no se invalida al rotar la credencial",
+      "severidad": "ROJO",
+      "detectado": "2026-08-28",
+      "afecta": [
+        "unrlvl-mail-mcp"
+      ],
+      "hecho": "accessTokenCache va cacheada por mailbox_id con TTL de una hora. vault.update_secret NO la toca.",
+      "ocurrio_en_produccion": "SI: TRES ROTACIONES SEGUIDAS siguieron sirviendo el buzon anterior hasta que un redeploy vacio la cache.",
+      "verificado_2026-08-28": "lib/providers/google_oauth.ts — accessTokenCache es un Map con clave session.mailbox_id y NADA MAS (:145 declaracion, :151 lectura, :199 escritura), TTL de expires_in ?? 3600 (:198). Nada en la clave depende del refresh token.",
+      "por_que_no_es_un_caso_raro": "Rotar una credencial es RUTINA: pasa cada vez que un cliente cambie su contrasena. No es una excepcion que se pueda absorber con un redeploy manual.",
+      "arreglo": "Clave = mailbox_id + huella del refresh token. Cambia la credencial, cambia la clave, muere la entrada: sin invalidacion explicita y sin ventana.",
+      "estado": "ABIERTO"
+    },
+    "MAIL-03": {
+      "titulo": "forumphs-db entra en pausa y no esta en el mapa",
+      "severidad": "ROJO",
+      "detectado": "2026-08-28",
+      "hecho": "Aviso de Supabase del 28-ago: mas de 7 dias sin actividad. Es una DB de CLIENTE fuera del ecosistema, sin dueno declarado ni dependencias conocidas.",
+      "verificado_2026-08-28": "list_projects sobre la cuenta de UNRLVL (org tnqcrwmfxesiqxlhuzri) devuelve EXACTAMENTE dos proyectos: unrlvl-db (amlvyycfepwhiindxgzw) y XMMs (puoybldykxqvhvtnwrld). forumphs-db NO esta.",
+      "matices_medidos": [
+        "forumphs-db SI aparece mencionada en prosa en ecosystem.json y AGENDA.md, con ref tajuoqdbnsnzkhyqvdgs. Lo que NO tiene es nodo propio: el bloque supabase declara solo `main`.",
+        "XMMs no aparece en ecosystem.json en absoluto: son DOS proyectos sin declarar, no uno, y este si esta dentro de la cuenta de UNRLVL."
+      ],
+      "detalle": "Ver supabase._proyectos_no_declarados_2026-08-28.",
+      "estado": "ABIERTO"
+    },
+    "MAIL-04": {
+      "titulo": "Codigos de error agrupados, y un log ciego por omision",
+      "severidad": "NARANJA",
+      "detectado": "2026-08-28",
+      "afecta": [
+        "unrlvl-mail-mcp"
+      ],
+      "hecho": "MAIL_TOKEN_REVOKED cubre invalid_grant, invalid_client y cualquier otro fallo del canje. Costo TRES ITERACIONES averiguar que fallaba de verdad.",
+      "verificado_2026-08-28": "lib/errors.ts:15 declara MAIL_TOKEN_REVOKED y nada mas para esta familia; google_oauth.ts:186-188 mapea invalid_grant explicito y :225 REUTILIZA EL MISMO CODIGO como cajon de sastre. No existen MAIL_CLIENT_CONFIG_INVALID ni MAIL_TOKEN_EXCHANGE_FAILED. route.ts llama a logOp en sus DOS puntos (:151, :159) SIN mailbox_id, aunque el campo existe en OpLog (lib/log.ts:16) y se serializa (:27).",
+      "arreglo": "Separar en MAIL_TOKEN_REVOKED / MAIL_CLIENT_CONFIG_INVALID / MAIL_TOKEN_EXCHANGE_FAILED, loguear el campo `error` que devuelve Google, y pasar mailbox_id en las dos llamadas a logOp.",
+      "estado": "ABIERTO"
+    },
+    "_patron_2026-08-28": "Los tres defectos del MCP de correo son LA MISMA CLASE DE FALLO: el sistema AFIRMA algo que no COMPRUEBA. MAIL-01 afirma de quien es el correo y no comprueba que la credencial abra ese buzon. MAIL-02 afirma que el token es el vigente y no comprueba que la credencial no haya rotado. MAIL-04 afirma cual fue la causa del fallo y no comprueba que dijo Google exactamente. NINGUNO ROMPE: LOS TRES MIENTEN EN SILENCIO, que es la forma cara. Es el mismo diagnostico que HRD-R11 dejo escrito para el carril el 25-ago: el exito se comprueba contra el EFECTO, no contra la afirmacion."
   },
   "_repos_nuevos_2026-08-27": {
     "unrlvl-mail-mcp": {
@@ -1480,7 +1589,8 @@
       "verificado_2026-08-28": "El repo existe y es privado; pushed_at 2026-08-27T23:34:36Z. 30 archivos, medidos con git ls-files sobre projects/unrlvl-mail-mcp en la rama de este PR.",
       "que_es": "MCP de correo de clientes, SOLO LECTURA. Tres tools: list_brand_mailboxes, search_messages, get_message. Carpetas INBOX / SENT / SPAM, papelera excluida, sin persistencia de contenido.",
       "multimarca": "El eje va en el codigo, la instancia en el dato: el buzon, la marca y el proveedor son filas de mail.mailboxes. provider SIN CHECK a proposito — el mapa de adaptadores vive en lib/providers/index.ts con fail-loud MAIL_PROVIDER_UNSUPPORTED (precedente iid_content_queue_angle_check, HRD-R12). Test de la marca N+1 documentado en docs/TEST_MARCA_N1.md del repo.",
-      "abierto": "ALTA DEL CONECTOR en Claude.ai · MCP_AUTH_TOKEN pendiente del merge de MCP-AUTH-01 · 003_drop_brand_oauth_tokens.sql en PR propio · PR de limpieza para sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context (son andamio de traslado, no context files: su historia queda en el PR)."
+      "abierto": "ALTA DEL CONECTOR en Claude.ai · MCP_AUTH_TOKEN pendiente del merge de MCP-AUTH-01 · 003_drop_brand_oauth_tokens.sql en PR propio · PR de limpieza para sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context (son andamio de traslado, no context files: su historia queda en el PR).",
+      "_update_2026-08-28": "MCP-AUTH-01 mergeado (PR #1, merge 350de4a). Repo operativo con tres buzones. PENDIENTE: PR de limpieza para sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context — ya no son solo andamio de traslado: son UNA COPIA QUE PUEDE DIVERGIR del repo real."
     }
   },
   "google_cloud": {
@@ -1498,7 +1608,9 @@
         "gmail.readonly"
       ],
       "oauth_client": "Client ID creado — Web application, redirect http://localhost:8080/. El client secret NO esta en el repo (CC_PROTOCOL §3).",
-      "publicacion": "PENDIENTE — Production bloqueada hasta que las paginas legales esten vivas. El orden no es burocratico: Google pide las URLs y tienen que resolver."
+      "publicacion": "IN PRODUCTION desde el 2026-08-28. Branding completo, dominio unrealvillestudio.com autorizado. SIN evaluacion CASA y COSTE CERO. Se desbloqueo cuando las paginas legales quedaron vivas y enlazadas.",
+      "_publicacion_anterior_2026-08-27": "PENDIENTE — Production bloqueada hasta que las paginas legales esten vivas. El orden no es burocratico: Google pide las URLs y tienen que resolver.",
+      "desbloqueo": "La §04 de /legal/privacy documenta el acceso de SOLO LECTURA al buzon con la clausula de LIMITED USE de Google (scope minimo, sin transferencia, sin publicidad, sin lectura humana salvo consentimiento afirmativo, seguridad o ley). Eso es lo que Google pedia."
     }
   },
   "next_session_agenda_archivo_2026-08-26-v2": [
@@ -1522,5 +1634,18 @@
     "⚠️ lucien_social declara X como publicacion manual y la DB ya lo tiene como x_api activo. Divergencia documento-dato, pendiente EN EL GENOMA",
     "⚠️ El drenaje no atiende vercel_html — UNRLVL y Lucien tienen canal blog activo pero el sitio debe RENDERIZAR DESDE LA DB como forumphs.com. Falta ese mecanismo en WebLab",
     "⚠️ Los 4 dominios editoriales de NeuroneSCF no tienen publicador — su canal es shopify_blog y el drenaje todavia no lo atiende"
+  ],
+  "next_session_agenda_archivo_2026-08-27-v1": [
+    "🔴 SEC-01 — TRES MCPs SIN AUTENTICACION EN CODIGO. unrlvl-supabase-mcp, unrlvl-meta-mcp y unrlvl-shopify-mcp no leen ninguna cabecera de credencial (req.json() -> handleRpc -> callTool, sin tocar req.headers) y declaran Access-Control-Allow-Origin: *. Tools que mutan: 3 / 9 / 4. AGRAVANTE: en esa DB viven shopify_stores y meta_accounts con los tokens de los otros dos. MITIGACION YA APLICADA (Vercel Authentication activa en los cuatro proyectos, medido 2026-08-28) — NO ES EL CIERRE: all_except_custom_domains no cubre un dominio propio. CIERRE: MCP-AUTH-01 extendido a los tres",
+    "🔴 SEC-02 — unrlvl-meta-mcp/api/upload.ts, segundo endpoint publico sin autenticar: sube al bucket unrlvl-media con SERVICE_ROLE_KEY y x-upsert: true, y descarga una url remota. SSRF + sobrescritura de assets de marca en brand/{brand_id}/",
+    "🟠 MCP-AUTH-01 — entregado (rama claude/mcp-auth-01-cxzbrs, commit 0decb6e, 44 tests en verde). PENDIENTE: merge, MCP_AUTH_TOKEN en Vercel, deploy y VERIFICACION DE 401. Hasta el 401 verificado, el patron esta escrito y no esta en pie",
+    "🟠 ALTA DEL CONECTOR — unrlvl-mail-mcp no esta dado de alta como conector en Claude.ai. Sin ese paso el sistema esta completo y es INUTIL. Se mide solo: mail.mailboxes en 0 filas",
+    "🟠 PAGINAS LEGALES de unrealvillestudio.com — PR en curso en CoreProject. Las del 28-abr nombraban Unrealville Studio LLC (entidad que no existe) y estaban huerfanas: cero href desde ambos footers. Se sustituyen por Samuel Moreno Mendoza, empresario individual. El mismo PR borra legal/a",
+    "🟠 SIN LLC NI NOMBRE FICTICIO registrados en Florida. Sam firma como persona fisica documentos con clausula de indemnidad que dan acceso a buzones de clientes",
+    "🟠 PUBLICACION EN PRODUCTION del proyecto de Google Cloud unrlvl-mail-mcp — pendiente de que las paginas legales esten vivas",
+    "🟡 003_drop_brand_oauth_tokens.sql — pendiente, PR propio. Barrido cerrado: 31 repos y cero referencias en codigo; cero FK, cero vistas dependientes; 0 filas",
+    "🟡 PR DE LIMPIEZA — sacar projects/unrlvl-mail-mcp/ y projects/UNRLVL_MAIL_MCP_HANDOFF.md de unrlvl-context, ya extraido el repo. Son andamio de traslado, no context files",
+    "🟡 unrlvl-db — 16 ERROR y 39 WARN medidos el 2026-08-28 (12 vistas SECURITY DEFINER + 4 tablas ops_* sin RLS). La AGENDA del 26-ago decia 4: el dato viejo no se borra, se anota la remedicion",
+    "⚠️ LOS ROJOS Y NARANJAS DEL CARRIL SIGUEN ABIERTOS y no se tocaron en esta pasada — P1 judged_source NULL (bloquea toda generacion nueva), P2 las tres reglas con falso positivo medido (condicion para encender el cron 66), P3 IID_FANOUT_EMPTY, P4 el fan-out encola para plataformas sin proveedor, P5 el adaptador no lee el genoma. Su detalle integro esta en next_session_agenda_archivo_2026-08-26-v2 y en el bloque del 26-ago de AGENDA.md"
   ]
 }

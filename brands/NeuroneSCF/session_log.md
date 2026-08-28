@@ -1,5 +1,57 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)_
+_Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular de la cuenta SIN DECLARAR; cobro de Shopify de $39,00 USD rechazado por fondos insuficientes) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-08-28 — `neuronescflorida@gmail.com` entra al MCP · el cobro de Shopify rechazado · y un titular que no consta
+
+> Verificado contra producción el **2026-08-28** con `execute_sql` (HRD-R13). Professor cerrado
+> **antes**: **9 learnings**, `session_date = 2026-08-28`, los nueve `approved_by_sam = true`.
+> **SMA no se consultó.** Detalle transversal en `brands/UnrealvilleStudio/session_log.md`
+> (2026-08-28). Lo previo se conserva íntegro debajo.
+
+### `neuronescflorida@gmail.com` dado de alta en el MCP de correo
+
+**Tercera de las tres marcas del alcance declarado por Sam.** Medido en `mail.mailboxes`:
+
+- `brand_id = NeuroneSCF` · `address = neuronescflorida@gmail.com` · `provider = google_oauth` ·
+  `active = true`.
+- Autorización viva (`revoked_at IS NULL`), `signed_at = 2026-08-28`.
+
+**Alcance:** `INBOX` / `SENT` / `SPAM`, **papelera excluida**, **sin persistencia** de contenido. El
+MCP no puede enviar, responder, borrar, mover ni etiquetar.
+
+### 🟠 El titular de la cuenta no está declarado
+
+La fila de `mail.authorizations` dice **literalmente**:
+
+```
+holder_name    = PENDIENTE DE CONFIRMAR - titular de la cuenta no declarado
+document_path  = PENDIENTE DE FIRMA - alta tecnica 2026-08-28, se reemplaza por el documento firmado
+```
+
+**Un buzón activo cuyo dueño no consta.** No es un detalle administrativo: es de quién es el correo
+que el sistema puede leer, y quién puede revocar ese permiso. **De las tres altas, ésta es la que
+tiene los dos campos abiertos** — ForumPHs al menos tiene titular declarado, y UnrealvilleStudio va
+como `AUTOTITULAR`, correcto y definitivo.
+
+⚠️ **Y aquí ocurrió MAIL-01.** Hoy, en producción, **NeuroneSCF sirvió la bandeja de
+UnrealvilleStudio** — sin error, sin alerta, con la etiqueta de NeuroneSCF encima. El MCP estampa la
+dirección **desde la base, no desde el proveedor**. Hasta que exista `assertMailboxIdentity()`,
+**una lectura de este buzón no prueba que el contenido sea de este buzón**. Detalle y arreglo en
+`brands/UnrealvilleStudio/session_log.md` (2026-08-28).
+
+### 🟠 NSCF-PAY — Cobro de Shopify rechazado por fondos insuficientes
+
+- **Mercury:** transacción **declinada** con la tarjeta terminada en **`5823`**.
+- **Shopify:** falla el cobro de **$39,00 USD** de **`PRO-Neurone SCFlorida`**
+  (`pro.neuronescflorida.com`).
+
+**Shopify reintenta y después suspende.** No es un aviso de cortesía: es un reloj. Una tienda B2B
+suspendida se lleva el portal, el fulfillment y las comisiones con ella.
+
+**Revisar el saldo de Mercury:** puede haber **más cobros en cola contra la misma tarjeta**, y este
+rechazo sólo es el primero que avisó.
 
 ---
 

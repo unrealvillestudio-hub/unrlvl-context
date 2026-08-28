@@ -6,6 +6,146 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
+## 2026-08-28 — El MCP de correo lee. Y lo que costó llegar no fue Google: fue que el sistema no verificaba de quién era lo que devolvía
+
+**Tres buzones de tres marcas leyendo en producción**, y tres defectos encontrados **por usarlo**, no
+por auditarlo. Los tres son la misma clase de fallo, y ninguno rompe: **mienten en silencio**.
+
+> Verificado contra producción el **2026-08-28** con `execute_sql`, `list_projects`, la API de Vercel
+> y una llamada externa al endpoint del MCP. Los defectos de código están verificados **contra el
+> repo desplegado** (`unrealvillestudio-hub/unrlvl-mail-mcp`, merge `350de4a`), no contra la copia de
+> `projects/`. Professor cerrado **antes**: **9 learnings**, `session_date = 2026-08-28`, los nueve
+> con `approved_by_sam = true` — **medido, coincide con el brief**. **SMA no se consultó.**
+
+### El MCP de correo, operativo
+
+| Marca | Buzón | `provider` | `active` | Autorización |
+|---|---|---|---|---|
+| ForumPHs | `forumphs507@gmail.com` | `google_oauth` | ✅ | ⚠️ `PENDIENTE DE FIRMA` — se reemplaza por el documento firmado por Ivette |
+| UnrealvilleStudio | `unrealvillestudio@gmail.com` | `google_oauth` | ✅ | ✅ `AUTOTITULAR` — cuenta propia |
+| NeuroneSCF | `neuronescflorida@gmail.com` | `google_oauth` | ✅ | ⚠️ `PENDIENTE DE FIRMA` · titular `PENDIENTE DE CONFIRMAR` |
+
+**Alcance declarado por Sam: sólo esas tres marcas.** El 27-ago ambas tablas estaban en **cero
+filas**; hoy hay tres y tres. Entre una cosa y otra está toda la sesión.
+
+**MCP-AUTH-01 cerrado en sus cuatro pasos.** PR **#1** del repo, merge `350de4a` · `MCP_AUTH_TOKEN`
+puesto en Vercel · desplegado · **verificado desde fuera**:
+
+```
+401  {"error":{"code":"MCP_UNAUTHORIZED"}}
+www-authenticate: Bearer
+```
+
+`lib/auth.ts` compara en **tiempo constante** y **no degrada a abierto**: sin `MCP_AUTH_TOKEN` el
+servidor falla, que es la decisión correcta. Ayer «el patrón estaba escrito y no estaba en pie»; hoy
+está en pie.
+
+**Conector dado de alta en Claude.ai** — `Authentication: None` y cabecera `Authorization: Bearer`,
+porque el servidor usa **token estático, no OAuth**. Las tres tools aparecen en esta sesión: ésa es
+la prueba, no el brief.
+
+**Vercel Authentication retirada de `unrlvl-mail-mcp`** (medido `ssoProtection: false`). **Bloqueaba
+también al conector**, que no lleva sesión de Vercel. Y el orden importa: el andamio se retira
+**porque el código ya autentica** — primero la cerradura, después quitar la puerta. En
+`unrlvl-supabase-mcp` sigue encendida (medido `true`) **porque allí el andamio es lo único que hay**.
+
+**Bucket privado `mail-authorizations`** — creado a las **11:07:42 UTC**, `public = false`, 10 MB,
+`application/pdf` · `image/jpeg` · `image/png`. **Los cinco buckets que ya existían no servían:**
+`unrlvl-media` y `product-assets` son **públicos**, y los otros tres son privados pero de propósito
+ajeno (`nscf-licenses`, `iid-expert-uploads`, `brand-intel`). Un documento firmado por el titular de
+un buzón no vive en un bucket público.
+
+**Dos políticas RLS nuevas**, medidas en `pg_policies`: `mail_mcp_select_mailboxes` y
+`mail_mcp_select_authorizations`, ambas `SELECT` para el rol `mail_mcp`. El acceso lo sigue cerrando
+el `REVOKE`; las políticas son la segunda capa.
+
+### 🔴 MAIL-01 — El MCP no verifica de quién es el buzón que lee
+
+`lib/tools.ts` estampa `address` **desde la fila de la base**, nunca desde el proveedor.
+
+**Ocurrió hoy en producción: NeuroneSCF sirvió la bandeja de UnrealvilleStudio.** Sin error, sin
+alerta, sin nada raro en la respuesta. Ése es exactamente el problema — **no falló, mintió**, y con
+la etiqueta correcta encima.
+
+**Verificado contra el código desplegado:** `address: mailbox.address` en **cuatro** puntos
+(`lib/tools.ts:126`, `:133`, `:159`, `:166`), y **cero apariciones** de `assertMailboxIdentity`,
+`getProfile` o `MAILBOX_IDENTITY_MISMATCH` en todo el repo.
+
+**Arreglo:** `assertMailboxIdentity()` contrastando `users.getProfile` contra
+`mail.mailboxes.address`, y código nuevo **`MAILBOX_IDENTITY_MISMATCH`**. **La etiqueta debe salir de
+quien la puede probar, no de quien la declara.**
+
+### 🔴 MAIL-02 — La caché de access token no se invalida al rotar la credencial
+
+**Verificado:** `accessTokenCache` es un `Map` con clave **`session.mailbox_id` y nada más**
+(`lib/providers/google_oauth.ts:145`, `:151`, `:199`), TTL de `expires_in ?? 3600` (`:198`).
+**`vault.update_secret` no la toca**, y nada en la clave depende del refresh token.
+
+**Tres rotaciones seguidas siguieron sirviendo el buzón anterior** hasta que un redeploy vació la
+caché. **Rotar una credencial es rutina** —pasa cada vez que un cliente cambie su contraseña—, no
+una excepción que se absorba con un redeploy manual.
+
+**Arreglo:** clave = `mailbox_id` **+ huella del refresh token**. Cambia la credencial, cambia la
+clave, muere la entrada.
+
+### 🟠 MAIL-04 — Códigos agrupados, y un log ciego por omisión
+
+**Verificado:** `lib/errors.ts:15` declara **`MAIL_TOKEN_REVOKED`** y nada más para esta familia.
+`invalid_grant` se mapea explícito (`google_oauth.ts:186-188`) **y el mismo código se reutiliza como
+cajón de sastre** (`:225`). No existen `MAIL_CLIENT_CONFIG_INVALID` ni `MAIL_TOKEN_EXCHANGE_FAILED`.
+**Costó tres iteraciones** averiguar qué fallaba.
+
+**Y el diagnóstico es ciego por omisión, no por diseño:** `route.ts` llama a `logOp` en sus **dos**
+puntos (`:151`, `:159`) **sin `mailbox_id`**, aunque el campo **existe** en `OpLog`
+(`lib/log.ts:16`) y se serializa (`:27`). El dato estaba ahí y no se pasó.
+
+**Arreglo:** separar en `MAIL_TOKEN_REVOKED` / `MAIL_CLIENT_CONFIG_INVALID` /
+`MAIL_TOKEN_EXCHANGE_FAILED`, loguear el campo `error` de Google, y pasar `mailbox_id`.
+
+### App de Google en Production, y por qué las páginas legales eran el bloqueante
+
+Proyecto `unrlvl-mail-mcp` (`212509698390`) **In production**: branding completo, dominio
+`unrealvillestudio.com` autorizado, scope `gmail.readonly`. **Sin evaluación CASA y coste cero** — la
+lectura de correo con scope `gmail.readonly` no la dispara.
+
+**Páginas legales publicadas.** `/legal/privacy` verificada en vivo: **200**, **v1.1 con fecha 28 de
+agosto de 2026**, entidad **«Samuel Moreno Mendoza, sole proprietor»**, y el footer enlaza
+`/legal/privacy`, `/legal/terms` y `/es/legal/privacidad` — **ya no están huérfanas**, que era el
+otro defecto del 28-abr. Su **§04** documenta el acceso de sólo lectura al buzón con la cláusula de
+**Limited Use de Google**: scope mínimo, sin transferencia, sin publicidad, sin lectura humana salvo
+consentimiento afirmativo, seguridad o ley. **Eso es lo que Google pedía**, y por eso el orden no era
+burocrático. `legal/a` borrado (PR #8).
+
+### 🧭 El patrón, y por qué merece nombre
+
+| Defecto | Qué afirma | Qué no comprueba |
+|---|---|---|
+| MAIL-01 | de quién es el correo | que la credencial abra ese buzón |
+| MAIL-02 | que el token es el vigente | que la credencial no haya rotado |
+| MAIL-04 | cuál fue la causa del fallo | qué dijo Google exactamente |
+
+**Ninguno rompe. Los tres mienten en silencio**, que es la forma cara — el mismo diagnóstico que
+**HRD-R11** dejó escrito para el carril el 25-ago: *el éxito se comprueba contra el efecto, no contra
+la afirmación*. Que reaparezca en un subsistema nuevo, escrito de cero, dice que la regla todavía no
+está en el reflejo.
+
+### Abre
+
+**🔴 Rojos** — **MAIL-01** (identidad del buzón sin verificar; **ocurrió en producción**) ·
+**MAIL-02** (caché que sobrevive a la rotación) · **MAIL-03** (`forumphs-db` en pausa y fuera del
+mapa; detalle en `brands/ForumPHs/session_log.md`).
+
+**🟠 Naranjas** — **MAIL-04** (códigos agrupados + `logOp` sin `mailbox_id`) · **NSCF-PAY** (cobro de
+Shopify rechazado; detalle en `brands/NeuroneSCF/session_log.md`) · **FPHS-FORM** (formulario sin
+anti-spam y aviso en SPAM) · **autorizaciones sin firmar** y **titular de NSCF sin declarar** ·
+**SEC-01** sigue abierto en los otros tres MCPs · **SEC-02** (`upload.ts`).
+
+**🟡 Amarillos** — retirar `oauthplayground` de los redirect URIs · TikTok Shop de NSCF ·
+`003_drop_brand_oauth_tokens.sql` · **PR de limpieza** para sacar `projects/unrlvl-mail-mcp/` y el
+HANDOFF: **ya no son sólo andamio, son una copia que puede divergir del repo real**.
+
+---
+
 ## 2026-08-27 — El MCP de correo de punta a punta, y tres MCPs del ecosistema que estaban en internet sin autenticación
 
 **El carril no fue el problema de hoy.** Se construyó el MCP de correo de clientes completo —schema,

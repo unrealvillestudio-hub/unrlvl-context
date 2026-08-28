@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
+_Versión: 1.8 · 2026-08-28 (`unrlvl-mail-mcp` OPERATIVO: autenticado con MCP-AUTH-01 —401 verificado—, conector dado de alta en Claude.ai y tres buzones activos; y sus tres defectos abiertos, MAIL-01 / MAIL-02 / MAIL-04, que el catálogo declara porque cambian CÓMO se usa la capacidad) · base previa: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
 
 ---
 
@@ -51,7 +51,19 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 | `Meta` (UNRLVL Meta) | publicar IG/FB, ads, insights, audiencias | `list_brands` primero. brand_id mapping: ver ecosystem. Solo FB+IG existen (no LinkedIn/X aún). |
 | `Shopify` (Unrealville Studio) | productos, colecciones, temas, órdenes, GraphQL | B2C + B2B. `list_brands` para ver tiendas conectadas. |
 | `Vercel` | deploys, proyectos, logs, **web_fetch_vercel_url** (= acceso al proxy gh) | La vía para TODA URL de Vercel y para leer repos. |
-| `Mail` (unrlvl-mail-mcp) | leer buzones de correo de clientes | **SOLO LECTURA.** `list_brand_mailboxes` → `search_messages` → `get_message`. Carpetas `INBOX`/`SENT`/`SPAM`, **papelera excluida**, **sin persistencia del contenido**. Schema `mail` en `unrlvl-db` con el rol dedicado `mail_mcp` (NO `service_role`). ⚠️ **No está dado de alta como conector en Claude.ai** — hasta ese paso, no aparece en tools. |
+| `Mail` (unrlvl-mail-mcp) | leer buzones de correo de clientes | **SOLO LECTURA.** `list_brand_mailboxes` → `search_messages` → `get_message`. Carpetas `INBOX`/`SENT`/`SPAM`, **papelera excluida**, **sin persistencia del contenido**. Schema `mail` en `unrlvl-db` con el rol dedicado `mail_mcp` (NO `service_role`). ✅ **Operativo desde el 2026-08-28**: autenticado, conector dado de alta, **3 buzones** — ForumPHs, NeuroneSCF, UnrealvilleStudio, **y sólo esas tres**. ⚠️ **Leer los tres defectos abiertos antes de usarlo** (debajo). |
+
+> _Estado anterior de esta fila (v1.7, 2026-08-27), conservado: «⚠️ **No está dado de alta como conector en Claude.ai** — hasta ese paso, no aparece en tools.» Superado el 2026-08-28._
+
+### ⚠️ `unrlvl-mail-mcp` — tres defectos abiertos que cambian cómo se lee su respuesta
+
+| Código | Qué afirma el sistema | Qué NO comprueba | Consecuencia al usarlo |
+|---|---|---|---|
+| 🔴 **MAIL-01** | de quién es el correo | que la credencial abra ese buzón | **Una respuesta puede traer correo de OTRA marca con la etiqueta correcta encima.** Ocurrió en producción el 2026-08-28. **Una lectura no prueba de qué buzón viene.** |
+| 🔴 **MAIL-02** | que el token es el vigente | que la credencial no haya rotado | Tras rotar una credencial, **hasta una hora sirviendo el buzón anterior**. Si Sam acaba de rotar, no confiar en la lectura. |
+| 🟠 **MAIL-04** | cuál fue la causa del fallo | qué dijo Google exactamente | `MAIL_TOKEN_REVOKED` es cajón de sastre. **Un error de configuración se lee como token revocado.** |
+
+**Ninguno rompe: los tres mienten en silencio.** Hasta que cierren, tratar toda respuesta del MCP de correo como **indicativa, no probatoria** — y contrastar la dirección con `list_brand_mailboxes` antes de atribuir un mensaje a una marca.
 
 ### Estado de autenticación de los MCPs — medido el 2026-08-28
 
@@ -61,6 +73,8 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 | `unrlvl-meta-mcp` | ❌ **sin autenticación** (SEC-01) · además **SEC-02** en `api/upload.ts` | ✅ `true` (`all_except_custom_domains`) | **9** |
 | `unrlvl-shopify-mcp` | ❌ **sin autenticación** (SEC-01) | ✅ `true` (`all_except_custom_domains`) | **4** |
 | `unrlvl-mail-mcp` | ⏳ pendiente del merge de **MCP-AUTH-01** | ✅ `true` (`all_except_custom_domains`) | **0** — sólo lectura |
+
+**Actualización 2026-08-28 — sólo cambia `unrlvl-mail-mcp`:** el código **ya autentica** (MCP-AUTH-01 mergeado, PR #1, merge `350de4a`), verificado desde fuera con **`401 MCP_UNAUTHORIZED`** y **`WWW-Authenticate: Bearer`**; y por eso su **Vercel Authentication se retiró** (medido `ssoProtection: false`) — bloqueaba también al conector. **El orden importa: primero la cerradura, después quitar la puerta.** Los otros tres siguen exactamente como arriba, y en `unrlvl-supabase-mcp` la casilla de Vercel es **la única protección que hay**.
 
 **Los tres de SEC-01 no leen ninguna cabecera de credencial** (`req.json()` → `handleRpc` → `callTool`, sin tocar `req.headers`) y declaran `Access-Control-Allow-Origin: *`.
 
