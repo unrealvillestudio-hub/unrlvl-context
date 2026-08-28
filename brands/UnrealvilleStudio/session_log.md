@@ -132,13 +132,18 @@ está en el reflejo.
 ### Abre
 
 **🔴 Rojos** — **MAIL-01** (identidad del buzón sin verificar; **ocurrió en producción**) ·
-**MAIL-02** (caché que sobrevive a la rotación) · **MAIL-03** (`forumphs-db` en pausa y fuera del
-mapa; detalle en `brands/ForumPHs/session_log.md`).
+**MAIL-02** (caché que sobrevive a la rotación) · **MAIL-03** (`forumphs-db` **fuera del mapa del
+ecosistema**; detalle en `brands/ForumPHs/session_log.md`).
 
-**🟠 Naranjas** — **MAIL-04** (códigos agrupados + `logOp` sin `mailbox_id`) · **NSCF-PAY** (cobro de
-Shopify rechazado; detalle en `brands/NeuroneSCF/session_log.md`) · **FPHS-FORM** (formulario sin
-anti-spam y aviso en SPAM) · **autorizaciones sin firmar** y **titular de NSCF sin declarar** ·
-**SEC-01** sigue abierto en los otros tres MCPs · **SEC-02** (`upload.ts`).
+**🟠 Naranjas** — **MAIL-04** (códigos agrupados + `logOp` sin `mailbox_id`) · **FPHS-FORM**
+(formulario **sin protección anti-spam**) · **SEC-01** sigue abierto en los otros tres MCPs ·
+**SEC-02** (`upload.ts`). ✅ **Cerrado el mismo día:** las dos autorizaciones quedaron **firmadas**
+—Ivette Flores y Patricia Osorio C.—, con el PDF pendiente de subir.
+
+> _Corregido el 2026-08-28 por **MAIL-PRIV-01**: de esta lista se retiró un ítem que procedía de la
+> lectura de un buzón de cliente, y dos se reescribieron sin su procedencia. **Los tres defectos del
+> MCP —MAIL-01, MAIL-02, MAIL-04— se conservan íntegros:** son defectos de **nuestro propio código**
+> y no contienen correspondencia._
 
 **🟡 Amarillos** — retirar `oauthplayground` de los redirect URIs · TikTok Shop de NSCF ·
 `003_drop_brand_oauth_tokens.sql` · **PR de limpieza** para sacar `projects/unrlvl-mail-mcp/` y el

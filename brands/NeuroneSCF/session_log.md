@@ -1,5 +1,5 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular de la cuenta SIN DECLARAR; cobro de Shopify de $39,00 USD rechazado por fondos insuficientes) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28 por proceder de la lectura de un buzon de cliente) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
 
 ---
 
@@ -21,19 +21,19 @@ _Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MC
 **Alcance:** `INBOX` / `SENT` / `SPAM`, **papelera excluida**, **sin persistencia** de contenido. El
 MCP no puede enviar, responder, borrar, mover ni etiquetar.
 
-### 🟠 El titular de la cuenta no está declarado
+### ✅ El titular de la cuenta, declarado y con autorización firmada
 
-La fila de `mail.authorizations` dice **literalmente**:
+Al escribirse la primera versión de esta entrada, la fila de `mail.authorizations` tenía **los dos
+campos abiertos** —titular sin confirmar y documento sin firmar—, y así se anotó. **Ambos se
+cerraron el mismo 2026-08-28:**
 
-```
-holder_name    = PENDIENTE DE CONFIRMAR - titular de la cuenta no declarado
-document_path  = PENDIENTE DE FIRMA - alta tecnica 2026-08-28, se reemplaza por el documento firmado
-```
+- **Titular declarado: Patricia Osorio C.**
+- **Autorización firmada**, `signed_at = 2026-08-28`.
+- **Pendiente:** subir el **PDF** al bucket `mail-authorizations`.
 
-**Un buzón activo cuyo dueño no consta.** No es un detalle administrativo: es de quién es el correo
-que el sistema puede leer, y quién puede revocar ese permiso. **De las tres altas, ésta es la que
-tiene los dos campos abiertos** — ForumPHs al menos tiene titular declarado, y UnrealvilleStudio va
-como `AUTOTITULAR`, correcto y definitivo.
+**Por qué esto sí se registra, y el resto no:** es **el registro del consentimiento** —de quién es el
+correo que el sistema puede leer, y quién puede revocar ese permiso—, no contenido de
+correspondencia. **Debe existir.**
 
 ⚠️ **Y aquí ocurrió MAIL-01.** Hoy, en producción, **NeuroneSCF sirvió la bandeja de
 UnrealvilleStudio** — sin error, sin alerta, con la etiqueta de NeuroneSCF encima. El MCP estampa la
@@ -41,17 +41,10 @@ dirección **desde la base, no desde el proveedor**. Hasta que exista `assertMai
 **una lectura de este buzón no prueba que el contenido sea de este buzón**. Detalle y arreglo en
 `brands/UnrealvilleStudio/session_log.md` (2026-08-28).
 
-### 🟠 NSCF-PAY — Cobro de Shopify rechazado por fondos insuficientes
+### 🚫 Ítem retirado — MAIL-PRIV-01 (2026-08-28)
 
-- **Mercury:** transacción **declinada** con la tarjeta terminada en **`5823`**.
-- **Shopify:** falla el cobro de **$39,00 USD** de **`PRO-Neurone SCFlorida`**
-  (`pro.neuronescflorida.com`).
-
-**Shopify reintenta y después suspende.** No es un aviso de cortesía: es un reloj. Una tienda B2B
-suspendida se lleva el portal, el fulfillment y las comisiones con ella.
-
-**Revisar el saldo de Mercury:** puede haber **más cobros en cola contra la misma tarjeta**, y este
-rechazo sólo es el primero que avisó.
+Un ítem retirado el 2026-08-28 por **MAIL-PRIV-01**: procedía de la lectura de un buzón de cliente y
+vulneraba la **§5 del documento de autorización**. **Notificado a Sam en el chat.**
 
 ---
 
