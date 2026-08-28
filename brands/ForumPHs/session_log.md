@@ -17,10 +17,12 @@ UnrealvilleStudio; ninguna otra entra). Medido en `mail.mailboxes`:
 - Autorización viva (`revoked_at IS NULL`), `signed_at = 2026-08-28`, titular declarado **Samuel
   Moreno Mendoza (creador y titular de la cuenta)**.
 
-⚠️ **El `document_path` dice literalmente `PENDIENTE DE FIRMA`** — alta técnica de prueba, **se
-reemplaza por el documento firmado por Ivette**. La compuerta técnica funciona (hay fila viva, luego
-hay token), pero **lo que la compuerta representa todavía no existe en papel**. Es el hueco de esta
-alta, y se anota como tal.
+✅ **Autorización firmada el mismo 2026-08-28** — titular declarado **Ivette Flores**,
+`signed_at = 2026-08-28`. Al escribirse la primera versión de esta entrada el `document_path` decía
+`PENDIENTE DE FIRMA`; **ya no**. **Queda pendiente subir el PDF** al bucket `mail-authorizations`.
+
+_El registro del consentimiento debe existir y se conserva: es **quién autorizó qué**, no contenido
+de correspondencia._
 
 **Alcance de la lectura, y es técnico, no contractual:** carpetas `INBOX` / `SENT` / `SPAM`,
 **papelera excluida**, **sin persistencia** de contenido, asunto, remitente, destinatario, adjuntos
@@ -32,14 +34,17 @@ que lee** (estampa la dirección desde la base, no desde el proveedor). Hoy ocur
 otras dos marcas. Hasta que exista `assertMailboxIdentity()`, **una lectura de este buzón no es
 prueba de que el contenido sea de este buzón**.
 
-### 🔴 MAIL-03 — `forumphs-db` entra en pausa, y no está en el mapa
+### 🔴 MAIL-03 — `forumphs-db` está fuera del mapa del ecosistema
 
-Aviso de Supabase del **28-ago**: más de **7 días sin actividad**. Supabase pausa los proyectos
-inactivos del plan gratuito.
+**Medido con `list_projects` el 2026-08-28:** la cuenta de Supabase de UNRLVL (org
+`tnqcrwmfxesiqxlhuzri`) contiene **`unrlvl-db` y `XMMs`, y nada más**. **`forumphs-db` no está ahí.**
+Hay una base de datos **de esta marca, fuera del mapa del ecosistema, sin dueño declarado ni
+dependencias conocidas**.
 
-**Medido con `list_projects`:** la cuenta de Supabase de UNRLVL (org `tnqcrwmfxesiqxlhuzri`) contiene
-**`unrlvl-db` y `XMMs`, y nada más**. **`forumphs-db` no está ahí.** Hay una base de datos **de esta
-marca, fuera del ecosistema, sin dueño declarado ni dependencias conocidas** — y a punto de pausarse.
+**Pendiente:** determinar **qué contiene** y **si algo del carril depende de ella**.
+
+> _Reescrito el 2026-08-28 por **MAIL-PRIV-01**: la redacción anterior citaba su procedencia, que era
+> la lectura de un buzón de cliente. Se conserva sólo el hecho verificable de forma independiente._
 
 ⚠️ **Dos matices medidos frente al brief** (HRD-R13):
 
@@ -52,22 +57,22 @@ marca, fuera del ecosistema, sin dueño declarado ni dependencias conocidas** �
 
 **Lo que importa para ForumPHs:** el re-diagnóstico de BI del **04-ago** ya había medido que
 `monthly_kpis`, `eeff_preliminar` y `mora_mensual` estaban **vacías en toda `forumphs-db`** —falta
-carga de datos, no código—. Si la DB se pausa, **ese frente deja de existir sin que nadie lo decida**.
+carga de datos, no código—. Una DB fuera del mapa es un frente que **puede desaparecer sin que nadie
+lo decida**.
 
-### 🟠 FPHS-FORM — El formulario de `forumphs.com` no tiene anti-spam, y su aviso cae en SPAM
+### 🟠 FPHS-FORM — El formulario de `forumphs.com` no tiene protección anti-spam
 
-Dos defectos que se multiplican entre sí:
+**Comprobable visitando el sitio:** el formulario de `forumphs.com` **no tiene protección anti-spam**
+— sin captcha, sin honeypot, sin filtro. Para una administradora de PH, un formulario sin filtro no
+es una molestia de marketing: es ruido delante de una consulta de propietario.
 
-1. **El formulario no tiene anti-spam** — recibe prospección en frío sin filtro alguno.
-2. **`noreply@forumphs.com` no pasa los filtros de Gmail** — la notificación de que llegó algo cae
-   en **SPAM**.
+**Pendiente de verificar por prueba propia:** la **entregabilidad de `noreply@forumphs.com` hacia
+buzones Gmail**. Encaja con el frente **DKIM/SPF** ya abierto —es el mismo problema de
+**autenticación de correo saliente**, en otro remitente— y conviene cerrarlos juntos.
 
-**Un propietario real preguntando por una cuota extraordinaria aterriza en el mismo sitio que el
-spam, y nadie mira ese sitio.** Para una administradora de PH, un formulario silenciosamente roto no
-es una molestia de marketing: es una consulta de propietario perdida.
-
-Encaja con el **DKIM/SPF de Klaviyo** ya abierto: es el mismo problema de **autenticación de correo
-saliente**, en otro remitente. Conviene cerrarlos juntos.
+> _Reescrito el 2026-08-28 por **MAIL-PRIV-01**: la redacción anterior afirmaba un comportamiento de
+> entrega observado leyendo un buzón de cliente. Se conserva lo comprobable desde fuera; lo demás
+> pasa de hallazgo a **tarea de verificación por vía propia**._
 
 ---
 
