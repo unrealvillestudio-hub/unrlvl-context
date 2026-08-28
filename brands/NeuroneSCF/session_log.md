@@ -1,9 +1,9 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28 por proceder de la lectura de un buzon de cliente) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
 
 ---
 
-## 2026-08-28 — `neuronescflorida@gmail.com` entra al MCP · el cobro de Shopify rechazado · y un titular que no consta
+## 2026-08-28 — `neuronescflorida@gmail.com` entra al MCP · autorización firmada
 
 > Verificado contra producción el **2026-08-28** con `execute_sql` (HRD-R13). Professor cerrado
 > **antes**: **9 learnings**, `session_date = 2026-08-28`, los nueve `approved_by_sam = true`.
@@ -43,8 +43,8 @@ dirección **desde la base, no desde el proveedor**. Hasta que exista `assertMai
 
 ### 🚫 Ítem retirado — MAIL-PRIV-01 (2026-08-28)
 
-Un ítem retirado el 2026-08-28 por **MAIL-PRIV-01**: procedía de la lectura de un buzón de cliente y
-vulneraba la **§5 del documento de autorización**. **Notificado a Sam en el chat.**
+Un ítem retirado el 2026-08-28 por **MAIL-PRIV-01**: vulneraba la **§5 del documento de
+autorización**. **Notificado a Sam en el chat.**
 
 ---
 

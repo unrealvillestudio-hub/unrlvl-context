@@ -14,12 +14,19 @@ UnrealvilleStudio; ninguna otra entra). Medido en `mail.mailboxes`:
 
 - `brand_id = ForumPHs` · `address = forumphs507@gmail.com` · `provider = google_oauth` ·
   `active = true`.
-- Autorización viva (`revoked_at IS NULL`), `signed_at = 2026-08-28`, titular declarado **Samuel
-  Moreno Mendoza (creador y titular de la cuenta)**.
+- Autorización viva (`revoked_at IS NULL`), `signed_at = 2026-08-28`, **titular declarado: Ivette
+  Flores**. La cuenta la **creó Samuel Moreno Mendoza**, que no es lo mismo que ser su titular.
 
 ✅ **Autorización firmada el mismo 2026-08-28** — titular declarado **Ivette Flores**,
 `signed_at = 2026-08-28`. Al escribirse la primera versión de esta entrada el `document_path` decía
 `PENDIENTE DE FIRMA`; **ya no**. **Queda pendiente subir el PDF** al bucket `mail-authorizations`.
+
+> _Corregido el 2026-08-28 por **MAIL-PRIV-02**: esta sección declaraba **dos titulares distintos
+> para el mismo buzón** —Samuel Moreno Mendoza e Ivette Flores—, ambos con `signed_at = 2026-08-28`.
+> El registro de consentimiento no puede tener dos versiones. **Autoridad: la base**, consultada el
+> 2026-08-28 (`mail.mailboxes` × `mail.authorizations`, sin revocaciones): `ForumPHs` /
+> `forumphs507@gmail.com` → `holder_name = Ivette Flores`. Se corrige el log contra la base, no al
+> revés; la línea que atribuía la titularidad a Samuel **no se borra, se aclara**: creó la cuenta._
 
 _El registro del consentimiento debe existir y se conserva: es **quién autorizó qué**, no contenido
 de correspondencia._
@@ -43,8 +50,7 @@ dependencias conocidas**.
 
 **Pendiente:** determinar **qué contiene** y **si algo del carril depende de ella**.
 
-> _Reescrito el 2026-08-28 por **MAIL-PRIV-01**: la redacción anterior citaba su procedencia, que era
-> la lectura de un buzón de cliente. Se conserva sólo el hecho verificable de forma independiente._
+> _Reescrito el 2026-08-28 por **MAIL-PRIV-01**._
 
 ⚠️ **Dos matices medidos frente al brief** (HRD-R13):
 
@@ -70,9 +76,7 @@ es una molestia de marketing: es ruido delante de una consulta de propietario.
 buzones Gmail**. Encaja con el frente **DKIM/SPF** ya abierto —es el mismo problema de
 **autenticación de correo saliente**, en otro remitente— y conviene cerrarlos juntos.
 
-> _Reescrito el 2026-08-28 por **MAIL-PRIV-01**: la redacción anterior afirmaba un comportamiento de
-> entrega observado leyendo un buzón de cliente. Se conserva lo comprobable desde fuera; lo demás
-> pasa de hallazgo a **tarea de verificación por vía propia**._
+> _Reescrito el 2026-08-28 por **MAIL-PRIV-01**._
 
 ---
 
