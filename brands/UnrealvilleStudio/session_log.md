@@ -6,6 +6,36 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
+## 2026-08-29 — DELIVERY_AND_VERIFICATION_RULE v1.0 · entrega, evidencia y las cuatro QA
+
+**Qué se instaló.** `protocols/DELIVERY_AND_VERIFICATION_RULE.md` como **fuente única** de cómo se entrega y cómo se verifica en todo el ecosistema. Nació **v1.0** en el PR #70 y cerró el día en **v1.1** (24.300 b) tras el #71. Cubre cuatro cosas que vivían a medias o no vivían en ninguna parte:
+
+1. **Destinatario declarado.** Todo lo que se entrega cae en un bloque `PARA SAM` o `PARA CC`, que termina donde empieza el siguiente encabezado. **El diferenciador visual es para que Sam lea, no para que CC ejecute** — CC recibe estructura, no color. La marca depende de la superficie: cuadrado emoji en chat, carácter `●` con hex (`#00FFD1` Sam / `#FFB300` CC) en documento o UI con estilos.
+2. **Idioma.** ES o EN neutro internacional, **sin voseo**, por ambigüedad operativa: el imperativo voseante y el pretérito son homógrafos. Antes de este PR el idioma **no estaba escrito en ningún archivo del repo** — vivía sólo en las `userPreferences` de Sam, que CC no lee.
+3. **Evidencia.** Toda afirmación de estado va etiquetada `medido` / `reportado` / `deducido`. Sin etiqueta se lee como `medido`.
+4. **Las cuatro QA, con estatus HRD:** `QA-ENCARGO` → `QA-OBJETIVO` → `QA-INFO` → `QA-PROP`. `QA-INFO` es un **bloqueo**: sin la información completa no se responde, se entrega el plan para obtenerla. `QA-PROP` no existe sin `QA-OBJETIVO` validado con Sam.
+
+**Puntos de carga (8), ninguno copia la regla entera:** el documento fuente · `CC_PROTOCOL.md` §4.1 (v3, reducida a puntero, con su v2 archivada bajo guard) · `HRD_PROTOCOL.md` (`HRD-R15`) · `CAPABILITIES.md` · `ecosystem.json → delivery_and_verification_rule` · puntero cruzado en `knowledge/ecosystem/decision-matrix/QA_RULES.md` · el `CLAUDE.md` de cada repo del org · las `userPreferences` de Sam. La §6 declara además el **estatus de cada punto** —FUENTE / PUNTERO / RESUMEN OPERATIVO— y una §6.1 que ata al futuro proyecto de sync: **un sync que iguala textos entre puntos de carga rompe la regla en vez de aplicarla.**
+
+**Apertura de sesión reescrita.** `HRD_PROTOCOL.md` pasó a **v1.8**: la frase del paso 4 quedó única —«Hola Sam, Protocolos cargados según el panel. ¿Con qué marca o proyecto vamos a trabajar?»— y el paso 8 dejó de ser una frase fija para ser el **PANEL DE CARGA VERIFICADA**, con evidencia por fila y las **dos reglas inviolables como dos filas más**, cada una con su fuente y su evidencia. Convivían tres versiones de la misma frase.
+
+**Motivo medido, no teórico.** El 2026-08-29 se declaró «contexto cargado» con `ecosystem.md` **nunca solicitado** y con cuatro skills declarados activos **sin haber leído ningún `SKILL.md`**. Una frase fija se escribe igual con la carga hecha y sin hacer.
+
+**Lo que CC aportó por encima del brief.** (a) Un **paso 3-quater**: la regla **se carga** en la apertura, no se consulta — gobierna cómo se responde, y abrirla al final llega tarde porque el texto ya está escrito; además el propio panel está especificado en su §2.4. (b) **Cazó un defecto del brief de Claude.ai**: la verificación pedía `grep "protocolo cargado" → una sola línea`, pero con la redacción anterior archivada en el mismo archivo ese grep devuelve **dos**. Se sustituyó por un `awk` que corta en el bloque histórico y busca sólo en el cuerpo vivo. (c) Encontró **6** apariciones de la forma voseante donde el brief declaraba 5, y lo anotó por `HRD-R13`. (d) **Midió las dos vías a Vercel** en vez de deducir el estado: `curl` sigue dando **403 en CONNECT**, la tool `Vercel:web_fetch_vercel_url` devuelve **200**. `CC_PROTOCOL.md` pasó a **v7** con la nueva §0 bis.1; el texto de v5 se conserva íntegro porque sigue siendo cierto en su literal — lo que caducó es su conclusión.
+
+**Propagación — MEDIDA, no reportada.** Un PR por repo sobre los 32 del org, los 32 mergeados el mismo día. Verificado leyendo el `CLAUDE.md` de cada repo **en su rama por defecto**: **31 de 31** contienen el encabezado `## ENTREGA Y VERIFICACIÓN — INVIOLABLE` **y** el puntero a la fuente única, y ninguno conserva la regla derogada fuera de un guard. Con `unrlvl-context`, **32 de 32**.
+
+**El barrido encontró más de lo que el encargo pedía.** La regla de push **derogada desde el 2026-07-31** —«nunca por CC», «solo Sam vía GitHub Desktop»— seguía viva en **18 repos**, con un dato falso encima: Sam mergea por **GitHub Web UI** desde el 2026-07-29. No es cosmética: leerla como imperativo vigente **traba a CC**, y ya había ocurrido. Y **13 repos** decían «solo entonces hacer merge o pedir merge», que dejaba abierta la puerta a que CC mergeara. **11 repos no tenían `CLAUDE.md`** y se creó mínimo y apuntador: uno que describe el repo se desactualiza, uno que apunta no.
+
+**Dos errores propios, declarados.** (a) El script de propagación **re-corrigió ImageLab**, el único repo que ya tenía la regla arreglada, leyendo el texto viejo **dentro de su propio bloque archivado**; se detectó antes de abrir ningún PR, se arregló el orden de comprobación —guard antes que texto— y esa rama se rehízo desde `origin/main`. (b) Se forzó como firma de commit el `userEmail` de Sam, que **no es miembro del org** y además le habría atribuido commits que no hizo; las 17 ramas afectadas se re-firmaron y se verificó **en `origin`**, no en local. La primera verificación de ese arreglo dio los 17 por buenos con un `grep` que devolvía «ok» por defecto: el push no había entrado. `HRD-R11` exacto — comprobar contra el efecto, no contra lo que uno infiere.
+
+**Coste de la sesión, anotado a propósito.** Dos horas intentando aplicar `#00FFD1` y `#FFB300` a líneas de texto **en el chat**, superficie que no rinde color arbitrario. De ahí sale la regla de marca por superficie: una convención que no se puede cumplir se abandona entera, y con ella la parte que sí funcionaba.
+
+**Tres divergencias protocolo–práctica cerradas en el `Actualiza`** (`HRD_PROTOCOL.md` → **v1.9**): el paso 4 mandaba **regenerar** derivados contra la regla de **sincronizar** vigente desde el 2026-08-23 —contradicción viva dentro del mismo protocolo durante seis días—; el pie del cuerpo vivo declaraba **v1.3** mientras la cabecera decía v1.8; y los pasos 1-2 mandaban consultar el SMA **siempre**, cuando la práctica es sólo a petición. **Hallazgo de seguridad:** esos pasos llevaban el **secreto de export del SMA en claro** dentro del archivo, en `main`. Queda redactado en el bloque histórico y **la rotación es decisión de Sam**.
+
+---
+
+
 ## 2026-08-28 — El MCP de correo lee. Y lo que costó llegar no fue Google: fue que el sistema no verificaba de quién era lo que devolvía
 
 **Tres buzones de tres marcas leyendo en producción**, y tres defectos encontrados **por usarlo**, no
