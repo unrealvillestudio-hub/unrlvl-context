@@ -6,6 +6,43 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
+## 2026-08-29 — Recuperación del trabajo real del 2026-08-27, medido contra la fuente
+
+**Por qué existe esta entrada.** La sesión del **2026-08-27 duró más de dos días y tuvo DOS `Actualiza`**. El que quedó registrado cuenta *«tres MCPs del ecosistema en internet sin autenticación»*; **el otro —el del carril— nunca entró a los context files**. Sam confirma que ese trabajo es real e importante. Se recupera aquí, con fecha de hoy, y **no se copia del brief: se mide contra Supabase**, porque un brief de hace dos días es `reportado`, no `medido`, y lo que no se pudo confirmar se dice.
+
+### Lo que la medición CONFIRMA
+
+**NeuroneSCF pasó de 0 a 6 agentes con 12 crons, y arranca solo.** [medido — `intel.iid_agents` y `cron.job`] Seis dominios: `chlorine-sun` · `color-fade` · `damage-repair` · `fine-fragile` · `frizz-humidity` · `hair-science`. Doce crons, **jobs 67 a 78, los doce `active = true`**, un par `research`+`process` por dominio: martes `color-fade`, miércoles `damage-repair`, viernes `frizz-humidity`, y los quincenales los días 5, 12, 19 y 26. **Es la siembra más grande de una marca hasta la fecha y no estaba escrita en ninguna parte.**
+
+**Las versiones de EF que el carril dejó desplegadas.** [medido — `list_edge_functions`, sufijo de `entrypoint_path`] `content-run-stage` **100** (2026-08-27 23:03:51 UTC) · `iid-core` **56** (2026-08-27 15:02:05 UTC) · `iid-process` **49** (2026-08-26 22:38:45 UTC). Las tres estaban desfasadas en `ecosystem.json` desde el 26 y el 27: **el context file llevaba dos días declarando una versión que no era la servida.**
+
+**`HR-LUC-10` tiene `verify_pattern`.** [medido — `intel.watcher_rules`] Confirma lo que el brief declaraba.
+
+### Lo que la medición CORRIGE del brief
+
+**`cta_base` no es un caso de UnrealvilleStudio: es un hueco del eje.** El brief lo presentaba como la excepción de una marca. [medido — `public.brands`] Es **NULL en cinco filas**: `DEFAULT`, `LucienSael`, `PatriciaOsorioConectando`, `SamPublisher` y `UnrealvilleStudio`. Y las dos que el brief daba por pendientes —NeuroneSCF y ForumPHs— **sí lo tienen**. Tratarlo como excepción de una marca escondía que faltaba en cuatro.
+
+**LucienSael: 1 agente, UN dominio, cuatro temas.** El brief decía «1 agente para 4 dominios». [medido] En `intel.iid_agents` LucienSael tiene **1 agente y 1 dominio** (`behavioral-science`); los cuatro son sus **`brand_topics` activos**. El cuello de botella es real, pero la diferencia importa: **no faltan tres dominios, falta capacidad de agente para los temas que ya existen.**
+
+**La cobertura de `verify_pattern` es peor de lo que el brief describía.** El brief hablaba de cinco reglas sin patrón. [medido] De **50 reglas activas**, sólo **5** tienen `verify_pattern` —`HR-FPHS-13`, `HR-FPHS-15`, `HR-FPHS-16`, `HR-LEGAL-01`, `HR-LUC-10`— y sólo **UNA** tiene `fix_replacement` (`HR-FPHS-15`). Es decir: **45 de 50 reglas se evalúan sin patrón verificable, y el corrector determinista tiene con qué corregir en una sola.** Y **49 de 50 son `blocking`**; la única `warn` es `HR-FPHS-08`.
+
+### Lo que quedó pendiente de confirmar — y se confirmó al dar con la ruta
+
+**`judged_source` — CONFIRMADO, y el hito es real.** [medido 2026-08-29 por la ruta correcta] Está poblado en **13 de 67 piezas** (`content.content_pieces`) y **46 de 417 jobs** (`content.orchestrator_jobs`), con valor único **`social_adapted`**. La ruta es `assets->'watcher'->>'judged_source'`: **lo escribe `content-run-stage` dentro de `assets.watcher` de la pieza y del job**, no el Watcher en su log.
+
+**El corte es temporal y se ve dentro de la propia jornada:** **0 de 52** piezas anteriores al 2026-08-27 lo llevan —el campo no existía—, el **2026-08-27 lo llevan 12 de 14** —las dos que faltan son las juzgadas **antes** del despliegue de ese mismo día— y el **2026-08-28, 1 de 1**. **La ausencia en las filas viejas no es un defecto estructural: es el corte del despliegue de P3-FIX**, y `P3` queda **auditable por primera vez**.
+
+> **Cómo se llegó a decir que no existía, porque el error vale más que el dato.** La primera pasada consultó `information_schema.columns` —donde `judged_source` no aparece, porque **no es columna: es una clave dentro de un `jsonb`**— y `intel.watcher_log.gate_detail`, que es el **registro del juicio y no lleva `assets`**, así que ahí **no puede estar por construcción**. Las **747 filas** de esa consulta no son ni las 417 de jobs ni las 67 de piezas: **se estaba contando otra cosa**. `HRD-R13` dice que grepear no es leer; esto añade el escalón siguiente: **una consulta a la tabla equivocada devuelve un cero verdadero sobre una pregunta falsa**, y un cero verdadero es indistinguible de una ausencia real si nadie comprueba que la pregunta era la correcta. Lo que faltaba era **la ruta, no el dato**.
+
+**El ratio del 26 %, «8 de 27 mueren antes del juez» y «33 de 48 incumplimientos».** No se pudieron reproducir con las consultas de esta pasada: `intel.watcher_log` da otra distribución sobre **747 filas** —446 `hard_rules`, 206 `evidence`, 30+20 `duplication`, 8 `objective_stimulus`, **37 `PASS`**— y `content.content_pieces` tiene **67 piezas** repartidas en seis estados. **Quedan como `reportado`, con la consulta que habría que afinar anotada en la agenda.**
+
+### Lo que entra a la agenda
+
+**P1 a P13** más el bloque «sin bloquear», cada uno con su etiqueta: los que se midieron llevan el dato medido —**el cron 66 sigue `active = false`**, `HR-GEN-05` es `blocking` sin patrón, `cta_base` NULL en cinco— y los que no, llevan escrito que son `reportado` y qué consulta los cerraría. **Ningún ítem se copió del brief sin pasar por la fuente.**
+
+---
+
+
 ## 2026-08-29 — DELIVERY_AND_VERIFICATION_RULE v1.0 · entrega, evidencia y las cuatro QA
 
 **Qué se instaló.** `protocols/DELIVERY_AND_VERIFICATION_RULE.md` como **fuente única** de cómo se entrega y cómo se verifica en todo el ecosistema. Nació **v1.0** en el PR #70 y cerró el día en **v1.1** (24.300 b) tras el #71. Cubre cuatro cosas que vivían a medias o no vivían en ninguna parte:
