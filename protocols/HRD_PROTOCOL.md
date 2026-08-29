@@ -1,5 +1,5 @@
 # HRD — Hard Instructions Protocol
-_HRD Protocol v1.7 · UNRLVL Studio · 2026-08-26 (**dos reglas globales nuevas, ninguna derogación**, las dos nacidas de errores de la sesión 2026-08-26: **HRD-R13 — una lectura de estado caduca dentro de la misma sesión** (cuatro afirmaciones sin verificar en un chat que mutó producción durante horas; grepear no es leer, y una hipótesis razonada no sustituye una medición) y **HRD-R14 — el orden merge → deploy no es ceremonia; su violación es silenciosa** (`iid-research` v44 revirtió RESEARCH-01 y la EF siguió devolviendo 200, guardando el memo y marcando el truncamiento: todo parecía correcto y el arreglo no estaba puesto — costó tres corridas de research). · base previa v1.6 · 2026-08-26 (**tres reglas globales nuevas, ninguna derogación**, las tres nacidas de errores de la sesión 2026-08-25: **HRD-R10 — verificar fragmentos no es verificar el archivo** (50 tests en verde sobre `content-run-stage` mientras el archivo no compilaba, porque la suite extrae bloques por sentinelas; un `deno check` lo habría cazado), **HRD-R11 — el éxito se comprueba contra el efecto, no contra el código HTTP** (un 200 de SocialLab no es una publicación: cero publicaciones automáticas reales, y de ahí sale PUB-01) y **HRD-R12 — el test de la marca N+1 barre también los `CHECK` existentes** (la enumeración puede estar en el esquema: `iid_content_queue_angle_check` bloqueó el primer run con ángulos diversos). · base previa v1.5 · 2026-08-25 (**dos reglas globales nuevas, ninguna derogación**: **HRD-R08 — verificar contra el motor donde se ejecuta, no donde es cómodo probar** (`verify_pattern` en POSIX, `fix_replacement` en ECMAScript: `$1`, nunca `\1`; documentado en el `COMMENT ON COLUMN` de cada columna) y **HRD-R09 — mergear no despliega, y un merge puede quedarse corto** (se verifica el COMMIT tras el merge, no que el PR aparezca cerrado). Las dos nacen de errores cometidos el 2026-08-24/25 y quedan escritas para que no se repitan. · base previa v1.4 · 2026-08-16 (HRD_ACTUALIZA paso 10: **CONDICIÓN 4 — resuelto por vía alterna** + **paso 10-bis — verificación contra fuente**, ambos definidos en `skills/context-resolver/SKILL.md` §2 y §3; este protocolo los invoca, no los duplica. · base previa v1.3 · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas))_
+_HRD Protocol v1.8 · UNRLVL Studio · 2026-08-29 (**una regla global nueva y tres correcciones de forma, ninguna derogación**: **HRD-R15 — destinatario, idioma, evidencia y las cuatro QA**, cuya fuente única es `protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0; **barrido de voseo** — la forma voseante de «quieres» corregida a neutro en **6** apariciones, una más que las 5 declaradas en el brief: la sexta está en la pregunta de MODO de `HRD_ECOSYSTEM_AUDIT`, y se anota por `HRD-R13`; **`HRD_PROTOCOLO_ACTUALIZACION` suma los pasos 3-bis y 3-ter** —`CAPABILITIES.md` y `protocols/MULTIBRAND_RULE.md`— **sin renumerar** los existentes, cerrando la divergencia entre las 3 URLs de este HRD y las 5 de las `userPreferences` de Sam; **el paso 4 pasa a la frase única** que remite al panel, y **el paso 8 deja de ser una frase fija y pasa a ser el PANEL DE CARGA VERIFICADA** con evidencia por fila —una fila sin evidencia es roja—, donde **las dos reglas inviolables son DOS FILAS MÁS con su propia fuente y su propia evidencia** (`ecosystem.json → labs._note` y `protocols/MULTIBRAND_RULE.md`): si su fuente no se cargó, la fila sale **roja con su motivo** y la sesión se detiene sobre lo que esa regla protege. **Las redacciones anteriores de los pasos 4 y 8 quedan ARCHIVADAS ÍNTEGRAS** al final de este documento, bajo guard `⛔ NO OPERATIVO` (`CC_PROTOCOL.md` §0 y §6), con el comando exacto que comprueba que hay **una sola frase de apertura viva**. Motivo medido el 2026-08-29: se declaró «contexto cargado» con `ecosystem.md` nunca solicitado y cuatro skills declarados activos sin haber leído ningún `SKILL.md`. · base previa v1.7 · 2026-08-26 (**dos reglas globales nuevas, ninguna derogación**, las dos nacidas de errores de la sesión 2026-08-26: **HRD-R13 — una lectura de estado caduca dentro de la misma sesión** (cuatro afirmaciones sin verificar en un chat que mutó producción durante horas; grepear no es leer, y una hipótesis razonada no sustituye una medición) y **HRD-R14 — el orden merge → deploy no es ceremonia; su violación es silenciosa** (`iid-research` v44 revirtió RESEARCH-01 y la EF siguió devolviendo 200, guardando el memo y marcando el truncamiento: todo parecía correcto y el arreglo no estaba puesto — costó tres corridas de research). · base previa v1.6 · 2026-08-26 (**tres reglas globales nuevas, ninguna derogación**, las tres nacidas de errores de la sesión 2026-08-25: **HRD-R10 — verificar fragmentos no es verificar el archivo** (50 tests en verde sobre `content-run-stage` mientras el archivo no compilaba, porque la suite extrae bloques por sentinelas; un `deno check` lo habría cazado), **HRD-R11 — el éxito se comprueba contra el efecto, no contra el código HTTP** (un 200 de SocialLab no es una publicación: cero publicaciones automáticas reales, y de ahí sale PUB-01) y **HRD-R12 — el test de la marca N+1 barre también los `CHECK` existentes** (la enumeración puede estar en el esquema: `iid_content_queue_angle_check` bloqueó el primer run con ángulos diversos). · base previa v1.5 · 2026-08-25 (**dos reglas globales nuevas, ninguna derogación**: **HRD-R08 — verificar contra el motor donde se ejecuta, no donde es cómodo probar** (`verify_pattern` en POSIX, `fix_replacement` en ECMAScript: `$1`, nunca `\1`; documentado en el `COMMENT ON COLUMN` de cada columna) y **HRD-R09 — mergear no despliega, y un merge puede quedarse corto** (se verifica el COMMIT tras el merge, no que el PR aparezca cerrado). Las dos nacen de errores cometidos el 2026-08-24/25 y quedan escritas para que no se repitan. · base previa v1.4 · 2026-08-16 (HRD_ACTUALIZA paso 10: **CONDICIÓN 4 — resuelto por vía alterna** + **paso 10-bis — verificación contra fuente**, ambos definidos en `skills/context-resolver/SKILL.md` §2 y §3; este protocolo los invoca, no los duplica. · base previa v1.3 · 2026-07-18 (HRD_ACTUALIZA paso 10: BARRIDO DE ARCHIVADO — los ítems completados hace +30 días y sin referencias activas se MUEVEN a historical_AGENDA.md; se propone a Sam, nunca se ejecuta en silencio. + HRD_PROFESSOR: el proxy /api/professor YA EXISTE — verificar con action=checkpoint, NO con ping. · base previa v1.2 · 2026-06-29: HRD_ACTUALIZA paso 0: recargar estado vigente del repo antes de editar — evita pisar cambios de sesiones paralelas))_
 
 ---
 
@@ -12,7 +12,7 @@ Si apunta a un protocolo o skill, ese protocolo/skill es igualmente inviolable.
 
 ## MENSAJE DE VERIFICACIÓN — OBLIGATORIO ANTES DE EJECUTAR CUALQUIER HRD
 
-> "Ok Sam, querés que [objetivo]. Para ello debo [pasos intermedios implícitos, breve]. Correcto? Me faltan: [datos o 'ninguno — procedo']."
+> "Ok Sam, quieres que [objetivo]. Para ello debo [pasos intermedios implícitos, breve]. Correcto? Me faltan: [datos o 'ninguno — procedo']."
 
 Incluir pasos intermedios implícitos — lo que yo necesito hacer para llegar al objetivo aunque Sam no lo haya nombrado (cargar skill, leer repo, consultar Supabase, etc.) — para que Sam corrija el plan antes de que ejecute.
 
@@ -88,13 +88,17 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 >
 > **Cómo se cumple:** CC no ejecuta despliegues. Cuando un cambio necesita estar vivo para probarse, CC lo deja en **PENDIENTE PARA SAM** con el repo, el commit y la EF exactos. Y antes de afirmar que un arreglo está en producción, se lee **la versión servida** (el número final de `entrypoint_path`, no el del PR) y se confirma contra el commit mergeado.
 
+**HRD-R15** — **Destinatario, idioma, evidencia y las cuatro QA.** Todo lo que se entrega cae dentro de un bloque con encabezado propio (`PARA SAM` / `PARA CC`), con la marca visual que corresponda a la superficie —cuadrado emoji en chat, carácter `●` con su hex en documento o UI con estilos—; **el diferenciador es para que Sam lea, no para que CC ejecute**. El idioma es ES o EN neutro internacional, **sin voseo**; toda afirmación de estado va etiquetada `medido` / `reportado` / `deducido`; y toda entrega pasa, en orden, `QA-ENCARGO` → `QA-OBJETIVO` → `QA-INFO` → `QA-PROP`. **`QA-INFO` es un bloqueo:** sin la información completa no se responde — se entrega el plan para obtenerla vía Sam o CC. **`QA-PROP` no existe sin `QA-OBJETIVO` validado con Sam.** La apertura de sesión se confirma con el **panel de carga verificada**, no con una frase fija. Fuente única: `protocols/DELIVERY_AND_VERIFICATION_RULE.md`. Un brief sin la sección de `QA-PROP` respondida se devuelve, mismo deber que ante un brief sin el test de la marca N+1.
+
+> **Nota sobre `QA-ENCARGO`:** es el *MENSAJE DE VERIFICACIÓN* que ya encabeza este protocolo y el §2 de `CC_PROTOCOL.md`. `HRD-R15` sólo le pone nombre; no lo modifica ni lo duplica.
+
 ---
 
 ## HRD_PROTOCOLO_ACTUALIZACION
 
 **Trigger:** Sam escribe "protocolo actualización" o "protocolo actualizacion"
 
-**Verificación:** "Ok Sam, querés que cargue el protocolo completo del sistema. Sin alterar el protocolo, correcto? Me faltan estos datos: ninguno — procedo."
+**Verificación:** "Ok Sam, quieres que cargue el protocolo completo del sistema. Sin alterar el protocolo, correcto? Me faltan estos datos: ninguno — procedo."
 
 **Pasos inviolables:**
 
@@ -104,11 +108,60 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
    → Confirmar: prioridades activas
 3. Fetch `https://unrlvl-context.vercel.app/skills/INDEX.md` vía `Vercel:web_fetch_vercel_url`
    → Confirmar: versión del INDEX
-4. Responder exactamente: "Hola Sam, protocolo cargado. Confirmo: los labs son apps del ecosistema, no servicios genéricos. ¿Con qué marca o proyecto vamos a trabajar?"
+3-bis. Fetch `https://unrlvl-context.vercel.app/CAPABILITIES.md` vía `Vercel:web_fetch_vercel_url`
+   → Confirmar: versión
+3-ter. Fetch `https://unrlvl-context.vercel.app/protocols/MULTIBRAND_RULE.md` vía `Vercel:web_fetch_vercel_url`
+   → Confirmar: versión
+
+> **Por qué van como 3-bis y 3-ter y no renumerados:** este HRD carga 3 URLs desde su
+> redacción original y las `userPreferences` de Sam cargan 5. La divergencia se cierra
+> añadiendo, no renumerando — renumerar rompe las referencias cruzadas por número.
+
+4. Responder exactamente: "Hola Sam, Protocolos cargados según el panel. ¿Con qué marca o proyecto vamos a trabajar?"
+
+> **Frase única, fijada el 2026-08-29.** Convivían tres versiones: la de las
+> `userPreferences` de Sam, una más larga en este paso que confirmaba los labs, y la
+> exigencia de `MULTIBRAND_RULE.md` §7.1 de confirmar dos reglas. Manda ésta.
+> **Motivo:** una frase de apertura es un string fijo, y un string fijo al que se le
+> cuelgan confirmaciones deja de ser fijo — cada regla nueva reclama su línea, que es
+> exactamente cómo se llegó a tener tres versiones.
+>
+> **Y la frase remite al panel a propósito.** Decir "protocolos cargados" sin el panel
+> del paso 8 es afirmar sin medir. La frase afirma; el panel prueba.
+
 5. Si Sam indica marca → fetch `brands/[Marca]/brand.json` + `brands/[Marca]/BP_Brand_Context.md` + `brands/[Marca]/session_log.md`
 6. Si Sam indica ecosistema/labs → fetch `ecosystem.md` + `ecosystem_filemap.md`
 7. Consultar `skills/INDEX.md` y cargar skills relevantes para el trabajo declarado
-8. Confirmar: "Contexto cargado · Skills activos: [lista] · Estado: [resumen]"
+8. **PANEL DE CARGA VERIFICADA** — se emite siempre, junto con la frase del paso 4.
+   No es un resumen: es la comprobación a la que esa frase remite.
+
+   Una fila por archivo de carga obligatoria (pasos 1, 2, 3, 3-bis, 3-ter), por archivo
+   del contexto declarado (pasos 5 o 6) y por skill de carga obligatoria en apertura
+   según `skills/INDEX.md`. Cada fila lleva **estado** (verde cargado · ámbar parcial ·
+   rojo no cargado), **evidencia** (versión, bytes o código de respuesta, tomada del
+   fetch real) y, si no es verde, **el motivo en una línea**.
+
+   **Una fila sin evidencia es roja.** Usar la herramienta de un skill no es haber
+   cargado el skill.
+
+   **LAS DOS REGLAS INVIOLABLES se confirman aquí, y cada una es UNA FILA MÁS DEL PANEL,
+   con su propia evidencia. No son una frase declarada: se confirman o no se confirman.**
+
+   | Regla | Su fuente | La fila es verde sólo si |
+   |---|---|---|
+   | **Los labs son apps del ecosistema, no servicios genéricos** | `ecosystem.json` → `labs._note` (REGLA DE NOMENCLATURA — INVIOLABLE) | el paso 1 devolvió el archivo **y** se leyó `labs._note`. Evidencia: versión de `ecosystem.json` + el número de labs listados |
+   | **REGLA MULTIMARCA — el eje va en el CÓDIGO, la instancia en el DATO** | `protocols/MULTIBRAND_RULE.md` (paso 3-ter) | el paso 3-ter devolvió el archivo **y** se leyó. Evidencia: su versión |
+
+   **Si la fuente de una de las dos no se cargó, su fila NO es verde: es roja —o ámbar si
+   se leyó parcial— y declara el motivo en una línea, igual que cualquier otra fila.** Una
+   regla inviolable afirmada sobre un archivo que nunca se abrió es exactamente la frase
+   fija que este paso viene a sustituir, con una regla dentro en vez de un adjetivo.
+
+   **Y si una fila de regla inviolable sale roja, se dice y se para**: la sesión no arranca
+   trabajo sobre labs sin la primera, ni toca capa compartida sin la segunda. Se carga lo
+   que falta y se reemite el panel.
+
+   → Especificación completa del panel: `protocols/DELIVERY_AND_VERIFICATION_RULE.md` §2.4.
 
 ---
 
@@ -116,7 +169,7 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 
 **Trigger:** Sam escribe "Actualiza"
 
-**Verificación:** "Ok Sam, querés ejecutar el protocolo Actualiza completo. Sin alterar el protocolo, correcto? Me faltan estos datos: ninguno — procedo."
+**Verificación:** "Ok Sam, quieres ejecutar el protocolo Actualiza completo. Sin alterar el protocolo, correcto? Me faltan estos datos: ninguno — procedo."
 
 **Pasos inviolables:**
 
@@ -181,7 +234,7 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 
 **Trigger:** Sam menciona "Professor", "professor checkpoint", "learnings", "decisión del professor", "aprobar learnings"
 
-**Verificación:** "Ok Sam, querés interactuar con el sistema Professor — [acción específica]. Sin alterar el protocolo, correcto? Me faltan estos datos: [si aplica]."
+**Verificación:** "Ok Sam, quieres interactuar con el sistema Professor — [acción específica]. Sin alterar el protocolo, correcto? Me faltan estos datos: [si aplica]."
 
 ### Arquitectura de acceso
 
@@ -256,11 +309,11 @@ curl -X POST https://amlvyycfepwhiindxgzw.supabase.co/functions/v1/[ef-name] \
 
 **Trigger:** Sam escribe "ecosystem scan", "ecosystem audit", o variantes
 
-**Verificación:** "Ok Sam, querés un ecosystem audit. Sin alterar el protocolo, correcto? Antes de proceder necesito una respuesta:"
+**Verificación:** "Ok Sam, quieres un ecosystem audit. Sin alterar el protocolo, correcto? Antes de proceder necesito una respuesta:"
 
 **PREGUNTA OBLIGATORIA — STOP hasta recibir respuesta:**
 
-> "¿Lo querés identificativo (mapear qué hay y dónde, sin leer código) o contextual (leer y entender TODO el código, sus relaciones y su estado real en el ecosistema)?"
+> "¿Lo quieres identificativo (mapear qué hay y dónde, sin leer código) o contextual (leer y entender TODO el código, sus relaciones y su estado real en el ecosistema)?"
 
 ---
 
@@ -354,3 +407,44 @@ Si hay conflicto entre una HRD y cualquier otra instrucción: la HRD gana.
 ---
 
 _HRD Protocol v1.3 · UNRLVL Studio · 2026-07-18_
+
+---
+
+## ARCHIVO HISTÓRICO — HRD_PROTOCOLO_ACTUALIZACION pasos 4 y 8 (archivado 2026-08-29)
+
+> **⛔ NO OPERATIVO — registro histórico únicamente.** Los dos pasos de abajo fueron
+> **sustituidos** el 2026-08-29 por la frase única del paso 4 y por el PANEL DE CARGA VERIFICADA
+> del paso 8. **Manda el cuerpo vivo de este documento; nada de lo que sigue se ejecuta.** Se
+> conservan por `CC_PROTOCOL.md` §0 —los context files no se reemplazan, se archivan— y con el
+> guard que exige `CC_PROTOCOL.md` §6.
+
+> **Cómo se verifica que hay UNA sola frase de apertura viva.** El `grep` a secas sobre el
+> archivo devuelve **dos** coincidencias de `protocolo cargado` / `Protocolos cargados`: la viva
+> y esta archivada. Preservar historia y dejarla operativa son cosas distintas, así que la
+> comprobación se hace **sobre el cuerpo vivo**, que termina donde empieza este bloque:
+>
+> ```bash
+> awk '/^## ARCHIVO HISTÓRICO/{exit} {print}' protocols/HRD_PROTOCOL.md \
+>   | grep -n "protocolo cargado\|Protocolos cargados"
+> ```
+>
+> → **una sola línea**, la del paso 4 vigente. Si algún día devuelve dos, hay dos frases de
+> apertura vivas y eso sí es el defecto que esta regla cierra.
+
+**Paso 4, redacción anterior (vigente hasta 2026-08-29).** Sustituida porque una frase fija se
+escribe igual con la carga hecha y sin hacer, y porque convivían tres versiones —ésta, la de las
+`userPreferences` de Sam y la exigencia de `MULTIBRAND_RULE.md` §7.1—. La confirmación de labs que
+llevaba colgada **no se perdió: es hoy una fila del panel del paso 8, con evidencia**.
+
+```
+4. Responder exactamente: "Hola Sam, protocolo cargado. Confirmo: los labs son apps del ecosistema, no servicios genéricos. ¿Con qué marca o proyecto vamos a trabajar?"
+```
+
+**Paso 8, redacción anterior (vigente hasta 2026-08-29).** Sustituida porque declaraba «Contexto
+cargado» y una lista de skills activos **sin un solo dato que sólo se pueda tener habiendo cargado
+algo**. Medido el 2026-08-29: se emitió con `ecosystem.md` nunca solicitado y con cuatro skills
+declarados activos sin haber leído ningún `SKILL.md`.
+
+```
+8. Confirmar: "Contexto cargado · Skills activos: [lista] · Estado: [resumen]"
+```

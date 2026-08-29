@@ -130,7 +130,17 @@ Repos donde va el bloque: `unrlvl-iid-functions`, `Orchestrator`, `CopyLab`, `Im
 
 ### 7.1 · Claude.ai (chat)
 - Se carga en el arranque junto con `ecosystem.json`, `AGENDA.md`, `skills/INDEX.md` y `CAPABILITIES.md`.
-- La respuesta de apertura de `HRD_PROTOCOLO_ACTUALIZACION` confirma **dos** reglas, no una: la de labs y la multimarca.
+- La confirmación de las **dos reglas inviolables** —labs y multimarca— se emite en el
+  **paso 8** de `HRD_PROTOCOLO_ACTUALIZACION`, junto al panel de carga verificada, y ya
+  no en la línea de apertura. La línea de apertura es un string fijo y no admite
+  confirmaciones colgadas: ver `HRD_PROTOCOL.md` paso 4 y
+  `DELIVERY_AND_VERIFICATION_RULE.md` §2.4.
+- **La regla no se debilita: se endurece.** En la línea de apertura la confirmación era una
+  **afirmación**; en el paso 8 es **una fila del panel con su evidencia**. La fila de la
+  multimarca sólo es verde si el paso 3-ter devolvió `protocols/MULTIBRAND_RULE.md` **y** se
+  leyó, y la evidencia es su versión. Si no se cargó, la fila sale **roja con su motivo** y
+  **no se toca capa compartida** hasta cargarla. Antes, una apertura que afirmaba las dos
+  reglas sin haber abierto ninguno de los dos archivos era indistinguible de una que sí.
 - **Todo brief que Claude.ai le pase a CC y que produzca código, migración o siembra incluye el test de la marca N+1 respondido** (§2). Un brief sin esa sección está incompleto y CC puede rechazarlo.
 
 ### 7.2 · Claude Code (CC) — SECCIÓN OPERATIVA

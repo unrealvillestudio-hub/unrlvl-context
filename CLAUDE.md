@@ -28,8 +28,18 @@ Orden de carga, sin excepciones (`CC_PROTOCOL.md` §0 bis):
 > independiente de gobernanza en dos sesiones** (2026-08-23). Un CC sin protocolo cargado no es un CC
 > prudente: es uno que improvisa la gobernanza.
 
-Lo mismo aplica a `protocols/MULTIBRAND_RULE.md`, a `protocols/MAIL_PRIVACY_RULE.md` y a cualquier
+Lo mismo aplica a `protocols/MULTIBRAND_RULE.md`, a `protocols/MAIL_PRIVACY_RULE.md`, a
+`protocols/DELIVERY_AND_VERIFICATION_RULE.md` y a cualquier
 otro protocolo de `protocols/`.
+
+> **`protocols/DELIVERY_AND_VERIFICATION_RULE.md` (2026-08-29) — carga obligatoria** antes de
+> producir cualquier entrega: reporte, brief, cuerpo de PR o respuesta de chat. Es la **fuente
+> única** de la forma de entregar y de verificar —destinatario declarado, marca visual **por
+> superficie**, idioma ES/EN neutro **sin voseo**, etiqueta de evidencia y las **cuatro QA**
+> (`QA-ENCARGO` → `QA-OBJETIVO` → `QA-INFO` → `QA-PROP`, donde `QA-INFO` es un **bloqueo**).
+> `CC_PROTOCOL.md` §4.1, `HRD_PROTOCOL.md` `HRD-R15`, `CAPABILITIES.md` y este archivo **apuntan
+> ahí y no la copian**. El resumen operativo vive al final de este documento, bajo
+> «ENTREGA Y VERIFICACIÓN — INVIOLABLE».
 
 > **`protocols/MAIL_PRIVACY_RULE.md` (2026-08-28) — carga obligatoria** antes de cualquier tarea que
 > lea un buzón de cliente con `unrlvl-mail-mcp`, que toque el schema `mail`, o que escriba en un
@@ -188,6 +198,7 @@ protocols/
   HRD_PROTOCOL.md           ← Protocolo HRD completo
   CC_PROTOCOL.md            ← Protocolo de Claude Code (gobernanza CC)
   MAIL_PRIVACY_RULE.md      ← Lo que se lee de un buzón de cliente no se escribe en ningún sitio
+  DELIVERY_AND_VERIFICATION_RULE.md ← Destinatario declarado, idioma, evidencia y las cuatro QA
   ECOSYSTEM_AUDIT.md        ← Protocolo de auditoría
   AYRA_MASTER_PLAN.md       ← Plan maestro Ayra
   ...
@@ -266,3 +277,39 @@ Formato estándar: `chore: session update YYYY-MM-DD-vN`
 - ✅ Professor + Skills INDEX.md — ver `skills/INDEX.md` (índice vivo)
 
 > **Anterior (2026-05-29):** LIVE · `ecosystem.json` v21 (portal fulfillment NSCF) · Professor v1.0 (54 learnings, 42 aprobados) · Skills INDEX 15 skills · `brands/NeuroneSCF/session_log.md` sesión 2026-05-29.
+
+---
+
+## ENTREGA Y VERIFICACIÓN — INVIOLABLE
+
+**Destinatario declarado.** Todo lo que se entrega cae dentro de un bloque con
+encabezado propio: `PARA SAM — [de qué va]` o `PARA CC — [asunto]`. El bloque termina
+donde empieza el siguiente encabezado. Un párrafo fuera de un bloque no es una
+instrucción: es contexto.
+
+**El diferenciador visual es para que SAM lea, no para que CC ejecute.** La marca
+depende de la superficie: en **chat**, cuadrado emoji (verde Sam / naranja CC) más
+encabezado grande, porque el markdown no rinde color arbitrario; en **documento, HTML
+o UI con estilos**, el carácter `●` con la línea completa en su hex (`#00FFD1` Sam /
+`#FFB300` CC). El hex no se escribe dentro de la línea: es especificación.
+
+**Briefs largos se entregan como archivo**, no pegados: un bloque se trunca al copiarlo
+y el truncamiento no falla — CC ejecuta lo que le llegó.
+
+**Idioma.** ES neutro internacional o EN neutro internacional, sin excepción, sin
+regionalismos y **sin voseo** (el imperativo voseante y el pretérito son homógrafos:
+"decidí" es a la vez una orden y un hecho consumado). Aplica a chat, briefs, PRs,
+commits, comentarios de código, context files y plantillas de protocolo.
+
+**Evidencia.** Toda afirmación de estado va etiquetada `medido` / `reportado` /
+`deducido`. Sin etiqueta se lee como `medido`. Antes de asumir, se consulta.
+
+**Las cuatro QA son HRD RULES, en este orden:**
+`QA-ENCARGO` (confirmar que entendí el encargo) → `QA-OBJETIVO` (confirmar el objetivo
+con Sam) → `QA-INFO` (**bloqueo**: sin información completa NO se responde; si no hay
+forma de obtenerla, se entrega el plan para conseguirla vía Sam o CC) → `QA-PROP`
+(comprobar que lo entregado apunta al objetivo validado; cinco preguntas respondidas
+por escrito). Un brief sin `QA-PROP` respondida se devuelve.
+
+Fuente única: `unrlvl-context/protocols/DELIVERY_AND_VERIFICATION_RULE.md`.
+**No copiar la regla completa aquí: este bloque es un puntero, no una segunda fuente.**
