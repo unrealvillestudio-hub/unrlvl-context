@@ -905,16 +905,26 @@
       "auth_2026-08-28": "MCP-AUTH-01 MERGEADO Y DESPLEGADO — PR #1 del repo unrlvl-mail-mcp, merge 350de4a. VERIFICADO DESDE FUERA el 2026-08-28: 401 con {\"error\":{\"code\":\"MCP_UNAUTHORIZED\"}} y WWW-Authenticate: Bearer. lib/auth.ts compara en TIEMPO CONSTANTE y NO DEGRADA A ABIERTO si falta MCP_AUTH_TOKEN: sin la variable el servidor falla. VERCEL AUTHENTICATION RETIRADA (medido ssoProtection: false, antes true): bloqueaba tambien al conector, que no lleva sesion de Vercel. El andamio se retira PORQUE EL CODIGO YA AUTENTICA — primero la cerradura, despues quitar la puerta.",
       "conector_claude_ai": "DADO DE ALTA el 2026-08-28, con Authentication: None y cabecera Authorization: Bearer, porque el servidor usa TOKEN ESTATICO y no OAuth. Las tres tools aparecen en sesion: esa es la prueba.",
       "buzones_2026-08-28": [
-        "ForumPHs — forumphs507@gmail.com (google_oauth, active). Autorizacion: PENDIENTE DE FIRMA — alta tecnica, se reemplaza por el documento firmado por Ivette.",
-        "UnrealvilleStudio — unrealvillestudio@gmail.com (google_oauth, active). Autorizacion: AUTOTITULAR, cuenta propia, sin documento de terceros. Correcto y DEFINITIVO.",
-        "NeuroneSCF — neuronescflorida@gmail.com (google_oauth, active). Autorizacion: PENDIENTE DE FIRMA; titular PENDIENTE DE CONFIRMAR."
+        "ForumPHs — forumphs507@gmail.com (google_oauth, active). Autorizacion FIRMADA: titular Ivette Flores, signed_at 2026-08-28, document_path ForumPHs/20260828autorizacion.ForumPHs.pdf. revoked_at NULL.",
+        "UnrealvilleStudio — unrealvillestudio@gmail.com (google_oauth, active). Autorizacion: AUTOTITULAR, cuenta propia, sin documento de terceros. Titular Samuel Moreno Mendoza, signed_at 2026-08-28. Correcto y DEFINITIVO. revoked_at NULL.",
+        "NeuroneSCF — neuronescflorida@gmail.com (google_oauth, active). Autorizacion FIRMADA: titular Patricia Osorio C., signed_at 2026-08-28, document_path NeuroneSCF/20260828autorizacion.NeuroneSCF.pdf. revoked_at NULL.",
+        "MEDIDO EN LA BASE el 2026-08-29 con execute_sql (mail.mailboxes JOIN mail.authorizations, revoked_at IS NULL en las tres). Los dos document_path resuelven contra objetos REALES del bucket mail-authorizations, comprobado con el join contra storage.objects: ambos objeto_existe=true. El de UnrealvilleStudio no resuelve a objeto y es correcto — es AUTOTITULAR, no hay documento de terceros que subir. CC no toco la base: solo escribe lo que la base ya dice."
       ],
       "alcance_declarado_por_sam": "SOLO tres marcas: ForumPHs, NeuroneSCF y UnrealvilleStudio. Ninguna otra del ecosistema entra.",
       "_blockers_anteriores_2026-08-27": [
         "ALTA DEL CONECTOR en Claude.ai — pendiente. Sin ese paso el sistema esta completo y es inutil.",
         "MCP_AUTH_TOKEN en el entorno de Vercel — pendiente del merge de MCP-AUTH-01.",
         "Publicacion en Production del proyecto de Google Cloud — pendiente de que las paginas legales esten vivas."
-      ]
+      ],
+      "_buzones_anteriores_2026-08-28": {
+        "_guard": "⛔ NO OPERATIVO — SUPERADO POR buzones_2026-08-28. Registro historico unicamente (CC_PROTOCOL §0 y §6).",
+        "_por_que": "Archivado por MAIL-PRIV-04 el 2026-08-29. Esta lista declaraba como VIGENTE un estado que dejo de serlo el mismo 2026-08-28: contradecia, DENTRO DE SU PROPIA ENTRADA, a verificado_2026-08-28, a los blockers cerrados en el PR #68 y a la base. La entrada de UnrealvilleStudio ya era correcta entonces y se conserva igual en la clave vigente.",
+        "contenido": [
+          "ForumPHs — forumphs507@gmail.com (google_oauth, active). Autorizacion: PENDIENTE DE FIRMA — alta tecnica, se reemplaza por el documento firmado por Ivette.",
+          "UnrealvilleStudio — unrealvillestudio@gmail.com (google_oauth, active). Autorizacion: AUTOTITULAR, cuenta propia, sin documento de terceros. Correcto y DEFINITIVO.",
+          "NeuroneSCF — neuronescflorida@gmail.com (google_oauth, active). Autorizacion: PENDIENTE DE FIRMA; titular PENDIENTE DE CONFIRMAR."
+        ]
+      }
     }
   ],
   "staging_workflow": {
