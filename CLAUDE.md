@@ -27,13 +27,23 @@ Orden de carga, sin excepciones (`CC_PROTOCOL.md` §0 bis):
 > contra el dominio de Vercel. Con el protocolo declarado sólo en esa URL, CC quedó **sin fuente
 > independiente de gobernanza en dos sesiones** (2026-08-23). Un CC sin protocolo cargado no es un CC
 > prudente: es uno que improvisa la gobernanza.
+>
+> **Actualización medida (2026-08-29).** Las dos vías, probadas en la misma sesión: `curl` **sigue
+> dando 403 en CONNECT** contra `*.vercel.app`, y la tool MCP **`Vercel:web_fetch_vercel_url` devuelve
+> 200 con el cuerpo completo**. El orden **no cambia** —el repo sigue siendo la fuente canónica—, pero
+> CC **sí tiene hoy una segunda vía**: usa siempre la tool, nunca `curl`, y sólo declara Vercel
+> inalcanzable si la tool no está en la sesión. Evidencia: `protocols/CC_PROTOCOL.md` §0 bis.1.
 
 Lo mismo aplica a `protocols/MULTIBRAND_RULE.md`, a `protocols/MAIL_PRIVACY_RULE.md`, a
 `protocols/DELIVERY_AND_VERIFICATION_RULE.md` y a cualquier
 otro protocolo de `protocols/`.
 
-> **`protocols/DELIVERY_AND_VERIFICATION_RULE.md` (2026-08-29) — carga obligatoria** antes de
-> producir cualquier entrega: reporte, brief, cuerpo de PR o respuesta de chat. Es la **fuente
+> **`protocols/DELIVERY_AND_VERIFICATION_RULE.md` (2026-08-29) — carga obligatoria EN LA APERTURA**,
+> no cuando surja la duda: es el paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION` y tiene **fila propia
+> en el panel de carga verificada**. Una regla de forma que se consulta al final llega tarde, porque el
+> texto ya está escrito — y además ese documento **especifica el propio panel** (§2.4), así que un panel
+> emitido sin haberlo cargado es un panel que nadie verificó contra su especificación. Rige toda entrega:
+> reporte, brief, cuerpo de PR o respuesta de chat. Es la **fuente
 > única** de la forma de entregar y de verificar —destinatario declarado, marca visual **por
 > superficie**, idioma ES/EN neutro **sin voseo**, etiqueta de evidencia y las **cuatro QA**
 > (`QA-ENCARGO` → `QA-OBJETIVO` → `QA-INFO` → `QA-PROP`, donde `QA-INFO` es un **bloqueo**).
