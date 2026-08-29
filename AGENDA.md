@@ -1,4 +1,25 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-08-29 · v2026-08-29-v4 (**`judged_source` CONFIRMADO — el hito del 2026-08-27 es real y `P3` queda auditable por primera vez.** La v3 lo dejó abierto porque la consulta daba cero; **faltaba la ruta, no el dato**. Medido por `assets->'watcher'->>'judged_source'`: **13 de 67 piezas** y **46 de 417 jobs**, valor `social_adapted`, con **corte temporal limpio** en el despliegue de P3-FIX. La lección queda escrita: **una consulta a la tabla equivocada devuelve un cero verdadero sobre una pregunta falsa**.)_
+
+---
+
+## 🗓️ CONFIRMACIÓN 2026-08-29-v4 — `judged_source` existe; la consulta miraba donde no podía estar
+
+_(Bloque al tope. Corrige el único ítem que la v3 dejó sin confirmar.)_
+
+### ✅ Cerrado hoy, y verificado
+
+- ✅ **`judged_source` está poblado — el hito del 2026-08-27 es real y `P3` queda auditable por primera vez** (medido 2026-08-29). Ruta: **`assets->'watcher'->>'judged_source'`**. **13 de 67 piezas** (`content.content_pieces`) y **46 de 417 jobs** (`content.orchestrator_jobs`), con **valor único `social_adapted`**. Lo escribe **`content-run-stage` dentro de `assets.watcher`** de la pieza y del job — **no el Watcher en su log**.
+
+- ✅ **El corte es temporal, y la costura se ve dentro de la propia jornada** (medido). **0 de 52** piezas anteriores al 2026-08-27 lo llevan, porque el campo no existía. El **2026-08-27 lo llevan 12 de 14**: las dos que faltan son las juzgadas **antes** del despliegue de ese mismo día. El **2026-08-28, 1 de 1**. **La ausencia en las filas viejas no es un defecto estructural: es el corte del despliegue de P3-FIX.**
+
+### 🧭 Por qué la primera pasada dijo que no existía — el error vale más que el dato
+
+La consulta miró **`information_schema.columns`**, donde `judged_source` no aparece **porque no es una columna: es una clave dentro de un `jsonb`**. Y miró **`intel.watcher_log.gate_detail`**, que es el **registro del juicio y no lleva `assets`**, así que **ahí no puede estar por construcción**. Las **747 filas** de esa consulta no son ni las 417 de jobs ni las 67 de piezas: **se estaba contando otra cosa**.
+
+**Un escalón por encima de `HRD-R13`.** Esa regla dice que *grepear no es leer*. Esto añade lo siguiente: **una consulta a la tabla equivocada devuelve un CERO VERDADERO sobre una PREGUNTA FALSA**, y ese cero es **indistinguible de una ausencia real** si nadie comprueba que la pregunta era la correcta. El reflejo de **no escribirlo como medido cuando la consulta daba cero fue el correcto** —evitó registrar una negación falsa— pero el paso que faltaba era **verificar la ruta antes de concluir**, no dar el cero por bueno.
+
+
 _Actualizada: 2026-08-29 · v2026-08-29-v3 (**RECUPERACIÓN — EL TRABAJO REAL DEL 2026-08-27 NO ESTABA EN NINGÚN CONTEXT FILE.** Esa sesión duró **más de dos días y tuvo DOS `Actualiza`**; el registrado cuenta los MCPs sin autenticación, y **el del carril nunca entró**. Sam confirma que es real. Se recupera **medido contra Supabase, no copiado del brief**: **NeuroneSCF de 0 a 6 agentes con 12 crons** (jobs 67-78, los doce activos) · tres EF desfasadas dos días · y **P1-P13 en `next_session_agenda`**. Lo que el brief decía mal se corrige —`cta_base` es NULL en **cinco** marcas, no una; LucienSael tiene **1 dominio**, no 4; **45 de 50 reglas sin `verify_pattern`**— y lo que no se pudo confirmar **entra como ítem abierto, no como cierre**: `judged_source` da **cero** en toda la base.)_
 
 ---
