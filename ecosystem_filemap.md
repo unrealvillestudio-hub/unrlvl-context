@@ -35,8 +35,12 @@ _Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa:
 > íntegra** bajo guard `⛔ NO OPERATIVO`; §4 suma el campo `QA:`) · `HRD_PROTOCOL.md` → **v1.8**
 > (**HRD-R15**; barrido de voseo con **6** apariciones corregidas, **una más** que las 5 declaradas
 > en el brief —anotado por `HRD-R13`—; pasos **3-bis** y **3-ter** **sin renumerar**; paso 4 con la
-> frase única; paso 8 convertido en el panel) · `MULTIBRAND_RULE.md` §7.1 (la confirmación de las dos
-> reglas se **mueve** al paso 8; la redacción anterior queda **archivada en su sitio**, no borrada) ·
+> frase única; paso 8 convertido en el panel, donde **las dos reglas inviolables son dos filas más con
+> fuente y evidencia propias** —`ecosystem.json → labs._note` y `protocols/MULTIBRAND_RULE.md`—, rojas
+> con su motivo si su fuente no se cargó; y las **redacciones anteriores de los pasos 4 y 8 quedan
+> archivadas íntegras** al final del archivo, bajo guard `⛔ NO OPERATIVO`) · `MULTIBRAND_RULE.md` §7.1
+> (la confirmación de las dos reglas se **mueve** al paso 8 y **se endurece**: de afirmación a fila con
+> evidencia) ·
 > `CAPABILITIES.md` → **1.9** · `QA_RULES.md` (puntero cruzado) · los dos `CLAUDE.md` de este repo.
 >
 > **DERIVADOS — la regla, no la excepción:** este archivo **no se regenera completo**, y desde el

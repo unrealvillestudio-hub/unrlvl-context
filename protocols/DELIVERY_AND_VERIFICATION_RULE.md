@@ -93,6 +93,15 @@ Una frase fija que dice *«protocolos cargados»* no comprueba nada: se escribe 
 
 **Alcance del panel:** los cinco archivos de carga obligatoria (`ecosystem.json`, `AGENDA.md`, `skills/INDEX.md`, `CAPABILITIES.md`, `protocols/MULTIBRAND_RULE.md`), los archivos del contexto declarado —marca o ecosistema— y **los skills de carga obligatoria en apertura** según `skills/INDEX.md`. Un skill cuya herramienta se usó pero cuyo `SKILL.md` no se leyó **es rojo**: usar la herramienta no es haber cargado el skill que dice cómo usarla.
 
+**Las dos reglas inviolables del ecosistema son DOS FILAS MÁS del panel, no una frase declarada.** Antes colgaban de la línea de apertura, donde una confirmación no se distingue de una afirmación:
+
+| Regla | Su fuente | La fila es verde sólo si |
+|---|---|---|
+| **Los labs son apps del ecosistema, no servicios genéricos** | `ecosystem.json` → `labs._note` | el fetch devolvió el archivo **y** se leyó `labs._note`. Evidencia: versión de `ecosystem.json` + número de labs listados |
+| **REGLA MULTIMARCA — el eje va en el CÓDIGO, la instancia en el DATO** | `protocols/MULTIBRAND_RULE.md` | el fetch devolvió el archivo **y** se leyó. Evidencia: su versión |
+
+**Una regla inviolable afirmada sobre un archivo que nunca se abrió es la misma frase fija, con una regla dentro en vez de un adjetivo.** Si la fuente no se cargó, la fila sale **roja —o ámbar si se leyó parcial— con su motivo**, y la sesión **se detiene sobre lo que esa regla protege**: no se arranca trabajo sobre labs sin la primera, ni se toca capa compartida sin la segunda. Se carga lo que falta y se reemite el panel.
+
 ---
 
 ## 2-BIS. IDIOMA — ES O EN NEUTRO INTERNACIONAL, SIN EXCEPCIÓN
