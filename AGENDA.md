@@ -1,4 +1,36 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-08-29 · v2026-08-29-v3 (**RECUPERACIÓN — EL TRABAJO REAL DEL 2026-08-27 NO ESTABA EN NINGÚN CONTEXT FILE.** Esa sesión duró **más de dos días y tuvo DOS `Actualiza`**; el registrado cuenta los MCPs sin autenticación, y **el del carril nunca entró**. Sam confirma que es real. Se recupera **medido contra Supabase, no copiado del brief**: **NeuroneSCF de 0 a 6 agentes con 12 crons** (jobs 67-78, los doce activos) · tres EF desfasadas dos días · y **P1-P13 en `next_session_agenda`**. Lo que el brief decía mal se corrige —`cta_base` es NULL en **cinco** marcas, no una; LucienSael tiene **1 dominio**, no 4; **45 de 50 reglas sin `verify_pattern`**— y lo que no se pudo confirmar **entra como ítem abierto, no como cierre**: `judged_source` da **cero** en toda la base.)_
+
+---
+
+## 🗓️ RECUPERACIÓN 2026-08-29-v3 — El trabajo real del 2026-08-27, medido contra la fuente
+
+_(Bloque al tope. Detalle en `brands/UnrealvilleStudio/session_log.md` (2026-08-29). Sólo context files; cero código, cero migraciones, cero despliegues en esta pasada.)_
+
+**Por qué existe.** La sesión del **2026-08-27 duró más de dos días y tuvo DOS `Actualiza`**. El que quedó registrado cuenta *«tres MCPs en internet sin autenticación»*; **el del carril nunca entró a los context files**. Sam confirma que ese trabajo es real e importante. **No se copió del brief: se midió.**
+
+### 🟢 Confirmado por medición
+
+- ✅ **NeuroneSCF: de 0 a 6 agentes, con 12 crons y arrancando sola** (medido 2026-08-29 sobre `intel.iid_agents` y `cron.job`). Dominios `chlorine-sun` · `color-fade` · `damage-repair` · `fine-fragile` · `frizz-humidity` · `hair-science`; **jobs 67 a 78, los doce `active = true`**, un par `research`+`process` por dominio. **Es la siembra más grande de una marca hasta la fecha y no estaba escrita en ninguna parte.**
+- ✅ **Tres Edge Functions desfasadas dos días**, corregidas a la versión **real servida** (`content-run-stage` **100**, `iid-core` **56**, `iid-process` **49**). Detalle en el bloque `2026-08-29-v2`.
+- ✅ **`HR-LUC-10` tiene `verify_pattern`** (medido sobre `intel.watcher_rules`), como el brief declaraba.
+
+### 🟠 Corregido respecto al brief — el dato real difiere
+
+- ⚠️ **`cta_base` no es un caso de UnrealvilleStudio: es un hueco del eje.** Medido sobre `public.brands`: **NULL en cinco filas** —`DEFAULT`, `LucienSael`, `PatriciaOsorioConectando`, `SamPublisher`, `UnrealvilleStudio`—. Y las dos que el brief daba por pendientes, **NeuroneSCF y ForumPHs, sí lo tienen**.
+- ⚠️ **LucienSael: 1 agente, UN dominio, cuatro temas.** El brief decía «1 agente para 4 dominios». Medido: 1 agente y **1 dominio** (`behavioral-science`) en `iid_agents`; los cuatro son sus **`brand_topics`**. El cuello es real, pero **no faltan tres dominios: falta capacidad de agente para los temas que ya existen**.
+- ⚠️ **La cobertura de `verify_pattern` es peor de lo descrito.** De **50 reglas activas**, sólo **5** tienen `verify_pattern` y sólo **UNA** tiene `fix_replacement` (`HR-FPHS-15`). **45 de 50 se evalúan sin patrón verificable.** Y **49 de 50 son `blocking`**; la única `warn` es `HR-FPHS-08`.
+
+### 🔴 No confirmado — entra como ítem, no como cierre
+
+- ⬜ **`judged_source`.** El brief lo declara como el hito: *«poblado, P3 auditable por primera vez, era 0 de 54»*. **Medido, y no confirma:** la columna **no existe en ninguna tabla** (`information_schema.columns` → **0 filas**) y aparece en **0 de 747 filas** de `intel.watcher_log.gate_detail`. Vive con otro nombre, lo escribe `content-run-stage` v100 y no ha corrido desde el deploy del 27, o no ocurrió. **Dar por auditable algo que no se puede consultar es lo que `HRD-R11` prohíbe.**
+- ⬜ **El ratio del 26 %, «8 de 27 mueren antes del juez» y «33 de 48 incumplimientos».** No reproducibles con las consultas de esta pasada: `watcher_log` da **747 filas** (446 `hard_rules`, 206 `evidence`, 50 `duplication`, 8 `objective_stimulus`, **37 `PASS`**) y `content_pieces` tiene **67 piezas** en seis estados. Quedan como **`reportado`**.
+
+### 📋 P1–P13 en `next_session_agenda`
+
+Los trece más el bloque «sin bloquear», **cada uno con su etiqueta de evidencia**. Los medidos llevan el dato: **el cron 66 sigue `active = false`** (P3), `HR-GEN-05` es `blocking` sin patrón (P6), `cta_base` NULL en cinco (P9), una sola regla con `fix_replacement` (P4), una sola `warn` (P5). Los no medidos llevan escrito que son `reportado` y qué los cerraría. **Ninguno se copió del brief sin pasar por la fuente.**
+
+
 _Actualizada: 2026-08-29 · v2026-08-29-v2 (**CORRECCIÓN — UN BRIEF FECHADO EL 27 PEDÍA CERRAR UNA SESIÓN YA CERRADA Y BAJAR LAS VERSIONES.** No se ejecutó: `AGENDA` estaba en `2026-08-29-v1` y `ecosystem.json` en `2026-08-29-v3`, y la sesión del 2026-08-27 ya tenía su bloque y su entrada en `previous_sessions`, con **otro contenido**. Se rescató lo único que el paso 0 confirmó válido y medible: **cuatro reglas nuevas** en `HRD_PROTOCOL.md` → **v1.10** —R16 ESZIP, R17 Windows, R18 cableado, R19 la última palabra es de Sam— y **tres Edge Functions desfasadas** en `ecosystem.json`, que llevaban **dos días** declarando una versión que no era la servida.)_
 
 ---

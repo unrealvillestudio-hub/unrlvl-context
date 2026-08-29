@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-08-29-v4",
+    "version": "2026-08-29-v5",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-08-29-v3",
+    "previous": "2026-08-29-v4",
     "previous_chain": [
+      "2026-08-29-v4",
       "2026-08-29-v3",
       "2026-08-29-v2",
       "2026-08-29-v1",
@@ -124,7 +125,8 @@
         ]
       }
     ],
-    "_correccion_2026-08-29-v4": "Version de CORRECCION, no de sesion nueva: NO se anade entrada en previous_sessions (sigue en 16), mismo criterio que _correccion_2026-08-28-v2/-v3/-v4. Origen: un brief fechado el 2026-08-27 pidio cerrar esa sesion, que YA ESTABA CERRADA y con otro contenido, y bajar las versiones de AGENDA y de este JSON a 2026-08-27-v2 estando en 2026-08-29. No se ejecuto. Se rescato lo unico que el paso 0 confirmo valido y medible: las tres EF desfasadas y cuatro reglas nuevas de HRD_PROTOCOL (v1.10). El brief acertaba en content-run-stage 100, fallaba en iid-core (decia 55, es 56) y en iid-process (decia 48, es 49), y declaraba 19 learnings del 2026-08-27 cuando la base dice 31, los 31 aprobados. Se escribio lo medido."
+    "_correccion_2026-08-29-v4": "Version de CORRECCION, no de sesion nueva: NO se anade entrada en previous_sessions (sigue en 16), mismo criterio que _correccion_2026-08-28-v2/-v3/-v4. Origen: un brief fechado el 2026-08-27 pidio cerrar esa sesion, que YA ESTABA CERRADA y con otro contenido, y bajar las versiones de AGENDA y de este JSON a 2026-08-27-v2 estando en 2026-08-29. No se ejecuto. Se rescato lo unico que el paso 0 confirmo valido y medible: las tres EF desfasadas y cuatro reglas nuevas de HRD_PROTOCOL (v1.10). El brief acertaba en content-run-stage 100, fallaba en iid-core (decia 55, es 56) y en iid-process (decia 48, es 49), y declaraba 19 learnings del 2026-08-27 cuando la base dice 31, los 31 aprobados. Se escribio lo medido.",
+    "_correccion_2026-08-29-v5": "RECUPERACION del trabajo REAL de la sesion 2026-08-27, que duro mas de dos dias y tuvo DOS Actualiza, y cuyo contenido nunca entro a los context files. Sam confirma que el trabajo es real; se escribe MEDIDO contra Supabase, no copiado del brief. Version de CORRECCION: NO se anade entrada en previous_sessions (sigue en 16), porque la sesion del 2026-08-27 YA tiene la suya. Lo que el brief acertaba, lo que decia mal y lo que no se pudo confirmar queda declarado item por item con su etiqueta de evidencia."
   },
   "studio": {
     "name": "Unrealville Studio",
@@ -274,6 +276,13 @@
         "platform_mode": "19 filas.",
         "dominios": "9 con angles sembrados: 5 sociales bajo nscf_conversion, 4 editoriales bajo nscf_editorial. objecion entra SOLO en color-fade y fine-fragile — es angulo de venta y va donde hay decision que mover.",
         "abierto": "MARCA CON VENTA REAL DETRAS: revisar el adaptado antes de aprobar mientras el conteo de hashtags del genoma no sea regla del Watcher (P5). Aqui el costo de un adaptado malo es una venta, no reputacion. ⚠️ El handle del blog lleva sufijo -1 (hair-intelligence-1): hay o hubo un blog previo con el handle limpio — handle duplicado es contenido duplicado y URL fea para SEO. OAuth de TikTok for Business pendiente (PO)."
+      },
+      "iid_agents_2026-08-29": {
+        "_estado": "OPERATIVO — MEDIDO el 2026-08-29 con execute_sql sobre intel.iid_agents y cron.job. La marca paso de 0 a 6 agentes; el trabajo se hizo en la sesion del 2026-08-27 (dos Actualiza, mas de dos dias) y NUNCA habia entrado a este context file.",
+        "agentes": 6,
+        "dominios": "chlorine-sun · color-fade · damage-repair · fine-fragile · frizz-humidity · hair-science",
+        "crons": "12 — jobs 67 a 78 en cron.job, LOS DOCE ACTIVOS. Un par research+process por dominio: nscf-colorfade (67/68, martes 09:00/11:00), nscf-damage (69/70, miercoles), nscf-frizz (71/72, viernes), nscf-clima (73/74, dias 5 y 19), nscf-finefragile (75/76, dias 12 y 26), nscf-hairintel (77/78, dias 5 y 19 a las 09:30/11:30).",
+        "_evidencia": "SELECT jobid, jobname, schedule, active FROM cron.job WHERE jobid BETWEEN 60 AND 90 → los 12 nscf-* devuelven active=true. SELECT brand_id, count(*), count(DISTINCT domain) FROM intel.iid_agents → NeuroneSCF: 6 agentes, 6 dominios."
       }
     },
     {
@@ -584,6 +593,10 @@
         "theme": "VOID SYSTEM en brand_publish_channels.config.theme del canal blog, tokens de BP_BRAND_UNRLVL_v1.3.json: void=bg #080808, carbon=surface_1 #0F0F0F, graphite=surface_2 #1A1A1A, chalk=text #F2F0EC, cyan=accent #00FFD1 (UNICO acento). warn NO existe en el BP: queda como default DECLARADO, no inventado. blog_label «Field Notes», blog_path /blog — desacoplados a proposito.",
         "agentes": "DE 14 A 6: se eliminaron 8 agentes fantasma. Verificado: intel.iid_agents con brand_id=UnrealvilleStudio devuelve 6 filas, las 6 activas, una por dominio activo.",
         "abierto": "El drenaje NO atiende vercel_html: el canal blog esta activo pero el sitio debe RENDERIZAR DESDE LA DB como forumphs.com, y ese mecanismo falta en WebLab. Sembrar el canal no lo crea. ⚠️ Ademas: el tema Shopify de NSCF ya lleva «12951 Biscayne Blvd, Suite 1» y brands/UnrealvilleStudio/brand.json dice la direccion SIN el numero de suite. Dato legal, no redaccion: decide Sam."
+      },
+      "cta_base_2026-08-29": {
+        "_estado": "cta_base = NULL — MEDIDO el 2026-08-29: SELECT id, cta_base IS NULL FROM public.brands.",
+        "_correccion_al_brief": "El brief lo declaraba como si UnrealvilleStudio fuera el unico caso. NO LO ES: cta_base es NULL en CINCO filas de public.brands — DEFAULT, LucienSael, PatriciaOsorioConectando, SamPublisher y UnrealvilleStudio. Se escribe el conjunto medido, no el caso suelto, porque tratarlo como excepcion de una marca esconde que es un hueco del eje."
       }
     },
     {
@@ -612,6 +625,12 @@
         "primer_research": "2026-08-26 23:33:35 UTC — memo INTEGRO de 25.162 caracteres, stop_reason=end_turn, truncated=false, max_tokens=16000 de fuente base. PRIMER RESEARCH DE LA HISTORIA DE LA MARCA. La corrida anterior del mismo agente, 23:07:01, salio TRUNCADA con max_tokens NULL: la divergencia silenciosa de la jornada.",
         "piezas": "4 vivas, las cuatro pass_type=clean en awaiting_approval: blog y meta_ig del 2026-08-27 00:00 UTC (esta sesion) y x y tiktok del 2026-07-31. CORRECCION AL BRIEF: las dos de hoy NO son las dos primeras piezas de la marca — ya habia dos.",
         "abierto": "P1 judged_source NULL en las 4 piezas vivas, las dos nuevas incluidas, pese a content-run-stage v94 — BLOQUEA TODA GENERACION NUEVA. P4 el fan-out encolo para plataformas sin proveedor: 3 failed (tiktok, x, meta_fb) + 1 complete (meta_ig) en el lote de las 23:57. P3 IID_FANOUT_EMPTY sin causa. Divergencia lucien_social (X manual) vs DB (x_api). Colision de /blog/: luciensael.com sirve hoy HTML estatico con extension .html — resolver antes de BLOG-01 PR-3, con los 301. Divergencia 1 del 2026-08-22 (pesos tipograficos) SIGUE ABIERTA: migracion 20260822160000 sin aplicar."
+      },
+      "iid_agents_2026-08-29": {
+        "_estado": "1 agente — MEDIDO el 2026-08-29 sobre intel.iid_agents.",
+        "agentes": 1,
+        "dominios_en_iid_agents": "behavioral-science (UNO, no cuatro)",
+        "_correccion_al_brief": "El brief decia '1 agente para 4 dominios'. MEDIDO: en intel.iid_agents LucienSael tiene 1 agente y UN dominio, behavioral-science. Los cuatro son sus brand_topics activos (SELECT brand_id, count(*) FILTER (WHERE active) FROM intel.brand_topics → LucienSael: 4). El cuello de botella es REAL —un solo agente alimentando cuatro temas— pero se describia mal, y la diferencia importa: no faltan tres dominios en iid_agents, falta capacidad de agente para los temas que ya existen."
       }
     }
   ],
@@ -1372,6 +1391,21 @@
     "milestone_v1": "31 Agosto 2026"
   },
   "next_session_agenda": [
+    "🔴 P1 · AMBIENTE DE ARBITRAJE CON ETAPA CULPABLE — 30 piezas en tandas de 10 AGRUPADAS POR REGLA. Reglas de PRESENCIA: comparar raw / aife_filtered / adapted para localizar la etapa que introduce el incumplimiento. Reglas de AUSENCIA: mirar aguas arriba (case_examples, mechanism del finding). Sin etapa culpable, cada arreglo es una apuesta. [reportado por Sam — trabajo de la sesion 2026-08-27]",
+    "🔴 P2 · PRE-JUEZ-01 — piezas que mueren ANTES del juez. El brief declara 8 de 27, un 30 % del desperdicio SIN decision editorial de por medio. [reportado, NO medido: la consulta que lo decidiria no se ejecuto en esta pasada]",
+    "🔴 P3 · ENCENDER EL CRON 66 (content-placement-poll) — MEDIDO 2026-08-29: sigue active=false en cron.job. Es bloqueo comun de varias marcas; ForumPHs tiene 5 piezas colocadas esperando. PUB-01 se cerro en content-scheduler v6, asi que el motivo original del apagado ya no aplica: falta la decision de encenderlo.",
+    "🟠 P4 · PATTERN-01 — anadir fix_replacement a las reglas que el arbitraje de P1 senale. MEDIDO 2026-08-29: de 50 reglas activas en intel.watcher_rules, SOLO UNA tiene fix_replacement (HR-FPHS-15). El corrector determinista no tiene con que corregir.",
+    "🟠 P5 · SEVERITY-01 — bajar severidad regla por regla, SOLO CON FIRMA DE SAM (HRD-R19). MEDIDO: de 50 reglas activas, 49 son blocking y UNA es warn (HR-FPHS-08). Y warning significa 'va a su bandeja', no 'pasa sola'.",
+    "🟠 P6 · HR-GEN-05 — el voseo viene de CopyLab/AIFE y la regla no tiene dueno. MEDIDO 2026-08-29: HR-GEN-05 esta activa, es blocking y NO tiene verify_pattern, asi que el juez la evalua sin patron verificable.",
+    "🟠 P7 · LUCIENSAEL — capacidad de agente. MEDIDO: 1 agente (dominio behavioral-science) para 4 brand_topics activos. El brief lo describia como '1 agente para 4 dominios'; el dato real es ese.",
+    "🟠 P8 · MANUAL-01 [reportado por Sam, sin detalle medido en esta pasada]",
+    "🟠 P9 · TRANSPORTE DE cta_base — MEDIDO 2026-08-29: cta_base es NULL en CINCO filas de public.brands (DEFAULT, LucienSael, PatriciaOsorioConectando, SamPublisher, UnrealvilleStudio). El brief decia 'ya solo NSCF y ForumPHs'; la medicion dice que esas dos SI lo tienen y que faltan otras cuatro mas DEFAULT.",
+    "🟠 P10 · [DISCLAIMER_BASE] [reportado por Sam, sin detalle medido en esta pasada]",
+    "🟠 P11 · COPYLAB-03 [reportado por Sam, sin detalle medido en esta pasada]",
+    "🟡 P12 · SIG-01 y SEO-01 [reportado por Sam, sin detalle medido en esta pasada]",
+    "🟡 P13 · BLOG-01 PR-3 y PR-4 [reportado por Sam, sin detalle medido en esta pasada]",
+    "🟡 SIN BLOQUEAR (reportado por Sam en el brief del 2026-08-27, NO medido en esta pasada): 7 statement imperativos · 84 filas de cola fallida, 9 con piezas · deno.land y unrlvl-context.vercel.app bloqueados en el proxy de egreso de CC (ver CC_PROTOCOL §0 bis.1: la tool Vercel:web_fetch_vercel_url SI alcanza el segundo) · claves SERVICE_ROLE en 15 de 17 EF · 4 ERROR-level en unrlvl-db.",
+    "🔴 JUDGED_SOURCE — NO CONFIRMADO, y por eso entra como item y no como cierre. El brief declara 'judged_source poblado, P3 auditable por primera vez, era 0 de 54'. MEDIDO el 2026-08-29: la columna judged_source NO EXISTE en ninguna tabla de la base (information_schema.columns → 0 filas), y en intel.watcher_log.gate_detail aparece en 0 de 747 filas. O vive con otro nombre, o lo escribe content-run-stage v100 y aun no ha corrido, o no ocurrio. Cierre: localizar donde deberia escribirse y comprobarlo contra la fuente antes de darlo por hecho.",
     "🔴 MAIL-PRIV — PENDIENTE ESTRUCTURAL: decidir si la lectura de correo de clientes pasa a ocurrir en SESION APARTE que no ejecuta Actualiza ni Professor. Es la solucion ESTRUCTURAL y no de disciplina: una sesion que NO PUEDE escribir en context files, porque no ejecuta el paso que los escribe, no depende de que nadie se acuerde. La regla en si YA NO ES UN PENDIENTE: subio a protocols/MAIL_PRIVACY_RULE.md v1.0 el 2026-08-28 por decision de Sam, que es su FUENTE CANONICA y el unico sitio donde se escribe entera; AGENDA.md, ecosystem.json y la §7 del .github/CLAUDE.md de unrlvl-mail-mcp apuntan alla y NO duplican, porque lo que se copia diverge (CC_PROTOCOL §6). Enunciado, prueba para decidir una duda, lo que la regla NO prohibe y barrido previo al commit: en el protocolo, §1 a §7. Decision de Sam, no de CC",
     "🔴 MAIL-01 — EL MCP DE CORREO NO VERIFICA DE QUIEN ES EL BUZON QUE LEE. lib/tools.ts estampa address desde la base y no desde el proveedor: una credencial mal atada devuelve CORREO AJENO CON LA ETIQUETA CORRECTA ENCIMA. OCURRIO EN PRODUCCION el 2026-08-28 (NeuroneSCF sirvio la bandeja de UnrealvilleStudio, sin error ni alerta). Arreglo: assertMailboxIdentity() con users.getProfile contra mail.mailboxes.address + codigo MAILBOX_IDENTITY_MISMATCH",
     "🔴 MAIL-02 — LA CACHE DE ACCESS TOKEN NO SE INVALIDA AL ROTAR LA CREDENCIAL. Clave = mailbox_id a secas, TTL 1 h, y vault.update_secret no la toca. Tres rotaciones seguidas sirvieron el buzon anterior hasta que un redeploy vacio la cache. Arreglo: clave = mailbox_id + huella del refresh token",
