@@ -36,6 +36,12 @@ _Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa:
 > `AGENDA.md` decía que **tres** `document_path` seguían apuntando a texto. Son **dos**. El de
 > `UnrealvilleStudio` dice `AUTOTITULAR` y es correcto. Corregido en su sitio.
 >
+> ✅ **Y el residuo queda cerrado, no sólo corregido:** los dos PDF están **subidos** al bucket
+> `mail-authorizations` y los dos `document_path` **apuntan al objeto** — verificado por join de
+> `mail.authorizations` contra `storage.objects`. `infrastructure[INFRA-MAIL-MCP].blockers` lo
+> refleja, con la causa del rechazo previo anotada: era el **acento** del nombre de archivo, no
+> permisos ni RLS.
+>
 > **Cero regeneración, y por el motivo de siempre:** no existe generador en el repo —verificado el
 > 2026-08-23—, así que «regenerar» a mano es reescribir con interpretación y borra historia
 > (`CC_PROTOCOL.md` §0). Desde el 2026-08-23 **es la regla escrita en `CLAUDE.md`**, no una
