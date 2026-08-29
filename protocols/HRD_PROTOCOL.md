@@ -112,10 +112,19 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
    → Confirmar: versión
 3-ter. Fetch `https://unrlvl-context.vercel.app/protocols/MULTIBRAND_RULE.md` vía `Vercel:web_fetch_vercel_url`
    → Confirmar: versión
+3-quater. Fetch `https://unrlvl-context.vercel.app/protocols/DELIVERY_AND_VERIFICATION_RULE.md` vía `Vercel:web_fetch_vercel_url`
+   → Confirmar: versión
 
-> **Por qué van como 3-bis y 3-ter y no renumerados:** este HRD carga 3 URLs desde su
-> redacción original y las `userPreferences` de Sam cargan 5. La divergencia se cierra
-> añadiendo, no renumerando — renumerar rompe las referencias cruzadas por número.
+> **Por qué van como 3-bis, 3-ter y 3-quater y no renumerados:** este HRD cargaba 3 URLs
+> desde su redacción original y las `userPreferences` de Sam cargaban 5. La divergencia se
+> cierra añadiendo, no renumerando — renumerar rompe las referencias cruzadas por número.
+>
+> **Por qué `DELIVERY_AND_VERIFICATION_RULE.md` se carga y no se consulta (añadido 2026-08-29).**
+> Es la regla que gobierna **cómo se responde**, no una referencia que se abre cuando surge la
+> duda: una regla de forma que se consulta al final llega tarde, porque el texto ya está
+> escrito. Y es circular de la única manera que importa — **este mismo panel está
+> especificado en su §2.4**: un panel emitido sin haber cargado el documento que lo define
+> es un panel que nadie verificó contra su especificación.
 
 4. Responder exactamente: "Hola Sam, Protocolos cargados según el panel. ¿Con qué marca o proyecto vamos a trabajar?"
 
@@ -135,7 +144,7 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 8. **PANEL DE CARGA VERIFICADA** — se emite siempre, junto con la frase del paso 4.
    No es un resumen: es la comprobación a la que esa frase remite.
 
-   Una fila por archivo de carga obligatoria (pasos 1, 2, 3, 3-bis, 3-ter), por archivo
+   Una fila por archivo de carga obligatoria (pasos 1, 2, 3, 3-bis, 3-ter, 3-quater), por archivo
    del contexto declarado (pasos 5 o 6) y por skill de carga obligatoria en apertura
    según `skills/INDEX.md`. Cada fila lleva **estado** (verde cargado · ámbar parcial ·
    rojo no cargado), **evidencia** (versión, bytes o código de respuesta, tomada del
@@ -143,6 +152,11 @@ Si Sam confirma: ejecutar. Si hay corrección o datos faltantes: STOP.
 
    **Una fila sin evidencia es roja.** Usar la herramienta de un skill no es haber
    cargado el skill.
+
+   **La fila de `DELIVERY_AND_VERIFICATION_RULE.md` se lee antes que las demás.** Ese
+   documento especifica **este panel** (§2.4) y la forma de toda respuesta de la sesión. Si
+   sale **roja**, lo que está sin verificar no es un dato: es el criterio con el que se
+   pintan las demás filas. Se carga y se reemite el panel antes de responder nada más.
 
    **LAS DOS REGLAS INVIOLABLES se confirman aquí, y cada una es UNA FILA MÁS DEL PANEL,
    con su propia evidencia. No son una frase declarada: se confirman o no se confirman.**

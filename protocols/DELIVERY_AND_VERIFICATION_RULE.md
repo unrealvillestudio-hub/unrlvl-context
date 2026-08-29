@@ -1,6 +1,7 @@
 # DELIVERY AND VERIFICATION RULE — UNRLVL
 
-**Versión:** v1.0 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.1 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**v1.1 (2026-08-29), dos adiciones y ninguna derogación:** (a) **este documento pasa a ser carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— y por tanto **fila propia del panel**; una regla de forma que se consulta al final llega tarde, porque el texto ya está escrito. (b) **§6 declara el estatus de cada punto de carga** —FUENTE / PUNTERO / RESUMEN— y el contrato que ata al futuro proyecto de sync de context files. El cuerpo de v1.0 se conserva íntegro.
 **Destino en el repo:** `protocols/DELIVERY_AND_VERIFICATION_RULE.md`
 **Consumidores:** Claude.ai (chat), Claude Code (CC), Sam (revisión de PR)
 **Precedente de forma:** `protocols/MAIL_PRIVACY_RULE.md` — fuente única; los demás sitios apuntan y no copian.
@@ -91,7 +92,9 @@ Una frase fija que dice *«protocolos cargados»* no comprueba nada: se escribe 
 
 **Todo rojo y todo ámbar declara su motivo** en la misma fila, en una línea: *«nunca solicitado»*, *«403 del proxy»*, *«leída sólo la cabecera»*. Un rojo sin motivo no informa: alarma.
 
-**Alcance del panel:** los cinco archivos de carga obligatoria (`ecosystem.json`, `AGENDA.md`, `skills/INDEX.md`, `CAPABILITIES.md`, `protocols/MULTIBRAND_RULE.md`), los archivos del contexto declarado —marca o ecosistema— y **los skills de carga obligatoria en apertura** según `skills/INDEX.md`. Un skill cuya herramienta se usó pero cuyo `SKILL.md` no se leyó **es rojo**: usar la herramienta no es haber cargado el skill que dice cómo usarla.
+**Alcance del panel:** los **seis** archivos de carga obligatoria (`ecosystem.json`, `AGENDA.md`, `skills/INDEX.md`, `CAPABILITIES.md`, `protocols/MULTIBRAND_RULE.md` y **este documento**), los archivos del contexto declarado —marca o ecosistema— y **los skills de carga obligatoria en apertura** según `skills/INDEX.md`. Un skill cuya herramienta se usó pero cuyo `SKILL.md` no se leyó **es rojo**: usar la herramienta no es haber cargado el skill que dice cómo usarla.
+
+**Este documento se carga en la apertura, y su fila se lee antes que las demás.** Era la sexta ausencia: la regla que gobierna **cómo se responde** no puede ser una referencia que se abre cuando surge la duda. Y la dependencia es circular de la única manera que importa: **este panel está especificado aquí**, en esta misma §2.4. Un panel emitido sin haber cargado el documento que lo define es un panel que nadie verificó contra su especificación — **si su fila sale roja, lo que está sin verificar no es un dato: es el criterio con el que se pintan las demás filas**. Se carga y se reemite el panel antes de responder nada más.
 
 **Las dos reglas inviolables del ecosistema son DOS FILAS MÁS del panel, no una frase declarada.** Antes colgaban de la línea de apertura, donde una confirmación no se distingue de una afirmación:
 
@@ -203,18 +206,46 @@ QA:
 
 Este documento es la **FUENTE ÚNICA**. Los puntos de carga lo referencian; **ninguno lo copia entero** — lo que se copia, diverge (`CC_PROTOCOL.md` §6).
 
-| # | Dónde | Qué lleva |
-|---|---|---|
-| 1 | `protocols/DELIVERY_AND_VERIFICATION_RULE.md` | **este documento — la fuente** |
-| 2 | `protocols/CC_PROTOCOL.md` §4.1 | puntero; el texto de la convención deja de vivir ahí |
-| 3 | `protocols/HRD_PROTOCOL.md` | `HRD-R15`, en una línea, con puntero |
-| 4 | `CAPABILITIES.md` | fila en ARTEFACTOS CONSULTABLES |
-| 5 | `ecosystem.json → delivery_and_verification_rule` | la regla en una línea + puntero |
-| 6 | `knowledge/ecosystem/decision-matrix/QA_RULES.md` | puntero cruzado: aquél es el QA de UI, éste el de la entrega |
-| 7 | **`CLAUDE.md` de cada repo del org** | bloque corto de §7 + puntero |
-| 8 | `userPreferences` de Sam | lo edita Sam |
+| # | Dónde | Estatus | Qué lleva |
+|---|---|---|---|
+| 1 | `protocols/DELIVERY_AND_VERIFICATION_RULE.md` | **FUENTE** | **este documento**. Carga obligatoria en apertura: paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`, con fila propia en el panel |
+| 2 | `protocols/CC_PROTOCOL.md` §4.1 | **PUNTERO** | el texto de la convención deja de vivir ahí |
+| 3 | `protocols/HRD_PROTOCOL.md` | **PUNTERO** | `HRD-R15`, en una línea. Y el paso `3-quater` + el panel del paso 8, que son **mecánica de carga**, no copia de la regla |
+| 4 | `CAPABILITIES.md` | **PUNTERO** | fila en ARTEFACTOS CONSULTABLES |
+| 5 | `ecosystem.json → delivery_and_verification_rule` | **RESUMEN OPERATIVO** | la regla en una línea por clave + puntero en `_source` |
+| 6 | `knowledge/ecosystem/decision-matrix/QA_RULES.md` | **PUNTERO** | puntero cruzado: aquél es el QA de UI, éste el de la entrega |
+| 7 | **`CLAUDE.md` de cada repo del org** | **RESUMEN OPERATIVO** | bloque literal de §7 + puntero |
+| 8 | `userPreferences` de Sam | **RESUMEN OPERATIVO** | lo edita Sam; fuera del repo |
 
 El punto 7 es el que no depende de que nadie se acuerde: CC lo lee solo al abrir el repo.
+
+### 6.1 · Contrato para el proyecto de sync de context files
+
+**La regeneración real de `ecosystem.md` y `ecosystem_filemap.md` sigue abierta sin fecha en
+`AGENDA.md`** —no existe generador en el repo—. Cuando ese proyecto arranque, va a recorrer estos
+mismos archivos. **Estas tres reglas lo atan, y se escriben ahora para que no choque después:**
+
+1. **Un sync que iguala textos entre puntos de carga rompe la regla, no la aplica.** Los estatus
+   de la tabla no son decorativos: hay **una sola FUENTE**. Un PUNTERO que crece hasta parecerse a
+   la fuente es exactamente la divergencia que `CC_PROTOCOL.md` §6 previene —lo que se copia,
+   diverge—. Si un punto y la fuente discrepan, **se corrige el punto**, nunca al revés, y sólo
+   se corrige **acortándolo hacia el puntero**.
+
+2. **Un RESUMEN OPERATIVO no es un derivado calculable.** Los tres —el nodo de `ecosystem.json`,
+   el bloque de los `CLAUDE.md` y las `userPreferences`— están redactados para su superficie y su
+   lector. **No se generan desde la fuente y no se sobrescriben desde la fuente.** El de §7 se
+   pega literal; los otros dos se editan a mano y bajo PR.
+
+3. **Un derivado lleva cuerpo que no es derivable, y ese cuerpo manda sobre cualquier
+   regeneración.** `ecosystem.md` y `ecosystem_filemap.md` acumulan flujos, tablas de estado y
+   **notas de sincronización fechadas** que **no existen en `ecosystem.json`**: una regeneración
+   literal los vaciaría, y vaciar historia es lo que `CC_PROTOCOL.md` §0 prohíbe. **Todo generador
+   futuro preserva ese cuerpo o no se despliega.** Regla escrita en `CLAUDE.md` desde el
+   2026-08-23, tras cinco aplicaciones seguidas de la misma excepción.
+
+**Contrato legible por máquina:** el mismo estatus vive en
+`ecosystem.json → delivery_and_verification_rule._puntos_de_carga`, para que el generador lo lea
+del JSON y no de esta prosa.
 
 **Sam (revisión).** Pregunta de control antes de mergear: **¿qué tengo que hacer yo, y quién midió lo que aquí se afirma?** Si sus acciones están mezcladas con el relato, o si hay una afirmación de estado sin etiqueta, el PR vuelve.
 

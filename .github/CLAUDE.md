@@ -10,13 +10,20 @@ Orden de carga (`CC_PROTOCOL.md` §0 bis): **(1)** el repo — working tree, o `
 **403 en CONNECT** contra el dominio de Vercel, y eso dejó a CC sin fuente independiente de
 gobernanza en dos sesiones (2026-08-23).
 
+**Actualización medida (2026-08-29):** `curl` sigue dando 403, pero la tool MCP
+`Vercel:web_fetch_vercel_url` devuelve 200 con el cuerpo completo. El orden no cambia —el repo es la
+fuente canónica— pero CC sí tiene hoy una segunda vía: **usa la tool, nunca `curl`**. Ver
+`CC_PROTOCOL.md` §0 bis.1.
+
 CC lo carga y lo obedece antes de tocar nada. Este archivo NO duplica reglas: si algo
 parece contradecirlo, manda el protocolo.
 
 **Carga obligatoria, además de `CC_PROTOCOL.md`:** `unrlvl-context/protocols/MULTIBRAND_RULE.md` y
 `unrlvl-context/protocols/DELIVERY_AND_VERIFICATION_RULE.md` — esta última es la **fuente única** de
-la forma de entregar y de verificar (destinatario, idioma, evidencia, las cuatro QA). El resumen
-operativo está al final de este archivo; **no la copia**, apunta a ella.
+la forma de entregar y de verificar (destinatario, idioma, evidencia, las cuatro QA) y **se carga en la
+apertura de sesión**, no cuando surja la duda: es el paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`,
+con fila propia en el panel. El resumen operativo está al final de este archivo; **no la copia**,
+apunta a ella.
 
 Recordatorios operativos (no sustituyen al protocolo):
 - Siempre rama, nunca `main`. `git checkout -b fix/... | feat/... | ctx/...`

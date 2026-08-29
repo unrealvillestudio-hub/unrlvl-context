@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-08-29-v6 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-08-29-v7 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v7 (2026-08-29):** una adición, ninguna derogación. **§0 bis.1 — actualización medida del acceso de CC a Vercel.** Sam dio de alta Vercel en la allowed list de CC y las dos vías quedaron probadas en la misma sesión: `curl` **sigue devolviendo 403 en CONNECT**, y la tool MCP `Vercel:web_fetch_vercel_url` devuelve **200 con el cuerpo completo**. **El orden de carga no cambia** —el repo sigue siendo la fuente canónica y Vercel el respaldo—, pero **deja de ser cierto que CC no tenga una segunda vía**: hoy la tiene, y un CC que prueba sólo `curl` y declara Vercel inalcanzable está afirmando sin medir por la vía que existe. El texto de v5 se conserva íntegro: sigue siendo cierto en su literal, lo que caducó es su conclusión.
+>
 > **Cambios v6 (2026-08-29):** una sustitución y dos adiciones, ninguna derogación silenciosa. (a) **§4.1 pasa a v3** — «Bloques con destinatario y las cuatro QA»: el campo `PENDIENTE PARA SAM` se presenta como bloque `PARA SAM` y el trabajo de CC como bloque `PARA CC`, el diferenciador visual se declara **para que Sam lea, no para que CC ejecute**, y la marca depende de la **superficie** (cuadrado emoji en chat, `●` con hex en documento o UI con estilos). El texto de la convención **deja de vivir aquí**: la fuente única es `protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0. **La §4.1 v2 se conserva íntegra** en el bloque `ARCHIVO HISTÓRICO` del final, con su guard (§6). (b) **§4 suma el campo obligatorio `QA:`** con el estado de las cuatro QA —`QA-ENCARGO`, `QA-OBJETIVO`, `QA-INFO`, `QA-PROP`—, que son HRD RULES por `HRD-R15`. Motivo medido el 2026-08-29: la convención de destinatario existía **a medias** —sólo el bloque de Sam, sólo obligando a CC, sin distinguir superficies— y se perdieron **dos horas** intentando pintar hex en el chat, superficie que no rinde color arbitrario. **Barrido de voseo sobre este archivo: cero apariciones de la forma voseante de «quieres» y cero imperativos voseantes** —la plantilla de §2 ya estaba en neutro— medido con `grep` antes de editar.
 >
 > **Cambios v5 (2026-08-23):** dos adiciones, ninguna derogación. (a) **§0 bis — arranque de sesión:** la fuente canónica de los protocolos es el **repo** `unrealvillestudio-hub/unrlvl-context`; `unrlvl-context.vercel.app` queda como **respaldo**. Motivo documentado: el **proxy de egreso de CC devuelve 403 en CONNECT** contra el dominio de Vercel, y CC quedó **sin fuente independiente de gobernanza en dos sesiones**. (b) **§9 — causa raíz declarada:** todo brief que afirme una causa raíz debe declarar **archivo y línea, o consulta y resultado**. Un brief que afirma una causa *deducida* manda a CC a arreglar algo que puede no estar roto — ocurrió **dos veces el 2026-08-23**. Nota de trazabilidad: el brief de esa sesión pedía el cambio (a) «en §0»; §0 es la REGLA SUPREMA de context files y no se tocó — la regla nueva entra como **§0 bis** para no renumerar ni desplazar las referencias cruzadas a §0 que hay en §6 y §7.1.
@@ -62,6 +64,30 @@ prudente: es uno que improvisa la gobernanza.
 **Deuda declarada (2026-08-23):** el `CLAUDE.md` raíz de este repo y `.github/CLAUDE.md` todavía citan
 primero la URL de Vercel. Está registrado en `AGENDA.md` v2026-08-23-v1 → Gobernanza. Mientras no se
 corrijan, **manda esta sección**.
+
+### 0 bis.1 — Actualización medida del acceso de CC a Vercel (2026-08-29)
+
+**Lo de arriba se conserva íntegro y sigue siendo cierto en su literal. Lo que cambió es la
+conclusión.** Sam dio de alta Vercel en la allowed list de CC, y el estado real quedó **medido el
+2026-08-29**, con las dos vías probadas en la misma sesión:
+
+| Vía | Resultado | Medición |
+|---|---|---|
+| `curl` / egreso HTTP directo | **403 — CONNECT tunnel failed** | `curl -sS https://unrlvl-context.vercel.app/protocols/CC_PROTOCOL.md` → `curl: (56)`, 0 bytes |
+| Tool MCP `Vercel:web_fetch_vercel_url` | **HTTP 200**, cuerpo completo | mismo dominio, `protocols/DELIVERY_AND_VERIFICATION_RULE.md` → 200, `server: Vercel`, `x-vercel-cache: MISS` |
+
+**Qué se corrige y qué no.**
+
+- **El orden de carga NO cambia:** el repo sigue siendo la **fuente canónica** y Vercel el
+  **respaldo**. El repo es lo que Sam revisa y mergea; el estático es una copia de lo mergeado, y
+  puede ir por detrás de `main` entre el merge y el deploy (`HRD-R09`, `HRD-R14`).
+- **Lo que sí deja de ser cierto es la frase «CC quedó sin fuente independiente de gobernanza».**
+  Hoy hay una segunda vía viva. Un CC que sólo prueba `curl`, ve el 403 y declara que Vercel es
+  inalcanzable está **afirmando sin medir por la vía que existe** — que es lo que `CAPABILITIES.md`
+  advierte: casi siempre el acceso existe por una vía que no es la obvia.
+- **Regla operativa:** para cualquier URL de `*.vercel.app`, CC usa **`Vercel:web_fetch_vercel_url`**,
+  nunca `curl` ni un fetch genérico. Si esa tool no está disponible en la sesión, entonces —y sólo
+  entonces— el respaldo de Vercel es inalcanzable, y se declara así.
 
 ---
 
