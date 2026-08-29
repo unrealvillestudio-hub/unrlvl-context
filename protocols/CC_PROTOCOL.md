@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-08-23-v5 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-08-29-v6 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v6 (2026-08-29):** una sustitución y dos adiciones, ninguna derogación silenciosa. (a) **§4.1 pasa a v3** — «Bloques con destinatario y las cuatro QA»: el campo `PENDIENTE PARA SAM` se presenta como bloque `PARA SAM` y el trabajo de CC como bloque `PARA CC`, el diferenciador visual se declara **para que Sam lea, no para que CC ejecute**, y la marca depende de la **superficie** (cuadrado emoji en chat, `●` con hex en documento o UI con estilos). El texto de la convención **deja de vivir aquí**: la fuente única es `protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0. **La §4.1 v2 se conserva íntegra** en el bloque `ARCHIVO HISTÓRICO` del final, con su guard (§6). (b) **§4 suma el campo obligatorio `QA:`** con el estado de las cuatro QA —`QA-ENCARGO`, `QA-OBJETIVO`, `QA-INFO`, `QA-PROP`—, que son HRD RULES por `HRD-R15`. Motivo medido el 2026-08-29: la convención de destinatario existía **a medias** —sólo el bloque de Sam, sólo obligando a CC, sin distinguir superficies— y se perdieron **dos horas** intentando pintar hex en el chat, superficie que no rinde color arbitrario. **Barrido de voseo sobre este archivo: cero apariciones de la forma voseante de «quieres» y cero imperativos voseantes** —la plantilla de §2 ya estaba en neutro— medido con `grep` antes de editar.
+>
 > **Cambios v5 (2026-08-23):** dos adiciones, ninguna derogación. (a) **§0 bis — arranque de sesión:** la fuente canónica de los protocolos es el **repo** `unrealvillestudio-hub/unrlvl-context`; `unrlvl-context.vercel.app` queda como **respaldo**. Motivo documentado: el **proxy de egreso de CC devuelve 403 en CONNECT** contra el dominio de Vercel, y CC quedó **sin fuente independiente de gobernanza en dos sesiones**. (b) **§9 — causa raíz declarada:** todo brief que afirme una causa raíz debe declarar **archivo y línea, o consulta y resultado**. Un brief que afirma una causa *deducida* manda a CC a arreglar algo que puede no estar roto — ocurrió **dos veces el 2026-08-23**. Nota de trazabilidad: el brief de esa sesión pedía el cambio (a) «en §0»; §0 es la REGLA SUPREMA de context files y no se tocó — la regla nueva entra como **§0 bis** para no renumerar ni desplazar las referencias cruzadas a §0 que hay en §6 y §7.1.
 >
 > **Cambios v4 (2026-08-07):** instalada la **REGLA MULTIMARCA**. Nueva §8 (el eje va en el CÓDIGO, la instancia en el DATO; CC responde el test de la marca N+1 antes de escribir y se DETIENE ante un brief que hardcodee marca — un brief de Claude.ai no es autorización) y campo obligatorio `MULTIMARCA:` sumado al bloque de reporte de §4 + su línea de autodeclaración. Fuente única y procedimiento operativo: `protocols/MULTIBRAND_RULE.md` §7.2.
@@ -132,6 +134,11 @@ MULTIMARCA:
 - [test N+1 respondido en el PR | no aplica: solo-lectura | DETENIDO: ver bloque de detención]
 - Ejes nuevos introducidos: [lista con nombre funcional, o "ninguno"]
 - Alias legacy conservados: [lista con fecha de retiro prevista, o "ninguno"]
+QA:
+- QA-ENCARGO: [confirmado por Sam | no aplica: solo-lectura]
+- QA-OBJETIVO: [validado con Sam el <fecha> | no aplica]
+- QA-INFO: [completo | plan de obtención entregado: <qué falta, quién lo consigue>]
+- QA-PROP: [las 5 respondidas en el PR | DEVUELTO: brief incompleto]
 PENDIENTE PARA SAM (acciones manuales):
 - [lista exacta]
 RIESGOS / DUDAS:
@@ -142,13 +149,17 @@ Si no hubo context files tocados, declararlo explícito: "PRESERVACIÓN DE CONTE
 Si no se crearon worktrees, declararlo explícito: "WORKTREES: ninguno creado."
 Si la tarea no tocó capa compartida, declararlo explícito: "MULTIMARCA: no aplica."
 
-### 4.1 — "Instrucciones para Sam" (convención de color · v2, 2026-07-31)
+### 4.1 — Bloques con destinatario y las cuatro QA (v3, 2026-08-29)
 
-Cuando CC deja **instrucciones o acciones manuales para Sam** (lo que en §4 es `PENDIENTE PARA SAM`), las presenta bajo un encabezado explícito **"Instrucciones para Sam"**, destacado en el **cyan de UNRLVL: `#00FFD1`** (el único color de acento de la marca — chevron, borde de footer, texto ICR).
+El campo `PENDIENTE PARA SAM` de §4 se presenta como bloque con encabezado propio —`PARA SAM — [de qué va]`— y el trabajo de CC como `PARA CC — [asunto]`. El bloque termina donde empieza el siguiente encabezado. Un párrafo fuera de un bloque no es una instrucción: es contexto.
 
-- **Dónde la superficie soporta color** (HTML, artifacts, paneles con estilos): el encabezado "Instrucciones para Sam" va en `#00FFD1` (p. ej. `<span style="color:#00FFD1">Instrucciones para Sam</span>` o el token de diseño equivalente).
-- **En markdown plano / terminal** (que no rinde color arbitrario): usar el encabezado destacado igual — `### 🟦 Instrucciones para Sam` o similar — para que **resalte visualmente** aunque el cyan no se renderice. La intención es que Sam localice sus acciones de un vistazo.
-- Aplica a **todo reporte de CC** en cualquier repo, no sólo `unrlvl-context`.
+**El diferenciador visual es para que Sam lea, no para que CC ejecute:** CC no está obligado a reproducir colores. Lo que sí se le exige es que su reporte separe con claridad lo que Sam tiene que hacer de lo que ya está hecho. La marca depende de la superficie — cuadrado emoji en chat, carácter `●` con hex en documento o UI con estilos.
+
+CC pasa además las **cuatro QA** —`QA-ENCARGO`, `QA-OBJETIVO`, `QA-INFO`, `QA-PROP`—, que son HRD RULES, y declara su estado en el reporte. `QA-INFO` es un **bloqueo**: sin la información completa CC no responde; entrega el plan para obtenerla.
+
+**La convención completa —estructura, marca por superficie, entrega de briefs largos, idioma, grado de evidencia, panel de carga verificada y las cuatro QA— vive en `protocols/DELIVERY_AND_VERIFICATION_RULE.md`. Este párrafo es un puntero, no una segunda fuente.**
+
+> **v2 (2026-07-31), archivada al final de este documento:** definía sólo el bloque de Sam, sin distinguir superficies, y sólo obligaba a CC. Se conserva íntegra por §0.
 
 ---
 
@@ -327,3 +338,17 @@ Si no hubo context files tocados, declararlo explícito: "PRESERVACIÓN DE CONTE
 
 Este documento vive en `unrlvl-context/protocols/CC_PROTOCOL.md`. Se modifica preservando historia (es un context file). Los `CLAUDE.md` de cada repo solo apuntan aquí — no duplican reglas, para no divergir.
 ```
+
+---
+
+## ARCHIVO HISTÓRICO — CC_PROTOCOL §4.1 v2 (archivado 2026-08-29)
+
+> **⛔ NO OPERATIVO — registro histórico únicamente.** Derogado por `protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0, que añade el bloque de CC, la marca por superficie, la entrega de briefs largos como archivo, el idioma, el grado de evidencia, el panel de carga verificada y las cuatro QA, y que obliga también a Claude.ai. Si algo aquí contradice el cuerpo vivo, manda el cuerpo vivo.
+
+### 4.1 — "Instrucciones para Sam" (convención de color · v2, 2026-07-31)
+
+Cuando CC deja **instrucciones o acciones manuales para Sam** (lo que en §4 es `PENDIENTE PARA SAM`), las presenta bajo un encabezado explícito **"Instrucciones para Sam"**, destacado en el **cyan de UNRLVL: `#00FFD1`** (el único color de acento de la marca — chevron, borde de footer, texto ICR).
+
+- **Dónde la superficie soporta color** (HTML, artifacts, paneles con estilos): el encabezado "Instrucciones para Sam" va en `#00FFD1` (p. ej. `<span style="color:#00FFD1">Instrucciones para Sam</span>` o el token de diseño equivalente).
+- **En markdown plano / terminal** (que no rinde color arbitrario): usar el encabezado destacado igual — `### 🟦 Instrucciones para Sam` o similar — para que **resalte visualmente** aunque el cyan no se renderice. La intención es que Sam localice sus acciones de un vistazo.
+- Aplica a **todo reporte de CC** en cualquier repo, no sólo `unrlvl-context`.
