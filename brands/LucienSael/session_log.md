@@ -2,6 +2,71 @@
 
 ---
 
+## 2026-08-30 — La marca queda declarada en inglés, y su primera corrida en inglés sale limpia entera
+
+**El dato que gobierna el resto.** `public.brands.language_primary` de `LucienSael` pasa de **`es` a
+`en`**. [medido — la fila vale `en`] No es una preferencia: **`luciensael.com` está en inglés**, y
+cuando el dato y la declaración del dueño de la marca discrepan, **la fuente pública desempata en una
+sola lectura**. La columna es una afirmación como cualquier otra y también admite verificación externa.
+
+**Por qué importa más de lo que parece.** Un corte que hace que una columna **se obedezca mejor**
+convierte cada fila equivocada en un defecto nuevo, y en silencio. FIX-LANG-01 es justo ese corte: sin
+corregir la fila primero, habría hecho que Lucien escribiera en español con más rigor.
+
+### Corrida de verificación — 2026-08-30, 19:30:00 → 21:33:31 UTC
+
+Disparada **a mano** con `intel.trigger_iid_agent`, porque 🔴 **LucienSael no tiene ni un cron**. Es la
+primera corrida de la marca íntegramente en inglés.
+
+- **Research:** 82 fuentes, 26.581 caracteres, `stop_reason: end_turn`, sin truncar. 5 hallazgos
+  destilados con `provenance.clean: true`. [reportado por el brief]
+- **30 jobs · 23 piezas · 23 de 23 `pass_type = 'clean'` · 0 `assisted`.** [medido]
+- **Cero muertas en el juez:** `intel.watcher_log` da **20 `PASS` + 3 `RESCHEDULE`**, ningún `REJECT`.
+  La base previa de la marca era 12 de 27 muertas en el juez. [medido]
+- **Extremo a extremo: 23 de 30 · 76,7 %.** blog + `meta_fb` + `meta_ig` **15 de 15**; `x` + `tiktok`
+  **8 de 15**. [medido]
+- **Idioma:** `builder_meta.language = 'en'` en **23 de 23**. La corrección de la fila viaja por la
+  cascada hasta el generador. [medido]
+
+**Los seis fallos son todos `COPYLAB_TRUNCATED_BODY`, y el techo los explica.** Los jobs de 19:30 a
+21:00 corrieron con `builder_meta.max_tokens` en **100** (`x`) y **400** (`tiktok`): 3 de 9 produjeron
+pieza. Los cinco re-despachados a las **21:33** corrieron con **900** y **produjeron pieza los cinco,
+sin un solo truncamiento**. Mismo texto, misma voz, mismo día: **el techo era el discriminador**.
+[medido — `assets.builder_meta.max_tokens` y `error_log`]
+
+### Corpus para el arbitraje de mañana
+
+Las 23 piezas dejan **28 marcas** sobre **13 reglas**, todas en `warned` —ninguna en `violated`, porque
+las 50 reglas activas están hoy en `warn`—: `HR-GEN-05` **×6**, `HR-GEN-01` ×5, `HR-GEN-02` ×3,
+`HR-LUC-06` ×3, y el resto con una o dos. **Casos consecutivos, nunca elegidos por sospechosos.**
+[medido]
+
+### Lo que esta corrida deja abierto para la marca
+
+1. 🔴 **Sin ningún cron.** La corrida de hoy existió porque alguien la disparó a mano. Mientras no haya
+   cron, la marca **no produce sola**.
+2. ⚠️ **La traza del idioma no es observable.** `builder_meta.language_directive.source` viene `NULL`
+   en **23 de 23**: el idioma llega bien y **no se puede decir de dónde salió**. [medido]
+3. ⚠️ **`assets.social.language` viene `NULL` en 23 de 23.** El adaptador recibe el idioma **crudo del
+   eje** y LucienSael no declara `brand_topics.languages`, así que la fila viaja con `null`. CopyLab no
+   lo sufre porque resuelve la cascada completa; el adaptador no la resuelve. [medido]
+4. ⚠️ **El condicional por nombre sigue vivo en AIFE.** `voice === "lucien" ? … : …` decide la nota de
+   voz para todo el ecosistema: Lucien recibe la suya y las otras 14 marcas la de UnrealvilleStudio. Su
+   rama dice literalmente `First person. English.` — que ahora **coincide** con la fila, pero por
+   coincidencia, no por diseño.
+5. 🟡 **La ventana envenenada de `expertise`.** 77 filas anteriores a DIV-01 mantienen el ángulo fuera
+   de rotación hasta el **2026-09-11**. **No se toca:** una excepción por fecha en `loadRecentAngles`
+   sería instancia en capa compartida por un efecto que expira en doce días. Queda **declarado**, no
+   arreglado.
+6. 🟡 **Una pieza exonerada sin fila.** Del conjunto de 25 exoneradas sin fila (24 de ForumPHs + 1 de
+   LucienSael), la de esta marca tiene su texto íntegro en `orchestrator_jobs.assets` y requiere crear
+   la pieza. **Después del arbitraje**, por decisión de Sam.
+7. 🟡 **El eje del idioma bilingüe no está declarado.** El blog de Lucien etiqueta piezas `EN`, `ES` y
+   `EN·ES`, y `brands.language_primary` es de **valor único**. `brand_topics.languages` **sí es lista**
+   y el fan-out ya emite una fila por idioma: **el eje existe, la declaración no**.
+
+---
+
 ## 2026-08-26 — Primer research de la historia de Lucien · la marca entra al Scheduler
 
 **Lo que ocurrió hoy, medido:** LucienSael entra al Scheduler con `rollout_started_at = 2026-08-26`,
