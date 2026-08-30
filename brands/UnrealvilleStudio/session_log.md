@@ -6,6 +6,165 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
+## 2026-08-30 — La corrida de verificación de LucienSael, medida al cierre y no al corte del brief
+
+**Por qué esta entrada difiere del brief que la encarga.** El brief de `Actualiza` se escribió con la
+corrida **en curso** y lo declara: el corte 10 —seis filas devueltas a `pending` y re-despachadas—
+quedaba *«en curso al cierre»*. **La corrida siguió después de escrito el brief**, así que todo lo de
+abajo se **midió contra Supabase en el momento de escribir**, no se copió (`HRD-R13`). Donde el número
+medido supera al declarado, se escribe el medido y se dice cuál era el declarado.
+
+### Lo ejecutado en producción por Claude.ai, verificado por CC contra la base
+
+| # | Corte | Verificación de CC | Estado |
+|---|---|---|---|
+| 1 | 50 reglas activas de `intel.watcher_rules` a `severity='warn'`, con firma de Sam | **50 activas en `warn`, cero activas en `blocking`; 15 inactivas intactas** (14 `blocking` + 1 `warn`) | ✅ medido |
+| 2 | `public.language_directives` creada, con RLS y `GRANT SELECT` a `service_role` y `anon` | tabla presente en `public` | ✅ medido |
+| 3 | Sembradas `es` y `en` | **2 filas**, `directive_block` de **585** y **422** caracteres; `register_constraints` sólo en `es` (**472** caracteres), `NULL` en `en` | ✅ medido |
+| 5 | `public.brand_voice_genome.voice_note` añadida | columna presente | ✅ medido |
+| 6 | 11 notas de voz sembradas | **11 de 11 voces activas** con `voice_note`; 13 filas en total, las 2 inactivas sin nota | ✅ medido |
+| 7 | `intel.iid_content_queue.angle_pick` añadida | columna presente | ✅ medido |
+| 8 | `brands.language_primary` de `LucienSael` y `SamPublisher` corregido a `en` | **las dos filas valen `en`** | ✅ medido |
+| 9 | `content_type_registry`: `x` y `tiktok` a `max_tokens = 900` con `format_instruction` | **5 filas** —`x` 2, `tiktok` 3—, las cinco en **900** y con instrucción de **339** caracteres | ✅ medido |
+| 10 | 6 filas de cola devueltas a `pending` y re-despachadas | **5 de las 6 produjeron pieza**; la sexta seguía en `processing` al cierre | ✅ medido — ver abajo |
+
+**Dato que el brief no traía, y que corrige un supuesto:** `UnrealvilleStudio` **ya valía `en`** antes
+de esta sesión. Las marcas con `language_primary = 'en'` son **tres**, no dos: `LucienSael`,
+`SamPublisher` y `UnrealvilleStudio`. De las **15 filas** de `public.brands`, las otras **12** valen
+`es`. [medido — `SELECT id, language_primary FROM public.brands`]
+
+### La corrida de LucienSael — medida al cierre
+
+Disparada a mano con `intel.trigger_iid_agent` porque **LucienSael no tiene ni un cron**. Ventana real
+**19:30:00 → 21:33:31 UTC** (el brief declaraba 19:24–21:00, porque se escribió antes del último tramo).
+
+| Métrica | Medido al cierre | Declarado en el brief | Base previa |
+|---|---|---|---|
+| Jobs de la corrida | **30** | 24 | — |
+| Piezas creadas | **23** | 18 | — |
+| `content_pieces.pass_type = 'clean'` | **23 de 23 · 100 %** | 18 de 18 | 26 % |
+| Extremo a extremo (piezas por job) | **23 de 30 · 76,7 %** | 18 de 24 · 75 % | 26 % |
+| blog + meta_fb + meta_ig | **15 de 15 · 100 %** | 15 de 15 | — |
+| `x` + `tiktok` | **8 de 15** | 3 de 10 · 30 % | — |
+| Piezas `assisted` | **0** | 0 | — |
+| Muertas **en** el juez | **0** — `intel.watcher_log` da **20 `PASS` + 3 `RESCHEDULE`**, cero `REJECT` | 0 | 12 de 27 |
+
+**Los seis fallos son todos `COPYLAB_TRUNCATED_BODY`**, los seis en `x` y `tiktok`, con el mensaje de
+error nombrando el techo que aplicó.
+
+### 🟢 PRE-JUEZ-01 queda VERIFICADO — el brief lo dejaba «en curso»
+
+El error de cada job dice **qué techo aplicó**, así que la verificación no necesita interpretación:
+
+| Tramo | Techo en `builder_meta.max_tokens` | Resultado |
+|---|---|---|
+| 19:30 – 21:00 UTC | **100** en `x` · **400** en `tiktok`, `max_tokens_source = voice_platform` | **3 de 9** produjeron pieza; los 6 fallos son de este tramo |
+| 21:33 UTC (re-despacho del corte 10) | **900**, `max_tokens_source = voice_platform` | **5 de 5 produjeron pieza · cero truncamiento** |
+
+**El techo era el discriminador, y el dato lo confirma en la misma jornada.** Es la comprobación que el
+learning 3 del brief pedía: `format_instruction` en `NULL` no explicaba nada porque también estaba en
+`NULL` en las filas que nunca truncan; **el techo sí separa los dos grupos**, y lo hace dentro de la
+misma corrida, con el resto de las condiciones iguales. [medido — `assets.builder_meta.max_tokens` y
+`error_log` de los 15 jobs de `x` y `tiktok`]
+
+### Los cuatro cortes, contra la base
+
+- ✅ **FIX-LANG-01 (efecto).** `builder_meta.language = 'en'` en **23 de 23**. La corrección de
+  `brands.language_primary` viaja por la cascada. [medido]
+- ⚠️ **FIX-LANG-01 (traza).** `builder_meta.language_directive.source` viene **`NULL` en 23 de 23**. El
+  idioma llega bien, pero **la procedencia de la directiva no es observable**, que era el criterio de
+  éxito escrito. Queda abierto contra el código de CopyLab. [medido]
+- ✅ **FIX-AIFE-04.** `assets.copy.aife_voice_note_source = 'genome'` en **23 de 23**. La nota sale del
+  genoma, no del alias cableado. [medido]
+- ⚠️ **FIX-ADAPT-02 — desplegado y sin efecto.** `assets.social` trae la clave `language` en **23 de
+  23** y su valor es **`NULL` en las 23**. **Un campo presente no es un campo poblado.** [medido]
+- ✅ **`angle_pick`.** **25 de 25** filas encoladas hoy lo llevan, con **7 ángulos distintos** en
+  rotación real. [medido — `intel.iid_content_queue`, filas de `created_at >= 2026-08-30`]
+- ✅ **`duplication.outcome` responde en 23 de 23.** **Corrección de ruta:** no vive en
+  `assets.watcher` del job —ahí no está— sino en **`intel.watcher_log.gate_detail->'duplication'`**.
+  Consultar la primera ruta devuelve **cero**, y ese cero es el «cero verdadero sobre una pregunta
+  falsa» que ya costó una pasada el 2026-08-29. [medido]
+
+### Corpus de arbitraje — mayor que el declarado, y con otro primero
+
+De las 23 piezas salen **28 marcas** sobre **13 reglas distintas**, todas en `warned` y ninguna en
+`violated`, porque las 50 reglas activas están en `warn`:
+
+`HR-GEN-05` **×6** · `HR-GEN-01` ×5 · `HR-GEN-02` ×3 · `HR-LUC-06` ×3 · `HR-GEN-03` ×2 ·
+`HR-GEN-08` ×2 · y ocho reglas con una marca cada una.
+
+El brief declaraba **23 marcas** con `HR-GEN-01` a la cabeza (×5) y `HR-GEN-05` en ×4. Medido al
+cierre, **`HR-GEN-05` es la primera con ×6** — y es precisamente la regla que `P6` describe como
+*«blocking sin `verify_pattern` y sin dueño»*. [medido — `gate_detail->'hard_rules'->'warned'`]
+
+### 🔴 Hallazgo nuevo de CC, no pedido y no tocado: el juez filtra su propia deliberación
+
+En la fila leída, `gate_detail.hard_rules.raw` contiene el razonamiento del modelo en texto corrido
+—*«Wait, let me reconsider…»*— y el parser lo deposita en `unmatched` junto con la palabra `NINGUNA`.
+El veredicto salió correcto, así que **no rompe nada hoy**; lo que hace es meter ruido en el campo que
+el arbitraje de mañana va a leer. [medido sobre **1** fila leída — no es una tasa, es una observación;
+medirlo sobre las 23 es trabajo de la sesión de arbitraje]
+
+### 🔴 Divergencia declarada — Professor no coincide con el brief
+
+El brief afirma que los learnings *«quedaron capturados **antes** de escribir este brief, aprobados por
+Sam»* y enumera **doce**. La base dice otra cosa: `public.professor_learnings` con
+`session_date = '2026-08-30'` tiene **6 filas**, las seis con `filter_passed = true` y **las seis con
+`approved_by_sam = false`**; la última se escribió a las **21:33:12 UTC**, después del corte del brief.
+[medido]
+
+**No se corrige el dato: se declara.** Aprobar un learning es de Sam (`HRD-R19`), y escribir en la base
+para que cuadre con un brief es exactamente lo contrario de medir. Los seis restantes de la lista de
+doce **están en el cuerpo de este `Actualiza`** —es donde importan— pero **no están en Professor**.
+
+### El learning que sí está en la base y no está en el brief — el corte de AIFE
+
+La primera fila del día (10:52:51 UTC) registra **tres defectos de AIFE medidos por CC**, ninguno
+tocado, y ninguno parte de FIX-LANG-01:
+
+1. **AIFE cablea dos marcas en capa compartida.** `voice === "lucien" ? … : …` decide la nota de voz:
+   LucienSael recibe la suya y **las otras 14 marcas reciben la de UnrealvilleStudio**, ForumPHs y
+   NeuroneSCF incluidas. Es el patrón que `MULTIBRAND_RULE` prohíbe de forma explícita. El eje es
+   *«cada voz declara su nota»*; la nota es instancia y va en dato.
+2. **La rama de Lucien dice literalmente `First person. English.`** sobre una marca cuya fila decía
+   entonces `es`. Con la fila ya corregida a `en`, **el defecto se resuelve como fila equivocada, no
+   como código equivocado** — pero el condicional por nombre de marca sigue ahí.
+3. **Un tercio de las piezas de ForumPHs vuelve byte-idéntica de AIFE.** Medido sobre 354 piezas:
+   ForumPHs **93 de 283 (33 %)** sin cambio alguno; LucienSael 0 de 30, NeuroneSCF 0 de 9,
+   UnrealvilleStudio 0 de 28. **La asimetría es por marca, no por idioma.** Candidato `deducido`:
+   `applyAIFE` termina en `data.content?.[0]?.text ?? text`, así que un contenido vacío devuelve el
+   input intacto y reporta `aife_applied: true` — **un no-op que se declara éxito**.
+
+Y una **hipótesis descartada**, que vale registrar: CC había supuesto que la lista de purga en inglés
+rendía menos sobre piezas en español. **Es falsa** — las palabras de la purga aparecen 0,00 veces por
+pieza tanto en ES como en EN sobre 354 piezas.
+
+### Versiones de Edge Function, medidas por el sufijo de `entrypoint_path`
+
+`iid-core` **57** (2026-08-30 14:56:10 UTC) · `content-watcher` **45** (14:56:22 UTC) ·
+`content-run-stage` **101** (12:19:37 UTC) · `aife-filter` **43** (12:19:40 UTC). Las cuatro coinciden
+con lo declarado en el brief. [medido — `list_edge_functions`, sufijo de `entrypoint_path`, no el
+comentario de cabecera (`HRD-R09`, `HRD-R14`)]
+
+⚠️ **Divergencia anotada y no tocada:** `content-dispatcher` devuelve `version: 50` mientras su
+`entrypoint_path` termina en **47**, que es lo que declara `ecosystem.json`. Por el método de
+`HRD-R14` manda el sufijo, así que el context file **no se cambia**; queda escrito para que la próxima
+sesión decida cuál de los dos campos está mintiendo.
+
+### Lo cancelado, y por qué el expediente pesa más que la propuesta
+
+- **FIX-DUP-03 y el PR #110 quedan CANCELADOS.** La premisa se refutó: el chequeo aguas arriba **ya
+  existía** —DIV-01 devolvía `null` y no encolaba— y **FANOUT-01 lo revirtió a propósito**, documentado
+  en el commit `e865333` con un diferencial controlado: no encolar dejaba marcas sin producir. **El
+  ecosistema ya eligió** entre producir con ángulo repetido y no producir. [reportado por el brief; el
+  commit no se leyó en esta pasada]
+- **FIX-PATTERN-04 queda CANCELADO.** No era un defecto del sistema sino de lectura: `->>` sobre un
+  array JSONB devuelve el array serializado, no el elemento. El texto juzgado vive en
+  `assets->'social'->'adapted'->0->>'copy'`. **Los cinco `verify_pattern` están sanos**, y re-medido
+  por la ruta correcta los números salen idénticos. [reportado]
+
+---
+
 ## 2026-08-29 — Recuperación del trabajo real del 2026-08-27, medido contra la fuente
 
 **Por qué existe esta entrada.** La sesión del **2026-08-27 duró más de dos días y tuvo DOS `Actualiza`**. El que quedó registrado cuenta *«tres MCPs del ecosistema en internet sin autenticación»*; **el otro —el del carril— nunca entró a los context files**. Sam confirma que ese trabajo es real e importante. Se recupera aquí, con fecha de hoy, y **no se copia del brief: se mide contra Supabase**, porque un brief de hace dos días es `reportado`, no `medido`, y lo que no se pudo confirmar se dice.

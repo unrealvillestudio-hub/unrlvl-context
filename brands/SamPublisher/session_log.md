@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-08-30 — `language_primary` corregido a `en`
+
+**Cambio único, y de dato.** `public.brands.language_primary` de `SamPublisher` pasa de **`es` a
+`en`**. [medido — la fila vale `en`]
+
+**Por qué entra aquí y no sólo en el log del ecosistema.** La marca personal publicadora de Sam actúa
+de **vocero** que presenta a LucienSael y a UnrealvilleStudio, y las tres quedan ahora declaradas en
+inglés: de las **15 filas** de `public.brands`, **tres** valen `en` —`LucienSael`, `SamPublisher` y
+`UnrealvilleStudio`— y las otras **12** valen `es`. [medido] `UnrealvilleStudio` **ya valía `en`** antes
+de esta sesión; las dos corregidas hoy son `LucienSael` y `SamPublisher`.
+
+**Lo que este cambio NO es.** No hay corrida, ni pieza, ni siembra de voz para esta marca en esta
+sesión: `sam_personal` no participó de la corrida de verificación. El único efecto medible es que la
+cascada de idioma —`builder_input → meta → params → brands.language_primary`— ahora resuelve `en` para
+esta marca cuando le toque producir.
+
+**Y el motivo por el que se corrige el dato antes de endurecer su aplicación.** FIX-LANG-01 hace que la
+columna **se obedezca mejor**. Un corte así convierte cada fila equivocada en un defecto nuevo, y en
+silencio: sin corregir primero, `SamPublisher` habría empezado a escribir en español con más rigor del
+que tenía. **Antes de endurecer la aplicación de un dato, se valida el dato.**
+
+**Pendiente declarado:** las **otras 11 marcas** no tienen su `language_primary` auditado contra una
+fuente independiente. Queda como ítem abierto en `AGENDA.md` v2026-08-30-v1.
+
+---
+
 ## 2026-06-02 — Genoma de voz pública (sam_personal v0.5) · Sam + Claude
 
 ### Resumen

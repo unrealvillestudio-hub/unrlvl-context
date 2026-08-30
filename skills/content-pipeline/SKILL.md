@@ -1,5 +1,6 @@
 # CONTENT PIPELINE SKILL
-## UNRLVL · Versión canónica · v2.7
+## UNRLVL · Versión canónica · v2.8
+_v2.8 · 2026-08-30 — **precisión del learning del GRANT**: el `GRANT` a nivel de TABLA sí cubre las columnas nuevas; lo que no es automático es el grant a nivel de COLUMNA. Medido sobre tres columnas añadidas ese día. El enunciado v2.7 se conserva íntegro y la precisión entra debajo, sin derogarlo._
 _v2.7 · 2026-08-16 — añadido el patrón **lab-lee-nunca-construye** (constructor único de snapshots), los 3 headers del detector y el learning del GRANT. El cuerpo v2.6 se conserva íntegro debajo._
 **Propietario:** Unrealville Studio · Sam  
 **Estado:** ICR ✅ — R4B (Ready for Business)  
@@ -728,6 +729,20 @@ El detector de capas del snapshot reporta bajo tres encabezados. Se nombran acá
 >
 > **El GRANT va como paso fijo del DDL, no como recordatorio.** Verificado el 2026-08-16 al crear
 > `intel.content_embeddings` (`vector(768)` + HNSW + GRANT `service_role`).
+>
+> **Precisión medida el 2026-08-30 — la regla estaba enunciada MÁS ANCHA de lo que es.** Lo de arriba
+> vale para una **tabla nueva**, y sólo para eso. **El `GRANT` a nivel de TABLA sí cubre las columnas
+> que se añadan después:** `brand_voice_genome.voice_note`, `iid_content_queue.angle_pick` y
+> `content_type_registry.format_instruction` quedaron legibles y escribibles por `service_role` **sin
+> re-otorgar nada**, porque el privilegio vive sobre la tabla. **Lo que NO es automático es el `GRANT`
+> a nivel de COLUMNA:** si alguna vez se otorgó columna por columna, la columna nueva **queda fuera**,
+> y ahí sí hace falta el otorgamiento explícito.
+>
+> **Por qué importa que la regla sea exacta y no sólo prudente.** Una regla más ancha de lo real hace
+> añadir un paso inútil a cada `ALTER TABLE` — y un paso que nunca cambia nada **se deja de dar**, con
+> él el caso en que sí hacía falta. **El alcance correcto es: tabla nueva → `GRANT` obligatorio ·
+> columna nueva sobre tabla con grant de tabla → nada que hacer · columna nueva sobre tabla con grants
+> de columna → `GRANT` explícito.**
 
 **Corolario de `Globals`:** las reglas globales `hard` **se heredan y GANAN** sobre las de marca.
 ForumPHs pasó de 9 a 11 reglas de compliance sin que nadie sembrara nada en la marca. Consecuencia

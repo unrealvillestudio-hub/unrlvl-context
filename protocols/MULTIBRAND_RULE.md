@@ -6,7 +6,7 @@
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
 
-**Versión:** v1.2 · **Creado:** 2026-08-07 · **Actualizado:** 2026-08-18 (§13 Migrar el eje sin migrar a sus consumidores) · 2026-08-16 (§11 Modelos y versiones · §12 Granularidad del eje) · **base previa:** v1.1 (2026-08-16) y v1.0 (2026-08-07), cuerpo conservado íntegro · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.3 · **Creado:** 2026-08-07 · **Actualizado:** 2026-08-30 (§5 precisión de alcance: los dos tiempos rigen la MIGRACIÓN DE HARDCODE, no toda DDL — una columna nueva y nullable va al revés, y hacerlo al derecho abre una ventana en la que la traza se pierde en silencio) · 2026-08-18 (§13 Migrar el eje sin migrar a sus consumidores) · 2026-08-16 (§11 Modelos y versiones · §12 Granularidad del eje) · **base previa:** v1.1 (2026-08-16) y v1.0 (2026-08-07), cuerpo conservado íntegro · **Naturaleza:** REGLA INVIOLABLE del ecosistema
 **Destino en el repo:** `protocols/MULTIBRAND_RULE.md`
 **Consumidores:** Claude.ai (chat), Claude Code (CC), Sam (revisión de PR)
 **Precedente:** `ecosystem.json → labs._note` — misma naturaleza, misma fuerza. Aquella regla nació de `generadorLocal`; esta nace del hardcode de marca.
@@ -95,6 +95,16 @@ Aplica a **toda capa compartida**, que es cualquier cosa que más de una marca a
 Hacerlo al revés rompe: ampliar un `CHECK` cuyo valor el builder no tiene cableado produce fail-loud en producción — verificado el 2026-08-07 sobre `AUDIENCE_FRAMES`.
 
 3. **El alias legacy se retira** en un tercer PR, cuando ninguna fila lo use. Se documenta la fecha; no se deja vivo por comodidad.
+
+> **Precisión de ALCANCE (2026-08-30) — los dos tiempos rigen la MIGRACIÓN DE HARDCODE, no toda DDL. El texto de arriba se conserva íntegro.**
+>
+> **Qué cubre.** El orden «PR primero, DDL después» existe para un caso concreto y verificado: **ampliar un `CHECK` cuyo valor el builder todavía no tiene cableado** produce fail-loud en producción (`AUDIENCE_FRAMES`, 2026-08-07). El riesgo que evita es que el **dato admita antes de que el código entienda**.
+>
+> **Qué NO cubre: una columna NUEVA y NULLABLE.** Ahí no hay valor que el builder pueda rechazar, porque no hay `CHECK` que ampliar ni fila previa que reinterpretar: la columna nace vacía y **nadie la lee hasta que el código la lee**. Aplicarle el orden de la migración **abre una ventana en la que la traza se pierde en silencio** — el código empieza a producir el dato antes de que exista la columna donde escribirlo, y lo que se produjo en esa ventana no queda registrado en ninguna parte. Es el corolario de `HRD-R18` un piso más abajo: un campo de diagnóstico que no existe todavía **no se distingue de uno que no se escribió**.
+>
+> **Cómo se decide, en una pregunta:** *¿el cambio de esquema puede hacer que el código vigente reciba un valor que no sabe tratar?* Si la respuesta es **sí** —`CHECK` ampliado, `ENUM` nuevo, dato migrado—, manda el orden de arriba: **PR primero**. Si es **no** —columna nueva y nullable, tabla nueva—, **la DDL va primero**, para que ni un solo registro nazca sin sitio donde caer.
+>
+> **Lo que esta precisión NO deroga:** los tres tiempos de la migración de hardcode, íntegros; ni el punto del checklist de §8, que sigue leyéndose como lo que siempre fue — **el orden aplica cuando hay hardcode que migrar**.
 
 ---
 
