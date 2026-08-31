@@ -225,7 +225,7 @@ Si Sam escribe "Actualiza" sin haber hecho Professor, Claude recuerda:
 
 A partir de v15, `Actualiza` **NO** recoge datos de sesiones del Social Media Agent automáticamente.
 El SMA solo se consulta cuando **Sam lo pide explícitamente** en la misma instrucción, por ejemplo:
-> "Actualiza con SMA" · "Actualiza incluyendo el SMA" · "revisá el SMA y Actualiza"
+> "Actualiza con SMA" · "Actualiza incluyendo el SMA" · "revisar el SMA y Actualiza"
 
 Cuando Sam lo pida explícitamente:
 - GET `https://unrlvl-social-media-agent.vercel.app/api/export?secret=[SECRET]` vía `Vercel:web_fetch_vercel_url`.
