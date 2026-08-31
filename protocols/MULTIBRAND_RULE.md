@@ -217,7 +217,7 @@ Que hoy una sola marca use un eje NO lo convierte en suyo.
 1. ¿Sobrevive a que entre otra marca de otro rubro y otro país?
 2. ¿El nombre describe la FUNCIÓN o el CASO?
 3. ¿Esto es eje o es instancia?
-4. ¿Cuántas marcas hay hoy en esta enumeración? Si es una, revisá el nombre.
+4. ¿Cuántas marcas hay hoy en esta enumeración? Si es una, revisar el nombre.
 
 Las 4 respuestas van en el cuerpo del PR. **Un brief que hardcodee marca no se ejecuta:
 detenerse, reportarlo y proponer el eje funcional** — un brief no es autorización para violar
@@ -397,4 +397,4 @@ La migración **no se declara hecha** hasta que esa lista esté vacía. Enumerar
 
 ---
 
-_Fin · MULTIBRAND_RULE v1.2 (base previa v1.1, cuerpo conservado íntegro) · regla inviolable · Unrealville Studio_
+_Fin · MULTIBRAND_RULE v1.3 (base previa v1.2 y v1.1, cuerpo conservado íntegro) · regla inviolable · Unrealville Studio_
