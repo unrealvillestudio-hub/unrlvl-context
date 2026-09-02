@@ -1,6 +1,7 @@
 # DELIVERY AND VERIFICATION RULE — UNRLVL
 
-**Versión:** v1.1 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.2 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**v1.2 (2026-09-02), dos adiciones y ninguna derogación**, las dos medidas el mismo día sobre un defecto que ya había costado trabajo: (a) **§2.3-bis — todo brief declara EL REPO DE CADA CAMBIO**, no un repo para todo el brief; (b) **§2.3-ter — toda instrucción de verificación declara si escribe en PRODUCCIÓN y sobre qué pieza**. El cuerpo de v1.1 y de v1.0 se conserva íntegro.
 **v1.1 (2026-08-29), dos adiciones y ninguna derogación:** (a) **este documento pasa a ser carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— y por tanto **fila propia del panel**; una regla de forma que se consulta al final llega tarde, porque el texto ya está escrito. (b) **§6 declara el estatus de cada punto de carga** —FUENTE / PUNTERO / RESUMEN— y el contrato que ata al futuro proyecto de sync de context files. El cuerpo de v1.0 se conserva íntegro.
 **Destino en el repo:** `protocols/DELIVERY_AND_VERIFICATION_RULE.md`
 **Consumidores:** Claude.ai (chat), Claude Code (CC), Sam (revisión de PR)
@@ -77,6 +78,50 @@ Todo lo que se entrega cae dentro de un bloque con encabezado propio:
 **Por qué la asimetría.** Trocear un brief en viñetas cortas para que quede prolijo le quita a CC lo que necesita para no perder el objetivo: la ruta exacta, el literal exacto y el orden. La numeración es una ayuda de lectura para Sam; convertirla en la forma del brief degrada el brief.
 
 **Entrega de briefs largos.** Un brief con varios niveles de cercas de código **se entrega como archivo**, no como bloque pegado: un bloque se trunca al copiarlo y el truncamiento **no falla** — CC ejecuta lo que le llegó, que es `HRD-R11` un piso más arriba. Si va pegado, se envuelve en una cerca **cuya longitud supere en uno a la más larga que contenga**.
+
+
+### 2.3-bis · El repo de CADA cambio, no un repo para el brief (2026-09-02)
+
+**Un brief tiene tantos repos como cambios, no uno.** El repo no es una propiedad del brief: es una
+propiedad de **cada pieza** del brief. La línea de gobernanza declara, **por cada cambio**: **el repo**,
+la rama, quién publica la rama, quién abre el PR, y quién mergea y borra.
+
+**Por qué, medido el 2026-09-02.** BRIEF-04 nació con gobernanza de **un solo repo** cuando sus tres
+piezas vivían en tres —`Orchestrator`, `unrlvl-iid-functions` y `CopyLab`— y **CC quedó bloqueado sin
+permiso de escritura** sobre los repos que el brief no había nombrado. Nadie decidió bloquearlo: la
+gobernanza se escribió en singular y el ejecutor no puede inventar un permiso que no le dieron.
+
+**Es la misma familia de defecto que fijar el nombre de la rama**, que tampoco es parte del encargo: un
+brief que fija lo que el entorno decide, y omite lo que sólo el brief puede decir.
+
+**Qué hace CC ante un brief con un solo repo y varios repos de destino:** **se DETIENE y lo reporta**,
+como ante un `str_replace` que no matchea (`CC_PROTOCOL` §0) o un brief sin el test de la marca N+1
+(`MULTIBRAND_RULE` §7.2). No adivina el repo por el nombre del archivo.
+
+### 2.3-ter · Una instrucción de verificación declara si escribe en PRODUCCIÓN, y sobre qué pieza (2026-09-02)
+
+**Toda instrucción de verificación —de una UI, de una bandeja, de un endpoint, de una migración— declara
+dos cosas por escrito:**
+
+1. **Si escribe en producción.** Sí o no, explícito.
+2. **Sobre qué pieza, fila u objeto concreto** cae la escritura, nombrado por su identificador.
+
+**Una instrucción de verificación es una instrucción de escritura mientras no diga lo contrario.** Quien
+la ejecuta no puede deducir de «comprueba que el botón funciona» que el botón escribe, ni sobre qué.
+
+**Por qué, medido el 2026-09-02.** Una instrucción decía *«aprueba una pieza y rechaza otra»* para
+comprobar un despliegue **en un preview de Vercel**. Un preview de Vercel **no es un entorno de pruebas:
+apunta a la misma base**. Se **escribió en producción** y quedaron **selladas cuatro piezas de
+ForumPHs** —juzgadas sin leerlas, siguiendo la instrucción—, **una de ellas en `scheduled`, camino de
+publicarse**. Se revirtió archivando los cuatro veredictos con su motivo escrito, no borrándolos.
+
+**Corolario para quien escribe la instrucción:** si la verificación **puede** hacerse sin escribir —una
+consulta de sólo lectura, un `curl` que no muta, un bloque `DO` con manejo de excepción que revierte—,
+**esa es la instrucción**, y la que escribe se declara como último recurso con su reversión al lado.
+
+**Corolario para quien la ejecuta:** ante una instrucción de verificación que no declara ninguna de las
+dos cosas, **se pregunta antes de ejecutarla**. `QA-INFO` es un bloqueo, y esto es exactamente lo que
+bloquea.
 
 ### 2.4 · Panel de carga verificada — la apertura se comprueba, no se afirma
 
@@ -188,7 +233,7 @@ El cuerpo de esta disciplina ya existe y **esta sección no lo duplica**: `HRD_P
 
 Antes de declarar terminada una entrega, Claude.ai y CC se preguntan:
 
-> «¿Todo lo que escribí cae dentro de un bloque con destinatario? ¿Usé la marca que corresponde a la superficie, o intenté pintar color donde no se rinde? ¿Cada afirmación de estado lleva su etiqueta? ¿Pasé las cuatro QA en orden, y `QA-INFO` de verdad me bloqueó donde faltaba algo, o me la salté porque tenía prisa? ¿Hay una sola forma voseante en todo el texto?»
+> «¿Todo lo que escribí cae dentro de un bloque con destinatario? ¿Usé la marca que corresponde a la superficie, o intenté pintar color donde no se rinde? ¿Cada afirmación de estado lleva su etiqueta? ¿Pasé las cuatro QA en orden, y `QA-INFO` de verdad me bloqueó donde faltaba algo, o me la salté porque tenía prisa? ¿Hay una sola forma voseante en todo el texto? ¿Cada cambio del brief declara SU repo, o hay uno solo para todos? ¿Cada instrucción de verificación dice si escribe en producción y sobre qué pieza?»
 
 CC añade el estado de las cuatro al bloque de reporte de `CC_PROTOCOL` §4:
 
