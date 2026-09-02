@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-08-29-v7 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-02-v8 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v8 (2026-09-02):** una adición, ninguna derogación. **§10 — dónde corre CC, y qué se sigue de ahí.** CC **no se ejecuta en la máquina de Sam**: corre en un **contenedor Linux propio**, así que las variables de entorno, las CLI instaladas y las rutas de disco de Sam **no le alcanzan**. Y el despliegue de `content-run-stage` —**385.953 bytes**, que ninguna tool MCP de deploy puede recibir inline sin truncar— **lo lanza Sam desde su terminal**, con **`--no-verify-jwt` obligatorio**: sin la bandera, el deploy cambia `verify_jwt` y **rompe el cron**. Motivo medido el 2026-09-02: se dieron instrucciones de entorno que presuponían la máquina de Sam, y no había forma de que CC las cumpliera. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
+>
 > **Cambios v7 (2026-08-29):** una adición, ninguna derogación. **§0 bis.1 — actualización medida del acceso de CC a Vercel.** Sam dio de alta Vercel en la allowed list de CC y las dos vías quedaron probadas en la misma sesión: `curl` **sigue devolviendo 403 en CONNECT**, y la tool MCP `Vercel:web_fetch_vercel_url` devuelve **200 con el cuerpo completo**. **El orden de carga no cambia** —el repo sigue siendo la fuente canónica y Vercel el respaldo—, pero **deja de ser cierto que CC no tenga una segunda vía**: hoy la tiene, y un CC que prueba sólo `curl` y declara Vercel inalcanzable está afirmando sin medir por la vía que existe. El texto de v5 se conserva íntegro: sigue siendo cierto en su literal, lo que caducó es su conclusión.
 >
 > **Cambios v6 (2026-08-29):** una sustitución y dos adiciones, ninguna derogación silenciosa. (a) **§4.1 pasa a v3** — «Bloques con destinatario y las cuatro QA»: el campo `PENDIENTE PARA SAM` se presenta como bloque `PARA SAM` y el trabajo de CC como bloque `PARA CC`, el diferenciador visual se declara **para que Sam lea, no para que CC ejecute**, y la marca depende de la **superficie** (cuadrado emoji en chat, `●` con hex en documento o UI con estilos). El texto de la convención **deja de vivir aquí**: la fuente única es `protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0. **La §4.1 v2 se conserva íntegra** en el bloque `ARCHIVO HISTÓRICO` del final, con su guard (§6). (b) **§4 suma el campo obligatorio `QA:`** con el estado de las cuatro QA —`QA-ENCARGO`, `QA-OBJETIVO`, `QA-INFO`, `QA-PROP`—, que son HRD RULES por `HRD-R15`. Motivo medido el 2026-08-29: la convención de destinatario existía **a medias** —sólo el bloque de Sam, sólo obligando a CC, sin distinguir superficies— y se perdieron **dos horas** intentando pintar hex en el chat, superficie que no rinde color arbitrario. **Barrido de voseo sobre este archivo: cero apariciones de la forma voseante de «quieres» y cero imperativos voseantes** —la plantilla de §2 ya estaba en neutro— medido con `grep` antes de editar.
@@ -217,7 +219,8 @@ Si para un PR CC crea un worktree (`git worktree add`), CC es **responsable de e
 
 **7.3 — Autoverificación de cierre.**
 Antes de declarar una tarea terminada, CC se pregunta:
-> "¿Creé algún worktree durante esta tarea? Si sí → ¿lo eliminé? Si no pude eliminarlo, ¿lo reporté explícitamente en PENDIENTE PARA SAM con la ruta exacta?"
+> "¿Alguna instrucción que ejecuté presuponía la máquina de Sam en vez de mi contenedor? (§10)
+> ¿Creé algún worktree durante esta tarea? Si sí → ¿lo eliminé? Si no pude eliminarlo, ¿lo reporté explícitamente en PENDIENTE PARA SAM con la ruta exacta?"
 
 El campo `WORKTREES:` del reporte (§4) es obligatorio: declara `creado y eliminado`, `ninguno creado`, o `creado y NO eliminado — acción para Sam: [ruta]`.
 
@@ -261,6 +264,50 @@ no las **evaluadas**), y un fail-loud propuesto contra el conteo de tabla que ha
 
 Aplica en los dos sentidos: **CC tampoco afirma una causa raíz sin declarar su evidencia** — ni en
 un reporte, ni en el cuerpo de un PR, ni en un context file.
+
+
+---
+
+## 10. DÓNDE CORRE CC — SU MÁQUINA NO ES LA DE SAM
+
+**CC no se ejecuta en la máquina de Sam.** Corre en un **contenedor Linux propio**, efímero, con su
+propio disco y su propio entorno. De ahí se sigue, y no es opinable:
+
+- **Las variables de entorno de la máquina de Sam no existen para CC.** Ni las de Windows, ni las de su
+  shell, ni las que un `.env` local tenga cargadas.
+- **Las CLI instaladas localmente no existen para CC.** Que Sam tenga `supabase`, `vercel` o `gh` en su
+  terminal no significa que CC pueda invocarlas.
+- **Las rutas de disco de Sam no existen para CC.** Una ruta absoluta de su máquina no resuelve nada.
+- **La red de CC pasa por su propio proxy de egreso**, con su propia lista de destinos permitidos —de ahí
+  el 403 en CONNECT contra `*.vercel.app` de §0 bis.1.
+
+**Regla para quien escribe briefs:** antes de dar instrucciones de entorno, de credenciales o de
+herramientas de línea de comandos, **preguntar dónde corre el proceso**. Un brief que dice *«usa la
+variable que ya tienes»* o *«corre el comando como siempre»* está hablando de otra máquina.
+
+**Regla para CC:** ante una instrucción que presupone un entorno que no tiene, **se DETIENE y lo
+reporta** con lo que sí tiene disponible. No improvisa una credencial ni finge un acceso.
+
+### 10.1 — `content-run-stage` la despliega Sam, y con `--no-verify-jwt`
+
+**`content-run-stage` pesa 385.953 bytes** [medido 2026-09-02], y **las tools MCP de deploy reciben el
+código inline**: ningún modelo puede desplegarla sin truncarla. Una función truncada que despliega sin
+error es exactamente el fallo silencioso que este ecosistema ya paga caro.
+
+**El despliegue lo lanza Sam desde su terminal:**
+
+```
+supabase functions deploy content-run-stage --project-ref amlvyycfepwhiindxgzw --no-verify-jwt
+```
+
+**`--no-verify-jwt` es OBLIGATORIO, no una preferencia.** Sin la bandera, el deploy **cambia
+`verify_jwt`** y **rompe el cron**: el carril la invoca por `pg_net`, sin JWT de usuario. Es la misma
+asimetría deliberada que ya está declarada para el resto del carril frente a `judge-arbitration` y
+`piece-edit`, que sí van con `verify_jwt: true`.
+
+**Esto no deroga `HRD-R14` — la aplica.** El despliegue sigue siendo un acto aparte del merge, y sigue
+siendo de Sam. Lo que §10.1 añade es **por qué**, en este caso concreto, no es siquiera técnicamente
+posible que lo haga otro.
 
 ---
 

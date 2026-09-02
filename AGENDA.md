@@ -1,4 +1,127 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-02 · v2026-09-02-v1 (**HRD_ACTUALIZA 2026-09-02 — CUATRO BRIEFS CERRADOS Y EL DATO DEL TIEMPO ENTRA AL ESQUEMA.** BRIEF-01, 02, 03 y 04 quedan **completos**: código mergeado **y** DDL aplicada, verificado con `execute_sql` al escribir. **BRIEF-05 PR-A (#114) está mergeado Y APLICADO** —`publish_timezone` en las 15 filas, las dos tablas nuevas vacías, con RLS y `GRANT` explícito a `service_role`—; **lo pendiente es la migración correctora de #115**, que el `CHECK` vigente todavía no lleva: hoy **un `-05:00` entra sin protesta**, y un desfase no es un huso. **El defecto que BRIEF-05 ataca, re-medido:** 47 crons activos, **38 de research y process y CERO de publicación**, `scheduled_posts` en 0 filas y **118 piezas**. Cuarenta relojes que dicen FABRICA y ninguno que diga PUBLICA. **Professor cerrado antes: 12 learnings, los doce `approved_by_sam = true`** [medido]. **Gobernanza que cambia por dato, no por opinión:** todo brief declara **el repo de CADA cambio** —BRIEF-04 nació con gobernanza de un solo repo cuando sus piezas vivían en tres y CC quedó bloqueado— y toda instrucción de verificación declara **si escribe en producción y sobre qué pieza** —«aprueba una y rechaza otra» en un preview escribió en la base real y selló cuatro piezas de ForumPHs—. **CC corre en su propio contenedor Linux:** el entorno de Sam no le alcanza, y `content-run-stage` (385.953 bytes) **la despliega Sam desde su terminal con `--no-verify-jwt` obligatorio**. **Abre:** aplicar la migración de #115 · declarar husos y políticas · PR-B y PR-C · `HR-GEN-10` · el eje de cortes del historial · el texto adaptado junto al maestro · `signature_closer` con **dos fuentes para el mismo dato** · BRIEF-06 · y 🔴 **dos secretos en claro en `intel.iid_scheduler_config`**.)_
+
+---
+
+## 🗓️ HRD_ACTUALIZA 2026-09-02 — Cuatro briefs cerrados, y el eje que faltaba desde el 27 de julio: el tiempo como dato
+
+_(Bloque al tope. Detalle en `brands/UnrealvilleStudio/session_log.md` (2026-09-02).)_
+
+> **Todo lo etiquetado `medido` se consultó con `execute_sql` al escribir este bloque** (`HRD-R13`), no
+> se copió del brief. Donde el brief y la medición discrepan, **manda la medición y se dice cuál era lo
+> declarado**.
+
+### ✅ Cerrado hoy, y verificado contra la base
+
+- ✅ **BRIEF-01 — lectura en voz alta en las tres bandejas.** `Orchestrator` **#26**. Síntesis nativa del
+  navegador: sin backend, sin proveedor externo, sin costo por reproducción.
+- ✅ **BRIEF-02 — historial de piezas evaluadas.** `Orchestrator` **#31**, cuarto tab de sólo lectura.
+  Cierra el defecto de que una pieza calibrada **desaparecía y no podía volver a nombrarse**: el
+  `piece_id` es copiable en la fila cerrada. **165 pruebas en verde.**
+- ✅ **BRIEF-03 — el tercer veredicto `fixable`.** `Orchestrator` **#27**, **#28**, **#29** (DDL) y
+  **#30**. **DDL aplicada:** `intel.approval_calibration.fix_proposal` existe y el `CHECK` vale
+  `CHECK ((verdict = ANY (ARRAY['approved'::text, 'rejected'::text, 'fixable'::text])))`. [medido]
+- ✅ **BRIEF-03 #30 — el lector sabe en qué idioma leer.** `api/_brandLanguage.ts`, cascada
+  `voicelab_language` → `language_primary` → `null`. **Degradar, nunca inventar.**
+- ✅ **BRIEF-04 — la imagen deja de repetir el texto de la pieza.** `unrlvl-iid-functions` **#112**
+  (DDL), `CopyLab` **#38** (el escritor emite tres cadenas) y `unrlvl-iid-functions` **#113** (el carril
+  transporta el modo y compone). **La siembra está aplicada:** `intel.brand_publish_channels` da
+  **`dialogue` = 13 · `echo` = 6** sobre 19 filas. [medido]
+- ✅ **BRIEF-05 PR-A — el dato del tiempo, aplicado.** `unrlvl-iid-functions` **#114**, mergeado 15:51
+  UTC **y aplicado**: `public.brands.publish_timezone` existe con **`NULL` en las 15 filas**;
+  `intel.brand_publish_policies` e `intel.brand_publish_slots` existen **vacías**, con **RLS activada** y
+  **`GRANT SELECT, INSERT, UPDATE, DELETE` explícito a `service_role`** en las dos. [medido]
+- ✅ **La bandeja de publicación también explica el error.** `Orchestrator` **#32**: `publishInbox.req`
+  dejaba de colapsar el mensaje del server en un código de máquina. **171 pruebas en verde.**
+- ✅ **MCP-SCOPE-01 — el token del MCP de correo lleva alcance de marcas.** `unrlvl-mail-mcp` **#7**:
+  `403 MCP_BRAND_OUT_OF_SCOPE` **antes** de resolver credencial y de abrir conexión. `MCP_AUTH_TOKEN`
+  queda como alias legacy, y **se retira en un tercer PR**. **79 pruebas en verde.**
+- ✅ **Professor cerrado ANTES del Actualiza.** **12 learnings**, `session_date = 2026-09-02`, **los doce
+  con `approved_by_sam = true`**. Orden cumplido: Professor → Actualiza. [medido]
+
+### 🔴 Abierto — lo que sale de esta sesión
+
+- 🔴 **Aplicar la migración correctora de BRIEF-05 (`unrlvl-iid-functions` #115), mergeada 21:11 UTC y
+  NO aplicada.** El `CHECK` vigente en producción es
+  `CHECK (((publish_timezone IS NULL) OR (length(btrim(publish_timezone)) > 0)))` [medido]: **un
+  `-05:00` entra sin protesta**. `America/Panama` es UTC−5 los doce meses; `America/New_York` alterna
+  entre −5 y −4, así que un `-05:00` literal para una marca de Miami **publica una hora tarde durante
+  ocho meses al año sin que nada falle**. Y cae también `Etc/GMT±N`, que es IANA legítima **con el signo
+  invertido** (`Etc/GMT+5` **es** UTC−5): peor que un desfase a secas **porque parece correcta**. **Dos
+  sentencias, una por llamada, cada una con `DROP` y `ADD` en un solo `ALTER`.** ⚠️ **La migración
+  `20260902180000` NO está pendiente: ya está aplicada. Reaplicarla revertiría esta corrección.**
+- 🔴 **Declarar husos y políticas de publicación — sin esto, PR-B no tiene nada que hacer.** Las tablas
+  nacen vacías **a propósito**: un huso y una franja son **dato de marca**, y no hay comportamiento
+  vigente que copiar (cero filas publicadas por esta vía), así que **no existe el default honesto**.
+  Husos decididos por Sam, **en nombre IANA y nunca como desfase**: `America/Panama` para **ForumPHs**;
+  `America/New_York` para **NeuroneSCF**, **UnrealvilleStudio** y **LucienSael** — porque **Panamá no
+  cambia la hora y Miami sí**. Se declara **después** de aplicar #115, para que el `CHECK` corregido
+  proteja la siembra.
+- 🔴 **BRIEF-05 PR-B (el proceso que reserva) y PR-C (la fecha visible).** PR-B valida además que el
+  nombre de huso **exista** en `pg_timezone_names` —lo que un `CHECK` no puede hacer, porque es una
+  vista y no es inmutable— y se niega a generar franjas para una marca cuyo huso no reconozca: **cero
+  franjas y un motivo, nunca horas silenciosamente equivocadas**.
+- 🟠 **`HR-GEN-10` — redactada y SIN SEMBRAR.** La guarda antirrepetición del Watcher para el modo
+  diálogo queda propuesta, pendiente de la decisión de Sam sobre cómo darle un campo con las dos
+  cadenas. **Se nombra como propuesta, no como regla vigente.**
+- 🟠 **El eje de cortes del historial de piezas evaluadas.** BRIEF-02 **no** recalculó la generación
+  contra `intel.pipeline_cutoffs`, y lo declaró: el corpus guarda la fecha del **veredicto**, no la de la
+  pieza, y usar ese timestamp contra los cortes daría **otra magnitud con el mismo nombre** — peor que no
+  tenerla. Hacerlo bien exige un tercer join a `content_pieces`. **Unidad aparte.**
+- 🟠 **El texto adaptado junto al maestro, vía `metrics.text_source`.** El texto que publica **no** es
+  `assets.copy.aife_filtered` sino `assets.social.adapted`: el maestro alimenta el artefacto de la
+  bandeja, y el adaptado es lo que sale al canal — **es donde viven hashtags y firma**. Medir el maestro
+  y llamarlo «la pieza» produjo hoy **un cero verdadero sobre la pregunta equivocada**, y con él dos
+  afirmaciones falsas: que no había hashtags y que el contador mentía. La bandeja debe mostrar **las dos
+  caras** y declarar cuál se mide.
+- 🟠 **Resolver si `signature_closer` del genoma alimenta el mecanismo del `builder_meta` o compite con
+  él.** Toda marca tiene firma, y para UnrealvilleStudio **vivía en ningún sitio** — por eso el escritor
+  estampó un glifo inventado. Pero `assets.builder_meta.signature_closer` **ya existía** como mecanismo
+  de estampado tras el `PASS` del Watcher. **Dos fuentes para el mismo dato es exactamente lo que produjo
+  el defecto**, y añadir una columna sin decidir cuál manda lo reproduce con más ceremonia.
+- 🟠 **BRIEF-06.** Por definir, sobre la base de que el eje del tiempo ya está en el esquema.
+- 🔴 **Dos secretos en claro en `intel.iid_scheduler_config`.** Las claves son **`iid_cron_secret`** y
+  **`vercel_bypass_secret`**, con el valor **en texto plano en la columna `value`** [medido — se
+  consultaron las claves y la longitud, **nunca el valor**]. La propia tabla ya declara el patrón
+  correcto en otra fila: `vercel_bypass_configured` dice *«`VERCEL_BYPASS_SECRET` está en Supabase
+  Secrets»* — es decir, **el mismo secreto está a la vez en el sitio correcto y en claro en una tabla**.
+  **Acción: rotar los dos, moverlos a Supabase Secrets y dejar en la fila sólo el indicador de
+  configuración.** Mientras tanto, todo lector con `SELECT` sobre `intel` los ve.
+
+### 🧭 Gobernanza que cambia hoy, y por dato medido
+
+- **`protocols/DELIVERY_AND_VERIFICATION_RULE.md` → v1.2, dos reglas nuevas y ninguna derogación.**
+  (a) **Todo brief declara el repo de CADA cambio**, no un repo para todo el brief: BRIEF-04 nació con
+  gobernanza en singular cuando sus tres piezas vivían en `Orchestrator`, `unrlvl-iid-functions` y
+  `CopyLab`, y **CC quedó bloqueado sin permiso de escritura**. (b) **Toda instrucción de verificación
+  declara si escribe en producción y sobre qué pieza**: «aprueba una pieza y rechaza otra» en un preview
+  de Vercel **escribió en la base real** y selló **cuatro piezas de ForumPHs**, una camino de publicarse.
+- **`protocols/CC_PROTOCOL.md` → v8, §10 nueva.** **CC corre en su propio contenedor Linux:** las
+  variables de entorno, las CLI y las rutas de disco de la máquina de Sam **no le alcanzan**. Y el
+  despliegue de `content-run-stage` —**385.953 bytes**, que ninguna tool MCP de deploy puede recibir
+  inline sin truncar— **lo lanza Sam desde su terminal**, con **`--no-verify-jwt` obligatorio**: sin la
+  bandera, el deploy cambia `verify_jwt` y **rompe el cron**.
+- **`CAPABILITIES.md` → v1.11.** `unrealvillestudio-hub/BluePrints` entra al catálogo, con sus dos
+  advertencias como parte de la capacidad: **no es fuente para firmas**, y el `BP_BRAND` de
+  **UnrealvilleStudio está desactualizado**.
+
+### 🧭 Lo que este día enseña sobre cómo se mide
+
+- **Una fuente canónica desactualizada es peor que una ausente, porque parece autoridad.** La ausente
+  hace preguntar; la desactualizada hace afirmar. `BluePrints` tenía la respuesta y no estaba en el
+  catálogo: **media sesión reconstruyendo lo que ya estaba escrito**.
+- **Antes de afirmar sobre una pieza, declarar qué cara se está midiendo.** Maestro y adaptado son dos
+  caras del mismo objeto. La pregunta correcta sobre la cara equivocada devuelve un cero **verdadero**.
+- **Una TABLA nueva no hereda ningún privilegio; una COLUMNA nueva sobre tabla ya concedida SÍ.** Medido
+  con `watcher_result` y `watcher_gate`. La formulación anterior —«en este ecosistema no se hereda en
+  columnas nuevas»— **era falsa y se había afirmado sin medir**.
+- **Una política de RLS sin `GRANT` falla en silencio y parece un bug de código.** `public.platform_configs`
+  tenía política y **cero privilegios** para `service_role`. **Al sembrar una tabla, verificar las dos
+  cosas.**
+- **Una migración aplicada no se edita: se corrige con otra.** Editarla no cambia una fila de la base,
+  **sólo hace que el repo deje de describir lo que hay, y en silencio**.
+- **Preguntar dónde corre el proceso antes de hablar de su entorno.** CC no comparte máquina, disco ni
+  variables con Sam.
 _Actualizada: 2026-08-30 · v2026-08-30-v1 (**HRD_ACTUALIZA 2026-08-30 — SEIS CORTES APLICADOS EN PRODUCCIÓN, Y LA CORRIDA DE VERIFICACIÓN CIERRA PRE-JUEZ-01 QUE EL BRIEF DEJABA ABIERTO.** La corrida siguió **después** de escrito el brief, así que todo se midió al cierre y no se copió: **30 jobs, 23 piezas, 23 de 23 `clean`, cero muertas en el juez** —contra las 18 de 18 declaradas—. **El techo era el discriminador:** los 6 fallos corrieron con `max_tokens` 100/400 y los 5 re-despachados con **900 produjeron pieza los cinco**. Cerrado: FIX-LANG-01 (efecto) · FIX-AIFE-04 · #111 puntos 2 y 3 · PRE-JUEZ-01 · el idioma de `LucienSael` y `SamPublisher` · las 50 reglas en `warn`. Cancelado: **FIX-DUP-03 + PR #110** (el expediente ya lo había decidido en `e865333`) y **FIX-PATTERN-04** (era un defecto de lectura, no del sistema: los cinco `verify_pattern` están sanos). Abierto y nuevo: 🔴 **dos de cuatro marcas activas están fuera del carril por calendario**, la **traza del idioma en NULL**, **FIX-ADAPT-02 sin efecto** con su corolario de **dos resolutores del mismo eje**, y el **corte de AIFE** con su condicional por nombre de marca. Declarado y no corregido: **Professor tiene 6 learnings, no 12, y ninguno aprobado**.)_
 
 ---
