@@ -1,5 +1,5 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.10 · 2026-08-29 (dos precisiones medidas el mismo día. (1) `protocols/DELIVERY_AND_VERIFICATION_RULE.md` pasa a **carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— con **fila propia en el panel**: una regla de forma que se consulta al final llega tarde, y además ese documento especifica el panel. (2) **Cómo alcanza CC una URL de Vercel**: `curl` da **403 en CONNECT**, la tool MCP `Vercel:web_fetch_vercel_url` da **200** — dos vías distintas, sólo una funciona, y declarar Vercel inalcanzable tras probar sólo `curl` es afirmar sin medir por la vía que existe) · base previa: 1.9 · 2026-08-29 (`protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0 — REGLA INVIOLABLE nueva, listada en ARTEFACTOS CONSULTABLES: bloques con destinatario declarado y marca visual **por superficie** —emoji en chat, `●` con hex en documento o UI con estilos, y el diferenciador existe para que Sam lea, no para que CC ejecute—, idioma ES/EN neutro internacional **sin voseo**, etiqueta de evidencia `medido`/`reportado`/`deducido`, **panel de carga verificada** en la apertura de sesión —una fila sin evidencia es roja— y las **cuatro QA** con estatus HRD por `HRD-R15`, donde `QA-INFO` es un bloqueo. Este catálogo es punto de carga nº 4 de esa regla y **no la copia**: apunta a la fuente única) · base previa: 1.8 · 2026-08-28 (`unrlvl-mail-mcp` OPERATIVO: autenticado con MCP-AUTH-01 —401 verificado—, conector dado de alta en Claude.ai y tres buzones activos; y sus tres defectos abiertos, MAIL-01 / MAIL-02 / MAIL-04, que el catálogo declara porque cambian CÓMO se usa la capacidad) · base previa: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
+_Versión: 1.11 · 2026-09-02 (**una adición y ninguna derogación: el repositorio `unrealvillestudio-hub/BluePrints` entra al catálogo** —395 archivos, fuente de la identidad **visual** de cada marca (`BP_BRAND_*`, paletas, logos, tipografía)—, **con sus dos advertencias, que son parte de la capacidad y no una nota al pie**: NO es fuente para las firmas, y el `BP_BRAND` de UnrealvilleStudio **está desactualizado**. Una fuente canónica desactualizada es peor que una ausente porque **parece autoridad**. Motivo medido el 2026-09-02: no figuraba ni aquí ni en `ecosystem_filemap.md`, y **se trabajó media sesión reconstruyendo lo que ya estaba escrito ahí**) · base previa: 1.10 · 2026-08-29 (dos precisiones medidas el mismo día. (1) `protocols/DELIVERY_AND_VERIFICATION_RULE.md` pasa a **carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— con **fila propia en el panel**: una regla de forma que se consulta al final llega tarde, y además ese documento especifica el panel. (2) **Cómo alcanza CC una URL de Vercel**: `curl` da **403 en CONNECT**, la tool MCP `Vercel:web_fetch_vercel_url` da **200** — dos vías distintas, sólo una funciona, y declarar Vercel inalcanzable tras probar sólo `curl` es afirmar sin medir por la vía que existe) · base previa: 1.9 · 2026-08-29 (`protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0 — REGLA INVIOLABLE nueva, listada en ARTEFACTOS CONSULTABLES: bloques con destinatario declarado y marca visual **por superficie** —emoji en chat, `●` con hex en documento o UI con estilos, y el diferenciador existe para que Sam lea, no para que CC ejecute—, idioma ES/EN neutro internacional **sin voseo**, etiqueta de evidencia `medido`/`reportado`/`deducido`, **panel de carga verificada** en la apertura de sesión —una fila sin evidencia es roja— y las **cuatro QA** con estatus HRD por `HRD-R15`, donde `QA-INFO` es un bloqueo. Este catálogo es punto de carga nº 4 de esa regla y **no la copia**: apunta a la fuente única) · base previa: 1.8 · 2026-08-28 (`unrlvl-mail-mcp` OPERATIVO: autenticado con MCP-AUTH-01 —401 verificado—, conector dado de alta en Claude.ai y tres buzones activos; y sus tres defectos abiertos, MAIL-01 / MAIL-02 / MAIL-04, que el catálogo declara porque cambian CÓMO se usa la capacidad) · base previa: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
 
 ---
 
@@ -34,6 +34,36 @@ https://unrlvl-context.vercel.app/api/gh?action=[tree|file|repos]&repo=[REPO]&pa
 
 **Referencia:** `skills/github-auditor/SKILL.md` · `skills/vercel/SKILL.md`
 **Regla URLs Vercel:** SIEMPRE `Vercel:web_fetch_vercel_url`, nunca web_fetch normal.
+
+
+### `BluePrints` — la identidad visual de cada marca ya está escrita (añadido 2026-09-02)
+
+**`unrealvillestudio-hub/BluePrints` · 395 archivos.** Es la fuente de la **identidad visual** por marca:
+los `BP_BRAND_*` (JSON = FUENTE, HTML = RENDER), las paletas, los logotipos y la tipografía. Ruta por
+marca: `brands/[Marca]/`. Se lee por el proxy gh como cualquier otro repo:
+
+```
+Vercel:web_fetch_vercel_url →
+https://unrlvl-context.vercel.app/api/gh?action=tree&repo=BluePrints
+https://unrlvl-context.vercel.app/api/gh?action=file&repo=BluePrints&path=/brands/Unrealville/BP_BRAND_UNRLVL_v1.3.json
+```
+
+> ⚠️ **Dos advertencias, y son parte de la capacidad.**
+>
+> 1. **NO es fuente para las firmas.** La firma de marca no se toma de aquí. Su mecanismo vive en
+>    `assets.builder_meta.signature_closer` (estampado tras el `PASS` del Watcher) y su eje de dato, en
+>    el genoma de voz — con la relación entre ambos **todavía sin resolver** (`AGENDA.md`).
+> 2. **El `BP_BRAND` de UnrealvilleStudio está desactualizado.** Leerlo como estado vigente es leer una
+>    foto vieja con cara de documento canónico. **Una fuente canónica desactualizada es peor que una
+>    ausente porque parece autoridad**: la ausente hace preguntar, la desactualizada hace afirmar.
+>
+> **Por qué esta fila existe:** el repo no figuraba en este catálogo ni en `ecosystem_filemap.md`, y el
+> 2026-09-02 **se trabajó media sesión reconstruyendo identidad de marca que ya estaba escrita ahí**.
+> Es exactamente el caso que la regla de oro de arriba describe: el acceso existía por una vía que no era
+> obvia, y no consultarlo costó tiempo. [medido]
+
+**Nota de nomenclatura:** la carpeta de UnrealvilleStudio en `BluePrints` se llama `Unrealville`; en el
+sistema de contexto, `UnrealvilleStudio`. **Son la misma marca** (`brands/UnrealvilleStudio/brand.json`).
 
 ---
 
@@ -182,6 +212,7 @@ El carril async está **cerrado end-to-end** y su generador es **CopyLab**, invo
 | `ecosystem.json` | `ecosystem.json` (raíz) | Estado estructural completo del ecosistema. | HRD_ACTUALIZA |
 | `MULTIBRAND_RULE.md` | `protocols/MULTIBRAND_RULE.md` | Regla inviolable: eje en código, instancia en dato. Test de la marca N+1, patrones prohibidos, procedimiento de CC, deuda conocida. | Claude + Sam, bajo PR |
 | `DELIVERY_AND_VERIFICATION_RULE.md` | `protocols/DELIVERY_AND_VERIFICATION_RULE.md` | Regla inviolable: bloques con destinatario declarado y marca visual por superficie (para que Sam lea, no para que CC ejecute), idioma ES/EN neutro sin voseo, etiqueta de evidencia, panel de carga verificada y las cuatro QA (HRD RULES). **Carga obligatoria en apertura** (paso `3-quater`), con fila propia en el panel. | Claude + Sam, bajo PR |
+| `BluePrints` (repo) | `unrealvillestudio-hub/BluePrints` → `brands/[Marca]/` | **395 archivos.** Identidad **VISUAL** por marca: `BP_BRAND_*` (JSON = FUENTE, HTML = RENDER), paletas, logos, tipografía. ⚠️ **NO es fuente para firmas**, y el `BP_BRAND` de **UnrealvilleStudio está desactualizado**. | Sam + Claude, bajo PR en ese repo |
 
 > `supabase_access_map.json` y `ecosystem_graph.json` se enlazan por `caller.repo` ↔ nodos del graph. Se versionan por separado — no fusionar.
 
