@@ -5,6 +5,197 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-09-06 — BRIEF-05 cerrado y operando: el ecosistema deja de fabricar a ciegas y empieza a tener hora
+
+> **Verificado contra producción el 2026-09-06** con `execute_sql` (`HRD-R13`): todo lo que abajo se
+> etiqueta `medido` se consultó **al escribir esta entrada**, no se copió del brief. Professor cerrado
+> **antes**: **14 learnings**, `session_date = 2026-09-06`, los catorce con `approved_by_sam = true`
+> [reportado — brief de Claude.ai del 2026-09-06]. **SMA no se consultó.** Lo previo se conserva
+> íntegro debajo.
+>
+> **Donde el brief y la medición discrepan, manda la medición y se dice cuál era lo declarado.** Esta
+> entrada corrige **tres** cifras del brief y añade **una** que el brief no trae. Van marcadas en su
+> sitio, no en una nota al pie.
+
+### Lo que cambia de estado, en una línea
+
+**BRIEF-05 queda cerrado y operando de punta a punta.** Cuatro PR de función más tres correctivos, y
+**dos crons vivos** donde antes había cuarenta relojes que decían FABRICA y ninguno que dijera PUBLICA.
+
+### ✅ Los siete PR de BRIEF-05, y qué prueba que cada uno está aplicado
+
+**La prueba es directa, no el registro de migraciones.** `supabase_migrations.schema_migrations` tiene
+**194 filas y su última versión es `20260816224730`** [medido]: **ninguna** de las migraciones de
+BRIEF-05 figura ahí, porque se aplicaron con `execute_sql` y no con `apply_migration`. Preguntarle al
+registro habría devuelto «no aplicada» sobre siete migraciones que **sí** están aplicadas. Lo que se
+consulta es el objeto en el esquema.
+
+| PR | Qué entregó | Prueba directa de que está aplicado |
+|---|---|---|
+| PR-A `20260902180000` | el dato del tiempo | `intel.brand_publish_policies` e `intel.brand_publish_slots` existen y tienen filas [medido] |
+| #115 `20260902200000` | huso IANA, nunca desfase | el `CHECK` vigente, citado abajo [medido] |
+| #117 `20260902220000` | `HR-GEN-10` | **mergeada, pineada y NUNCA APLICADA** — dos defectos [reportado — brief] |
+| #119 `20260903130000` | correctiva de `HR-GEN-10` | `HR-GEN-10` existe, `active`, `severity = warn`, `brand_id = NULL` [medido] |
+| PR-B `20260903150000` | el reservador | EF `publish-slot-reserver` **v6, ACTIVE**, `verify_jwt: false` [medido] |
+| #121 `20260905120000` | `REVOKE EXECUTE … FROM PUBLIC` | ACL de `intel.drain_due_slots` = `postgres=X/postgres` + `service_role=X/postgres`, **sin `PUBLIC`** [medido] |
+| PR-C (Orchestrator #33) | la fecha visible en las dos bandejas | mergeado [reportado — brief] |
+| PR-D `20260905140000` | el drenaje | `intel.brand_publish_drain_log` y `intel.drain_due_slots` existen; `max_publications_per_run` es columna de `brand_publish_policies` [medido] |
+
+**El `CHECK` que #115 dejó vigente**, leído con `pg_get_constraintdef` [medido]:
+
+```
+brands_publish_timezone_es_iana
+CHECK (((publish_timezone IS NULL) OR ((length(btrim(publish_timezone)) > 0)
+        AND (publish_timezone !~ '[+]') AND (publish_timezone !~ '-[0-9]')
+        AND (publish_timezone ~ '[A-Za-z]'))))
+```
+
+Rechaza `-05:00` y `UTC-5` por `-[0-9]`, `+04:00` por `[+]`, y **`Etc/GMT±N` por partida doble** — que
+era el caso peligroso, porque es IANA legítima **con el signo invertido** (`Etc/GMT+5` **es** UTC−5) y
+por eso parece correcta. La exigencia de al menos una letra descarta además cualquier desfase pelado.
+
+**Se leyó la definición del constraint; no se ejecutó un `INSERT` de prueba.** Un `INSERT` que lanza
+demuestra que **algún** constraint lanzó; `pg_get_constraintdef` demuestra **cuál**, y no escribe en
+producción. Cuando existe prueba directa, la indirecta no se ejecuta — regla que esta sesión sube a
+`DELIVERY_AND_VERIFICATION_RULE.md`.
+
+### 📐 Estado medido al cierre
+
+Todo lo de esta tabla se consultó en una sola sentencia el **2026-09-06 a las 00:18 UTC** [medido]:
+
+| Magnitud | Valor |
+|---|---|
+| Canales activos | **16** (de 20 filas en `intel.brand_publish_channels`) |
+| Políticas | **16** |
+| Franjas | **54** — **44 libres**, **10 reservadas** |
+| Marcas con huso | **4** (de **16** marcas) |
+| `intel.brand_publish_reservation_log` | **15 filas** |
+| `intel.brand_publish_drain_log` | **0 filas** |
+| Reglas de watcher activas | **51**, **las 51 en `warn`** |
+
+**Las cuatro marcas con huso, en nombre IANA** [medido]: `ForumPHs` → `America/Panama`; `LucienSael`,
+`NeuroneSCF` y `UnrealvilleStudio` → `America/New_York`.
+
+**12 de 16 marcas siguen sin huso, y eso es correcto:** el huso se siembra cuando la marca entra al
+calendario, no antes. Una marca sin huso no tiene franjas que reservar, así que el reservador la ignora
+en vez de inventarle una hora.
+
+### 🕐 Los dos crons vivos
+
+| jobid | Nombre | Horario | Estado |
+|---|---|---|---|
+| **66** | `content-placement-poll` | `*/15 * * * *` | **activo** — el drenaje |
+| **79** | `publish-slot-reserver-daily` | `10 6 * * *` | **activo** — el barrido |
+
+El `command` de **79 lee el secreto desde vault**, y el barrido de patrones de secreto en claro sobre
+las dos filas de `cron.job` da **cero coincidencias** [medido]. El precedente que esto cierra está en la
+AGENDA del 2026-09-02: dos secretos en texto plano en `intel.iid_scheduler_config`. Aquí no se repitió.
+
+### 📅 La primera publicación automática, y por qué sólo la mitad va a salir
+
+**Lunes 7 de septiembre, 17:00 UTC — las 13:00 de Nueva York** [medido: la franja reservada más
+temprana es `2026-09-07 17:00:00 UTC`, y `2026-09-07` cae en **lunes**].
+
+De las **10 franjas reservadas**, **sólo 5 son drenables hoy por SocialLab** [medido, agrupando por
+`provider`]:
+
+| Proveedor | Franjas | Drenable |
+|---|---|---|
+| `meta_graph` | **5** — LucienSael (fb, ig), ForumPHs (fb), NeuroneSCF (fb, ig) | ✅ |
+| `x_api` | 1 — LucienSael | ❌ `PROVIDER_NOT_DRAINABLE` |
+| `vercel_html` | 2 — LucienSael `blog`, ForumPHs `blog_forumphs` | ❌ `PROVIDER_NOT_DRAINABLE` |
+| `tiktok_business` | 2 — LucienSael, NeuroneSCF | ❌ `PROVIDER_NOT_DRAINABLE` |
+
+**Las cinco no drenables fallan con la franja intacta**, no la consumen. Es la diferencia entre un
+carril que se detiene y uno que pierde el turno en silencio.
+
+### 🔧 Normalización de datos — `assets.social.adapted`
+
+**137 piezas con el campo como arreglo y 0 como cadena**, sobre **137 piezas totales** en
+`content.content_pieces` [medido]. Antes de la normalización, **43** estaban serializadas como cadena
+[reportado — brief].
+
+**El escritor sigue sin corregir, y por eso esto no está cerrado:** se arregló el lector y se normalizó
+el dato, pero **algo escribe ese campo como cadena**. Mientras siga así, **las piezas nuevas nacen
+rotas** y este 137/0 es una foto que caduca. Queda como encargo abierto en la AGENDA.
+
+### 🔑 Incidente de credenciales
+
+**`GH_PAT` caducó el 2026-09-03 a las 22:10 UTC tras tres avisos sin leer**, y el proxy
+`unrlvl-context/api/gh` devolvió **401 en todas las rutas**. **Rotado y verificado el 2026-09-05**
+[reportado — brief]. **`SLOT_RESERVER_SECRET`** fue rotado y **guardado en vault** como
+`slot_reserver_secret`; que el `command` del jobid 79 lo lea desde vault es la parte **medida** de esta
+afirmación.
+
+Lo que el incidente enseña no es que un token caduque —eso es su naturaleza—, sino que **tres avisos
+sin leer son un aviso mal diseñado**: el canal que avisa no es el canal que Sam mira.
+
+### ⚠️ Tres cifras del brief que la medición corrige
+
+**(1) Publicación manual fuera del carril — el brief declara 3 piezas de ForumPHs; hay 9, de 4 marcas,
+y la cuenta crecía mientras se medía.**
+
+El brief declara *«3 piezas de ForumPHs —2 Facebook, 1 Instagram— publicadas por MCP el 2026-09-06»*.
+La parte de ForumPHs es exacta [medido: 3 piezas, 2 vía `MCP Meta` y 1 vía `MCP Meta IG`]. Lo que el
+brief no trae son **las otras seis**:
+
+| Marca | Piezas | Vía |
+|---|---|---|
+| ForumPHs | 3 | `MCP Meta` (2), `MCP Meta IG` (1) |
+| LucienSael | 4 | `MCP Meta FB manual` (2), `MCP Meta IG manual` (2) |
+| NeuroneSCF | 1 | `MCP Meta IG manual` |
+| UnrealvilleStudio | 1 | `MCP Meta FB manual` |
+
+**Total: 9 piezas** con `assets.publish_manual`, las nueve en `status = published` y las nueve con su
+`platform_post_id` [medido].
+
+**La cuenta no estaba quieta:** tres lecturas sucesivas dieron **7, luego 8, luego 9**. La causa no es
+una lectura inestable — es que **la publicación manual estaba ocurriendo en ese momento**: `now()`
+devolvió `2026-09-06 00:18:29 UTC` y el `at` más reciente era `2026-09-06 00:18:16 UTC`, **trece
+segundos antes** [medido]. El brief no se equivocó: **fue superado por los hechos** entre que se
+escribió (primer `at`: `00:01:10 UTC`) y que se ejecutó.
+
+**Lo que esto enseña, y va a Professor:** una cifra medida sobre una tabla que alguien está escribiendo
+**no es un estado, es un instante**, y se escribe con su hora. La lectura que discrepa de sí misma
+entre dos consultas no es un error de medición: es la señal de que el sistema está vivo debajo.
+
+**(2) Funciones `SECURITY DEFINER` alcanzables por `anon` — el brief declara 10; hay 11.**
+
+Medido con `has_function_privilege('anon', oid, 'EXECUTE')` sobre `pg_proc` en `intel`, `content` y
+`public`. Las diez que el brief nombra están las diez. **La undécima es `intel.validate_queue_voice()`**,
+que el brief no lista. Importa porque el encargo abierto dice **una por PR**: con el número mal, el
+encargo se declara terminado con una función todavía expuesta.
+
+**(3) El registro de migraciones no sirve para verificar BRIEF-05.** Ya declarado arriba: última versión
+del registro `20260816224730`, y las siete migraciones de BRIEF-05 aplicadas fuera de él.
+
+### ➕ Una cifra que el brief no trae
+
+**`ecosystem.json` declara 106 Edge Functions; hay 109** [medido con `list_edge_functions`]. El propio
+campo ya advertía de sí mismo —*«este campo es un DATO consultable: por context-resolver §1 no debería
+vivir en un context file»*— y vuelve a tener razón: se corrige a 109 y se deja la advertencia intacta.
+
+### 🧭 Dos reglas de gobernanza que esta sesión produce
+
+- **`DELIVERY_AND_VERIFICATION_RULE.md` → v1.3, §4.1 nueva.** **Cuando existe prueba directa, la
+  indirecta no se ejecuta.** Un `INSERT` que lanza demuestra que **algún** constraint lanzó; leer
+  `pg_get_constraintdef` demuestra **cuál**, y **no escribe en producción**. Medida hoy sobre #115.
+- **`CC_PROTOCOL.md` → v9, §11 nueva.** **Toda función `SECURITY DEFINER` lleva
+  `REVOKE EXECUTE … FROM PUBLIC` antes del `GRANT`.** `CREATE FUNCTION` **concede a `PUBLIC` por
+  defecto**, y un `GRANT` a `service_role` **suma, no restringe**: la función queda abierta y el `GRANT`
+  explícito da la impresión contraria. Es la causa raíz de las **once** funciones del punto (2).
+
+### 🧭 Lo que este día enseña sobre cómo se mide
+
+- **Una cifra sobre una tabla viva es un instante, no un estado.** Se escribe con su hora, o no se
+  escribe.
+- **Cuando existe prueba directa, la indirecta no se ejecuta** — y menos si la indirecta escribe.
+- **Un registro de migraciones sólo prueba lo que pasó por él.** Verificar «aplicada» contra un ledger
+  que no recibió la migración devuelve un falso negativo con toda la apariencia de un hecho.
+- **Un `GRANT` explícito puede hacer creer que hay una restricción donde sólo hay una suma.**
+- **Tres avisos sin leer son un aviso mal diseñado.**
+
+---
 
 ## 2026-09-02 — Cinco briefs, cuatro cerrados, y el dato del tiempo entra al esquema: el ecosistema deja de fabricar a ciegas
 
