@@ -1,6 +1,7 @@
 # DELIVERY AND VERIFICATION RULE — UNRLVL
 
-**Versión:** v1.2 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.3 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**v1.3 (2026-09-06), una adición y ninguna derogación:** **§4.1 — cuando existe prueba directa, la indirecta no se ejecuta.** Un `INSERT` de prueba que lanza demuestra que **algún** constraint lanzó; leer `pg_get_constraintdef` demuestra **cuál**, y **no escribe en producción**. Medida el 2026-09-06 al verificar el `CHECK` de huso IANA de BRIEF-05 #115. El cuerpo de v1.2, v1.1 y v1.0 se conserva íntegro.
 **v1.2 (2026-09-02), dos adiciones y ninguna derogación**, las dos medidas el mismo día sobre un defecto que ya había costado trabajo: (a) **§2.3-bis — todo brief declara EL REPO DE CADA CAMBIO**, no un repo para todo el brief; (b) **§2.3-ter — toda instrucción de verificación declara si escribe en PRODUCCIÓN y sobre qué pieza**. El cuerpo de v1.1 y de v1.0 se conserva íntegro.
 **v1.1 (2026-08-29), dos adiciones y ninguna derogación:** (a) **este documento pasa a ser carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— y por tanto **fila propia del panel**; una regla de forma que se consulta al final llega tarde, porque el texto ya está escrito. (b) **§6 declara el estatus de cada punto de carga** —FUENTE / PUNTERO / RESUMEN— y el contrato que ata al futuro proyecto de sync de context files. El cuerpo de v1.0 se conserva íntegro.
 **Destino en el repo:** `protocols/DELIVERY_AND_VERIFICATION_RULE.md`
@@ -226,6 +227,29 @@ El cuerpo de esta disciplina ya existe y **esta sección no lo duplica**: `HRD_P
 **Una afirmación sin etiqueta se lee como `medido`.** Por eso omitirla no es un descuido de forma: es afirmar haber medido.
 
 **Un identificador con forma de regla vigente se lee como regla vigente.** Nombrar `HRD-R15`, `SEC-0X` o `PR #N` sin que exista es afirmar sin medir, aunque la frase alrededor sea una propuesta. Lo propuesto se nombra como propuesto.
+
+### 4.1 · Cuando existe prueba directa, la indirecta no se ejecuta (2026-09-06)
+
+**Una medición se elige por lo que demuestra, no por lo que resulta cómodo ejecutar.** Entre dos lecturas que responden a la misma pregunta, manda la que responde **exactamente** esa pregunta.
+
+El caso que la origina, medido el 2026-09-06 al verificar el `CHECK` de huso IANA de BRIEF-05 **#115**:
+
+| Vía | Qué demuestra | Escribe |
+|---|---|---|
+| **Directa** — `pg_get_constraintdef(oid)` | **cuál** constraint hay y **qué** rechaza, en su literal | **no** |
+| **Indirecta** — un `INSERT` de prueba con `-05:00` | que **algún** constraint lanzó | **sí, en producción** |
+
+**Los dos defectos de la vía indirecta, y el segundo es el grave.** Un `INSERT` que lanza no dice **cuál** regla lo rechazó: un `NOT NULL` de otra columna, un tipo incompatible o un trigger ajeno producen **el mismo error aparente** y se leen como confirmación de lo que se quería confirmar. Y además **escribe —o intenta escribir— en la base real**, que es el defecto que §2.3-ter ya documenta con su propio precedente: cuatro piezas de ForumPHs selladas por una instrucción de verificación que nadie declaró como escritura.
+
+**Regla operativa:**
+
+1. **Antes de ejecutar una verificación, preguntarse qué demuestra exactamente su resultado.** Si el resultado es compatible con más de una causa, la verificación **no demuestra** la que se busca.
+2. **Si existe una lectura de catálogo, de definición o de metadato que responda igual, se usa esa.** `pg_get_constraintdef`, `pg_proc`, `information_schema`, `has_function_privilege`, `pg_get_functiondef` y la lectura del archivo en el repo son directas y no escriben.
+3. **La prueba por efecto se reserva para lo que sólo se puede saber por efecto** —que la EF responde, que el cron dispara, que el carril publica—, y entonces **se declara que escribe y sobre qué pieza** (§2.3-ter).
+
+**Esto no deroga `HRD-R11`** —el éxito se mide contra el efecto, no contra el HTTP—: `HRD-R11` fija **contra qué** se mide un éxito; esta sección fija **con qué lectura** se mide un estado. Un despliegue se verifica por su efecto; **un constraint se verifica por su definición**.
+
+---
 
 ---
 

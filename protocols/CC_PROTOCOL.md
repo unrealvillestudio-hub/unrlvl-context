@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-02-v8 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-06-v9 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v9 (2026-09-06):** una adición, ninguna derogación. **§11 — toda función `SECURITY DEFINER` lleva `REVOKE EXECUTE … FROM PUBLIC` antes del `GRANT`.** `CREATE FUNCTION` **concede `EXECUTE` a `PUBLIC` por defecto**, y un `GRANT` a `service_role` **suma, no restringe**: la función queda abierta **y el `GRANT` explícito da la impresión contraria**, que es lo que la vuelve difícil de ver en una revisión. Motivo medido el 2026-09-06: **once funciones `SECURITY DEFINER` alcanzables por `anon`** en `intel`, `content` y `public`, **al menos cinco de ellas de escritura** —consulta y resultado en §11—. El precedente correcto ya existía en el mismo ecosistema: BRIEF-05 **#121** aplicó el `REVOKE` sobre el drenaje, y `intel.drain_due_slots` no tiene `PUBLIC` en su ACL. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
+>
 > **Cambios v8 (2026-09-02):** una adición, ninguna derogación. **§10 — dónde corre CC, y qué se sigue de ahí.** CC **no se ejecuta en la máquina de Sam**: corre en un **contenedor Linux propio**, así que las variables de entorno, las CLI instaladas y las rutas de disco de Sam **no le alcanzan**. Y el despliegue de `content-run-stage` —**385.953 bytes**, que ninguna tool MCP de deploy puede recibir inline sin truncar— **lo lanza Sam desde su terminal**, con **`--no-verify-jwt` obligatorio**: sin la bandera, el deploy cambia `verify_jwt` y **rompe el cron**. Motivo medido el 2026-09-02: se dieron instrucciones de entorno que presuponían la máquina de Sam, y no había forma de que CC las cumpliera. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
 >
 > **Cambios v7 (2026-08-29):** una adición, ninguna derogación. **§0 bis.1 — actualización medida del acceso de CC a Vercel.** Sam dio de alta Vercel en la allowed list de CC y las dos vías quedaron probadas en la misma sesión: `curl` **sigue devolviendo 403 en CONNECT**, y la tool MCP `Vercel:web_fetch_vercel_url` devuelve **200 con el cuerpo completo**. **El orden de carga no cambia** —el repo sigue siendo la fuente canónica y Vercel el respaldo—, pero **deja de ser cierto que CC no tenga una segunda vía**: hoy la tiene, y un CC que prueba sólo `curl` y declara Vercel inalcanzable está afirmando sin medir por la vía que existe. El texto de v5 se conserva íntegro: sigue siendo cierto en su literal, lo que caducó es su conclusión.
@@ -308,6 +310,55 @@ asimetría deliberada que ya está declarada para el resto del carril frente a `
 **Esto no deroga `HRD-R14` — la aplica.** El despliegue sigue siendo un acto aparte del merge, y sigue
 siendo de Sam. Lo que §10.1 añade es **por qué**, en este caso concreto, no es siquiera técnicamente
 posible que lo haga otro.
+
+---
+
+## 11. `SECURITY DEFINER` — EL `REVOKE` VA ANTES DEL `GRANT`
+
+**Toda función `SECURITY DEFINER` lleva `REVOKE EXECUTE … FROM PUBLIC` antes del `GRANT`.** No es una
+buena práctica opcional: sin esa línea la función **nace abierta a todo el mundo**.
+
+**Por qué, y no se deduce del código que uno escribe:** `CREATE FUNCTION` **concede `EXECUTE` a `PUBLIC`
+por defecto**. Un `GRANT EXECUTE … TO service_role` escrito a continuación **suma un privilegio, no
+restringe ninguno** — y como el `GRANT` es explícito y se lee bien, **produce la impresión de que el
+acceso quedó acotado**. Una función `SECURITY DEFINER` corre con los privilegios de quien la creó, así
+que el resultado es un camino por el que `anon` ejecuta con permisos de `postgres`.
+
+**El orden correcto, y las tres líneas van juntas en la misma migración:**
+
+```sql
+CREATE OR REPLACE FUNCTION esquema.la_funcion(...) RETURNS ... LANGUAGE plpgsql SECURITY DEFINER AS $$ ... $$;
+REVOKE EXECUTE ON FUNCTION esquema.la_funcion(...) FROM PUBLIC;   -- ← primero
+GRANT  EXECUTE ON FUNCTION esquema.la_funcion(...) TO service_role;
+```
+
+`REVOKE` y `GRANT` van **por firma completa**: dos sobrecargas del mismo nombre son **dos funciones**, y
+revocar una deja la otra abierta.
+
+**Cómo se comprueba, con la lectura directa que no escribe** (§4.1 de
+`DELIVERY_AND_VERIFICATION_RULE.md`):
+
+```sql
+select n.nspname, p.proname, pg_get_function_identity_arguments(p.oid) as firma
+from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+where p.prosecdef and has_function_privilege('anon', p.oid, 'EXECUTE');
+```
+
+**Resultado medido el 2026-09-06 sobre `intel`, `content` y `public`: once filas.** `ops_log_generation`,
+`ops_set_cost_residual`, `ops_set_client_terms`, `ops_promote_rates`, `ops_resolve_rate`,
+`ops_compute_cost`, `rotate_sequence_current`, `upsert_brand_cache`, `intel.trigger_iid_agent` **en dos
+firmas** e `intel.validate_queue_voice`. **Al menos cinco escriben.** El saneamiento va **una función
+por PR**, para poder atribuir una regresión a un cambio concreto.
+
+**El precedente correcto ya existe en este ecosistema:** BRIEF-05 **#121** aplicó el `REVOKE` sobre el
+drenaje, y el ACL de `intel.drain_due_slots` es `postgres=X/postgres` más `service_role=X/postgres`,
+**sin `PUBLIC`** [medido 2026-09-06]. Lo que §11 hace es convertir ese acierto puntual en la regla.
+
+**Qué hace CC ante un brief que crea una `SECURITY DEFINER` sin el `REVOKE`:** lo trata como el brief
+incompleto que es —mismo deber que ante un `str_replace` que no matchea o un brief sin el test de la
+marca N+1—, **añade el `REVOKE` y lo declara en el cuerpo del PR**. No es una mejora por iniciativa
+propia de las que §5 prohíbe: es la diferencia entre desplegar una función acotada y desplegar una
+abierta.
 
 ---
 
