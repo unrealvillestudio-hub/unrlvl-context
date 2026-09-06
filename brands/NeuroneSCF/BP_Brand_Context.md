@@ -1,8 +1,22 @@
 # BP_BRAND_CONTEXT — Neurone South & Central Florida
 **Schema:** BP_BRAND_1.1  
-**Versión:** 2026-08-08-v1.1 · base previa 2026-05-19-v1.0  
+**Versión:** 2026-09-06-v1.2 · base previa 2026-08-08-v1.1 · 2026-05-19-v1.0  
 **Fuentes:** BP_BRAND_NeuroneSCF_v1.0.json (historial WebLab 2026-03-23) + brand.json v11 + humanize_profiles + brand_voice_genome po_consumer v0.6 + Shopify B2C auditado 2026-05-19  
 **Mantenido por:** Claude / Unrealville Studio
+
+---
+
+## 🆕 COLOR — el terracota canónico es `#C4622D` (2026-09-06)
+
+**El naranja terracota B2C/editorial de NeuroneSCF es `#C4622D`.** Decisión de Sam del 2026-09-06, tomada contra la fuente: es el color del enlace de menú **Rituals & Kits** en el tema Shopify de la tienda B2C (`egdk1n-gt`, tema `192983662919`, `sections/nc-header.liquid` → `.nc-nav-link--kits`). **El sitio es la referencia y este documento se corrige para coincidir con él.**
+
+**Este documento declaraba antes `#D4622A`**, en cuatro puntos. Ese valor queda archivado al final y **no es operativo**. Los dos hex difieren solo en el primer y el último carácter, que es como pudieron convivir sin detectarse.
+
+**Dónde vive el dato operativo:** `public.brand_palette`, fila `brand_id='NeuroneSCF'` · `role='accent_warm'` ("Terracota Rituals & Kits"). Es el color del **filete y de la identidad lateral** del overlay de imagen, y el compositor lo resuelve **por rol en runtime**: el hex no está cableado en ningún código (`MULTIBRAND_RULE`).
+
+**Comparte hex con el rol `terra` de ForumPHs, y es coincidencia aceptada.** Son dos filas independientes, una por marca: ninguna lee la de la otra, y tocar una no toca la otra. Lo que sí estaba mal —y `BRIEF-N01` corrigió— era que NeuroneSCF **tomara prestado el rol** de ForumPHs en lugar de tener el suyo.
+
+**La regla de canal no cambia:** `#C4622D` es B2C únicamente; `#0076A8` es B2B/Pro únicamente. Entre las 11:43 y las 13:36 UTC del 2026-09-06, `BRIEF-N01` dejó 33 piezas B2C pintadas con el azul B2B — violación de esa regla, corregida el mismo día.
 
 ---
 
@@ -47,13 +61,13 @@
 | **Blanco Neurone** | `#FAFAFA` | Blanco | Fondos claros · espacio negativo · texto sobre oscuro · universal B2C+B2B |
 | **Azul Neurone** (B2B/Pro) | `#0076A8` | Azul Pantone 7546 | Portal Pro B2B · contexto profesional · autoridad técnica · datos · CTAs del portal B2B |
 | **Navy Pro Salon** | `#003A70` | Navy Pro Salon | Portal B2B profundo · línea Pro Salon · autoridad máxima |
-| **Naranja Terracota** (B2C/Editorial) | `#D4622A` | Naranja editorial NSCF | B2C únicamente · CTAs · pricing highlights · acento cálido · voz de PO · énfasis en copy |
+| **Naranja Terracota** (B2C/Editorial) | `#C4622D` | Naranja editorial NSCF | B2C únicamente · CTAs · pricing highlights · acento cálido · voz de PO · énfasis en copy |
 | Terracota Restore | `#C27D5B` | Terracota Editorial | Línea Restore · acento editorial secundario B2C |
 | Burdeos Color Rescue | `#41273B` | Burdeos | Línea Color Rescue |
 | Grafito Styling | `#3F3E3F` | Grafito | Línea Styling |
 
 **Regla crítica de color:**
-- `#D4622A` → B2C únicamente (consumer page, copy, pricing)
+- `#C4622D` → B2C únicamente (consumer page, copy, pricing)
 - `#0076A8` → B2B/Pro únicamente (portal profesional)
 - `#000000` + `#FAFAFA` → universal en ambos canales
 - Nunca mezclar colores de canal en un mismo output
@@ -145,7 +159,7 @@ Resumen operativo del genoma:
 ### Propias del operador / distribuidor NSCF
 - Voz editorial local — tono, calidez de PO, Spanglish Miami cuando corresponde
 - Slogan territorial: **[PENDIENTE DEFINICIÓN]** — ver arriba
-- Color editorial B2C: `#D4622A` (adicional al sistema global, solo canal consumer)
+- Color editorial B2C: `#C4622D` (adicional al sistema global, solo canal consumer)
 - Énfasis en distribución exclusiva South & Central Florida como diferenciador
 - Arquitectura dual B2C / Portal Pro — entrada "Soy profesional" siempre visible
 - Fotografía: editorial warm Miami, mujeres reales de la comunidad, cabello con textura auténtica
@@ -206,7 +220,7 @@ Resumen operativo del genoma:
 
 2. **Voice Genome:** el ADN operativo de la voz de PO B2C está en `brand_voice_genome.po_consumer v0.6` en Supabase. Este BP_Brand_Context es el complemento visual e identitario. Los dos juntos son el ADN completo de la marca.
 
-3. **Color en copy:** siempre `#D4622A` en outputs B2C (HTML, descripciones, emails consumer). Nunca `#0076A8` en copy consumer — ese es el canal Pro.
+3. **Color en copy:** siempre `#C4622D` en outputs B2C (HTML, descripciones, emails consumer). Nunca `#0076A8` en copy consumer — ese es el canal Pro.
 
 4. **Compliance:** antes de cualquier output de copy para NSCF, cargar `compliance_rules` desde Supabase (FL_US hard + soft). No asumir que se recuerda — siempre cargar.
 
@@ -231,3 +245,13 @@ Resumen operativo del genoma:
 | Slogan oficial | ❌ PENDIENTE DEFINICIÓN |
 | Voice genome `po_b2b` | ❌ PENDIENTE CAPTURA |
 | BP_BRAND assets visuales (logos, URLs) | ⚠️ Pendiente entrega de Neurone Cosmética |
+
+---
+
+## ARCHIVO HISTÓRICO — naranja terracota `#D4622A` (archivado 2026-09-06)
+
+> **⛔ NO OPERATIVO — registro histórico únicamente.** Derogado por la sección «COLOR — el terracota canónico es `#C4622D`» del tope de este documento. Se conserva por trazabilidad (`CC_PROTOCOL` §0): los context files no se reemplazan, se archivan. Si algo de aquí contradice el cuerpo vivo, manda el cuerpo vivo.
+
+Hasta el 2026-09-06 este documento declaraba el naranja terracota B2C/editorial como **`#D4622A`** ("Naranja editorial NSCF"), en cuatro puntos: la tabla de paleta de IDENTIDAD VISUAL (§ Paleta de colores), la «Regla crítica de color», la línea de color editorial B2C del bloque de sistema visual, y la nota 3 de NOTAS IMPORTANTES PARA CLAUDE.
+
+El valor vigente es **`#C4622D`**, medido contra el tema Shopify de la tienda B2C. `#D4622A` no debe usarse en ningún output nuevo.
