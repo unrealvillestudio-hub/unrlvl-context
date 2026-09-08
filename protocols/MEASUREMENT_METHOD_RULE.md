@@ -27,19 +27,47 @@ SELECT o.id IS NOT NULL AS vive, (o.metadata->>'size')::bigint AS bytes
 Un `HEAD` contra la URL pública añade dos capas que pueden mentir —el proxy de salida del
 contenedor y la CDN— para responder una pregunta que la base contesta directa.
 
-## 2 · Un `000` no se interpreta jamás. Se lee la cabecera
+## 2 · Un `000` no se interpreta jamás. Se lee el estado del proxy
 
 `curl` devuelve `000` **tanto si el servidor calla como si el proxy de salida niega el `CONNECT`**.
 Son dos hechos opuestos con el mismo código, y elegir uno es afirmar sin medir.
 
+**Dónde se lee el motivo:**
+
 ```
-curl: (56) CONNECT tunnel failed, response 403
+$HTTPS_PROXY/__agentproxy/status   →   campo  recentRelayFailures
 ```
 
-El proxy de egreso de este contenedor niega `*.vercel.app` **y también `*.supabase.co`**. Es la
-misma barrera que obliga a usar `Vercel:web_fetch_vercel_url` en vez de `curl` contra Vercel
-(`CC_PROTOCOL.md` §0 bis.1), y hasta el 2026-09-08 nadie había visto que fuera la misma. Ante un
-`000`: se repite con `-sS` y se lee lo que dice, o se cambia de vía.
+Cada entrada trae `kind`, `detail` y **el host**, que es el dato que ninguna otra vía aporta.
+Medido el 2026-09-08 contra `amlvyycfepwhiindxgzw.supabase.co`:
+
+```json
+{ "kind":   "connect_rejected",
+  "detail": "gateway answered 403 to CONNECT (policy denial or upstream failure)",
+  "host":   "amlvyycfepwhiindxgzw.supabase.co:443" }
+```
+
+> **Corrección del 2026-09-08.** La primera versión de esta regla mandaba leer una cabecera
+> `x-deny-reason`. **Esa cabecera no existe en este entorno** — se comprobó explícitamente. Una
+> regla que manda leer algo que nadie emite no se puede cumplir, y es exactamente la clase de
+> defecto que estas tres reglas existen para cazar. Se corrige nombrando el sitio que sí responde.
+
+**Y el matiz que hace honesta la medición: el proxy dice «policy denial *or* upstream failure» y
+él mismo no distingue las dos.** Así que el `403` en el `CONNECT` y el host son **`medido`**; que la
+causa sea la lista de dominios permitidos es **`deducido`**.
+
+**Lo que resuelve la ambigüedad es la regla 3.** Con un control conocido-vivo —un objeto del que ya
+se sabe que existe— se separan los dos casos: si el objeto está vivo en `storage.objects` y aun así
+el `CONNECT` devuelve 403, el fallo no es del servidor. **Es la regla 3 haciendo su trabajo sobre la
+regla 2**, y es el mejor ejemplo que hay de por qué las tres se sostienen entre sí: ninguna de ellas
+basta sola para decir qué ocurrió.
+
+**Alcance medido de la barrera, para no volver a probarlo a ciegas:** el proxy niega el `CONNECT`
+contra `*.vercel.app` **y contra `*.supabase.co`**, subdominios incluidos — una lista de permitidos
+con el dominio desnudo **no cubre el subdominio**, comprobado el 2026-09-08 con
+`amlvyycfepwhiindxgzw.supabase.co`. Es la misma barrera que obliga a usar
+`Vercel:web_fetch_vercel_url` en vez de `curl` contra Vercel (`CC_PROTOCOL.md` §0 bis.1), y hasta
+ese día nadie había visto que fuera la misma.
 
 ## 3 · Todo barrido masivo lleva dentro un control conocido-vivo
 
