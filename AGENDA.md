@@ -1,5 +1,50 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-09-06 · v2026-09-06-v1 (**HRD_ACTUALIZA 2026-09-06 — BRIEF-05 CERRADO Y OPERANDO DE PUNTA A PUNTA.** Cuatro PR de función más tres correctivos, y **dos crons vivos** donde el 2026-09-02 había cuarenta relojes que decían FABRICA y ninguno que dijera PUBLICA. **Estado medido al cierre** (00:18 UTC, una sola sentencia): 16 canales activos · 16 políticas · **54 franjas (44 libres, 10 reservadas)** · 4 marcas con huso de 16 · `reservation_log` 15 filas · `drain_log` **0 filas** · **51 reglas activas, las 51 en `warn`**. **Crons:** jobid **66** `content-placement-poll` `*/15 * * * *` y jobid **79** `publish-slot-reserver-daily` `10 6 * * *`, los dos activos, y el 79 **lee el secreto desde vault** —cero coincidencias del barrido de secreto en claro sobre `cron.job`—. **Primera publicación automática: lunes 7 de septiembre, 17:00 UTC = 13:00 de Nueva York**; de las 10 franjas **sólo 5 son drenables** (`meta_graph`) y las otras cinco fallan **con la franja intacta**. **El registro de migraciones NO verifica BRIEF-05:** su última versión es `20260816224730` y las siete migraciones se aplicaron con `execute_sql`, fuera del ledger — la prueba es el objeto en el esquema. **Tres cifras del brief corregidas por medición:** la publicación manual fuera del carril es de **9 piezas y 4 marcas**, no 3 de ForumPHs, **y la cuenta crecía mientras se medía** (7 → 8 → 9; `now()` 00:18:29 UTC, último `at` 00:18:16 UTC); las funciones `SECURITY DEFINER` alcanzables por `anon` son **11**, no 10 —falta `intel.validate_queue_voice()`—; y `ecosystem.json` declaraba **106 EFs cuando hay 109**. **Gobernanza:** `DELIVERY_AND_VERIFICATION_RULE.md` **v1.3** —cuando existe prueba directa, la indirecta no se ejecuta— y `CC_PROTOCOL.md` **v9** —toda `SECURITY DEFINER` lleva `REVOKE EXECUTE … FROM PUBLIC` antes del `GRANT`—. **Abre:** el escritor de `assets.social.adapted` · **once** funciones `SECURITY DEFINER` expuestas a `anon` · PR-E (copiar texto y descargar imagen) · generalizar el guardián de rótulos a las 51 reglas · BRIEF-06 · y el blog de LucienSael por `vercel_html`.)_
+_Actualizada: 2026-09-08 · v2026-09-08-v1 (**HRD_ACTUALIZA 2026-09-08 — DOS ENTREGAS DE INFRAESTRUCTURA EN PRODUCCIÓN, Y TRES AFIRMACIONES CORREGIDAS POR MEDICIÓN.** Auto-respuesta de correo entrante (`unrlvl-mail-worker`, PR #1 y #2) con `public.inbound_autoresponder_config` **2 filas** —`info@` y `admin@forumphs.com`, misma redacción copiada, no reescrita— y ruta `/bim` con token (`forumphs-com`, PR #8 y #9) con `public.collateral_links` **2 filas** y bucket privado `collateral` [todo medido]. **El hueco que nadie habría notado:** los privilegios por defecto de `public` son `{service_role=r/postgres}` —SELECT y nada más—, faltaba **UPDATE**, y como el registro de apertura está atrapado en un `catch` a propósito, **el documento se servía bien y `open_count` se quedaba en 0**. Lo delató `edge_logs`, no la tabla. **Tres afirmaciones del brief corregidas por medición:** las tablas del carril financiero viven en el esquema **`fph`**, no `public`; **`mora_mensual` NO EXISTE**; y `eeff_preliminar` e `informes` —citadas como las que referencian `bank_reconciliations`— **tampoco**. «0 filas» y «no existe» no son el mismo estado. **Gobernanza:** `CC_PROTOCOL.md` **v10** —un PostgreSQL desechable no valida roles ni RLS de Supabase—, `DELIVERY_AND_VERIFICATION_RULE.md` **v1.4** —un error atrapado a propósito necesita su propia vía de verificación— y `SESSION_PROTOCOL.md` **Paso 3-bis** —BluePrints se consulta antes de producir un asset de marca—. **Comercial:** prospecto P.H. Plaza 77 (59 apartamentos y 1 local) y el **Sales-Kit** estrena pieza estándar. **Abre:** el `UPDATE` de `contact_email` y wordmark · el acuse desde `admin@` sin probar · la jurisdicción del NDA · la verificación legal de la Cláusula Sexta · el vFINAL de marca en los documentos del proyecto · y el informe sin panel de siguiente paso.)_
+
+---
+
+## 🗓️ HRD_ACTUALIZA 2026-09-08 — Dos entregas en producción, y la diferencia entre «0 filas» y «no existe»
+
+_(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md` (2026-09-08).)_
+
+> **Todo lo etiquetado `medido` se consultó con `execute_sql` al escribir este bloque** (`HRD-R13`).
+> Professor cerrado antes: **19 learnings**, `checkpoint_number = 14`, los diecinueve aprobados,
+> cinco con prefijo `SALES-KIT` [medido]. **SMA no se consultó.**
+
+### ✅ Cerrado hoy
+
+- ✅ **Auto-respuesta de correo entrante en producción** — PR **#1** y **#2** de `unrlvl-mail-worker`.
+  `public.inbound_autoresponder_config` con **2 filas** [medido]. El Worker resuelve por
+  `recipient_address` y **no lleva ninguna dirección literal** en `src/` [medido: `grep` → cero].
+- ✅ **Ruta `/bim` con token en producción** — PR **#8** y **#9** de `forumphs-com`.
+  `public.collateral_links` **2 filas**, bucket **privado** `collateral` [medido].
+- ✅ **#80 cerrado por dato** — Lefevre y Plaza España traen `Date` y `Date Due`, cobertura 100 %.
+- ✅ **Sales-Kit estrena pieza estándar** — `brands/ForumPHs/sales-kit/email_respuesta_prospecto.md`.
+
+### 🔴 Abre, y son de Sam
+
+- 🔴 **`UPDATE` sobre `intel.brand_publish_channels` sin aplicar** — `config.contact_email`
+  (`admin@forumphs.com`) y el `wordmark` de tres partes. Sin él, las páginas de aviso de `/bim`
+  salen sin marca y sin línea de contacto. **No rompe nada; sólo no se ve.**
+- 🔴 **El acuse desde `admin@` no está probado.** Se probó con `info@`. La fila y la regla de
+  enrutamiento están hechas; falta el envío de prueba.
+- 🔴 **NDA — Cláusula Décima Primera:** sigue con `[JURISDICCIÓN O CLÁUSULA ARBITRAL A DEFINIR]`.
+  **Es decisión de política de la firma, una vez para todos los clientes**, no por cliente.
+- 🔴 **NDA — Cláusula Sexta:** la **Ley 81 de 2019** y el **Decreto Ejecutivo 285 de 2021** están
+  citados y **pendientes de confirmación por la asesoría legal**.
+- 🔴 **`ForumPHs_Amatista_Carbon_vFINAL.html` debe reemplazar al `v2`** en los documentos del
+  proyecto. Mientras no se haga, se sigue construyendo sobre la versión equivocada — ya pasó
+  (`SESSION_PROTOCOL.md` Paso 3-bis).
+- 🔴 **Sales-Kit: el informe no cierra con panel de siguiente paso.** El correo depende de que el
+  prospecto **vuelva a la bandeja** tras abrir el enlace. **Encargo aparte**: tocar el documento,
+  reprocesarlo con `vendor-collateral.mjs` y resubirlo. **No cambia el enlace ni la fila.**
+- 🟡 **Favicon en pestaña real** — `curl -I https://forumphs.com/favicon.ico`. Cerrado por Sam en
+  producción; **confirmar en el log**.
+- 🟡 **Carril financiero, 0.C sigue abierta.** Parser especificado, **diseño de tablas congelado** a
+  la espera de datos de la nueva contaduría. **`payments` no tiene fuente** desde el Aged
+  Receivables: depende del segundo reporte solicitado.
+- ⏰ **1-oct-2026:** la ventana de 24 h de WhatsApp **pasa a facturable**. Afecta al coste por
+  conversación del agente de propietarios, no a su diseño.
 
 ---
 

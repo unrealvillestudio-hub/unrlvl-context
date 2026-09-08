@@ -110,6 +110,38 @@ Confirmar: `"Contexto operativo cargado. [N] variables de plataforma. [N] aprend
 5. https://unrlvl-context.vercel.app/ecosystem_filemap.md
 ```
 
+### Paso 3-bis — Identidad visual: BluePrints se consulta ANTES de producir (2026-09-08)
+
+**Si el trabajo toca identidad visual —logotipo, wordmark, paleta, tipografía, favicon, iconos—, el
+asset se BUSCA en `BluePrints/brands/<Marca>/assets/` antes de crear nada.**
+
+```
+unrealvillestudio-hub/BluePrints → brands/<Marca>/assets/
+```
+
+**Motivo medido el 2026-09-08: ocurrió dos veces en la misma sesión.**
+
+- Se iba a derivar un favicon sin haber mirado que el oficial ya estaba ahí
+  (`FPHS_favicon_deep.png`, 2363×2363).
+- Se trabajó media sesión sobre una versión **antigua** del sistema de marca subida al proyecto,
+  cuando el vigente —`ForumPHs_Amatista_Carbon_vFINAL.html`— vivía en el repo. **Y la diferencia no
+  era cosmética:** el wordmark del vFINAL tiene **tres** partes —`Forum` + `PH` + `s`, con
+  espaciados distintos que alinean la «s» a la altura de x— y la versión antigua describía **dos**.
+  Construir sobre la antigua daba un wordmark **parecido y mal**, que es la clase de error que pasa
+  una revisión.
+
+**Las dos comprobaciones, en este orden:**
+
+1. **¿Existe el asset?** Si existe, se usa. Producir uno nuevo cuando ya hay oficial no es trabajo
+   de más: es **una segunda versión de la marca**, y a partir de ahí hay dos.
+2. **¿Es el vigente?** Un archivo con sufijo de versión —`vFINAL`, `v2`, `v1.3`— obliga a mirar cuál
+   manda **en el repo**, no cuál se subió al proyecto. Una copia en el proyecto puede ir por detrás,
+   y **una fuente desactualizada es peor que una ausente porque parece autoridad**
+   (`CAPABILITIES.md`, aviso ya declarado para BluePrints).
+
+**Si el asset no está en BluePrints**, entonces sí se produce — y se declara en la entrega que se
+creó porque no existía, para que la próxima sesión lo encuentre.
+
 ### Paso 4 — Skills bajo demanda
 
 | Sam dice | Skills a cargar |

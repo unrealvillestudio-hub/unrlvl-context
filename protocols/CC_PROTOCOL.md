@@ -1,7 +1,17 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-06-v9 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-08-v10 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v10 (2026-09-08):** una adición, ninguna derogación. **§12 — validar una migración contra
+> un PostgreSQL desechable NO verifica privilegios de rol ni RLS de Supabase.** En un PostgreSQL
+> limpio **no existen `service_role`, `anon` ni `authenticated`**, y los que se crean a mano nacen
+> **sin los privilegios por defecto** que Supabase configura en sus proyectos. Motivo medido el
+> 2026-09-08: `public.collateral_links` pasó **48 pruebas locales** y en producción el `PATCH` devolvía
+> **403**, porque los privilegios por defecto del proyecto son `{service_role=r/postgres}` —**SELECT y
+> nada más**— y a la ruta le faltaba **UPDATE**. Toda migración que dependa de roles de Supabase
+> necesita verificación **contra el proyecto real**. **Barrido de voseo sobre las líneas nuevas: cero
+> apariciones.**
+>
 > **Cambios v9 (2026-09-06):** una adición, ninguna derogación. **§11 — toda función `SECURITY DEFINER` lleva `REVOKE EXECUTE … FROM PUBLIC` antes del `GRANT`.** `CREATE FUNCTION` **concede `EXECUTE` a `PUBLIC` por defecto**, y un `GRANT` a `service_role` **suma, no restringe**: la función queda abierta **y el `GRANT` explícito da la impresión contraria**, que es lo que la vuelve difícil de ver en una revisión. Motivo medido el 2026-09-06: **once funciones `SECURITY DEFINER` alcanzables por `anon`** en `intel`, `content` y `public`, **al menos cinco de ellas de escritura** —consulta y resultado en §11—. El precedente correcto ya existía en el mismo ecosistema: BRIEF-05 **#121** aplicó el `REVOKE` sobre el drenaje, y `intel.drain_due_slots` no tiene `PUBLIC` en su ACL. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
 >
 > **Cambios v8 (2026-09-02):** una adición, ninguna derogación. **§10 — dónde corre CC, y qué se sigue de ahí.** CC **no se ejecuta en la máquina de Sam**: corre en un **contenedor Linux propio**, así que las variables de entorno, las CLI instaladas y las rutas de disco de Sam **no le alcanzan**. Y el despliegue de `content-run-stage` —**385.953 bytes**, que ninguna tool MCP de deploy puede recibir inline sin truncar— **lo lanza Sam desde su terminal**, con **`--no-verify-jwt` obligatorio**: sin la bandera, el deploy cambia `verify_jwt` y **rompe el cron**. Motivo medido el 2026-09-02: se dieron instrucciones de entorno que presuponían la máquina de Sam, y no había forma de que CC las cumpliera. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
@@ -359,6 +369,52 @@ incompleto que es —mismo deber que ante un `str_replace` que no matchea o un b
 marca N+1—, **añade el `REVOKE` y lo declara en el cuerpo del PR**. No es una mejora por iniciativa
 propia de las que §5 prohíbe: es la diferencia entre desplegar una función acotada y desplegar una
 abierta.
+
+---
+
+## 12. UN POSTGRESQL DESECHABLE NO VALIDA ROLES NI RLS DE SUPABASE
+
+**Validar una migración contra un PostgreSQL local es útil y no basta.** Cubre sintaxis,
+restricciones, idempotencia, orden de aplicación y el comportamiento de las políticas RLS que la
+propia migración crea. **No cubre privilegios de rol.**
+
+**Por qué, y no se deduce de que las pruebas pasen:** en un PostgreSQL limpio **no existen
+`service_role`, `anon` ni `authenticated`**. Hay que crearlos a mano, y los que se crean así nacen
+**sin los privilegios por defecto** que Supabase configura en sus proyectos. La migración corre
+verde sobre roles que no se parecen a los de producción.
+
+**Motivo medido el 2026-09-08.** `public.collateral_links` pasó **48 pruebas** —incluidas las que
+ejercitaban la ruta entera contra un PostgREST simulado— y en producción el `PATCH` devolvía **403**.
+La causa:
+
+```sql
+select pg_get_userbyid(defaclrole), defaclobjtype, defaclacl::text
+  from pg_default_acl d join pg_namespace n on n.oid = d.defaclnamespace
+ where n.nspname = 'public';
+-- postgres | r | {service_role=r/postgres}
+```
+
+Los privilegios por defecto del proyecto son **`SELECT` y nada más**. Una tabla nueva nace con
+`service_role` **pudiendo leer y sin poder escribir** — y lo que faltaba era **`UPDATE`**, no
+`SELECT`, así que **el camino de lectura funcionaba** y sólo fallaba la escritura.
+
+**Qué se exige, entonces.** Toda migración que dependa de roles de Supabase —`GRANT`, `REVOKE`,
+`CREATE POLICY`, o simplemente contar con que `service_role` alcance una tabla nueva— lleva
+**verificación contra el proyecto real después de aplicar**:
+
+```sql
+select relacl::text, relrowsecurity from pg_class
+ where relname = '<tabla>' and relnamespace = '<esquema>'::regnamespace;
+```
+
+**Y los privilegios se escriben explícitos, nunca heredados.** Es el mismo criterio de §11: lo que
+depende de un privilegio por defecto **no se puede leer en el repositorio**, y lo que no se lee no se
+revisa. Un `GRANT` explícito que resulta redundante cuesta una línea; uno ausente cuesta una tabla
+que no escribe.
+
+**Corolario para quien escribe briefs:** «validado contra PostgreSQL 16» es una afirmación cierta y
+**parcial**. Declarar qué cubrió esa validación es parte de la afirmación — decir sólo que pasó
+invita a leerla como cobertura completa.
 
 ---
 

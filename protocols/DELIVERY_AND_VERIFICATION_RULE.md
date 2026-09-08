@@ -1,6 +1,7 @@
 # DELIVERY AND VERIFICATION RULE — UNRLVL
 
-**Versión:** v1.3 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**Versión:** v1.4 · **Creado:** 2026-08-29 · **Naturaleza:** REGLA INVIOLABLE del ecosistema
+**v1.4 (2026-09-08), una adición y ninguna derogación:** **§4.2 — un error atrapado a propósito necesita su propia vía de verificación.** Atrapar un fallo para que no bloquee la entrega es correcto y **lo vuelve invisible**: durante doce aperturas, `open_count = 0` era compatible con «no se registró» y con «no se ejecutó», y la tabla no distinguía cuál. Lo resolvió el log del proveedor. Medida el 2026-09-08 sobre `collateral_links`. El cuerpo de v1.3, v1.2, v1.1 y v1.0 se conserva íntegro.
 **v1.3 (2026-09-06), una adición y ninguna derogación:** **§4.1 — cuando existe prueba directa, la indirecta no se ejecuta.** Un `INSERT` de prueba que lanza demuestra que **algún** constraint lanzó; leer `pg_get_constraintdef` demuestra **cuál**, y **no escribe en producción**. Medida el 2026-09-06 al verificar el `CHECK` de huso IANA de BRIEF-05 #115. El cuerpo de v1.2, v1.1 y v1.0 se conserva íntegro.
 **v1.2 (2026-09-02), dos adiciones y ninguna derogación**, las dos medidas el mismo día sobre un defecto que ya había costado trabajo: (a) **§2.3-bis — todo brief declara EL REPO DE CADA CAMBIO**, no un repo para todo el brief; (b) **§2.3-ter — toda instrucción de verificación declara si escribe en PRODUCCIÓN y sobre qué pieza**. El cuerpo de v1.1 y de v1.0 se conserva íntegro.
 **v1.1 (2026-08-29), dos adiciones y ninguna derogación:** (a) **este documento pasa a ser carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— y por tanto **fila propia del panel**; una regla de forma que se consulta al final llega tarde, porque el texto ya está escrito. (b) **§6 declara el estatus de cada punto de carga** —FUENTE / PUNTERO / RESUMEN— y el contrato que ata al futuro proyecto de sync de context files. El cuerpo de v1.0 se conserva íntegro.
@@ -250,6 +251,56 @@ El caso que la origina, medido el 2026-09-06 al verificar el `CHECK` de huso IAN
 **Esto no deroga `HRD-R11`** —el éxito se mide contra el efecto, no contra el HTTP—: `HRD-R11` fija **contra qué** se mide un éxito; esta sección fija **con qué lectura** se mide un estado. Un despliegue se verifica por su efecto; **un constraint se verifica por su definición**.
 
 ---
+
+---
+
+### 4.2 · Un error atrapado a propósito necesita su propia vía de verificación (2026-09-08)
+
+**Atrapar un fallo para que no rompa lo importante es correcto. Y por eso mismo lo vuelve
+invisible.** Un `catch` que existe para que el camino principal siga funcionando **borra la señal**
+que habría avisado de que algo dejó de funcionar. La decisión es buena; lo que falta es la segunda
+vía.
+
+**El caso que la origina, medido el 2026-09-08.** La ruta `/bim` registra cada apertura de un
+documento, y ese registro está deliberadamente envuelto en un `catch`: si falla, el documento se
+sirve igual. Es la decisión correcta —nadie debe quedarse sin su material porque un contador no
+subió—. El resultado fue que un `403` de privilegios pasó **doce aperturas** sin que nada lo
+delatara.
+
+**Y la tabla no podía delatarlo, que es lo importante.** `open_count = 0` es compatible con dos
+estados distintos:
+
+| lectura | qué significa |
+|---|---|
+| `open_count = 0` | **nadie lo abrió** |
+| `open_count = 0` | **se abrió y el registro falló** |
+
+**El dato no distingue cuál.** Un cero no dice si es un cero medido o un cero por ausencia de
+medición, y **la ausencia de escritura no deja rastro en el sitio donde se iba a escribir**. Es la
+misma clase de error que confundir «tabla vacía» con «tabla que no existe».
+
+Lo resolvió el **log del proveedor** —`Supabase:query_logs` sobre `edge_logs`, donde el par
+`GET 200` / `PATCH 403` aparecía sin ambigüedad—, que es una fuente **distinta de la que el fallo
+silenció**.
+
+**La regla, entonces.** Cuando una entrega decide atrapar un error para no bloquear el camino
+principal, esa decisión **obliga a declarar, en el mismo sitio, cómo se verifica que no está
+ocurriendo**:
+
+1. **Nombrar la vía alternativa.** Un log del proveedor, un contador aparte, una consulta que no
+   pase por el camino silenciado. **Nunca la misma tabla que el fallo dejó sin escribir.**
+2. **Escribirla donde se lee el estado** —el `README`, la tabla de verificación posterior al
+   despliegue—, no sólo en un comentario junto al `catch`.
+3. **Emitir algo al atrapar.** Un `console.error` con un código estable convierte un silencio en
+   una línea buscable. No sustituye a la vía alternativa: la hace encontrable.
+
+**Y afecta a cómo se etiqueta la evidencia (§4).** «El registro funciona» apoyado sólo en que la
+página se ve bien es **`deducido`**, no `medido` — la página se veía bien las doce veces. `medido`
+exige la lectura que el `catch` no puede haber falseado.
+
+**Corolario para quien escribe briefs:** un brief que pide «que el fallo no bloquee la entrega»
+está pidiendo, en la misma frase, **una vía para enterarse del fallo**. Un brief que pide lo primero
+sin lo segundo está incompleto, y CC lo devuelve.
 
 ---
 

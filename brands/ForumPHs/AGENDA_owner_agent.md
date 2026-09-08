@@ -64,20 +64,50 @@ FASE 3 ─── PILOTO REAL
 ### 0.C — Ingesta Sage 50
 | Item | Detalle | Estado |
 |---|---|---|
-| 0.C.1 | **Estandarizar el formato de export** con Ivette — detallado + **CON COLUMNA DE FECHA** (hoy no la trae; sin ella el historial no tiene cronología) | 🟡 en curso |
+| 0.C.1 | **Estandarizar el formato de export** con Ivette — detallado + **CON COLUMNA DE FECHA** (el motivo original: sin ella el historial no tiene cronología) | ✅ **#80 CERRADO 2026-09-08** — Lefevre y Plaza España traen `Date` y `Date Due`, cobertura 100 % (379/379 y 909/909). **Castilla sigue resumido y sin fecha**: sólo permite saldo, no historial, y la causa es la casilla *Summarize report* del export — no la versión ni el formato |
 | 0.C.2 | Instructivo de export para administradoras (Reports & Forms → Accounts Receivable → Aged Receivables → Excel) | ✅ entregado 21-jul |
 | 0.C.3 | Parser bilingüe ES/EN con esquema canónico interno | 🔴 |
 | 0.C.4 | Config de parseo por PH (idioma, columnas, detallado/resumido, filtros de basura, prefijos de movimiento) | 🔴 |
 | 0.C.5 | Normalizador `Customer ID` → `units.unit_code` (**validado 198/198**, 21-jul) | 🟢 regla definida |
-| 0.C.6 | Poblar `arrears` / `mora_mensual` / `payments` (hoy **0 filas**) | 🔴 |
+| 0.C.6 | Poblar `fph.arrears` / `fph.payments` (**0 filas**) y **crear `mora_mensual`, que NO EXISTE** | 🔴 |
+| 0.C.8 | **Tabla de movimientos** — `fph.arrears` es *snapshot* con los campos del protocolo de mora, **no historial** | 🔴 |
 | 0.C.7 | Recolectar exports de los 5 PHs restantes y validar sus formatos | 🔴 |
+
+> **Estado de 0.C al 2026-09-08 — sigue ABIERTA.** El parser está **especificado**, pero el
+> **diseño de tablas quedó congelado** a la espera de datos de la nueva contaduría (Marlene ya no
+> es la contadora). Especificar sin datos produce un esquema que hay que rehacer al primer export
+> real.
+>
+> 🔴 **BLOQUEANTE NUEVO — `payments` no tiene fuente.** El **Aged Receivables no puede poblar
+> `payments` en ningún escenario**: es un reporte de saldos, no de movimientos de caja. Hace falta
+> un **segundo reporte**, y depende de la solicitud emitida a contaduría (CxC detallado con pagos +
+> EEFF mensuales, por PH). El flujo alternativo por **OCR de comprobantes queda muerto por decisión
+> de Sam**: todos los PH cobran por transferencia.
+>
+> **Corrección medida el 2026-09-08** (`information_schema.tables`): las tablas viven en el esquema
+> **`fph`**, no en `public`; **`mora_mensual` no existe** en ningún esquema; y `eeff_preliminar` e
+> `informes` —citadas como las que referencian `bank_reconciliations`— **tampoco existen**. «0 filas»
+> y «no existe» no son el mismo estado: la primera es un carril esperando datos, la segunda es
+> trabajo sin empezar.
 
 **Reglas de parseo ya establecidas (21-jul):**
 - **Fila = MOVIMIENTO** si tiene `Invoice/CM #`; **fila = SUBTOTAL** si tiene `Customer ID` sin `Invoice #`. Filas vacías y `Report Total` se descartan.
 - **Venezia:** quitar prefijo `^\d-` (marca de nº de propietario) + quitar guiones → `07A`.
 - **Lefevre:** quitar prefijo `^I-` (inmobiliaria, unidad en venta) + match literal → `01-E-A`.
 - Preservar **saldos negativos** (son saldo a favor, no errores).
-- Tipos de movimiento por prefijo de factura (`M-`/`MUL-`=multa, `REC-`=pago, `EXT-`=extraordinario) — **el diccionario varía por PH**.
+- Tipos de movimiento por prefijo de factura (`M-`/`MUL-`=multa, ~~`REC-`=pago~~, `EXT-`=extraordinario) — **el diccionario varía por PH**.
+
+> **Corregido el 2026-09-08, y no es un matiz:** **`REC-` es siempre CARGO POSITIVO** en **351
+> movimientos** — es **recargo, no recibo**. Leerlo como pago invertía el signo y habría restado
+> deuda donde había que sumarla. La línea anterior **no se borra, se tacha**, para que el error no
+> vuelva a circular como regla vigente.
+>
+> **Dos precisiones más de la misma medición:**
+> - `HERME-` / `Herm-` aparece en **Lefevre y en Plaza España**, **siempre $87.45**: es
+>   **transversal**, no una rareza de un PH.
+> - Un mismo prefijo aparece con **tres formatos dentro de un solo PH**. Por eso la config de 0.C.4
+>   **debe ser lista ordenada de regex, no diccionario**: un diccionario obliga a una clave por
+>   variante y **pierde el orden de precedencia**, que es lo que resuelve las colisiones.
 
 ---
 
@@ -158,3 +188,14 @@ FASE 3 ─── PILOTO REAL
 ---
 
 _ForumPHs · Agenda de implementación agente de propietarios · v1.0 · 2026-07-21_
+
+---
+
+## ⏰ NOTA DEL RELOJ — la ventana de 24 h de WhatsApp pasa a facturable
+
+**A partir del 1 de octubre de 2026**, la ventana de servicio al cliente de 24 horas de WhatsApp
+**deja de ser gratuita**. Afecta al coste por conversación de las fases 1 a 3 de esta agenda, no a
+su diseño.
+
+Se anota aquí porque es un **cambio de precio con fecha**, y una estimación de coste hecha antes
+del 1-oct-2026 sin este dato queda baja sin que nadie lo note. Registrado el 2026-09-08.
