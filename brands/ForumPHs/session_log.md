@@ -1,5 +1,133 @@
 # ForumPHs — Session Log
 
+## 2026-09-08 — Dos entregas de infraestructura en producción, un prospecto nuevo, y tres afirmaciones del brief corregidas por medición
+
+> Professor cerrado **antes** (orden Professor → Actualiza respetado): **19 learnings**,
+> `session_date = 2026-09-08`, `checkpoint_number = 14`, los diecinueve
+> `approved_by_sam = true`, **cinco** con prefijo `SALES-KIT` en `raw_learning`
+> [medido con `execute_sql` al escribir este bloque]. **SMA no se consultó** — Sam no lo pidió.
+> Lo previo se conserva íntegro debajo.
+>
+> **Todo lo etiquetado `medido` se consultó al escribir este bloque, no se copió del brief**
+> (`HRD-R13`). Donde el brief y la medición discrepan, **manda la medición y se dice cuál era
+> lo declarado** — tres casos, en «Esquema» y en «Padrón».
+
+### ✅ Auto-respuesta de correo entrante — en producción, multimarca
+
+Cloudflare Email Worker sobre `unrealvillestudio-hub/unrlvl-mail-worker`. PR **#1** y **#2**
+mergeados [reportado por CC, 2026-09-08].
+
+- Tabla `public.inbound_autoresponder_config` en UNRLVL, **2 filas** [medido]: `info@forumphs.com`
+  y `admin@forumphs.com`, mismo `brand_id`, misma redacción, `sla_hours = 24`,
+  `cooldown_hours = 168`.
+- **El eje no conoce ninguna marca:** el Worker resuelve por `recipient_address` contra la base
+  (`src/config.ts`), y `grep -rniE 'forumphs|info@|admin@' src/` devuelve **cero coincidencias**
+  [medido] — las que hay están en `test/`, que son fixtures.
+- **La segunda dirección se sembró copiando la redacción de la primera** con un
+  `INSERT ... SELECT`, no reescribiéndola: dos copias literales del mismo texto son dos
+  redacciones que se separan en cuanto alguien ajusta una y olvida la otra.
+- ⚠️ **La fila en la base NO basta.** Sin su regla de Email Routing apuntando al Worker, el correo
+  a una dirección nueva **nunca llega al handler `email()`** y la fila no hace nada — sin error y
+  sin log. Son dos pasos, y el de la base es el que no se ve fallar.
+- **Pendiente:** el acuse se probó con `info@`; **con `admin@` no**.
+
+### ✅ Ruta `/bim` con token — en producción
+
+`forumphs-com`, PR **#8** y **#9** mergeados [reportado por CC, 2026-09-08].
+
+- Tabla `public.collateral_links` (**2 filas** [medido]) y bucket **privado** `collateral`
+  [medido: `storage.buckets`, 8 buckets, `collateral` con `public = false`].
+- El documento se sirve **desde el servidor**, sin URL firmada: una URL firmada sobrevive a la
+  revocación hasta que expira por su cuenta.
+- Caducidad, revocación y registro de apertura, verificados. `no-store` va **dos veces** —función
+  y borde— porque sin él el CDN seguiría sirviendo un documento revocado y **la revocación
+  parecería aplicada sin estarlo**.
+- **El documento no depende de terceros:** Chart.js 4.4.0 y las tipografías se sirven desde el
+  proyecto. Abrir material bajo acuerdo de confidencialidad **no genera una sola conexión
+  externa** — comprobado en Chromium, 10 de 10 gráficas dibujadas en las seis pestañas.
+- 🔴 **El hueco de privilegios, y por qué nadie lo habría notado.** Los privilegios por defecto de
+  `public` en este proyecto son `{service_role=r/postgres}` — **SELECT y nada más** [medido en
+  `pg_default_acl`]. Faltaba **UPDATE**, no SELECT: el documento se servía bien y sólo fallaba
+  `recordOpen`, atrapado por su propio `catch`. `open_count` se habría quedado en 0 para siempre
+  con la página viéndose impecable. Corregido con `GRANT SELECT, INSERT, UPDATE` — **sin
+  `DELETE`**, porque un enlace no se borra, se revoca.
+
+### 🔍 Ingesta Sage — #80 cerrado por dato
+
+- **#80 CERRADO.** Lefevre y Plaza España traen `Date` y `Date Due` con cobertura **100 %**
+  (379/379 y 909/909) [reportado en el brief; no medido por CC en esta sesión].
+- **Castilla sigue resumido y sin fecha:** sólo permite saldo, **no historial**. La causa es la
+  casilla **Summarize report** del export, no la versión ni el formato.
+- **Método open item.** El Aged Receivables **no puede poblar `payments` en ningún escenario**:
+  requiere un segundo reporte. El flujo OCR/comprobantes **queda muerto por decisión de Sam** —
+  todos los PH cobran por transferencia.
+- **`bank_reconciliations` NO se toca.**
+
+### ⚠️ Esquema — tres correcciones medidas al brief
+
+El brief decía: «`arrears`, `mora_mensual` y `payments` siguen en 0 filas» y «a
+`bank_reconciliations` la referencian `eeff_preliminar` e `informes`». **Medido el 2026-09-08
+contra `information_schema.tables`:**
+
+| lo declarado | lo medido |
+|---|---|
+| `arrears`, `payments` en `public` | viven en el esquema **`fph`**, no en `public` |
+| `mora_mensual` en 0 filas | **`mora_mensual` NO EXISTE** en ningún esquema |
+| `eeff_preliminar` e `informes` referencian `bank_reconciliations` | **ninguna de las dos existe** — ni tabla ni vista |
+
+**«0 filas» y «no existe» no son el mismo estado, y la diferencia importa**: una tabla vacía es un
+carril esperando datos; una tabla ausente es trabajo sin empezar. Es la misma confusión que el
+learning (b) de esta sesión describe para `open_count = 0`. `fph` tiene **22 tablas base y ninguna
+vista** [medido]; `fph.arrears`, `fph.payments`, `fph.units` y `fph.bank_reconciliations` están
+las cuatro en **0 filas** [medido].
+
+**No se corrige el diseño por esto** — sólo el registro. La razón por la que `bank_reconciliations`
+no se toca sigue en pie como decisión de Sam; lo que cae es la justificación citada, porque los dos
+referentes no están en el esquema. Queda anotado para que la afirmación no vuelva a circular
+(`CC_PROTOCOL.md` §9).
+
+**`arrears` es un snapshot** con los campos del protocolo de mora, **no un historial**: falta una
+tabla de movimientos.
+
+### 🔤 Prefijos de movimiento
+
+- `HERME-` / `Herm-` aparece en Lefevre **y** en Plaza España, **siempre $87.45**: es
+  **transversal**, no una rareza local.
+- `REC-` es **siempre cargo positivo** en 351 movimientos: es **recargo, no recibo**.
+- Un mismo prefijo aparece con **tres formatos dentro de un solo PH**, así que la config de parseo
+  debe ser **lista ordenada de regex**, no diccionario. Un diccionario obliga a una clave por
+  variante y pierde el orden de precedencia.
+
+### 🏢 Padrón
+
+- **Castilla:** campo 305, filas 306, reales **312**.
+- Locales `L 1-13`, `L-04`, `L-06` facturan **$1,196.75** y **no están en `units`**.
+- **Plaza España sí tiene sus 6 locales con finca** — el problema es de Castilla, no del modelo.
+- Precisión medida: `fph.units` está **entera en 0 filas**, así que hoy no falta un local en el
+  padrón — **falta el padrón**.
+
+### 👩‍💼 Contaduría
+
+- **Cambio de contadora: Marlene ya no lo es.**
+- **Diseño de tablas congelado** hasta tener la data.
+- **Solicitud emitida:** CxC detallado con pagos y EEFF mensuales, por PH, con periodicidad
+  acordada.
+
+### 💼 Comercial — P.H. Plaza 77
+
+Prospecto nuevo. Vía Argentina, **59 apartamentos y 1 local**.
+
+- **Prioridades declaradas por ellos:** mora sin gestión y revisión de gastos.
+- **Evalúan cambiar el equipo de trabajo** — las prestaciones del personal saliente quedan por
+  definir.
+- **Enlace BIM emitido, vence 2026-10-08.**
+- Piezas producidas: modelo estándar de acuerdo de confidencialidad, formulario de levantamiento
+  con el porqué de cada dato, y la Suite de Gestión Financiera servida por enlace con token.
+- **Estándar del Sales-Kit codificado** en `brands/ForumPHs/sales-kit/` — el correo de respuesta a
+  prospecto, con su estructura de nueve pasos y las tres reglas que codifica.
+
+---
+
 ## 2026-08-28 — El buzón de ForumPHs entra al MCP · una DB de la marca fuera del mapa · y el formulario que nadie mira
 
 > Verificado contra producción el **2026-08-28** con `execute_sql` y `list_projects` (HRD-R13).

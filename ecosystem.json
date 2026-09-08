@@ -559,7 +559,8 @@
       "_update_2026-08-25": "HRD_ACTUALIZA 2026-08-24/25. ADICION, ninguna clave previa borrada: los cuatro campos de r4b_status que cambiaron (state, canal, aprobacion, bloqueante_abierto) quedan ARCHIVADOS en claves _*_anterior_2026-08-23. Se anaden procedencia (PROC-01), angles (los seis angulos con su matriz y el criterio de las ausencias) y politica_de_enlaces. Hitos del dia: primera publicacion automatica del ecosistema (5e9f03ef, Facebook, 13:13 UTC, cron 66) · primer arbitraje humano del juez (14:36:41, decided_by: sam) · primera retencion (2 piezas salvadas) · PROC-01 en produccion · corpus de embeddings completo. Detalle en brands/ForumPHs/session_log.md (2026-08-25).",
       "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ForumPHs DEJA DE SER LA UNICA MARCA DEL CARRIL: sigue con rollout_started_at 2026-08-22 (primera del ecosistema) y hoy entran UnrealvilleStudio, LucienSael y NeuroneSCF. ADICIONES DEL DIA EN ESTA MARCA: el angulo objecion entra en los 11 DOMINIOS DE CONVERSION (verificado: son exactamente 11; los once ya llevaban expertise/artefacto/pregunta/consecuencia del 25-ago, objecion SE SUMA y quedan con 5). NO entra en los editoriales: es angulo de venta y la definition del catalogo lo dice. theme «Amatista Carbon» y fonts_href pasan a DATO DEL CANAL en brand_publish_channels.config del canal blog_forumphs — Cinzel es utility y no tiene token propio en el renderizador, asi que VIAJA EN fonts_href para estar disponible. Ruta VERIFICADA contra forumphs.com el 2026-08-26: rotulo «Sin tecnicismos», ruta /blog, desacoplados a proposito. linkedin pasa a INACTIVO por decision de Sam del 2026-08-26 (fuera para TODAS las marcas hasta segunda orden). LO QUE ESTA MARCA LE PRESTA AL RESTO: PUB-01 cerrado (content-scheduler v6) es lo que faltaba del hito del 22-ago; y BLOG-01 PR-2 SACA EL RENDERIZADOR de forumphs-com al repo nuevo unrlvl-blog, con blog_path como dato — lo que era codigo de una marca pasa a ser eje del ecosistema y la instancia queda en el dato. Test de la marca N+1: lo pasa por construccion. Detalle en brands/ForumPHs/session_log.md (2026-08-26).",
       "publish_timezone": "America/Panama",
-      "_publish_timezone_nota": "Sembrado 2026-09-06 [medido]. Nombre IANA, NUNCA desfase: el CHECK brands_publish_timezone_es_iana rechaza -05:00, +04:00, UTC-5 y Etc/GMT+-N. America/Panama no cambia la hora; America/New_York si. 12 de 16 marcas siguen sin huso y es correcto: se siembra cuando la marca entra al calendario."
+      "_publish_timezone_nota": "Sembrado 2026-09-06 [medido]. Nombre IANA, NUNCA desfase: el CHECK brands_publish_timezone_es_iana rechaza -05:00, +04:00, UTC-5 y Etc/GMT+-N. America/Panama no cambia la hora; America/New_York si. 12 de 16 marcas siguen sin huso y es correcto: se siembra cuando la marca entra al calendario.",
+      "_update_2026-09-08": "Ruta /bim/[token] en produccion sobre el sitio de la marca (repo forumphs-com, PR #8 y #9 mergeados). Sirve material comercial confidencial con caducidad, revocacion y registro de apertura. El MECANISMO es eje y vive en api/_collateral.js, que no conoce ninguna marca; /bim es la direccion que ESTE sitio publica y vive en api/bim.js, que si es artefacto de una marca. Otra marca monta el mismo modulo bajo la direccion que quiera, con su BRAND_ID, y sus filas apuntan a su carpeta del bucket collateral: cero cambios de esquema y cero codigo tocado. El documento servido no genera ninguna conexion a terceros — Chart.js y tipografias interiorizadas en el propio proyecto. Detalle operativo: forumphs-com → docs/COLLATERAL_LINKS.md."
     },
     {
       "id": "SamPublisher",
@@ -881,6 +882,19 @@
           "brand-intel (privado)",
           "mail-authorizations (privado, NUEVO)"
         ]
+      },
+      "tablas_nuevas_2026-09-08": {
+        "_note": "MEDIDO con execute_sql sobre UNRLVL el 2026-09-08. Dos tablas nuevas en public, las dos infraestructura TRANSVERSAL: su estructura no nombra ninguna marca y brand_id es un valor de fila tomado de public.brands.",
+        "inbound_autoresponder_config": "Acuse automatico por direccion entrante: plantilla, SLA y cooldown. 2 filas. RLS con politica de SELECT solo sobre filas activas para anon — el Worker lee con la clave publicable, nunca con service_role. Una marca nueva es un INSERT.",
+        "collateral_links": "Enlaces con token a material comercial confidencial: caducidad, revocacion y registro de apertura. 2 filas. RLS SIN NINGUNA POLITICA a proposito: se lee y escribe solo desde el servidor con service_role.",
+        "_privilegios_2026-09-08": "HALLAZGO. Los privilegios POR DEFECTO de public en este proyecto son {service_role=r/postgres} — SELECT y nada mas. collateral_links nacio sin UPDATE, y como el registro de apertura esta atrapado en un catch a proposito, el documento se servia bien y open_count se quedaba en 0: el fallo era invisible. Corregido con GRANT SELECT, INSERT, UPDATE; SIN DELETE, porque un enlace no se borra, se revoca. Regla derivada en CC_PROTOCOL.md v10 §12.",
+        "_carril_financiero_2026-09-08": "CORRECCION MEDIDA. Las tablas del carril financiero de administracion de PH viven en el esquema fph, NO en public: 22 tablas base y ninguna vista. mora_mensual NO EXISTE en ningun esquema, y eeff_preliminar e informes tampoco — se citaban como las que referencian bank_reconciliations. fph.arrears, fph.payments, fph.units y fph.bank_reconciliations estan las cuatro en 0 filas. '0 filas' y 'no existe' no son el mismo estado."
+      },
+      "storage_buckets_2026-09-08": {
+        "_note": "MEDIDO con execute_sql sobre storage.buckets el 2026-09-08. OCHO buckets: los seis del 2026-08-28 mas collateral y brand-assets. El nodo storage_buckets_2026-08-28 se conserva integro por trazabilidad (CC_PROTOCOL §0) y NO es operativo como conteo.",
+        "collateral": "NUEVO. public=false. Material comercial confidencial servido por la ruta con token. NO SE HACE PUBLICO EN NINGUN CASO: la ruta lo lee desde el servidor con service_role y lo sirve. No se emite URL firmada — una URL firmada sobrevive a la revocacion hasta que expira por su cuenta. Convencion de rutas: {brand_id}/{nombre}.html.",
+        "brand-assets": "NUEVO. public=true.",
+        "_conteo": "8 buckets: 3 publicos (product-assets, unrlvl-media, brand-assets) y 5 privados (brand-intel, collateral, iid-expert-uploads, mail-authorizations, nscf-licenses)."
       }
     },
     "_proyectos_no_declarados_2026-08-28": {
@@ -1836,5 +1850,16 @@
     ],
     "_verificacion": "El registro de migraciones NO sirve para verificar BRIEF-05: supabase_migrations.schema_migrations tiene 194 filas y su ultima version es 20260816224730 [medido]; las siete migraciones se aplicaron con execute_sql, fuera del ledger. La prueba de cada una es el objeto en el esquema, no el ledger.",
     "_abierto": "El escritor de assets.social.adapted sigue sin corregir: se arreglo el lector y se normalizo el dato, pero algo escribe ese campo como cadena, asi que las piezas nuevas nacen rotas y el 137/0 es una foto que caduca."
+  },
+  "_repos_nuevos_2026-09-08": {
+    "unrlvl-mail-worker": {
+      "repo": "unrealvillestudio-hub/unrlvl-mail-worker",
+      "plataforma": "Cloudflare Email Worker (handler email(), sin rutas HTTP)",
+      "que_es": "Auto-respuesta de correo entrante. Reenvia siempre y ademas acusa recibo una vez por remitente dentro de la ventana de cooldown.",
+      "multimarca": "El eje va en el codigo, la instancia en el dato: el Worker resuelve por recipient_address contra public.inbound_autoresponder_config y NO lleva ninguna direccion literal. Medido 2026-09-08: grep -rniE 'forumphs|info@|admin@' sobre src/ devuelve CERO coincidencias; las que hay estan en test/, que son fixtures. Una direccion nueva es un INSERT, no un despliegue.",
+      "prs_2026-09-08": "PR #1 (acuse multimarca) y PR #2 (segunda direccion, sembrada con INSERT ... SELECT copiando la redaccion de la primera en vez de reescribirla) — los dos mergeados.",
+      "advertencia": "LA FILA EN LA BASE NO BASTA. Sin su regla de Email Routing apuntando al Worker, el correo a esa direccion nunca llega al handler email() y la fila no hace nada: sin error y sin log. Son dos pasos, y el de la base es el que no se ve fallar.",
+      "pendiente": "El acuse se probo con info@; con admin@ NO."
+    }
   }
 }
