@@ -3,6 +3,11 @@
 **Emitido:** 2026-09-08 · **Origen:** N09 y N12 · **Aplica a:** CC y a cualquiera que mida contra
 producción desde un contenedor.
 
+> **Actualización 2026-09-09 — entra una cuarta regla, §4, y ninguna de las tres se deroga.** El
+> título dice «tres reglas» porque así nació el documento y **no se reescribe**: la cuarta se suma
+> abajo con su propio motivo medido. El cierre «Lo que las tres tienen en común» también se conserva
+> literal, y lo que dice sigue siendo cierto de las cuatro.
+
 > **Esta es la fuente canónica.** Las tres reglas nacieron midiendo `unrlvl-iid-functions` durante
 > N09 y N12, y estuvieron un día en `docs/METODO_DE_MEDICION.md` de ese repositorio. Se mudan aquí
 > porque **son protocolo, no documentación de un repo**: gobiernan cómo se mide contra producción
@@ -81,6 +86,28 @@ archivos que existen.
 
 El control se elige ANTES de barrer y se ejecuta con el mismo método, no con uno mejor: un control
 que se mide de otra forma no controla nada.
+
+## 4 · Un despliegue de Edge Function se verifica por `ezbr_sha256`, nunca por el contador de versión
+
+```
+Supabase:list_edge_functions  →  campo  ezbr_sha256
+```
+
+El contador `version` y el sufijo numérico del `entrypoint_path` **suben con el intento de
+despliegue, no con el contenido desplegado**. Medido el 2026-09-08: **un deploy subió el mismo
+bundle y el sufijo del `entrypoint_path` cambió igual**, así que un sufijo nuevo es compatible con
+«se desplegó código nuevo» y con «se volvió a desplegar lo mismo». Son dos hechos distintos con el
+mismo indicador — la regla 2, un piso más arriba.
+
+`ezbr_sha256` es el hash del bundle: **cambia si y sólo si cambió lo que corre**. Un PR de función
+queda probado cuando el `sha` medido después del deploy difiere del de antes, y **el `sha` se cita
+en el reporte**, no el número de versión.
+
+**Y el control conocido-vivo de la regla 3 aplica igual acá:** si el `sha` no cambió, antes de
+concluir «el deploy no entró» hay que comprobar que el bundle **sí era distinto**. Un `sha` idéntico
+también es el resultado correcto de volver a desplegar el mismo código.
+
+---
 
 ---
 

@@ -1,5 +1,135 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-09 · v2026-09-08-v2 (**HRD_ACTUALIZA 2026-09-08 — LA PUBLICACIÓN DEJA DE SER UNA PROMESA, Y EL PATRÓN RAÍZ TIENE NOMBRE: EL ESCALÓN EQUIVOCADO.** Sesión del 2026-09-07/08, ejecutada por CC el **2026-09-09**. **La primera pieza publicada sola por el ecosistema**: `LucienSael` / `meta_fb`, `platform_post_id` **`1076134175585218_122118274185298889`**, `published_at` **2026-09-08 15:15:14 UTC** [medido en `intel.brand_publish_drain_log`]. Para llegar ahí hubo que tirar **tres muros encadenados** —alias `social-lab-flame` muerto en el respaldo · guarda anti-doble-publicación contando filas terminales como vivas · SocialLab leyendo con clave anónima sin `SELECT`— y cada uno **tapaba al siguiente** (PR **#136**; SocialLab PR **#4**; barredor PR **#137**, `ezbr_sha256` **`08173f9a…0a2e7e5b`** [medido]). **Cerrado además:** tokens de composición de NeuroneSCF remapeados —**42 de 42 piezas de la marca compuestas** [medido]— · catálogo de oferta al escritor, `intel.brand_topics.offer_selector` **sembrado en 8 filas de una marca** [medido] · `HR-GEN-11`, `-12` y `-13` activas, `warn`, `brand_id = NULL` → **54 reglas activas de 69** [medido] · `visual_directive` **en 3 de 52 dominios** [medido] · wordmark y favicon de ForumPHs en el blog (`forumphs-com` PR **#10**). **Gobernanza:** `protocols/MEASUREMENT_METHOD_RULE.md` creado (#82) y corregido el mismo día (#83) cuando se midió que la cabecera `x-deny-reason` **no existe** — una regla que manda leer algo que nadie emite no se puede cumplir. **CUATRO CIFRAS DEL BRIEF CORREGIDAS POR MEDICIÓN, y una de ellas es urgente:** (1) la fuga de N10 **no está en 76 filas: está en 134**, y **24 de ellas cayeron en las últimas tres horas** sobre **sólo 2 franjas** [medido `now()` 2026-09-09 06:12 UTC] — sigue viva mientras se escribe esto; (2) `content_pieces.post_url` de la pieza publicada está **en `NULL`**: el identificador vive en el log de drenaje y **no en la pieza**; (3) `approval_calibration_piece_id_key` **no es una constraint sino un UNIQUE INDEX** —`DROP CONSTRAINT` fallaría—; (4) el hueco de costos del ledger **no se reproduce**: **4.791 registros, cero sin costo y cero sin modelo**, con 690 a costo cero y 132 sin `rate_source` [medido]. **Abre, con orden:** N05A (el veredicto deja de sellar) · N12 cambio 2 (**#138**, mergea DESPUÉS de la publicación del 09-09 16:00 UTC) · N12 cambio 3 · **N10, que es lo urgente** · N07 · N13 · N08 congelado · y la rotación del secreto de barrido, hecha por Sam, con la revisión de `cron.job.command` pendiente.)_
+
+> **Cabecera anterior (`v2026-09-08-v1`) conservada íntegra e inmediatamente debajo.** Esta versión
+> es **`-v2`** y no `-v1` como pedía el brief: `v2026-09-08-v1` **ya existe** —la creó el PR **#81**
+> el mismo 2026-09-08— y reutilizar el identificador habría sustituido una versión en lugar de
+> añadir otra. La numeración avanza; la fecha de sesión se respeta.
+>
+> **Y una constancia que no es de esta sesión, para que no se pierda:** el PR #81 **reemplazó** la
+> cabecera `v2026-09-06-v1` en vez de conservarla debajo, y ese texto **no está hoy ni en este
+> archivo ni en `historical_AGENDA.md`** [medido: `grep` → 0 coincidencias en ambos]. Vive sólo en
+> el historial de git. **CC no lo restaura por iniciativa propia** —queda como decisión de Sam—,
+> pero lo deja escrito, porque una cabecera perdida en silencio es exactamente lo que §0 existe
+> para impedir.
+
 _Actualizada: 2026-09-08 · v2026-09-08-v1 (**HRD_ACTUALIZA 2026-09-08 — DOS ENTREGAS DE INFRAESTRUCTURA EN PRODUCCIÓN, Y TRES AFIRMACIONES CORREGIDAS POR MEDICIÓN.** Auto-respuesta de correo entrante (`unrlvl-mail-worker`, PR #1 y #2) con `public.inbound_autoresponder_config` **2 filas** —`info@` y `admin@forumphs.com`, misma redacción copiada, no reescrita— y ruta `/bim` con token (`forumphs-com`, PR #8 y #9) con `public.collateral_links` **2 filas** y bucket privado `collateral` [todo medido]. **El hueco que nadie habría notado:** los privilegios por defecto de `public` son `{service_role=r/postgres}` —SELECT y nada más—, faltaba **UPDATE**, y como el registro de apertura está atrapado en un `catch` a propósito, **el documento se servía bien y `open_count` se quedaba en 0**. Lo delató `edge_logs`, no la tabla. **Tres afirmaciones del brief corregidas por medición:** las tablas del carril financiero viven en el esquema **`fph`**, no `public`; **`mora_mensual` NO EXISTE**; y `eeff_preliminar` e `informes` —citadas como las que referencian `bank_reconciliations`— **tampoco**. «0 filas» y «no existe» no son el mismo estado. **Gobernanza:** `CC_PROTOCOL.md` **v10** —un PostgreSQL desechable no valida roles ni RLS de Supabase—, `DELIVERY_AND_VERIFICATION_RULE.md` **v1.4** —un error atrapado a propósito necesita su propia vía de verificación— y `SESSION_PROTOCOL.md` **Paso 3-bis** —BluePrints se consulta antes de producir un asset de marca—. **Comercial:** prospecto P.H. Plaza 77 (59 apartamentos y 1 local) y el **Sales-Kit** estrena pieza estándar. **Abre:** el `UPDATE` de `contact_email` y wordmark · el acuse desde `admin@` sin probar · la jurisdicción del NDA · la verificación legal de la Cláusula Sexta · el vFINAL de marca en los documentos del proyecto · y el informe sin panel de siguiente paso.)_
+
+---
+
+## 🗓️ HRD_ACTUALIZA 2026-09-08 — La publicación deja de ser una promesa, y el patrón raíz tiene nombre
+
+_(Bloque al tope. Detalle en `brands/UnrealvilleStudio/session_log.md` (2026-09-08).)_
+
+> **Sesión del 2026-09-07/08. Brief emitido por Claude.ai el 2026-09-08; ejecutado por CC el
+> 2026-09-09.** Todo lo etiquetado `medido` se consultó con `execute_sql` **al escribir este
+> bloque** (`HRD-R13`), no se copió del brief. Professor cerrado antes: **15 learnings**,
+> `checkpoint_number = 15`, `session_date = 2026-09-08`, los quince con `approved_by_sam = true`
+> [medido — `public.professor_learnings`, consultado el 2026-09-09]. **SMA no se consultó.**
+>
+> **Donde el brief y la medición discrepan, manda la medición y se dice cuál era lo declarado.**
+> Este bloque corrige **cuatro** cifras del brief. Van marcadas en su sitio, no en una nota al pie.
+
+### ✅ Cerrado en esta sesión
+
+- ✅ **N09 — la publicación restaurada, y son tres muros encadenados.** En orden, y cada uno tapaba
+  al siguiente: (1) el alias `social-lab-flame` **muerto en el respaldo**, (2) la guarda
+  anti-doble-publicación **contando filas terminales como vivas**, (3) SocialLab **leyendo con clave
+  anónima sin `SELECT`**. **PR #136.** Que fueran tres y no uno es el hallazgo: un muro solo se ve
+  cuando cae el anterior.
+- ✅ **La primera publicación automática del ecosistema.** `LucienSael` / `meta_fb`,
+  `platform_post_id` **`1076134175585218_122118274185298889`**, `published_at`
+  **2026-09-08 15:15:14 UTC** [medido — `intel.brand_publish_drain_log`, `outcome = PUBLISHED`,
+  una fila]. **⚠️ Corrección al brief:** el brief citaba un `post_id` «terminado en `…401298889`».
+  El medido termina en **`…185298889`**. El identificador correcto es el de arriba, entero.
+- ✅ **N11 — la rama de Facebook pasa a `fb_publish_photo`**, lee `post_id` en vez de `id`, y
+  `sbGet` **deja de tragarse el error**. SocialLab **PR #4**.
+- ✅ **N01 — tokens de composición de NeuroneSCF remapeados a sus roles propios.** Medido el
+  2026-09-09: **42 de 42 piezas de NeuroneSCF llevan composición**, y **123 de 146 en todo el
+  carril** [criterio de la consulta: `assets::text ILIKE '%composed%'`]. El brief declaraba **35**
+  piezas compuestas y **32** recompuestas; la cifra creció entre el brief y la ejecución.
+- ✅ **N02 — catálogo de oferta al escritor.** DDL, carril y CopyLab **#39**.
+  `intel.brand_topics.offer_selector` (`jsonb`) existe y está **sembrado en 8 filas, de una sola
+  marca**; `public.content_type_registry.offer_catalog_max_items` (`smallint`) existe [medido].
+- ✅ **N03 — tres reglas nuevas: `HR-GEN-11` (firma) · `HR-GEN-12` (tercero por categoría) ·
+  `HR-GEN-13` (oferta presente).** Las tres `active`, `severity = warn` y **`brand_id = NULL`**, que
+  es lo que las hace del sistema y no de una marca. Total: **54 activas de 69** [medido —
+  `intel.watcher_rules`].
+- ✅ **N06 — `visual_directive` por dominio y cláusula de sujetos distintos.** **3 de 52 dominios**
+  sembrados, sobre 4 marcas en la tabla [medido].
+- ✅ **N12 cambio 1 — el barredor comprueba referencias.** **PR #137**, desplegado:
+  `storage-orphan-sweep` **v21**, `ezbr_sha256`
+  **`08173f9aa525afc242d998ab45caa7196c0bdcc96c0c6e5c99d297410a2e7e5b`**, `updated_at`
+  **2026-09-08 21:51:49 UTC** [medido]. **Los dos cron llevan ya su `guard`**: jobid **35**
+  `iid-expert-orphan-sweep` (`0 * * * *`) y jobid **36** `unrlvl-media-temp-cleanup` (`0 3 * * *`),
+  los dos activos [medido — `cron.job`].
+- ✅ **Gobernanza — `protocols/MEASUREMENT_METHOD_RULE.md`.** Creado (**#82**) con su puntero
+  (**#139**) y **corregido el mismo día** (**#83** + **#140**) al medirse que la cabecera
+  `x-deny-reason` **no existe en este entorno**. El motivo se lee en
+  `$HTTPS_PROXY/__agentproxy/status` → `recentRelayFailures`.
+- ✅ **Quickwin — wordmark y favicon de ForumPHs en el blog.** `forumphs-com` **PR #10**,
+  `verify-bim` **52/52**.
+
+### 🔴 Abierto, y con orden
+
+1. 🔴 **N05A — el veredicto deja de sellar.** Diseño final: **tres columnas nullables**
+   `route_state`, `route_reentry_stage` y `route_budget_spent`, con `content.content_pieces.status`
+   **intacto**. Presupuesto de **dos pasadas**; al agotarlo, **desvío humano → descarte, desvío
+   automático → bandeja de Sam marcada**. **Ninguna de las tres columnas existe todavía** [medido —
+   `information_schema.columns`, cero coincidencias en todos los esquemas]: el diseño está
+   decidido, no aplicado.
+   **⚠️ Corrección al brief:** el bloqueante conocido `approval_calibration_piece_id_key` **no es
+   una constraint: es un `UNIQUE INDEX`** sobre `intel.approval_calibration (piece_id)` [medido —
+   `pg_indexes`; `pg_constraint` sólo devuelve `_pkey` y `_verdict_check`]. Se retira con
+   **`DROP INDEX`**, no con `ALTER TABLE … DROP CONSTRAINT`, que fallaría. Sigue siendo un **tercer
+   tiempo**, después del código.
+2. 🔴 **N12 cambio 2 — `#138`, promoción al aprobar. MERGEA DESPUÉS de la publicación del 09-09
+   16:00 UTC.** La condición de tiempo es del brief y se conserva literal.
+3. 🔴 **N12 cambio 3 — el publicador lee la ruta vigente de la pieza**, no la copia congelada de
+   `public.scheduled_posts`.
+4. 🚨 **N10 — franjas no drenables atascadas. ES LO URGENTE, y creció.** Medido el 2026-09-09 a las
+   **06:12 UTC**: `intel.brand_publish_drain_log` tiene **134 filas `PROVIDER_NOT_DRAINABLE`**
+   —el brief declaraba **76**—, desde **2026-09-08 13:00:34 UTC** hasta **2026-09-09 06:00:04
+   UTC**, y **24 de ellas en las últimas tres horas**. Y el dato que el brief no traía: son **sólo
+   2 franjas distintas** las que las producen todas. Con `DRAIN_SAFETY_CEILING = 50` y orden
+   `slot_at ASC`, esas dos ocupan la cabeza de la cola indefinidamente. **La fuga sigue viva
+   mientras se escribe esto.**
+5. 🔴 **N07 — prefijo `CONTEXTO —` y guardián de rótulos contra la tabla viva**, no contra una lista
+   copiada.
+6. 🔴 **N13 — drenaje `vercel_html`.** Medido en el brief: el sitio ya lee `content.content_pieces`
+   con `status = 'published'` y `discarded_at IS NULL`; **la pieza ES el post**, así que publicar
+   es sellar dos campos. Decidido: sella directo con desenlace propio, **no publica si el archivo
+   referenciado no existe**, y va **después** del cambio 3.
+   **Dato nuevo que este frente hereda:** la pieza ya publicada tiene **`post_url` en `NULL`**
+   [medido]. El identificador de la publicación vive **en el log de drenaje y no en la pieza**, así
+   que hoy `content_pieces` no basta para saber dónde salió lo que salió.
+7. 🧊 **N08 — reescritura de las piezas del carril viejo. CONGELADO** hasta que exista el reparto
+   humano/automático del descarte.
+8. 🟡 **N14 — rotación del secreto de barrido. Hecha por Sam.** Queda pendiente revisar que ningún
+   secreto viva en claro en `cron.job.command`.
+
+### 📌 Frentes anotados, sin abrir
+
+- **`title_budget_chars` — sigue en cero.** **0 de 146 piezas** lo llevan en `assets` [medido; el
+  brief decía 0 de **126**: el cero se mantiene, el denominador creció]. **No existe como columna
+  en ningún esquema** [medido]. Tres casos de `OVERLAY_TEXT_OVERFLOW` en un solo día.
+- **EN/ES cruzado** y **límite de caracteres por canal**, los dos en el adaptador de SocialLab.
+- **`public.brand_assets` vacía** — **0 filas** [medido], para las siete marcas de `BluePrints`.
+- **El `vFINAL` de ForumPHs** como sistema de diseño completo viviendo de archivo suelto: mismo
+  patrón que la tabla vacía.
+- **⚠️ Costos — la cifra del brief no se reproduce.** El brief declaraba **286 de 1.563 registros
+  del ledger sin costo o sin modelo**. Medido el 2026-09-09 sobre `public.ops_generation_ledger`:
+  **4.791 registros, `cost_usd IS NULL` = 0 y `model_id IS NULL` = 0**. Lo que sí sale: **690
+  registros a costo cero**, **132 sin `rate_source`** y **293 de proveedor `google`** —Google Cloud
+  sigue sin mapear—. El frente no se cierra: **se reformula sobre lo que la base contesta hoy**.
+
+### 🧩 El patrón raíz de la sesión: el escalón equivocado
+
+Cinco formas del mismo error en dos días: se arregla el escalón que se ve y no el que falla. El
+alias muerto, la guarda que contaba terminales como vivas, la clave anónima sin `SELECT`, el `id`
+en vez del `post_id`, y el `sbGet` que se tragaba el error. **Un fallo no puede parecerse a un
+resultado** — es la misma frase que cierra `protocols/MEASUREMENT_METHOD_RULE.md`, y no es
+coincidencia: el instrumento es parte del sistema.
 
 ---
 

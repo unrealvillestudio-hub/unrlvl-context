@@ -1,4 +1,12 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.13 · 2026-09-09 (**una adición y ninguna derogación: las reglas de método de medición entran al catálogo como sección propia**, con **puntero** a `protocols/MEASUREMENT_METHOD_RULE.md` y **una línea por regla, nunca el texto** — dos textos de la misma regla son dos reglas en cuanto alguien toca uno. Son **cuatro**: `storage.objects` en vez de `HEAD` · el `000` se resuelve en el estado del proxy, no interpretándolo · todo barrido lleva control conocido-vivo · y la cuarta, nueva y específica de despliegues, **`ezbr_sha256` y no el contador de versión** —medido el 2026-09-08: un deploy subió el mismo bundle y el sufijo del `entrypoint_path` cambió igual—, que entra como **§4 del protocolo** y no vive suelta acá)_
+> **Cabecera anterior (`1.12`) conservada íntegra e inmediatamente debajo.** La cadena de versiones
+> de este archivo se venía encadenando **dentro** de una sola línea con `base previa:`, y eso obliga
+> a sustituir esa línea en cada actualización. Acá se conserva **por yuxtaposición**: la línea nueva
+> arriba, la anterior intacta debajo, con su propia cadena `base previa:` completa. El diff de este
+> archivo **no borra ni una línea**, que es lo que exige `CC_PROTOCOL.md` §0 y lo que pedía la
+> verificación del brief.
+
 _Versión: 1.12 · 2026-09-08 (**tres adiciones medidas y ninguna derogación.** (1) **`Supabase:query_logs` sobre UNRLVL lee `edge_logs` de PostgREST**, y fue **la única vía** para diagnosticar un `PATCH 403` que la aplicación atrapaba a propósito: la tabla no podía delatarlo —`open_count = 0` era compatible con «no se abrió» y con «se abrió y el registro falló»— y el log del proveedor sí, porque es una fuente distinta de la que el fallo silenció. (2) **El proxy `api/professor` sólo expone GET**: el checkpoint **no se siembra por ahí**, se siembra con `execute_sql` sobre `professor_learnings`. Buscar un POST en el proxy y no encontrarlo no significa que no haya vía. (3) **Un conector MCP reconectado NO entra en caliente a una sesión abierta**: si un servidor se cae y vuelve, sus tools no reaparecen en la sesión en curso, y planificar contando con ellas es contar con un acceso que no está. Se replantea la vía o se declara el bloqueo) · base previa: 1.11 · 2026-09-02 (**una adición y ninguna derogación: el repositorio `unrealvillestudio-hub/BluePrints` entra al catálogo** —395 archivos, fuente de la identidad **visual** de cada marca (`BP_BRAND_*`, paletas, logos, tipografía)—, **con sus dos advertencias, que son parte de la capacidad y no una nota al pie**: NO es fuente para las firmas, y el `BP_BRAND` de UnrealvilleStudio **está desactualizado**. Una fuente canónica desactualizada es peor que una ausente porque **parece autoridad**. Motivo medido el 2026-09-02: no figuraba ni aquí ni en `ecosystem_filemap.md`, y **se trabajó media sesión reconstruyendo lo que ya estaba escrito ahí**) · base previa: 1.10 · 2026-08-29 (dos precisiones medidas el mismo día. (1) `protocols/DELIVERY_AND_VERIFICATION_RULE.md` pasa a **carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— con **fila propia en el panel**: una regla de forma que se consulta al final llega tarde, y además ese documento especifica el panel. (2) **Cómo alcanza CC una URL de Vercel**: `curl` da **403 en CONNECT**, la tool MCP `Vercel:web_fetch_vercel_url` da **200** — dos vías distintas, sólo una funciona, y declarar Vercel inalcanzable tras probar sólo `curl` es afirmar sin medir por la vía que existe) · base previa: 1.9 · 2026-08-29 (`protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0 — REGLA INVIOLABLE nueva, listada en ARTEFACTOS CONSULTABLES: bloques con destinatario declarado y marca visual **por superficie** —emoji en chat, `●` con hex en documento o UI con estilos, y el diferenciador existe para que Sam lea, no para que CC ejecute—, idioma ES/EN neutro internacional **sin voseo**, etiqueta de evidencia `medido`/`reportado`/`deducido`, **panel de carga verificada** en la apertura de sesión —una fila sin evidencia es roja— y las **cuatro QA** con estatus HRD por `HRD-R15`, donde `QA-INFO` es un bloqueo. Este catálogo es punto de carga nº 4 de esa regla y **no la copia**: apunta a la fuente única) · base previa: 1.8 · 2026-08-28 (`unrlvl-mail-mcp` OPERATIVO: autenticado con MCP-AUTH-01 —401 verificado—, conector dado de alta en Claude.ai y tres buzones activos; y sus tres defectos abiertos, MAIL-01 / MAIL-02 / MAIL-04, que el catálogo declara porque cambian CÓMO se usa la capacidad) · base previa: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
 
 ---
@@ -151,6 +159,37 @@ contando con ellas es contar con un acceso que no está.
 
 **Qué hacer:** replantear la vía con lo que sí hay en la sesión, o **declarar el bloqueo**. Lo que no
 vale es escribir el plan como si la tool fuera a estar — eso es afirmar un acceso sin medirlo.
+
+---
+
+## MÉTODO DE MEDICIÓN — cuatro reglas, y la fuente es el protocolo (añadido 2026-09-09)
+
+**Fuente única: `protocols/MEASUREMENT_METHOD_RULE.md`** (respaldo:
+https://unrlvl-context.vercel.app/protocols/MEASUREMENT_METHOD_RULE.md, alcanzable **sólo** con
+`Vercel:web_fetch_vercel_url`). Este catálogo **apunta y no copia**: abajo va **una línea por regla**
+para saber que existen y cuándo aplican; el texto, el motivo medido y las consultas viven allá.
+
+Responden la pregunta anterior a todas las demás: **¿respondió el instrumento?** Antes de poder
+etiquetar una afirmación como `medido`, `reportado` o `deducido`, hay que saber que la medición
+ocurrió — y las cuatro separan **«no pude medir»** de **«medí y salió esto»**.
+
+1. **La existencia de un objeto de Storage se comprueba en `storage.objects`, nunca con un `HEAD`.**
+   Un `HEAD` contra la URL añade dos capas que pueden mentir —el proxy de salida y la CDN— para
+   responder algo que la base contesta directo.
+2. **Un `000` no se interpreta: el motivo se lee en `$HTTPS_PROXY/__agentproxy/status` →
+   `recentRelayFailures`.** `curl` devuelve `000` tanto si el servidor calla como si el proxy niega
+   el `CONNECT`. La cabecera `x-deny-reason` **no existe en este entorno** — se comprobó.
+3. **Todo barrido masivo lleva dentro un control conocido-vivo.** Si el control también falla, **el
+   roto es el método, no el dato**. El control se elige **antes** de barrer y se ejecuta **con el
+   mismo método**.
+4. **Un despliegue de Edge Function se verifica por `ezbr_sha256`** (`Supabase:list_edge_functions`),
+   **nunca por el contador de versión ni por el sufijo del `entrypoint_path`**: los dos suben con el
+   intento, no con el contenido. Medido el 2026-09-08 — un deploy subió **el mismo bundle** y el
+   sufijo cambió igual. El `sha` es lo que se cita en el reporte de un PR de función.
+
+**Dónde se cargan:** no en la apertura. Se cargan **cuando la tarea mide contra producción** — un
+barrido, un inventario de Storage, la verificación de un deploy, o cualquier `curl` que devuelva
+`000`.
 
 ---
 
