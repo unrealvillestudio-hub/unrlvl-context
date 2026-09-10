@@ -1,5 +1,55 @@
 # ForumPHs — Session Log
 
+## 2026-09-09 — El carrusel del PL 678 sale a las dos redes, pero sale fuera del carril
+
+> Professor cerrado **antes** (orden `Professor → Actualiza → commit` respetado): **16 learnings**,
+> `session_date = 2026-09-09`, `checkpoint_number = 16`, los dieciséis `approved_by_sam = true`
+> [reportado — brief de Claude.ai, 2026-09-09; CC no lo volvió a medir en esta sesión].
+> **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+>
+> **Etiqueta de evidencia:** lo que CC midió contra la fuente al escribir este bloque va como
+> `medido`, con su consulta al lado; lo que viene del brief y no se remidió aquí va como
+> `reportado`, con quién lo afirma y cuándo.
+
+### ✅ Carrusel del Proyecto de Ley 678 — publicado en Instagram y en Facebook
+
+- **Instagram** — `platform_post_id` **`18016965923948414`**.
+- **Facebook** — `platform_post_id` **`1184045168120977_122135449431355949`**.
+- **Con aprobación de Sam**, pieza por pieza [reportado — brief].
+
+**Y lo que hay que decir en la misma frase: salió FUERA DEL CARRIL.** No lo colocó
+`content-scheduler` ni lo drenó el cron: se armó y se publicó a mano. La publicación es real; **el
+carril no la hizo**, y darla por prueba de que el carril publica sería justo el error que `HRD-R11`
+nombra — el éxito se comprueba contra el efecto, y aquí el efecto lo produjo otra vía.
+
+### ✅ Dos artículos de blog publicados por marcado
+
+Publicar, en el proveedor `vercel_html`, **es cambiar el estado**: el blog es un **modelo de
+lectura** que filtra por `brand_id` y `status = 'published'`, descarta lo que tenga `discarded_at`
+y deriva el `slug` cuando falta [reportado — brief].
+
+**De ahí sale el cierre de una duda que venía abierta:** `vercel_html` **sí publica**, y
+**`PROVIDER_NOT_DRAINABLE` es correcto por diseño** para ese proveedor — no es un defecto que haya
+que arreglar. Lo que falta no es el drenaje: es **quién cambia el estado**, y hoy **no existe**.
+
+### 🔴 Lo que queda abierto y toca a esta marca
+
+- 🔴 **Tres piezas de ForumPHs en `awaiting_approval` no aparecieron en la bandeja de
+  calibración** — la más vieja del **2026-08-22** [medido el 2026-09-10:
+  `select brand_id, count(*), min(created_at)::date from content.content_pieces where status =
+  'awaiting_approval' group by 1` → `ForumPHs` **3**]. Son parte de las **16** de tres marcas.
+  **La causa está deducida, no medida:** falta leer la consulta del orchestrator. Hasta entonces,
+  no se toca nada.
+- 🔴 **Ninguna regla puede detener una pieza de esta marca hoy** — las **14** reglas de severidad
+  `blocking` del Watcher están **todas** con `active = false` [medido el 2026-09-10:
+  `select severity, active, count(*) from intel.watcher_rules group by 1,2` → `blocking/false = 14`,
+  sobre **69** en total]. Las reglas `HR-FPHS-*` que sí corren son `warn`: **marcan, no cortan.**
+- 🔴 **No existe promotor de blogs.** Mientras no exista, cada publicación de blog de ForumPHs es
+  **manual**, como las dos de hoy. Debe nacer **como eje**, resolviendo el canal por `brand_id`
+  contra el dato (`protocols/MULTIBRAND_RULE.md`), nunca con una rama por marca.
+
+---
+
 ## 2026-09-08 — Dos entregas de infraestructura en producción, un prospecto nuevo, y tres afirmaciones del brief corregidas por medición
 
 > Professor cerrado **antes** (orden Professor → Actualiza respetado): **19 learnings**,

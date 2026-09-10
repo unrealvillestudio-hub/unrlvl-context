@@ -2,6 +2,50 @@
 
 ---
 
+## 2026-09-09 — El primer artículo de blog sale publicado, y la cadencia acordada no tiene quién la ejecute
+
+> Professor cerrado **antes** (orden `Professor → Actualiza → commit` respetado): **16 learnings**,
+> `session_date = 2026-09-09`, `checkpoint_number = 16`, los dieciséis `approved_by_sam = true`
+> [reportado — brief de Claude.ai, 2026-09-09]. **SMA no se consultó** — Sam no lo pidió.
+> Lo previo se conserva íntegro debajo.
+
+### ✅ Primer artículo de blog de la marca, publicado
+
+Publicado **por marcado**: en el proveedor `vercel_html`, publicar **es cambiar el estado**. El blog
+es un **modelo de lectura** —filtra por `brand_id` y `status = 'published'`, descarta lo que tenga
+`discarded_at`, deriva el `slug` cuando falta— y por eso **`PROVIDER_NOT_DRAINABLE` es correcto por
+diseño** para ese proveedor [reportado — brief].
+
+### 🟡 La cadencia está acordada; el automatismo **no existe**
+
+**Acordado con Sam: 1 artículo cada 2 días** para los tres restantes [reportado — brief].
+
+🔴 **Y no hay nada que lo ejecute.** No existe componente que mueva una pieza de blog de
+`scheduled` a `published`: **cada uno de los tres saldrá a mano**, como el de hoy. Un acuerdo de
+cadencia sin ejecutor no es una cadencia — es un recordatorio.
+
+**Cuando ese promotor se construya, nace como eje:** resuelve el canal **por `brand_id`** contra el
+dato, nunca con una rama de condicional por marca (`protocols/MULTIBRAND_RULE.md`). Que hoy lo
+pidan LucienSael y ForumPHs **no lo vuelve suyo**.
+
+### 🔴 El drenaje reintenta contra esta marca todo el día, sin fin
+
+**192 intentos el 2026-09-09** — **96 en `blog` y 96 en `x`**, todos con
+`outcome = PROVIDER_NOT_DRAINABLE`, de las **00:00:03** a las **23:45:01 UTC** [medido el
+2026-09-10: `select brand_id, platform_key, outcome, count(*), min(run_at), max(run_at) from
+intel.brand_publish_drain_log where run_at::date = '2026-09-09' group by 1,2,3`].
+
+> **Corrección de dato del brief, declarada:** el brief afirmaba **164** intentos. La medición da
+> **192**. Y **96 es exactamente 24 h a `*/15`**: el bucle no decae ni se agota — corre el día
+> entero a la cadencia del cron 66, que está **ACTIVO** [medido].
+
+**Por qué importa y no es ruido de log:** el resultado es **correcto por diseño** —`vercel_html` no
+se drena, se lee—, así que esto **no es un error que reintentar**: es un no-aplica que el drenaje
+vuelve a preguntar 96 veces al día. La franja queda **INTACTA** cada vez, así que no se pierde nada;
+lo que se gasta es ejecución y ruido en el libro que después hay que leer.
+
+---
+
 ## 2026-08-30 — La marca queda declarada en inglés, y su primera corrida en inglés sale limpia entera
 
 **El dato que gobierna el resto.** `public.brands.language_primary` de `LucienSael` pasa de **`es` a

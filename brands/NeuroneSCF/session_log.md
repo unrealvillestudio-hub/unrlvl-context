@@ -1,5 +1,60 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-09-09 — Sam calibra trece piezas, y tres se rescatan por corrección en vez de morir
+
+> Professor cerrado **antes** (orden `Professor → Actualiza → commit` respetado): **16 learnings**,
+> `session_date = 2026-09-09`, `checkpoint_number = 16`, los dieciséis `approved_by_sam = true`
+> [reportado — brief de Claude.ai, 2026-09-09]. **SMA no se consultó** — Sam no lo pidió.
+> Lo previo se conserva íntegro debajo.
+
+### ✅ La calibración de Sam
+
+- **13 piezas calibradas: 9 a `scheduled`, 4 a `rejected`** [reportado — brief de Claude.ai,
+  2026-09-09].
+- **Lo que CC no pudo aislar, y lo dice en vez de darlo por medido:** el corte por fecha **no
+  separa la calibración de hoy**, porque `updated_at` recoge también los aplazamientos — la consulta
+  del 2026-09-10 devuelve 12 `scheduled`, 11 `deferred`, 1 `published` y 1 `rejected` tocadas el
+  2026-09-09, que **no es el mismo conjunto**. Lo confirmaría un registro de veredicto con su propia
+  fecha; con lo que hay hoy, **el 9/4 queda `reportado`, no `medido`**.
+
+### ✅ Tres piezas rescatadas por corrección — y esto sí está medido
+
+**3 piezas** con `status = 'scheduled'`, `approved_by = 'sam'`, `edited_by = 'claude'` y
+`edited_at = 2026-09-09`
+[medido el 2026-09-10: `select status, approved_by, edited_by, count(*) from
+content.content_pieces where brand_id = 'NeuroneSCF' group by 1,2,3` → esa combinación, **3 filas**,
+y es la **única** con `edited_by = 'claude'` en toda la marca].
+
+- **Qué se corrigió:** formas **voseantes** y **firma repetida** [reportado — brief].
+- **Por qué la autoría queda partida en dos columnas:** `approved_by = 'sam'` dice **quién
+  decidió**; `edited_by = 'claude'` dice **quién tocó el texto**. Con una sola columna, una pieza
+  editada por la máquina y aprobada por una persona sería indistinguible de una que nadie tocó.
+- **Una cuarta pieza se devolvió, y no es lo mismo:** pedía **reescritura de voz**, no corrección
+  [reportado — brief]. Corregir un defecto de forma y reescribir una voz son dos trabajos distintos;
+  tratarlos igual es como se degrada una voz sin que nadie lo decida.
+
+### 🔴 El contexto que hace frágil todo lo anterior
+
+- 🔴 **Hoy ninguna regla puede detener una pieza de esta marca.** Las **14** reglas de severidad
+  `blocking` del Watcher están **todas** con `active = false`, sobre **69** en total [medido el
+  2026-09-10: `select severity, active, count(*) from intel.watcher_rules group by 1,2` →
+  `blocking/false = 14` · `warn/true = 54` · `warn/false = 1`]. El voseo y la firma repetida de hoy
+  **los detectó Sam leyendo**, no el sistema.
+- 🔴 **No existe regla de registro gramatical en ninguna marca** [reportado — brief]. La propuesta,
+  **nombrada como propuesta y no como regla vigente**: una regla **de eje** que prohíba las formas
+  voseantes, con `verify_pattern`, aplicable **según el registro declarado de cada marca**, que es
+  dato. El registro es instancia; la regla, eje. Sin ella, cada corrección de voseo es manual y se
+  repite.
+- 🔴 **Un fallo de publicación en `meta_ig` que el brief no traía.** `intel.brand_publish_drain_log`
+  registra `NeuroneSCF` / `meta_ig` con `outcome = PUBLISH_FAILED` el **2026-09-09 a las 23:00:04
+  UTC**, un solo intento; en el mismo día, `meta_fb` dio `PUBLISHED` a las 16:00:36 [medido el
+  2026-09-10: `select brand_id, platform_key, outcome, count(*), min(run_at) from
+  intel.brand_publish_drain_log where run_at::date = '2026-09-09' group by 1,2,3`]. **La causa no se
+  investigó en esta sesión**: queda anotada, no diagnosticada. Lo que la confirmaría es el `detail`
+  de esa fila y el log de la EF de publicación en esa ventana.
 
 ---
 

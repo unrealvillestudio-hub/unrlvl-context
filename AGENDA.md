@@ -1,4 +1,119 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido].)_
+
+---
+
+## 🗓️ ACTUALIZA 2026-09-09-v1 — Publicación fuera del carril, y dos EF de eje
+
+_(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSCF/session_log.md` y
+`brands/LucienSael/session_log.md` (2026-09-09).)_
+
+> **Professor cerrado ANTES del Actualiza** (orden `Professor → Actualiza → commit` respetado):
+> **16 learnings**, `session_date = 2026-09-09`, `checkpoint_number = 16`, `approved_by_sam = true`
+> [reportado — brief de Claude.ai, 2026-09-09]. **SMA no se consultó** — Sam no lo pidió.
+>
+> **Etiqueta de evidencia en todo este bloque.** Lo que CC pudo medir contra la fuente al escribirlo
+> va como `medido` con su consulta al lado; lo que viene del brief de Claude.ai y no se volvió a
+> medir aquí va como `reportado`, con quién lo afirma y cuándo. No hay afirmación sin etiqueta.
+
+### ✅ Cerrado hoy
+
+- ✅ **Carrusel del Proyecto de Ley 678 publicado en las dos redes de ForumPHs** —
+  Instagram `platform_post_id 18016965923948414` · Facebook `1184045168120977_122135449431355949`.
+  **Fuera del carril**, a mano y con aprobación de Sam [reportado — brief].
+- ✅ **`media-store` y `meta-graph-post` desplegadas y ACTIVE** en `amlvyycfepwhiindxgzw`
+  [medido con `list_edge_functions` y `get_edge_function` el 2026-09-10]. Las dos son **eje**:
+  el `grep` de marca sobre su código da **cero** — `media-store` recibe `bucket`, `path`,
+  `content_type`, `data_base64` y `upsert` por el cuerpo, y `meta-graph-post` resuelve las
+  credenciales por `brand_id` contra `public.meta_accounts` **en runtime**.
+- ✅ **Dos piezas de blog de ForumPHs y la primera de LucienSael, publicadas por marcado**
+  [reportado — brief]. Publicar, en el proveedor `vercel_html`, **es cambiar el estado**.
+- ✅ **Tres piezas de NeuroneSCF corregidas y pasadas a `scheduled`** — las que Sam marcó
+  `fixable` [reportado — brief].
+- ✅ **La duda sobre `vercel_html` queda cerrada: SÍ publica**, por **lectura** y no por drenaje.
+  `PROVIDER_NOT_DRAINABLE` **es correcto por diseño** para ese proveedor, no un defecto
+  [reportado — brief]. Lo que faltaba no era el drenaje: era quién cambia el estado.
+
+### 🔴 Frentes abiertos que este Actualiza deja anotados
+
+1. 🔴 **No existe promotor de blogs.** Ningún componente mueve una pieza de blog de `scheduled` a
+   `published` [reportado — brief]. **Debe nacer como eje**, resolviendo el canal por `brand_id`
+   contra el dato, nunca por una rama de condicional por marca (`protocols/MULTIBRAND_RULE.md`).
+2. 🔴 **Las reglas `blocking` del Watcher están inactivas — 14 de 69, todas con `active = false`**
+   [medido el 2026-09-10: `select severity, active, count(*) from intel.watcher_rules group by 1,2`
+   → `blocking/false = 14` · `warn/true = 54` · `warn/false = 1` · **total 69**]. La consecuencia se
+   dice entera: **hoy ninguna regla puede detener una pieza.** El juez marca; nada corta.
+   **Precisión de columna, para que no se repita el error de lectura:** la severidad vive en
+   **`severity`**, no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
+   `enforced_on = 'blocking'` devuelve **cero filas** y hace parecer que el problema no existe.
+3. 🔴 **No hay regla de registro gramatical en ninguna marca** [reportado — brief]. La propuesta,
+   **nombrada como propuesta y no como regla vigente**: una regla **de eje** que prohíba las formas
+   voseantes, con `verify_pattern`, aplicable **según el registro declarado de cada marca**, que es
+   dato. El registro es instancia; la regla, eje.
+4. 🔴 **La bandeja de calibración está incompleta — 16 piezas en `awaiting_approval`** que **no
+   aparecieron en ella** [medido el 2026-09-10: `UnrealvilleStudio` **7** (la más vieja del
+   2026-08-18) · `LucienSael` **6** (2026-07-31) · `ForumPHs` **3** (2026-08-22) — **16 en total**,
+   tres marcas]. La ausencia en la bandeja es **reportado — brief**; el censo de piezas es
+   **medido**. **Falta leer la consulta del orchestrator**: mientras no se lea, la causa está
+   **deducida**, no medida, y no se toca nada.
+5. 🔴 **Bucle del drenaje.** Las franjas de proveedor **no drenable** reintentan **cada 15 minutos
+   sin fin**. **Corrección de dato del brief, declarada:** el brief afirmaba **164 intentos**; la
+   medición da **192** — **96 en `blog` y 96 en `x` de LucienSael**, todos
+   `PROVIDER_NOT_DRAINABLE`, de las **00:00:03** a las **23:45:01 UTC** [medido el 2026-09-10:
+   `select brand_id, platform_key, outcome, count(*) from intel.brand_publish_drain_log where
+   run_at::date = '2026-09-09' group by 1,2,3`]. **96 es exactamente 24 h a `*/15`**: el bucle no
+   se agota ni se frena — corre el día entero a la cadencia del cron. Un `PROVIDER_NOT_DRAINABLE`
+   **correcto por diseño** no debería reintentarse indefinidamente.
+   **Y en la misma consulta apareció algo que el brief no traía:** `NeuroneSCF` / `meta_ig` con
+   `outcome = PUBLISH_FAILED` el 2026-09-09 a las **23:00:04 UTC**, un solo intento [medido]. La
+   causa **no se investigó en esta sesión** y queda anotada, no diagnosticada.
+6. 🔴 **Secreto literal en las dos EF nuevas.** En `media-store` y en `meta-graph-post` la constante
+   `SECRET` toma un **literal como fallback** de la variable `MEDIA_STORE_SECRET`
+   [medido: `index.ts` de las dos EF, línea 8 y línea 15 respectivamente — el valor **no se
+   transcribe aquí**, por la regla de secretos de `CLAUDE.md`]. El arreglo es **retirar el fallback**
+   y dejar la variable sola, con fail-loud si falta. **La variable ya se lee**: lo que sobra es el
+   literal.
+7. 🔴 **Dos libros mayores que discrepan.** `scheduled_posts` registró una publicación que
+   `brand_publish_slots` **no reflejó** [reportado — brief]. Dos registros del mismo hecho que no
+   coinciden **no son un dato con un error: son dos fuentes sin árbitro declarado.**
+8. 🔴 **Rotación de `AGENDA.md`** — decisión de Sam, con su propia sección al final de este bloque.
+
+### 🟡 Corrección de estado que este Actualiza aplica a `CAPABILITIES.md`
+
+- 🟡 **El cron 66 `content-placement-poll` NO está apagado: está ACTIVO, `*/15 * * * *`**
+  [medido el 2026-09-10 — `select jobid, jobname, schedule, active from cron.job` → jobid 66,
+  `*/15 * * * *`, `active = true`]. `CAPABILITIES.md` lo declaraba **APAGADO** desde el 2026-08-26,
+  y `AGENDA.md` v2026-09-06-v1 ya lo daba por activo: **el catálogo iba por detrás de la agenda**.
+  El texto anterior queda archivado bajo guard `⛔ NO OPERATIVO`, no borrado.
+
+### 🟦 DECISIÓN PARA SAM — rotación de `AGENDA.md`
+
+**No es una tarea: es una decisión.** Este Actualiza **no rota nada**; deja el dato medido y la
+propuesta escrita **como propuesta**.
+
+| Archivo | Tamaño | Medido el 2026-09-10 |
+|---|---|---|
+| `AGENDA.md` | **365.851 b** | **2.526 líneas** · **49** encabezados `##`, de los cuales **29** son bloques fechados `## 🗓️` · **2** guards `⛔ NO OPERATIVO` |
+| `historical_AGENDA.md` | **113.988 b** | archivo de rotación |
+
+> **Corrección de dato del brief, declarada.** El brief de Claude.ai afirmaba **19 bloques `##`**;
+> el conteo contra el archivo da **49** en total y **29** fechados
+> [medido: `grep -c '^## ' AGENDA.md` → 49 · `grep -c '^## 🗓️' AGENDA.md` → 29]. El tamaño, las
+> líneas y los dos guards del brief **sí coinciden**. La corrección **refuerza** el argumento en
+> vez de debilitarlo: hay más bloque acumulado del declarado, no menos.
+
+**El dato, en una línea:** la AGENDA operativa es **3,2 veces más grande que su propio archivo
+histórico**. La rotación existe y **no se está usando al ritmo al que la AGENDA crece**. Con 365 KB
+ninguna sesión la lee entera —hoy se cargó completa y se leyeron sólo los bloques del tope— y
+**una AGENDA que no se lee entera deja de ser una agenda**.
+
+**Propuesta, para decisión de Sam, y NO incluida en este PR:** rotar a `historical_AGENDA.md` los
+bloques cerrados anteriores al **2026-08-01**, **preservando íntegro el texto**, y dejar en
+`AGENDA.md` un índice de **una línea por bloque rotado**, con su fecha. Es un **PR aparte**,
+posterior a este.
+
+---
+
 _Actualizada: 2026-09-08 · v2026-09-08-v1 (**HRD_ACTUALIZA 2026-09-08 — DOS ENTREGAS DE INFRAESTRUCTURA EN PRODUCCIÓN, Y TRES AFIRMACIONES CORREGIDAS POR MEDICIÓN.** Auto-respuesta de correo entrante (`unrlvl-mail-worker`, PR #1 y #2) con `public.inbound_autoresponder_config` **2 filas** —`info@` y `admin@forumphs.com`, misma redacción copiada, no reescrita— y ruta `/bim` con token (`forumphs-com`, PR #8 y #9) con `public.collateral_links` **2 filas** y bucket privado `collateral` [todo medido]. **El hueco que nadie habría notado:** los privilegios por defecto de `public` son `{service_role=r/postgres}` —SELECT y nada más—, faltaba **UPDATE**, y como el registro de apertura está atrapado en un `catch` a propósito, **el documento se servía bien y `open_count` se quedaba en 0**. Lo delató `edge_logs`, no la tabla. **Tres afirmaciones del brief corregidas por medición:** las tablas del carril financiero viven en el esquema **`fph`**, no `public`; **`mora_mensual` NO EXISTE**; y `eeff_preliminar` e `informes` —citadas como las que referencian `bank_reconciliations`— **tampoco**. «0 filas» y «no existe» no son el mismo estado. **Gobernanza:** `CC_PROTOCOL.md` **v10** —un PostgreSQL desechable no valida roles ni RLS de Supabase—, `DELIVERY_AND_VERIFICATION_RULE.md` **v1.4** —un error atrapado a propósito necesita su propia vía de verificación— y `SESSION_PROTOCOL.md` **Paso 3-bis** —BluePrints se consulta antes de producir un asset de marca—. **Comercial:** prospecto P.H. Plaza 77 (59 apartamentos y 1 local) y el **Sales-Kit** estrena pieza estándar. **Abre:** el `UPDATE` de `contact_email` y wordmark · el acuse desde `admin@` sin probar · la jurisdicción del NDA · la verificación legal de la Cláusula Sexta · el vFINAL de marca en los documentos del proyecto · y el informe sin panel de siguiente paso.)_
 
 ---
