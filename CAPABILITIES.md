@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.14 · 2026-09-10 (**una adición medida, ninguna derogación: LOS DOS LIBROS MAYORES DE UNA PUBLICACIÓN TIENEN AUTORIDAD DISTINTA Y NO ESTABA ESCRITO.** `intel.brand_publish_drain_log` registra **intentos**; `public.scheduled_posts` registra el **estado final**; **manda `scheduled_posts`**. Medido el 2026-09-10 sobre una publicación de LucienSael en `meta_fb` que aparece con **dos `platform_post_id` distintos** separados por 1 h 16 min — el del `drain_log` es un intento que ya no existe en la red, y su fila dice `PUBLISHED` sin nada que lo delate. Quien le pregunte al registro de intentos por el estado final se lleva el id de un post borrado. Es la misma familia de defecto que «0 filas ≠ no existe» (2026-09-08) y que «`NULL` ≠ `0`» del frente de costo) · base previa: 1.13 · 2026-09-09 (**una corrección de estado y siete adiciones medidas; ninguna derogación silenciosa.** (0) **CORRECCIÓN: el cron 66 `content-placement-poll` NO está apagado — está ACTIVO, `*/15`** [medido el 2026-09-10 contra `cron.job`]. Este catálogo lo declaraba APAGADO desde el 2026-08-26 mientras `AGENDA.md` v2026-09-06-v1 ya lo daba por activo: **el catálogo iba por detrás de la agenda**, y la redacción anterior queda archivada bajo guard `⛔ NO OPERATIVO` en su sitio, no borrada. Lo que sigue vigente de ella es **la advertencia PUB-01**, no el estado. Adiciones: (1) **Storage rechaza `SUPABASE_SERVICE_ROLE_KEY`** —formato `sb_secret_`— con `Invalid Compact JWS`; la que sirve es `SERVICE_ROLE_JWT`, y se reconoce porque **empieza por `eyJ`**. (2) **Subir una foto a Meta con `published=false` exige token DE PÁGINA**, que se canjea en `/{page_id}?fields=access_token` con el `system_token` de `meta_accounts` resuelto por `brand_id`. (3) **ImageLab: `/api/execute` NO compone texto** —el overlay está en `/api/compose`, son dos llamadas por frame, `execute` usa `brandId` y `compose` usa `brand_id`, `preset_id` es eco y el preset se resuelve por `(brand_id, canal)`, `markers` va en la raíz— y **ninguno de los dos sube al bucket**. (4) **`gemini-2.5-flash-image` no acepta `4:5`**: devuelve `896x1152`, y para `1080x1350` hay que recortar y escalar ANTES de componer. (5) **Los blogs son un modelo de lectura**: publicar es cambiar el estado, y por eso `PROVIDER_NOT_DRAINABLE` es correcto por diseño en `vercel_html`. (6) **`api/professor` con `action=submit-learning` devuelve 500** porque la EF calcula un `relevance_score` fuera del `CHECK` de 1 a 5 [medido con `pg_get_constraintdef`]; el fallback es el `INSERT` directo. (7) **No existe el estado `approved`**: aprobar escribe `status = 'scheduled'` con `approved_by` [medido: los ocho valores del `content_pieces_status_check`]) · base previa: 1.12 · 2026-09-08 (**tres adiciones medidas y ninguna derogación.** (1) **`Supabase:query_logs` sobre UNRLVL lee `edge_logs` de PostgREST**, y fue **la única vía** para diagnosticar un `PATCH 403` que la aplicación atrapaba a propósito: la tabla no podía delatarlo —`open_count = 0` era compatible con «no se abrió» y con «se abrió y el registro falló»— y el log del proveedor sí, porque es una fuente distinta de la que el fallo silenció. (2) **El proxy `api/professor` sólo expone GET**: el checkpoint **no se siembra por ahí**, se siembra con `execute_sql` sobre `professor_learnings`. Buscar un POST en el proxy y no encontrarlo no significa que no haya vía. (3) **Un conector MCP reconectado NO entra en caliente a una sesión abierta**: si un servidor se cae y vuelve, sus tools no reaparecen en la sesión en curso, y planificar contando con ellas es contar con un acceso que no está. Se replantea la vía o se declara el bloqueo) · base previa: 1.11 · 2026-09-02 (**una adición y ninguna derogación: el repositorio `unrealvillestudio-hub/BluePrints` entra al catálogo** —395 archivos, fuente de la identidad **visual** de cada marca (`BP_BRAND_*`, paletas, logos, tipografía)—, **con sus dos advertencias, que son parte de la capacidad y no una nota al pie**: NO es fuente para las firmas, y el `BP_BRAND` de UnrealvilleStudio **está desactualizado**. Una fuente canónica desactualizada es peor que una ausente porque **parece autoridad**. Motivo medido el 2026-09-02: no figuraba ni aquí ni en `ecosystem_filemap.md`, y **se trabajó media sesión reconstruyendo lo que ya estaba escrito ahí**) · base previa: 1.10 · 2026-08-29 (dos precisiones medidas el mismo día. (1) `protocols/DELIVERY_AND_VERIFICATION_RULE.md` pasa a **carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— con **fila propia en el panel**: una regla de forma que se consulta al final llega tarde, y además ese documento especifica el panel. (2) **Cómo alcanza CC una URL de Vercel**: `curl` da **403 en CONNECT**, la tool MCP `Vercel:web_fetch_vercel_url` da **200** — dos vías distintas, sólo una funciona, y declarar Vercel inalcanzable tras probar sólo `curl` es afirmar sin medir por la vía que existe) · base previa: 1.9 · 2026-08-29 (`protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0 — REGLA INVIOLABLE nueva, listada en ARTEFACTOS CONSULTABLES: bloques con destinatario declarado y marca visual **por superficie** —emoji en chat, `●` con hex en documento o UI con estilos, y el diferenciador existe para que Sam lea, no para que CC ejecute—, idioma ES/EN neutro internacional **sin voseo**, etiqueta de evidencia `medido`/`reportado`/`deducido`, **panel de carga verificada** en la apertura de sesión —una fila sin evidencia es roja— y las **cuatro QA** con estatus HRD por `HRD-R15`, donde `QA-INFO` es un bloqueo. Este catálogo es punto de carga nº 4 de esa regla y **no la copia**: apunta a la fuente única) · base previa: 1.8 · 2026-08-28 (`unrlvl-mail-mcp` OPERATIVO: autenticado con MCP-AUTH-01 —401 verificado—, conector dado de alta en Claude.ai y tres buzones activos; y sus tres defectos abiertos, MAIL-01 / MAIL-02 / MAIL-04, que el catálogo declara porque cambian CÓMO se usa la capacidad) · base previa: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
+
 _Versión: 1.13 · 2026-09-09 (**una adición y ninguna derogación: las reglas de método de medición entran al catálogo como sección propia**, con **puntero** a `protocols/MEASUREMENT_METHOD_RULE.md` y **una línea por regla, nunca el texto** — dos textos de la misma regla son dos reglas en cuanto alguien toca uno. Son **cuatro**: `storage.objects` en vez de `HEAD` · el `000` se resuelve en el estado del proxy, no interpretándolo · todo barrido lleva control conocido-vivo · y la cuarta, nueva y específica de despliegues, **`ezbr_sha256` y no el contador de versión** —medido el 2026-09-08: un deploy subió el mismo bundle y el sufijo del `entrypoint_path` cambió igual—, que entra como **§4 del protocolo** y no vive suelta acá)_
 > **Cabecera anterior (`1.12`) conservada íntegra e inmediatamente debajo.** La cadena de versiones
 > de este archivo se venía encadenando **dentro** de una sola línea con `base previa:`, y eso obliga
@@ -162,6 +164,148 @@ vale es escribir el plan como si la tool fuera a estar — eso es afirmar un acc
 
 ---
 
+## CAPACIDADES Y CORRECCIONES MEDIDAS EL 2026-09-09
+
+_Adición al tope de las secciones de diagnóstico. **Ninguna derogación**: lo que corrige a un texto
+anterior lo deja archivado bajo guard `⛔ NO OPERATIVO` en su sitio, nunca borrado
+(`protocols/CC_PROTOCOL.md` §0 y §6)._
+
+**La corrección del cron 66 vive en su propia sección** —«CARRIL — CAPACIDADES NUEVAS», bloque verde
+de corrección 2026-09-09—, porque ahí es donde el texto vencido se leía.
+
+### 🔐 Credenciales de Storage — la clave de servicio del proyecto **no sirve** para Storage
+
+**`SUPABASE_SERVICE_ROLE_KEY` es del formato `sb_secret_`, y Storage la rechaza** con
+**`Invalid Compact JWS`**. La credencial que Storage acepta es la de **familia JWT**: la variable
+**`SERVICE_ROLE_JWT`**.
+
+- **Cómo se reconoce sin adivinar:** una credencial válida para Storage **empieza por `eyJ`**. Es
+  exactamente el criterio que la EF `media-store` implementa —`pickKey()` recorre
+  `SERVICE_ROLE_JWT`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_SERVICE_KEY`, `SERVICE_ROLE_KEY` y
+  **se queda con la primera que empieza por `eyJ`**— [medido: `index.ts` de `media-store`, función
+  `pickKey`, leída con `get_edge_function` el 2026-09-10].
+- **Por qué importa más de lo que parece:** las dos claves **existen** y las dos **parecen**
+  correctas. El fallo no llega como «falta la credencial» sino como un error de formato de JWS, que
+  se lee como un problema de la petición y no de la variable elegida.
+
+### 📣 Publicación en Meta — subir una foto no publicada exige **token de página**
+
+**Un token de usuario no basta.** Con `published=false`, Graph responde
+**`(#200) Unpublished posts must be posted to a page as the page itself`**. El token de página se
+**canjea primero**:
+
+```
+GET https://graph.facebook.com/{graph_version}/{page_id}?fields=access_token&access_token={system_token}
+```
+
+donde `system_token` y `page_id` salen de **`public.meta_accounts` resuelto por `brand_id`** — es
+dato, no constante. Con el token de página ya se suben las fotos a `/{page_id}/photos` con
+`published=false` y se arma la entrada en `/{page_id}/feed` con `attached_media[i]`
+[medido: `index.ts` de `meta-graph-post`, leída con `get_edge_function` el 2026-09-10].
+
+> ⚠️ **Alcance real de `meta-graph-post`, dicho por lo que hace el código y no por su nombre:**
+> publica **multi-imagen en una página de Facebook** (`/photos` + `/feed`). **No** publica en
+> Instagram: el carrusel de IG de esta sesión salió por la vía de contenedores del MCP de Meta
+> (`ig_create_container` → `ig_publish_container`), que es otra ruta [medido — el código de la EF no
+> toca ningún endpoint de IG].
+
+### 🖼️ ImageLab — `execute` **no compone texto**; el overlay vive en `compose`
+
+Son **dos llamadas por frame**, y confundirlas produce una imagen sin texto que **no falla**:
+
+| Endpoint | Qué hace | Nombre del parámetro de marca |
+|---|---|---|
+| `/api/execute` | genera la imagen; **no compone texto** | **`brandId`** (camelCase) |
+| `/api/compose` | estampa el overlay | **`brand_id`** (snake_case) |
+
+- **`preset_id` es eco, no selector:** el preset **se resuelve por `(brand_id, canal)`**. Enviarlo
+  distinto no cambia lo que se aplica; sólo cambia lo que vuelve en la respuesta.
+- **`markers` viaja en la raíz** del cuerpo, no anidado.
+- 🔴 **Ninguno de los dos sube al bucket.** El almacenamiento es un paso aparte —hoy, `media-store`—.
+  Dar por guardada una imagen porque `compose` devolvió `200` es el defecto que `HRD-R11` nombra:
+  el éxito se comprueba contra el efecto, no contra el código HTTP.
+
+[reportado — brief de Claude.ai, 2026-09-09; no se volvió a medir contra ImageLab en esta sesión.]
+
+### 📐 Proporción — `gemini-2.5-flash-image` **no acepta `4:5`**
+
+Devuelve **`896x1152`**. Para llegar a **`1080x1350`** hay que **recortar y escalar antes de
+componer**: el overlay se calcula sobre el lienzo final, así que componer primero y redimensionar
+después mueve el texto. [reportado — brief de Claude.ai, 2026-09-09.]
+
+### 📝 Blogs — es un **modelo de lectura**, y publicar es **cambiar el estado**
+
+El blog no se drena: **se lee**. La consulta filtra por **`brand_id`** y **`status = 'published'`**,
+**descarta lo que tenga `discarded_at`**, y **deriva el `slug`** cuando falta.
+
+**De ahí se sigue lo que cerró la duda de esta sesión:** `vercel_html` **sí publica**, y
+**`PROVIDER_NOT_DRAINABLE` es correcto por diseño** para ese proveedor — no es un defecto que
+haya que arreglar. Lo que falta no es el drenaje: es **quién cambia el estado**, y hoy no existe
+(frente abierto nº 1 de `AGENDA.md` v2026-09-09-v1). [reportado — brief de Claude.ai, 2026-09-09.]
+
+### 📒 Los DOS libros mayores de una publicación — cuál manda, y por qué no da igual
+
+**`intel.brand_publish_drain_log` registra INTENTOS. `public.scheduled_posts` registra el ESTADO
+FINAL. Manda `scheduled_posts`.**
+
+| Tabla | Qué es una fila | Autoridad |
+|---|---|---|
+| `intel.brand_publish_drain_log` | **un intento** del drenaje, con su desenlace y el `platform_post_id` que devolvió la API **en ese momento** | **ninguna** sobre el estado actual |
+| `public.scheduled_posts` | **el estado final** de la publicación: `status`, `published_at`, `platform_post_id` vigente | **la que manda** |
+
+**El caso medido que obliga a escribirlo** [medido el 2026-09-10]. Una misma publicación de
+LucienSael en `meta_fb` aparece con **dos identificadores distintos**:
+
+```
+brand_publish_drain_log →  1076134175585218_122118274185298889   PUBLISHED   15:15:14 UTC
+scheduled_posts         →  1076134175585218_122118277401298889   published   16:31:33 UTC
+```
+
+**Una hora y dieciséis minutos de diferencia, y dos ids para lo que se lee como un solo hecho.** El
+del `drain_log` es un intento que **ya no existe en la red**. Quien lea el `drain_log` creyendo que
+lee el estado final **se lleva el identificador de un post borrado**, y no hay nada en la fila que
+lo delate: dice `PUBLISHED`.
+
+> **La pista que sí lo delata, y hay que saber buscarla:** el post no resuelve. `scheduled_posts`
+> **no tiene columna `post_url`** [medido: sus 15 columnas son `id`, `brand_id`, `platform`,
+> `copy_text`, `image_url`, `status`, `scheduled_at`, `published_at`, `source_lab`,
+> `orchestrator_stage_label`, `platform_post_id`, `error_message`, `created_at`, `updated_at`,
+> `piece_id`], así que la comprobación es contra la red o contra el `platform_post_id` de esta tabla,
+> nunca contra el del registro de intentos.
+
+**Regla de lectura, y es la práctica:** para responder **«¿esto se publicó y con qué id?»** se
+consulta **`scheduled_posts`**. Para responder **«¿qué intentó el carril y por qué falló?»** se
+consulta **`brand_publish_drain_log`**. Preguntarle a uno lo que sabe el otro devuelve una respuesta
+con forma de dato correcto — que es la peor clase de respuesta equivocada.
+
+**Corolario, porque es el mismo defecto de familia que este catálogo ya registra dos veces:** «0
+filas» y «no existe» no son el mismo estado (2026-09-08), `NULL` y `0` tampoco (frente de costo,
+`AGENDA.md` v2026-09-09-v1), y **«un intento con desenlace `PUBLISHED`» y «una publicación viva»
+tampoco lo son.**
+
+### 🎓 Professor — `action=submit-learning` devuelve **500**, y la vía es el `INSERT` directo
+
+**Causa raíz declarada con evidencia:** la EF calcula un `relevance_score` **fuera del rango del
+`CHECK`**, que es **1 a 5**
+[medido el 2026-09-10: `pg_get_constraintdef` de `professor_learnings_relevance_score_check` →
+`CHECK (((relevance_score >= 1) AND (relevance_score <= 5)))`]. El `500` **no es del proxy**: es la
+base rechazando la fila.
+
+- **Fallback vigente:** `INSERT` directo en `public.professor_learnings` con `execute_sql`.
+- Concuerda con lo ya escrito en la cabecera v1.12: **el proxy `api/professor` sólo expone GET**, y
+  el checkpoint se siembra con SQL.
+
+### 🏷️ Estados de una pieza — **no existe `approved`**
+
+Aprobar **escribe `status = 'scheduled'`** y sella el **`approved_by`**. Los ocho estados válidos,
+y no hay más [medido el 2026-09-10: `pg_get_constraintdef` de `content_pieces_status_check`]:
+
+`draft` · `awaiting_approval` · `challenged` · `deferred` · `scheduled` · `published` · `failed` ·
+`rejected`
+
+**Por qué se escribe aquí:** buscar `approved` y no encontrarlo se lee como «la aprobación no se
+registró». Se registró: **está en `scheduled` con su `approved_by`**.
+
 ## MÉTODO DE MEDICIÓN — cuatro reglas, y la fuente es el protocolo (añadido 2026-09-09)
 
 **Fuente única: `protocols/MEASUREMENT_METHOD_RULE.md`** (respaldo:
@@ -243,12 +387,26 @@ _Se suma a las seis capacidades de arriba, que siguen vigentes sin cambio._
 | **Backfill de embeddings** *(ya declarada; se precisa el parámetro)* | Corrido sobre el **corpus completo**: cero piezas vivas sin embedding en 21 d. El **gate de duplicación deja de degradarse a LLM** | `content-watcher` **v44** · 🔴 el parámetro es **`days`**, **NO `window_days`** |
 | **Backfill de firma** | Repone la firma en piezas que el sistema no firmó. Resultado verificado: **23 de 23 vivas con firma, cero duplicadas** — el «cero duplicadas» es la mitad que importa, porque un backfill de firma mal hecho **firma dos veces** | 18 piezas corregidas · el arreglo de raíz es **SIGN-01**, en `content-run-stage` **v93** |
 
-> 🔴 **Lo que NO se puede invocar todavía, y hay que saberlo antes de intentarlo: publicar solo.**
-> El drenaje **da por publicada** una pieza con un `200` de SocialLab **sin verificar el efecto** —
-> **cero publicaciones automáticas reales hasta hoy** (**PUB-01**). El **cron 66
-> `content-placement-poll` está APAGADO** hasta que eso cierre. El carril **coloca**; todavía no se
-> puede afirmar que **publica**. Regla de lectura: **`HRD-R11` — el éxito se comprueba contra el
-> efecto, no contra el código HTTP.**
+> 🟢 **CORRECCIÓN 2026-09-09 — el cron 66 `content-placement-poll` está ACTIVO, no apagado.**
+> `*/15 * * * *`, `active = true` [medido el 2026-09-10:
+> `select jobid, jobname, schedule, active from cron.job` → jobid **66**, `*/15 * * * *`, `true`].
+> `AGENDA.md` v2026-09-06-v1 ya lo daba por activo: **este catálogo iba por detrás de la agenda**, y
+> es exactamente el defecto que la etiqueta de evidencia existe para evitar. **Lo que sigue vigente
+> del párrafo archivado abajo es la advertencia, no el estado:** el drenaje **da por publicada** una
+> pieza con un `200` del lab **sin verificar el efecto** (**PUB-01**), y la regla de lectura
+> **`HRD-R11` — el éxito se comprueba contra el efecto, no contra el código HTTP** no ha cambiado.
+> Con el cron encendido, la advertencia pesa **más**, no menos.
+
+> ⛔ **NO OPERATIVO — redacción anterior (2026-08-26), archivada el 2026-09-09 por medición.**
+> Se conserva por `CC_PROTOCOL.md` §0: la historia no se borra. **Su afirmación de estado quedó
+> vencida**; su advertencia sobrevive en el bloque verde de arriba.
+>
+> > 🔴 **Lo que NO se puede invocar todavía, y hay que saberlo antes de intentarlo: publicar solo.**
+> > El drenaje **da por publicada** una pieza con un `200` de SocialLab **sin verificar el efecto** —
+> > **cero publicaciones automáticas reales hasta hoy** (**PUB-01**). El **cron 66
+> > `content-placement-poll` está APAGADO** hasta que eso cierre. El carril **coloca**; todavía no se
+> > puede afirmar que **publica**. Regla de lectura: **`HRD-R11` — el éxito se comprueba contra el
+> > efecto, no contra el código HTTP.**
 
 > ⚠️ **Y una advertencia sobre el juicio de lo que sale:** el **texto adaptado por plataforma no pasa
 > por el juez** (`content-run-stage:3134-3136`). Verificado: `social.adapted` **reintrodujo una cita
@@ -316,7 +474,7 @@ Reglas de carga (qué skill con qué disparador): `skills/INDEX.md`. Siempre act
 | "Professor / anota / checkpoint" | learnings | mensaje de verificación HRD |
 
 Todas las HRD requieren el mensaje de verificación antes de ejecutar:
-> "Ok Sam, querés que [objetivo]. Para ello debo [pasos]. Correcto? Me faltan: [datos o 'ninguno — procedo']."
+> "Ok Sam, quieres que [objetivo]. Para ello debo [pasos]. ¿Correcto? Me faltan: [datos o 'ninguno — procedo']."
 
 ---
 
@@ -333,7 +491,7 @@ Cada archivo de un paquete de actualización se nombra con **prefijo de carpeta 
 
 ---
 
-_CAPABILITIES v1.4 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
+_CAPABILITIES v1.13 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
 
 ---
 

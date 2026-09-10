@@ -1,5 +1,350 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido]. **Adición 2026-09-10 — SERIE N, sección propia:** los identificadores `N05A`, `N07`, `N08`, `N10`, `N13`, `N14` y `N15` **no estaban en ningún context file**, y por eso un encargo que los nombrara era irresoluble. Ahora tienen registro con su estado medido. **N10 es lo urgente y empeora solo**: `intel.drain_due_slots` **no filtra por proveedor**, las franjas no drenables nunca alcanzan estado terminal y ocupan la cabeza de la cola —**544 filas acumuladas y 4 franjas atascadas, dos de ellas desde el 2026-09-08**—; al llegar a las 50 del techo, **la publicación se detiene sin un solo error**. **N14 no se reproduce**: ninguno de los dos `cron.job.command` lleva secreto en claro [medido con volcado redactado]. **N15 se abarata**: el tope ya vive en `platform_configs.char_limit`, así que es enrutar un dato que existe, no crearlo. **N07, N08 y N13 quedan declarados SIN CONTENIDO** — nombrados y sin definición en ninguna parte.)_
+
+---
+
+## 🗓️ ACTUALIZA 2026-09-09-v1 — Publicación fuera del carril, y dos EF de eje
+
+_(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSCF/session_log.md` y
+`brands/LucienSael/session_log.md` (2026-09-09).)_
+
+> **Professor cerrado ANTES del Actualiza** (orden `Professor → Actualiza → commit` respetado):
+> **16 learnings**, `session_date = 2026-09-09`, `checkpoint_number = 16`, `approved_by_sam = true`
+> [reportado — brief de Claude.ai, 2026-09-09]. **SMA no se consultó** — Sam no lo pidió.
+>
+> **Etiqueta de evidencia en todo este bloque.** Lo que CC pudo medir contra la fuente al escribirlo
+> va como `medido` con su consulta al lado; lo que viene del brief de Claude.ai y no se volvió a
+> medir aquí va como `reportado`, con quién lo afirma y cuándo. No hay afirmación sin etiqueta.
+
+### ✅ Cerrado hoy
+
+- ✅ **Carrusel del Proyecto de Ley 678 publicado en las dos redes de ForumPHs** —
+  Instagram `platform_post_id 18016965923948414` · Facebook `1184045168120977_122135449431355949`.
+  **Fuera del carril**, a mano y con aprobación de Sam [reportado — brief].
+  **Los dos identificadores quedan CONFIRMADOS contra el libro que manda** [medido el 2026-09-10]:
+  ambos están en **`public.scheduled_posts` con `status = 'published'`** —IG a las 18:52:56 UTC y FB
+  a las 20:10:40 UTC del 2026-09-09—, **no en `brand_publish_drain_log`**, que para ForumPHs no
+  registra ninguna fila de Meta en esas fechas: sólo `blog_forumphs` con `PROVIDER_NOT_DRAINABLE`.
+  Es la prueba, por partida doble, de que **la publicación no pasó por el carril**.
+- ✅ **`media-store` y `meta-graph-post` desplegadas y ACTIVE** en `amlvyycfepwhiindxgzw`
+  [medido con `list_edge_functions` y `get_edge_function` el 2026-09-10]. Las dos son **eje**:
+  el `grep` de marca sobre su código da **cero** — `media-store` recibe `bucket`, `path`,
+  `content_type`, `data_base64` y `upsert` por el cuerpo, y `meta-graph-post` resuelve las
+  credenciales por `brand_id` contra `public.meta_accounts` **en runtime**.
+- ✅ **Dos piezas de blog de ForumPHs y la primera de LucienSael, publicadas por marcado**
+  [reportado — brief]. Publicar, en el proveedor `vercel_html`, **es cambiar el estado**.
+- ✅ **Tres piezas de NeuroneSCF corregidas y pasadas a `scheduled`** — las que Sam marcó
+  `fixable` [reportado — brief].
+- ✅ **La duda sobre `vercel_html` queda cerrada: SÍ publica**, por **lectura** y no por drenaje.
+  `PROVIDER_NOT_DRAINABLE` **es correcto por diseño** para ese proveedor, no un defecto
+  [reportado — brief]. Lo que faltaba no era el drenaje: era quién cambia el estado.
+
+### 🔴 Frentes abiertos que este Actualiza deja anotados
+
+1. 🔴 **No existe promotor de blogs.** Ningún componente mueve una pieza de blog de `scheduled` a
+   `published` [reportado — brief]. **Debe nacer como eje**, resolviendo el canal por `brand_id`
+   contra el dato, nunca por una rama de condicional por marca (`protocols/MULTIBRAND_RULE.md`).
+2. 🔴 **Las reglas `blocking` del Watcher están inactivas — 14 de 69, todas con `active = false`**
+   [medido el 2026-09-10: `select severity, active, count(*) from intel.watcher_rules group by 1,2`
+   → `blocking/false = 14` · `warn/true = 54` · `warn/false = 1` · **total 69**]. La consecuencia se
+   dice entera: **hoy ninguna regla puede detener una pieza.** El juez marca; nada corta.
+   **Precisión de columna, para que no se repita el error de lectura:** la severidad vive en
+   **`severity`**, no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
+   `enforced_on = 'blocking'` devuelve **cero filas** y hace parecer que el problema no existe.
+3. 🔴 **No hay regla de registro gramatical en ninguna marca** [reportado — brief]. La propuesta,
+   **nombrada como propuesta y no como regla vigente**: una regla **de eje** que prohíba las formas
+   voseantes, con `verify_pattern`, aplicable **según el registro declarado de cada marca**, que es
+   dato. El registro es instancia; la regla, eje.
+4. 🔴 **La bandeja de calibración está incompleta — 16 piezas en `awaiting_approval`** que **no
+   aparecieron en ella** [medido el 2026-09-10: `UnrealvilleStudio` **7** (la más vieja del
+   2026-08-18) · `LucienSael` **6** (2026-07-31) · `ForumPHs` **3** (2026-08-22) — **16 en total**,
+   tres marcas]. La ausencia en la bandeja es **reportado — brief**; el censo de piezas es
+   **medido**. **Falta leer la consulta del orchestrator**: mientras no se lea, la causa está
+   **deducida**, no medida, y no se toca nada.
+5. 🔴 **Bucle del drenaje.** Las franjas de proveedor **no drenable** reintentan **cada 15 minutos
+   sin fin**. **Corrección de dato del brief, declarada:** el brief afirmaba **164 intentos**; la
+   medición da **192** — **96 en `blog` y 96 en `x` de LucienSael**, todos
+   `PROVIDER_NOT_DRAINABLE`, de las **00:00:03** a las **23:45:01 UTC** [medido el 2026-09-10:
+   `select brand_id, platform_key, outcome, count(*) from intel.brand_publish_drain_log where
+   run_at::date = '2026-09-09' group by 1,2,3`]. **96 es exactamente 24 h a `*/15`**: el bucle no
+   se agota ni se frena — corre el día entero a la cadencia del cron. Un `PROVIDER_NOT_DRAINABLE`
+   **correcto por diseño** no debería reintentarse indefinidamente.
+   **Y en la misma consulta apareció algo que el brief no traía:** `NeuroneSCF` / `meta_ig` con
+   `outcome = PUBLISH_FAILED` el 2026-09-09 a las **23:00:04 UTC**, un solo intento [medido]. La
+   causa **no se investigó en esta sesión** y queda anotada, no diagnosticada.
+6. 🔴 **Secreto literal en las dos EF nuevas.** En `media-store` y en `meta-graph-post` la constante
+   `SECRET` toma un **literal como fallback** de la variable `MEDIA_STORE_SECRET`
+   [medido: `index.ts` de las dos EF, línea 8 y línea 15 respectivamente — el valor **no se
+   transcribe aquí**, por la regla de secretos de `CLAUDE.md`]. El arreglo es **retirar el fallback**
+   y dejar la variable sola, con fail-loud si falta. **La variable ya se lee**: lo que sobra es el
+   literal.
+7. 🔴 **Dos libros mayores que discrepan — y ya tienen ÁRBITRO DECLARADO.**
+   `intel.brand_publish_drain_log` registra **INTENTOS**; `public.scheduled_posts` registra el
+   **ESTADO FINAL**. **Manda `scheduled_posts`.** No estaba escrito en ninguna parte y por eso se
+   podía leer el libro equivocado sin saberlo; queda escrito en `CAPABILITIES.md`.
+   **El caso medido que lo prueba** [medido el 2026-09-10, `platform_post_id` de las dos tablas]:
+   una misma publicación de **LucienSael** en `meta_fb` aparece con **dos identificadores
+   distintos** — `…_122118274185298889` en `drain_log` con `PUBLISHED` a las **15:15:14 UTC**, y
+   `…_122118277401298889` en `scheduled_posts` con `published` a las **16:31:33 UTC**. **Una hora y
+   dieciséis minutos, y dos ids para lo que se lee como un hecho.** El del `drain_log` corresponde a
+   un intento que **ya no existe en la red**; el vivo es el de `scheduled_posts`.
+   **Lo que sigue abierto** no es cuál manda —eso queda resuelto— sino **por qué el drenaje escribe
+   un id que después deja de ser el bueno**, y si el primero se borró a mano o lo reemplazó el
+   propio carril. Eso **no se investigó** y queda anotado, no diagnosticado.
+
+   > ⛔ **NO OPERATIVO — redacción anterior de este punto (2026-09-09), archivada el 2026-09-10.**
+   > Se conserva por `CC_PROTOCOL.md` §0. Nombraba la tabla equivocada y no tenía árbitro:
+   >
+   > > 🔴 **Dos libros mayores que discrepan.** `scheduled_posts` registró una publicación que
+   > > `brand_publish_slots` **no reflejó** [reportado — brief]. Dos registros del mismo hecho que no
+   > > coinciden **no son un dato con un error: son dos fuentes sin árbitro declarado.**
+   >
+   > **Qué cambió y por qué:** la discrepancia **no es con `brand_publish_slots`** sino con
+   > `intel.brand_publish_drain_log`, y **ya no está sin árbitro**: manda `scheduled_posts`. La
+   > afirmación vieja era `reportado`; la nueva es `medido`, con los dos identificadores al lado.
+8. 🔴 **El hueco de la instrumentación de costo NO se cerró: CRECIÓ.**
+   [medido el 2026-09-10 sobre `public.ops_generation_ledger`]:
+
+   | Alcance | Registros | `cost_usd = 0` | `rate_source` vacío |
+   |---|---|---|---|
+   | `generated_at >= 2026-08-25` | **1.875** | **433** | — |
+   | Tabla entera | **4.878** | **704** | **132** |
+
+   Sam midió **4.791 / 690** y **1.788 / 419** unas horas antes: las dos mediciones coinciden en
+   magnitud y **la diferencia entre ambas es el crecimiento**. Con `$0,0681` por pieza publicada
+   declarado como coste del carril desde el 2026-07-31, **una de cada siete filas del ledger no
+   sostiene esa cifra**.
+
+   > 🔴 **LA TRAMPA DE LA CONSULTA, escrita para que no vuelva a pasar.** `cost_usd` **NUNCA es
+   > `NULL`**: hay **0 nulos y 704 ceros** [medido]. Una consulta que pregunte por
+   > `cost_usd IS NULL` devuelve **cero** y **parece que no hay hueco**. Es la misma familia de
+   > defecto que el 2026-09-08 dejó escrito como «"0 filas" y "no existe" no son el mismo estado»,
+   > en otra forma: **`NULL` y `0` tampoco lo son.** Filtrar `cost_usd > 0` antes de contar los
+   > ceros produce el mismo espejismo.
+
+   **Este frente está ABIERTO y no se cierra en este Actualiza.** Ninguna entrada de `AGENDA.md`
+   lo declara resuelto — se verificó con un barrido antes de escribir esto.
+9. 🔴 **Rotación de `AGENDA.md`** — decisión de Sam, con su propia sección al final de este bloque.
+
+### 🟡 Corrección de estado que este Actualiza aplica a `CAPABILITIES.md`
+
+- 🟡 **El cron 66 `content-placement-poll` NO está apagado: está ACTIVO, `*/15 * * * *`**
+  [medido el 2026-09-10 — `select jobid, jobname, schedule, active from cron.job` → jobid 66,
+  `*/15 * * * *`, `active = true`]. `CAPABILITIES.md` lo declaraba **APAGADO** desde el 2026-08-26,
+  y `AGENDA.md` v2026-09-06-v1 ya lo daba por activo: **el catálogo iba por detrás de la agenda**.
+  El texto anterior queda archivado bajo guard `⛔ NO OPERATIVO`, no borrado.
+
+### 🟦 DECISIÓN PARA SAM — rotación de `AGENDA.md`
+
+**No es una tarea: es una decisión.** Este Actualiza **no rota nada**; deja el dato medido y la
+propuesta escrita **como propuesta**.
+
+| Archivo | Tamaño | Medido el 2026-09-10 |
+|---|---|---|
+| `AGENDA.md` | **365.851 b** | **2.526 líneas** · **49** encabezados `##`, de los cuales **29** son bloques fechados `## 🗓️` · **2** guards `⛔ NO OPERATIVO` |
+| `historical_AGENDA.md` | **113.988 b** | archivo de rotación |
+
+> **Corrección de dato del brief, declarada.** El brief de Claude.ai afirmaba **19 bloques `##`**;
+> el conteo contra el archivo da **49** en total y **29** fechados
+> [medido: `grep -c '^## ' AGENDA.md` → 49 · `grep -c '^## 🗓️' AGENDA.md` → 29]. El tamaño, las
+> líneas y los dos guards del brief **sí coinciden**. La corrección **refuerza** el argumento en
+> vez de debilitarlo: hay más bloque acumulado del declarado, no menos.
+
+**El dato, en una línea:** la AGENDA operativa es **3,2 veces más grande que su propio archivo
+histórico**. La rotación existe y **no se está usando al ritmo al que la AGENDA crece**. Con 365 KB
+ninguna sesión la lee entera —hoy se cargó completa y se leyeron sólo los bloques del tope— y
+**una AGENDA que no se lee entera deja de ser una agenda**.
+
+**Propuesta, para decisión de Sam, y NO incluida en este PR:** rotar a `historical_AGENDA.md` los
+bloques cerrados anteriores al **2026-08-01**, **preservando íntegro el texto**, y dejar en
+`AGENDA.md` un índice de **una línea por bloque rotado**, con su fecha. Es un **PR aparte**,
+posterior a este.
+
+## 🔷 SERIE N — los encargos nominados, y su estado. **REGISTRO ABIERTO**
+
+_(Sección nueva 2026-09-10. **Motivo, dicho por Sam:** «N05A, N07, N08, N10, N13 y N14 no están en
+ningún context file y por eso no los pudiste resolver». Un identificador con forma de encargo vigente
+**se lee como encargo vigente**; si no existe en ningún archivo, quien lo recibe **no puede
+resolverlo y debe pararse**. Esta sección cierra ese hueco: de aquí en adelante, **un encargo que no
+esté acá no es ejecutable**.)_
+
+> **Cómo se lee esta tabla.** `medido` significa que la consulta está al lado y se ejecutó al
+> escribir esto. `reportado` significa que lo afirma Sam o un brief, con quién y cuándo.
+> **`SIN CONTENIDO` significa exactamente eso: el identificador existe y su encargo no está escrito
+> en ninguna parte.** No es una tarea pequeña ni una tarea olvidada: es una tarea que **nadie puede
+> ejecutar**, y se nombra así para que no vuelva a circular como si estuviera definida.
+
+| ID | Estado | Qué es | Evidencia |
+|---|---|---|---|
+| **N05A** | 🟡 abierto, **corregido antes de ejecutarse** | Retirar `approval_calibration_piece_id_key`. Su **tercer tiempo** decía `DROP CONSTRAINT` y **fallaría**: es un **`UNIQUE INDEX`**, se retira con **`DROP INDEX`** | **medido** 2026-09-10 |
+| **N07** | ⬛ **SIN CONTENIDO** | — | nombrado por Sam; sin definición en ningún archivo |
+| **N08** | ⬛ **SIN CONTENIDO** | — | nombrado por Sam; sin definición en ningún archivo |
+| **N10** | 🔴 **abierto y EMPEORA solo** | La fuga del drenaje. Detalle completo abajo | **medido** 2026-09-10 |
+| **N13** | ⬛ **SIN CONTENIDO** | — | nombrado por Sam; sin definición en ningún archivo |
+| **N14** | 🟢 **su premisa NO se reproduce** | «el secreto sigue en claro en los dos `cron.job.command`». **Medido: no lo está en ninguno** | **medido** 2026-09-10 |
+| **N15** | 🟡 abierto, **y este Actualiza lo abarata** | El tope de caracteres viaja al escritor en `builder_input` | **medido** — el dato ya existe |
+
+---
+
+### 🔴 N10 — la fuga del drenaje. Es lo único que empeora solo mientras nadie mira
+
+**Repo:** `unrealvillestudio-hub/unrlvl-iid-functions`.
+
+**La causa raíz, con su consulta** [medido el 2026-09-10 con `pg_get_functiondef`]:
+
+```sql
+CREATE OR REPLACE FUNCTION intel.drain_due_slots(p_limit integer) ... AS $function$
+  SELECT s.id, s.brand_id, s.platform_key, s.slot_at, s.piece_id
+    FROM intel.brand_publish_slots s
+   WHERE s.status = 'reserved' AND s.slot_at <= now() AND s.piece_id IS NOT NULL
+   ORDER BY s.slot_at ASC
+   LIMIT GREATEST(0, COALESCE(p_limit, 0)) FOR UPDATE SKIP LOCKED
+$function$
+```
+
+**No hay filtro de proveedor.** Y una franja de canal **no drenable** nunca alcanza estado terminal
+—`PROVIDER_NOT_DRAINABLE` deja la franja **INTACTA** a propósito, y es correcto por diseño—, así que
+el RPC **la vuelve a seleccionar cada quince minutos**. Como el orden es `slot_at ASC` y las
+atascadas son las **más viejas**, ocupan **la cabeza de la cola** en cada pasada.
+
+**El estado medido hoy** [2026-09-10]:
+
+| Qué | Valor |
+|---|---|
+| Filas `PROVIDER_NOT_DRAINABLE` acumuladas | **544** (Sam midió **532** horas antes: **crece**) |
+| Franjas vencidas y reservadas sin resolver | **4** |
+| Lo que devuelve `intel.drain_due_slots(200)` | **4** — las mismas |
+| `DRAIN_SAFETY_CEILING` en `content-scheduler` | **50** |
+
+**Las cuatro atascadas son EXACTAMENTE de proveedor no drenable** [medido, con su `provider`]:
+
+| Marca · canal | `provider` | Vencida desde |
+|---|---|---|
+| LucienSael · `x` | `x_api` | **2026-09-08 13:00 UTC** |
+| LucienSael · `blog` | `vercel_html` | **2026-09-08 14:00 UTC** |
+| LucienSael · `tiktok` | `tiktok_business` | 2026-09-10 00:00 UTC |
+| ForumPHs · `blog_forumphs` | `vercel_html` | 2026-09-10 15:00 UTC |
+
+**Las dos primeras llevan más de dos días en la cabeza de la cola.**
+
+> 🔴 **Por qué esto es lo urgente y no una molestia de registro.** Hoy son **4 contra un techo de
+> 50**: la publicación **todavía no se ha detenido**. Pero las atascadas **sólo se acumulan** —nada
+> las saca— y **cuando lleguen a 50 la publicación se detiene SIN UN SOLO ERROR**: el drenaje
+> devolverá su techo lleno de franjas que no puede publicar, y ninguna franja publicable entrará en
+> la ventana. **No hay alerta que salte, porque nada falla.** Es la peor forma de un fallo: el
+> sistema informa que trabajó.
+
+**Los tres cambios, en orden** [reportado — Sam, 2026-09-10]:
+
+1. **El RPC salta lo no drenable** — el filtro de proveedor entra en `intel.drain_due_slots`.
+2. **`publish-slot-reserver` no reserva donde no hay proveedor** — deja de crear el problema.
+3. **Las atascadas se sacan a mano, una vez** — nacieron antes del arreglo y ninguno de los dos
+   cambios anteriores las alcanza.
+
+**Orden y motivo:** el 1 y el 2 son **código y DDL**; el 3 es **una escritura en producción sobre
+franjas concretas** y, por `DELIVERY_AND_VERIFICATION_RULE` §2.3-ter, **se declara y se decide
+aparte**, con las cuatro franjas nombradas por su identificador. **No se ejecuta el 3 antes que el
+1**: sacarlas a mano con el RPC todavía sin filtro las deja volver.
+
+---
+
+### 🟢 N14 — la premisa no se reproduce, y por eso NO se toca
+
+**Lo declarado:** «el secreto está rotado pero **sigue en claro en los dos `cron.job.command`**».
+
+**Lo medido el 2026-09-10**, con el volcado **redactado** (la regla de secretos de `CLAUDE.md` se
+respeta: no se transcribe ningún valor, sólo se afirma su ausencia):
+
+| jobid | Trabajo | JWT en claro | Secreto en claro | Lee de Vault |
+|---|---|---|---|---|
+| **66** | `content-placement-poll` | **no** | **no** | no lo necesita |
+| **79** | `publish-slot-reserver-daily` | **no** | **no** | **sí** |
+
+- **El jobid 66 no lleva ningún secreto**: su comando entero es
+  `SELECT intel.trigger_iid_agent('content-scheduler', '{"mode":"placement"}'::jsonb);` — **83
+  caracteres**, una llamada a una función de la propia base. **Nunca tuvo uno que rotar.**
+- **El jobid 79 ya lee de Vault**:
+  `(SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'slot_reserver_secret')`.
+  **Es la migración que `ecosystem.json` ya declaraba hecha el 2026-09-06**, y sigue hecha.
+
+**Conclusión, y es la que ahorra el trabajo:** **no hay nada que migrar a Vault en `cron.job`.** El
+patrón que N14 viene a cerrar **ya está cerrado ahí**. Si queda un secreto en claro en otro sitio
+—`intel.iid_scheduler_config` lo tuvo—, **ese es otro encargo y necesita su propia medición**: N14,
+tal como está enunciado, **está satisfecho**.
+
+---
+
+### 🟡 N15 — el tope va al escritor, y el hallazgo de hoy lo abarata
+
+**La decisión de Sam, y es la correcta:** **el límite se le da al escritor, no se bloquea al final.**
+Viaja en `builder_input` desde el registro de tipos, igual que `max_tokens`, y **es dato por canal**
+—nunca constante—. La regla del Watcher es **la red, no la puerta**: verifica, y **si salta a menudo
+significa que el techo no está llegando**.
+
+**Lo que este Actualiza le ahorra a N15** [medido el 2026-09-10]: el tope **ya vive en el dato**, en
+`public.platform_configs.char_limit`, sembrado y correcto —`meta_ig` **2.200**, `x` **280**—. Así que
+**N15 no es crear el dato: es ENRUTAR uno que ya existe** hasta `builder_input`. Es una tarea
+notablemente más pequeña de lo que parecía.
+
+> 🔴 **Y hay una contradicción que N15 tiene que resolver, porque hoy nadie la concilia**
+> [medido]: `content_type_registry.max_tokens` da **900 tokens** (≈3.600 caracteres) para `x`,
+> cuyo `char_limit` es **280**. **Al escritor se le autoriza unas trece veces lo que el canal
+> acepta**, en dos tablas distintas y en dos unidades distintas. Mientras eso siga así, la red del
+> Watcher va a saltar **siempre** en `x` — que es precisamente la señal que Sam describe: *«si salta
+> a menudo, el techo no está llegando»*.
+
+**La división de trabajo queda declarada:** **la puerta es el escritor (N15); la red es el drenaje
+(`unrlvl-iid-functions` PR #141).** No compiten y no se sustituyen: la puerta evita producir lo que
+no cabe, la red evita publicarlo si se produjo igual.
+
+---
+
+### ⬛ N07 · N08 · N13 — nombrados y sin definición
+
+**No están escritos en ningún archivo del repo** [medido el 2026-09-10: barrido sobre los 161
+`.md`/`.json` versionados → cero apariciones de `N07`, `N08` y `N13` fuera de esta tabla].
+
+**Qué se hace con ellos, y es una regla, no una queja:** un encargo que los nombre **se detiene y se
+reporta**, exactamente como un `str_replace` que no matchea (`CC_PROTOCOL.md` §0) o un brief sin el
+test de la marca N+1 (`MULTIBRAND_RULE` §7.2). **No se deducen del contexto ni se reconstruyen de
+memoria**, porque un encargo reconstruido de memoria es indistinguible de uno inventado.
+
+**Para cerrarlos hace falta, de Sam, lo mínimo de cada uno:** qué hace, **en qué repo vive**, y qué
+lo da por terminado.
+
+---
+---
+
 _Actualizada: 2026-09-09 · v2026-09-08-v2 (**HRD_ACTUALIZA 2026-09-08 — LA PUBLICACIÓN DEJA DE SER UNA PROMESA, Y EL PATRÓN RAÍZ TIENE NOMBRE: EL ESCALÓN EQUIVOCADO.** Sesión del 2026-09-07/08, ejecutada por CC el **2026-09-09**. **La primera pieza publicada sola por el ecosistema**: `LucienSael` / `meta_fb`, `platform_post_id` **`1076134175585218_122118274185298889`**, `published_at` **2026-09-08 15:15:14 UTC** [medido en `intel.brand_publish_drain_log`]. Para llegar ahí hubo que tirar **tres muros encadenados** —alias `social-lab-flame` muerto en el respaldo · guarda anti-doble-publicación contando filas terminales como vivas · SocialLab leyendo con clave anónima sin `SELECT`— y cada uno **tapaba al siguiente** (PR **#136**; SocialLab PR **#4**; barredor PR **#137**, `ezbr_sha256` **`08173f9a…0a2e7e5b`** [medido]). **Cerrado además:** tokens de composición de NeuroneSCF remapeados —**42 de 42 piezas de la marca compuestas** [medido]— · catálogo de oferta al escritor, `intel.brand_topics.offer_selector` **sembrado en 8 filas de una marca** [medido] · `HR-GEN-11`, `-12` y `-13` activas, `warn`, `brand_id = NULL` → **54 reglas activas de 69** [medido] · `visual_directive` **en 3 de 52 dominios** [medido] · wordmark y favicon de ForumPHs en el blog (`forumphs-com` PR **#10**). **Gobernanza:** `protocols/MEASUREMENT_METHOD_RULE.md` creado (#82) y corregido el mismo día (#83) cuando se midió que la cabecera `x-deny-reason` **no existe** — una regla que manda leer algo que nadie emite no se puede cumplir. **CUATRO CIFRAS DEL BRIEF CORREGIDAS POR MEDICIÓN, y una de ellas es urgente:** (1) la fuga de N10 **no está en 76 filas: está en 134**, y **24 de ellas cayeron en las últimas tres horas** sobre **sólo 2 franjas** [medido `now()` 2026-09-09 06:12 UTC] — sigue viva mientras se escribe esto; (2) `content_pieces.post_url` de la pieza publicada está **en `NULL`**: el identificador vive en el log de drenaje y **no en la pieza**; (3) `approval_calibration_piece_id_key` **no es una constraint sino un UNIQUE INDEX** —`DROP CONSTRAINT` fallaría—; (4) el hueco de costos del ledger **no se reproduce**: **4.791 registros, cero sin costo y cero sin modelo**, con 690 a costo cero y 132 sin `rate_source` [medido]. **Abre, con orden:** N05A (el veredicto deja de sellar) · N12 cambio 2 (**#138**, mergea DESPUÉS de la publicación del 09-09 16:00 UTC) · N12 cambio 3 · **N10, que es lo urgente** · N07 · N13 · N08 congelado · y la rotación del secreto de barrido, hecha por Sam, con la revisión de `cron.job.command` pendiente.)_
+
+> ⛔ **CORRECCIÓN POSTERIOR — 2026-09-10, aplicada al integrar este bloque con `main`.**
+> **La cabecera de arriba se conserva ÍNTEGRA y no se reescribe** (`CC_PROTOCOL.md` §0). Lo que
+> sigue corrige **dos de sus cuatro cifras** y actualiza una tercera. La cuarta —el `UNIQUE INDEX`—
+> **era correcta y se confirma**: 0 en `pg_constraint`, 1 en `pg_indexes` [medido 2026-09-10].
+>
+> **1 · El `platform_post_id` citado es el del INTENTO, no el de la publicación viva.**
+> `1076134175585218_122118274185298889` sale de `intel.brand_publish_drain_log`, que registra
+> **intentos**. La fila viva está en `public.scheduled_posts` con
+> **`1076134175585218_122118277401298889`**, `published` a las **16:31:33 UTC** — **1 h 16 min
+> después** [medido 2026-09-10]. **El primero corresponde a un post que ya no existe en la red**
+> [reportado — Sam, 2026-09-10: lo borró él]. La fila del `drain_log` dice `PUBLISHED` y **no hay
+> nada en ella que delate que su identificador caducó**. La regla que sale de aquí —**`drain_log`
+> registra intentos, `scheduled_posts` registra el estado final, y manda `scheduled_posts`**— vive
+> en `CAPABILITIES.md` desde la v1.14. Lo demás del punto (2) **se sostiene**: `content_pieces`
+> **sí** tiene columna `post_url` y estaba en `NULL` — y ese `NULL` era justamente la pista.
+>
+> **2 · El hueco de costos SÍ se reproduce. La consulta preguntó por `NULL` y la tabla tiene CEROS.**
+> «4.791 registros, cero sin costo y cero sin modelo» es correcto **sólo si se mide `IS NULL`**.
+> Medido el 2026-09-10 sobre `public.ops_generation_ledger`: **`cost_usd` NUNCA es `NULL` — 0 nulos
+> y 704 CEROS**, sobre **4.878** registros; desde el 2026-08-25, **433 de 1.875**. **El frente está
+> abierto y creciendo**, no cerrado. Es la misma familia de defecto que este archivo ya registró el
+> 2026-09-08 —«0 filas» y «no existe» no son el mismo estado—: **`NULL` y `0` tampoco lo son.**
+>
+> **3 · N10 ya no está en 134: está en 544** [medido 2026-09-10], y **su causa raíz está confirmada
+> y escrita** en la sección `SERIE N` de este mismo archivo: `intel.drain_due_slots` **no filtra por
+> proveedor**. Las **4** franjas atascadas son **exactamente** de proveedor no drenable, y dos llevan
+> **desde el 2026-09-08** en la cabeza de la cola. La cifra de la cabecera **era correcta cuando se
+> midió**; se actualiza porque el frente sigue vivo, que es justo lo que aquella medición anunciaba.
 
 > **Cabecera anterior (`v2026-09-08-v1`) conservada íntegra e inmediatamente debajo.** Esta versión
 > es **`-v2`** y no `-v1` como pedía el brief: `v2026-09-08-v1` **ya existe** —la creó el PR **#81**
@@ -2598,7 +2943,7 @@ Consolida #35 + #39. Resolver duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE
 
 ## ✅ Resuelto recientemente
 
-> **📁 ARCHIVO HISTÓRICO.** Los ítems **completados hace más de 30 días y sin referencias activas** se mueven a **`historical_AGENDA.md`** (raíz del repo). El barrido corre en **cada Actualiza** (HRD_PROTOCOL §HRD_ACTUALIZA paso 10) y **siempre se propone a Sam antes de mover nada**. Si buscás un ítem cerrado que no aparece acá, está allá con su texto íntegro. El tamaño de este archivo NO es criterio de archivado: si todo está pendiente, no se archiva nada.
+> **📁 ARCHIVO HISTÓRICO.** Los ítems **completados hace más de 30 días y sin referencias activas** se mueven a **`historical_AGENDA.md`** (raíz del repo). El barrido corre en **cada Actualiza** (HRD_PROTOCOL §HRD_ACTUALIZA paso 10) y **siempre se propone a Sam antes de mover nada**. Si buscas un ítem cerrado que no aparece aquí, está allá con su texto íntegro. El tamaño de este archivo NO es criterio de archivado: si todo está pendiente, no se archiva nada.
 >
 > **"Sin referencias activas" — aclarado 2026-08-06 (def. completa en `historical_AGENDA.md`).** *Referencia activa* = dependencia viva: un ítem ABIERTO/pendiente que depende del candidato, o estado vivo en `ecosystem.json` (tabla/EF/vista/campo que existe hoy), o una mención en `AGENDA.md` **fuera de la zona de completados**. Una mención en un `session_log.md` fechado **NO** cuenta — es historia append-only. (Sin esta aclaración, cualquier mención en un log retendría todo para siempre.)
 - ✅ **Cierre 2026-08-16 — Scheduler, snapshots, queue y canónico de `CLAUDE.md` (4 ítems, todos por VÍA ALTERNA · condición 4 de `skills/context-resolver/SKILL.md` §2).**

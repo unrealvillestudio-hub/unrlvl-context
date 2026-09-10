@@ -33,7 +33,7 @@ El lector escanea antes de leer, y en el escaneo decide si lee.
 - No nominalices: "decidimos", no "tomamos la decisión de". La nominalización
   convierte acción en cosa y borra al sujeto.
 - No uses pasiva salvo que esconder al responsable sea deliberado.
-- Borrá el andamiaje: realmente, básicamente, simplemente, es importante destacar,
+- Borra el andamiaje: realmente, básicamente, simplemente, es importante destacar,
   cabe mencionar, en cierto sentido, un poco. Si al borrarlo la frase pierde
   sentido, no era andamiaje.
 - No repitas una palabra por falta de vocabulario. Repetir una estructura es

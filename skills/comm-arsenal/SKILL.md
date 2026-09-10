@@ -57,7 +57,7 @@ La estructura es el **orden de los movimientos**, no un molde de frases. Elegir 
 | **Problema-Reencuadre-Solución** | Problema tal como lo ve el lector → el problema **real** que no había visto → solución | B2B, decisores, cualquier caso donde la venta es de CRITERIO | Cuando el lector ya tiene el encuadre correcto: suena a corrección innecesaria |
 | **Diagnóstico** | Síntoma → causa mecánica → secuencia correcta → dónde entra el producto (tarde) | Voz educativa/autoridad; producto que necesita comprensión previa | Piezas de impulso: el diagnóstico enfría |
 | **Story-Lección-Aplicación** | Escena concreta → qué revela → qué hace el lector con eso | Voz personal, editorial, oratoria | Cuando la historia no es propia ni verificable |
-| **Objeción-Primero** | Nombrar la resistencia real → desactivarla → recién entonces proponer | Audiencia escéptica o quemada por la categoría | Audiencia fría que no tiene todavía objeción: se la instalás |
+| **Objeción-Primero** | Nombrar la resistencia real → desactivarla → recién entonces proponer | Audiencia escéptica o quemada por la categoría | Audiencia fría que no tiene todavía objeción: se la instalas |
 
 **La estructura ordena los MOVIMIENTOS; jamás dicta las FRASES. Si dos piezas comparten estructura, deben ser irreconocibles entre sí.**
 
@@ -149,7 +149,7 @@ De más fuerte a más débil. **Usar siempre el escalón más alto disponible**;
 
 | Técnica | Cómo se ejecuta | Cuándo | Cómo falla |
 |---|---|---|---|
-| **Objeción anticipada** | Nombrarla antes que el lector y desactivarla con prueba | Audiencia escéptica o quemada | Si la objeción no existía, **la instalás**. Regla de `voice-craft` §1.4: no aclarar lo no preguntado |
+| **Objeción anticipada** | Nombrarla antes que el lector y desactivarla con prueba | Audiencia escéptica o quemada | Si la objeción no existía, **la instalas**. Regla de `voice-craft` §1.4: no aclarar lo no preguntado |
 | **Reencuadre de la objeción** | Mostrar que la objeción responde a una premisa equivocada | Cuando la objeción es de encuadre, no de hecho | Si la premisa sí era correcta, suena a evasión |
 | **Concesión + pivote** | Conceder lo cierto, girar a lo que importa | Objeción parcialmente válida | Conceder de más: el pivote no alcanza a recuperar |
 | **Prueba directa** | Contestar con el escalón más alto de §4.1 | Objeción factual | — |

@@ -52,7 +52,7 @@ Destilados de 4 calibraciones. Aparecen repetidamente y son transversales a todo
 - **Falso binario con remate reflexivo inmediato:** si se abre con "hay dos tipos de…", rematar con la pregunta-espejo ("¿cuál de las dos eres tú?") que no espera respuesta. (NSCF)
 
 ### F · Regla dura anti-invención
-- **Nunca inventar; si no sabés, preguntá o buscá en la DB.** El generador debe leer el conocimiento REAL de la marca (product_blueprints, brand_services). founder_axis = dirección de voz (hipótesis), NO cuerpo de conocimiento. (D7H t3-t4-t6: inventó Serenoa repens/Ortiga/Ginkgo/glicerina, todos vetados; NSCF `prescription_substance_rule`)
+- **Nunca inventar; si no sabes, pregunta o busca en la DB.** El generador debe leer el conocimiento REAL de la marca (product_blueprints, brand_services). founder_axis = dirección de voz (hipótesis), NO cuerpo de conocimiento. (D7H t3-t4-t6: inventó Serenoa repens/Ortiga/Ginkgo/glicerina, todos vetados; NSCF `prescription_substance_rule`)
 
 ### G · Variación técnica con voz constante (el techo de producción)
 - **La voz es constante; la técnica varía pieza a pieza, sin reincidir.** Requiere MEMORIA de lo ya generado. Sin memoria, el generador repite la misma técnica y colapsa la voz en fórmula. (NSCF `technique_variation_rule`; Tratado §6)

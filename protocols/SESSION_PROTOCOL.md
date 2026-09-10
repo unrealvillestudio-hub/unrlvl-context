@@ -45,7 +45,7 @@ Los context files **nunca se reemplazan** — se actualizan preservando historia
 `https://unrlvl-context.vercel.app/protocols/HRD_PROTOCOL.md`
 
 Toda HRD se ejecuta paso a paso, con mensaje de verificación obligatorio antes de actuar:
-> "Ok Sam, querés que [objetivo]. Para ello debo [pasos intermedios implícitos, breve]. Correcto? Me faltan: [datos o 'ninguno — procedo']."
+> "Ok Sam, quieres que [objetivo]. Para ello debo [pasos intermedios implícitos, breve]. ¿Correcto? Me faltan: [datos o 'ninguno — procedo']."
 
 ### HRDs activas — mapa rápido
 
@@ -213,7 +213,7 @@ Claude llama `professor-checkpoint` EF. Solo score = 5 genera output visible: `[
 **Skill:** `skills/ecosystem-auditor/SKILL.md` — cargarlo y leerlo antes de ejecutar.
 
 **Pregunta obligatoria antes de cualquier paso:**
-> *"¿Lo querés identificativo (qué hay y dónde, sin leer código) o contextual (leer y entender TODO el código, relaciones y estado real)?"*
+> *"¿Lo quieres identificativo (qué hay y dónde, sin leer código) o contextual (leer y entender TODO el código, relaciones y estado real)?"*
 
 El alcance cubre: Context System · Vercel · GitHub repos · Supabase (tablas, EFs, schemas) · Labs · Marcas · Agents · Skills · Tools.
 

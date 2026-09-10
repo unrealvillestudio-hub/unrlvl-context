@@ -34,6 +34,49 @@ _Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa:
 > (`CC_PROTOCOL.md` §0).
 
 
+> **Nota de sincronización — HRD_ACTUALIZA 2026-09-09 (`ecosystem.json` v2026-09-06-v1 → **v2026-09-09-v1**).**
+> **Este archivo se SINCRONIZA, no se regenera, y el cuerpo previo queda íntegro.**
+>
+> **Nodos que cambiaron en el JSON, y NADA MÁS:**
+>
+> 1. **`_meta`** — `version` → **`2026-09-09-v1`**, `previous` → `2026-09-06-v1`, `previous_chain`
+>    con `2026-09-06-v1` al tope, el `last_session` anterior (**2026-09-06**) **archivado íntegro**
+>    en `previous_sessions` —que pasa de **18 a 19**— sin reescribir su texto, y el `last_session`
+>    nuevo del **2026-09-09**. Clave nueva `_actualiza_2026-09-09-v1` con el detalle.
+> 2. **`supabase.main.edge_functions`** — clave nueva **`key_changes_2026-09-09`** con las **dos EF
+>    nuevas**, y el contador **`total_active` corregido de 109 a 111** con su clave
+>    **`_total_active_correccion_2026-09-09`**, que declara por qué se corrigió.
+>
+> **Las dos EF, por lo que HACEN y no por quién las pidió primero** [medido con
+> `list_edge_functions` y `get_edge_function` el 2026-09-10]:
+>
+> - **`media-store`** — v1.2 en el código, deploy version **3**, `ACTIVE`, `verify_jwt:false`.
+>   Guarda bytes en un bucket de Storage y devuelve la URL pública. `bucket`, `path`,
+>   `content_type`, `data_base64` y `upsert` entran **por el cuerpo**; autenticación por cabecera
+>   `x-store-secret`. **Ninguna marca, dominio ni jurisdicción cableada.** Storage **rechaza** la
+>   credencial de formato `sb_secret_` con `Invalid Compact JWS`, así que la EF elige la primera
+>   variable cuyo valor empiece por `eyJ`.
+> - **`meta-graph-post`** — v1.1 en el código, deploy version **2**, `ACTIVE`, `verify_jwt:false`.
+>   Publicación **multi-imagen en una PÁGINA DE FACEBOOK**. `brand_id`, `message`, `image_urls[]`,
+>   `published` y `graph_version` entran por el cuerpo; **`page_id` y `system_token` se resuelven
+>   por `brand_id` contra `public.meta_accounts` EN RUNTIME**. Subir una foto con `published=false`
+>   **exige token de página**, que se canjea en `/{page_id}?fields=access_token`.
+>   **Precisión de alcance:** **no** publica en Instagram — el carrusel de IG del 2026-09-09 salió
+>   por la vía de contenedores del MCP de Meta, que es otra ruta.
+>
+> 🔴 **Defecto abierto que las dos comparten:** el secreto tiene un **literal como fallback** de la
+> variable `MEDIA_STORE_SECRET`. El valor **no se transcribe en este repo** (regla de secretos de
+> `CLAUDE.md`); el arreglo es retirar el fallback y fallar en voz alta si la variable falta.
+>
+> **Por qué esto es una nota y no una regeneración:** **no existe generador en el repo**, así que
+> «regenerar» a mano no es regenerar — es **reescribir con interpretación**, justo lo que la
+> instrucción «cero interpretación» busca impedir, y **borra historia** (`protocols/CC_PROTOCOL.md`
+> §0). Este archivo lleva además **cuerpo acumulado que no es derivable del JSON** —flujos, tablas
+> de estado y notas fechadas—: una regeneración literal lo vaciaría. Es **la regla escrita en
+> `CLAUDE.md`** desde el 2026-08-23, no una excepción. **Nota de sincronización en la cabecera,
+> cuerpo íntegro, en commit separado.** La regeneración real sigue abierta **sin fecha** en
+> `AGENDA.md`.
+
 > **Nota de sincronización — HRD_ACTUALIZA 2026-09-02 (`ecosystem.json` **sin bump: sigue en `2026-08-30-v1`**).**
 > **Este archivo se SINCRONIZA, no se regenera, y el cuerpo previo queda íntegro.** No existe generador en
 > el repo: «regenerar» a mano no es regenerar — es **reescribir con interpretación**, justo lo que la
