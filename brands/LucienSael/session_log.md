@@ -28,6 +28,28 @@ cadencia sin ejecutor no es una cadencia — es un recordatorio.
 dato, nunca con una rama de condicional por marca (`protocols/MULTIBRAND_RULE.md`). Que hoy lo
 pidan LucienSael y ForumPHs **no lo vuelve suyo**.
 
+### 🔴 Una publicación de esta marca tiene DOS identificadores, y el de uno de los libros está muerto
+
+Medido el 2026-09-10 buscando el mismo hecho en las dos tablas:
+
+```
+intel.brand_publish_drain_log →  1076134175585218_122118274185298889   PUBLISHED   2026-09-08 15:15:14 UTC
+public.scheduled_posts        →  1076134175585218_122118277401298889   published   2026-09-08 16:31:33 UTC
+```
+
+**Una hora y dieciséis minutos, y dos ids.** El del `drain_log` corresponde a un intento que **ya no
+existe en la red**; el vivo es el de `scheduled_posts`. La fila del `drain_log` dice `PUBLISHED` y
+**no hay nada en ella que delate que su id caducó**.
+
+**De aquí sale una regla que faltaba en el ecosistema y ya está escrita** en `CAPABILITIES.md` v1.14:
+`brand_publish_drain_log` registra **intentos**, `scheduled_posts` registra el **estado final**, y
+**manda `scheduled_posts`**. Preguntarle al registro de intentos por el estado final devuelve una
+respuesta con forma de dato correcto, que es la peor clase de respuesta equivocada.
+
+**Lo que NO se investigó, y queda anotado y no diagnosticado:** por qué el drenaje escribió un id que
+después dejó de ser el bueno, y si el primer post se borró a mano o lo reemplazó el propio carril.
+Lo confirmaría el log del proveedor en esa ventana de 76 minutos.
+
 ### 🔴 El drenaje reintenta contra esta marca todo el día, sin fin
 
 **192 intentos el 2026-09-09** — **96 en `blog` y 96 en `x`**, todos con
