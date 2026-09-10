@@ -21,6 +21,11 @@ _(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSC
 - ✅ **Carrusel del Proyecto de Ley 678 publicado en las dos redes de ForumPHs** —
   Instagram `platform_post_id 18016965923948414` · Facebook `1184045168120977_122135449431355949`.
   **Fuera del carril**, a mano y con aprobación de Sam [reportado — brief].
+  **Los dos identificadores quedan CONFIRMADOS contra el libro que manda** [medido el 2026-09-10]:
+  ambos están en **`public.scheduled_posts` con `status = 'published'`** —IG a las 18:52:56 UTC y FB
+  a las 20:10:40 UTC del 2026-09-09—, **no en `brand_publish_drain_log`**, que para ForumPHs no
+  registra ninguna fila de Meta en esas fechas: sólo `blog_forumphs` con `PROVIDER_NOT_DRAINABLE`.
+  Es la prueba, por partida doble, de que **la publicación no pasó por el carril**.
 - ✅ **`media-store` y `meta-graph-post` desplegadas y ACTIVE** en `amlvyycfepwhiindxgzw`
   [medido con `list_edge_functions` y `get_edge_function` el 2026-09-10]. Las dos son **eje**:
   el `grep` de marca sobre su código da **cero** — `media-store` recibe `bucket`, `path`,
@@ -73,10 +78,53 @@ _(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSC
    transcribe aquí**, por la regla de secretos de `CLAUDE.md`]. El arreglo es **retirar el fallback**
    y dejar la variable sola, con fail-loud si falta. **La variable ya se lee**: lo que sobra es el
    literal.
-7. 🔴 **Dos libros mayores que discrepan.** `scheduled_posts` registró una publicación que
-   `brand_publish_slots` **no reflejó** [reportado — brief]. Dos registros del mismo hecho que no
-   coinciden **no son un dato con un error: son dos fuentes sin árbitro declarado.**
-8. 🔴 **Rotación de `AGENDA.md`** — decisión de Sam, con su propia sección al final de este bloque.
+7. 🔴 **Dos libros mayores que discrepan — y ya tienen ÁRBITRO DECLARADO.**
+   `intel.brand_publish_drain_log` registra **INTENTOS**; `public.scheduled_posts` registra el
+   **ESTADO FINAL**. **Manda `scheduled_posts`.** No estaba escrito en ninguna parte y por eso se
+   podía leer el libro equivocado sin saberlo; queda escrito en `CAPABILITIES.md`.
+   **El caso medido que lo prueba** [medido el 2026-09-10, `platform_post_id` de las dos tablas]:
+   una misma publicación de **LucienSael** en `meta_fb` aparece con **dos identificadores
+   distintos** — `…_122118274185298889` en `drain_log` con `PUBLISHED` a las **15:15:14 UTC**, y
+   `…_122118277401298889` en `scheduled_posts` con `published` a las **16:31:33 UTC**. **Una hora y
+   dieciséis minutos, y dos ids para lo que se lee como un hecho.** El del `drain_log` corresponde a
+   un intento que **ya no existe en la red**; el vivo es el de `scheduled_posts`.
+   **Lo que sigue abierto** no es cuál manda —eso queda resuelto— sino **por qué el drenaje escribe
+   un id que después deja de ser el bueno**, y si el primero se borró a mano o lo reemplazó el
+   propio carril. Eso **no se investigó** y queda anotado, no diagnosticado.
+
+   > ⛔ **NO OPERATIVO — redacción anterior de este punto (2026-09-09), archivada el 2026-09-10.**
+   > Se conserva por `CC_PROTOCOL.md` §0. Nombraba la tabla equivocada y no tenía árbitro:
+   >
+   > > 🔴 **Dos libros mayores que discrepan.** `scheduled_posts` registró una publicación que
+   > > `brand_publish_slots` **no reflejó** [reportado — brief]. Dos registros del mismo hecho que no
+   > > coinciden **no son un dato con un error: son dos fuentes sin árbitro declarado.**
+   >
+   > **Qué cambió y por qué:** la discrepancia **no es con `brand_publish_slots`** sino con
+   > `intel.brand_publish_drain_log`, y **ya no está sin árbitro**: manda `scheduled_posts`. La
+   > afirmación vieja era `reportado`; la nueva es `medido`, con los dos identificadores al lado.
+8. 🔴 **El hueco de la instrumentación de costo NO se cerró: CRECIÓ.**
+   [medido el 2026-09-10 sobre `public.ops_generation_ledger`]:
+
+   | Alcance | Registros | `cost_usd = 0` | `rate_source` vacío |
+   |---|---|---|---|
+   | `generated_at >= 2026-08-25` | **1.875** | **433** | — |
+   | Tabla entera | **4.878** | **704** | **132** |
+
+   Sam midió **4.791 / 690** y **1.788 / 419** unas horas antes: las dos mediciones coinciden en
+   magnitud y **la diferencia entre ambas es el crecimiento**. Con `$0,0681` por pieza publicada
+   declarado como coste del carril desde el 2026-07-31, **una de cada siete filas del ledger no
+   sostiene esa cifra**.
+
+   > 🔴 **LA TRAMPA DE LA CONSULTA, escrita para que no vuelva a pasar.** `cost_usd` **NUNCA es
+   > `NULL`**: hay **0 nulos y 704 ceros** [medido]. Una consulta que pregunte por
+   > `cost_usd IS NULL` devuelve **cero** y **parece que no hay hueco**. Es la misma familia de
+   > defecto que el 2026-09-08 dejó escrito como «"0 filas" y "no existe" no son el mismo estado»,
+   > en otra forma: **`NULL` y `0` tampoco lo son.** Filtrar `cost_usd > 0` antes de contar los
+   > ceros produce el mismo espejismo.
+
+   **Este frente está ABIERTO y no se cierra en este Actualiza.** Ninguna entrada de `AGENDA.md`
+   lo declara resuelto — se verificó con un barrido antes de escribir esto.
+9. 🔴 **Rotación de `AGENDA.md`** — decisión de Sam, con su propia sección al final de este bloque.
 
 ### 🟡 Corrección de estado que este Actualiza aplica a `CAPABILITIES.md`
 
