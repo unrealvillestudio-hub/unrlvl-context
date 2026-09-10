@@ -18,6 +18,6 @@ prohibido.** El objetivo es autoridad; el mecanismo nunca es anunciarla.
   declaraciones vacías.
 - No expliques de más para parecer solvente. La sobreexplicación se lee como
   necesidad de convencer.
-- Si usás una analogía para explicar un mecanismo, que venga del mundo real del
+- Si usas una analogía para explicar un mecanismo, que venga del mundo real del
   lector y que comparta la estructura, no el aspecto. Prohibidas las analogías de
   manual: el músculo, el iceberg. No explican; señalan que no se buscó una propia.

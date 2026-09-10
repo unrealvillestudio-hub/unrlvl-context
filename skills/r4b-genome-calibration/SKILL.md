@@ -156,7 +156,7 @@ Para R4B (Ready for Business, listo para publicar):
 
 ## 7. REGLAS TRANSVERSALES (aplican en todas las fases)
 
-- **HRD antes de toda mutación de producción.** Mensaje de verificación: "querés X, para ello debo Y, ¿correcto?".
+- **HRD antes de toda mutación de producción.** Mensaje de verificación: "quieres X, para ello debo Y, ¿correcto?".
 - **Flujo de entrega de context files:** CC crea rama, pushea, abre PR contra main; CC NO mergea; Sam revisa, mergea y borra la rama. Nunca commit directo en main.
 - **La regla dura de voz (§1.4) gobierna todo output de todas las voces.**
 - **Verificar antes de afirmar** la existencia/naturaleza de un archivo, módulo, tabla o componente. Si no se puede verificar, decir "no lo verifiqué". (Los planes obsoletos apuntan a componentes que fueron absorbidos/refactorizados.)

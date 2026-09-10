@@ -341,7 +341,7 @@ Invocable bajo demanda — NO en cada Actualiza (el cruce código↔DB es caro: 
 ```
 Cuando Sam escriba "auditor" o "supabase audit" → HRD_SUPABASE_AUDIT:
 1. Cargar skills/supabase-auditor/SKILL.md vía Vercel:web_fetch_vercel_url
-2. Preguntar: "¿Lo querés identificativo o contextual?"
+2. Preguntar: "¿Lo quieres identificativo o contextual?"
 3. Cargar supabase_access_map.json como baseline para el diff
 4. Ejecutar el modo indicado; reportar diff + acciones propuestas (HRD antes de aplicar)
 ```
