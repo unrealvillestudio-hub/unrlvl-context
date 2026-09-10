@@ -5,6 +5,138 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-09-08 — Tres muros encadenados, la primera pieza que salió sola, y un patrón raíz con nombre
+
+> **Sesión del 2026-09-07/08. Brief de Claude.ai del 2026-09-08; ejecutado por CC el 2026-09-09.**
+> Todo lo etiquetado `medido` se consultó con `execute_sql` **al escribir esta entrada**
+> (`HRD-R13`), no se copió del brief. Professor cerrado **antes**, orden respetado: **15 learnings**,
+> `checkpoint_number = 15`, `session_date = 2026-09-08`, los quince con `approved_by_sam = true`
+> [medido — `public.professor_learnings`, 2026-09-09]. **SMA no se consultó.** Lo previo se conserva
+> íntegro debajo.
+>
+> **Esta entrada vive aquí y no en `brands/NeuroneSCF/`** aunque cuatro de los frentes sean de esa
+> marca: lo que cambió es **el carril compartido** —publicador, barredor, adaptador de SocialLab,
+> reglas del guardián con `brand_id = NULL`—, y el carril se registra en el log del estudio, igual
+> que BRIEF-05 el 2026-09-06. **El brief no nombraba el archivo; el criterio es de CC y queda
+> declarado** para que la sesión siguiente no lo tenga que deducir.
+
+### Lo que cambia de estado, en una línea
+
+**El ecosistema publicó una pieza sin que nadie la empujara.** `LucienSael` / `meta_fb`,
+`platform_post_id` **`1076134175585218_122118274185298889`**, `published_at`
+**2026-09-08 15:15:14 UTC** [medido — `intel.brand_publish_drain_log`, `outcome = 'PUBLISHED'`, una
+sola fila]. El 2026-09-06 había dos crones vivos y ninguna salida; hoy hay una salida y su registro.
+
+### 🧱 Los tres muros de N09, en orden, y por qué cada uno tapaba al siguiente
+
+Esto es lo que hay que leer de esta sesión, y no la lista de PR.
+
+1. **El alias `social-lab-flame`, muerto en el respaldo.** La ruta principal fallaba y la de
+   respaldo apuntaba a un nombre que ya no resolvía. Mientras este muro estuvo en pie, **el segundo
+   no era observable**: la llamada no llegaba nunca al punto donde la guarda decide.
+2. **La guarda anti-doble-publicación contando filas terminales como vivas.** Una pieza ya resuelta
+   —descartada o publicada— seguía computando como «hay una publicación en curso», así que la guarda
+   negaba el permiso a la siguiente. Es el mismo defecto de forma que el `.neq("status","discarded")`
+   que este mes se cerró en otro punto del carril: **un estado terminal no es un estado activo**.
+   Con el muro 1 en pie, este se veía como «no pasa nada»; con el muro 1 caído, se ve como «se niega
+   siempre».
+3. **SocialLab leyendo con clave anónima sin `SELECT`.** Ni error ni fila: **una lectura vacía**. El
+   privilegio faltaba, la respuesta era `[]`, y `[]` es indistinguible de «no hay nada que
+   publicar». Es exactamente el hueco que `CC_PROTOCOL.md` §12 describe desde el 2026-09-08 —un
+   PostgreSQL desechable no valida privilegios de rol de Supabase— y el que
+   `DELIVERY_AND_VERIFICATION_RULE.md` §4.2 llama «un fallo que se parece a un resultado».
+
+**Entregas:** **PR #136** (los tres cortes del publicador) · **SocialLab PR #4** —rama de Facebook a
+`fb_publish_photo`, lectura de `post_id` en vez de `id`, y `sbGet` que **deja de tragarse el
+error**— · **PR #137** (el barredor comprueba referencias).
+
+**Lo que hace verificable el despliegue del barredor:** `storage-orphan-sweep` **v21**, `ezbr_sha256`
+**`08173f9aa525afc242d998ab45caa7196c0bdcc96c0c6e5c99d297410a2e7e5b`**, `updated_at`
+**2026-09-08 21:51:49 UTC** [medido]. **El `sha` es la prueba; el contador de versión y el sufijo del
+`entrypoint_path` no lo son** — un deploy de esta misma sesión subió el mismo bundle y el sufijo
+cambió igual. Por eso la regla sube a `CAPABILITIES.md` en este mismo PR.
+
+### 📊 Estado medido del carril el 2026-09-09
+
+| Objeto | Estado medido | Consulta |
+|---|---|---|
+| `content-run-stage` | **v119**, `ezbr_sha256` `47d0cb68…1a092d002`, 2026-09-06 22:34 UTC | `list_edge_functions` |
+| `content-scheduler` | **v15**, `ezbr_sha256` `9b903f8a…8e90f459`, 2026-09-08 13:40 UTC | `list_edge_functions` |
+| `storage-orphan-sweep` | **v21**, `ezbr_sha256` `08173f9a…0a2e7e5b`, 2026-09-08 21:51 UTC | `list_edge_functions` |
+| Reglas del guardián | **54 activas de 69**; `HR-GEN-11/12/13` `active`, `warn`, `brand_id = NULL` | `intel.watcher_rules` |
+| Franjas de publicación | **53 libres · 16 reservadas · 1 publicada** | `intel.brand_publish_slots` |
+| Piezas | **146 totales · 95 vivas · 17 publicadas** | `content.content_pieces` |
+| Composición | **123 de 146** llevan composición; **NeuroneSCF 42 de 42** | `assets::text ILIKE '%composed%'` |
+| `offer_selector` | **8 filas sembradas**, una marca | `intel.brand_topics` |
+| `visual_directive` | **3 de 52 dominios**, sobre 4 marcas | `intel.brand_topics` |
+| Ledger de generación | **4.791 registros**; **0** sin costo, **0** sin modelo | `public.ops_generation_ledger` |
+
+### 🖼️ Las 14 imágenes regeneradas
+
+**14 imágenes regeneradas, ~0,56 USD** [reportado — brief de Claude.ai del 2026-09-08]. CC **no
+consiguió aislar esas catorce** dentro de `ops_generation_ledger` con una consulta que no
+presupusiera la ventana exacta de la corrida, así que la cifra **se conserva como `reportado` y no
+se asciende a `medido`**. Lo que sí está medido es el marco: el ledger tiene **4.791 registros**,
+ninguno sin costo y ninguno sin modelo, del **2026-06-16** al **2026-09-08**.
+
+### ⚠️ Cuatro cifras del brief corregidas por medición (`CC_PROTOCOL.md` §9)
+
+1. **La fuga de N10 no está en 76 filas: está en 134**, y **24 cayeron en las últimas tres horas**
+   [medido — `now()` = 2026-09-09 06:12 UTC]. Van desde **2026-09-08 13:00:34 UTC** hasta
+   **2026-09-09 06:00:04 UTC**. **Y las produce sólo 2 franjas distintas**, dato que el brief no
+   traía y que cambia el diagnóstico: no es una degradación general del proveedor, son **dos filas
+   atascadas** que con `DRAIN_SAFETY_CEILING = 50` y orden `slot_at ASC` ocupan la cabeza de la cola
+   en cada pasada. **La fuga sigue activa.**
+2. **El `post_id` de la pieza publicada no termina en `…401298889`.** El medido es
+   `1076134175585218_122118274185298889`. **Y `content_pieces.post_url` está en `NULL`**: el
+   identificador vive en el log de drenaje y **no en la pieza**, así que hoy la tabla de piezas no
+   basta para saber dónde salió lo que salió. Ese hueco es de N13.
+3. **`approval_calibration_piece_id_key` no es una constraint: es un `UNIQUE INDEX`** sobre
+   `intel.approval_calibration (piece_id)` [medido — `pg_indexes`; `pg_constraint` sólo devuelve
+   `approval_calibration_pkey` y `approval_calibration_verdict_check`]. Se retira con **`DROP
+   INDEX`**; `ALTER TABLE … DROP CONSTRAINT` **fallaría**. Importa porque N05A lo tiene como
+   bloqueante de su tercer tiempo, y una instrucción que no se puede ejecutar detiene el PR.
+4. **El hueco de costos no se reproduce.** El brief declaraba **286 de 1.563 registros sin costo o
+   sin modelo**; medido: **4.791 registros, `cost_usd IS NULL` = 0, `model_id IS NULL` = 0**. Lo que
+   sí sale hoy: **690 a costo cero**, **132 sin `rate_source`**, **293 de proveedor `google`**. El
+   frente no se cierra —Google Cloud sigue sin mapear—, **se reformula sobre lo que la base
+   contesta**.
+
+**Y una quinta, menor:** el brief pedía la versión de AGENDA `2026-09-08-v1`, que **ya existe** (PR
+#81, del mismo día). Este Actualiza entra como **`v2026-09-08-v2`**.
+
+### 🔎 Lo que se confirmó tal cual lo declaraba el brief
+
+- **Los dos cron llevan su `guard`**: jobid **35** `iid-expert-orphan-sweep` (`0 * * * *`) y jobid
+  **36** `unrlvl-media-temp-cleanup` (`0 3 * * *`), los dos `active` [medido — `cron.job`].
+- **`offer_selector` sembrado en 8 dominios de una sola marca**, y **`visual_directive` en 3**
+  [medido].
+- **Las tres reglas nuevas llevan `brand_id = NULL`** [medido]: son del sistema, no de la marca que
+  las pidió primero. La regla multimarca se cumple **en el dato**, que es donde se comprueba.
+- **Ninguna de las tres columnas de N05A existe** —`route_state`, `route_reentry_stage`,
+  `route_budget_spent`— [medido]: el diseño está decidido y **no aplicado**, que es justo lo que el
+  brief declara.
+
+### 🧩 El patrón raíz: el escalón equivocado
+
+Cinco formas del mismo error en dos días, y conviene verlas juntas porque por separado parecen cinco
+bugs distintos:
+
+| Forma | Escalón que se veía | Escalón que fallaba |
+|---|---|---|
+| Alias `social-lab-flame` | «el lab no responde» | el **respaldo** apuntaba a un nombre muerto |
+| Guarda anti-doble-publicación | «hay una publicación en curso» | contaba **filas terminales** como vivas |
+| Clave anónima sin `SELECT` | «no hay nada que publicar» | **falta de privilegio**, respuesta `[]` |
+| `id` en vez de `post_id` | «Facebook no devolvió identificador» | se leía **la clave equivocada** |
+| `sbGet` tragándose el error | «la consulta salió vacía» | el `catch` **borraba la causa** |
+
+Las cinco comparten una sola frase, que es la que cierra `protocols/MEASUREMENT_METHOD_RULE.md`:
+**un fallo no puede parecerse a un resultado.** Y el corolario operativo, que es lo que se lleva a
+`CAPABILITIES.md` en este PR: **antes de etiquetar una afirmación hay que estar seguro de que el
+instrumento respondió.**
+
+---
+
 ## 2026-09-06 — BRIEF-05 cerrado y operando: el ecosistema deja de fabricar a ciegas y empieza a tener hora
 
 > **Verificado contra producción el 2026-09-06** con `execute_sql` (`HRD-R13`): todo lo que abajo se

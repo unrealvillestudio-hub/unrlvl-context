@@ -50,6 +50,32 @@ _Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa:
 > cuerpo íntegro, en commit separado.** La regeneración real sigue abierta **sin fecha** en
 > `AGENDA.md`.
 
+> **Nota de sincronización — HRD_ACTUALIZA 2026-09-08 (`ecosystem.json` `2026-09-06-v1` → **`2026-09-08-v2`**).**
+> **El cuerpo de este archivo NO cambia, y se declara.** **Nodos que cambiaron en el JSON, y sólo esos:**
+> (1) `_meta` — `version` a `2026-09-08-v2`, `previous` a `2026-09-06-v1`, la cadena avanza, `last_session`
+> rota a `previous_sessions[0]` **con sus campos íntegros** y entra la sesión del 2026-09-08, más
+> `_actualiza_2026-09-08-v2` que declara **dos huecos heredados del PR #81**: escribió nodos fechados
+> 2026-09-08 sin mover `version`, y no rotó `last_session`, así que la sesión de ForumPHs del 2026-09-08
+> **no tiene entrada propia en `_meta`** y su registro vive en `AGENDA.md` y en
+> `brands/ForumPHs/session_log.md`. **CC no la fabrica retroactivamente.**
+> (2) `supabase.main.edge_functions.key_changes_2026-09-08` — `storage-orphan-sweep` v21,
+> `content-scheduler` v15 y `content-run-stage` v119, **cada una con su `ezbr_sha256`**, que es la prueba
+> del despliegue; el contador de versión y el sufijo del `entrypoint_path` **no lo son**
+> (`protocols/MEASUREMENT_METHOD_RULE.md` §4).
+> (3) `supabase.main.columnas_nuevas_2026-09-08` — `intel.brand_topics.offer_selector` (`jsonb`),
+> `intel.brand_topics.visual_directive` (`text`) y `public.content_type_registry.offer_catalog_max_items`
+> (`smallint`), con el **test de la marca N+1 respondido**: ninguna nombra ni presupone una marca.
+> (4) `publish_pipeline._update_2026-09-09` — la **primera publicación automática real**
+> (`LucienSael` / `meta_fb`, 2026-09-08 15:15:14 UTC), el estado medido del 2026-09-09, la **fuga N10
+> activa en 134 filas producidas por sólo 2 franjas**, el `post_url` en `NULL` y el bloqueante de N05A,
+> que es un `UNIQUE INDEX` y no una constraint. El bloque `estado` del 2026-09-06 **se conserva íntegro**.
+> (5) `brand_topics._campos_nuevos_2026-09-08` — puntero a (3), sin duplicar el texto.
+> **Cero pérdidas verificadas:** 1.161 claves antes, 1.196 después, y **cero valores de cadena perdidos**
+> (comparación del árbol completo contra `HEAD`). **Cuerpo íntegro, cero regeneración:** este archivo
+> lleva flujos, tablas de estado y notas fechadas que **no son derivables del JSON**, y **no existe
+> generador en el repo** — «regenerar» a mano sería reescribir con interpretación y borrar historia
+> (`CC_PROTOCOL.md` §0).
+
 > **Nota de sincronización — HRD_ACTUALIZA 2026-08-30 (`ecosystem.json` v2026-08-29-v6 → **v2026-08-30-v1**).**
 > **El cuerpo de este archivo NO cambia, y se declara.** Versión de **sesión nueva**: `previous_sessions`
 > pasa de **16 a 17**, y el `last_session` anterior —**2026-08-28**— se inserta **en su orden
