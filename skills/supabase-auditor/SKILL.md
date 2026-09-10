@@ -67,7 +67,7 @@ Lista cruda: para cada objeto con grant anon/PUBLIC, ¿hay un caller en código?
 ### Modo contextual (profundo, caro)
 Lee el código de cada caller, determina la credencial real, evalúa si el acceso es intencional según los design_principles, y puebla `intentional` (true/false/debatable) con `verified_in`. Es el que genera el map completo. Se corre en la primera pasada y tras cambios de arquitectura.
 
-**Siempre preguntar a Sam:** "¿Lo querés identificativo o contextual?" antes de ejecutar.
+**Siempre preguntar a Sam:** "¿Lo quieres identificativo o contextual?" antes de ejecutar.
 
 ---
 

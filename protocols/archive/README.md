@@ -2,7 +2,7 @@
 Documentos de protocolo y specs **cumplidos o superados**, conservados por valor histórico.
 No se cargan en sesión. No son fuente de verdad de nada vivo.
 Antes de archivar cada uno se extrajo su contenido todavía vigente al lugar que corresponde
-(skill, AGENDA o Professor). Si buscás algo de un archivo de aquí, probablemente su parte
+(skill, AGENDA o Professor). Si buscas algo de un archivo de aquí, probablemente su parte
 viva esté en otro sitio — este es el original completo.
 
 | Archivo | Archivado | Por qué | Qué se rescató antes |

@@ -395,7 +395,7 @@ Reglas de carga (qué skill con qué disparador): `skills/INDEX.md`. Siempre act
 | "Professor / anota / checkpoint" | learnings | mensaje de verificación HRD |
 
 Todas las HRD requieren el mensaje de verificación antes de ejecutar:
-> "Ok Sam, querés que [objetivo]. Para ello debo [pasos]. Correcto? Me faltan: [datos o 'ninguno — procedo']."
+> "Ok Sam, quieres que [objetivo]. Para ello debo [pasos]. ¿Correcto? Me faltan: [datos o 'ninguno — procedo']."
 
 ---
 
@@ -412,7 +412,7 @@ Cada archivo de un paquete de actualización se nombra con **prefijo de carpeta 
 
 ---
 
-_CAPABILITIES v1.4 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
+_CAPABILITIES v1.13 · carga en apertura (paso 3.5, después de INDEX) · mapa no contenido_
 
 ---
 

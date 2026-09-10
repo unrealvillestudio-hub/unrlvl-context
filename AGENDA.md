@@ -2583,7 +2583,7 @@ Consolida #35 + #39. Resolver duplicado `/CLAUDE.md` (8.4KB) vs `/.github/CLAUDE
 
 ## ✅ Resuelto recientemente
 
-> **📁 ARCHIVO HISTÓRICO.** Los ítems **completados hace más de 30 días y sin referencias activas** se mueven a **`historical_AGENDA.md`** (raíz del repo). El barrido corre en **cada Actualiza** (HRD_PROTOCOL §HRD_ACTUALIZA paso 10) y **siempre se propone a Sam antes de mover nada**. Si buscás un ítem cerrado que no aparece acá, está allá con su texto íntegro. El tamaño de este archivo NO es criterio de archivado: si todo está pendiente, no se archiva nada.
+> **📁 ARCHIVO HISTÓRICO.** Los ítems **completados hace más de 30 días y sin referencias activas** se mueven a **`historical_AGENDA.md`** (raíz del repo). El barrido corre en **cada Actualiza** (HRD_PROTOCOL §HRD_ACTUALIZA paso 10) y **siempre se propone a Sam antes de mover nada**. Si buscas un ítem cerrado que no aparece aquí, está allá con su texto íntegro. El tamaño de este archivo NO es criterio de archivado: si todo está pendiente, no se archiva nada.
 >
 > **"Sin referencias activas" — aclarado 2026-08-06 (def. completa en `historical_AGENDA.md`).** *Referencia activa* = dependencia viva: un ítem ABIERTO/pendiente que depende del candidato, o estado vivo en `ecosystem.json` (tabla/EF/vista/campo que existe hoy), o una mención en `AGENDA.md` **fuera de la zona de completados**. Una mención en un `session_log.md` fechado **NO** cuenta — es historia append-only. (Sin esta aclaración, cualquier mención en un log retendría todo para siempre.)
 - ✅ **Cierre 2026-08-16 — Scheduler, snapshots, queue y canónico de `CLAUDE.md` (4 ítems, todos por VÍA ALTERNA · condición 4 de `skills/context-resolver/SKILL.md` §2).**

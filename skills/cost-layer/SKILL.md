@@ -6,7 +6,7 @@ _Versión: 2.0 · 2026-07-30 (M-6). Reescritura completa de v1.0 — ver [ARCHIV
 
 ## REGLA CERO — DE DÓNDE SALE UN PRECIO
 
-**Ninguna tarifa vive en este skill, ni en el código, ni en un ejemplo. La ÚNICA fuente de precio es la tabla `ops_lab_rates`, resuelta por la función `ops_resolve_rate`.** Si necesitás saber cuánto cuesta un `(lab, model_id, unit_type)` a una fecha, se lo preguntás a la función — nunca lo escribís.
+**Ninguna tarifa vive en este skill, ni en el código, ni en un ejemplo. La ÚNICA fuente de precio es la tabla `ops_lab_rates`, resuelta por la función `ops_resolve_rate`.** Si necesitas saber cuánto cuesta un `(lab, model_id, unit_type)` a una fecha, se lo preguntas a la función — nunca lo escribes.
 
 ```sql
 -- La tarifa vigente a una fecha (composite: rate_usd, rate_id, effective_from):
