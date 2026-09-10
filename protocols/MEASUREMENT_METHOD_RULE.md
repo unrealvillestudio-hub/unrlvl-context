@@ -8,6 +8,11 @@ producción desde un contenedor.
 > abajo con su propio motivo medido. El cierre «Lo que las tres tienen en común» también se conserva
 > literal, y lo que dice sigue siendo cierto de las cuatro.
 
+> **Actualización 2026-09-10 — entra una quinta regla, §5, y ninguna de las cuatro se deroga.** Sale
+> del caso que **la §4 no podía cazar**: el `sha` se verificó correctamente **sobre la función
+> equivocada**. La §5 no corrige a la §4 — la completa por delante y por detrás. El título y el
+> cierre se conservan literales, por el mismo criterio de la actualización anterior.
+
 > **Esta es la fuente canónica.** Las tres reglas nacieron midiendo `unrlvl-iid-functions` durante
 > N09 y N12, y estuvieron un día en `docs/METODO_DE_MEDICION.md` de ese repositorio. Se mudan aquí
 > porque **son protocolo, no documentación de un repo**: gobiernan cómo se mide contra producción
@@ -108,6 +113,52 @@ concluir «el deploy no entró» hay que comprobar que el bundle **sí era disti
 también es el resultado correcto de volver a desplegar el mismo código.
 
 ---
+
+---
+
+## 5 · Un PR mergeado no dice qué función desplegar. El objeto se comprueba ANTES; los marcadores, DESPUÉS
+
+```
+antes:    git diff --name-only <base>..<head>   →   supabase/functions/<slug>/
+después:  el bundle contiene los MARCADORES del cambio, no sólo un sha distinto
+```
+
+**El repositorio tiene varias Edge Functions y el comando de despliegue nombra una sola.** Un PR
+mergeado dice **qué cambió**; **no dice qué se despliega**. Entre las dos cosas hay un paso que nadie
+escribió y que se venía resolviendo por inercia: *se despliega la función que veníamos desplegando*.
+
+**Motivo, medido el 2026-09-10.** Se mergearon dos PR que viven los dos en `content-scheduler` y se
+desplegó **`content-run-stage`**, que era la que se venía desplegando. El resultado:
+
+| Función | `ezbr_sha256` | Veredicto |
+|---|---|---|
+| `content-run-stage` | **cambió** | desplegada de verdad — y **sin nada de los dos PR** |
+| `content-scheduler` | **idéntico** al de dos días antes, con el contador **subido** | **ninguno de los dos PR está vivo** |
+
+**La §4 funcionó perfectamente y no sirvió de nada**, porque se aplicó al objeto equivocado.
+**Verificar el escalón correcto sobre el objeto equivocado no verifica nada** — y el informe que sale
+de ahí dice «desplegado» con un `sha` nuevo al lado, que es una prueba real de un hecho que no era el
+que se quería probar.
+
+**La regla, en sus dos mitades:**
+
+1. **Antes de desplegar, el objeto sale del diff, no de la costumbre.** Qué función hay que desplegar
+   se lee de los archivos que el PR tocó — `supabase/functions/<slug>/` —, y si el diff toca varias,
+   **se despliegan todas o se declara cuál se deja fuera y por qué**.
+2. **Después de desplegar, se buscan los MARCADORES del cambio en el bundle.** Un `sha` distinto
+   prueba que **algo** cambió; **no prueba qué**. El marcador es un identificador propio del cambio
+   —el nombre de una función nueva, una constante, un código de error— que **no existía antes** y
+   cuya presencia sólo se explica por ese PR.
+
+**Por qué la segunda mitad no es celo excesivo:** con sólo el `sha`, un despliegue de la función
+correcta pero de **la rama equivocada** —o de un working tree sin el `git pull`— es indistinguible
+de uno bueno. El `sha` cambia igual. **El marcador es lo único que ata el bundle al cambio**, y por
+eso es lo que se cita en el reporte, junto al `sha` y no en su lugar.
+
+**Corolario para quien escribe la instrucción de despliegue:** el comando lleva el `slug` **derivado
+del diff de ese PR**, nunca heredado del despliegue anterior. Un comando copiado de la vez pasada es
+una afirmación sobre el presente hecha con evidencia de otro día — que es, un piso más abajo, la
+misma familia de defecto que las cuatro reglas de arriba.
 
 ---
 
