@@ -44,12 +44,35 @@ _(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSC
 1. 🔴 **No existe promotor de blogs.** Ningún componente mueve una pieza de blog de `scheduled` a
    `published` [reportado — brief]. **Debe nacer como eje**, resolviendo el canal por `brand_id`
    contra el dato, nunca por una rama de condicional por marca (`protocols/MULTIBRAND_RULE.md`).
-2. 🔴 **Las reglas `blocking` del Watcher están inactivas — 14 de 69, todas con `active = false`**
-   [medido el 2026-09-10: `select severity, active, count(*) from intel.watcher_rules group by 1,2`
-   → `blocking/false = 14` · `warn/true = 54` · `warn/false = 1` · **total 69**]. La consecuencia se
-   dice entera: **hoy ninguna regla puede detener una pieza.** El juez marca; nada corta.
-   **Precisión de columna, para que no se repita el error de lectura:** la severidad vive en
-   **`severity`**, no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
+2. 🟡 **Las 14 reglas `blocking` inactivas NO eran una pérdida de capacidad: eran una cohorte
+   superseída, y se retira en esta misma sesión.** Las 13 que se borran son del **2026-07-27**, con
+   prefijo de marca, y **cada una declaraba en sus propias notas que estaba superseída** por su
+   equivalente de eje — `HR-GEN-02`, `HR-GEN-04`, `HR-GEN-05`, `HR-LEGAL-01/02`, `HR-RETAIL-01`,
+   `IMG-GEN-01/02/05`, `IMG-LEGAL-01/02`, `IMG-RETAIL-01` [medido el 2026-09-11: las 13 filas
+   volcadas íntegras antes de borrarlas, las 13 con `SUPERSEDIDA` en `notes`].
+   **`HR-FPHS-10` NO se borra:** su `subject` `cta_por_frente` **no tiene sucesora viva**, y su nota
+   es el único registro de que ese juicio vive en `gate7`.
+
+   > ⛔ **CORRECCIÓN 2026-09-11 — la redacción anterior de este punto afirmaba de más.**
+   > Se conserva por `CC_PROTOCOL.md` §0:
+   >
+   > > 🔴 **Las reglas `blocking` del Watcher están inactivas — 14 de 69, todas con
+   > > `active = false`** […] La consecuencia se dice entera: **hoy ninguna regla puede detener una
+   > > pieza.** El juez marca; nada corta.
+   >
+   > **Qué estaba mal y qué no.** El **conteo era correcto** —14 de 69, todas inactivas— y también
+   > la precisión de columna, que se conserva abajo. Lo que estaba mal es **la consecuencia**:
+   > presentaba como pérdida de capacidad lo que era **ruido de una migración ya hecha**. Esas 13
+   > reglas **no dejaron de cortar: fueron reemplazadas por reglas de eje que sí corren**. La
+   > alarma fue falsa, y la produjo leer un `active = false` sin leer la nota que había al lado.
+   >
+   > **Lo que sí queda abierto, y es la pregunta correcta:** si el Watcher **soporta hoy alguna
+   > severidad bloqueante** — si lee `severity`, si distingue `blocking` de `warn`, y si existe
+   > algún camino por el que un veredicto detenga una pieza antes de reservar franja. **Eso no se
+   > sabía y no se sabe por el conteo de la tabla.**
+
+   **Precisión de columna que SÍ se sostiene, y se conserva:** la severidad vive en **`severity`**,
+   no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
    `enforced_on = 'blocking'` devuelve **cero filas** y hace parecer que el problema no existe.
 3. 🔴 **No hay regla de registro gramatical en ninguna marca** [reportado — brief]. La propuesta,
    **nombrada como propuesta y no como regla vigente**: una regla **de eje** que prohíba las formas
