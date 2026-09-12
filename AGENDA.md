@@ -110,6 +110,42 @@ _(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSC
    > **de marca** de `HR-GEN-05` sobre este mismo `subject`. La migración a eje se hizo; lo que no
    > se hizo fue darle a la regla de eje el patrón que la vuelve comprobable.
 
+   ### ✅ SEMBRADO el 2026-09-12 — `HR-GEN-05` ya tiene su mitad determinista
+
+   **El patrón enumera 74 formas voseantes inequívocas. No es un sufijo genérico, y eso es la
+   decisión de diseño**, no un detalle: `-ás`, `-és` e `-ís` genéricos marcan **el futuro correcto de
+   tuteo** (`hablarás`, `podrás`, `tendrás`), los **gentilicios** (`inglés`, `cortés`), y
+   `jamás` · `además` · `quizás` · `atrás` · `compás` · `país` · `interés` · `después` · `Tomás`.
+   Un patrón así habría convertido la regla en ruido el primer día.
+
+   **Medido ANTES de sembrar, sobre las 169 piezas del corpus** [2026-09-12]:
+
+   | | |
+   |---|---|
+   | Piezas que marca | **24** de 169 |
+   | Formas distintas encontradas | **14** |
+   | **Falsos positivos** | **CERO** — las 24 inspeccionadas en contexto, una por una |
+   | En cola de publicar (`scheduled` · `awaiting_approval`) | **8** |
+   | **Ya publicadas** | **1** |
+
+   **Y simulado contra el traductor POSIX→ECMAScript de la propia EF** —mismos mapas, mismas flags
+   `giu`—: **14/14 verdaderos positivos y 21/21 controles negativos**, con las trampas de arriba
+   entre los controles.
+
+   🔴 **`sos` queda FUERA del patrón, y es una exclusión medida:** `compileRulePattern` compila con
+   flag **`i`**, así que `sos` matchearía el **«Kit SOS»** del catálogo de NeuroneSCF. Una forma
+   voseante que no se puede distinguir de un nombre de producto **no entra**: el falso positivo
+   sobre un producto real cuesta más que el voseo que deja pasar.
+
+   🔴 **`fix_replacement` se deja en `NULL` A PROPÓSITO.** Voseo→tuteo **no es una sustitución de
+   regex**: `querés`→`quieres` cambia la raíz, y `vos`→`tú` arrastra la concordancia de la frase
+   entera. El corrector, **sin reemplazo, MARCA y no inventa** — que es exactamente lo que debe
+   hacer. Poner un reemplazo aquí produciría español roto con cara de corregido.
+
+   **Lo que queda abierto, y es de Sam:** las **8 piezas en cola** y **la ya publicada** llevan
+   voseo hoy. El patrón las marcará en cuanto pasen por el corrector o por `piece-edit`; **no las
+   corrige solo, y no las toqué.**
+
 3. 🔴 **No hay regla de registro gramatical en ninguna marca** [reportado — brief; **matizado por
    el punto 2-bis**: la regla de eje `HR-GEN-05` existe y cubre el enunciado — lo que falta es su
    `verify_pattern`]. La propuesta,
