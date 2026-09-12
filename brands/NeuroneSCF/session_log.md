@@ -3,6 +3,40 @@ _Actualizado: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `bl
 
 ---
 
+## 2026-09-12 (v2) — Manda `discarded_at`: las tres piezas incoherentes quedan cerradas
+
+> **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,
+> aplicación— y verificó **por efecto**. Medido el **2026-09-12 entre las 19:30 y las 19:55 UTC**.
+> **Professor: no lo cerró CC.** **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+**Decisión de Sam:** *«El descarte es un veredicto humano; `scheduled` es una posición en la cola. Un
+veredicto pesa más que una posición.»* Y el estado incoherente se cierra **por el lado del
+planificador**, no relajando el bloqueo del publicador.
+
+**Aplicado** [medido antes y después]:
+
+- **Las tres piezas pasan a `rejected`** —`0a8168af…` (`meta_fb`), `dae462b1…` (`meta_ig`),
+  `0e906d4b…` (`tiktok`)—, que es la convención que ya seguían **las otras 14** fixables descartadas.
+  **`discarded_at` y `discarded_reason` no se tocan:** el veredicto es de Sam y no se reescribe.
+- **Se libera una franja futura.** `0f82718d-e14c-41a5-9fd3-bcf1f906854b` · `meta_ig` · **`slot_at`
+  2026-09-16 23:00 UTC** estaba `reserved` **para una pieza descartada el 9 de septiembre**. Vuelve
+  al pozo.
+
+**Y el hueco de fondo que eso destapó, medido:** **`publish-slot-reserver` no filtra `discarded_at`
+—cero apariciones en todo el archivo—**, mientras `content-scheduler` sí lo hace (líneas 2422 y
+2485) y `blog-promoter` también. **Por eso una pieza descartada tenía franja.** Queda como encargo,
+junto a N16, que vive en el mismo archivo.
+
+**Efecto:** **0** piezas a la vez `scheduled` y descartadas · **0** franjas `reserved` con pieza
+descartada · franjas libres futuras de **43 a 44**.
+
+**Y lo que sigue esperando a Sam:** las 8 notas del grupo «producto Neurone ausente o sin fuerza»
+**se releen sobre el texto adaptado antes de decidir su regla** — decisión 3 de Sam, encargo propio
+y con prioridad. El blog de la marca **sigue sin publicador**: `shopify_blog` no está en
+`MARK_PUBLISHED_PROVIDERS` ni lo drena `content-scheduler`.
+
+---
+
 ## 2026-09-12 — El handle del blog queda corregido, y el tercer modelo de publicación sigue sin publicador
 
 > **Entrada de CC.** Lo aplicó Claude.ai; **CC documenta y mide, no re-aplica.** Todo lo etiquetado

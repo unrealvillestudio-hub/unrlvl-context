@@ -1,5 +1,27 @@
 # ForumPHs — Session Log
 
+## 2026-09-12 (v2) — La franja del 10 de septiembre queda cerrada, y el artículo ya tiene URL
+
+> **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,
+> aplicación— y verificó **por efecto**. Medido el **2026-09-12 entre las 19:30 y las 19:55 UTC**.
+> **Professor: no lo cerró CC.** **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+**Aplicado con `blog-promoter` v1.2** (`unrlvl-iid-functions` PR #145):
+
+| | Antes | Después |
+|---|---|---|
+| Franja `c09c824a-4770-4b9c-aa4c-7e35a075cbd3` | `reserved`, vencida desde el **2026-09-10 15:00 UTC** | **`published`**, sellada con `2026-09-09 21:52:24` — el `published_at` de la pieza |
+| `post_url` de la pieza | **NULL** | `https://forumphs.com/blog/la-asamblea-que-no-entiendo-c4b3e01f` |
+| `slug` | **NULL** | `la-asamblea-que-no-entiendo-c4b3e01f` |
+| `intel.drain_due_slots(200)` la devuelve | sí, cada 15 minutos | **no** |
+
+**Lo que sigue abierto para la marca:** el pozo, que es lo grande. **5 dominios produciendo de 32
+declarados** — 27 sin agente. Por decisión de Sam, el Frente 4 pasa a ser **«un agente y su cron por
+dominio declarado»**, y la siembra de dominios nuevos baja a segundo lugar. La marca es la que más
+capacidad declarada tiene parada.
+
+---
+
 ## 2026-09-12 — El promotor de blogs atiende el canal de la marca, y deja su franja a medio sellar
 
 > **Entrada de CC.** Lo aplicó Claude.ai; **CC documenta y mide, no re-aplica.** Todo lo etiquetado

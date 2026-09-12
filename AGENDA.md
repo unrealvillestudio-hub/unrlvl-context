@@ -1,7 +1,195 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-12 · v2026-09-12-v3 (**CIERRE DEL 2026-09-12 — SAM DECIDE, Y LA FUGA DE N10 QUEDA CERRADA POR EL LADO DEL BLOG.** Cinco decisiones de Sam, **escritas con su motivo**; CC ejecutó las dos primeras con el método que él fijó —**en seco, lectura, aplicación**— y verificó **por efecto**. **(1) `blog-promoter` v1.2 desplegada** —`version 3`, `ezbr_sha256` **`9529a937…8418f97`**, `verify_jwt` `false` preservado; código en `unrlvl-iid-functions` **PR #145**—: la rama `YA_PUBLICADA` **ahora sella la franja y rellena lo que falte**. Cron 99 apagado durante la prueba y encendido al terminar. **Medido antes y después:** las dos franjas pasan de `reserved` a **`published`** con el `published_at` **de la pieza** —los dos libros mayores cuentan por fin la misma fecha—, `post_url` y `slug` pasan de **NULL** a puestos, **`intel.drain_due_slots(200)` deja de devolverlas** y las franjas vencidas y reservadas bajan de **6 a 4**; las 4 que quedan son `x_api` y `tiktok_business` y **esperan su publicador**. **(2) Manda `discarded_at` sobre `status`** —*el descarte es un veredicto humano, `status` es una posición en la cola*—: las 3 piezas incoherentes de NeuroneSCF pasan a `rejected` sin tocar el veredicto, y **se libera una franja futura del 16-09 que una pieza descartada el 09-09 tenía reservada**. **El hueco de fondo, medido: `publish-slot-reserver` NO filtra `discarded_at` —cero apariciones en el archivo—**, mientras `content-scheduler` sí lo hace en las líneas 2422 y 2485. **(3) La pieza es el texto adaptado** `social.adapted[n].copy`: **encargo propio y con prioridad**, porque todo lo que se calibre hasta que se arregle se calibra sobre el texto equivocado; **las 22 notas no se pierden, se reevalúan**. **(4) 200 pares de mínimo, con la contrapartida dicha en voz alta:** sin corpus suficiente el gate declara **`SIN_LINEA_BASE`** y **no compara** —nunca aprueba en silencio por tabla vacía—, y **una marca sin gate publica igual porque nada sale sin la aprobación de Sam**. **(5) Frente 4 reordenado: primero el agente, después el dominio** — el cuello no son los dominios sino los agentes que los trabajan: ForumPHs produce sobre **5 de 32**, LucienSael sobre **1 de 4**. **🔴 Y UN HALLAZGO NUEVO, QUE ES DECISIÓN PENDIENTE: la bitácora del promotor NUNCA pudo escribir una fila, en ninguna versión.** Un `catch` a propósito ocultó **tres rechazos apilados**, probados sin escribir nada: `run_id` `NOT NULL` sin default (**23502**), `slot_id` igual, y el `CHECK` de `outcome` que **no admite ninguno de los cuatro `BLOG_*`** (**23514**). Si el lunes el promotor publica, **publica sin rastro**. Es DDL sobre tabla compartida: **no se aplica sin Sam**. **N16 sube a 24 piezas contra 44 franjas libres** y gana causa que investigar. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-12 · v2026-09-12-v2 (**CIERRE DEL 2026-09-12 — EL PROMOTOR DE BLOGS ESTÁ VIVO EN PRODUCCIÓN, Y RECONOCER LO YA HECHO LE CUESTA EL SELLO.** `blog-promoter` v1.1 desplegada el 2026-09-12 **17:53:11 UTC**, `ezbr_sha256` **`db02acb3…fca169`**, cron **`blog-promoter-15min`** `jobid 99` `*/15 * * * *` **activo** [medido]. **CINCO AFIRMACIONES DEL BRIEF CORREGIDAS POR MEDICIÓN, y dos cambian el encargo:** (1) **no es un `dry_run`** — lleva **nueve invocaciones reales HTTP 200**, `dry_run:false`, `canales:3`, `franjas_vencidas:6`, todas `YA_PUBLICADA` [medido en `net._http_response`]; (2) 🔴 **la rama `YA_PUBLICADA` NO sella la franja**, así que **dos franjas `vercel_html` con pieza ya publicada quedan `reserved` para siempre** —`66227c12…` de LucienSael y `c09c824a…` de ForumPHs, vencidas desde el 08 y el 10 de septiembre— **reabriendo la fuga de N10 en la cabeza de la cola**, y **sus dos piezas siguen con `post_url` en NULL**, que es justo el defecto que el promotor vino a cerrar [medido]; (3) la causa raíz del blog de UnrealvilleStudio **no es código por marca** —**cero marcas hardcodeadas** en los cuatro EF del camino—: `platforms` de la fila de cola sale del **`platforms_hint` del modelo** (`iid-process/index.ts:845` → `iid-core/index.ts:112`) y **`brand_topics.platforms` nunca se consulta**; (4) el contador de hashtags **NO miente** — `hashtags_out:2` es exacto sobre `social.adapted[0].copy` (2 hashtags, 1.187 chars, español), y **`assets.copy` es OTRO texto** (0 hashtags, 3.747 chars, inglés): **la bandeja muestra un texto y el publicador manda otro**, y las 22 notas de Sam se escribieron mirando el que no publica; (5) el corte por **percentil 99 no da 0,97 y 0,94 sino 0,9603 y 0,9046** —ésas eran los máximos— y **LucienSael no tiene línea base de dominios distintos: sus 52 vectores son de un solo dominio**. **Confirmado exacto:** las 4 medias de coseno sobre los **241 vectores**, el reparto de las **56** piezas devueltas a la bandeja (NSCF 32 · FPHS 12 · LUC 8 · UVS 4), los dominios por marca (32 · 9 · 6+1 · 4) y el handle **`hair-intelligence`** de Shopify. **El umbral `0.80` es literal en `content-watcher/index.ts` en NUEVE sitios y TRES gates** (449, 450, 456, 458, 1059, 1073, 1101, 1454, 1456) y la línea 964 ya lo confesaba. **SERIE N:** N07, N08 y N13 dejan de ser `SIN CONTENIDO` · **N13 CERRADO** con su defecto abierto · **N16 DADO DE ALTA** —**24** piezas `scheduled` sin franja contra **43** franjas libres futuras, peor que el 13/45 del brief— · N05A confirmado `UNIQUE INDEX` por tercera vez, **y es por qué «11 cerradas» no tiene representación en el dato**. **Y un hallazgo que reordena el Frente 4:** los dominios declarados **no producen** — ForumPHs escribe sobre **5 de 32**, LucienSael sobre **1 de 4**: primero el agente y su cron, después el dominio nuevo. **Barrido de voseo sobre el bloque nuevo: cero apariciones** [medido con el `verify_pattern` de `HR-GEN-05`]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-12 · v2026-09-12-v1 (**CIERRE DEL 2026-09-12 — EL MÉTODO DE PUBLICAR SE VUELVE CARGABLE, Y N10 QUEDA APLICADO A MEDIAS.** Alta de **`skills/publicacion-operativa/SKILL.md` v1.0**, capa MÉTODO y destino CARGABLE, entregado por Sam y **registrado literal** —md5 idéntico contra el origen—: cubre el hueco que `BRIEF-06` §4.4 nombró y que **no existía en el repo** [medido]. **BRIEF-06 encendido en seco:** `intel.carril_regulation_log` creada, `carril-regulator` desplegada y su `dry_run` corrido —**16 canales, 14 `SUPPLY_ABSENT` y 2 `HOLD`, cero liberadas, cero aparcadas, déficit total 75,2**—, `carril-regulator-daily` **ACTIVADO** y `carril-cobertura-alarma-daily` **apagado a propósito** [medido, todo]. **N10:** la DDL está —columna, intervalo en config y RPC con backoff— y el **punto 5 aplicado**: `intel.v_carril_cobertura` gana `franjas_sin_publicador` y `primera_sin_publicador` **sin cambiar ninguna fórmula** [medido]. **LO QUE ESTE BLOQUE ABRE, Y ES LO URGENTE: `content-scheduler` NO lleva el código de N10.** La desplegada es la **v17 del 2026-09-10 21:43 UTC** —trae el tope de caption, **cero apariciones** de `sellarBackoff`, `last_drain_check_at` y `SLOT_BACKOFF_FAILED`— y el efecto lo confirma: **120 `PROVIDER_NOT_DRAINABLE` en 6 horas y CERO franjas selladas** [medido]. **El backoff no está operando.** Los 12 crons de UnrealvilleStudio reprogramados a semanal, lunes a sábado [medido: los 12 activos]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido]. **Adición 2026-09-10 — SERIE N, sección propia:** los identificadores `N05A`, `N07`, `N08`, `N10`, `N13`, `N14` y `N15` **no estaban en ningún context file**, y por eso un encargo que los nombrara era irresoluble. Ahora tienen registro con su estado medido. **N10 es lo urgente y empeora solo**: `intel.drain_due_slots` **no filtra por proveedor**, las franjas no drenables nunca alcanzan estado terminal y ocupan la cabeza de la cola —**544 filas acumuladas y 4 franjas atascadas, dos de ellas desde el 2026-09-08**—; al llegar a las 50 del techo, **la publicación se detiene sin un solo error**. **N14 no se reproduce**: ninguno de los dos `cron.job.command` lleva secreto en claro [medido con volcado redactado]. **N15 se abarata**: el tope ya vive en `platform_configs.char_limit`, así que es enrutar un dato que existe, no crearlo. **N07, N08 y N13 quedan declarados SIN CONTENIDO** — nombrados y sin definición en ninguna parte.)_
+
+---
+
+## 🗓️ CIERRE 2026-09-12-v3 — Sam decide, y la fuga de N10 queda cerrada por el lado del blog
+
+_(Bloque al tope. **Amplía el `v2026-09-12-v2` inmediatamente debajo; no lo reescribe.**
+Sam tomó cinco decisiones sobre lo que el `v2` dejaba abierto, **y quedan escritas con su motivo**,
+que es la parte que no se puede reconstruir después. CC ejecutó las dos primeras con el método que
+Sam fijó —**en seco, lectura, y después aplicación**— y **verificó por efecto**, no por lo que la
+función dice de sí misma. Todo lo etiquetado `medido` se consultó el **2026-09-12 entre las 19:30 y
+las 19:55 UTC**. `now()` de cierre: **2026-09-12 19:53:25 UTC**.)_
+
+---
+
+### 📋 Las cinco decisiones de Sam, con su motivo
+
+| # | Decisión | El motivo, en sus términos |
+|---|---|---|
+| **1** | **El parche del promotor: SÍ, aplicarlo** — y de paso rellenar `post_url` de las dos piezas | *«El atajo que evita republicar es el que impide reparar.»* Que toque un publicador con horas en producción **es exactamente el motivo de que exista el `dry_run`**: primero en seco, se lee el resultado, y después se aplica |
+| **2** | **Manda `discarded_at`**, sobre `status` | *«El descarte es un veredicto humano; `scheduled` es una posición en la cola. Un veredicto pesa más que una posición.»* Y el estado incoherente se cierra **por el lado del planificador**, no relajando el bloqueo del publicador |
+| **3** | **La pieza es el texto adaptado** — `social.adapted[n].copy`, uno por canal | Cambia el **proceso**, no sólo el dato: la bandeja tiene que mostrar ése. Las 22 notas **no se pierden: se reevalúan** contra el texto real. **Encargo propio y con prioridad**, porque todo lo que se calibre hasta que se arregle **se calibra sobre el texto equivocado** |
+| **4** | **200 pares de mínimo**, con la contrapartida dicha en voz alta | Con ese mínimo **una marca nueva arranca sin gate de duplicación, y eso hay que decirlo, no dejarlo implícito**. La regla: sin corpus suficiente el gate declara **`SIN_LINEA_BASE`** y **no compara**. Nunca aprueba en silencio por tabla vacía. **Y una marca sin gate publica igual, porque nada sale sin la aprobación de Sam** |
+| **5** | **Frente 4 reordenado: primero el agente, después el dominio** | *«El cuello no son los dominios: son los agentes que los trabajan.»* El frente pasa a ser **«un agente y su cron por dominio declarado»**, y la siembra de dominios nuevos baja a segundo lugar |
+
+---
+
+### ✅ DECISIÓN 1, APLICADA Y VERIFICADA — `blog-promoter` v1.2
+
+**Desplegada** [medido]: `version 3`, `ezbr_sha256`
+**`9529a937d230a08446bf577d2bf9bccd766f3cf6b68a4e033e8ef04af8418f97`**, `verify_jwt` **`false`**
+(preservado — `CC_PROTOCOL.md` §10). Código en `unrlvl-iid-functions` **PR #145**, rama
+`fix/blog-promoter-sella-en-ya-publicada`.
+
+**El método de Sam, paso a paso y con su resultado:**
+
+1. **Cron 99 apagado** con `cron.alter_job(99, active := false)` —la vía que funciona, `UPDATE cron.job`
+   está prohibido en este proyecto—, para que ninguna corrida real ocurriera durante la prueba.
+2. **Estado previo capturado** para poder revertir: las dos franjas `reserved` con `published_at` NULL,
+   las dos piezas `published` con **`slug` Y `post_url` en NULL**.
+3. **`dry_run` corrido y leído** [medido]: 3 canales, 6 franjas vencidas, **2 `SELLARIA_YA_PUBLICADA`**,
+   **cero publicaciones nuevas**. Declaró de antemano que sellaría con el `published_at` **de la pieza**
+   y qué URL rellenaría.
+4. **Aplicación real**: las dos `YA_PUBLICADA_SELLADA`.
+5. **Cron 99 encendido de nuevo.**
+
+**La verificación por efecto, que es la que vale** [medido]:
+
+| Comprobación | Antes | Después |
+|---|---|---|
+| Franja `66227c12…` · LucienSael · `blog` | `reserved`, `published_at` NULL | **`published`**, `2026-09-09 21:52:27` |
+| Franja `c09c824a…` · ForumPHs · `blog_forumphs` | `reserved`, `published_at` NULL | **`published`**, `2026-09-09 21:52:24` |
+| `published_at` de franja y pieza | discrepaban | **coinciden exactamente** |
+| `post_url` de las dos piezas | **NULL** | `https://luciensael.com/blog/behavioral-science-e4aba666` · `https://forumphs.com/blog/la-asamblea-que-no-entiendo-c4b3e01f` |
+| `slug` de las dos piezas | **NULL** | `behavioral-science-e4aba666` · `la-asamblea-que-no-entiendo-c4b3e01f` |
+| **`intel.drain_due_slots(200)` las devuelve** | **sí, cada 15 minutos** | **0** |
+| Franjas vencidas y reservadas | **6** | **4** |
+
+**Las 4 que quedan son de `x_api` y `tiktok_business`**: no son de este publicador y **siguen
+esperando el suyo**. La fuga de N10 queda cerrada **por el lado del blog**, no entera.
+
+> **Una salvedad reportada, no medida por CC:** el `config` de LucienSael advierte que el sitio
+> *«hoy sirve HTML estático con extensión `.html`»*, así que la URL sellada **puede no resolver
+> todavía**. `post_url` guarda **la ubicación canónica que declara el canal**, que es el valor
+> correcto; la colisión del sitio es un frente aparte, ya anotado en ese mismo `config`.
+
+#### 🔴 Y lo que apareció al verificar: la bitácora del promotor NUNCA pudo escribir
+
+`intel.brand_publish_drain_log` **no tiene ni una fila** de `BLOG_SLOT_SEALED` después de dos sellos
+correctos [medido]. `logDrain()` tiene un `catch (_) {}` deliberado —*«la bitácora no puede tumbar la
+publicación»*, que es razonable— y **ocultó tres rechazos apilados**. Probado el 2026-09-12 con
+inserciones que **nunca se confirman** (bloque `DO` que aborta siempre, cero escrituras):
+
+| # | Rechazo | Código |
+|---|---|---|
+| 1 | `run_id` es `NOT NULL` sin default y `logDrain` no lo envía | **23502** |
+| 2 | `slot_id`, igual | 23502 |
+| 3 | El `CHECK` de `outcome` sólo admite `PUBLISHED`, `CHANNEL_INACTIVE`, `PROVIDER_NOT_DRAINABLE`, `PUBLISH_POLICY_MISSING`, `PUBLISH_FAILED`, `PUBLISH_UNVERIFIABLE`. **Ninguno de los cuatro `BLOG_*` está** | **23514** |
+
+**Lo que significa, y es lo que hay que decidir:** si el lunes el promotor publica de verdad,
+**publica sin dejar rastro**. Es la misma familia del defecto que ya costó una sesión el 2026-09-08
+—el `open_count` clavado en 0 por un `catch` a propósito— y es exactamente lo que
+`DELIVERY_AND_VERIFICATION_RULE` v1.4 nombra: **un error atrapado a propósito necesita su propia vía
+de verificación**.
+
+**🟧 PENDIENTE — DECISIÓN DE SAM. Es DDL sobre tabla compartida y CC no lo aplica solo.** Lo que hace
+falta: que `run_id` y `slot_id` tengan default o los envíe el publicador, y que el `CHECK` de
+`outcome` admita los estados de este modelo de publicación. **Test de la marca N+1 sobre ese `CHECK`:
+sus seis valores actuales describen el modelo de EMPUJE y sólo ése.** Al añadir los del MARCADO, el
+nombre correcto no es «los de blog» sino **el estado funcional** que registran. Y el orden de
+`MULTIBRAND_RULE` §7.2 va **al revés que de costumbre**: acá **el código ya emite** valores que el
+`CHECK` rechaza, así que **la DDL va primero** y el código ya está listo.
+
+---
+
+### ✅ DECISIÓN 2, APLICADA — manda `discarded_at`
+
+**Lo aplicado** [medido antes y después]:
+
+- **Las tres piezas de NeuroneSCF pasan a `rejected`**, que es la convención que ya seguían **las
+  otras 14** fixables descartadas. `discarded_at` y `discarded_reason` **no se tocan**: el veredicto
+  es de Sam y no se reescribe.
+- **Una franja se libera.** `0f82718d-e14c-41a5-9fd3-bcf1f906854b` · NeuroneSCF · `meta_ig` ·
+  **`slot_at` 2026-09-16 23:00 UTC** estaba `reserved` **para una pieza descartada el 9 de
+  septiembre**. Vuelve al pozo (`free`, `piece_id` NULL).
+
+**Y el hueco de fondo que eso destapa, medido:**
+
+| Componente | ¿Filtra `discarded_at`? |
+|---|---|
+| `content-scheduler` | **Sí** — `.is("discarded_at", null)` en las líneas **2422** y **2485** |
+| `blog-promoter` | **Sí** — FAIL-LOUD 2 |
+| **`publish-slot-reserver`** | **NO. Cero apariciones de `discarded_at` en todo el archivo** |
+
+**Por eso una pieza descartada tenía reservada una franja futura.** El planificador ya hacía lo
+correcto; **el reservador no**. Queda como encargo y **se junta con N16**, que vive en el mismo
+archivo.
+
+**Efecto medido:** **0** piezas a la vez `scheduled` y descartadas · **0** franjas `reserved` con
+pieza descartada · y las franjas libres futuras suben de **43 a 44**.
+
+---
+
+### 📌 DECISIÓN 4 — la regla del umbral queda escrita entera, con su contrapartida
+
+**Sustituye a la propuesta del Frente 1 del bloque `v2`, y la completa.** El corte es el **percentil
+99** de la propia distribución de la marca, calculado por separado para **mismo dominio** y para
+**dominios distintos**, con un **mínimo de 200 pares** por distribución.
+
+**Y la contrapartida se dice en voz alta, porque implícita engaña:**
+
+> **Con ese mínimo, una marca nueva arranca SIN gate de duplicación.** El gate declara
+> **`SIN_LINEA_BASE`** y **no compara**. **Nunca aprueba en silencio por tabla vacía**, que es el
+> defecto que su propio código ya advierte. **Y una marca sin gate publica igual, porque nada sale
+> sin la aprobación de Sam** — la bandeja absorbe el riesgo mientras el corpus crece.
+
+**A quién le aplica hoy** [medido sobre los 241 vectores]: las tres marcas con las dos
+distribuciones pasan el mínimo; **LucienSael no tiene ni un par de dominios distintos** —sus 52
+vectores son todos de `behavioral-science`—, así que **para esa marca el corte de dominios distintos
+nace en `SIN_LINEA_BASE`**, y es el caso exacto que la regla existe para declarar.
+
+---
+
+### 📌 DECISIÓN 5 — el Frente 4 se reordena: primero el agente, después el dominio
+
+**El Frente 4 del bloque `v2` queda reformulado así, y su encargo cambia de nombre:** de «sembrar
+dominios» pasa a **«un agente y su cron por dominio declarado»**.
+
+**El motivo, medido:** los dominios declarados no producen.
+
+| Marca | Dominios activos | **Con piezas en el corpus** | Sin producir |
+|---|---|---|---|
+| ForumPHs | 32 | **5** | **27** |
+| NeuroneSCF | 9 | **6** | 3 |
+| UnrealvilleStudio | 6 | **4** | 2 |
+| LucienSael | 4 | **1** | **3** |
+
+**La siembra de dominios nuevos baja a segundo lugar.** Sembrarle cuatro a LucienSael le daría
+**ocho declarados y uno produciendo**.
+
+---
+
+### 📌 DECISIÓN 3 — el texto adaptado es la pieza. Encargo propio y con prioridad
+
+**No se ejecuta en esta sesión por decisión de Sam: va en la suya.** Queda escrito lo que la hace
+urgente, que es la parte que caduca:
+
+- **Lo que llega a la plataforma es `social.adapted[n].copy`, uno por canal.** La bandeja tiene que
+  mostrar ése.
+- **Las 22 notas de Sam —y las de CC— están escritas sobre un borrador previo.** No se pierden:
+  **se reevalúan contra el texto real**.
+- **Y por eso tiene prioridad:** todo lo que se calibre hasta que se arregle **se calibra sobre el
+  texto equivocado**.
+
+**Las 11 fixables de criterio quedan en espera de esto**: sus reglas por grupo **no se deciden antes
+de releerlas sobre el texto adaptado**. Lo mismo para los territorios de los dominios nuevos, que
+siguen esperando a Sam sin que nadie los invente.
+
+---
+
+### 🔷 SERIE N — lo que estas decisiones mueven
+
+| ID | Estado | Qué cambió hoy |
+|---|---|---|
+| **N10** | 🟡 **abierto, y baja de 6 a 4** | Las dos franjas de blog quedan selladas. **Las 4 restantes son `x_api` y `tiktok_business`**: esperan su publicador |
+| **N13** | 🟢 **CERRADO, y su defecto también** | v1.2 sella y rellena. **Queda una deuda propia: su bitácora no puede escribir** hasta que se decida la DDL |
+| **N16** | 🔴 **abierto, y gana un hallazgo** | **24 piezas sin franja contra 44 franjas libres futuras** (una más, la liberada hoy). **Y ya hay una causa medida que investigar primero: `publish-slot-reserver` no filtra `discarded_at`** |
+| **N08** | 🟡 **abierto y EN ESPERA de la decisión 3** | Sus 22 notas **se releen sobre el texto adaptado** antes de decidir regla alguna |
 
 ---
 

@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-09-12 (v2) — La franja del 8 de septiembre queda cerrada, y el artículo ya tiene URL
+
+> **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,
+> aplicación— y verificó **por efecto**. Medido el **2026-09-12 entre las 19:30 y las 19:55 UTC**.
+> **Professor: no lo cerró CC.** **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+**Aplicado con `blog-promoter` v1.2** (`unrlvl-iid-functions` PR #145):
+
+| | Antes | Después |
+|---|---|---|
+| Franja `66227c12-a169-419d-a246-a79878a2149c` | `reserved`, vencida desde el **2026-09-08 14:00 UTC** | **`published`**, sellada con `2026-09-09 21:52:27` — el `published_at` de la pieza |
+| `post_url` de la pieza | **NULL** | `https://luciensael.com/blog/behavioral-science-e4aba666` |
+| `slug` | **NULL** | `behavioral-science-e4aba666` |
+| `intel.drain_due_slots(200)` la devuelve | sí, cada 15 minutos | **no** |
+
+**El primer artículo de blog de la marca ya se puede localizar desde el dato.** La franja sale de la
+cabeza de la cola de N10 y los dos libros mayores cuentan la misma fecha.
+
+> ⚠️ **Salvedad que no cierra acá** [reportado, no medido por CC]: el `config` del canal advierte que
+> el sitio *«hoy sirve HTML estático con extensión `.html`»*, así que esa URL **puede no resolver
+> todavía**. `post_url` guarda la ubicación canónica que declara el canal, que es el valor correcto a
+> sellar; la colisión del sitio es un frente aparte, ya anotado en ese mismo `config`.
+
+**Lo que sigue abierto para la marca:** su franja de `x` (`x_api`) y la de `tiktok`
+(`tiktok_business`) **siguen vencidas y reservadas** — no son de este publicador y esperan el suyo.
+Y el pozo sigue en **1 dominio produciendo de 4 declarados**: por decisión de Sam, **primero el
+agente y su cron, después los dominios nuevos**.
+
+---
+
 ## 2026-09-12 — El promotor de blogs existe y corre, y la franja del 08 de septiembre sigue abierta
 
 > **Entrada de CC.** Lo aplicó Claude.ai; **CC documenta y mide, no re-aplica.** Todo lo etiquetado
