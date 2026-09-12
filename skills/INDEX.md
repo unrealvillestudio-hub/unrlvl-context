@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.12 · 2026-08-18 · Mantenido por: Claude_
+_Versión: 1.13 · 2026-09-12 · Mantenido por: Claude_
 
 ---
 
@@ -20,6 +20,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `shopify-mcp` | `skills/shopify-mcp/SKILL.md` | Trabajo directo en Shopify via conector MCP | Interno — NeuroneSCF (activo), futuras marcas |
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
+| `publicacion-operativa` | `skills/publicacion-operativa/SKILL.md` | **Publicar una pieza, operar el carril, diagnosticar por qué algo no salió, o desplegar y encender un componente de publicación.** MÉTODO sin estado: el reparto Sam↔Claude, las cuatro QA e ICR como acciones, once entradas How2 y dónde se mira cada cosa. **No produce texto** — eso es `content-pipeline` | UNRLVL infra — transversal |
 | `voice-craft` | `skills/voice-craft/SKILL.md` | **CAPA PRIMARIA — siempre que se calibre o genere CUALQUIER voz.** Oficio comunicacional transversal: arsenal operado, artefacto de destino, ejemplo-como-mecanismo, capas PSY/AIFE/Watcher declaradas, reparto genoma↔angle, triage técnica/intención | Multimarca — toda voz |
 | `comm-arsenal` | `skills/comm-arsenal/SKILL.md` | **SE CARGA JUNTO CON `voice-craft`** — es el arsenal que `voice-craft` §2 exige operar. Cuerpo de técnicas de comunicación oral y escrita: estructuras persuasivas, niveles de conciencia, aperturas por canal, prueba/objeción/contraste/analogía/especificidad/reencuadre, tipología de cierres, ritmo micro, ejecución escrita vs oral, anti-patrones | Multimarca — toda redacción y todo guion |
 | `voice-conversion` | `skills/voice-conversion/SKILL.md` | Calibrar o generar una voz de CONVERSIÓN (la que VENDE al decisor). Perfil secundario delgado — **invoca `voice-craft`** | Multimarca — marcas de producto/servicio |
@@ -41,6 +42,23 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.13
+
+**Cambios respecto a v1.12:**
+- **`publicacion-operativa` v1.0 — ALTA.** Skill nuevo, capa **MÉTODO**, destino **CARGABLE**,
+  transversal a todas las marcas. Cubre el hueco que `BRIEF-06` §4.4 nombró y que **no existía**
+  [`medido` 2026-09-12: `skills/publicacion-operativa/` ausente del árbol del repo antes de este PR].
+  Entregado por Sam como archivo consolidado y **registrado tal cual, sin reescribir**: la copia es
+  literal y se verificó por md5 idéntico contra el archivo de origen.
+- **El skill es CERO ESTADO a propósito.** No dice cuántos canales existen ni cuáles están en alarma:
+  su Parte D lleva las **consultas**, no las cifras. Donde alguien esperaría un número y no lo
+  encuentra, es deliberado — regla de `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md` §2.
+- **Queda una ambigüedad declarada y sin cerrar**, ver «PROPUESTA PENDIENTE DE SAM» en REGLAS DE
+  CARGA: la línea de `content-pipeline` y la nueva se solapan en el vocabulario «IID». No se fijó
+  redacción sin Sam.
 
 ---
 
@@ -189,9 +207,18 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 - Sam dice "ads / campaña / Meta / TikTok" → `ads-mcp`
 - Sam dice "costos / margen / tokens" → `cost-layer`
 - Sam dice "pipeline / IID / Orchestrator" → `content-pipeline`
+- Sam dice "publicar / publicación / carril / franja / drenaje / no salió" → `publicacion-operativa`
 - Sam dice "actualiza graph / actualiza ecosystem / ecosystem desactualizado" → `ecosystem-auditor` + `ecosystem-updater`
 - Sam dice "ecosystem audit" o "ecosystem scan" → `ecosystem-auditor` (ver también HRD_ECOSYSTEM_AUDIT en userPreferences)
 - Sam dice "videos TikTok / transcribir / OCR / voice genome / referencia de cuenta" → `voice-reference-extractor` (research local, paso 1) → `genome-calibration` (calibración, paso 2)
+
+**PROPUESTA PENDIENTE DE SAM — la línea de `content-pipeline` quedó ambigua (v1.13).**
+El alta de `publicacion-operativa` la vuelve ambigua: *«pipeline / IID / Orchestrator»* dispara hoy sólo
+`content-pipeline`, y el carril de publicación es IID. La separación que se propone es
+**`content-pipeline` produce el texto · `publicacion-operativa` lo publica y opera el carril**.
+**La redacción NO se fija aquí: es el vocabulario de Sam el que dispara la carga, y la decide él.**
+Mientras tanto la línea de arriba queda **como estaba**, y las dos reglas conviven: quien declare
+trabajo de publicación carga la nueva, quien declare producción de texto carga la de siempre.
 
 **Regla de carga de la familia VOICE (v1.9):**
 - **`voice-craft` + `comm-arsenal` SE CARGAN JUNTOS, SIEMPRE**, en toda calibración o generación de voz. No son alternativas ni opcionales entre sí: `voice-craft` es el oficio (qué hace bueno a un texto) y `comm-arsenal` es el repertorio que ese oficio ejecuta. Cargar `voice-craft` sin `comm-arsenal` reproduce exactamente el defecto que ambos diagnostican: principios sin cuerpo.
@@ -236,4 +263,4 @@ Los archivos específicos de cliente viven en `brands/[Marca]/`, no en `skills/`
 
 ---
 
-_INDEX v1.12 · Unrealville Studio · Carga obligatoria en apertura de sesión_
+_INDEX v1.13 · Unrealville Studio · Carga obligatoria en apertura de sesión_

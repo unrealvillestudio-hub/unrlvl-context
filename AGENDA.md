@@ -1,5 +1,114 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-12 · v2026-09-12-v1 (**CIERRE DEL 2026-09-12 — EL MÉTODO DE PUBLICAR SE VUELVE CARGABLE, Y N10 QUEDA APLICADO A MEDIAS.** Alta de **`skills/publicacion-operativa/SKILL.md` v1.0**, capa MÉTODO y destino CARGABLE, entregado por Sam y **registrado literal** —md5 idéntico contra el origen—: cubre el hueco que `BRIEF-06` §4.4 nombró y que **no existía en el repo** [medido]. **BRIEF-06 encendido en seco:** `intel.carril_regulation_log` creada, `carril-regulator` desplegada y su `dry_run` corrido —**16 canales, 14 `SUPPLY_ABSENT` y 2 `HOLD`, cero liberadas, cero aparcadas, déficit total 75,2**—, `carril-regulator-daily` **ACTIVADO** y `carril-cobertura-alarma-daily` **apagado a propósito** [medido, todo]. **N10:** la DDL está —columna, intervalo en config y RPC con backoff— y el **punto 5 aplicado**: `intel.v_carril_cobertura` gana `franjas_sin_publicador` y `primera_sin_publicador` **sin cambiar ninguna fórmula** [medido]. **LO QUE ESTE BLOQUE ABRE, Y ES LO URGENTE: `content-scheduler` NO lleva el código de N10.** La desplegada es la **v17 del 2026-09-10 21:43 UTC** —trae el tope de caption, **cero apariciones** de `sellarBackoff`, `last_drain_check_at` y `SLOT_BACKOFF_FAILED`— y el efecto lo confirma: **120 `PROVIDER_NOT_DRAINABLE` en 6 horas y CERO franjas selladas** [medido]. **El backoff no está operando.** Los 12 crons de UnrealvilleStudio reprogramados a semanal, lunes a sábado [medido: los 12 activos]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido]. **Adición 2026-09-10 — SERIE N, sección propia:** los identificadores `N05A`, `N07`, `N08`, `N10`, `N13`, `N14` y `N15` **no estaban en ningún context file**, y por eso un encargo que los nombrara era irresoluble. Ahora tienen registro con su estado medido. **N10 es lo urgente y empeora solo**: `intel.drain_due_slots` **no filtra por proveedor**, las franjas no drenables nunca alcanzan estado terminal y ocupan la cabeza de la cola —**544 filas acumuladas y 4 franjas atascadas, dos de ellas desde el 2026-09-08**—; al llegar a las 50 del techo, **la publicación se detiene sin un solo error**. **N14 no se reproduce**: ninguno de los dos `cron.job.command` lleva secreto en claro [medido con volcado redactado]. **N15 se abarata**: el tope ya vive en `platform_configs.char_limit`, así que es enrutar un dato que existe, no crearlo. **N07, N08 y N13 quedan declarados SIN CONTENIDO** — nombrados y sin definición en ninguna parte.)_
+
+---
+
+## 🗓️ CIERRE 2026-09-12-v1 — El método de publicar se vuelve cargable, y N10 queda aplicado a medias
+
+_(Bloque al tope. Lo aplicó Claude.ai y lo desplegó Sam; **CC documenta, no re-aplica.**
+Todo lo etiquetado `medido` acá lo consultó CC con `execute_sql`, `list_edge_functions` y
+`get_edge_function` el **2026-09-12 entre las 14:30 y las 16:30 UTC**.)_
+
+### ✅ Cerrado hoy
+
+- ✅ **`skills/publicacion-operativa/SKILL.md` v1.0 — ALTA.** Capa **MÉTODO**, destino **CARGABLE**,
+  transversal. Entregado por Sam como archivo consolidado y **registrado tal cual, sin reescribir**:
+  la copia se verificó por **md5 idéntico** contra el origen. Registrado en `skills/INDEX.md` v1.13 en
+  los tres sitios que el índice exige. **Es cero estado a propósito**: su Parte D lleva las consultas,
+  no las cifras.
+- ✅ **N10 — la DDL está aplicada** [medido]: `intel.brand_publish_slots.last_drain_check_at` existe ·
+  `intel.iid_scheduler_config.drain_backoff_sin_publicador` vale **`6 hours`** ·
+  `intel.drain_due_slots` ya excluye lo sellado hace menos que ese intervalo.
+- ✅ **N10 punto 5 — APLICADO con aprobación de Sam.** `intel.v_carril_cobertura` gana
+  **`franjas_sin_publicador`** y **`primera_sin_publicador`**; `franjas_comprometidas`, `cobertura` y
+  `alarma` **no cambian de fórmula** [medido]. La vista **cuenta el sello** que el código escribió;
+  **no decide** qué proveedor es drenable, que sigue siendo capacidad de `DRAINABLE_PROVIDER`.
+- ✅ **BRIEF-06 — `intel.carril_regulation_log` creada y `carril-regulator` desplegada** (v1,
+  2026-09-12) [medido con `list_edge_functions`].
+- ✅ **`dry_run` corrido y leído** [medido en la bitácora]: **16 canales**, **14 `SUPPLY_ABSENT`** y
+  **2 `HOLD`** con código `COVERAGE_SUFFICIENT`, **cero liberadas**, **cero aparcadas**, **déficit
+  total 75,2**.
+- ✅ **`carril-regulator-daily` ACTIVADO** — `jobid 85`, `40 6 * * *` [medido].
+- ✅ **Los 12 crons de UnrealvilleStudio, reprogramados a semanal** — un agente por día de lunes a
+  sábado, research 08:00 UTC y process 10:00 UTC [medido: los 12 activos con esas expresiones].
+  Sus 6 agentes declaran `weekly` en `intel.iid_agents` y sus crons corrían **trimestral y
+  semestralmente**: ahora las dos fuentes dicen lo mismo **para esa marca**.
+- ✅ **PR #143 de `unrlvl-iid-functions` mergeado** — el código de N10 está en `main`.
+
+### 🔴 ABIERTO Y URGENTE — `content-scheduler` no lleva el código de N10
+
+**Medido el 2026-09-12, y contradice lo que el brief daba por hecho.** La `content-scheduler`
+desplegada es la **v17 del 2026-09-10 21:43 UTC**: contiene el tope de caption de `#141`, y
+**cero apariciones** de `sellarBackoff`, `last_drain_check_at` y `SLOT_BACKOFF_FAILED`
+[`get_edge_function`, conteo literal sobre el bundle desplegado].
+
+**El efecto lo confirma, que es la prueba que vale:** `intel.brand_publish_drain_log` registra
+**120 `PROVIDER_NOT_DRAINABLE` en las últimas 6 horas** —el cron 66 corre cada 15 minutos y llevaba
+12 corridas— y `intel.brand_publish_slots` tiene **CERO filas** `reserved` con `last_drain_check_at`
+no nulo. **La DDL está; el despliegue falta. El backoff no está operando.**
+
+Es exactamente el defecto que `protocols/MEASUREMENT_METHOD_RULE.md` §5 nombra: **un PR mergeado no
+despliega nada**, y **el objeto de despliegue se comprueba antes**. Y es la entrada **C.1** del skill
+que se da de alta hoy: *push ≠ deploy*.
+
+**Lo que falta, y es de Sam** — desplegar desde `main` actualizado:
+
+```
+supabase functions deploy content-scheduler --project-ref amlvyycfepwhiindxgzw --no-verify-jwt
+```
+
+**Verificación posterior, en este orden:** que el bundle contenga `sellarBackoff`, y **a las 6 horas**
+que `franjas_sin_publicador` sea mayor que cero en los canales de `tiktok_business`, `vercel_html` y
+`x_api`, y **cero** en los de `meta_graph`. Si lo primero pasa y lo segundo no, el sello falla y hay
+que leer `writeErrors`.
+
+### 📋 Decisiones tomadas, con su motivo
+
+- **El regulador se enciende; la alarma no.** El `dry_run` mostró que hoy el regulador **no libera ni
+  aparca nada**: sólo escribe su bitácora. Encenderlo **no cambia producción** y empieza a acumular la
+  serie que hará falta para saber si el sistema arranca.
+- **`carril-cobertura-alarma-daily` sigue apagado** — `jobid 86`, `0 7 * * *` [medido]. Con **14 de 16
+  canales** en `SUPPLY_ABSENT`, enviaría un correo diario repitiendo una condición ya conocida y
+  documentada, y **lo primero que enseñaría es a ignorarla**. `BRIEF-06` dice que la alarma existe
+  contra la degradación **silenciosa**; ésta no es silenciosa: está medida y tiene encargo abierto.
+  **Condición para encenderla, escrita por adelantado: cuando `SUPPLY_ABSENT` baje de 14 a 4 o menos.**
+  Decisión de Claude.ai, autorizada por Sam el 2026-09-12; **Sam la revierte cuando quiera**.
+
+### ⚠️ Un defecto del brief, anotado para que no se repita
+
+`UPDATE cron.job SET active = false` **es rechazado en este proyecto** con
+`permission denied for table job` [medido el 2026-09-12]. La vía que funciona es
+**`cron.alter_job(jobid, active := false)`** con el `jobid` que devuelve `cron.schedule`. Una
+migración que apague crons por `UPDATE` **falla entera**. Anotado en `CAPABILITIES.md` v1.15.
+
+### 🔶 Frentes abiertos — los siete que este cierre deja anotados
+
+1. **Déficit de oferta: 75,2 piezas en 14 canales** [medido]. **El regulador no tiene nada que
+   regular.** Es la raíz de la que cuelgan los frentes 2 y 3.
+2. **26 dominios de ForumPHs sin agente**, frente a 6 con agente sobre 32 topics activos
+   [reportado — brief de Claude.ai, 2026-09-12].
+3. **LucienSael: 1 agente activo y CERO crons.** Su producción **no falla — no está programada**.
+   **No se le crearon crons a propósito:** con 8 franjas semanales y su pozo actual, **cualquier
+   cadencia produce duplicados por construcción**. **Decisión de Sam pendiente: más dominios o menos
+   franjas.**
+4. **Nada reconcilia `intel.iid_agents.run_frequency` con `cron.job`.** Hoy se alinearon a mano los 12
+   de UnrealvilleStudio; **la próxima divergencia no la detecta nadie**. Propuesta pendiente:
+   comprobación periódica que las enfrente y **falle ruidosamente**.
+5. **7 canales con política divergente de su cadencia.** Regenerar políticas **después** de observar
+   unos días al regulador, no antes.
+6. **4 de 6 proveedores activos sin publicador** — `vercel_html`, `tiktok_business`, `x_api`,
+   `shopify_blog`. El backoff apaga el ruido; **el hueco sigue**, y en cuanto la EF se despliegue
+   **se verá** en `franjas_sin_publicador`.
+7. **`icr_passed` es una constante literal `true`** en `content-run-stage`, y **`content-watcher` no
+   conoce el concepto ICR**. El estándar del ecosistema **se estampa sin comprobarse**. Encargo
+   aparte, ya decidido por Sam.
+
+### 📐 Contrato ICR — forma decidida, contenido pendiente
+
+Decidido por Sam el 2026-09-12: **contrato, no protocolo**. Tabla de definiciones **cerrada**: ICR,
+QA, AIID, IID, AIFE, CRO, PSY. **Pendiente:** dónde vive, qué cláusulas pasan a verificadores, y
+sembrar `icr_standard` para ForumPHs y NeuroneSCF.
 
 ---
 
