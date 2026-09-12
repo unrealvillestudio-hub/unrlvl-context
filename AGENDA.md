@@ -44,14 +44,75 @@ _(Bloque al tope. Detalle en `brands/ForumPHs/session_log.md`, `brands/NeuroneSC
 1. 🔴 **No existe promotor de blogs.** Ningún componente mueve una pieza de blog de `scheduled` a
    `published` [reportado — brief]. **Debe nacer como eje**, resolviendo el canal por `brand_id`
    contra el dato, nunca por una rama de condicional por marca (`protocols/MULTIBRAND_RULE.md`).
-2. 🔴 **Las reglas `blocking` del Watcher están inactivas — 14 de 69, todas con `active = false`**
-   [medido el 2026-09-10: `select severity, active, count(*) from intel.watcher_rules group by 1,2`
-   → `blocking/false = 14` · `warn/true = 54` · `warn/false = 1` · **total 69**]. La consecuencia se
-   dice entera: **hoy ninguna regla puede detener una pieza.** El juez marca; nada corta.
-   **Precisión de columna, para que no se repita el error de lectura:** la severidad vive en
-   **`severity`**, no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
+2. 🟡 **Las 14 reglas `blocking` inactivas NO eran una pérdida de capacidad: eran una cohorte
+   superseída, y se retira en esta misma sesión.** Las 13 que se borran son del **2026-07-27**, con
+   prefijo de marca, y **cada una declaraba en sus propias notas que estaba superseída** por su
+   equivalente de eje — `HR-GEN-02`, `HR-GEN-04`, `HR-GEN-05`, `HR-LEGAL-01/02`, `HR-RETAIL-01`,
+   `IMG-GEN-01/02/05`, `IMG-LEGAL-01/02`, `IMG-RETAIL-01` [medido el 2026-09-11: las 13 filas
+   volcadas íntegras antes de borrarlas, las 13 con `SUPERSEDIDA` en `notes`].
+   **`HR-FPHS-10` NO se borra:** su `subject` `cta_por_frente` **no tiene sucesora viva**, y su nota
+   es el único registro de que ese juicio vive en `gate7`.
+
+   > ⛔ **CORRECCIÓN 2026-09-11 — la redacción anterior de este punto afirmaba de más.**
+   > Se conserva por `CC_PROTOCOL.md` §0:
+   >
+   > > 2. 🔴 **Las reglas `blocking` del Watcher están inactivas — 14 de 69, todas con `active = false`**
+   > >    [medido el 2026-09-10: `select severity, active, count(*) from intel.watcher_rules group by 1,2`
+   > >    → `blocking/false = 14` · `warn/true = 54` · `warn/false = 1` · **total 69**]. La consecuencia se
+   > >    dice entera: **hoy ninguna regla puede detener una pieza.** El juez marca; nada corta.
+   > >    **Precisión de columna, para que no se repita el error de lectura:** la severidad vive en
+   > >    **`severity`**, no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
+   > >    `enforced_on = 'blocking'` devuelve **cero filas** y hace parecer que el problema no existe.
+   >
+   > **Qué estaba mal y qué no.** El **conteo era correcto** —14 de 69, todas inactivas— y también
+   > la precisión de columna, que se conserva abajo. Lo que estaba mal es **la consecuencia**:
+   > presentaba como pérdida de capacidad lo que era **ruido de una migración ya hecha**. Esas 13
+   > reglas **no dejaron de cortar: fueron reemplazadas por reglas de eje que sí corren**. La
+   > alarma fue falsa, y la produjo leer un `active = false` sin leer la nota que había al lado.
+   >
+   > **Y la pregunta correcta —¿soporta el Watcher una severidad bloqueante?— queda RESPONDIDA, y
+   > la respuesta es SÍ** [medido el 2026-09-11 sobre `content-watcher`]:
+   > `parseRuleVerdict` construye `const sev = new Map(rules.map(r => [code, r.severity ?? "blocking"]))`
+   > y reparte los códigos entre **`violated`** —que hace fallar el gate— y **`warned`**, que se
+   > registra y **no bloquea**. **La capacidad existe y está cableada.** Lo que no hay es ninguna
+   > regla que la use: tras el borrado queda **una sola** `blocking`, `HR-FPHS-10`, inactiva a
+   > propósito.
+   >
+   > 🔴 **Y ahí aparece el hallazgo que nadie buscaba: el valor por defecto es `blocking`.**
+   > `r.severity ?? "blocking"` significa que **una regla que llegue con `severity` nulo BLOQUEA**.
+   > Hoy no ocurre —las 56 filas tienen severidad—, pero **la columna no tiene `NOT NULL`**: sembrar
+   > una regla sin severidad la convierte en bloqueante sin que nadie lo pida. Es fail-safe por
+   > diseño y conviene saberlo antes de sembrar, no después.
+
+   **Precisión de columna que SÍ se sostiene, y se conserva:** la severidad vive en **`severity`**,
+   no en `enforced_on` —esa columna vale `piece` o `piece_and_brief`—, y consultar
    `enforced_on = 'blocking'` devuelve **cero filas** y hace parecer que el problema no existe.
-3. 🔴 **No hay regla de registro gramatical en ninguna marca** [reportado — brief]. La propuesta,
+2-bis. 🟡 **`verify_pattern` SÍ se lee — por tres consumidores— y NO está en `NULL` en todas.**
+   Las dos premisas del encargo se caen por medición [2026-09-11]. **Lo leen:** el corrector
+   determinista pre-juicio de `content-run-stage` (`CORRECTOR_COLS = "verify_pattern,fix_replacement"`),
+   la verificación de procedencia de `iid-process` (**PROC-01**) y la guarda de texto editado de
+   `piece-edit`. **Y lo tienen 5 de las 56 reglas** — `HR-FPHS-13`, `HR-FPHS-15`, `HR-FPHS-16`,
+   `HR-LEGAL-01`, `HR-LUC-10` —, más **1** con `fix_replacement`.
+
+   **Así que cablearlo no cuesta código: cuesta dato.** La maquinaria está construida y **ya avisa
+   cuando le falta**: `iid-process` mete la regla sin patrón en `unverified` y registra
+   `SIN_VERIFICACION_DETERMINISTA`, con el comentario que lo explica — *«silencio no es acuerdo, es
+   ausencia de medición»*.
+
+   🔴 **Por qué se publicaron tres piezas con voseo, entonces:** `HR-GEN-05` —activa, `warn`,
+   `brand_id = NULL`, subject `idioma_separado`— **no tiene `verify_pattern`** [medido]. Su
+   enunciado dice «regionalismos, marcas dialectales», y **sin patrón eso queda al criterio del
+   juez**, que es un LLM leyendo prosa. **El arreglo es sembrar el patrón en `HR-GEN-05`**, no
+   escribir código — y es además la respuesta al frente 3, que pedía una regla de registro
+   gramatical: **la regla ya existe y es de eje; lo que le falta es la mitad determinista.**
+
+   > **Nota de cierre del círculo:** `HR-NSCF-04`, una de las 13 borradas hoy, era la predecesora
+   > **de marca** de `HR-GEN-05` sobre este mismo `subject`. La migración a eje se hizo; lo que no
+   > se hizo fue darle a la regla de eje el patrón que la vuelve comprobable.
+
+3. 🔴 **No hay regla de registro gramatical en ninguna marca** [reportado — brief; **matizado por
+   el punto 2-bis**: la regla de eje `HR-GEN-05` existe y cubre el enunciado — lo que falta es su
+   `verify_pattern`]. La propuesta,
    **nombrada como propuesta y no como regla vigente**: una regla **de eje** que prohíba las formas
    voseantes, con `verify_pattern`, aplicable **según el registro declarado de cada marca**, que es
    dato. El registro es instancia; la regla, eje.
