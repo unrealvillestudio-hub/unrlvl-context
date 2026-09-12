@@ -1,5 +1,73 @@
 # ForumPHs — Session Log
 
+## 2026-09-12 (v2) — La franja del 10 de septiembre queda cerrada, y el artículo ya tiene URL
+
+> **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,
+> aplicación— y verificó **por efecto**. Medido el **2026-09-12 entre las 19:30 y las 19:55 UTC**.
+> **Professor: no lo cerró CC.** **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+**Aplicado con `blog-promoter` v1.2** (`unrlvl-iid-functions` PR #145):
+
+| | Antes | Después |
+|---|---|---|
+| Franja `c09c824a-4770-4b9c-aa4c-7e35a075cbd3` | `reserved`, vencida desde el **2026-09-10 15:00 UTC** | **`published`**, sellada con `2026-09-09 21:52:24` — el `published_at` de la pieza |
+| `post_url` de la pieza | **NULL** | `https://forumphs.com/blog/la-asamblea-que-no-entiendo-c4b3e01f` |
+| `slug` | **NULL** | `la-asamblea-que-no-entiendo-c4b3e01f` |
+| `intel.drain_due_slots(200)` la devuelve | sí, cada 15 minutos | **no** |
+
+**Lo que sigue abierto para la marca:** el pozo, que es lo grande. **5 dominios produciendo de 32
+declarados** — 27 sin agente. Por decisión de Sam, el Frente 4 pasa a ser **«un agente y su cron por
+dominio declarado»**, y la siembra de dominios nuevos baja a segundo lugar. La marca es la que más
+capacidad declarada tiene parada.
+
+---
+
+## 2026-09-12 — El promotor de blogs atiende el canal de la marca, y deja su franja a medio sellar
+
+> **Entrada de CC.** Lo aplicó Claude.ai; **CC documenta y mide, no re-aplica.** Todo lo etiquetado
+> `medido` se consultó con `execute_sql`, `get_edge_function` y lectura del working tree de
+> `unrlvl-iid-functions` en `034d940`, el **2026-09-12 entre las 18:50 y las 19:25 UTC**.
+> **Professor: no lo cerró CC** — la captura de learnings es de Claude.ai (`HRD_PROFESSOR`).
+> **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+
+### ✅ `blog_forumphs` entra entre los canales del nuevo publicador
+
+`blog-promoter` v1.1 atiende los proveedores que publican **por marcado**, y el canal
+`ForumPHs` / `blog_forumphs` es `vercel_html` [medido en `intel.brand_publish_channels`]. Es uno de
+los **3 canales** que la EF devuelve en cada corrida.
+
+### 🔴 Su franja del 10 de septiembre sigue `reserved`, con la pieza ya publicada
+
+**Medido** [`now()` = 2026-09-12 19:21:57 UTC]:
+
+| Franja | Canal | Vencida desde | Pieza | `post_url` |
+|---|---|---|---|---|
+| `c09c824a-4770-4b9c-aa4c-7e35a075cbd3` | `blog_forumphs` · `vercel_html` | **2026-09-10 15:00 UTC** | **`published`** desde 2026-09-09 21:52:24 | **NULL** |
+
+La rama `YA_PUBLICADA` del promotor **no sella la franja**: la reconoce, no la republica —correcto— y
+la deja `reserved`. Sigue en la fuga de N10 y su pieza sigue sin URL en el dato. Mismo caso que la de
+LucienSael; el parche es uno solo y está descrito en `AGENDA.md`, bloque `CIERRE 2026-09-12-v2` §A.
+
+### 🟡 32 dominios declarados, 5 produciendo
+
+**Medido sobre `intel.content_embeddings`:** los **57 vectores** de ForumPHs se reparten en **5
+dominios** —`el-acta-como-instrumento`, `la-asamblea-que-no-entiendo`,
+`la-cuota-extraordinaria-que-viene-jd`, `la-cuota-por-dentro`,
+`rendir-cuentas-sin-sudar-doliente`—, frente a **32 activos** en `intel.brand_topics`.
+
+Es la otra cara de los **26 dominios sin agente** que este archivo ya tenía anotados: la marca es la
+única que sostiene 2 artículos semanales **por número de dominios**, y a la vez es la que más
+capacidad declarada tiene parada.
+
+### ⚠️ Un detalle de medición que conviene no repetir
+
+La comprobación «¿la fila de cola lleva `blog`?» **da 0 para esta marca y no significa nada**: su
+canal de blog se llama **`blog_forumphs`**, y son **22 de sus 100 filas** las que lo llevan [medido].
+La comprobación correcta es contra el `platform_key` del canal de blog **de cada marca**, no contra
+la palabra `blog`.
+
+---
+
 ## 2026-09-09 — El carrusel del PL 678 sale a las dos redes, pero sale fuera del carril
 
 > Professor cerrado **antes** (orden `Professor → Actualiza → commit` respetado): **16 learnings**,

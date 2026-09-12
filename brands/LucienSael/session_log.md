@@ -2,6 +2,89 @@
 
 ---
 
+## 2026-09-12 (v2) — La franja del 8 de septiembre queda cerrada, y el artículo ya tiene URL
+
+> **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,
+> aplicación— y verificó **por efecto**. Medido el **2026-09-12 entre las 19:30 y las 19:55 UTC**.
+> **Professor: no lo cerró CC.** **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+**Aplicado con `blog-promoter` v1.2** (`unrlvl-iid-functions` PR #145):
+
+| | Antes | Después |
+|---|---|---|
+| Franja `66227c12-a169-419d-a246-a79878a2149c` | `reserved`, vencida desde el **2026-09-08 14:00 UTC** | **`published`**, sellada con `2026-09-09 21:52:27` — el `published_at` de la pieza |
+| `post_url` de la pieza | **NULL** | `https://luciensael.com/blog/behavioral-science-e4aba666` |
+| `slug` | **NULL** | `behavioral-science-e4aba666` |
+| `intel.drain_due_slots(200)` la devuelve | sí, cada 15 minutos | **no** |
+
+**El primer artículo de blog de la marca ya se puede localizar desde el dato.** La franja sale de la
+cabeza de la cola de N10 y los dos libros mayores cuentan la misma fecha.
+
+> ⚠️ **Salvedad que no cierra acá** [reportado, no medido por CC]: el `config` del canal advierte que
+> el sitio *«hoy sirve HTML estático con extensión `.html`»*, así que esa URL **puede no resolver
+> todavía**. `post_url` guarda la ubicación canónica que declara el canal, que es el valor correcto a
+> sellar; la colisión del sitio es un frente aparte, ya anotado en ese mismo `config`.
+
+**Lo que sigue abierto para la marca:** su franja de `x` (`x_api`) y la de `tiktok`
+(`tiktok_business`) **siguen vencidas y reservadas** — no son de este publicador y esperan el suyo.
+Y el pozo sigue en **1 dominio produciendo de 4 declarados**: por decisión de Sam, **primero el
+agente y su cron, después los dominios nuevos**.
+
+---
+
+## 2026-09-12 — El promotor de blogs existe y corre, y la franja del 08 de septiembre sigue abierta
+
+> **Entrada de CC.** Lo aplicó Claude.ai; **CC documenta y mide, no re-aplica.** Todo lo etiquetado
+> `medido` se consultó con `execute_sql`, `get_edge_function` y lectura del working tree de
+> `unrlvl-iid-functions` en `034d940`, el **2026-09-12 entre las 18:50 y las 19:25 UTC**.
+> **Professor: no lo cerró CC** — la captura de learnings es de Claude.ai (`HRD_PROFESSOR`).
+> **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+
+### ✅ La marca ya tiene publicador de blog
+
+`blog-promoter` v1.1 está desplegada y su cron corre cada 15 minutos [medido]. El canal
+`LucienSael` / `blog` es uno de los **3** que atiende, por ser `vercel_html`.
+
+**La primera prueba real está fechada: lunes 15 de septiembre, 09:00 Panamá.**
+
+### 🔴 Y la franja del 08 de septiembre sigue `reserved`, con su pieza ya publicada
+
+**Medido** [`now()` = 2026-09-12 19:21:57 UTC]:
+
+| Franja | Canal | Vencida desde | Pieza | `post_url` |
+|---|---|---|---|---|
+| `66227c12-a169-419d-a246-a79878a2149c` | `blog` · `vercel_html` | **2026-09-08 14:00 UTC** | **`published`** desde 2026-09-09 21:52:27 | **NULL** |
+
+El promotor la ve cada 15 minutos y responde **`YA_PUBLICADA`** —lo cual es correcto: no la
+republica—, pero **su rama de reconocimiento no sella la franja**. Así que la franja **sigue
+alimentando la fuga de N10**, en la cabeza de la cola por ser de las más viejas, y **la pieza sigue
+sin `post_url`**: nadie sabe desde el dato dónde salió el primer artículo de la marca.
+
+**Es la misma pieza del 09-09** cuya falta de `post_url` motivó que el promotor sellara ese campo.
+El atajo que evita republicarla es el que impide repararla.
+
+**Pendiente de Sam** — el parche va en `unrlvl-iid-functions`, es pequeño y toca un publicador que
+lleva horas en producción: sellar la franja en la rama `YA_PUBLICADA` y rellenar `post_url` y `slug`
+**sólo cuando estén en NULL**. Detalle y efecto observable en `AGENDA.md`, bloque `CIERRE
+2026-09-12-v2` §A.
+
+### 🟡 El pozo de la marca: cuatro dominios declarados, uno produciendo
+
+**Medido sobre el corpus de `intel.content_embeddings`:** los **52 vectores** de LucienSael son
+**todos del dominio `behavioral-science`**. Los otros tres dominios activos —`ai-cognition`,
+`ai-identity`, `human-essence`— **no tienen ni una pieza**.
+
+Se junta con lo que este archivo ya registró: **1 agente activo y CERO crons** para la marca. Así que
+la conclusión del brief —«faltan 4 dominios para 2/semana»— **se queda corta en el orden**: sembrar
+cuatro dominios más produce ocho declarados y uno produciendo. **Primero el agente y su cron sobre
+los tres que ya están declarados; después los dominios nuevos.**
+
+Consecuencia directa y medida para el gate de duplicación: **la marca no tiene línea base de dominios
+distintos** —no hay un solo par de dominios distintos que cruzar—, así que un umbral calculado por
+percentil **no se le puede calcular hoy** y el fail-loud tiene que declararlo.
+
+---
+
 ## 2026-09-09 — El primer artículo de blog sale publicado, y la cadencia acordada no tiene quién la ejecute
 
 > Professor cerrado **antes** (orden `Professor → Actualiza → commit` respetado): **16 learnings**,

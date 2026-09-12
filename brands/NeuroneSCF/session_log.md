@@ -1,5 +1,111 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-09-12 (v2) — Manda `discarded_at`: las tres piezas incoherentes quedan cerradas
+
+> **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,
+> aplicación— y verificó **por efecto**. Medido el **2026-09-12 entre las 19:30 y las 19:55 UTC**.
+> **Professor: no lo cerró CC.** **SMA no se consultó.** Lo previo se conserva íntegro debajo.
+
+**Decisión de Sam:** *«El descarte es un veredicto humano; `scheduled` es una posición en la cola. Un
+veredicto pesa más que una posición.»* Y el estado incoherente se cierra **por el lado del
+planificador**, no relajando el bloqueo del publicador.
+
+**Aplicado** [medido antes y después]:
+
+- **Las tres piezas pasan a `rejected`** —`0a8168af…` (`meta_fb`), `dae462b1…` (`meta_ig`),
+  `0e906d4b…` (`tiktok`)—, que es la convención que ya seguían **las otras 14** fixables descartadas.
+  **`discarded_at` y `discarded_reason` no se tocan:** el veredicto es de Sam y no se reescribe.
+- **Se libera una franja futura.** `0f82718d-e14c-41a5-9fd3-bcf1f906854b` · `meta_ig` · **`slot_at`
+  2026-09-16 23:00 UTC** estaba `reserved` **para una pieza descartada el 9 de septiembre**. Vuelve
+  al pozo.
+
+**Y el hueco de fondo que eso destapó, medido:** **`publish-slot-reserver` no filtra `discarded_at`
+—cero apariciones en todo el archivo—**, mientras `content-scheduler` sí lo hace (líneas 2422 y
+2485) y `blog-promoter` también. **Por eso una pieza descartada tenía franja.** Queda como encargo,
+junto a N16, que vive en el mismo archivo.
+
+**Efecto:** **0** piezas a la vez `scheduled` y descartadas · **0** franjas `reserved` con pieza
+descartada · franjas libres futuras de **43 a 44**.
+
+**Y lo que sigue esperando a Sam:** las 8 notas del grupo «producto Neurone ausente o sin fuerza»
+**se releen sobre el texto adaptado antes de decidir su regla** — decisión 3 de Sam, encargo propio
+y con prioridad. El blog de la marca **sigue sin publicador**: `shopify_blog` no está en
+`MARK_PUBLISHED_PROVIDERS` ni lo drena `content-scheduler`.
+
+---
+
+## 2026-09-12 — El handle del blog queda corregido, y el tercer modelo de publicación sigue sin publicador
+
+> **Entrada de CC.** Lo aplicó Claude.ai; **CC documenta y mide, no re-aplica.** Todo lo etiquetado
+> `medido` se consultó con `execute_sql`, el MCP de Shopify y lectura del working tree de
+> `unrlvl-iid-functions` en `034d940`, el **2026-09-12 entre las 18:50 y las 19:25 UTC**.
+> **Professor: no lo cerró CC** — la captura de learnings es de Claude.ai (`HRD_PROFESSOR`).
+> **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+
+### ✅ El handle del blog de Shopify, corregido y definitivo
+
+Había **tres blogs** en la tienda: `news` con 0 artículos, `hair-intelligence` con 0 y
+`hair-intelligence-1` con 4 — los dos primeros creados con **7 segundos** de diferencia, que es la
+firma de un doble envío [reportado — brief de Claude.ai, 2026-09-12].
+
+**Aplicado:** borrados los dos vacíos y **`hair-intelligence-1` renombrado a `hair-intelligence`**,
+con sus 4 artículos intactos.
+
+**Lo que CC sí midió, contra la fuente**, en `intel.brand_publish_channels`, canal `NeuroneSCF`/`blog`,
+proveedor `shopify_blog`:
+
+- `blog_path` = **`/blogs/hair-intelligence`**
+- `shopify_blog_handle` = **`hair-intelligence`**
+- **`nota_handle` ya no está** en el `config` — se retiró porque dejó de ser cierta.
+
+Tienda b2c medida con el MCP de Shopify: **`egdk1n-gt.myshopify.com`** — *Neurone South & Central
+Florida*. La b2b (`nj5ybc-n1.myshopify.com`) no interviene.
+
+**El motivo del momento queda escrito, porque es lo que no se puede reconstruir después:** todavía no
+se dirige tráfico a ese blog, así que el coste de SEO del renombrado era **mínimo hoy y creciente
+cada semana**.
+
+### 🔴 Y aun así el blog de la marca no tiene publicador
+
+**`shopify_blog` es el TERCER modelo de publicación y hoy no lo atiende nadie** [medido en código]:
+
+| Modelo | Proveedor | Quién lo atiende |
+|---|---|---|
+| Empuje por API del proveedor | `meta_graph` | `content-scheduler` |
+| Marcado (el sitio lee la DB) | `vercel_html` | `blog-promoter` v1.1, desde hoy |
+| **Empuje por la API de Shopify** | **`shopify_blog`** | **nadie** |
+
+La constante del promotor es `MARK_PUBLISHED_PROVIDERS = ['vercel_html']` — **`shopify_blog` no está
+en ella**, y el drenaje devuelve `PROVIDER_NOT_DRAINABLE` para todo lo que no sea `meta_graph`
+(**191 filas en 12 horas** [medido]).
+
+**El encargo queda con el handle ya resuelto**, que era su única incógnita. Contrato y test de la
+marca N+1 respondidos en `AGENDA.md`, bloque `CIERRE 2026-09-12-v2`, Frente 2.
+
+### 🔴 Tres piezas de la marca están a la vez `scheduled` y descartadas
+
+**Medido** en `intel.approval_calibration` cruzado con `content.content_pieces`: tres piezas de
+NeuroneSCF con nota de Sam del 2026-09-09 —`Voceo.`, `Voceo y firma repetida.` y
+`Voceo y firma repetida e incorrecta.`— tienen **`status = 'scheduled'` y `discarded_at` sellado a la
+vez**.
+
+Es una contradicción con consecuencia: el **FAIL-LOUD 2** del promotor y cualquier publicador que lea
+`discarded_at` las bloquean, mientras el planificador las sigue contando como programadas.
+**Contradice además lo que el brief daba por hecho** («todas en `scheduled`, sin sello de descarte»).
+**Decidir cuál de los dos sellos manda, y retirar el otro.**
+
+### 📋 Las notas de Sam sobre piezas de la marca
+
+De las **22 filas `fixable`** vivas del ecosistema, la mayoría son de NeuroneSCF, y el grupo más
+grande —**8 de 22**— dice lo mismo de distintas maneras: **el producto Neurone falta o entra sin
+fuerza en una voz de conversión**. Es una sola regla por definir, y es la que más rinde.
+
+> **Y hay que leerlas sabiendo esto** [medido]: las notas se escribieron mirando `assets.copy`, y la
+> pieza que se publica en las redes es `assets.social.adapted[0].copy` — **otro texto, en otro
+> idioma**. Ver Frente 5 en `AGENDA.md`.
 
 ---
 
