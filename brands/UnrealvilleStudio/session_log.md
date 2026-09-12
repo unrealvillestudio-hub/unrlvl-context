@@ -5,6 +5,91 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-09-12 — El blog está vacío porque nadie le pregunta a la marca qué canales tiene
+
+> **Entrada de CC.** Todo lo etiquetado `medido` se consultó con `execute_sql` y lectura del working
+> tree de `unrlvl-iid-functions` en `034d940`, el **2026-09-12 entre las 18:50 y las 19:25 UTC**.
+> **Professor: no lo cerró CC** — la captura de learnings es de Claude.ai (`HRD_PROFESSOR`).
+> **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+
+### 🔴 La causa raíz de `unrealvillestudio.com/blog` vacío, y NO es la que se suponía
+
+**Lo que se daba por causa:** «el componente que arma `platforms` al crear la fila de la cola falla
+sólo para esta marca».
+
+**Lo medido dice otra cosa, y es más barato de arreglar.**
+
+**1 · No hay código por marca.** Barrido sobre `content-dispatcher`, `iid-process`, `iid-core` y
+`content-scheduler` buscando las cuatro marcas del ecosistema: **cero apariciones** [medido]. La rama
+por marca que se suponía **no existe**.
+
+**2 · `platforms` de la fila de cola sale del MODELO, no de la marca:**
+
+| Paso | Archivo y línea | Qué hace |
+|---|---|---|
+| 1 | `iid-process/index.ts:654` | El **único ejemplo** del esquema del prompt dice `"platforms_hint":["linkedin"]` |
+| 2 | `iid-process/index.ts:845` | `platforms: finding.platforms_hint ?? ["linkedin", "instagram"]` |
+| 3 | `iid-core/index.ts:112` | `platforms: platforms ?? []` — lo escribe tal cual en la cola |
+| 4 | `content-dispatcher/index.ts:81` | `const platforms = (item.platforms as string[]) ?? ["linkedin"]` — sólo **lee** |
+
+**`intel.brand_topics.platforms` no se consulta en ninguno de los cuatro** [medido].
+
+**3 · Y los 6 dominios de la marca SÍ declaran `blog`** en `brand_topics.platforms` [medido]. Nadie
+lee esa columna al crear la fila. **No es que el blog falle: nunca se le pide, porque nadie pregunta
+a la marca.**
+
+**4 · La cadencia no es el bloqueo, y conviene descartarlo por escrito.** `intel.brand_cadence`
+**sí** declara `blog` para la marca —`1x_week` / `1x_week` / `2x_week`— [medido]. Lo que no lo
+declara es el `cadence` de sus `brand_topics`, que es el **alias legacy** y sólo entra cuando
+`brand_cadence` no tiene filas (`content-scheduler/index.ts:1019` y `:1023`). Tiene filas.
+
+**El estado, medido:** de las **64 filas** de la marca en `intel.iid_content_queue`, **cero** llevan
+`blog`. Comparación con las otras marcas —y con el matiz de la clave, que importa:
+
+| Marca | Filas de cola | Con su clave de blog | Clave |
+|---|---|---|---|
+| ForumPHs | 100 | 22 | `blog_forumphs` |
+| LucienSael | 78 | 16 | `blog` |
+| NeuroneSCF | 85 | 3 | `blog` |
+| **UnrealvilleStudio** | **64** | **0** | `blog` |
+
+**El encargo, reformulado:** hacer que `platforms` se resuelva contra los canales activos de la marca
+en vez de contra la sugerencia del modelo, dejando la sugerencia como preferencia **dentro de lo que
+la marca sí tiene** — y **fail-loud si la intersección queda vacía**, porque una pieza para un canal
+que la marca no tiene es trabajo que nadie va a publicar. Test de la marca N+1 respondido en
+`AGENDA.md`, bloque `CIERRE 2026-09-12-v2`, Frente 3.
+
+### 🟡 El pozo: 6 dominios declarados, 4 produciendo
+
+**Medido sobre `intel.content_embeddings`:** los **72 vectores** de la marca cubren **4 dominios**
+—`ai-industrialization`, `brand-voice-systems`, `cro-psychology`, `signal-learning-loops`—.
+`ai-cognition-tech` y `algorithm-mechanics` están activos y **no tienen ni una pieza**; `system-proof`
+está inactivo.
+
+Para 2 artículos de blog por semana con turno mínimo de 4 semanas **faltan 1 o 2 dominios**, pero
+**antes** están los 2 declarados que no producen.
+
+### ⚠️ La pieza de los hashtags: el contador no miente, la bandeja muestra otro texto
+
+Sobre la pieza `abda1ebf-0f3b-41e7-999e-c05a6d4cd846` (`meta_fb`), donde Sam anotó *«no he visto
+hashtags aunque el warn dice que lleva 2»* [medido]:
+
+| Texto | Longitud | Idioma | Hashtags |
+|---|---|---|---|
+| `assets.social.adapted[0].copy` — **el que se publica** | 1.187 | español | **2** (`#ContentMarketing #SEO`) |
+| `assets.copy` — **el que se mostró** | 3.747 | inglés | **0** |
+
+**`hashtags_out: 2` es exacto** para el texto que midió (`content-run-stage/index.ts:2768-2778`). Y
+**no hubo ningún warn**: la pieza salió `PASS` con `failed_rules: []` y `rules_evaluated: 10`; las
+cinco reglas de hashtags que existen —`HR-LUC-06` a `HR-LUC-10`— son **todas de LucienSael**, no hay
+ninguna para esta marca.
+
+**El defecto real es más grave que un contador roto:** la superficie de aprobación muestra un texto y
+el publicador manda otro, y **nada los reconcilia**. Las 22 notas de Sam se escribieron sobre el que
+no publica.
+
+---
+
 ## 2026-09-08 — Tres muros encadenados, la primera pieza que salió sola, y un patrón raíz con nombre
 
 > **Sesión del 2026-09-07/08. Brief de Claude.ai del 2026-09-08; ejecutado por CC el 2026-09-09.**
