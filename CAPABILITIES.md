@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.15 · 2026-09-12 (**cuatro adiciones medidas y ninguna derogación: el regulador de entrada se vuelve consultable, y una vía de cron que el brief daba por buena NO funciona.** (1) **Cómo se lee la cobertura del carril** — `intel.v_carril_cobertura`, una fila por marca × canal activo, con `cobertura` = stock disponible menos franjas comprometidas sin pieza. (2) **Cómo se sube el volumen: SE SUBE EL MARGEN, NUNCA LA CADENCIA** — `intel.brand_production_margin`, acotado por `margin_max`. Son **tres números con tres dueños** y confundirlos contamina una decisión editorial con una falta puntual. (3) **Cuál de las fuentes de cadencia MANDA: `intel.brand_cadence`** — `brand_topics.cadence` es **LEGACY por comentario de columna** desde el 2026-09-11 y **no se borra** hasta medir que ningún consumidor la lea; `intel.brand_publish_policies` dice **cuándo**, no **cuántas**. (4) **`UPDATE cron.job SET active = false` es rechazado en este proyecto** con `permission denied for table job` [medido el 2026-09-12]: la vía que funciona es **`cron.alter_job(jobid, active := false)`** con el `jobid` que devuelve `cron.schedule`. Una migración que apague crons por `UPDATE` **falla entera**) · la cabecera anterior (`1.14`) queda intacta e inmediatamente debajo, con su cadena completa_
+
 _Versión: 1.14 · 2026-09-10 (**una adición medida, ninguna derogación: LOS DOS LIBROS MAYORES DE UNA PUBLICACIÓN TIENEN AUTORIDAD DISTINTA Y NO ESTABA ESCRITO.** `intel.brand_publish_drain_log` registra **intentos**; `public.scheduled_posts` registra el **estado final**; **manda `scheduled_posts`**. Medido el 2026-09-10 sobre una publicación de LucienSael en `meta_fb` que aparece con **dos `platform_post_id` distintos** separados por 1 h 16 min — el del `drain_log` es un intento que ya no existe en la red, y su fila dice `PUBLISHED` sin nada que lo delate. Quien le pregunte al registro de intentos por el estado final se lleva el id de un post borrado. Es la misma familia de defecto que «0 filas ≠ no existe» (2026-09-08) y que «`NULL` ≠ `0`» del frente de costo) · base previa: 1.13 · 2026-09-09 (**una corrección de estado y siete adiciones medidas; ninguna derogación silenciosa.** (0) **CORRECCIÓN: el cron 66 `content-placement-poll` NO está apagado — está ACTIVO, `*/15`** [medido el 2026-09-10 contra `cron.job`]. Este catálogo lo declaraba APAGADO desde el 2026-08-26 mientras `AGENDA.md` v2026-09-06-v1 ya lo daba por activo: **el catálogo iba por detrás de la agenda**, y la redacción anterior queda archivada bajo guard `⛔ NO OPERATIVO` en su sitio, no borrada. Lo que sigue vigente de ella es **la advertencia PUB-01**, no el estado. Adiciones: (1) **Storage rechaza `SUPABASE_SERVICE_ROLE_KEY`** —formato `sb_secret_`— con `Invalid Compact JWS`; la que sirve es `SERVICE_ROLE_JWT`, y se reconoce porque **empieza por `eyJ`**. (2) **Subir una foto a Meta con `published=false` exige token DE PÁGINA**, que se canjea en `/{page_id}?fields=access_token` con el `system_token` de `meta_accounts` resuelto por `brand_id`. (3) **ImageLab: `/api/execute` NO compone texto** —el overlay está en `/api/compose`, son dos llamadas por frame, `execute` usa `brandId` y `compose` usa `brand_id`, `preset_id` es eco y el preset se resuelve por `(brand_id, canal)`, `markers` va en la raíz— y **ninguno de los dos sube al bucket**. (4) **`gemini-2.5-flash-image` no acepta `4:5`**: devuelve `896x1152`, y para `1080x1350` hay que recortar y escalar ANTES de componer. (5) **Los blogs son un modelo de lectura**: publicar es cambiar el estado, y por eso `PROVIDER_NOT_DRAINABLE` es correcto por diseño en `vercel_html`. (6) **`api/professor` con `action=submit-learning` devuelve 500** porque la EF calcula un `relevance_score` fuera del `CHECK` de 1 a 5 [medido con `pg_get_constraintdef`]; el fallback es el `INSERT` directo. (7) **No existe el estado `approved`**: aprobar escribe `status = 'scheduled'` con `approved_by` [medido: los ocho valores del `content_pieces_status_check`]) · base previa: 1.12 · 2026-09-08 (**tres adiciones medidas y ninguna derogación.** (1) **`Supabase:query_logs` sobre UNRLVL lee `edge_logs` de PostgREST**, y fue **la única vía** para diagnosticar un `PATCH 403` que la aplicación atrapaba a propósito: la tabla no podía delatarlo —`open_count = 0` era compatible con «no se abrió» y con «se abrió y el registro falló»— y el log del proveedor sí, porque es una fuente distinta de la que el fallo silenció. (2) **El proxy `api/professor` sólo expone GET**: el checkpoint **no se siembra por ahí**, se siembra con `execute_sql` sobre `professor_learnings`. Buscar un POST en el proxy y no encontrarlo no significa que no haya vía. (3) **Un conector MCP reconectado NO entra en caliente a una sesión abierta**: si un servidor se cae y vuelve, sus tools no reaparecen en la sesión en curso, y planificar contando con ellas es contar con un acceso que no está. Se replantea la vía o se declara el bloqueo) · base previa: 1.11 · 2026-09-02 (**una adición y ninguna derogación: el repositorio `unrealvillestudio-hub/BluePrints` entra al catálogo** —395 archivos, fuente de la identidad **visual** de cada marca (`BP_BRAND_*`, paletas, logos, tipografía)—, **con sus dos advertencias, que son parte de la capacidad y no una nota al pie**: NO es fuente para las firmas, y el `BP_BRAND` de UnrealvilleStudio **está desactualizado**. Una fuente canónica desactualizada es peor que una ausente porque **parece autoridad**. Motivo medido el 2026-09-02: no figuraba ni aquí ni en `ecosystem_filemap.md`, y **se trabajó media sesión reconstruyendo lo que ya estaba escrito ahí**) · base previa: 1.10 · 2026-08-29 (dos precisiones medidas el mismo día. (1) `protocols/DELIVERY_AND_VERIFICATION_RULE.md` pasa a **carga obligatoria en apertura** —paso `3-quater` de `HRD_PROTOCOLO_ACTUALIZACION`— con **fila propia en el panel**: una regla de forma que se consulta al final llega tarde, y además ese documento especifica el panel. (2) **Cómo alcanza CC una URL de Vercel**: `curl` da **403 en CONNECT**, la tool MCP `Vercel:web_fetch_vercel_url` da **200** — dos vías distintas, sólo una funciona, y declarar Vercel inalcanzable tras probar sólo `curl` es afirmar sin medir por la vía que existe) · base previa: 1.9 · 2026-08-29 (`protocols/DELIVERY_AND_VERIFICATION_RULE.md` v1.0 — REGLA INVIOLABLE nueva, listada en ARTEFACTOS CONSULTABLES: bloques con destinatario declarado y marca visual **por superficie** —emoji en chat, `●` con hex en documento o UI con estilos, y el diferenciador existe para que Sam lea, no para que CC ejecute—, idioma ES/EN neutro internacional **sin voseo**, etiqueta de evidencia `medido`/`reportado`/`deducido`, **panel de carga verificada** en la apertura de sesión —una fila sin evidencia es roja— y las **cuatro QA** con estatus HRD por `HRD-R15`, donde `QA-INFO` es un bloqueo. Este catálogo es punto de carga nº 4 de esa regla y **no la copia**: apunta a la fuente única) · base previa: 1.8 · 2026-08-28 (`unrlvl-mail-mcp` OPERATIVO: autenticado con MCP-AUTH-01 —401 verificado—, conector dado de alta en Claude.ai y tres buzones activos; y sus tres defectos abiertos, MAIL-01 / MAIL-02 / MAIL-04, que el catálogo declara porque cambian CÓMO se usa la capacidad) · base previa: 1.7 · 2026-08-27 (MCP de correo de clientes `unrlvl-mail-mcp` — tres tools de lectura, papelera excluida, sin persistencia de contenido; y el estado de autenticación de los cuatro MCPs, medido el 2026-08-28: SEC-01 abierto en código, mitigado en infraestructura) · base previa: 1.6 · 2026-08-26 (ángulos por dominio, aplazamiento por duplicación, arbitraje con tasas de falso positivo medidas, `pass_type` clean/assisted, backfill de firma; y la advertencia PUB-01 — el carril coloca pero todavía no se puede afirmar que publica) · base previa: v1.5 · 2026-08-25 (capacidades nuevas del carril: modo `placement`, `gate9Language`, corrector determinista pre-juicio, retención por desacuerdo, edición con registro de diff, backfill de embeddings) · base previa: v1.4 (2026-08-18) · base previa: v1.3 (2026-08-07), cuerpo conservado íntegro · Mantenido por: Claude
 
 _Versión: 1.13 · 2026-09-09 (**una adición y ninguna derogación: las reglas de método de medición entran al catálogo como sección propia**, con **puntero** a `protocols/MEASUREMENT_METHOD_RULE.md` y **una línea por regla, nunca el texto** — dos textos de la misma regla son dos reglas en cuanto alguien toca uno. Son **cuatro**: `storage.objects` en vez de `HEAD` · el `000` se resuelve en el estado del proxy, no interpretándolo · todo barrido lleva control conocido-vivo · y la cuarta, nueva y específica de despliegues, **`ezbr_sha256` y no el contador de versión** —medido el 2026-09-08: un deploy subió el mismo bundle y el sufijo del `entrypoint_path` cambió igual—, que entra como **§4 del protocolo** y no vive suelta acá)_
@@ -305,6 +307,85 @@ y no hay más [medido el 2026-09-10: `pg_get_constraintdef` de `content_pieces_s
 
 **Por qué se escribe aquí:** buscar `approved` y no encontrarlo se lee como «la aprobación no se
 registró». Se registró: **está en `scheduled` con su `approved_by`**.
+
+## EL REGULADOR DE ENTRADA AL CARRIL — cómo se consulta y qué perilla se toca (añadido 2026-09-12)
+
+> Todo lo de esta sección es **`medido` el 2026-09-12** con `execute_sql` salvo donde diga otra cosa.
+> **Aquí van las consultas, no las cifras**: un número escrito en un catálogo caduca en silencio.
+> El método completo vive en `skills/publicacion-operativa/SKILL.md`, que **no se copia acá**.
+
+### 📊 Cómo se lee la cobertura del carril
+
+```sql
+SELECT brand_id, platform_key, provider, margen, cobertura, alarma,
+       franjas_comprometidas, franjas_sin_pieza, stock_disponible,
+       franjas_sin_publicador, primera_sin_publicador
+  FROM intel.v_carril_cobertura
+ ORDER BY alarma DESC, cobertura ASC;
+```
+
+**Es una VISTA: nadie la escribe.** Una fila por marca × canal **activo**.
+`cobertura` = `stock_disponible` − `franjas_sin_pieza`; **negativa** significa que hay franjas
+comprometidas que hoy no tienen con qué llenarse. `alarma` es `cobertura < margen`.
+
+`franjas_sin_publicador` y `primera_sin_publicador` (añadidas el 2026-09-12) **cuentan el sello** que
+el drenaje deja escrito, **no deciden qué proveedor es drenable**: esa capacidad vive en el código, en
+`DRAINABLE_PROVIDER`, en un único lugar. Una vista que la copiara divergiría el día que el drenaje
+aprenda un proveedor nuevo. **Si valen cero en todos los canales, la primera sospecha no es que no
+haya hueco: es que el drenaje no está sellando.**
+
+### 🎚️ Cómo se sube el volumen — SE SUBE EL MARGEN, NUNCA LA CADENCIA
+
+Son **tres números con tres dueños**, y confundirlos contamina una decisión editorial con una falta
+puntual:
+
+| Número | Dónde vive | Quién lo escribe |
+|---|---|---|
+| **Cadencia** | `intel.brand_cadence` | **Sam, y nadie más.** Es decisión editorial |
+| **Margen** | `intel.brand_production_margin` | **Sam.** Es la única perilla que sube si hace falta más |
+| **Cobertura** | `intel.v_carril_cobertura` | **Nadie: se calcula** |
+
+```sql
+UPDATE intel.brand_production_margin
+   SET margin = <N>
+ WHERE brand_id = '<marca>' AND platform = '<canal>';
+```
+
+**`margin` está acotado por `margin_max`** de esa misma fila. El regulador produce *cadencia + margen*
+**sumando en tiempo de cálculo, sin persistir el resultado**: por eso la cadencia tiene que salir
+idéntica antes y después de cualquier ciclo, y esa es su verificación.
+
+### ⚖️ Cuál de las fuentes de cadencia MANDA
+
+**`intel.brand_cadence` manda.** Las otras dos no son alternativas, son otra cosa:
+
+- **`brand_topics.cadence` — LEGACY.** Marcada por **comentario de columna** desde el 2026-09-11
+  [`medido`: `col_description` devuelve el texto completo]. **No se borra**: `content-scheduler`
+  todavía la lee como alias legacy de paso 1 de 3, y retirarla se hace **contando** que ningún
+  consumidor la lea, no suponiéndolo.
+- **`intel.brand_publish_policies` dice CUÁNDO se publica, no CUÁNTAS piezas.** Días de la semana por
+  horas de franja. Preguntarle cuánto producir es preguntarle algo que no sabe.
+
+**Nada reconcilia hoy `intel.iid_agents.run_frequency` con `cron.job`.** El 2026-09-12 se alinearon a
+mano los 12 crons de una marca; **la próxima divergencia no la detecta nadie**. Frente abierto en
+`AGENDA.md`.
+
+### ⏻ Apagar o encender un cron — `cron.alter_job`, NUNCA `UPDATE cron.job`
+
+**Medido el 2026-09-12:** `UPDATE cron.job SET active = false` es **rechazado en este proyecto** con
+`permission denied for table job`. La tabla no es escribible por esta vía, y **una migración que
+apague crons así falla entera** — no deja el cron a medias: no deja nada.
+
+La vía que funciona es la función de la extensión, con el `jobid` que devuelve `cron.schedule`:
+
+```sql
+SELECT cron.alter_job(<jobid>, active := false);
+```
+
+**`cron.schedule` devuelve el `jobid`** — se captura al crear, no se busca después por nombre.
+**Verificación:** `SELECT jobid, jobname, schedule, active FROM cron.job WHERE jobid = <jobid>;`
+
+---
 
 ## MÉTODO DE MEDICIÓN — cuatro reglas, y la fuente es el protocolo (añadido 2026-09-09)
 
