@@ -850,8 +850,11 @@ migración que apague crons por `UPDATE` **falla entera**. Anotado en `CAPABILIT
 ### 📐 Contrato ICR — forma decidida, contenido pendiente
 
 Decidido por Sam el 2026-09-12: **contrato, no protocolo**. Tabla de definiciones **cerrada**: ICR,
-QA, AIID, IID, AIFE, CRO, PSY. **Pendiente:** dónde vive, qué cláusulas pasan a verificadores, y
-sembrar `icr_standard` para ForumPHs y NeuroneSCF.
+QA, AIID, IID, AIFE, CRO, PSY. **Vive en `protocols/ICR_CONTRACT.md` desde el 2026-09-12**, con sus
+doce cláusulas y sus doce verificadores, que **informan y no bloquean**. **Sigue pendiente:** que los
+verificadores marcados «A ESPECIFICAR» reciban su consulta medida —V-09 el primero, porque
+`icr_passed` se estampa sin comprobarse— y sembrar `icr_standard` para las marcas que aún no lo
+tienen.
 
 ---
 
