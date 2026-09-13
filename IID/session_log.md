@@ -293,6 +293,107 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-13 — El carril deja de estar ciego por el lado del código, y seis afirmaciones del brief que la medición matiza
+
+> **Entrada de CC.** Alcance de la sesión: **ecosistema — el carril**, no una marca; por eso la novedad
+> entra acá y **no se creó ningún `session_log.md` nuevo**. Todo lo etiquetado `medido` lo consultó CC
+> el **2026-09-13 entre las 20:45 y las 20:50 UTC** con `Supabase:list_edge_functions`,
+> `Supabase:execute_sql` sobre `amlvyycfepwhiindxgzw` y lectura del working tree. Lo etiquetado
+> `reportado` lo afirma el **brief de cierre de Claude.ai del 2026-09-13** y **CC no lo midió**.
+> **Professor: no lo cerró CC** — la captura de learnings es de Claude.ai (`HRD_PROFESSOR`), y se cerró
+> **antes** de este Actualiza: 12 learnings del 2026-09-13, los doce con `relevance_score = 5`
+> [`reportado`]. **SMA no se consultó** — Sam no lo pidió. `ecosystem.json` **no cambió**, así que sus
+> derivados no se tocan. Lo previo se conserva íntegro debajo.
+
+### 🟢 En producción, con su `sha`
+
+| Función | Versión | `ezbr_sha256` | Qué trae |
+|---|---|---|---|
+| `publish-slot-reserver` | **v11** | `c12e02c6…c606b` | Filtra `discarded_at`. **N16 cerrado por el lado del código** |
+| `blog-promoter` | **v6** (v1.3) | `c9d262d8…0acfc` | Envía `run_id`, `slot_id`, `piece_id`; `PUBLISHED` con `platform_post_id` y `published_at` [`reportado`] |
+| `content-watcher` | **v57** | `b0c62f50…77694` | Fail-open cerrado; gate5 lee la tabla; gate1 llama con `p_match_domain=false` [`reportado`] |
+| `content-run-stage` | **v123** | `8babc595…a9d5a` | El filtro de dominio sólo aplica en modo `own`, `:3224` [`reportado`] |
+
+Las cuatro versiones y los cuatro `sha` [`medido`]. Lo que cada bundle hace por dentro, `reportado`:
+**CC verificó el despliegue, no leyó el código** — y decirlo es la diferencia entre las dos etiquetas.
+
+### 🗄️ Lo que cambió en el esquema
+
+- **`CHECK` de `intel.brand_publish_drain_log.outcome`: de 6 a 13 valores** [`medido`]. Nueve son **eje
+  de desenlace** —los seis del modelo de EMPUJE más `SLOT_SEALED`, `SLOT_SEAL_FAILED` y
+  `PIECE_NOT_ELIGIBLE`, del modelo de MARCADO— y cuatro son **alias legacy `BLOG_*`**. **El mapa de
+  retiro está escrito en el `COMMENT` de la columna**, que es lo único que viaja con la tabla: el alias
+  se retira **contando filas**, no por fecha.
+- **`intel.brand_similarity_threshold` creada y sembrada** [`medido`: 8 filas]. Eje **`pair_scope`** con
+  valores **`own_brand` / `cross_brand`** — corregido dos veces desde `same_domain` / `cross_domain`
+  [`reportado`], y el nombre final describe **la clase de par**, no el dominio, que es lo que la
+  distingue de una marca concreta.
+- **Cortes vigentes `own_brand`** [`medido`]: **NeuroneSCF `0.93739`** · **LucienSael `0.90551`** ·
+  **ForumPHs** y **UnrealvilleStudio** en **`SIN_LINEA_BASE`**.
+- **RPC `intel.match_content_embeddings`: una sola firma**, con `p_match_domain boolean DEFAULT true`
+  [`medido`].
+
+### 🔍 Las seis correcciones de CC
+
+1. **`min_own_vectors = 30` no es una propuesta: está sembrado** en las ocho filas [`medido`]. El brief
+   lo daba por *«propuesto, no medido»*, y una guarda propuesta no bloquea a nadie — ésta sí está
+   bloqueando a dos marcas.
+2. **El ACL del RPC no está acotado a `service_role`.** Medido:
+   `{=X/postgres,postgres=X/postgres,service_role=X/postgres}` — la primera entrada es **`PUBLIC` con
+   `EXECUTE`**, y `has_function_privilege` devuelve `true` para `anon` y `authenticated`. **No es
+   `CC_PROTOCOL` §11** (`prosecdef = false`: corre como quien invoca y la RLS sigue mandando), pero es
+   el patrón que §11 describe — falta el `REVOKE … FROM PUBLIC` y el `GRANT` explícito **se lee como si
+   estuviera acotado**. Queda como frente abierto en `AGENDA.md`.
+3. **`cross_brand` no está sin línea base por falta de volumen: su población está vacía por
+   construcción.** Lo dice la propia fila: *«cero pares de marcas distintas dentro del mismo dominio en
+   todo el corpus (241 vectores). Los dominios no se solapan entre marcas»* [`medido`, en
+   `recalculated_reason`]. **Esperar no siembra ese corte**: hace falta que dos marcas compartan
+   dominio. Es condición de datos, no de tiempo.
+4. **ForumPHs y UnrealvilleStudio incumplen las dos guardas, no una** [`medido`]: 83 < 200 y 27 < 30 la
+   primera; 30 < 200 y 12 < 30 la segunda.
+5. **La candidata de §5.b existe y está viva:** franja `0ed7214c-1d1b-4339-bc0e-48143eb5b29d` ·
+   LucienSael · `blog` · **2026-09-29 14:00 UTC** · `reserved`, para la pieza
+   `d621e8d5-b31c-4dfd-8c14-940f4eee33df`, en **`scheduled`** y **sin descartar** [`medido`]. Revocarla
+   **escribe en producción sobre contenido programado** (`DELIVERY_AND_VERIFICATION_RULE` §2.3-ter):
+   **decisión de Sam, no paso de verificación**.
+6. **La cita caducada sobre el texto adaptado ya no sigue viva** [`medido`]: la cerró el **PR #95** y su
+   redacción anterior está bajo guard `⛔ NO OPERATIVO` en su mismo sitio. **CC no la volvió a
+   archivar** — archivar dos veces lo archivado duplica la historia en vez de preservarla.
+
+### 🧾 Las seis correcciones por medición que trae el brief
+
+[`reportado` — brief de Claude.ai del 2026-09-13.] Cuatro de Claude.ai: **(1)** el RPC filtra por
+dominio pero **no era lo que cegaba a gate1** —el filtro que disparaba estaba en
+`content-run-stage:3224`—; **(2)** *«165 de 175 difieren»* comparaba **dos etapas del carril**, no juez
+contra salida; **(3)** los cortes del 12 se midieron sobre **una población que no es la del consumidor**
+—y eso quedó escrito en el dato, en las cuatro `recalculated_reason` [`medido`]—; **(4)** *«no puedo
+leer el repo»* era **`deducido` de una sola vía fallida**: el proxy `gh` lo lee. Y dos de CC: **(5)** el
+blog de UnrealvilleStudio sale de `brand_topics` vía `fanout.ts:673`, **no** del `platforms_hint` del
+modelo; **(6)** la conflación de `degraded` introducida en A-4 **la delató un test existente**, no una
+lectura.
+
+### 🔴 Lo que queda abierto
+
+**El criterio de éxito de gate5 NO está cumplido** —95,7 % pgvector contra 7,0 % LLM [`reportado`]— y
+**no es medible hasta que corra tráfico nuevo**. **gate1** arranca sin corte sembrado y **gate8 sigue
+ciego**. **V-09** y **V-11** sin cerrar, y **no existe en ninguna forma** el verificador que avise
+cuando un gate lleve N corridas sin comparar nada: **gate1 estuvo ciego 858 corridas y nadie se enteró**
+[`reportado`]. **La adaptación no adapta título ni imagen**, y **`social.language` está poblado en 1 de
+175** [`medido`: 175 piezas con `social`, las 175 con `adapted` no vacío, **1** con `language`]. Los
+**vectores anteriores a P3** describen el texto viejo. **`iid-approval-digest` desplegada** [`medido`:
+`version 21`, `ACTIVE`] **y ausente del repo** [`reportado`] — **segundo caso del patrón**. Listado
+completo con su estado: `AGENDA.md` v2026-09-13-v1.
+
+### 📌 La regla que más costó, y no vive acá
+
+**«Mergear no despliega, y desplegar tampoco despliega necesariamente lo mergeado.»** Cinco de ocho
+despliegues del día subieron **el bundle anterior**, por correr desde un clon sin `git pull`
+[`reportado`]; el contador de versión y `updated_at` **suben igual**, porque suben con el intento.
+**La única señal que no miente es el `ezbr_sha256`, y lo que cierra el caso es leer un marcador dentro
+del bundle.** Texto y secuencia: `CAPABILITIES.md` → **DESPLIEGUE**. Extiende
+`protocols/MEASUREMENT_METHOD_RULE.md` §4 **sin copiarla**.
+
+---
 ## 2026-08-26 — Carril IID: PUB-01, P3 y RESEARCH-01 cerrados; tres marcas sembradas
 
 En una línea: **los tres bloqueantes rojos del 2026-08-25 quedan cerrados y verificados en
