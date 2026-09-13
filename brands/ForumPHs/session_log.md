@@ -499,9 +499,19 @@ arbitraje, esas nueve piezas se habrían perdido y las tres reglas seguirían pa
   **Cero publicaciones automáticas reales hasta hoy.** Es la mitad que faltaba del hito del
   checkpoint anterior: el carril **coloca**, pero todavía no se puede afirmar que **publica**. Cron
   66 apagado hasta cerrarlo. De acá sale **HRD-R11**.
-- 🔴 **El texto adaptado por plataforma no pasa por el juez** — `content-run-stage:3134-3136`.
-  **Verificado, no deducido:** `social.adapted` **reintrodujo una cita de ley** que `aife_filtered`
-  ya no tenía. El juez aprueba un texto y sale otro.
+- ✅ **El texto adaptado SÍ pasa por el juez desde el 2026-08-26** — lo cerró **P3**,
+  `content-run-stage` **v94**, PR **#99**, con `pickJudgedText` (`:4504`) y `syncJudgedAdapted`.
+  La columna que lo prueba es **`assets.watcher.judged_source`** [medido el 2026-09-12: **121**
+  piezas con `'social_adapted'`; **121 de 121** con el adaptado ya sincronizado].
+  **Lo que seguía abierto era la BANDEJA, que mostraba el maestro** — `Orchestrator` PR **#35**.
+
+  > ⛔ **NO OPERATIVO — redacción anterior, conservada íntegra (archivada el 2026-09-12).**
+  > Describía en presente un defecto cerrado dos semanas antes, y **su cita de línea era
+  > incorrecta**: `:3134-3136` es el armado del payload a los labs; la adaptación está en `:2714`.
+  >
+  > > 🔴 **El texto adaptado por plataforma no pasa por el juez** — `content-run-stage:3134-3136`.
+  > > **Verificado, no deducido:** `social.adapted` **reintrodujo una cita de ley** que `aife_filtered`
+  > > ya no tenía. El juez aprueba un texto y sale otro.
 - 🔴 **`deno check` antes de dar por bueno un PR** — **50 tests en verde sobre un archivo que no
   compilaba**, porque la suite extrae bloques por sentinelas. De acá sale **HRD-R10**.
 - **Tres reglas con falso positivo alto y dato suficiente para reescribirlas** — las de la tabla de
