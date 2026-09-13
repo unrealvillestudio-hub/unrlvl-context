@@ -117,8 +117,24 @@ directo funcionaba, así que nada falló de forma visible: simplemente se usó l
 su propia gobernanza. Mezclarlo rompería la regla que el propio ecosistema se dio: **un brief declara
 el repo de CADA cambio** (`DELIVERY_AND_VERIFICATION_RULE` §2.3-bis).
 
-**Y `QA-INFO` bloquea, que es lo que hay que decir en vez de improvisar.** Faltan tres datos que CC
-**no puede obtener solo** — están detallados en el reporte de CC a Sam, con quién consigue cada uno.
+**`QA-INFO` bloqueó, y el bloqueo se levantó el mismo día.** Faltaban tres datos que CC no podía
+obtener solo; Sam los entregó y **el trabajo salió, en sus propios sitios y sin mezclarse con este
+`Actualiza`**:
+
+| Encargo | Dónde | Estado |
+|---|---|---|
+| El `UPDATE` del guardián | `intel.watcher_rules`, `HR-GEN-05` | **Aplicado** [`medido`]: de **79 a 95 formas**, las 16 medidas sobre el corpus. 16/16 presentes, **cero falsos positivos** en los 13 controles, `brand_id` sigue **nulo** |
+| A-5.3 (con A-5.2 dentro) | `unrlvl-iid-functions` **PR #151** | **Abierto.** 11 sitios, y el guardián del repo extendido con 8 formas |
+| A-5.2 suelto | `unrlvl-iid-functions` **PR #150** | **Cerrado**, absorbido por el #151 |
+
+**Y dos cosas que la ejecución destapó, porque son la lección y no el trámite:** los prompts del juez
+en voseo eran **seis, no dos** —cuatro terminan en `-á/-é/-í` **sin `s`**, y **ni la vía determinista
+ni la morfológica ven el imperativo voseante**: las dos que CC declaró suficientes compartían el mismo
+punto ciego—; y la siembra del 2026-09-12 **reconstruyó el léxico desde cero** en vez de extenderlo,
+**perdiendo seis formas que el barrido del 09-09 ya había añadido** y que estaban documentadas en las
+propias `notes` de la regla. **Un léxico se extiende, no se rehace:** rehacerlo borra trabajo de
+medición anterior **sin que nada falle**, que es la misma regla suprema de los context files aplicada
+a un campo de datos.
 
 **Lo que CC sí midió al ir a buscarlo, y cambia el enunciado del hueco** [`medido` el 2026-09-13 sobre
 `intel.watcher_rules`, leyendo el `verify_pattern` de `HR-GEN-05`]:
