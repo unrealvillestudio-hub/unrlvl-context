@@ -489,10 +489,34 @@ _Se suma a las seis capacidades de arriba, que siguen vigentes sin cambio._
 > > puede afirmar que **publica**. Regla de lectura: **`HRD-R11` — el éxito se comprueba contra el
 > > efecto, no contra el código HTTP.**
 
-> ⚠️ **Y una advertencia sobre el juicio de lo que sale:** el **texto adaptado por plataforma no pasa
-> por el juez** (`content-run-stage:3134-3136`). Verificado: `social.adapted` **reintrodujo una cita
-> de ley** que `aife_filtered` ya no tenía. **El juez aprueba un texto y sale otro** — no dar por
-> juzgado lo que se publica en un canal social.
+> ✅ **El juicio de lo que sale: CERRADO el 2026-08-26 por P3** — `content-run-stage` **v94**, PR
+> **#99**. El juez recibe **`social.adapted`**, no `aife_filtered`, con **`pickJudgedText`
+> (`:4504`, llamada desde `:4860`)** y **`syncJudgedAdapted`**, que reescribe el texto juzgado
+> —post-corrector, post-firma— **dentro de lo que se publica**. `adapted_pre_judgment` guarda el
+> antes, sin firmar, como evidencia.
+>
+> **La columna que lo prueba en el dato es `assets.watcher.judged_source`** [medido el 2026-09-12:
+> **121 piezas** con `'social_adapted'`, del 27-08 al 12-09; las **54** sin el campo son todas
+> anteriores al arreglo; y **121 de 121** tienen `adapted` distinto de `adapted_pre_judgment`, que
+> es la prueba de que la sincronización corrió].
+>
+> ⚠️ **Lo que SÍ seguía abierto, y es otra cosa: la BANDEJA mostraba el maestro.** P3 tocó el juez,
+> no la superficie. Medido en la pieza `abda1ebf`: el juez leyó el español con sus hashtags y la
+> bandeja mostraba `assets.copy` —3.747 caracteres, en inglés y sin ninguno—. Lo cierra
+> `Orchestrator` **PR #35**. **De ahí salía el `hashtags: 2` sin hashtags visibles**: la cabecera ya
+> contaba el adaptado y el cuerpo mostraba el otro texto.
+
+> ⛔ **NO OPERATIVO — redacción anterior, conservada íntegra (archivada el 2026-09-12).**
+> Describía en presente un defecto **ya cerrado el 2026-08-26**, y **su cita de línea era
+> incorrecta**: `content-run-stage:3134-3136` es el armado del payload a los labs, no la
+> adaptación —que está en `:2714`—. Esa contradicción con `ecosystem.json`, que ya lo registraba
+> cerrado, **costó un brief entero el 2026-09-12**. Es C-09 del contrato ICR: dos fuentes para el
+> mismo hecho, y una miente.
+>
+> > ⚠️ **Y una advertencia sobre el juicio de lo que sale:** el **texto adaptado por plataforma no pasa
+> > por el juez** (`content-run-stage:3134-3136`). Verificado: `social.adapted` **reintrodujo una cita
+> > de ley** que `aife_filtered` ya no tenía. **El juez aprueba un texto y sale otro** — no dar por
+> > juzgado lo que se publica en un canal social.
 
 ---
 
