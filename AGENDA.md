@@ -126,9 +126,18 @@ el repo de CADA cambio** (`DELIVERY_AND_VERIFICATION_RULE` §2.3-bis).
 - **No está `devolvés` NI está `devolvé`. Faltan las dos formas, no una.** El hueco no es que la
   denylist tenga el imperativo y le falte el presente: es que **el verbo entero está ausente**.
 - **Y el hueco real es estructural, no de una entrada.** El `verify_pattern` es una **enumeración de
-  formas literales** —75 alternativas separadas por `|`—, así que **todo verbo no enumerado escapa**.
+  formas literales** —**79** alternativas separadas por `|`— así que **todo verbo no enumerado escapa**.
   `devolver` es el ejemplo que se nombró, no el caso. Añadir `devolvé|devolvés` cierra **ese** verbo y
   deja la clase abierta.
+- **Corrección de una cifra propia, dentro de este mismo PR:** la primera redacción de esta línea dijo
+  **«75 alternativas»**. Son **79** [`medido` el 2026-09-13, contando las alternativas del
+  `verify_pattern`; coincide con la cifra de Sam]. El 75 fue un conteo a ojo de CC sobre la lectura, no
+  una medición — **y así es exactamente como se cuela una afirmación sin etiqueta**: la frase que lo
+  rodeaba hablaba de medir.
+- **Y la enumeración no es consistente consigo misma** [`medido`]: de las **62** formas de presente
+  voseante, **59 no tienen su imperativo en la lista** —están `mirás`/`mirá`, `dejás`/`dejá` y
+  `ponés`/`poné`, y ninguna más—, mientras que `tomá` y `andá` están **sin** `tomás` ni `andás`. El
+  hueco no es un verbo ausente: es que **la lista se construyó por acumulación, no por paradigma**.
 - **Por eso el barrido de este PR se hizo por DOS vías** —la determinista con este mismo
   `verify_pattern`, y una **morfológica por terminación voseante**— y por eso la segunda no es
   decorativa: **es la que cubre lo que la enumeración no enumera**. Ambas: **cero** sobre las líneas
