@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.17 · 2026-09-13 (**tres correcciones medidas el mismo día, y las tres retiran una afirmación que había dejado de ser cierta — ninguna se borra: las tres se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal.** (1) **El proxy `api/professor` SÍ acepta POST**, y `action=submit-learning` funciona pasando **`relevance_score` explícito dentro del `1..5` del `CHECK`**: el `500` documentado el 2026-09-10 lo producía la EF calculando el valor **fuera de rango**, así que la causa raíz era correcta y **la conclusión que se sacó de ella no** — de «el `CHECK` rechaza el valor» se pasó a «no se puede por el proxy» sin medir la regla [reportado — Claude.ai, 12 learnings sembrados por esa vía el 2026-09-13 entre 13:47 y 13:49 UTC; **corroborado por CC**: 12 filas con `session_date = '2026-09-13'`, las 12 con `relevance_score = 5`, y el `CHECK` sigue siendo `>= 1 AND <= 5`]. (2) **La misma corrección retira la entrada que decía que el proxy sólo exponía GET.** (3) **El `REVOKE` sobre `intel.match_content_embeddings` ya está aplicado**: el ACL medido es `{postgres=X/postgres,service_role=X/postgres}` y `anon` y `authenticated` quedan en **falso** — la advertencia que la fila `p_match_domain` llevaba unas horas antes **se archiva**, con su reversión escrita al lado. **Cabecera anterior (`1.16`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
+
 _Versión: 1.16 · 2026-09-13 (**tres adiciones medidas y ninguna derogación: el despliegue deja de verificarse por el contador, y el corte de duplicación entra al catálogo.** (1) **Sección DESPLIEGUE nueva — «mergear no despliega, y desplegar tampoco despliega necesariamente lo mergeado»**: cinco de ocho despliegues del 2026-09-13 subieron **el bundle anterior** por correr desde un clon sin `git pull` [reportado — brief de cierre del 2026-09-13], con el contador de versión y `updated_at` subiendo igual porque suben **con el intento**; la única señal que no miente es el `ezbr_sha256`, y lo que cierra el caso es **leer un marcador dentro del bundle**. Extiende la regla 4 de MÉTODO DE MEDICIÓN sin copiarla. (2) **Dos filas nuevas en ARTEFACTOS CONSULTABLES**: `intel.brand_similarity_threshold` —el corte de duplicación por marca × clase de par, con su política de congelado escrita en el `COMMENT` de la tabla— y el parámetro **`p_match_domain`** del RPC `intel.match_content_embeddings`, **una sola firma** con `DEFAULT true` [medido 2026-09-13]. (3) **La cita caducada sobre el texto adaptado NO se vuelve a tocar**: la cerró el **PR #95** y su redacción anterior ya está bajo guard `⛔ NO OPERATIVO` [medido] — archivar dos veces lo archivado duplica la historia en vez de preservarla. **Cabecera anterior (`1.15`) conservada íntegra e inmediatamente debajo**, por yuxtaposición, igual que desde `1.13`: el diff de este archivo **no borra ni una línea**)_
 
 _Versión: 1.15 · 2026-09-12 (**cuatro adiciones medidas y ninguna derogación: el regulador de entrada se vuelve consultable, y una vía de cron que el brief daba por buena NO funciona.** (1) **Cómo se lee la cobertura del carril** — `intel.v_carril_cobertura`, una fila por marca × canal activo, con `cobertura` = stock disponible menos franjas comprometidas sin pieza. (2) **Cómo se sube el volumen: SE SUBE EL MARGEN, NUNCA LA CADENCIA** — `intel.brand_production_margin`, acotado por `margin_max`. Son **tres números con tres dueños** y confundirlos contamina una decisión editorial con una falta puntual. (3) **Cuál de las fuentes de cadencia MANDA: `intel.brand_cadence`** — `brand_topics.cadence` es **LEGACY por comentario de columna** desde el 2026-09-11 y **no se borra** hasta medir que ningún consumidor la lea; `intel.brand_publish_policies` dice **cuándo**, no **cuántas**. (4) **`UPDATE cron.job SET active = false` es rechazado en este proyecto** con `permission denied for table job` [medido el 2026-09-12]: la vía que funciona es **`cron.alter_job(jobid, active := false)`** con el `jobid` que devuelve `cron.schedule`. Una migración que apague crons por `UPDATE` **falla entera**) · la cabecera anterior (`1.14`) queda intacta e inmediatamente debajo, con su cadena completa_
@@ -150,13 +152,36 @@ no distingue cuál. **`edge_logs` sí**, porque el par `GET 200` / `PATCH 403` a
 **Regla derivada:** ante un contador que no sube, la tabla no es la fuente — es justamente la que el
 fallo dejó sin escribir. Detalle: `protocols/DELIVERY_AND_VERIFICATION_RULE.md` §4.2.
 
-### El proxy `api/professor` sólo expone GET
+### El proxy `api/professor` SÍ acepta POST (corregido 2026-09-13)
 
-**El checkpoint NO se siembra por el proxy.** Se siembra con **`execute_sql` sobre
-`professor_learnings`**. `action=checkpoint` lee; no hay POST.
+**`api/professor` acepta `POST`, y `action=submit-learning` funciona** pasando `relevance_score`
+**explícito y dentro del rango `1..5`** del `CHECK` [`reportado` — medido por Claude.ai el
+2026-09-13]. El checkpoint **también** se puede seguir sembrando con `execute_sql` sobre
+`professor_learnings`: la vía SQL no queda derogada, deja de ser **la única**.
 
-Buscar un POST en el proxy y no encontrarlo **no significa que no haya vía** — significa que la vía
-es otra. Es el caso literal de la regla de oro de este catálogo.
+**Lo que CC sí midió el 2026-09-13**, y es lo que ancla la corrección en el dato: **12 filas** con
+`session_date = '2026-09-13'` en `public.professor_learnings`, **las 12 con `relevance_score = 5`**, y
+el `CHECK` vigente es `professor_learnings_relevance_score_check` →
+`CHECK (((relevance_score >= 1) AND (relevance_score <= 5)))` [`medido`]. **CC no ejecutó el POST:**
+hacerlo habría escrito un learning en producción, y existe una lectura que responde igual
+(`DELIVERY_AND_VERIFICATION_RULE` §4.1).
+
+**Por qué la redacción anterior se equivocaba, y la lección es la del catálogo entero:** *«busqué un
+POST y no lo encontré»* se escribió como *«no hay POST»*. La regla de oro de este archivo dice
+exactamente lo contrario — **casi siempre el acceso existe por una vía que no es la obvia**—, y esta
+entrada era el caso, sólo que del lado de quien la escribió.
+
+> ⛔ **NO OPERATIVO — redacción anterior, conservada íntegra (archivada el 2026-09-13).** Afirmaba que
+> el proxy **no tenía POST**. Lo desmiente la siembra de los 12 learnings del 2026-09-13 por esa misma
+> vía. Se conserva literal por `CC_PROTOCOL.md` §0.
+>
+> > ### El proxy `api/professor` sólo expone GET
+> >
+> > **El checkpoint NO se siembra por el proxy.** Se siembra con **`execute_sql` sobre
+> > `professor_learnings`**. `action=checkpoint` lee; no hay POST.
+> >
+> > Buscar un POST en el proxy y no encontrarlo **no significa que no haya vía** — significa que la vía
+> > es otra. Es el caso literal de la regla de oro de este catálogo.
 
 ### Un conector MCP reconectado NO entra en caliente a una sesión abierta
 
@@ -287,17 +312,41 @@ filas» y «no existe» no son el mismo estado (2026-09-08), `NULL` y `0` tampoc
 `AGENDA.md` v2026-09-09-v1), y **«un intento con desenlace `PUBLISHED`» y «una publicación viva»
 tampoco lo son.**
 
-### 🎓 Professor — `action=submit-learning` devuelve **500**, y la vía es el `INSERT` directo
+### 🎓 Professor — `action=submit-learning` FUNCIONA con `relevance_score` explícito (corregido 2026-09-13)
 
-**Causa raíz declarada con evidencia:** la EF calcula un `relevance_score` **fuera del rango del
-`CHECK`**, que es **1 a 5**
-[medido el 2026-09-10: `pg_get_constraintdef` de `professor_learnings_relevance_score_check` →
-`CHECK (((relevance_score >= 1) AND (relevance_score <= 5)))`]. El `500` **no es del proxy**: es la
-base rechazando la fila.
+**La causa raíz de 2026-09-10 era correcta; la conclusión que se sacó de ella, no.** La EF calculaba un
+`relevance_score` **fuera del rango del `CHECK`**, que es **1 a 5** — y el `500` era **la base
+rechazando la fila**, no el proxy negándose. De ahí se concluyó que la vía era el `INSERT` directo.
+**La conclusión sobraba:** si el problema es el valor, la vía se arregla **mandando el valor bueno**.
 
-- **Fallback vigente:** `INSERT` directo en `public.professor_learnings` con `execute_sql`.
-- Concuerda con lo ya escrito en la cabecera v1.12: **el proxy `api/professor` sólo expone GET**, y
-  el checkpoint se siembra con SQL.
+- **Vía vigente:** `action=submit-learning` **pasando `relevance_score` explícito en `1..5`**
+  [`reportado` — medido por Claude.ai el 2026-09-13, con 12 learnings sembrados por esa vía entre las
+  13:47 y las 13:49 UTC].
+- **Corroboración de CC** [`medido` el 2026-09-13]: **12 filas** con `session_date = '2026-09-13'`, **las
+  12 con `relevance_score = 5`**, y el `CHECK` sigue siendo `>= 1 AND <= 5`. CC midió **el resultado**,
+  no el camino: no ejecutó el POST para no escribir un learning de prueba en producción.
+- **El `INSERT` directo con `execute_sql` sigue siendo válido** como fallback. Deja de ser **la única
+  vía**.
+
+**La lección, que es la cara:** un diagnóstico correcto (`el CHECK rechaza el valor`) se convirtió en
+una regla de acceso (`no se puede por el proxy`) **sin medir la regla**. Entre la causa y la
+conclusión se coló un salto — y quedó escrito en el catálogo durante tres días.
+
+> ⛔ **NO OPERATIVO — redacción anterior, conservada íntegra (archivada el 2026-09-13).** Declaraba el
+> `500` como estado vigente y el `INSERT` directo como **la** vía. Se conserva literal por
+> `CC_PROTOCOL.md` §0; su causa raíz sigue siendo cierta y está recogida arriba.
+>
+> > ### 🎓 Professor — `action=submit-learning` devuelve **500**, y la vía es el `INSERT` directo
+> >
+> > **Causa raíz declarada con evidencia:** la EF calcula un `relevance_score` **fuera del rango del
+> > `CHECK`**, que es **1 a 5**
+> > [medido el 2026-09-10: `pg_get_constraintdef` de `professor_learnings_relevance_score_check` →
+> > `CHECK (((relevance_score >= 1) AND (relevance_score <= 5)))`]. El `500` **no es del proxy**: es la
+> > base rechazando la fila.
+> >
+> > - **Fallback vigente:** `INSERT` directo en `public.professor_learnings` con `execute_sql`.
+> > - Concuerda con lo ya escrito en la cabecera v1.12: **el proxy `api/professor` sólo expone GET**, y
+> >   el checkpoint se siembra con SQL.
 
 ### 🏷️ Estados de una pieza — **no existe `approved`**
 
@@ -590,9 +639,23 @@ El carril async está **cerrado end-to-end** y su generador es **CopyLab**, invo
 | `ICR_CONTRACT.md` | `protocols/ICR_CONTRACT.md` | Contrato del ecosistema: tabla de definiciones de las siete siglas (ICR, QA, AIID, IID, AIFE, CRO, PSY), doce cláusulas y doce verificadores. Las cláusulas **informan, no bloquean**. NO se carga en apertura: se consulta al declarar el ICR de una entrega. | Claude + Sam, bajo PR |
 | `BluePrints` (repo) | `unrealvillestudio-hub/BluePrints` → `brands/[Marca]/` | **395 archivos.** Identidad **VISUAL** por marca: `BP_BRAND_*` (JSON = FUENTE, HTML = RENDER), paletas, logos, tipografía. ⚠️ **NO es fuente para firmas**, y el `BP_BRAND` de **UnrealvilleStudio está desactualizado**. | Sam + Claude, bajo PR en ese repo |
 | `intel.brand_similarity_threshold` | Supabase UNRLVL · esquema `intel` | Corte de similitud de coseno **por marca × clase de par** (`pair_scope`: `own_brand` / `cross_brand`) a partir del cual el gate de duplicación aparta una pieza; sustituye al literal `0.80` de `content-watcher`. Estados: `CALIBRATED` / `SIN_LINEA_BASE`. **Dos guardas, no una:** `pairs_count >= min_pairs` **y** `own_vectors >= min_own_vectors`. **La política de congelado y de recálculo vive en el `COMMENT` de la tabla** — se recalcula por evento, nunca por calendario, y todo recálculo escribe su `recalculated_reason`. | El carril, por evento · siembra y recálculo bajo migración |
-| `intel.match_content_embeddings` → `p_match_domain` | Supabase UNRLVL · esquema `intel` | RPC de comparación de embeddings, **una sola firma** [medido 2026-09-13]. `p_match_domain boolean DEFAULT true` decide si la comparación se restringe al mismo dominio: el par propio lo deja en `true`, el par cruzado lo llama en `false`. **Leer el `DEFAULT` antes de asumir el alcance de una llamada** — un filtro implícito fue lo que mantuvo un gate comparando contra una población vacía. ⚠️ `PUBLIC` conserva `EXECUTE` sobre la función [medido 2026-09-13]; no es `SECURITY DEFINER` (`prosecdef = false`), así que la RLS sigue mandando, pero falta el `REVOKE … FROM PUBLIC`. | PR de función, bajo migración |
+| `intel.match_content_embeddings` → `p_match_domain` | Supabase UNRLVL · esquema `intel` | RPC de comparación de embeddings, **una sola firma** [medido 2026-09-13]. `p_match_domain boolean DEFAULT true` decide si la comparación se restringe al mismo dominio: el par propio lo deja en `true`, el par cruzado lo llama en `false`. **Leer el `DEFAULT` antes de asumir el alcance de una llamada** — un filtro implícito fue lo que mantuvo un gate comparando contra una población vacía. ✅ **ACL acotado**: `{postgres=X/postgres, service_role=X/postgres}` — `anon` y `authenticated` en **falso** [medido 2026-09-13, después del `REVOKE`]. Único llamador: `content-watcher` con `service_role`. | PR de función, bajo migración |
 
 > `supabase_access_map.json` y `ecosystem_graph.json` se enlazan por `caller.repo` ↔ nodos del graph. Se versionan por separado — no fusionar.
+
+> ⛔ **NO OPERATIVO — advertencia anterior de la fila `p_match_domain`, conservada íntegra (archivada el
+> 2026-09-13).** Describía un `PUBLIC` con `EXECUTE` que **ya fue revocado el mismo día**. Se conserva
+> literal por `CC_PROTOCOL.md` §0; su texto fue:
+>
+> > ⚠️ `PUBLIC` conserva `EXECUTE` sobre la función [medido 2026-09-13]; no es `SECURITY DEFINER`
+> > (`prosecdef = false`), así que la RLS sigue mandando, pero falta el `REVOKE … FROM PUBLIC`.
+>
+> **Estado vigente** [`medido` el 2026-09-13, después del `REVOKE` aplicado por Claude.ai]: el ACL es
+> `{postgres=X/postgres,service_role=X/postgres}`, y `has_function_privilege` devuelve **`false`** para
+> `anon` y para `authenticated`, **`true`** para `service_role`. **Reversión, si alguna corrida dejara
+> de comparar:** `GRANT EXECUTE … TO PUBLIC` por firma completa. **No debería hacer falta** — el único
+> llamador es `content-watcher` con `service_role`, y el Orchestrator no la usa [`reportado` — cero
+> coincidencias en su repo, según Claude.ai].
 
 ---
 

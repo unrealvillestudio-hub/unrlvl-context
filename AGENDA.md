@@ -1,9 +1,142 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-13 · v2026-09-13-v2 (**CIERRE DEL 2026-09-13 — CUATRO CORRECCIONES DE SAM SOBRE EL `v1`, Y DOS FRENTES QUE SE CIERRAN EL MISMO DÍA EN QUE SE ABRIERON.** Amplía el `v2026-09-13-v1` inmediatamente debajo; **no lo reescribe**. **(1) El `REVOKE` sobre `intel.match_content_embeddings` YA ESTÁ APLICADO** por Claude.ai: ACL medido **`{postgres=X/postgres, service_role=X/postgres}`**, `anon` y `authenticated` en **falso**, `service_role` en **true** [`medido` por CC el 2026-09-13, después del cambio]. **El frente 11 del `v1` nace y muere el mismo día**, y **no se abre migración**: el único llamador es `content-watcher` con `service_role` y el Orchestrator no la usa [`reportado`]; la reversión, si alguna corrida dejara de comparar, es un `GRANT EXECUTE … TO PUBLIC` por firma completa. **(2) §5.b cambia de condición, no de estado: U-5 está mergeado y funcionando** [`reportado`], así que **la ventana «antes de U-5» se cerró y NO se fabrica un caso de prueba** — **la primera revocación real de Sam sobre una pieza programada ES la verificación**. Queda anotado como **verificación pendiente de un evento, no como tarea**, con su línea base para comparar después [`medido`]: **55 franjas `free`** (cero con pieza), **21 `reserved`** (las 21 con pieza), 4 `published`, 1 `failed` — **cero huérfanas por las dos lecturas**. **Cae la corrección 5 del `v1`:** la franja `0ed7214c…` deja de ser candidata a caso fabricado. **(3) Dos correcciones al catálogo, y las dos retiran una afirmación de acceso que era falsa:** el proxy **`api/professor` SÍ acepta POST**, y **`action=submit-learning` funciona** pasando `relevance_score` **explícito dentro del `1..5` del `CHECK`** — el `500` documentado el 2026-09-10 lo producía **la EF calculando el valor fuera de rango**, de modo que **la causa raíz era correcta y la conclusión que se sacó de ella no lo era**: de *«el `CHECK` rechaza el valor»* se pasó a *«no se puede por el proxy»* **sin medir la regla**, y eso estuvo tres días en el catálogo [`reportado` — Claude.ai, 12 learnings sembrados por esa vía entre las 13:47 y las 13:49 UTC; **corroborado por CC**: 12 filas con `session_date = '2026-09-13'`, **las 12 con `relevance_score = 5`**, y el `CHECK` sigue siendo `>= 1 AND <= 5`]. **Las dos redacciones anteriores se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal, ninguna se borra.** `CAPABILITIES.md` pasa a **1.17**. **(4) El PR del voseo queda DESBLOQUEADO** — A-1 mergeado y desplegado, `content-watcher` **v57** `b0c62f50…77694` [`medido`] — **y NO entra en este PR**: es trabajo de otro repo y le faltan tres datos que CC no puede obtener solo, listados abajo. **Y un hueco que CC sí midió al ir a buscarlo:** en el `verify_pattern` de `HR-GEN-05` **no está `devolvés` NI `devolvé`** — **faltan las dos**, no una; la denylist es una **enumeración de formas literales**, así que **todo verbo no enumerado escapa**, y `devolver` es sólo el ejemplo que se nombró [`medido` el 2026-09-13 sobre `intel.watcher_rules`])_
 _Actualizada: 2026-09-13 · v2026-09-13-v1 (**CIERRE DEL 2026-09-13 — EL CARRIL DEJA DE ESTAR CIEGO POR EL LADO DEL CÓDIGO, Y SEIS AFIRMACIONES DEL BRIEF QUE LA MEDICIÓN MATIZA.** Entró en producción: **`publish-slot-reserver` v11** (`ezbr_sha256` **`c12e02c6…c606b`**) filtrando `discarded_at` —**N16 cerrado por el lado del código**—; **`blog-promoter` v6** (**`c9d262d8…0acfc`**); **`content-watcher` v57** (**`b0c62f50…77694`**); **`content-run-stage` v123** (**`8babc595…a9d5a`**) [los cuatro `medido` con `Supabase:list_edge_functions` el 2026-09-13]. El `CHECK` de `intel.brand_publish_drain_log.outcome` pasa de 6 a **13 valores** —9 de eje de desenlace más **4 alias legacy `BLOG_*`**, con el mapa completo escrito en el `COMMENT` de la columna— [`medido`]. **`intel.brand_similarity_threshold` creada y sembrada**, con el eje corregido a **`own_brand` / `cross_brand`**: cortes vigentes **NeuroneSCF `0.93739`** y **LucienSael `0.90551`**; **ForumPHs y UnrealvilleStudio en `SIN_LINEA_BASE`** [`medido`, 8 filas]. El RPC `intel.match_content_embeddings` queda en **una sola firma** con `p_match_domain boolean DEFAULT true` [`medido`]. **LO QUE CC CORRIGE POR MEDICIÓN, y son seis:** (1) `min_own_vectors = 30` **no es propuesto — está sembrado** en las ocho filas; (2) el ACL del RPC **no está acotado a `service_role`: `PUBLIC` conserva `EXECUTE`**, así que `anon` y `authenticated` lo ejecutan —no es `CC_PROTOCOL` §11 porque `prosecdef = false`, pero el `GRANT` explícito lee como si estuviera acotado—; (3) `cross_brand` está en `SIN_LINEA_BASE` **por población vacía por construcción**, no por falta de volumen —los dominios no se solapan entre marcas—; (4) ForumPHs y UnrealvilleStudio **incumplen las dos guardas**, no una; (5) la candidata de §5.b **existe y está viva** —franja `0ed7214c…` reservada para la pieza `d621e8d5…`, en `scheduled` y sin descartar—, así que revocarla **escribe en producción** y es decisión de Sam; (6) la cita caducada del §2.2 del brief **ya no sigue viva** — la cerró el PR #95 y su redacción anterior quedó bajo guard. **Regla nueva y la más cara del día, en `CAPABILITIES.md`: mergear no despliega, y desplegar tampoco despliega necesariamente lo mergeado** — cinco de ocho despliegues subieron el bundle anterior por correr desde un clon sin `git pull`, con el contador de versión subiendo igual. **El criterio de éxito de gate5 sigue SIN cumplir** y no es medible hasta que corra tráfico nuevo. `ecosystem.json` **no cambió**: sus derivados no se tocan. Professor cerrado antes: **12 learnings** del 2026-09-13, los doce con `relevance_score = 5` [`reportado` — brief de Claude.ai])_
 _Actualizada: 2026-09-12 · v2026-09-12-v3 (**CIERRE DEL 2026-09-12 — SAM DECIDE, Y LA FUGA DE N10 QUEDA CERRADA POR EL LADO DEL BLOG.** Cinco decisiones de Sam, **escritas con su motivo**; CC ejecutó las dos primeras con el método que él fijó —**en seco, lectura, aplicación**— y verificó **por efecto**. **(1) `blog-promoter` v1.2 desplegada** —`version 3`, `ezbr_sha256` **`9529a937…8418f97`**, `verify_jwt` `false` preservado; código en `unrlvl-iid-functions` **PR #145**—: la rama `YA_PUBLICADA` **ahora sella la franja y rellena lo que falte**. Cron 99 apagado durante la prueba y encendido al terminar. **Medido antes y después:** las dos franjas pasan de `reserved` a **`published`** con el `published_at` **de la pieza** —los dos libros mayores cuentan por fin la misma fecha—, `post_url` y `slug` pasan de **NULL** a puestos, **`intel.drain_due_slots(200)` deja de devolverlas** y las franjas vencidas y reservadas bajan de **6 a 4**; las 4 que quedan son `x_api` y `tiktok_business` y **esperan su publicador**. **(2) Manda `discarded_at` sobre `status`** —*el descarte es un veredicto humano, `status` es una posición en la cola*—: las 3 piezas incoherentes de NeuroneSCF pasan a `rejected` sin tocar el veredicto, y **se libera una franja futura del 16-09 que una pieza descartada el 09-09 tenía reservada**. **El hueco de fondo, medido: `publish-slot-reserver` NO filtra `discarded_at` —cero apariciones en el archivo—**, mientras `content-scheduler` sí lo hace en las líneas 2422 y 2485. **(3) La pieza es el texto adaptado** `social.adapted[n].copy`: **encargo propio y con prioridad**, porque todo lo que se calibre hasta que se arregle se calibra sobre el texto equivocado; **las 22 notas no se pierden, se reevalúan**. **(4) 200 pares de mínimo, con la contrapartida dicha en voz alta:** sin corpus suficiente el gate declara **`SIN_LINEA_BASE`** y **no compara** —nunca aprueba en silencio por tabla vacía—, y **una marca sin gate publica igual porque nada sale sin la aprobación de Sam**. **(5) Frente 4 reordenado: primero el agente, después el dominio** — el cuello no son los dominios sino los agentes que los trabajan: ForumPHs produce sobre **5 de 32**, LucienSael sobre **1 de 4**. **🔴 Y UN HALLAZGO NUEVO, QUE ES DECISIÓN PENDIENTE: la bitácora del promotor NUNCA pudo escribir una fila, en ninguna versión.** Un `catch` a propósito ocultó **tres rechazos apilados**, probados sin escribir nada: `run_id` `NOT NULL` sin default (**23502**), `slot_id` igual, y el `CHECK` de `outcome` que **no admite ninguno de los cuatro `BLOG_*`** (**23514**). Si el lunes el promotor publica, **publica sin rastro**. Es DDL sobre tabla compartida: **no se aplica sin Sam**. **N16 sube a 24 piezas contra 44 franjas libres** y gana causa que investigar. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-12 · v2026-09-12-v2 (**CIERRE DEL 2026-09-12 — EL PROMOTOR DE BLOGS ESTÁ VIVO EN PRODUCCIÓN, Y RECONOCER LO YA HECHO LE CUESTA EL SELLO.** `blog-promoter` v1.1 desplegada el 2026-09-12 **17:53:11 UTC**, `ezbr_sha256` **`db02acb3…fca169`**, cron **`blog-promoter-15min`** `jobid 99` `*/15 * * * *` **activo** [medido]. **CINCO AFIRMACIONES DEL BRIEF CORREGIDAS POR MEDICIÓN, y dos cambian el encargo:** (1) **no es un `dry_run`** — lleva **nueve invocaciones reales HTTP 200**, `dry_run:false`, `canales:3`, `franjas_vencidas:6`, todas `YA_PUBLICADA` [medido en `net._http_response`]; (2) 🔴 **la rama `YA_PUBLICADA` NO sella la franja**, así que **dos franjas `vercel_html` con pieza ya publicada quedan `reserved` para siempre** —`66227c12…` de LucienSael y `c09c824a…` de ForumPHs, vencidas desde el 08 y el 10 de septiembre— **reabriendo la fuga de N10 en la cabeza de la cola**, y **sus dos piezas siguen con `post_url` en NULL**, que es justo el defecto que el promotor vino a cerrar [medido]; (3) la causa raíz del blog de UnrealvilleStudio **no es código por marca** —**cero marcas hardcodeadas** en los cuatro EF del camino—: `platforms` de la fila de cola sale del **`platforms_hint` del modelo** (`iid-process/index.ts:845` → `iid-core/index.ts:112`) y **`brand_topics.platforms` nunca se consulta**; (4) el contador de hashtags **NO miente** — `hashtags_out:2` es exacto sobre `social.adapted[0].copy` (2 hashtags, 1.187 chars, español), y **`assets.copy` es OTRO texto** (0 hashtags, 3.747 chars, inglés): **la bandeja muestra un texto y el publicador manda otro**, y las 22 notas de Sam se escribieron mirando el que no publica; (5) el corte por **percentil 99 no da 0,97 y 0,94 sino 0,9603 y 0,9046** —ésas eran los máximos— y **LucienSael no tiene línea base de dominios distintos: sus 52 vectores son de un solo dominio**. **Confirmado exacto:** las 4 medias de coseno sobre los **241 vectores**, el reparto de las **56** piezas devueltas a la bandeja (NSCF 32 · FPHS 12 · LUC 8 · UVS 4), los dominios por marca (32 · 9 · 6+1 · 4) y el handle **`hair-intelligence`** de Shopify. **El umbral `0.80` es literal en `content-watcher/index.ts` en NUEVE sitios y TRES gates** (449, 450, 456, 458, 1059, 1073, 1101, 1454, 1456) y la línea 964 ya lo confesaba. **SERIE N:** N07, N08 y N13 dejan de ser `SIN CONTENIDO` · **N13 CERRADO** con su defecto abierto · **N16 DADO DE ALTA** —**24** piezas `scheduled` sin franja contra **43** franjas libres futuras, peor que el 13/45 del brief— · N05A confirmado `UNIQUE INDEX` por tercera vez, **y es por qué «11 cerradas» no tiene representación en el dato**. **Y un hallazgo que reordena el Frente 4:** los dominios declarados **no producen** — ForumPHs escribe sobre **5 de 32**, LucienSael sobre **1 de 4**: primero el agente y su cron, después el dominio nuevo. **Barrido de voseo sobre el bloque nuevo: cero apariciones** [medido con el `verify_pattern` de `HR-GEN-05`]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-12 · v2026-09-12-v1 (**CIERRE DEL 2026-09-12 — EL MÉTODO DE PUBLICAR SE VUELVE CARGABLE, Y N10 QUEDA APLICADO A MEDIAS.** Alta de **`skills/publicacion-operativa/SKILL.md` v1.0**, capa MÉTODO y destino CARGABLE, entregado por Sam y **registrado literal** —md5 idéntico contra el origen—: cubre el hueco que `BRIEF-06` §4.4 nombró y que **no existía en el repo** [medido]. **BRIEF-06 encendido en seco:** `intel.carril_regulation_log` creada, `carril-regulator` desplegada y su `dry_run` corrido —**16 canales, 14 `SUPPLY_ABSENT` y 2 `HOLD`, cero liberadas, cero aparcadas, déficit total 75,2**—, `carril-regulator-daily` **ACTIVADO** y `carril-cobertura-alarma-daily` **apagado a propósito** [medido, todo]. **N10:** la DDL está —columna, intervalo en config y RPC con backoff— y el **punto 5 aplicado**: `intel.v_carril_cobertura` gana `franjas_sin_publicador` y `primera_sin_publicador` **sin cambiar ninguna fórmula** [medido]. **LO QUE ESTE BLOQUE ABRE, Y ES LO URGENTE: `content-scheduler` NO lleva el código de N10.** La desplegada es la **v17 del 2026-09-10 21:43 UTC** —trae el tope de caption, **cero apariciones** de `sellarBackoff`, `last_drain_check_at` y `SLOT_BACKOFF_FAILED`— y el efecto lo confirma: **120 `PROVIDER_NOT_DRAINABLE` en 6 horas y CERO franjas selladas** [medido]. **El backoff no está operando.** Los 12 crons de UnrealvilleStudio reprogramados a semanal, lunes a sábado [medido: los 12 activos]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido]. **Adición 2026-09-10 — SERIE N, sección propia:** los identificadores `N05A`, `N07`, `N08`, `N10`, `N13`, `N14` y `N15` **no estaban en ningún context file**, y por eso un encargo que los nombrara era irresoluble. Ahora tienen registro con su estado medido. **N10 es lo urgente y empeora solo**: `intel.drain_due_slots` **no filtra por proveedor**, las franjas no drenables nunca alcanzan estado terminal y ocupan la cabeza de la cola —**544 filas acumuladas y 4 franjas atascadas, dos de ellas desde el 2026-09-08**—; al llegar a las 50 del techo, **la publicación se detiene sin un solo error**. **N14 no se reproduce**: ninguno de los dos `cron.job.command` lleva secreto en claro [medido con volcado redactado]. **N15 se abarata**: el tope ya vive en `platform_configs.char_limit`, así que es enrutar un dato que existe, no crearlo. **N07, N08 y N13 quedan declarados SIN CONTENIDO** — nombrados y sin definición en ninguna parte.)_
+
+---
+
+## 🗓️ CIERRE 2026-09-13-v2 — Cuatro correcciones de Sam, y dos frentes que se cierran el mismo día en que se abrieron
+
+_(Bloque al tope. **Amplía el `v2026-09-13-v1` inmediatamente debajo; no lo reescribe** — el `v1` se
+conserva íntegro con sus cifras y sus etiquetas, incluidas las que este bloque supersede, porque el
+valor de una corrección está en poder leer qué se afirmaba antes. Todo lo etiquetado `medido` lo
+consultó **CC** el **2026-09-13 entre las 21:00 y las 21:05 UTC**. Lo etiquetado `reportado` lo afirma
+**Sam, en su corrección del 2026-09-13**, y **CC no lo midió**.)_
+
+---
+
+### ✅ CORRECCIÓN 1 — el `REVOKE` ya está aplicado; el frente 11 nace y muere el mismo día
+
+**Aplicado por Claude.ai** [`reportado`]. **Verificado por CC** [`medido`]:
+
+| Lectura | Antes (v1, 20:47 UTC) | Ahora (21:00 UTC) |
+|---|---|---|
+| `proacl` | `{=X/postgres,postgres=X/postgres,service_role=X/postgres}` | **`{postgres=X/postgres,service_role=X/postgres}`** |
+| `has_function_privilege('anon', …, 'EXECUTE')` | `true` | **`false`** |
+| `has_function_privilege('authenticated', …, 'EXECUTE')` | `true` | **`false`** |
+| `has_function_privilege('service_role', …, 'EXECUTE')` | `true` | `true` |
+
+**No se abre migración para esto.** Ya está hecho. **Y la reversión está escrita por adelantado**, que
+es lo que convierte un cambio de privilegios en algo reversible en vez de en algo que da miedo tocar:
+si en alguna corrida posterior **gate5 o gate1 dejaran de comparar**, se restituye con
+`GRANT EXECUTE … TO PUBLIC` **por firma completa** — dos sobrecargas del mismo nombre son dos
+funciones, y aquí hay **una sola firma** [`medido` en el `v1`].
+
+**No debería hacer falta:** el único llamador es **`content-watcher` con `service_role`**, y el
+**Orchestrator no la usa** —cero coincidencias en su repo— [`reportado`].
+
+> **El frente 11 del `v1` queda CERRADO.** Se conserva ahí escrito a propósito: un frente que se abre
+> y se cierra el mismo día **sigue siendo la prueba de que la lectura lo encontró**. Borrarlo dejaría
+> el catálogo igual de limpio y la trazabilidad peor.
+
+---
+
+### 🔄 CORRECCIÓN 2 — §5.b cambia de condición: la verificación pasa a depender de un evento
+
+**U-5 está mergeado y funcionando** [`reportado`]. **La ventana «antes de U-5» se cerró**, y de ahí se
+sigue lo importante: **no se fabrica un caso de prueba**. **La primera revocación real de Sam sobre una
+pieza programada ES la verificación.**
+
+**Esto retira la corrección 5 del `v1`.** La franja `0ed7214c…` **deja de ser candidata**: no porque el
+dato haya cambiado, sino porque **ya no hace falta un caso fabricado**. La observación de fondo del
+`v1` sigue en pie y ahora no cuesta nada — **no se escribe en producción sobre contenido programado
+para probar algo que el uso normal va a probar solo**.
+
+**Línea base para comparar después de ese evento** [`medido` el 2026-09-13 21:0x UTC, sobre
+`intel.brand_publish_slots`]:
+
+| `status` | Franjas | Con `piece_id` |
+|---|---|---|
+| `free` | **55** | **0** |
+| `reserved` | **21** | **21** |
+| `published` | 4 | 4 |
+| `failed` | 1 | 1 |
+
+**Cero huérfanas por las dos lecturas**, y las dos importan porque son dos defectos distintos:
+**ninguna franja `free` arrastra `piece_id`** (sobrante que bloquearía el pozo) y **ninguna `reserved`
+está sin pieza** (reserva fantasma). Después de la primera revocación real, **una franja debe pasar de
+`reserved` a `free` y soltar su `piece_id`**: `21 → 20` y `55 → 56`, con los dos ceros intactos.
+
+**Se anota como verificación pendiente de un evento, no como tarea.** La diferencia no es semántica:
+una tarea sin hacer es deuda y se persigue; **una verificación que espera su evento no se persigue, se
+reconoce cuando llega** — y si nadie escribió de antemano qué mirar, no se reconoce.
+
+---
+
+### 📚 CORRECCIÓN 3 — el Professor: dos afirmaciones de acceso que eran falsas
+
+**El proxy `api/professor` SÍ acepta POST**, y **`action=submit-learning` funciona** pasando
+`relevance_score` **explícito y dentro del rango `1..5`** del `CHECK` [`reportado` — Claude.ai, con
+**12 learnings sembrados por esa vía** el 2026-09-13 entre las **13:47 y las 13:49 UTC**].
+
+**Corroboración de CC** [`medido` el 2026-09-13]: **12 filas** con `session_date = '2026-09-13'` en
+`public.professor_learnings`, **las 12 con `relevance_score = 5`**, y el `CHECK` vigente es
+`professor_learnings_relevance_score_check` → `CHECK (relevance_score >= 1 AND relevance_score <= 5)`.
+**CC midió el resultado, no el camino:** no ejecutó el POST, porque hacerlo habría escrito un learning
+de prueba en producción y existe una lectura que responde igual
+(`DELIVERY_AND_VERIFICATION_RULE` §4.1).
+
+**Lo que esto corrige, y es más interesante que el dato:** la causa raíz del 2026-09-10 **era
+correcta** —la EF calculaba el `relevance_score` fuera del rango del `CHECK`, y el `500` era la base
+rechazando la fila, no el proxy negándose—. **La conclusión que se sacó de ella no lo era.** De *«el
+`CHECK` rechaza el valor»* se pasó a *«no se puede por el proxy, la vía es el `INSERT` directo»*, que
+es **una regla de acceso deducida de un síntoma y nunca medida**. Si el problema es el valor, la vía se
+arregla **mandando el valor bueno**.
+
+**Estuvo tres días escrito en `CAPABILITIES.md`** — el archivo cuya **regla de oro** dice, literal, que
+*«si Claude cree que no tiene acceso a algo, primero consulta este catálogo: la mayoría de las veces el
+acceso existe por una vía que no es obvia»*. **El catálogo se contradijo a sí mismo**, y el `INSERT`
+directo funcionaba, así que nada falló de forma visible: simplemente se usó la vía larga.
+
+**Las dos redacciones anteriores se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal**
+—ninguna se borra—, y el `INSERT` directo **sigue siendo válido como fallback**: deja de ser **la
+única** vía, no deja de ser una. `CAPABILITIES.md` pasa a **1.17**.
+
+---
+
+### ✍️ CORRECCIÓN 4 — el PR del voseo queda desbloqueado, y NO entra en este PR
+
+**El bloqueo se levantó:** A-1 está mergeado y desplegado — `content-watcher` **v57**, `ezbr_sha256`
+**`b0c62f50ae75935ed11a8c0c359506e0154614d1ae2f8a0cf84ce21358e77694`** [`medido`].
+
+**CC no lo ejecuta dentro de este PR, y el motivo es de alcance, no de criterio.** Este PR es un
+`Actualiza` de context files en `unrlvl-context`; el trabajo del voseo es **código en otro repo**, con
+su propia gobernanza. Mezclarlo rompería la regla que el propio ecosistema se dio: **un brief declara
+el repo de CADA cambio** (`DELIVERY_AND_VERIFICATION_RULE` §2.3-bis).
+
+**Y `QA-INFO` bloquea, que es lo que hay que decir en vez de improvisar.** Faltan tres datos que CC
+**no puede obtener solo** — están detallados en el reporte de CC a Sam, con quién consigue cada uno.
+
+**Lo que CC sí midió al ir a buscarlo, y cambia el enunciado del hueco** [`medido` el 2026-09-13 sobre
+`intel.watcher_rules`, leyendo el `verify_pattern` de `HR-GEN-05`]:
+
+- **No está `devolvés` NI está `devolvé`. Faltan las dos formas, no una.** El hueco no es que la
+  denylist tenga el imperativo y le falte el presente: es que **el verbo entero está ausente**.
+- **Y el hueco real es estructural, no de una entrada.** El `verify_pattern` es una **enumeración de
+  formas literales** —75 alternativas separadas por `|`—, así que **todo verbo no enumerado escapa**.
+  `devolver` es el ejemplo que se nombró, no el caso. Añadir `devolvé|devolvés` cierra **ese** verbo y
+  deja la clase abierta.
+- **Por eso el barrido de este PR se hizo por DOS vías** —la determinista con este mismo
+  `verify_pattern`, y una **morfológica por terminación voseante**— y por eso la segunda no es
+  decorativa: **es la que cubre lo que la enumeración no enumera**. Ambas: **cero** sobre las líneas
+  nuevas.
+
+**La verificación contra la línea base medida** —**7,0 %** de apartadas por la vía LLM, **mediana
+`max_sim` 0,72** [`reportado`]— queda anotada como el criterio contra el que se mide ese PR cuando se
+haga.
 
 ---
 

@@ -305,6 +305,31 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 > [`reportado`]. **SMA no se consultó** — Sam no lo pidió. `ecosystem.json` **no cambió**, así que sus
 > derivados no se tocan. Lo previo se conserva íntegro debajo.
 
+### ⚠️ CORRECCIÓN DEL MISMO DÍA — cuatro puntos de Sam, y dos de los de abajo quedan superados
+
+**Lo de abajo se conserva íntegro y sigue siendo cierto en su literal: lo que cambió es su vigencia.**
+Detalle completo en `AGENDA.md` **v2026-09-13-v2**.
+
+1. **El `REVOKE` del RPC ya está aplicado** [`medido` 21:00 UTC]: ACL
+   `{postgres=X/postgres,service_role=X/postgres}`, `anon` y `authenticated` en **`false`**. **Supera
+   la corrección 2 de abajo**, que lo daba por pendiente. No se abre migración. Reversión, si alguna
+   corrida dejara de comparar: `GRANT EXECUTE … TO PUBLIC` por firma completa.
+2. **§5.b cambia de condición: U-5 está mergeado y funcionando** [`reportado`]. **No se fabrica un caso
+   de prueba** — **la primera revocación real de Sam es la verificación**. **Supera la corrección 5 de
+   abajo**: la franja `0ed7214c…` deja de ser candidata. Línea base para comparar después [`medido`]:
+   **55 `free`** (cero con pieza) · **21 `reserved`** (las 21 con pieza) · cero huérfanas por las dos
+   lecturas. Tras la primera revocación: `21 → 20`, `55 → 56`, y los dos ceros intactos.
+3. **El proxy `api/professor` SÍ acepta POST** y `submit-learning` funciona con `relevance_score`
+   explícito en `1..5` [`reportado`; corroborado por CC: 12 filas del 2026-09-13, las 12 con
+   `relevance_score = 5`, y el `CHECK` es `>= 1 AND <= 5`]. La causa raíz del 2026-09-10 era correcta;
+   **la conclusión que se sacó de ella no**. Las dos redacciones anteriores de `CAPABILITIES.md` quedan
+   **bajo guard, no borradas**.
+4. **El PR del voseo queda desbloqueado** por A-1 (`content-watcher` v57 [`medido`]) y **no entra en
+   este PR**: es otro repo y `QA-INFO` bloquea por tres datos que faltan. **Hueco medido al buscarlo:**
+   en el `verify_pattern` de `HR-GEN-05` **faltan `devolvé` Y `devolvés`, las dos** — y el hueco de
+   fondo es que la denylist es una **enumeración literal**, así que **todo verbo no enumerado escapa**.
+
+
 ### 🟢 En producción, con su `sha`
 
 | Función | Versión | `ezbr_sha256` | Qué trae |
