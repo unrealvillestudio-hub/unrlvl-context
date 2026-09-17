@@ -1,7 +1,15 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-08-v10 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-17-v11 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v11 (2026-09-17):** una adición, ninguna derogación. **§13 — el paso 0 de todo brief mide
+> dos cosas más: qué esquemas sirve PostgREST (`pgrst.db_schemas`) y qué puede cargar CC de verdad.**
+> Las dos nacen del mismo ciclo perdido en ALERTAS-01 PR 2 (2026-09-17): tres Edge Functions
+> desplegadas y correctas devolvieron 500 porque el esquema `alerting` no estaba expuesto, y el PR
+> asignaba a CC la carga de dos secretos para la que no existe tool. Ningún test del repositorio
+> podía ver ninguna de las dos: viven fuera del repositorio. §12 queda íntegro y §13 lo extiende —
+> es el mismo criterio, que un privilegio y una capacidad no se deducen, se miden contra el proyecto.
+>
 > **Cambios v10 (2026-09-08):** una adición, ninguna derogación. **§12 — validar una migración contra
 > un PostgreSQL desechable NO verifica privilegios de rol ni RLS de Supabase.** En un PostgreSQL
 > limpio **no existen `service_role`, `anon` ni `authenticated`**, y los que se crean a mano nacen
@@ -415,6 +423,58 @@ que no escribe.
 **Corolario para quien escribe briefs:** «validado contra PostgreSQL 16» es una afirmación cierta y
 **parcial**. Declarar qué cubrió esa validación es parte de la afirmación — decir sólo que pasó
 invita a leerla como cobertura completa.
+
+---
+
+## 13. EL PASO 0 DE TODO BRIEF MIDE DOS COSAS MÁS: LA PUERTA Y LA LLAVE
+
+**Un esquema nuevo no lo sirve PostgREST, y CC no puede cargar un secreto.** Las dos cosas se dan por
+supuestas porque las dos son invisibles hasta que algo falla, y ninguna falla al escribir el código:
+fallan al ejecutarlo, en producción, con todo ya desplegado.
+
+**Motivo medido el 2026-09-17, ALERTAS-01 PR 2.** Las tres Edge Functions del canal de alertas se
+desplegaron correctas, con su autenticación funcionando —secreto incorrecto → **401**—, y las tres
+devolvieron **500** a la primera invocación real:
+
+```
+alerting/alert_rules 406: {"code":"PGRST106",
+  "hint":"Only the following schemas are exposed: public, intel, content",
+  "message":"Invalid schema: alerting"}
+```
+
+El esquema existía, las tablas existían, los `GRANT` a `service_role` estaban puestos y verificados
+contra `relacl`. Lo que faltaba era una lista **fuera del repositorio**:
+`authenticator.rolconfig → pgrst.db_schemas`. Ningún test del repositorio podía verla, y el PR
+afirmaba que las EF leerían el esquema — un supuesto declarado como **deducido** que resultó falso.
+
+Y en la misma sesión, el mismo tipo de supuesto en la otra dirección: el brief y el PR decían «**CC
+carga los dos secretos**». CC no puede. Los MCP de Supabase exponen **tres** tools —`execute_sql`,
+`apply_migration`, `deploy_edge_function`— y ninguna gestiona variables de entorno
+[medido contra `CAPABILITIES.md`]. El pendiente para Sam no existía porque nadie lo midió.
+
+**Las dos mediciones, obligatorias en el paso 0 de todo brief que toque una Edge Function o un
+esquema nuevo:**
+
+| # | Qué se mide | Cómo | Qué invalida el brief |
+|---|---|---|---|
+| **P0-A** | Qué esquemas sirve PostgREST hoy | `select rolconfig from pg_roles where rolname='authenticator'` → la entrada `pgrst.db_schemas` | que el brief cuente con leer o escribir un esquema que no está en esa lista |
+| **P0-B** | Qué puede cargar CC y qué no | el inventario de tools del MCP que corresponda, contrastado con `CAPABILITIES.md` | que el brief asigne a CC una acción para la que no hay tool — y entonces el pendiente es de Sam, y va escrito |
+
+**Por qué van juntas.** Son la **puerta** y la **llave** del mismo despliegue: un artefacto que no
+puede llegar a su dato, y un dato que no puede llegar a su artefacto. Las dos se descubren en el
+mismo sitio —la primera invocación real— y las dos cuestan el mismo ciclo entero.
+
+**Exponer un esquema NO concede acceso**, y conviene decirlo para que la medición no se lea como una
+alarma: quien concede es el `GRANT`. Medido el 2026-09-17 sobre `alerting` antes de exponerlo,
+`anon` y `authenticated` no tenían ni `USAGE` sobre el esquema —el primer portón que PostgREST
+cruza—, cero tablas con `SELECT`, cero con escritura y cero funciones ejecutables. Aun así **la
+exposición se comprueba después**, con una lectura real usando la clave `anon`: es el mismo criterio
+de §12, que un privilegio no se deduce, se mide contra el proyecto.
+
+**Quién expone.** El `ALTER ROLE authenticator SET pgrst.db_schemas = …` funciona, y **no es la vía**:
+el panel de Supabase reescribe esa lista cuando alguien toca los ajustes de API, así que un cambio
+hecho sólo por SQL puede desaparecer sin que nadie lo note — exactamente el fallo silencioso que este
+protocolo persigue. **Lo cambia Sam desde el panel.** CC lo mide, lo reporta y lo verifica después.
 
 ---
 
