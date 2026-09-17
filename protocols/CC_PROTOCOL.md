@@ -9,6 +9,10 @@
 > asignaba a CC la carga de dos secretos para la que no existe tool. Ningún test del repositorio
 > podía ver ninguna de las dos: viven fuera del repositorio. §12 queda íntegro y §13 lo extiende —
 > es el mismo criterio, que un privilegio y una capacidad no se deducen, se miden contra el proyecto.
+> **Añade además el mecanismo de la exposición, medido al aplicarla el mismo día: son DOS señales
+> —`reload config` para la lista y `reload schema` para la caché de tablas— y entre las dos el error
+> pasa de 406 a 404, con un `hint` que sugiere que el problema es otro.** Un `404 PGRST205` no
+> significa «esquema sin exponer»: significa que sí lo está y que falta la segunda señal.
 >
 > **Cambios v10 (2026-09-08):** una adición, ninguna derogación. **§12 — validar una migración contra
 > un PostgreSQL desechable NO verifica privilegios de rol ni RLS de Supabase.** En un PostgreSQL
@@ -470,6 +474,24 @@ alarma: quien concede es el `GRANT`. Medido el 2026-09-17 sobre `alerting` antes
 cruza—, cero tablas con `SELECT`, cero con escritura y cero funciones ejecutables. Aun así **la
 exposición se comprueba después**, con una lectura real usando la clave `anon`: es el mismo criterio
 de §12, que un privilegio no se deduce, se mide contra el proyecto.
+
+**EXPONER SON DOS SEÑALES, NO UNA — y entre ellas el error MIENTE.** Medido el 2026-09-17
+aplicando la exposición de `alerting`:
+
+| Señal | Qué trae | Qué pasa si falta |
+|---|---|---|
+| `NOTIFY pgrst, 'reload config'` | la **lista de esquemas** (`pgrst.db_schemas`) | el esquema sigue sin existir para la API: **406 `PGRST106 · Invalid schema`** |
+| `NOTIFY pgrst, 'reload schema'` | la **caché de tablas** de ese esquema | el esquema ya se acepta pero **ninguna tabla se encuentra: 404 `PGRST205`** |
+
+**⚠️ Un `404 PGRST205 · Could not find the table … in the schema cache` NO significa «el esquema no
+está expuesto».** Significa lo contrario: significa que **sí lo está** y que falta la segunda señal.
+Su `hint` llega además a decir «Perhaps you meant the table 'alerting.alert_rules'» —la tabla que
+acabas de pedir—, que es la forma más eficaz de convencer a quien lee de que el problema es otro.
+Quien pare en el 404 y vuelva a tocar la lista de esquemas está arreglando lo que ya estaba bien.
+
+**La secuencia completa, en orden:** `ALTER ROLE` (o el panel) → `reload config` → `reload schema` →
+y sólo entonces la lectura de comprobación. Si el error pasó de **406 a 404**, vas bien: es la señal
+de que la primera mitad entró.
 
 **Quién expone.** El `ALTER ROLE authenticator SET pgrst.db_schemas = …` funciona, y **no es la vía**:
 el panel de Supabase reescribe esa lista cuando alguien toca los ajustes de API, así que un cambio
