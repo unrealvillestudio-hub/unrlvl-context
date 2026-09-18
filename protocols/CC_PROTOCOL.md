@@ -1,7 +1,21 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-17-v11 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-17-v12 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v12 (2026-09-17):** una adición, ninguna derogación. **§14 — una comprobación también
+> se mide: cuatro reglas de método sobre el instrumento, no sobre el código comprobado.** (1) Quitar
+> comentarios **antes** de comprobar, o la comprobación se dispara sobre su propia explicación —
+> ocurrió **tres veces en la misma sesión** el 2026-09-17. (2) **Un test verde no cuenta hasta
+> inyectarle su regresión**: dos tests verdes tenían un hueco cada uno, y los delató la inyección,
+> no la lectura — una guarda que mira el punto de uso **no guarda la decisión**, tiene que mirar
+> dónde se **calcula**. (3) **Un test no se clava a la arquitectura**: si falla sobre un cambio
+> correcto se hace independiente, **no se borra ni se relaja**. (4) **Patrón para una tabla que no se
+> puede indexar** —`CREATE INDEX` devuelve `must be owner of table`—: resumen en esquema propio,
+> refrescado incrementalmente y **acotado por los dos lados**; sin tope superior el plan genérico
+> estima 33 % de selectividad y **abandona la clave primaria** (17.090 ms contra 135 ms, medido).
+> **§13 queda íntegro: mide la puerta y la llave ANTES de escribir; §14 mide el instrumento con el
+> que se comprueba DESPUÉS.** **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
+>
 > **Cambios v11 (2026-09-17):** una adición, ninguna derogación. **§13 — el paso 0 de todo brief mide
 > dos cosas más: qué esquemas sirve PostgREST (`pgrst.db_schemas`) y qué puede cargar CC de verdad.**
 > Las dos nacen del mismo ciclo perdido en ALERTAS-01 PR 2 (2026-09-17): tres Edge Functions
@@ -497,6 +511,69 @@ de que la primera mitad entró.
 el panel de Supabase reescribe esa lista cuando alguien toca los ajustes de API, así que un cambio
 hecho sólo por SQL puede desaparecer sin que nadie lo note — exactamente el fallo silencioso que este
 protocolo persigue. **Lo cambia Sam desde el panel.** CC lo mide, lo reporta y lo verifica después.
+
+---
+
+## 14. UNA COMPROBACIÓN TAMBIÉN SE MIDE — CUATRO REGLAS DE MÉTODO QUE COSTARON UN DÍA
+
+**Origen:** ALERTAS-01, 2026-09-17. Las cuatro salieron de defectos **en las propias
+comprobaciones**, no en el código comprobado, y ninguna de las cuatro la podía ver un test verde.
+**§13 queda íntegro y esto no lo toca:** §13 mide la puerta y la llave antes de escribir; §14 mide
+**el instrumento con el que se comprueba después**.
+
+### 14.1 — Quitar comentarios ANTES de comprobar
+
+Una comprobación que busca texto en el código **debe eliminar los comentarios primero**, o **se
+dispara sobre su propia explicación**. El comentario que documenta el patrón prohibido contiene el
+patrón prohibido.
+
+**Motivo medido:** el 2026-09-17 esto ocurrió **tres veces en la misma sesión** — una guarda de
+lookbehind, una comprobación que leyó su propio comentario de `ON CONFLICT`, y una comprobación ad
+hoc que casó con una cita entre acentos graves dentro de la prosa de una línea.
+
+**Los tests del repositorio ya lo hacen. Las comprobaciones de una sola vez también deben hacerlo** —
+son las que más engañan, porque nadie las revisa: se escriben, se leen y se tiran.
+
+### 14.2 — Un test verde no cuenta hasta inyectarle su regresión
+
+**Escribir el test y verlo pasar no prueba que guarde nada.** Lo que lo prueba es **romper a propósito
+lo que dice guardar** y verlo ponerse rojo.
+
+**Motivo medido:** dos tests verdes de ALERTAS-01 tenían un hueco cada uno, y **los dos los delató la
+inyección, no la lectura**: (a) uno miraba sólo las líneas del **punto de uso** y no veía el sitio
+donde el valor **se calcula**; (b) el otro aceptaba el literal contrario porque **en otra línea existía
+el correcto** y le bastaba con encontrarlo una vez.
+
+**La forma de la regla:** *una guarda que mira el punto de uso no guarda la decisión — tiene que mirar
+el punto donde se **calcula**, y exigir el valor correcto en **cada** resolución, no en alguna.*
+
+### 14.3 — Un test no se clava a la arquitectura
+
+Si un test **falla sobre un cambio correcto**, el roto es el test: **se hace independiente de la
+arquitectura**. **No se borra y no se relaja.**
+
+**Motivo medido:** un test de ALERTAS-01 se puso rojo cuando un cálculo se movió a otra función, y el
+cálculo movido era el arreglo. Un test que afirma **dónde** vive algo, en vez de **qué** tiene que ser
+cierto, se convierte en un peaje sobre todo refactor legítimo. Se reescribió para comprobar el efecto.
+
+### 14.4 — Patrón para una tabla que no se puede indexar
+
+Cuando la tabla **no es nuestra** —`CREATE INDEX` devuelve `must be owner of table`— el patrón es:
+**resumen en esquema propio, refrescado incrementalmente y ACOTADO POR LOS DOS LADOS.**
+
+```sql
+-- techo fijado ANTES de agregar, y la marca de agua tomada FOR UPDATE
+WHERE r.runid > v_desde AND r.runid <= v_hasta
+```
+
+**Por qué el tope superior no es cosmético** [`medido` el 2026-09-17]: con `runid > $1` **a secas**, el
+plan genérico estima **33 % de selectividad** y **abandona la clave primaria**. Con los dos lados
+acotados, el plan es un `Index Scan` por la PK. La diferencia en ALERTAS-01 fue **17.090 ms** contra
+un `statement_timeout` de 8 s, frente a **135 ms** después.
+
+**Y el corolario que ata §14.4 con `MEASUREMENT_METHOD_RULE` §6:** ese resumen **se mide en la vía que
+lo ejecuta**, no en el nivel superior. `SELECT … INTO` impone un límite de filas, y **un plan con
+límite de filas no se paraleliza**.
 
 ---
 

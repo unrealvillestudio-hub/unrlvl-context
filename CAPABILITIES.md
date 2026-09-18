@@ -1,4 +1,5 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.18 · 2026-09-17 (**tres adiciones medidas y ninguna derogación.** (1) **CC NO PUEDE ESCRIBIR SECRETOS NI VARIABLES DE ENTORNO — LAS CARGA SAM** [medido por CC el 2026-09-16 y el 2026-09-17]: el MCP de Supabase expone `execute_sql`, `apply_migration` y `deploy_edge_function` y **ninguna gestiona secretos**; el de Vercel hace despliegues, proyectos, logs y `web_fetch_vercel_url` y **no escribe variables de entorno**; y no hay CLI instalada ni token para autenticarla. Lo que CC hace es **nombrar la clave y verificar por efecto después**. Motivo: el 2026-09-17 un PR asignó a CC la carga de dos secretos para la que no existe tool y **se perdió el ciclo entero**. (2) **Professor desde el chat: la vía operativa es `submit-learning`** — el proxy acepta también **GET con los parámetros en la cadena de consulta**, `action=submit-learning` **persiste** y devuelve `learning_id`, `relevance_score` y `filter_reason`, y **`action=checkpoint` devuelve `candidates: []` y NO persiste nada** [`medido` por Claude.ai el 2026-09-17; CC no lo midió]. **Añade a la corrección del 1.17, no la deroga.** (3) **Exposición de un esquema en PostgREST: el sitio autoritativo es `authenticator.rolconfig → pgrst.db_schemas`**, no la respuesta de la API ni la pantalla del panel, y **exponer son DOS señales** —`reload config` para la lista y `reload schema` para la caché de tablas—, entre las cuales el error pasa de **406 `PGRST106`** a **404 `PGRST205`** con un `hint` que desorienta; **lo cambia Sam desde el panel**, porque el panel reescribe esa lista. Fuente del mecanismo: `CC_PROTOCOL.md` §13, que esta entrada **apunta y no copia**. **Lo que NO entra, y la razón queda escrita:** la advertencia condicional sobre desfase entre el panel de Data API y la base **no se escribe** — panel y base **coinciden** [medido por CC y verificado por Sam el 2026-09-17], así que dejarla sería **plantar un aviso falso** en un archivo de referencia. **Cabecera anterior (`1.17`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.17 · 2026-09-13 (**tres correcciones medidas el mismo día, y las tres retiran una afirmación que había dejado de ser cierta — ninguna se borra: las tres se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal.** (1) **El proxy `api/professor` SÍ acepta POST**, y `action=submit-learning` funciona pasando **`relevance_score` explícito dentro del `1..5` del `CHECK`**: el `500` documentado el 2026-09-10 lo producía la EF calculando el valor **fuera de rango**, así que la causa raíz era correcta y **la conclusión que se sacó de ella no** — de «el `CHECK` rechaza el valor» se pasó a «no se puede por el proxy» sin medir la regla [reportado — Claude.ai, 12 learnings sembrados por esa vía el 2026-09-13 entre 13:47 y 13:49 UTC; **corroborado por CC**: 12 filas con `session_date = '2026-09-13'`, las 12 con `relevance_score = 5`, y el `CHECK` sigue siendo `>= 1 AND <= 5`]. (2) **La misma corrección retira la entrada que decía que el proxy sólo exponía GET.** (3) **El `REVOKE` sobre `intel.match_content_embeddings` ya está aplicado**: el ACL medido es `{postgres=X/postgres,service_role=X/postgres}` y `anon` y `authenticated` quedan en **falso** — la advertencia que la fila `p_match_domain` llevaba unas horas antes **se archiva**, con su reversión escrita al lado. **Cabecera anterior (`1.16`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 
 _Versión: 1.16 · 2026-09-13 (**tres adiciones medidas y ninguna derogación: el despliegue deja de verificarse por el contador, y el corte de duplicación entra al catálogo.** (1) **Sección DESPLIEGUE nueva — «mergear no despliega, y desplegar tampoco despliega necesariamente lo mergeado»**: cinco de ocho despliegues del 2026-09-13 subieron **el bundle anterior** por correr desde un clon sin `git pull` [reportado — brief de cierre del 2026-09-13], con el contador de versión y `updated_at` subiendo igual porque suben **con el intento**; la única señal que no miente es el `ezbr_sha256`, y lo que cierra el caso es **leer un marcador dentro del bundle**. Extiende la regla 4 de MÉTODO DE MEDICIÓN sin copiarla. (2) **Dos filas nuevas en ARTEFACTOS CONSULTABLES**: `intel.brand_similarity_threshold` —el corte de duplicación por marca × clase de par, con su política de congelado escrita en el `COMMENT` de la tabla— y el parámetro **`p_match_domain`** del RPC `intel.match_content_embeddings`, **una sola firma** con `DEFAULT true` [medido 2026-09-13]. (3) **La cita caducada sobre el texto adaptado NO se vuelve a tocar**: la cerró el **PR #95** y su redacción anterior ya está bajo guard `⛔ NO OPERATIVO` [medido] — archivar dos veces lo archivado duplica la historia en vez de preservarla. **Cabecera anterior (`1.15`) conservada íntegra e inmediatamente debajo**, por yuxtaposición, igual que desde `1.13`: el diff de este archivo **no borra ni una línea**)_
@@ -503,6 +504,63 @@ bundle desplegado** — una cadena que sólo existe en el código nuevo.
 > la **fuente** de cómo se verifica un despliegue. Esta entrada **no la copia**: añade el tramo del
 > **árbol de origen** y el **marcador**, que es lo que el 2026-09-13 costó cinco despliegues, y apunta
 > allá para el resto. Dos textos de la misma regla son dos reglas en cuanto alguien toca uno.
+
+---
+
+## SECRETOS, PROFESSOR Y EXPOSICIÓN DE ESQUEMAS — tres capacidades medidas el 2026-09-17
+
+### 🔐 CC no puede escribir secretos ni variables de entorno. **Las carga Sam**
+
+**Medido por CC el 2026-09-16 y el 2026-09-17**, contra el inventario de tools de la sesión y contra
+este mismo catálogo:
+
+| Vía | Qué expone | ¿Escribe secretos o variables? |
+|---|---|---|
+| MCP de Supabase | `execute_sql`, `apply_migration`, `deploy_edge_function`, `list_*`, `get_*`, `query_logs` | **No.** Ninguna tool gestiona secretos de proyecto |
+| MCP de Vercel | despliegues, proyectos, logs, `web_fetch_vercel_url` | **No.** No escribe variables de entorno |
+| CLI (`supabase`, `vercel`) | — | **No instalada**, y no hay token para autenticarla |
+
+**Qué se sigue de esto, y es la parte que cuesta un ciclo si no está escrita:** un brief **no puede
+asignar a CC la carga de un secreto ni de una variable de entorno**. Lo que CC hace es **nombrar la
+clave, decir dónde va y qué valor espera**, y **verificar por efecto después** de que Sam la cargue.
+El 2026-09-17 un PR asignó a CC la carga de dos secretos para la que no existe tool, y el ciclo se
+perdió entero — por eso `CC_PROTOCOL.md` §13 mide también **qué puede cargar CC de verdad**.
+
+**Corolario sobre el valor:** un secreto que CC genera —porque hace falta un valor aleatorio— **viaja
+sólo en el mensaje de respuesta a Sam**, nunca en un archivo, un commit, un PR ni un context file.
+
+### 🎓 Professor desde el chat — la vía operativa es `submit-learning`
+
+**Añade a la corrección del 2026-09-13, no la deroga.** [`medido` por **Claude.ai** el 2026-09-17;
+**CC no lo midió**.]
+
+- El proxy **acepta también `GET` con los parámetros en la cadena de consulta**: el manejador lee
+  `req.query` cuando el método no es POST y **reenvía el cuerpo igualmente**.
+- **`action=submit-learning` persiste** y devuelve `learning_id`, `relevance_score` y
+  `filter_reason`. **Es la vía operativa para capturar desde el chat.**
+- **`action=checkpoint` devuelve `candidates: []` y no persiste nada.** No es un error del
+  llamador: es lo que ese `action` hace hoy. Quien espere de él la captura se queda sin learnings y
+  sin aviso.
+
+### 🔌 Exposición de un esquema en PostgREST — dónde se lee, y son dos señales
+
+**El sitio autoritativo es `authenticator.rolconfig → pgrst.db_schemas`** — **no** la respuesta de la
+API, **no** la pantalla del panel [`medido` el 2026-09-17].
+
+**Y exponer son DOS señales, no una:** `NOTIFY pgrst, 'reload config'` para la **lista de esquemas** y
+`NOTIFY pgrst, 'reload schema'` para la **caché de tablas y funciones**, que es la que hace falta tras
+un DDL. Entre las dos, el error pasa de **406 `PGRST106`** a **404 `PGRST205`**, y **el `hint` del 404
+desorienta**: llega a sugerir la tabla que acabas de pedir, de modo que se lee como «el esquema no
+está expuesto» cuando significa lo contrario.
+
+**Quién lo cambia: Sam, desde el panel.** El `ALTER ROLE … SET pgrst.db_schemas` funciona y **no es la
+vía**: el panel reescribe esa lista cuando alguien toca los ajustes de API, así que un cambio hecho
+sólo por SQL puede desaparecer sin que nadie lo note.
+
+> **Fuente y por qué esta entrada no la copia:** el mecanismo completo, con su tabla de señales y su
+> secuencia en orden, vive en `protocols/CC_PROTOCOL.md` **§13**. Acá queda **dónde se lee el estado**
+> y **quién lo cambia**, que es lo que este catálogo responde. Dos textos de la misma regla son dos
+> reglas en cuanto alguien toca uno.
 
 ---
 

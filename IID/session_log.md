@@ -293,6 +293,56 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-17 · ALERTAS-01 — canal de alertas por Telegram, informe diario y vigilante externo
+
+> **Entrada de CC.** Alcance de la sesión: **ecosistema — el canal de alertas**, no una marca; por eso
+> la novedad entra acá y **no se creó ningún `session_log.md` nuevo** (precedente medido: el `#96` del
+> 2026-09-13, también de ecosistema, entró en este mismo archivo). Todo lo etiquetado `medido` lo
+> consultó CC el **2026-09-17 hacia las 21:37 UTC** con `Supabase:execute_sql` y
+> `Supabase:list_edge_functions` sobre `amlvyycfepwhiindxgzw`, y con la lectura del working tree. Lo
+> etiquetado `reportado` lo afirma el **brief de Actualiza de Claude.ai del 2026-09-17** y **CC no lo
+> midió**. **Professor: no lo cerró CC** — la captura es de Claude.ai (`HRD_PROFESSOR`), y se cerró
+> **antes** de este Actualiza [`reportado`]. **SMA no se consultó** — Sam no lo pidió. Lo previo se
+> conserva íntegro debajo.
+
+**Qué se entregó.** Diez PR, todos mergeados, aplicados y verificados. Cuatro del encargo
+(`unrlvl-iid-functions#162`, `#164`, `#165`, `unrlvl-ops#11`) y seis de arreglos del mismo día
+(`#166`, `#168`, `unrlvl-ops#12`, `#169`, `#170`, `#171`).
+
+**Qué existe ahora en producción.** Un esquema `alerting` con 13 tablas y 11 funciones, RLS en las
+13 y políticas `service_only`; tres Edge Functions (`ops-alert-dispatch`, `ops-alert-callback`,
+`ops-daily-report`), las tres con `verify_jwt: false` y autenticación por `x-cron-secret`; tres
+crons; tres disparadores `AFTER INSERT` sobre `intel.watcher_log`,
+`intel.brand_publish_drain_log` y `alerting.alert_action_log`; y un vigilante externo en
+`unrlvl-ops` con cron de Vercel cada 5 minutos.
+
+**Qué decidió Sam.**
+- Telegram es canal de salida; la única entrada son los botones Leído y Posponer, desde su chat.
+- No existe la categoría INCIDENCIA: todo cabe en URGENTE o en el informe diario.
+- El informe diario sale a las 07:00 UTC, con copia por correo.
+- Sin enlaces en ningún mensaje del canal.
+- V3: la cadencia observada (60 min y después 240) se deja como está; el criterio del brief no se
+  ajustó al resultado.
+
+**Cómo se verificó.** V1, V2, V3, V4, V5, V9, V10 y V11 cerradas; V2 y V4 con la parte que depende
+de los disparadores cerrada tras el PR 3. V6 ejecutable, V7 programada para el 2026-09-18 a las
+07:00 UTC con verificación a las 07:15, V8 pendiente de reespecificación.
+
+**Estado medido al cierre por CC [2026-09-17 ~21:37 UTC].** Carril intacto: 0 errores del detector
+sobre el carril y 0 corridas de cron fallidas desde el PR 3. Vigilante latiendo por debajo de 5
+minutos. `watchdog_snapshot` en 135 ms en la vía real, contra 17.090 ms antes del arreglo. 0
+episodios `CRON_SILENT`. Cuatro episodios `CRON_NEVER_RAN` abiertos, los cuatro verdaderos
+positivos. 12 de 12 reglas suenan. Suites: 90/0 en `unrlvl-iid-functions` y 17/0 en `unrlvl-ops`.
+
+**Lo que costó, y por qué queda escrito.** Una medición hecha fuera de la vía real se etiquetó
+`medido`, se mergeó y rompió el vigilante durante siete minutos en producción. Tres guardas
+distintas se dispararon sobre su propia explicación. Dos comprobaciones verdes no veían su propio
+defecto. Atar «se puede actuar» y «tiene que sonar» al mismo literal de severidad dejó cuatro
+episodios prioritarios sin botones, reescalando cada hora durante 72 horas.
+
+**Dos etiquetas `medido` retiradas por medición posterior**, archivadas en su PR y no borradas: el
+supuesto (b) de `#168` sobre el coste, y la afirmación de `#170` sobre `disable_notification`.
+
 ## 2026-09-13 — El carril deja de estar ciego por el lado del código, y seis afirmaciones del brief que la medición matiza
 
 > **Entrada de CC.** Alcance de la sesión: **ecosistema — el carril**, no una marca; por eso la novedad

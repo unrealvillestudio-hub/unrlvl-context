@@ -1,6 +1,7 @@
 # SUPABASE — Manual de Plataforma
 _Categoría: platform_
-_Versión: v1.0 · 2026-05-20 · Estado: approved_
+_Versión: v1.1 · 2026-09-17 · Estado: approved_
+_Versión anterior: v1.0 · 2026-05-20 — cuerpo conservado íntegro; ver CHANGELOG_
 
 ---
 
@@ -124,6 +125,54 @@ Settings → Connections → Add custom connector → URL del proxy Vercel
 
 ---
 
+## EXPOSICIÓN DE UN ESQUEMA EN LA API REST (PostgREST) — 2026-09-17
+
+### Dónde se lee el estado (y dónde NO)
+
+**El sitio autoritativo es `authenticator.rolconfig → pgrst.db_schemas`** [medido el 2026-09-17]:
+
+```sql
+SELECT rolconfig FROM pg_roles WHERE rolname = 'authenticator';
+-- una entrada de la forma  pgrst.db_schemas=public,graphql_public,mail,...
+```
+
+**No es autoritativa** la respuesta de la API —puede fallar por privilegios y no por exposición— **ni
+la pantalla del panel**, que muestra la intención guardada y no necesariamente lo que PostgREST tiene
+cargado en ese momento.
+
+### Exponer son DOS señales, y entre ellas el error miente
+
+| Señal | Qué recarga | Qué pasa si falta |
+|---|---|---|
+| `NOTIFY pgrst, 'reload config'` | la **lista de esquemas** (`pgrst.db_schemas`) | el esquema no existe para la API: **406 `PGRST106 · Invalid schema`** |
+| `NOTIFY pgrst, 'reload schema'` | la **caché de tablas y funciones** de ese esquema | el esquema ya se acepta pero **ninguna tabla se encuentra: 404 `PGRST205`** |
+
+**⚠️ Un `404 PGRST205 · Could not find the table … in the schema cache` NO significa «el esquema no
+está expuesto».** Significa lo contrario: que **sí lo está** y que falta la segunda señal. Su `hint`
+llega a sugerir *«Perhaps you meant the table …»* nombrando **la tabla que acabas de pedir**, que es la
+forma más eficaz de convencer a quien lee de que el problema es otro.
+
+**La secuencia completa, en orden:** cambio de la lista → `reload config` → `reload schema` → y sólo
+entonces la lectura de comprobación. **Si el error pasó de 406 a 404, vas bien:** es la señal de que
+la primera mitad entró.
+
+**Después de un DDL en un esquema ya expuesto basta `reload schema`.** Es la señal que se olvida,
+porque la lista no cambió.
+
+### Quién lo cambia
+
+**Sam, desde el panel.** El `ALTER ROLE authenticator SET pgrst.db_schemas = …` funciona y **no es la
+vía**: el panel **reescribe esa lista** cuando alguien toca los ajustes de API, así que un cambio
+hecho sólo por SQL puede desaparecer sin que nadie lo note. Claude mide, reporta y verifica después.
+
+**Exponer un esquema NO concede acceso** — quien concede es el `GRANT`. Son dos preguntas distintas y
+conviene decirlo para que la medición no se lea como una alarma.
+
+> **Fuente canónica del mecanismo:** `protocols/CC_PROTOCOL.md` §13. Esta entrada es el manual de la
+> plataforma y **apunta allá**; no duplica la regla.
+
+---
+
 ## PROYECTOS ACTIVOS
 
 | Proyecto | Org | ID | Uso |
@@ -137,4 +186,5 @@ Settings → Connections → Add custom connector → URL del proxy Vercel
 
 | Versión | Fecha | Cambio |
 |---|---|---|
+| v1.1 | 2026-09-17 | Sección nueva: **exposición de un esquema en la API REST** — el sitio autoritativo es `authenticator.rolconfig → pgrst.db_schemas`, exponer son **dos señales** (`reload config` y `reload schema`), un **404 `PGRST205`** significa que el esquema **sí** está expuesto y falta la segunda, y **lo cambia Sam desde el panel** porque el panel reescribe la lista. Origen: ALERTAS-01. Fuente del mecanismo: `CC_PROTOCOL.md` §13. **Ninguna sección anterior se tocó.** |
 | v1.0 | 2026-05-20 | Creación inicial — carga masiva, múltiples cuentas MCP, errores conocidos |
