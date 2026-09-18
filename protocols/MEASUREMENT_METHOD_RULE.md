@@ -13,6 +13,15 @@ producción desde un contenedor.
 > equivocada**. La §5 no corrige a la §4 — la completa por delante y por detrás. El título y el
 > cierre se conservan literales, por el mismo criterio de la actualización anterior.
 
+> **Actualización 2026-09-17 — entra una sexta regla, §6, y ninguna de las cinco se deroga.** Sale
+> del caso que **ninguna de las cinco podía cazar**: el escalón era el correcto y el objeto también;
+> **lo equivocado era la vía**. `EXPLAIN (ANALYZE)` en el nivel superior midió **259 ms** de una
+> consulta que dentro de su función PL/pgSQL tarda **17.090 ms**, porque **`SELECT … INTO` impone un
+> límite de filas y un plan con límite de filas no se paraleliza** — con la etiqueta `medido` puesta,
+> mergeado, y **siete minutos de vigilante roto en producción**. El título sigue diciendo «tres
+> reglas» y **no se reescribe**, y el cierre «Lo que las tres tienen en común» se conserva literal:
+> lo que dice sigue siendo cierto de las seis.
+
 > **Esta es la fuente canónica.** Las tres reglas nacieron midiendo `unrlvl-iid-functions` durante
 > N09 y N12, y estuvieron un día en `docs/METODO_DE_MEDICION.md` de ese repositorio. Se mudan aquí
 > porque **son protocolo, no documentación de un repo**: gobiernan cómo se mide contra producción
@@ -159,6 +168,51 @@ eso es lo que se cita en el reporte, junto al `sha` y no en su lugar.
 del diff de ese PR**, nunca heredado del despliegue anterior. Un comando copiado de la vez pasada es
 una afirmación sobre el presente hecha con evidencia de otro día — que es, un piso más abajo, la
 misma familia de defecto que las cuatro reglas de arriba.
+
+---
+
+## 6 · Una medición sólo vale en la vía que la ejecuta
+
+```
+mal:   EXPLAIN (ANALYZE, BUFFERS) <consulta>          -- nivel superior, plan paralelo
+bien:  SET LOCAL ROLE service_role;  SET LOCAL statement_timeout = '<el real>';
+       -- y se llama a la FUNCIÓN, no a la consulta que lleva dentro
+```
+
+**`EXPLAIN (ANALYZE, BUFFERS)` en el nivel superior NO mide lo que hará una función PL/pgSQL.** El
+motivo es concreto y no depende del caso: **`SELECT … INTO` impone un límite de filas, y un plan con
+límite de filas no se paraleliza.** La misma consulta, ejecutada desde dentro de la función, corre con
+un plan distinto del que el `EXPLAIN` acaba de mostrar.
+
+**Motivo, medido el 2026-09-17 en ALERTAS-01:**
+
+| Vía | Tiempo | Plan |
+|---|---|---|
+| `EXPLAIN (ANALYZE)` en el nivel superior | **259 ms** | paralelo |
+| La función real, con su `statement_timeout` de **8 s** | **17.090 ms** | sin paralelizar — **excede el tope y falla** |
+
+**La etiqueta `medido` estaba puesta.** Era falsa: estaba medido, pero **en otra vía**. Se mergeó y
+**rompió el vigilante durante siete minutos en producción**. Tras el arreglo, la misma función mide
+**135 ms** en la vía real.
+
+**Forma correcta, en sus tres partes:**
+
+1. **El rol** — `SET LOCAL ROLE service_role`: un plan medido como `postgres` puede no ser el que
+   corre quien de verdad llama.
+2. **El tope** — `SET LOCAL statement_timeout` con **el valor real de producción**, no el de la
+   sesión. Una medición sin el tope no puede decir «entra»: sólo dice cuánto tardó.
+3. **El objeto** — se llama **a la función**, no a la consulta que lleva dentro. Medir la consulta es
+   medir otra cosa con el mismo texto.
+
+**Por qué esto no es la §5 otra vez.** La §5 dice que verificar **el escalón correcto sobre el objeto
+equivocado** no verifica nada. Ésta dice algo distinto y peor: **el objeto era el correcto y el
+escalón también** — lo equivocado era **la vía**, y la vía no aparece en ningún lado del informe. Un
+`EXPLAIN` bien escrito sobre la consulta exacta de la función produce un número real de un hecho que
+no es el que se quería probar, **sin que nada en la salida lo delate**.
+
+**Y el corolario general, que es el que hay que llevarse:** cuando la medición y el consumo **no
+comparten contexto de ejecución** —rol, tope, límite de filas, nivel de aislamiento—, lo medido no es
+lo que va a correr. **El contexto es parte del instrumento.**
 
 ---
 
