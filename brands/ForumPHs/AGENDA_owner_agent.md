@@ -11,6 +11,67 @@ _Destino sugerido en repo: `brands/ForumPHs/AGENDA_owner_agent.md`_
 
 ---
 
+## 🔼 ACTUALIZACIÓN 2026-09-19 — el agente deja de ser una funcionalidad y pasa a habilitar el modelo comercial
+
+> **Entrada de CC.** Todo lo de este bloque es `reportado` — lo decidió Sam en la sesión de análisis
+> financiero y modelo comercial del 2026-09-19, y **CC no lo midió**. Detalle completo en
+> `brands/ForumPHs/session_log.md`, entrada del **2026-09-19**. **Nada de lo anterior se deroga:**
+> el mapa de fases, las dependencias y las decisiones ancladas siguen vigentes tal como están escritos
+> debajo. Lo que cambia es **por qué** se construye y **hasta dónde llega**.
+
+### 1 · Sube de prioridad: es la fuente de dos de los tres indicadores que se venden
+
+El modelo comercial decidido el 2026-09-19 **vende servicio, no horas hombre**, y lo que sostiene esa
+promesa son **indicadores medibles**. **Dos de los tres salen de este agente** —**incidencias** y
+**entregas**—, así que deja de ser una descarga de trabajo operativo para volverse **la condición de
+que el modelo comercial se pueda demostrar**.
+
+**Consecuencia práctica:** un retraso acá ya no retrasa sólo una funcionalidad interna. Retrasa **la
+capacidad de sostener el precio frente a una junta directiva**, que es el argumento con el que se
+cierra un contrato.
+
+### 2 · Se acota el alcance: ForumPHs no cobra ni registra pagos
+
+**El ACH va directo a la cuenta del PH, hacia Sage 50.** ForumPHs **no es intermediario de fondos en
+ningún punto del flujo**.
+
+De ahí sale el límite del agente, y conviene que esté escrito antes de diseñar nada:
+
+> **El agente consulta e informa. No transacciona.**
+
+Es coherente con lo que ya dice **FASE 1 — AGENTE SOLO-LECTURA** y con la decisión anclada
+*«Alcance: Solo-lectura primero · incidencias después»*. **La novedad no es la restricción técnica:
+es que ahora tiene una razón comercial y contable**, no sólo de orden de construcción. Un agente que
+cobrara convertiría a ForumPHs en intermediario de fondos, que es exactamente lo que el modelo evita.
+
+**Lo que esto no cambia:** `1.D.1` (consulta de estado de cuenta) sigue en pie. Informar un saldo no
+es transaccionar; **registrar un pago sí**. La frontera está entre leer y escribir en el libro de caja.
+
+### 3 · El tablero de incidencias pasa a requisito comercial
+
+`2.A.1` —el tablero de tickets, deuda heredada de FPHS-OPS— **deja de ser una mejora interna**: sin
+él **no hay indicador de incidencias que mostrar**, y sin ese indicador el argumento de «se vende
+atención, no presencia» no tiene con qué probarse.
+
+**Sigue en FASE 2 y sigue dependiendo de FASE 1** — esto **no reordena el mapa de fases**, cambia
+quién lo reclama: antes lo pedía la operación, ahora lo pide la venta.
+
+> 🟡 **Sobre el identificador `#78`.** El brief de origen nombra el tablero como **`#78`**. **CC no
+> verificó ese número** —el issue vive fuera de `unrlvl-context` y fuera del alcance de repos de esta
+> sesión—, así que queda anotado como **referencia del brief, no como issue confirmado**. Lo que sí
+> está confirmado en este archivo es el ítem **`2.A.1`**, que es como se lo nombra acá.
+
+### 4 · Lo que esta actualización NO resuelve
+
+- **Las frecuencias de presencia** (visitas al mes, reuniones con la JD) siguen **en blanco**. Son
+  compromiso contractual con costo, y el agente no las sustituye: un indicador de atención no reemplaza
+  una frecuencia pactada.
+- **R6 del cuadro de riesgos sigue vivo y ahora tiene diagnóstico**: el keepalive actual de FPHS
+  **no previene la pausa**. Medición, causa y remedio en `CAPABILITIES.md` 1.19 y en el
+  `session_log.md` del 2026-09-19. Un piloto sobre una base que se pausa sola no es un piloto.
+
+---
+
 ## MAPA DE FASES
 
 ```
