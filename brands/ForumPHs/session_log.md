@@ -1,5 +1,78 @@
 # ForumPHs — Session Log
 
+## 2026-09-19 (v2) — El keepalive se arregla cambiando de mecanismo, no de cron
+
+> **Entrada de CC.** Sam pidió «corrige el cron para que el task evite la pausa». **El cron no se
+> podía corregir**: lo que fallaba era el mecanismo. Lo etiquetado `medido` lo consultó CC el
+> **2026-09-19** entre las 13:30 y las 14:10 UTC. **`QA-OBJETIVO` validado con Sam** antes de
+> producir, porque toca producción. Lo previo se conserva íntegro debajo.
+
+### 🔴 Por qué no se podía «corregir el cron»
+
+**La fuente primaria, consultada antes de tocar nada** [`medido` — documentación oficial de
+Supabase, `guides/platform/free-project-pausing`]: un proyecto del plan gratuito se pausa por falta
+de **actividad de usuario**, y hacen falta **«a few user requests to the database each day»**.
+
+**Dos defectos, y son independientes:**
+
+1. **El `INSERT` interno no es una petición de usuario.** `pg_cron` corre dentro del motor; no hay
+   petición que contar. Y **no podía haberla**: `pg_net` y `http` están las dos sin instalar.
+   Cambiarle el SQL o la frecuencia **no cambia esto**.
+2. **La frecuencia también estaba mal.** `0 12 */3 * *` es **cada tres días**, por debajo del «cada
+   día» de la documentación. Aunque el punto 1 se resolviera, éste seguiría abierto.
+
+**El cron no estaba roto:** 3 corridas correctas, última el 2026-09-19 a las 12:00 UTC, 4 filas
+[`medido`]. Hacía bien algo que no sirve para esto.
+
+### ✅ El remedio: el latido sale de fuera — `unrlvl-ops` → `api/keepalive`
+
+Un cron de Vercel hace un **`POST`** a la REST API del proyecto, **tres veces al día**
+(`11 2,10,18 * * *`). Esa petición es **a la vez** la actividad que cuenta **y** el rastro.
+
+**Por qué `POST` y no `GET`** —la pregunta que hizo Sam, y mejoró el diseño—: un `GET` contaría
+igual, pero dejaría rastro **sólo en los logs**, cuya retención depende del plan. Su preocupación
+era no saber más adelante de dónde salía ese tráfico; **una fila no caduca**. Y la tabla ya estaba
+preparada: **`keepalive_ping.origen` existe, con `DEFAULT 'pg_cron'`** [`medido`] — alguien previó
+varios orígenes, y las 4 filas de hoy llevan justo el origen que no cuenta.
+
+**Multimarca:** va en `unrlvl-ops` y **no** en `forumphs-ops`. Un keepalive lo necesita cualquier
+proyecto en plan gratuito: es **eje**, no instancia de esta marca. En el código **no hay ni una URL,
+ni una clave, ni una marca** — los objetivos entran por `KEEPALIVE_TARGETS`.
+
+### 🔐 Privilegios: el `REVOKE` antes del `GRANT`, y por qué hacía falta
+
+**Medido:** `anon` tenía los **siete privilegios** sobre `keepalive_ping` por los grants por defecto
+de Supabase, con RLS activa y **cero políticas**. **RLS sin políticas no retira privilegios: los deja
+inertes**, y **la primera política que se abre los reactiva todos**. Un `GRANT INSERT` a secas habría
+dado la impresión de acotar sin acotar nada.
+
+Aplicado (`keepalive_ping_anon_insert_only`): `REVOKE ALL … FROM anon` → `GRANT INSERT` → política
+sólo de `INSERT`. **Verificado por efecto**, simulando el rol que usa PostgREST: `INSERT` entra,
+`SELECT` devuelve **`42501`**. Doble cerradura — quien tenga la clave publicable **no puede leer el
+historial**.
+
+### 🟡 Lo que NO está verificado, y se dice ahora
+
+- **La pata HTTP no se probó desde el contenedor de CC:** el proxy de egreso devuelve **403 en
+  CONNECT** contra `*.supabase.co`, igual que contra `*.vercel.app` [`medido` — dos entradas
+  `connect_rejected` en el estado del propio proxy]. Lo verificado es **el camino de privilegios**,
+  que es lo que el cambio toca.
+- **El efecto final sólo lo prueba el tiempo:** filas con `origen = 'unrlvl-ops/keepalive'` y FPHS
+  activa pasados 7 días sin correo de aviso. **No es verificable el día de la entrega.**
+- **El cron interno sigue vivo a propósito.** Se retira **después** de ver el primer latido externo;
+  retirarlo antes dejaría el proyecto sin nada.
+
+### 📌 Una corrección de CC sobre su propia entrada de ayer
+
+`CAPABILITIES.md` **1.19** escribió *«la pausa se mide por tráfico al gateway»* **dentro de una
+sección titulada «capacidades medidas» y sin etiqueta**. Ese mecanismo **venía del brief, no de una
+medición de CC**, y la documentación oficial lo dice distinto —actividad de usuario, peticiones a la
+API—. La conclusión operativa aguanta; **el criterio de diseño no**, y de ahí salió el segundo
+defecto del cron que ayer no se vio. Corregido en **1.20**, con la redacción anterior bajo guard
+`⛔ NO OPERATIVO`. **La fuente primaria estaba a una consulta de distancia.**
+
+---
+
 ## 2026-09-19 — Los costos reales corrigen el tarifario, y un solo contrato explica toda la pérdida
 
 > **Entrada de CC.** Sesión de **análisis financiero y definición de modelo comercial**: no se produjo
