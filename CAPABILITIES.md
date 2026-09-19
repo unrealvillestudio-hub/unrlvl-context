@@ -1,4 +1,5 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.20 · 2026-09-19 (**una corrección de evidencia sobre la propia 1.19, y el remedio ya construido. Ninguna derogación: la redacción anterior se conserva íntegra, con su frase imprecisa bajo guard `⛔ NO OPERATIVO`.** (1) **CORRECCIÓN — la 1.19 afirmó sin medir.** Escribió *«la pausa se mide por tráfico al gateway»* **dentro de una sección titulada «capacidades medidas» y sin etiqueta propia**, y ese mecanismo **venía del brief de Claude.ai, no de una medición de CC**. La fuente primaria dice otra cosa [`medido` el 2026-09-19 sobre la documentación oficial, `guides/platform/free-project-pausing`]: la pausa se decide por **actividad de usuario** —*«a few user requests to the database each day»*— y los remedios que nombra son **llamadas de API** o **visitar el panel**. **La conclusión operativa no cambia** —el `INSERT` interno sigue sin servir— **pero el criterio de diseño sí**, y de ahí sale un **segundo defecto del cron viejo que la 1.19 no vio: `0 12 */3 * *` es cada TRES días, por debajo del «cada día» que pide la documentación**. La lección de método: se citó un mecanismo de plataforma **de segunda mano** en el archivo que el ecosistema consulta para decidir, con la fuente primaria a una consulta de distancia. (2) **El remedio existe: `unrlvl-ops` → `api/keepalive`** —cron de Vercel `11 2,10,18 * * *`, `POST` a la REST API de cada objetivo, **cero objetivos en el código** (variable `KEEPALIVE_TARGETS`), y el rastro en `keepalive_ping` con `origen` propio porque la retención de logs depende del plan—. (3) **TRAMPA DE PRIVILEGIOS, y vale para toda tabla de Supabase: RLS activa sin políticas NO retira privilegios, los deja inertes.** `anon` tenía los **siete** por los grants por defecto mientras la tabla parecía cerrada [`medido`], y **la primera política que se abre los reactiva todos**, no sólo el que se quería abrir — por eso el `REVOKE` va antes del `GRANT`, mismo eje que §11 aplicado a tablas. Se comprueba **simulando `SET LOCAL ROLE anon` y mirando el efecto**, no leyendo el `GRANT`. **Cabecera anterior (`1.19`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.19 · 2026-09-19 (**tres adiciones medidas y ninguna derogación; una de ellas corrige el alcance de una afirmación de ausencia.** (1) **El esquema `fph` de UNRLVL es un esqueleto vacío** —22 tablas creadas, `buildings` con 6 filas y `units`, `owners`, `owner_units`, `arrears` y `payments` en **0**—: **el padrón real vive en el proyecto FPHS**, con **1,378 unidades en 8 PH** [medido por CC el 2026-09-19]. Una consulta de padrón contra UNRLVL devuelve **0 filas sin error**, que es la misma familia de «0 filas ≠ no existe» del 2026-09-08 vista del otro lado: acá las tablas existen y lo que falta es el dato. (2) **`storage.objects` de UNRLVL no tiene ningún EEFF —eso se sostiene— pero tampoco tiene «sólo dos objetos» de ForumPHs: tiene 200 en cuatro buckets** [medido]. El «sólo» es cierto **acotado al bucket `brand-intel`** y falso a nivel de `storage.objects`; se escribe con su alcance porque **una afirmación de ausencia sin alcance manda a buscar en el sitio equivocado**. (3) **El keepalive de FPHS NO previene la pausa**: `cron.job` id 1 está activo y `keepalive_tick()` hace un `INSERT` **interno** vía `pg_cron`, mientras **`pg_net` y `http` están las dos SIN instalar** [medido], así que **no sale ni una petición** y la pausa se mide por **tráfico al gateway**. El cron late, la tabla crece y el contador no se mueve; hace falta un **cron externo**. **Es el mismo eje que el vigilante externo de ALERTAS-01** —lo que corre dentro de lo que observa no puede probar nada sobre ello desde fuera— y por eso **no es una nota de ForumPHs: aplica a cualquier base cuya métrica de actividad viva fuera del motor**. **Cabecera anterior (`1.18`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.18 · 2026-09-17 (**tres adiciones medidas y ninguna derogación.** (1) **CC NO PUEDE ESCRIBIR SECRETOS NI VARIABLES DE ENTORNO — LAS CARGA SAM** [medido por CC el 2026-09-16 y el 2026-09-17]: el MCP de Supabase expone `execute_sql`, `apply_migration` y `deploy_edge_function` y **ninguna gestiona secretos**; el de Vercel hace despliegues, proyectos, logs y `web_fetch_vercel_url` y **no escribe variables de entorno**; y no hay CLI instalada ni token para autenticarla. Lo que CC hace es **nombrar la clave y verificar por efecto después**. Motivo: el 2026-09-17 un PR asignó a CC la carga de dos secretos para la que no existe tool y **se perdió el ciclo entero**. (2) **Professor desde el chat: la vía operativa es `submit-learning`** — el proxy acepta también **GET con los parámetros en la cadena de consulta**, `action=submit-learning` **persiste** y devuelve `learning_id`, `relevance_score` y `filter_reason`, y **`action=checkpoint` devuelve `candidates: []` y NO persiste nada** [`medido` por Claude.ai el 2026-09-17; CC no lo midió]. **Añade a la corrección del 1.17, no la deroga.** (3) **Exposición de un esquema en PostgREST: el sitio autoritativo es `authenticator.rolconfig → pgrst.db_schemas`**, no la respuesta de la API ni la pantalla del panel, y **exponer son DOS señales** —`reload config` para la lista y `reload schema` para la caché de tablas—, entre las cuales el error pasa de **406 `PGRST106`** a **404 `PGRST205`** con un `hint` que desorienta; **lo cambia Sam desde el panel**, porque el panel reescribe esa lista. Fuente del mecanismo: `CC_PROTOCOL.md` §13, que esta entrada **apunta y no copia**. **Lo que NO entra, y la razón queda escrita:** la advertencia condicional sobre desfase entre el panel de Data API y la base **no se escribe** — panel y base **coinciden** [medido por CC y verificado por Sam el 2026-09-17], así que dejarla sería **plantar un aviso falso** en un archivo de referencia. **Cabecera anterior (`1.17`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.17 · 2026-09-13 (**tres correcciones medidas el mismo día, y las tres retiran una afirmación que había dejado de ser cierta — ninguna se borra: las tres se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal.** (1) **El proxy `api/professor` SÍ acepta POST**, y `action=submit-learning` funciona pasando **`relevance_score` explícito dentro del `1..5` del `CHECK`**: el `500` documentado el 2026-09-10 lo producía la EF calculando el valor **fuera de rango**, así que la causa raíz era correcta y **la conclusión que se sacó de ella no** — de «el `CHECK` rechaza el valor» se pasó a «no se puede por el proxy» sin medir la regla [reportado — Claude.ai, 12 learnings sembrados por esa vía el 2026-09-13 entre 13:47 y 13:49 UTC; **corroborado por CC**: 12 filas con `session_date = '2026-09-13'`, las 12 con `relevance_score = 5`, y el `CHECK` sigue siendo `>= 1 AND <= 5`]. (2) **La misma corrección retira la entrada que decía que el proxy sólo exponía GET.** (3) **El `REVOKE` sobre `intel.match_content_embeddings` ya está aplicado**: el ACL medido es `{postgres=X/postgres,service_role=X/postgres}` y `anon` y `authenticated` quedan en **falso** — la advertencia que la fila `p_match_domain` llevaba unas horas antes **se archiva**, con su reversión escrita al lado. **Cabecera anterior (`1.16`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
@@ -646,6 +647,88 @@ base. Lo interno no se puede arreglar subiéndole la frecuencia: **no es poca se
 **Consecuencia operativa que ya estaba anotada y ahora tiene causa:** el riesgo **R6** de
 `brands/ForumPHs/AGENDA_owner_agent.md` —«FPHS free tier auto-pausa ~7 días»— **sigue vivo**, y el
 keepalive que parecía cubrirlo no lo cubre.
+
+---
+
+### 🔌 EL KEEPALIVE, CORREGIDO Y RESUELTO (2026-09-19, adición posterior)
+
+> **Esta entrada corrige la de arriba en un punto y la completa en otro. La redacción anterior
+> se conserva íntegra y sigue siendo cierta en lo esencial** —el `INSERT` interno no sirve— **pero
+> una de sus frases afirmaba sin medir.**
+
+#### 🔴 La corrección: una frase mía iba sin etiqueta, y la fuente oficial la dice distinto
+
+La entrada de arriba dice, **dentro de una sección titulada «capacidades medidas» y sin etiqueta
+propia**:
+
+> ⛔ **NO OPERATIVO — redacción imprecisa, conservada por §0.**
+> *«la pausa de Supabase **se mide por tráfico al gateway**»*
+
+**Ese mecanismo no lo midió CC: venía del brief de Claude.ai**, y por la regla de evidencia —*una
+afirmación sin etiqueta se lee como `medido`*— quedó escrita como si CC la hubiera comprobado.
+**No la había comprobado.**
+
+**Lo que dice la fuente primaria** [`medido` el 2026-09-19 — documentación oficial de Supabase,
+`guides/platform/free-project-pausing`]:
+
+> *«A Free plan project is considered inactive if it does not receive sufficient **user database
+> activity** over the past week… Typically **a few user requests to the database each day** over the
+> previous week is enough to keep the project from being paused.»* Los remedios que nombra son
+> **llamadas de API al proyecto** o **visitar el panel**.
+
+**Qué cambia y qué no.** **La conclusión operativa no cambia**: un `INSERT` interno vía `pg_cron`
+no es una petición de usuario y sigue sin servir. **Lo que cambia es el criterio con el que se
+diseña el remedio** — no es «generar tráfico» en abstracto, son **peticiones de usuario a la API,
+y varias por día**. De ahí sale un **segundo defecto del cron viejo que la redacción anterior no
+vio**: `0 12 */3 * *` es **cada tres días**, por debajo del «cada día» que pide la documentación.
+Aunque el `INSERT` hubiera contado, la frecuencia tampoco daba.
+
+**La lección de método, que es la que vale:** se citó un mecanismo de plataforma **de segunda mano**
+en el archivo que el ecosistema consulta para decidir. La fuente primaria estaba a una consulta de
+distancia y nadie la abrió hasta el día siguiente.
+
+#### ✅ Lo que ahora existe: `unrlvl-ops` → `api/keepalive`
+
+**Un cron de Vercel hace un `POST` a la REST API de cada proyecto objetivo, tres veces al día.** Esa
+petición es **a la vez** la actividad que cuenta y el rastro de que se emitió.
+
+| Pieza | Dónde |
+|---|---|
+| Ruta y criterio | `unrlvl-ops` → `api/keepalive.ts` + `api/_objetivos.mjs` |
+| Cron | `vercel.json` → `11 2,10,18 * * *` |
+| Objetivos | variable **`KEEPALIVE_TARGETS`** — **cero objetivos en el código** |
+| Rastro | `public.keepalive_ping` del proyecto, `origen = 'unrlvl-ops/keepalive'` |
+
+**Por qué `POST` y no `GET`:** un `GET` también contaría, pero dejaría rastro **sólo en los logs**,
+cuya retención depende del plan. La fila no caduca y lleva escrito quién la emitió — que es lo que
+permite, dentro de seis meses, saber de dónde salía ese tráfico.
+
+#### 🔐 Y una trampa de privilegios que vale para TODA tabla de Supabase
+
+**Medido el 2026-09-19 sobre `public.keepalive_ping`:** el rol `anon` tenía los **siete privilegios**
+—`DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE`— **por los grants por defecto de
+Supabase**, mientras la tabla mostraba `rowsecurity = true` y **cero políticas**.
+
+> **RLS activa sin políticas no retira privilegios: los deja inertes.** Mientras no haya ninguna
+> política, todo queda denegado y la tabla *parece* cerrada. **La primera política que se abra
+> reactiva los siete**, no sólo el que se quería abrir.
+
+**Por eso el `REVOKE` va antes del `GRANT`** —mismo eje que `CC_PROTOCOL` §11 para
+`SECURITY DEFINER`, aplicado a tablas—:
+
+```sql
+REVOKE ALL ON TABLE <tabla> FROM anon;
+GRANT INSERT ON TABLE <tabla> TO anon;
+CREATE POLICY … FOR INSERT TO anon WITH CHECK (true);
+```
+
+**Cómo se comprueba, y no es leyendo el `GRANT`:** simulando el rol que PostgREST usa
+—`SET LOCAL ROLE anon`— y mirando el efecto. En este caso: `INSERT` entra, `SELECT` devuelve
+**`42501 permission denied`**. **Doble cerradura** —sin privilegio y sin política—, así que quien
+tenga la clave publicable **no puede leer el historial**.
+
+**Corolario de clave:** para un trabajo acotado se manda la **clave publicable**, nunca la de
+servicio. La de servicio **ignora RLS**, así que acotar con políticas no la limita en nada.
 
 ---
 
