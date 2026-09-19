@@ -1,5 +1,173 @@
 # ForumPHs — Session Log
 
+## 2026-09-19 — Los costos reales corrigen el tarifario, y un solo contrato explica toda la pérdida
+
+> **Entrada de CC.** Sesión de **análisis financiero y definición de modelo comercial**: no se produjo
+> código, migración ni siembra. Lo etiquetado `reportado` lo afirma el **brief de Actualiza de
+> Claude.ai del 2026-09-19** y **CC no lo midió** —las cifras salen de los EEFF de enero a julio de
+> 2026 y de los exports de Sage, que CC no tiene—. Lo etiquetado `medido` lo consultó **CC** el
+> **2026-09-19** con `Supabase:execute_sql` sobre `tajuoqdbnsnzkhyqvdgs` (FPHS) y
+> `amlvyycfepwhiindxgzw` (UNRLVL). **Professor: no lo cerró CC** —la captura de learnings es de
+> Claude.ai (`HRD_PROFESSOR`)—, pero **CC corroboró la siembra** y encontró un detalle que el brief
+> no dice; está abajo. **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+
+### 💰 El costo real de operar, contra lo que decía el tarifario v4
+
+| | Tarifario v4 | Real Ene–Jul 2026 | Desvío |
+|---|---|---|---|
+| Costo mensual | $14,669 | **$17,391** | **+18.6 %** |
+| Por PH (8 PH) | — | **$2,174** | — |
+| Por unidad administrada | $9.65 | **$12.62** | **+30.8 %** |
+| Padrón usado como denominador | 1,520 | **1,378** | −142 unidades |
+
+[`reportado` — las tres primeras filas. **La cuarta la midió CC**: el padrón de FPHS suma
+**exactamente 1,378 unidades** repartidas en 8 PH, detalle en la tabla de abajo.]
+
+**Las dos causas de la diferencia, y ninguna es un error de cálculo:**
+
+1. **Las reservas laborales que el v4 no contemplaba** — **$1,282.81/mes**, confirmadas en balance
+   como **pasivo de $8,979.70 sin pagar** [`reportado`]. No es un gasto opcional: es una obligación
+   devengada que ya existe aunque todavía no haya salido de caja.
+2. **El denominador inflado** — el v4 repartía el costo entre **1,520** unidades y el padrón real es
+   de **1,378**. Un denominador que no existe abarata el costo unitario en el papel y en ningún lado más.
+
+### 📉 El resultado del período, que es el que obliga a revisar el modelo
+
+- **Ingresos planos en $17,307.50 desde enero**, sin un cliente nuevo en **siete meses** [`reportado`].
+- **Pérdida acumulada de $652.94** en el período [`reportado`].
+- **Aporte de capital del socio de $7,903.14 en mayo** para sostener caja [`reportado`]. Es el dato
+  que cambia la lectura: la operación no se sostuvo sola, y eso no se ve en la pérdida acumulada.
+
+### 🔴 La rentabilidad por PH — un solo contrato explica toda la pérdida
+
+**PH Los Álamos: 329 unidades, el 23.9 % del padrón, a $6.08 por unidad — pierde $2,152/mes.**
+Es **más que el margen de Luxor y Venezia juntos**. **Sin Los Álamos la empresa ganaría unos
+$2,000/mes** [`reportado`]. **PH Parque Central Arraiján repite el patrón a menor escala.**
+
+**El padrón por PH, medido por CC** el 2026-09-19 sobre `buildings` × `units` de FPHS:
+
+| PH | Unidades | Sobre el padrón |
+|---|---|---|
+| **PH Los Alamos** | **329** | **23.9 %** |
+| PH Torres de Castilla | 306 | 22.2 % |
+| PH Lefevre 75 Don Enrique | 186 | 13.5 % |
+| Venezia Tower | 182 | 13.2 % |
+| PH Luxor Towers 300 | 143 | 10.4 % |
+| PH Parque Central Arraijan | 82 | 5.9 % |
+| PH Firenze Tower | 80 | 5.8 % |
+| PH Plaza España | 70 | 5.1 % |
+| **Total** | **1,378** | 100 % |
+
+[`medido` — la suma de la columna da 1,378 exacto, que es el denominador del $12.62 y **no** el 1,520
+del v4.]
+
+### 📐 El metraje reconstruido, y el método que lo valida
+
+**Método: `metraje = cuota ÷ tarifa`**, aplicado sobre el export de Sage [`reportado`].
+
+- **Validación contra fuente independiente:** Lefevre dio **16,100 m²** por reconstrucción contra
+  **16,079 m²** del acta — **desvío de 0.1 %**. Es lo que convierte el método en utilizable.
+- **Venezia: 15,278.7 m²** medido por esa vía. **Castilla: 24,052 m² extrapolado** [`deducido` — al
+  promedio de 82.2 m²/unidad, no reconstruido desde cuotas].
+- 🔴 **Plaza España cobra monto fijo, no por m²**, así que el método **no aplica ahí**. **La base de
+  cálculo se verifica PH por PH antes de usar una cifra reconstruida** — un método validado en un PH
+  no es un método válido en todos.
+
+### 🤝 Plaza 77 — el prospecto, y por qué su problema no es la tarifa
+
+**~6,800 m²** [`deducido` — desde listados públicos, no de un padrón], cuota **$1.71/m²**, **por
+encima del $1.65 de Lefevre**. **No tienen un problema de tarifa: tienen un problema de cobro y de
+gasto**, y eso cambia por completo lo que se les ofrece.
+
+**Precio propuesto: $1,200/mes, 37 % de margen** — el **segundo precio por unidad más alto de la
+cartera** [`reportado`].
+
+### 📋 El modelo comercial, decidido en esta sesión
+
+Decisiones de Sam [`reportado`]:
+
+1. **Se vende servicio, no horas hombre.** Lo que se compromete no es presencia: es atención.
+2. **La gestión de cartera va incluida, sin recargo.**
+3. **Honorario de recuperación sobre la cartera de más de 90 días.** El porcentaje **sigue sin fijar**.
+4. **Sin representación judicial.** Queda fuera del alcance, explícitamente.
+
+### 📱 El alcance de la plataforma, decidido en esta sesión
+
+Decisiones de Sam [`reportado`]:
+
+1. **El agente de WhatsApp es el canal único del propietario.**
+2. **El seguimiento y la entrega van por correo.**
+3. **El ACH va directo a la cuenta del PH, hacia Sage 50** — **ForumPHs no cobra ni registra pagos**.
+   De ahí se sigue el límite del agente: **consulta e informa, no transacciona**.
+4. **La labor diaria de campo no se mapea por ahora.**
+
+### 🎓 Dos learnings de esta sesión tienen rango de regla, y no se quedan en Professor
+
+**a · La métrica correcta depende del servicio que se cotiza.** **Costo por unidad administrada**
+para administración; **metro cuadrado** para limpieza. El trabajo administrativo lo generan **los
+propietarios**, no la superficie. **Plaza 77 costeado por m² daba $1,047 y por unidad $757 — 38 % de
+diferencia sobre el mismo cliente** [`reportado`]. Elegir mal la métrica no desajusta el precio: lo
+inventa.
+
+**b · Toda tabla de costos declara quién absorbe la diferencia.** No basta con mostrar cuánto cambia
+el margen entre escenarios: hay que **decir que el cliente paga lo mismo en todos** y que **la caída
+la absorbe ForumPHs**. Es criterio de presentación y aplica a **todo documento con cifras**, no sólo
+a los de esta marca.
+
+### 🔍 LO QUE CC CORRIGE POR MEDICIÓN — el brief dice «sólo dos objetos» y son 200
+
+**El brief afirma** que `storage.objects` de UNRLVL «no contiene EEFF: **sólo**
+`brand-intel/forumphs/bi_2025_source.html` y `bi_2025.json`».
+
+**Medido por CC el 2026-09-19:** la parte que importa **se sostiene** —**no hay ningún EEFF en
+Storage**— pero el **«sólo» no es cierto a nivel de `storage.objects`**: hay **200 objetos de
+ForumPHs repartidos en cuatro buckets**.
+
+| Bucket | Objetos | Qué son |
+|---|---|---|
+| `unrlvl-media` | **196** | previsualizaciones e imágenes del carril de contenido |
+| `brand-intel` | **2** | `forumphs/bi_2025_source.html` y `forumphs/bi_2025.json` — el BI del cliente, anonimizado |
+| `collateral` | **1** | `ForumPHs/suite-gestion-financiera.html` — la muestra que se sirve por enlace con token |
+| `mail-authorizations` | **1** | la autorización de buzón del 2026-08-28 |
+
+**Por qué se corrige y no se copia:** el «sólo» es cierto **acotado al bucket `brand-intel`**, y
+falso tal como está escrito. Quien lo lea el mes que viene y busque un archivo de ForumPHs en Storage
+va a concluir que no existe. **La afirmación vale con su alcance dicho; sin él, no.**
+
+### 🎓 Trazabilidad del Professor — corroborada, con un detalle que el brief no dice
+
+**El brief afirma:** 14 learnings sembrados, `session_date = 2026-09-19`, `checkpoint_number = 15`,
+`approved_by_sam = true`, **dos con el prefijo `SALES-KIT`**.
+
+**Corroborado por CC** [`medido` el 2026-09-19 sobre `professor_learnings` de UNRLVL]: **14 filas**,
+las **14** con `approved_by_sam = true`, las **14** con `checkpoint_number = 15`, todas con el mismo
+`created_at` — **2026-09-19 12:18:09 UTC**. El reparto por categoría: `contenido` 6 · `arquitectura` 3
+· `datos` 3 · `gobernanza` 1 · `metodo` 1.
+
+🟡 **El detalle que el brief no dice, y que importa para recuperarlos:** el prefijo **`SALES-KIT` no
+está en `category`** —una consulta que filtre por ahí devuelve **cero filas**—. Está en
+**`raw_learning`**, y las dos piezas viven bajo `category = 'contenido'`. **Quien busque el material
+del kit por categoría no lo encuentra**; se busca por `raw_learning LIKE 'SALES-KIT%'`.
+
+### 🔴 PENDIENTES QUE ESTA SESIÓN REGISTRA Y NO RESUELVE
+
+1. **Los Álamos** — la decisión de mayor impacto financiero de la operadora, **sin tomar**.
+2. **Frecuencias de presencia** (visitas al mes, reuniones con la JD) — **en blanco** en el documento.
+   Son compromiso contractual **con costo**, así que un blanco ahí es un costo sin cuantificar.
+3. **Porcentaje del honorario de recuperación** — sugerido **8–10 %**, sin fijar.
+4. **Definición de «porcentaje de morosidad»** — unidades morosas sobre el total, o monto vencido
+   sobre facturación. **Luxor da 110 % por la segunda**, que es la prueba de que las dos definiciones
+   no son intercambiables y de que hay que elegir una y escribirla.
+5. **Planilla de conserjería y limpieza** — sin modelo de costo. Sería **la primera contratación de
+   personal en sitio** de la empresa.
+6. **Metraje de áreas comunes** — no está en ningún padrón **y no es reconstruible desde las cuotas**,
+   porque la cuota no lo incluye. Es dato a levantar, no a derivar.
+7. **Keepalive externo de FPHS** — el actual no previene la pausa. Medición y motivo en `CAPABILITIES.md` 1.19.
+8. **Anexos B y C** (Protocolos de Actuación y de Emergencias) — revisados con Ivette, **no oficiales**,
+   con decenas de campos `□` sin completar.
+
+---
+
 ## 2026-09-12 (v2) — La franja del 10 de septiembre queda cerrada, y el artículo ya tiene URL
 
 > **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,

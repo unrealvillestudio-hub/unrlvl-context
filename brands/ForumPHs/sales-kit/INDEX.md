@@ -16,6 +16,29 @@ Ejemplo trabajado: P.H. Plaza 77.
 **Cuándo se usa:** primera respuesta sustantiva a un prospecto que ya declaró sus prioridades.
 No sirve para un primer contacto en frío — el paso 1 necesita algo que devolver.
 
+### `argumento_servicio_vs_horas_hombre.md` — Argumento de servicio frente a horas hombre
+**Declarado estándar el 2026-09-19.** La regla que codifica: **se vende servicio con resultados
+medibles, no horas hombre** — quien acepta discutir horas ya aceptó que su servicio es
+intercambiable. Tres movimientos (la aritmética del competidor, no el margen propio · se compromete
+atención, no presencia · no manejamos el dinero del cliente) y el **guion de cuatro movimientos para
+la objeción del horario**, que se lee como reclamo de trazabilidad y no como pedido de horas.
+
+**Cuándo se usa:** cuando la conversación se mueve del qué se entrega al cuánto tiempo se dedica.
+**No abre: responde.**
+
+---
+
+### `correo_que_da_precio.md` — Correo que da precio
+**Declarado estándar el 2026-09-19.** Estructura de seis pasos y las tres reglas que codifica: la
+tarifa primero con su derivación pegada, el esquema cerrado de **tres tarifas con los mismos
+servicios en las tres**, y **cada dato pendiente pedido con su motivo y por separado** — nunca como
+bloque único de requisitos. Ejemplo trabajado: P.H. Plaza 77, $1,200/mes.
+
+**Cuándo se usa:** en el segundo momento, cuando ya hay levantamiento suficiente para dar tarifa.
+Va **después** de `email_respuesta_prospecto.md`, no en su lugar.
+
+---
+
 ---
 
 ## Piezas producidas, pendientes de incorporar
