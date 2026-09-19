@@ -1,5 +1,73 @@
 # ForumPHs — Session Log
 
+## 2026-09-19 (v3) — El keepalive queda desplegado, y el ecosistema por fin lo registra
+
+> **Entrada de CC.** Cierre del tramo: Sam cargó la variable y mergeó los PR; CC verificó el
+> despliegue, sembró los learnings en Professor y **dio de alta el nodo que faltaba en
+> `ecosystem.json`**. Todo lo etiquetado `medido` lo consultó CC el **2026-09-19 entre las 14:50 y
+> las 15:20 UTC**. Lo previo se conserva íntegro debajo.
+
+### ✅ Verificado tras el merge
+
+| Comprobación | Resultado |
+|---|---|
+| PR `unrlvl-ops#13` | **mergeado** 14:54:25 UTC |
+| PR `unrlvl-context#101` | **mergeado** |
+| Despliegue de producción de `unrlvl-ops` | **READY**, con el commit del merge |
+| Ruta `/api/keepalive` | **viva** — `401 {"error":"Unauthorized"}` sin cabecera |
+| `CRON_SECRET` cargado | **sí** — si faltara, la guarda se saltaría y habría seguido adelante |
+| `KEEPALIVE_TARGETS` | cargada por Sam [`reportado`] · **su corrección la prueba el primer disparo** |
+| Primer latido externo | **todavía no** — 4 filas, las 4 `pg_cron`, a las 14:55 UTC |
+
+**Qué prueba el `401`, dicho con precisión: que la puerta existe y está cerrada.** No prueba que la
+clave cargada abra la cerradura de Supabase — eso sólo se ve cuando el cron dispare con su cabecera
+y el `POST` llegue a la base. **Primer disparo: 18:11 UTC.**
+
+### 🧬 El hueco que este tramo cierra: `ecosystem.json` no registraba el cron
+
+`alerting_channel` tenía nodo propio de primer nivel desde ALERTAS-01; **el keepalive no tenía
+ninguno**, así que una capacidad en producción no existía en el mapa del ecosistema.
+
+**Alta de `keepalive_externo`**, hermano de `alerting_channel` y escrito con su misma forma.
+`ecosystem.json` pasa a **`v2026-09-19-v1`** y **los dos derivados se SINCRONIZAN en commit
+separado, no se regeneran**.
+
+**Se nombra por su función, no por la marca que lo pidió primero** — `keepalive_externo`, no
+«keepalive de ForumPHs». Hoy hay **un** objetivo en la variable, y precisamente por eso es una
+variable y no una constante.
+
+### 🎓 Professor — 6 learnings sembrados por CC, PENDIENTES DE APROBACIÓN
+
+**Excepción al reparto habitual:** Professor es de Claude.ai (`HRD_PROFESSOR`), pero **Sam pidió
+explícitamente que los sembrara CC** en este tramo. Sembrados con `execute_sql` sobre
+`professor_learnings`, `session_date = 2026-09-19`, **`checkpoint_number = 16`**,
+`brand_id = 'ecosystem'` — los seis son **transversales**, ninguno es de marca:
+
+| Categoría | Learning |
+|---|---|
+| `arquitectura` | El keepalive multimarca: el eje en el código, los objetivos en el dato |
+| `datos` | Qué pausa un proyecto del plan gratuito, según la fuente primaria |
+| `metodo` | Un mecanismo de plataforma se cita de la fuente primaria, nunca de segunda mano |
+| `arquitectura` | RLS activa sin políticas no retira privilegios: los deja **inertes** |
+| `arquitectura` | «Corre bien» y «sirve» son afirmaciones distintas — 2ª aparición del mismo eje |
+| `gobernanza` | Un encargo puede ser irrealizable en su literal, y se reporta **antes** de producir |
+
+🟡 **Los seis van con `approved_by_sam = false`, a propósito.** Sam pidió capturarlos, no aprobó su
+texto — y marcarlos aprobados sería afirmar algo sobre él que no ocurrió, que es exactamente el
+defecto que este mismo día obligó a corregir `CAPABILITIES.md` 1.19. **Consecuencia que conviene
+saber:** `professor-get-context` sirve sólo learnings aprobados, así que **hasta que Sam los apruebe
+no se sirven**. Una línea suya los activa.
+
+### 🔴 Lo que sigue abierto
+
+1. **El primer disparo real: 18:11 UTC.** CC tiene vuelta programada a las **18:22 UTC**.
+2. **El cron interno `jobid 1` sigue vivo A PROPÓSITO** — se retira después del primer latido.
+3. **El efecto final sólo lo prueba el tiempo:** FPHS activa pasados más de 7 días sin aviso.
+4. **Los 6 learnings esperan aprobación de Sam.**
+5. **«Tres peticiones al día» es `deducido`** — la documentación dice «a few … each day» sin número.
+
+---
+
 ## 2026-09-19 (v2) — El keepalive se arregla cambiando de mecanismo, no de cron
 
 > **Entrada de CC.** Sam pidió «corrige el cron para que el task evite la pausa». **El cron no se
