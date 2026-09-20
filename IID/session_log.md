@@ -293,6 +293,146 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-20 · EL CONTEO SALE DE LA BASE, Y UN «FIXABLE» DEJA DE SER UN DESCARTE
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior.** Todo lo etiquetado `medido` lo consultó
+**CC** el **2026-09-20** entre las ~17:30 y las ~22:35 UTC con `Supabase:execute_sql`,
+`Supabase:list_edge_functions` y `Supabase:get_edge_function` sobre `amlvyycfepwhiindxgzw`, y contra
+los repositorios `unrlvl-iid-functions` y `Orchestrator`. Lo etiquetado `reportado` lo afirma un brief
+o una sesión anterior. Professor cerrado **antes** de este Actualiza, por **CC** esta vez, con seis
+learnings sembrados y cinco aprobados por Sam.)_
+
+### El caso: tres instrumentos, tres números, una sola pregunta
+
+Sam reportó el 2026-09-19 que el correo de la bandeja le decía **583 piezas esperando su criterio** y
+la bandeja mostraba **64**. `medido` el 2026-09-20, no eran un error de resta: eran **tres preguntas
+distintas con el mismo nombre**.
+
+| Instrumento | Decía | Qué contaba |
+|---|---:|---|
+| `iid-approval-digest` (el despertador de las 7am ET) | **583** | jobs del carril |
+| `ops-daily-report`, sección 4 | **87** | dos consultas de piezas, solapadas entre sí |
+| Bandeja del Orchestrator | **64** | piezas |
+
+**Causa 1 — el despertador contaba JOBS, no piezas.** Un job es un INTENTO del carril; una pieza es lo
+que el intento produjo cuando salió bien. `medido`: `content.orchestrator_jobs` tenía **678 filas en
+`approval_status='pending'` y 2 en `approved`** — nada las marca nunca como resueltas, así que la cifra
+sólo podía crecer. Entre ellas, **258 jobs de una marca que fallaron sin producir pieza alguna**.
+
+**Causa 2 — el informe contaba con dos consultas que se solapan**, `status='awaiting_approval'` y
+`challenged_at IS NOT NULL`. Correctas por separado, mentían juntas y en las dos direcciones:
+**16 piezas estaban en las DOS** —se retaron, se re-adaptaron y volvieron a la bandeja, y
+`readaptPiece` **no borra** `challenged_at` ni debe, porque esa fecha es el registro de que fueron
+retadas— y **otras 7** figuraban «en challenged» estando ya `scheduled` o `published`.
+
+### El eje: el estado vivo es `status`; las columnas `*_at` son historia
+
+Una columna `*_at` dice que algo le **pasó** a la fila, no lo que la fila **es**. Contar por una fecha
+es contar el pasado y llamarlo presente. Y el criterio **tampoco es una cadena**: un «fixable» no se
+reconoce porque su motivo empiece por esa palabra.
+
+Ese segundo punto **lo anticipó Sam antes de la medición** —*«podría decir otra cosa y entonces
+fallaría»*— y la medición le dio la razón con un número: de las **41** piezas con veredicto `fixable`
+en el corpus, **TRES no llevaban el prefijo** en su motivo; de hecho **no llevaban motivo ninguno**,
+porque son anteriores a que el marcador se escribiera en la pieza y su propuesta existía sólo en el
+corpus. Un `WHERE discarded_reason ILIKE 'fixable%'` habría reparado 38 y **callado 3**.
+
+### Lo que entró en producción
+
+**`content.pieces_awaiting_criterion`** — la vista que define el criterio **para todos**. Expone
+`piece_id`, `brand_id`, `platform`, `status`, `reason`, `created_at`, `waiting_days`: exactamente lo
+que la lista de fixables del Orchestrator necesita leer. `GRANT SELECT` a `service_role`,
+`security_invoker = true`.
+
+**`ops-daily-report` gana el modo `digest`** — el resumen de cada 4 horas, con los **mismos
+contadores** que el informe diario. Dos servicios que cuentan lo mismo por su cuenta terminan dando dos
+cifras del mismo hecho, que es el defecto entero de este corte. Lleva **sólo conteos**: ni lista de
+piezas ni un solo `piece_id` — la lista es de la bandeja, que es donde se actúa sobre ella. Tabla
+`alerting.digest_reports` (clave `slot_at`, con `window_start`: **un disparo perdido no deja hueco**,
+el siguiente tramo lo absorbe), severidad **`digest`** en `alerting.alert_routes` heredando la fila de
+correo ya activa, y cron **`alerting-digest-4h`** `0 1,5,9,13,17,21 * * *` — ninguna franja coincide
+con las 07:00 del informe diario, porque dos correos a la vez se leen como uno.
+
+**`iid-approval-digest` ENTRA al repositorio.** `medido`: llevaba **ACTIVA en producción desde julio en
+su versión 28**, disparada por el cron `iid-approval-digest-daily`, y **su código no existía en ninguna
+rama**. Por eso un barrido por `unrlvl-iid-functions` buscando el texto del correo no la encontraba, y
+sus dos defectos se atribuyeron durante días al Orchestrator —**otro repositorio y otra causa**. Ahora
+cuenta desde la vista, imprime el desglose por estado, sale el regionalismo de la línea del conteo y
+autoriza comparando el secreto **entero y en tiempo constante**, sin aceptar ya
+`SUPABASE_SERVICE_ROLE_KEY`, que figura DEPRECATED.
+
+**El correo POR PIEZA se apaga con un dato.** `intel.iid_scheduler_config.piece_email_mode = 'digest'`.
+Volver atrás es un `UPDATE`, sin despliegue. Ante la clave ausente, un valor irreconocible o un fallo
+de lectura cae a `per_piece` — **hacia el ruido, nunca hacia el silencio**: un correo de más se nota y
+uno de menos no.
+
+**Un `fixable` RETA la pieza, ya no la descarta** (repositorio `Orchestrator`). El diseño anterior
+sellaba con `discarded_at` y su argumento era bueno mientras sólo se mirara esa bandeja. Lo que faltaba:
+`discarded_at` **no saca la pieza de la bandeja, la saca del sistema** — `storage-orphan-sweep` deja de
+sostener su imagen, `publish-slot-reserver` y el scheduler la excluyen, y la vía de re-adaptación
+(READAPT-01) la rechaza por diseño. **Marcar una pieza para arreglarla la estaba sacando de la cola de
+lo arreglable, con su imagen en la cuenta atrás.** Ahora escribe `status='challenged'` +
+`challenged_at` + `challenged_reason`, y el eje nuevo **`por_arreglar`** en `pendingStateOf` impide que
+reaparezca como una tarjeta sin juzgar — distinto de `retenida`, que es el desacuerdo del **juez** y se
+arbitra en otra bandeja.
+
+**Las 41 piezas vuelven a la cola.** Cuatro marcas, desde el 01-sep. `medido` tras aplicar: 41
+archivadas con su estado anterior completo en `content.piece_state_backfill_log`
+(`fixable_vuelve_a_la_cola_20260920`) · 41 en `challenged` · 0 descartadas · 0 sin motivo ·
+**40 conservan su imagen** (la de ForumPHs nunca tuvo). Para las tres sin motivo, el motivo se
+**reconstruyó desde la propuesta del corpus**: recuperar un dato que existía y no había llegado a la
+pieza, no inventarlo.
+
+### Estado medido al cierre
+
+```
+esperando criterio: 109
+  awaiting_approval  64  (UnrealvilleStudio 42 · NeuroneSCF 20 · LucienSael 1 · ForumPHs 1)
+  fixables           41  (NeuroneSCF 38 · UnrealvilleStudio 1 · LucienSael 1 · ForumPHs 1)
+  aplazadas           4  (UnrealvilleStudio 3 · NeuroneSCF 1)
+```
+
+Primer resumen emitido y enviado: `alerting.digest_reports` `R-0920-21`, `sent: true`, canal correo.
+
+### Cuatro PR mergeados
+
+`unrlvl-iid-functions` **#188** (el conteo desde la base, el modo `digest`, la EF adoptada, el correo
+por pieza apagado) · `Orchestrator` **#47** (el botón) · `unrlvl-iid-functions` **#189** (las 41) ·
+`unrlvl-iid-functions` **#190** (una fila del corpus). Migraciones `20260920090000`, `100000`, `110000`
+y `120000`, las cuatro aplicadas y pineadas en `supabase/MIGRACIONES_CONGELADAS.md`.
+Suites: **99/99** en `unrlvl-iid-functions`, **388** y `tsc -b` limpio en `Orchestrator`.
+
+### Lo que costó, y es lo que deja regla
+
+**(1) Una orden correcta sobre una premisa falsa, y la aportó quien la iba a ejecutar.** Se reportó a
+Sam «hay una pieza rechazada por ti y agendada para salir» **sin haber leído `approved_at`**. Sam
+ordenó sacarla, coherente con lo que se le contó. Al ir a ejecutarlo, la medición completa mostró que
+el «rechazo» del 31-ago era una **PREGUNTA** escrita en el panel de rechazo —*«Si todo está bien
+entonces se aprueba»*— y que Sam había **APROBADO** la pieza el **12-sep**, doce días después.
+Sacarla habría retirado de la cola una pieza aprobada deliberadamente. **Se le devolvió la cronología
+completa y él decidió**: corregir la fila del corpus, que es material de entrenamiento y decía lo
+contrario de lo que pasó, y **no tocar la pieza**. `criterion` se conservó palabra por palabra.
+
+**(2) `tsc -b` pasó en verde sobre una divergencia real.** `PendingState` vive DOS veces en el
+Orchestrator —server y cliente, porque el cliente no puede importar de `api/`—, y la tabla de color
+está tipada contra el tipo **del cliente**: estaba completa respecto de una lista que ya no era la
+buena. El síntoma habría sido la tarjeta reventando al pintarse, en producción. Lo cierra un test que
+**lee los dos archivos**, comprobado haciéndolo fallar a propósito.
+
+**(3) Dos guardarraíles del repositorio ficharon defectos reales mientras se escribía el corte, y los
+dos se arreglaron en vez de ensancharse:** `sin_voseo_en_prompts_test.mjs` no admitió ni la **cita** del
+regionalismo dentro de un comentario, y `calib_ef_auth_test.mjs` fichó a `iid-approval-digest` como
+quinta EF que compara la clave DEPRECATED.
+
+### Lo que queda abierto
+
+- **El registro de migraciones.** `medido` al cierre: **209 filas** en `supabase_migrations.schema_migrations` contra **82 archivos**. Antes de los PR de hoy sólo **3** coincidían por versión: el registro guarda versiones del momento de aplicación y los archivos las llevan escritas a mano. **Dos historias paralelas que nunca se alinearon.** Sam pidió **medir antes de decidir**: no hay encargo de arreglarlo.
+- **La sesión de arreglos de las 41.** La vía está probada: `readapt` y `recompose` por pieza.
+- **La lista de fixables en el Orchestrator**, con `piece_id`, motivo, marca y antigüedad. Ya tiene de dónde leer: la vista.
+- **`tiktok` sin fila en `public.content_type_registry`** teniendo política de publicación activa en UnrealvilleStudio. `medido`. **Corrección de una nota anterior: `x` NO está pendiente** — no tiene política activa, así que no hay canal que servir.
+
+---
+
 ## 2026-09-17 · ALERTAS-01 — canal de alertas por Telegram, informe diario y vigilante externo
 
 > **Entrada de CC.** Alcance de la sesión: **ecosistema — el canal de alertas**, no una marca; por eso
