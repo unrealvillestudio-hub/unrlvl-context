@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-20-v1",
+    "version": "2026-09-20-v2",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-19-v1",
+    "previous": "2026-09-20-v1",
     "previous_chain": [
+      "2026-09-20-v1",
       "2026-09-19-v1",
       "2026-09-17-v1",
       "2026-09-12-v1",
@@ -1997,11 +1998,13 @@
     "edge_functions": {
       "ops-alert-dispatch": "despacha el episodio y reescala. verify_jwt: false, autenticacion por x-cron-secret. v7 al 2026-09-17, ezbr_sha256 3eb20681...e79142 [medido]. Dos ejes SEPARADOS y medidos por test: admiteAcciones(ev) = ev.state !== 'resolved' decide los BOTONES; regla.silent decide el SONIDO. Estaban atados al mismo literal de severidad y eso dejo cuatro episodios prioritarios sin botones.",
       "ops-alert-callback": "recibe los dos botones desde el chat del operador y escribe en alerting.alert_action_log. verify_jwt: false, autenticacion por secreto compartido.",
-      "ops-daily-report": "el informe diario de las 07:00 UTC, con copia por correo. verify_jwt: false, autenticacion por x-cron-secret."
+      "ops-daily-report": "DOS MODOS, UN SOLO JUEGO DE CONTADORES [2026-09-20]. Cuerpo vacio o mode:daily = el informe diario de las 07:00 UTC, siete secciones, Telegram y correo. mode:digest = el resumen de cada 4 horas, tres secciones y SOLO CONTEOS: ni lista de piezas ni un solo piece_id, porque la lista es de la bandeja, que es donde se actua sobre ella. Los dos cuentan con las mismas funciones: dos servicios que cuentan lo mismo por su cuenta terminan dando dos cifras del mismo hecho. Un modo desconocido devuelve 400 en vez de mandar el informe equivocado en silencio. verify_jwt: false, autenticacion por x-cron-secret entero y en tiempo constante.",
+      "iid-approval-digest": "el despertador de las 7am ET, con guarda DST-proof (hora local America/New_York == 7) y un boton a la bandeja. ADOPTADA AL REPOSITORIO unrlvl-iid-functions EL 2026-09-20: llevaba ACTIVA en produccion desde julio en su version 28, disparada por el cron iid-approval-digest-daily, y su codigo NO EXISTIA EN NINGUNA RAMA [medido] — por eso sus dos defectos se atribuyeron durante dias a otro repositorio. Un servicio desplegado sin fuente en git no se puede revisar, ni versionar, ni corregir por PR. Cuenta desde content.pieces_awaiting_criterion, imprime el desglose por estado y autoriza SOLO por x-cron-secret, comparado entero y en tiempo constante: dejo de aceptar SUPABASE_SERVICE_ROLE_KEY, que figura DEPRECATED."
     },
     "crons": {
       "alerting-tick-1min": "* * * * * — reescala y cierra lo vencido",
       "alerting-daily-report": "0 7 * * * — el informe diario",
+    "alerting-digest-4h": "0 1,5,9,13,17,21 * * * — el resumen de cada 4 horas [2026-09-20]. NINGUNA franja coincide con las 07:00 del informe diario: dos correos a la vez se leen como uno. Las 13:00 UTC caen dentro de la manana de los dos mercados.",
       "alerting-watchdog-heartbeat-5min": "*/5 * * * * — comprueba el latido del vigilante externo"
     },
     "disparadores": [
@@ -2014,6 +2017,25 @@
     "_decisiones_de_sam_2026-09-17": "Telegram es canal de SALIDA; la unica entrada son los botones Leido y Posponer desde su chat. NO existe la categoria INCIDENCIA: todo cabe en URGENTE o en el informe diario. El informe sale a las 07:00 UTC con copia por correo. SIN ENLACES en ningun mensaje del canal. V3: la cadencia observada —60 min y despues 240— se deja como esta, y el criterio del brief NO se ajusto al resultado.",
     "_verificacion_2026-09-17": "V1, V2, V3, V4, V5, V9, V10 y V11 cerradas; V2 y V4 con la parte que depende de los disparadores cerrada tras el PR 3. Confirmacion de punta a punta en el dispositivo de Sam a las 21:36:35: sono, los botones funcionan, el episodio quedo reconocido y el Leido aplicado sobre A-0917-01. V6 ejecutable, V7 programada para el 2026-09-18 07:00 UTC con verificacion a las 07:15, V8 pendiente de reespecificacion.",
     "_abierto": "Cuatro crons semanales que no han corrido NUNCA —uvs-cro-process-weekly, uvs-cro-research-weekly, uvs-signal-process-weekly, uvs-signal-research-weekly—, los cuatro active = true: decision de Sam entre arreglarlos o retirarlos con cron.unschedule, y mientras sigan asi avisan cada hora hasta caducar a las 72 h. El canal de CORREO no tiene ruta activa: los episodios salen solo por Telegram y el encargo pedia dos canales. cron.job_run_details crece sin purga desde el 2026-04-25 —354.339 filas, 161 MB— y no se puede indexar porque la tabla no es nuestra. Y el literal de dominio de ops-alert-dispatch:211."
+  },
+  "criterio_de_bandeja": {
+    "_status": "EN PRODUCCION — 2026-09-20 [medido]",
+    "_eje": "QUE PIEZA ESPERA UN VEREDICTO HUMANO. La misma pregunta se la hacen tres sitios —el informe diario, el despertador de la manana y la bandeja del Orchestrator— y hasta el 2026-09-20 cada uno la respondia por su cuenta: decian 87, 583 y 64. No era un error de resta: eran TRES PREGUNTAS DISTINTAS CON EL MISMO NOMBRE. Ahora hay una fuente.",
+    "fuente_unica": "content.pieces_awaiting_criterion — vista con security_invoker, GRANT SELECT a service_role. Expone piece_id, brand_id, platform, status, reason, created_at y waiting_days. El correo, el informe y (cuando se cablee) el Orchestrator leen de aqui.",
+    "_el_criterio_es_el_estado_vivo": "EL ESTADO VIVO DE UNA FILA ES SU status; LAS COLUMNAS *_at SON HISTORIA — dicen que algo le PASO a la fila, no lo que la fila ES. Contar por una fecha es contar el pasado y llamarlo presente. Medido: contar por challenged_at metia 16 piezas en dos grupos a la vez (se retaron, se re-adaptaron y volvieron a la bandeja; readaptPiece no borra challenged_at ni debe, porque esa fecha es el registro de que fueron retadas) y daba por pendientes otras 7 que ya estaban publicadas.",
+    "_el_criterio_no_es_una_cadena": "Un fixable NO se reconoce porque su motivo empiece por esa palabra: se reconoce porque su estado es challenged. Medido el 2026-09-20 sobre las 41 piezas con veredicto fixable en el corpus: TRES no llevaban el prefijo en su motivo — de hecho no llevaban motivo ninguno. Un WHERE por prefijo habria reparado 38 y callado 3. Lo anticipo Sam antes de la medicion: podria decir otra cosa y entonces fallaria.",
+    "estados_que_esperan": {
+      "awaiting_approval": "el juez dio PASS · espera el sello",
+      "challenged": "tiene defecto declarado · espera arreglo. Es lo que el correo lee como fixables, que es ETIQUETA de presentacion y nunca criterio",
+      "deferred": "el carril la aparco · espera decision de reanudar"
+    },
+    "_dos_challenged_distintos": "Una pieza retada por el JUEZ (CALIB-01, desacuerdo con el patron verificable) se ARBITRA y sus filas viven en intel.judge_calibration. Una retada por SAM con un fixable espera una SESION DE ARREGLOS y su registro vive en intel.approval_calibration. Los distingue quien decidio, no el texto: el Orchestrator los separa con pendingStateOf en dos ejes, retenida y por_arreglar.",
+    "_un_fixable_no_descarta": "Cambio de diseno del 2026-09-20 en el repositorio Orchestrator (PR #47). Hasta esa fecha un fixable sellaba la pieza con discarded_at igual que un rechazo, y el argumento era bueno mientras solo se mirara la bandeja. LO QUE FALTABA: discarded_at no saca la pieza de una bandeja, LA SACA DEL SISTEMA — storage-orphan-sweep deja de sostener su imagen, publish-slot-reserver y el scheduler la excluyen y la via de re-adaptacion la rechaza por diseno. Marcar una pieza para arreglarla la estaba sacando de la cola de lo arreglable. Ahora escribe status=challenged + challenged_at + challenged_reason, sin discarded_at.",
+    "grano_del_aviso": "intel.iid_scheduler_config.piece_email_mode — per_piece o digest. Es DATO: volver al correo por pieza es un UPDATE, sin despliegue. Fail-safe HACIA EL RUIDO, NUNCA HACIA EL SILENCIO: la clave ausente, un valor irreconocible o un fallo de lectura caen a per_piece, porque un correo de mas se nota y uno de menos no.",
+    "donde_se_guarda_cada_tramo": "alerting.digest_reports — clave slot_at, con window_start. La fila se escribe AUNQUE el resumen no se envie: es la que cierra la ventana del tramo siguiente, asi que un disparo perdido no deja hueco, el siguiente lo absorbe. RLS con politica service_only, como las 13 tablas de alerting.",
+    "por_donde_sale": "Severidad digest en alerting.alert_routes, con su propia fila heredada del correo ya activo. Una severidad propia y no action_required: esa va hoy a Telegram y a correo, y colgar el resumen de ella serian seis sonidos al dia sobre un canal cuyo criterio escrito es un solo sonido. Anadirle Telegram al resumen es un INSERT, no un despliegue.",
+    "_que_lo_sostiene": "tests/criterio_una_sola_fuente_test.mjs en unrlvl-iid-functions compara la lista status IN (...) de la vista con los mapas de las dos Edge Functions y falla si los tres dejan de decir lo mismo; ademas prohibe volver a contar por challenged_at o por el prefijo del motivo. En Orchestrator, api/_pendingState.test.ts compara las DOS declaraciones de PendingState —server y cliente— leyendo los dos archivos: tsc -b no ve esa divergencia, porque la tabla de color esta tipada contra el tipo del cliente.",
+    "_abierto": "La lista de fixables con piece_id, motivo, marca y antiguedad todavia no esta cableada en el Orchestrator; la vista ya expone exactamente esos campos. Y 41 piezas de cuatro marcas esperan sesion de arreglos, la mas antigua de 26 dias, 40 de ellas con su imagen intacta."
   },
   "keepalive_externo": {
     "_status": "EN PRODUCCION Y VERIFICADO POR EFECTO — creado el 2026-09-19. Los TRES disparos programados aterrizaron: 2026-09-19 18:11:01, 2026-09-20 02:11 y 2026-09-20 10:11 UTC, con origen unrlvl-ops/keepalive [medido el 2026-09-20 11:46 UTC]. La cadena entera queda probada de punta a punta: el cron dispara, se autentica con CRON_SECRET, lee KEEPALIVE_TARGETS, el POST sale, la clave publicable pasa y la politica de RLS deja entrar el INSERT. LO QUE SIGUE SIN PODER CERRARSE es el criterio de 7 dias: FPHS activa y sin correo de aviso pasada una semana. Va por el dia 1.",
