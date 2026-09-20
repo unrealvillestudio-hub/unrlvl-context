@@ -1,5 +1,369 @@
 # ForumPHs — Session Log
 
+## 2026-09-20 — El keepalive queda probado por efecto, y el cron interno se retira
+
+> **Entrada de CC.** Cierre del frente abierto el 2026-09-19. Todo lo etiquetado `medido` lo
+> consultó CC el **2026-09-20 a las 11:46 UTC**. El retiro del cron interno lo autorizó Sam el
+> 2026-09-19 —«procede como propones», sobre una propuesta que incluía retirarlo **conservando la
+> tabla**— y quedó condicionado a ver antes el primer latido externo. Lo previo se conserva íntegro debajo.
+
+### ✅ LOS TRES DISPAROS ATERRIZARON — no uno
+
+| Disparo programado | Fila registrada | `origen` |
+|---|---|---|
+| 2026-09-19 18:11 UTC | **18:11:01.683** | `unrlvl-ops/keepalive` |
+| 2026-09-20 02:11 UTC | **02:11** | `unrlvl-ops/keepalive` |
+| 2026-09-20 10:11 UTC | **10:11:01.101** | `unrlvl-ops/keepalive` |
+
+**Los tres al minuto exacto.** Eso cierra la cadena entera de punta a punta, y conviene decir qué
+prueba cada eslabón porque ninguno estaba verificado antes: el cron **dispara**, se **autentica**
+con `CRON_SECRET`, **lee** `KEEPALIVE_TARGETS` sin error, el **`POST` sale** de Vercel, la **clave
+publicable pasa** el gateway, y la **política de RLS deja entrar** el `INSERT`.
+
+**Lo que lo cerró no fue una prueba, sino el efecto en producción.** La pata HTTP nunca se pudo
+probar desde el contenedor de CC —el proxy de egreso devuelve **403 en CONNECT** contra
+`*.supabase.co`—, así que la única verificación posible era esperar y mirar el dato. Conviene
+recordarlo la próxima vez que algo dependa de una llamada saliente.
+
+### 🗑️ Cron interno retirado — con guarda, y conservando la tabla
+
+`cron.unschedule(1)` + `DROP FUNCTION public.keepalive_tick()`, aplicado como migración
+`retirar_keepalive_interno_tras_primer_latido_externo`.
+
+**Tres cautelas, y las tres importan:**
+
+1. **Guarda de aborto:** la migración cuenta primero las filas con `origen = 'unrlvl-ops/keepalive'`
+   y **lanza excepción si no hay ninguna**. Quedarse sin los dos mecanismos a la vez era el único
+   desenlace que no se podía permitir.
+2. **Dependencias medidas antes:** ninguna otra función, trigger ni vista referenciaba
+   `keepalive_tick` [`medido`]. Y `cron.job` tenía **un solo job**, el 1.
+3. **La tabla no se tocó.** Conserva sus **4 filas históricas** con `origen = 'pg_cron'`, que el
+   `COMMENT` de la columna explica que **no probaban actividad**. Borrarlas habría borrado la
+   evidencia de por qué hizo falta cambiar de mecanismo.
+
+**Estado final** [`medido` 2026-09-20 11:46 UTC]: **0 crons** en la base · función **inexistente** ·
+**7 filas** en la tabla, 4 históricas y 3 latidos externos.
+
+### 🔴 QUEDA UNA SOLA COSA, Y ES DE CALENDARIO
+
+**El criterio de 7 días:** FPHS activa y **sin correo de aviso de pausa** pasada una semana desde el
+2026-09-19. **Va por el día 1 de 7.** Tres latidos no son siete días, y el criterio se nombró por
+adelantado precisamente para no darlo por cerrado antes de tiempo.
+
+🟡 **Y sigue siendo `deducido` que tres peticiones diarias basten** — la documentación dice «a few …
+each day» y **no da número**. Si llegara un aviso, se sube editando el cron, no el código.
+
+---
+
+## 2026-09-19 (v3) — El keepalive queda desplegado, y el ecosistema por fin lo registra
+
+> **Entrada de CC.** Cierre del tramo: Sam cargó la variable y mergeó los PR; CC verificó el
+> despliegue, sembró los learnings en Professor y **dio de alta el nodo que faltaba en
+> `ecosystem.json`**. Todo lo etiquetado `medido` lo consultó CC el **2026-09-19 entre las 14:50 y
+> las 15:20 UTC**. Lo previo se conserva íntegro debajo.
+
+### ✅ Verificado tras el merge
+
+| Comprobación | Resultado |
+|---|---|
+| PR `unrlvl-ops#13` | **mergeado** 14:54:25 UTC |
+| PR `unrlvl-context#101` | **mergeado** |
+| Despliegue de producción de `unrlvl-ops` | **READY**, con el commit del merge |
+| Ruta `/api/keepalive` | **viva** — `401 {"error":"Unauthorized"}` sin cabecera |
+| `CRON_SECRET` cargado | **sí** — si faltara, la guarda se saltaría y habría seguido adelante |
+| `KEEPALIVE_TARGETS` | cargada por Sam [`reportado`] · **su corrección la prueba el primer disparo** |
+| Primer latido externo | **todavía no** — 4 filas, las 4 `pg_cron`, a las 14:55 UTC |
+
+**Qué prueba el `401`, dicho con precisión: que la puerta existe y está cerrada.** No prueba que la
+clave cargada abra la cerradura de Supabase — eso sólo se ve cuando el cron dispare con su cabecera
+y el `POST` llegue a la base. **Primer disparo: 18:11 UTC.**
+
+### 🧬 El hueco que este tramo cierra: `ecosystem.json` no registraba el cron
+
+`alerting_channel` tenía nodo propio de primer nivel desde ALERTAS-01; **el keepalive no tenía
+ninguno**, así que una capacidad en producción no existía en el mapa del ecosistema.
+
+**Alta de `keepalive_externo`**, hermano de `alerting_channel` y escrito con su misma forma.
+`ecosystem.json` pasa a **`v2026-09-19-v1`** y **los dos derivados se SINCRONIZAN en commit
+separado, no se regeneran**.
+
+**Se nombra por su función, no por la marca que lo pidió primero** — `keepalive_externo`, no
+«keepalive de ForumPHs». Hoy hay **un** objetivo en la variable, y precisamente por eso es una
+variable y no una constante.
+
+### 🎓 Professor — 6 learnings sembrados por CC, PENDIENTES DE APROBACIÓN
+
+**Excepción al reparto habitual:** Professor es de Claude.ai (`HRD_PROFESSOR`), pero **Sam pidió
+explícitamente que los sembrara CC** en este tramo. Sembrados con `execute_sql` sobre
+`professor_learnings`, `session_date = 2026-09-19`, **`checkpoint_number = 16`**,
+`brand_id = 'ecosystem'` — los seis son **transversales**, ninguno es de marca:
+
+| Categoría | Learning |
+|---|---|
+| `arquitectura` | El keepalive multimarca: el eje en el código, los objetivos en el dato |
+| `datos` | Qué pausa un proyecto del plan gratuito, según la fuente primaria |
+| `metodo` | Un mecanismo de plataforma se cita de la fuente primaria, nunca de segunda mano |
+| `arquitectura` | RLS activa sin políticas no retira privilegios: los deja **inertes** |
+| `arquitectura` | «Corre bien» y «sirve» son afirmaciones distintas — 2ª aparición del mismo eje |
+| `gobernanza` | Un encargo puede ser irrealizable en su literal, y se reporta **antes** de producir |
+
+🟡 **Los seis van con `approved_by_sam = false`, a propósito.** Sam pidió capturarlos, no aprobó su
+texto — y marcarlos aprobados sería afirmar algo sobre él que no ocurrió, que es exactamente el
+defecto que este mismo día obligó a corregir `CAPABILITIES.md` 1.19. **Consecuencia que conviene
+saber:** `professor-get-context` sirve sólo learnings aprobados, así que **hasta que Sam los apruebe
+no se sirven**. Una línea suya los activa.
+
+### 🔴 Lo que sigue abierto
+
+1. **El primer disparo real: 18:11 UTC.** CC tiene vuelta programada a las **18:22 UTC**.
+2. **El cron interno `jobid 1` sigue vivo A PROPÓSITO** — se retira después del primer latido.
+3. **El efecto final sólo lo prueba el tiempo:** FPHS activa pasados más de 7 días sin aviso.
+4. **Los 6 learnings esperan aprobación de Sam.**
+5. **«Tres peticiones al día» es `deducido`** — la documentación dice «a few … each day» sin número.
+
+---
+
+## 2026-09-19 (v2) — El keepalive se arregla cambiando de mecanismo, no de cron
+
+> **Entrada de CC.** Sam pidió «corrige el cron para que el task evite la pausa». **El cron no se
+> podía corregir**: lo que fallaba era el mecanismo. Lo etiquetado `medido` lo consultó CC el
+> **2026-09-19** entre las 13:30 y las 14:10 UTC. **`QA-OBJETIVO` validado con Sam** antes de
+> producir, porque toca producción. Lo previo se conserva íntegro debajo.
+
+### 🔴 Por qué no se podía «corregir el cron»
+
+**La fuente primaria, consultada antes de tocar nada** [`medido` — documentación oficial de
+Supabase, `guides/platform/free-project-pausing`]: un proyecto del plan gratuito se pausa por falta
+de **actividad de usuario**, y hacen falta **«a few user requests to the database each day»**.
+
+**Dos defectos, y son independientes:**
+
+1. **El `INSERT` interno no es una petición de usuario.** `pg_cron` corre dentro del motor; no hay
+   petición que contar. Y **no podía haberla**: `pg_net` y `http` están las dos sin instalar.
+   Cambiarle el SQL o la frecuencia **no cambia esto**.
+2. **La frecuencia también estaba mal.** `0 12 */3 * *` es **cada tres días**, por debajo del «cada
+   día» de la documentación. Aunque el punto 1 se resolviera, éste seguiría abierto.
+
+**El cron no estaba roto:** 3 corridas correctas, última el 2026-09-19 a las 12:00 UTC, 4 filas
+[`medido`]. Hacía bien algo que no sirve para esto.
+
+### ✅ El remedio: el latido sale de fuera — `unrlvl-ops` → `api/keepalive`
+
+Un cron de Vercel hace un **`POST`** a la REST API del proyecto, **tres veces al día**
+(`11 2,10,18 * * *`). Esa petición es **a la vez** la actividad que cuenta **y** el rastro.
+
+**Por qué `POST` y no `GET`** —la pregunta que hizo Sam, y mejoró el diseño—: un `GET` contaría
+igual, pero dejaría rastro **sólo en los logs**, cuya retención depende del plan. Su preocupación
+era no saber más adelante de dónde salía ese tráfico; **una fila no caduca**. Y la tabla ya estaba
+preparada: **`keepalive_ping.origen` existe, con `DEFAULT 'pg_cron'`** [`medido`] — alguien previó
+varios orígenes, y las 4 filas de hoy llevan justo el origen que no cuenta.
+
+**Multimarca:** va en `unrlvl-ops` y **no** en `forumphs-ops`. Un keepalive lo necesita cualquier
+proyecto en plan gratuito: es **eje**, no instancia de esta marca. En el código **no hay ni una URL,
+ni una clave, ni una marca** — los objetivos entran por `KEEPALIVE_TARGETS`.
+
+### 🔐 Privilegios: el `REVOKE` antes del `GRANT`, y por qué hacía falta
+
+**Medido:** `anon` tenía los **siete privilegios** sobre `keepalive_ping` por los grants por defecto
+de Supabase, con RLS activa y **cero políticas**. **RLS sin políticas no retira privilegios: los deja
+inertes**, y **la primera política que se abre los reactiva todos**. Un `GRANT INSERT` a secas habría
+dado la impresión de acotar sin acotar nada.
+
+Aplicado (`keepalive_ping_anon_insert_only`): `REVOKE ALL … FROM anon` → `GRANT INSERT` → política
+sólo de `INSERT`. **Verificado por efecto**, simulando el rol que usa PostgREST: `INSERT` entra,
+`SELECT` devuelve **`42501`**. Doble cerradura — quien tenga la clave publicable **no puede leer el
+historial**.
+
+### 🟡 Lo que NO está verificado, y se dice ahora
+
+- **La pata HTTP no se probó desde el contenedor de CC:** el proxy de egreso devuelve **403 en
+  CONNECT** contra `*.supabase.co`, igual que contra `*.vercel.app` [`medido` — dos entradas
+  `connect_rejected` en el estado del propio proxy]. Lo verificado es **el camino de privilegios**,
+  que es lo que el cambio toca.
+- **El efecto final sólo lo prueba el tiempo:** filas con `origen = 'unrlvl-ops/keepalive'` y FPHS
+  activa pasados 7 días sin correo de aviso. **No es verificable el día de la entrega.**
+- **El cron interno sigue vivo a propósito.** Se retira **después** de ver el primer latido externo;
+  retirarlo antes dejaría el proyecto sin nada.
+
+### 📌 Una corrección de CC sobre su propia entrada de ayer
+
+`CAPABILITIES.md` **1.19** escribió *«la pausa se mide por tráfico al gateway»* **dentro de una
+sección titulada «capacidades medidas» y sin etiqueta**. Ese mecanismo **venía del brief, no de una
+medición de CC**, y la documentación oficial lo dice distinto —actividad de usuario, peticiones a la
+API—. La conclusión operativa aguanta; **el criterio de diseño no**, y de ahí salió el segundo
+defecto del cron que ayer no se vio. Corregido en **1.20**, con la redacción anterior bajo guard
+`⛔ NO OPERATIVO`. **La fuente primaria estaba a una consulta de distancia.**
+
+---
+
+## 2026-09-19 — Los costos reales corrigen el tarifario, y un solo contrato explica toda la pérdida
+
+> **Entrada de CC.** Sesión de **análisis financiero y definición de modelo comercial**: no se produjo
+> código, migración ni siembra. Lo etiquetado `reportado` lo afirma el **brief de Actualiza de
+> Claude.ai del 2026-09-19** y **CC no lo midió** —las cifras salen de los EEFF de enero a julio de
+> 2026 y de los exports de Sage, que CC no tiene—. Lo etiquetado `medido` lo consultó **CC** el
+> **2026-09-19** con `Supabase:execute_sql` sobre `tajuoqdbnsnzkhyqvdgs` (FPHS) y
+> `amlvyycfepwhiindxgzw` (UNRLVL). **Professor: no lo cerró CC** —la captura de learnings es de
+> Claude.ai (`HRD_PROFESSOR`)—, pero **CC corroboró la siembra** y encontró un detalle que el brief
+> no dice; está abajo. **SMA no se consultó** — Sam no lo pidió. Lo previo se conserva íntegro debajo.
+
+### 💰 El costo real de operar, contra lo que decía el tarifario v4
+
+| | Tarifario v4 | Real Ene–Jul 2026 | Desvío |
+|---|---|---|---|
+| Costo mensual | $14,669 | **$17,391** | **+18.6 %** |
+| Por PH (8 PH) | — | **$2,174** | — |
+| Por unidad administrada | $9.65 | **$12.62** | **+30.8 %** |
+| Padrón usado como denominador | 1,520 | **1,378** | −142 unidades |
+
+[`reportado` — las tres primeras filas. **La cuarta la midió CC**: el padrón de FPHS suma
+**exactamente 1,378 unidades** repartidas en 8 PH, detalle en la tabla de abajo.]
+
+**Las dos causas de la diferencia, y ninguna es un error de cálculo:**
+
+1. **Las reservas laborales que el v4 no contemplaba** — **$1,282.81/mes**, confirmadas en balance
+   como **pasivo de $8,979.70 sin pagar** [`reportado`]. No es un gasto opcional: es una obligación
+   devengada que ya existe aunque todavía no haya salido de caja.
+2. **El denominador inflado** — el v4 repartía el costo entre **1,520** unidades y el padrón real es
+   de **1,378**. Un denominador que no existe abarata el costo unitario en el papel y en ningún lado más.
+
+### 📉 El resultado del período, que es el que obliga a revisar el modelo
+
+- **Ingresos planos en $17,307.50 desde enero**, sin un cliente nuevo en **siete meses** [`reportado`].
+- **Pérdida acumulada de $652.94** en el período [`reportado`].
+- **Aporte de capital del socio de $7,903.14 en mayo** para sostener caja [`reportado`]. Es el dato
+  que cambia la lectura: la operación no se sostuvo sola, y eso no se ve en la pérdida acumulada.
+
+### 🔴 La rentabilidad por PH — un solo contrato explica toda la pérdida
+
+**PH Los Álamos: 329 unidades, el 23.9 % del padrón, a $6.08 por unidad — pierde $2,152/mes.**
+Es **más que el margen de Luxor y Venezia juntos**. **Sin Los Álamos la empresa ganaría unos
+$2,000/mes** [`reportado`]. **PH Parque Central Arraiján repite el patrón a menor escala.**
+
+**El padrón por PH, medido por CC** el 2026-09-19 sobre `buildings` × `units` de FPHS:
+
+| PH | Unidades | Sobre el padrón |
+|---|---|---|
+| **PH Los Alamos** | **329** | **23.9 %** |
+| PH Torres de Castilla | 306 | 22.2 % |
+| PH Lefevre 75 Don Enrique | 186 | 13.5 % |
+| Venezia Tower | 182 | 13.2 % |
+| PH Luxor Towers 300 | 143 | 10.4 % |
+| PH Parque Central Arraijan | 82 | 5.9 % |
+| PH Firenze Tower | 80 | 5.8 % |
+| PH Plaza España | 70 | 5.1 % |
+| **Total** | **1,378** | 100 % |
+
+[`medido` — la suma de la columna da 1,378 exacto, que es el denominador del $12.62 y **no** el 1,520
+del v4.]
+
+### 📐 El metraje reconstruido, y el método que lo valida
+
+**Método: `metraje = cuota ÷ tarifa`**, aplicado sobre el export de Sage [`reportado`].
+
+- **Validación contra fuente independiente:** Lefevre dio **16,100 m²** por reconstrucción contra
+  **16,079 m²** del acta — **desvío de 0.1 %**. Es lo que convierte el método en utilizable.
+- **Venezia: 15,278.7 m²** medido por esa vía. **Castilla: 24,052 m² extrapolado** [`deducido` — al
+  promedio de 82.2 m²/unidad, no reconstruido desde cuotas].
+- 🔴 **Plaza España cobra monto fijo, no por m²**, así que el método **no aplica ahí**. **La base de
+  cálculo se verifica PH por PH antes de usar una cifra reconstruida** — un método validado en un PH
+  no es un método válido en todos.
+
+### 🤝 Plaza 77 — el prospecto, y por qué su problema no es la tarifa
+
+**~6,800 m²** [`deducido` — desde listados públicos, no de un padrón], cuota **$1.71/m²**, **por
+encima del $1.65 de Lefevre**. **No tienen un problema de tarifa: tienen un problema de cobro y de
+gasto**, y eso cambia por completo lo que se les ofrece.
+
+**Precio propuesto: $1,200/mes, 37 % de margen** — el **segundo precio por unidad más alto de la
+cartera** [`reportado`].
+
+### 📋 El modelo comercial, decidido en esta sesión
+
+Decisiones de Sam [`reportado`]:
+
+1. **Se vende servicio, no horas hombre.** Lo que se compromete no es presencia: es atención.
+2. **La gestión de cartera va incluida, sin recargo.**
+3. **Honorario de recuperación sobre la cartera de más de 90 días.** El porcentaje **sigue sin fijar**.
+4. **Sin representación judicial.** Queda fuera del alcance, explícitamente.
+
+### 📱 El alcance de la plataforma, decidido en esta sesión
+
+Decisiones de Sam [`reportado`]:
+
+1. **El agente de WhatsApp es el canal único del propietario.**
+2. **El seguimiento y la entrega van por correo.**
+3. **El ACH va directo a la cuenta del PH, hacia Sage 50** — **ForumPHs no cobra ni registra pagos**.
+   De ahí se sigue el límite del agente: **consulta e informa, no transacciona**.
+4. **La labor diaria de campo no se mapea por ahora.**
+
+### 🎓 Dos learnings de esta sesión tienen rango de regla, y no se quedan en Professor
+
+**a · La métrica correcta depende del servicio que se cotiza.** **Costo por unidad administrada**
+para administración; **metro cuadrado** para limpieza. El trabajo administrativo lo generan **los
+propietarios**, no la superficie. **Plaza 77 costeado por m² daba $1,047 y por unidad $757 — 38 % de
+diferencia sobre el mismo cliente** [`reportado`]. Elegir mal la métrica no desajusta el precio: lo
+inventa.
+
+**b · Toda tabla de costos declara quién absorbe la diferencia.** No basta con mostrar cuánto cambia
+el margen entre escenarios: hay que **decir que el cliente paga lo mismo en todos** y que **la caída
+la absorbe ForumPHs**. Es criterio de presentación y aplica a **todo documento con cifras**, no sólo
+a los de esta marca.
+
+### 🔍 LO QUE CC CORRIGE POR MEDICIÓN — el brief dice «sólo dos objetos» y son 200
+
+**El brief afirma** que `storage.objects` de UNRLVL «no contiene EEFF: **sólo**
+`brand-intel/forumphs/bi_2025_source.html` y `bi_2025.json`».
+
+**Medido por CC el 2026-09-19:** la parte que importa **se sostiene** —**no hay ningún EEFF en
+Storage**— pero el **«sólo» no es cierto a nivel de `storage.objects`**: hay **200 objetos de
+ForumPHs repartidos en cuatro buckets**.
+
+| Bucket | Objetos | Qué son |
+|---|---|---|
+| `unrlvl-media` | **196** | previsualizaciones e imágenes del carril de contenido |
+| `brand-intel` | **2** | `forumphs/bi_2025_source.html` y `forumphs/bi_2025.json` — el BI del cliente, anonimizado |
+| `collateral` | **1** | `ForumPHs/suite-gestion-financiera.html` — la muestra que se sirve por enlace con token |
+| `mail-authorizations` | **1** | la autorización de buzón del 2026-08-28 |
+
+**Por qué se corrige y no se copia:** el «sólo» es cierto **acotado al bucket `brand-intel`**, y
+falso tal como está escrito. Quien lo lea el mes que viene y busque un archivo de ForumPHs en Storage
+va a concluir que no existe. **La afirmación vale con su alcance dicho; sin él, no.**
+
+### 🎓 Trazabilidad del Professor — corroborada, con un detalle que el brief no dice
+
+**El brief afirma:** 14 learnings sembrados, `session_date = 2026-09-19`, `checkpoint_number = 15`,
+`approved_by_sam = true`, **dos con el prefijo `SALES-KIT`**.
+
+**Corroborado por CC** [`medido` el 2026-09-19 sobre `professor_learnings` de UNRLVL]: **14 filas**,
+las **14** con `approved_by_sam = true`, las **14** con `checkpoint_number = 15`, todas con el mismo
+`created_at` — **2026-09-19 12:18:09 UTC**. El reparto por categoría: `contenido` 6 · `arquitectura` 3
+· `datos` 3 · `gobernanza` 1 · `metodo` 1.
+
+🟡 **El detalle que el brief no dice, y que importa para recuperarlos:** el prefijo **`SALES-KIT` no
+está en `category`** —una consulta que filtre por ahí devuelve **cero filas**—. Está en
+**`raw_learning`**, y las dos piezas viven bajo `category = 'contenido'`. **Quien busque el material
+del kit por categoría no lo encuentra**; se busca por `raw_learning LIKE 'SALES-KIT%'`.
+
+### 🔴 PENDIENTES QUE ESTA SESIÓN REGISTRA Y NO RESUELVE
+
+1. **Los Álamos** — la decisión de mayor impacto financiero de la operadora, **sin tomar**.
+2. **Frecuencias de presencia** (visitas al mes, reuniones con la JD) — **en blanco** en el documento.
+   Son compromiso contractual **con costo**, así que un blanco ahí es un costo sin cuantificar.
+3. **Porcentaje del honorario de recuperación** — sugerido **8–10 %**, sin fijar.
+4. **Definición de «porcentaje de morosidad»** — unidades morosas sobre el total, o monto vencido
+   sobre facturación. **Luxor da 110 % por la segunda**, que es la prueba de que las dos definiciones
+   no son intercambiables y de que hay que elegir una y escribirla.
+5. **Planilla de conserjería y limpieza** — sin modelo de costo. Sería **la primera contratación de
+   personal en sitio** de la empresa.
+6. **Metraje de áreas comunes** — no está en ningún padrón **y no es reconstruible desde las cuotas**,
+   porque la cuota no lo incluye. Es dato a levantar, no a derivar.
+7. **Keepalive externo de FPHS** — el actual no previene la pausa. Medición y motivo en `CAPABILITIES.md` 1.19.
+8. **Anexos B y C** (Protocolos de Actuación y de Emergencias) — revisados con Ivette, **no oficiales**,
+   con decenas de campos `□` sin completar.
+
+---
+
 ## 2026-09-12 (v2) — La franja del 10 de septiembre queda cerrada, y el artículo ya tiene URL
 
 > **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,

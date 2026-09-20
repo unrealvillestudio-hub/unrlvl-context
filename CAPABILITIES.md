@@ -1,5 +1,7 @@
 # CAPABILITIES — Unrealville Studio
-_Versión: 1.19 · 2026-09-20 (**tres adiciones medidas y ninguna derogación.** (1) **EL PROFESSOR SE OPERA DESDE CC, Y APROBAR ES UN SEGUNDO PASO** [`medido` por CC el 2026-09-20, seis llamadas, las seis **HTTP 200**]: el proxy `api/professor` se alcanza con **`Vercel:web_fetch_vercel_url`** —**nunca `curl`**, ver 1.10— y **acepta GET con los parámetros en la cadena de consulta**, incluidos `action=submit-learning` y **`action=approve-learning`**, que hasta hoy no estaba medido desde CC. Lo que este catálogo **no decía y cuesta un ciclo**: `professor-submit-learning` escribe **SIEMPRE `approved_by_sam: false`**, así que sembrar un learning **no lo aprueba** — la aprobación es una segunda llamada con `learning_id` y `approved=true`, y el valor viaja como **cadena** que PostgREST coerciona al booleano [verificado leyendo la fila después]. **Amplía el punto (2) del 1.18, no lo deroga.** (2) **`professor-submit-learning` YA NO devuelve 500, y el `relevance_score` no se pasa: lo calcula la EF** con `claude-haiku-4-5-20251001` aplicando su filtro F1→F2→F3, y devuelve además `filter_reason`, `category`, `learning_type` y `suggested_path` [`medido`: seis learnings del 2026-09-20, los seis `filter_passed: true` y `relevance_score: 5`]. Esto **cierra la entrada del 1.13 punto (6)** —el 500 por valor fuera del `CHECK`— y **precisa la del 1.17 punto (1)**: hoy pasar el score explícito no hace falta. **Advertencia que sí queda viva:** la EF escribe una **taxonomía de `category` distinta** (`platform`/`client`/`ecosystem`/`core-business`) de la que usan las siembras por `INSERT` directo (`arquitectura`, `metodo`, `gobernanza`, `datos`…), así que **la tabla tiene dos vocabularios según quién escriba** [`medido` el 2026-09-20: **183 categorías distintas sobre 1.127 filas** en `professor_learnings`]. No se unifica aquí: se declara. (3) **UNA EDGE FUNCTION DESPLEGADA PUEDE NO TENER FUENTE EN NINGÚN REPOSITORIO, Y ESO DESVÍA EL DIAGNÓSTICO** [`medido` el 2026-09-20]: `iid-approval-digest` llevaba **ACTIVA en producción desde julio en su versión 28**, disparada por un cron, y **su código no existía en ninguna rama** — un barrido por `unrlvl-iid-functions` buscando el texto de su correo no la encontraba, así que sus dos defectos se atribuyeron **durante días al repositorio equivocado**. **La comprobación que lo cierra, y va antes de concluir dónde vive un comportamiento: `Supabase:list_edge_functions` contra `supabase/functions/`.** Una EF desplegada que no está en el repo es un **hallazgo**, y lo primero que se hace con ella es **adoptarla** — sin fuente en git no se puede revisar, ni versionar, ni corregir por PR. **Lo que NO entra, y la razón queda escrita:** la regla «`EXPLAIN` planifica, no ejecuta» **no se copia aquí** — es método de medición y su sitio es `protocols/MEASUREMENT_METHOD_RULE.md`, que este catálogo apunta desde el 1.13; lo único nuevo de hoy es su variante sobre **escrituras** (`NOT NULL`, `GENERATED`, `CHECK` no los ve ningún plan), y duplicar el enunciado aquí crearía dos textos de la misma regla. **Cabecera anterior (`1.18`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
+_Versión: 1.21 · 2026-09-20 (**tres adiciones medidas y ninguna derogación.** (1) **EL PROFESSOR SE OPERA DESDE CC, Y APROBAR ES UN SEGUNDO PASO** [`medido` por CC el 2026-09-20, seis llamadas, las seis **HTTP 200**]: el proxy `api/professor` se alcanza con **`Vercel:web_fetch_vercel_url`** —**nunca `curl`**, ver 1.10— y **acepta GET con los parámetros en la cadena de consulta**, incluidos `action=submit-learning` y **`action=approve-learning`**, que hasta hoy no estaba medido desde CC. Lo que este catálogo **no decía y cuesta un ciclo**: `professor-submit-learning` escribe **SIEMPRE `approved_by_sam: false`**, así que sembrar un learning **no lo aprueba** — la aprobación es una segunda llamada con `learning_id` y `approved=true`, y el valor viaja como **cadena** que PostgREST coerciona al booleano [verificado leyendo la fila después]. **Amplía el punto (2) del 1.18, no lo deroga.** (2) **`professor-submit-learning` YA NO devuelve 500, y el `relevance_score` no se pasa: lo calcula la EF** con `claude-haiku-4-5-20251001` aplicando su filtro F1→F2→F3, y devuelve además `filter_reason`, `category`, `learning_type` y `suggested_path` [`medido`: seis learnings del 2026-09-20, los seis `filter_passed: true` y `relevance_score: 5`]. Esto **cierra la entrada del 1.13 punto (6)** —el 500 por valor fuera del `CHECK`— y **precisa la del 1.17 punto (1)**: hoy pasar el score explícito no hace falta. **Advertencia que sí queda viva:** la EF escribe una **taxonomía de `category` distinta** (`platform`/`client`/`ecosystem`/`core-business`) de la que usan las siembras por `INSERT` directo (`arquitectura`, `metodo`, `gobernanza`, `datos`…), así que **la tabla tiene dos vocabularios según quién escriba** [`medido` el 2026-09-20: **183 categorías distintas sobre 1.127 filas** en `professor_learnings`]. No se unifica aquí: se declara. (3) **UNA EDGE FUNCTION DESPLEGADA PUEDE NO TENER FUENTE EN NINGÚN REPOSITORIO, Y ESO DESVÍA EL DIAGNÓSTICO** [`medido` el 2026-09-20]: `iid-approval-digest` llevaba **ACTIVA en producción desde julio en su versión 28**, disparada por un cron, y **su código no existía en ninguna rama** — un barrido por `unrlvl-iid-functions` buscando el texto de su correo no la encontraba, así que sus dos defectos se atribuyeron **durante días al repositorio equivocado**. **La comprobación que lo cierra, y va antes de concluir dónde vive un comportamiento: `Supabase:list_edge_functions` contra `supabase/functions/`.** Una EF desplegada que no está en el repo es un **hallazgo**, y lo primero que se hace con ella es **adoptarla** — sin fuente en git no se puede revisar, ni versionar, ni corregir por PR. **Lo que NO entra, y la razón queda escrita:** la regla «`EXPLAIN` planifica, no ejecuta» **no se copia aquí** — es método de medición y su sitio es `protocols/MEASUREMENT_METHOD_RULE.md`, que este catálogo apunta desde el 1.13; lo único nuevo de hoy es su variante sobre **escrituras** (`NOT NULL`, `GENERATED`, `CHECK` no los ve ningún plan), y duplicar el enunciado aquí crearía dos textos de la misma regla. **Cabecera anterior (`1.20`) conservada íntegra e inmediatamente debajo**, por yuxtaposición. **Ninguna de las tres adiciones toca la `1.19` ni la `1.20`**, que son de otra sesión del mismo día y hablan del esquema `fph`, de `storage.objects` y del keepalive: no hay solape, así que esta versión no corrige nada de ellas)_
+_Versión: 1.20 · 2026-09-19 (**una corrección de evidencia sobre la propia 1.19, y el remedio ya construido. Ninguna derogación: la redacción anterior se conserva íntegra, con su frase imprecisa bajo guard `⛔ NO OPERATIVO`.** (1) **CORRECCIÓN — la 1.19 afirmó sin medir.** Escribió *«la pausa se mide por tráfico al gateway»* **dentro de una sección titulada «capacidades medidas» y sin etiqueta propia**, y ese mecanismo **venía del brief de Claude.ai, no de una medición de CC**. La fuente primaria dice otra cosa [`medido` el 2026-09-19 sobre la documentación oficial, `guides/platform/free-project-pausing`]: la pausa se decide por **actividad de usuario** —*«a few user requests to the database each day»*— y los remedios que nombra son **llamadas de API** o **visitar el panel**. **La conclusión operativa no cambia** —el `INSERT` interno sigue sin servir— **pero el criterio de diseño sí**, y de ahí sale un **segundo defecto del cron viejo que la 1.19 no vio: `0 12 */3 * *` es cada TRES días, por debajo del «cada día» que pide la documentación**. La lección de método: se citó un mecanismo de plataforma **de segunda mano** en el archivo que el ecosistema consulta para decidir, con la fuente primaria a una consulta de distancia. (2) **El remedio existe: `unrlvl-ops` → `api/keepalive`** —cron de Vercel `11 2,10,18 * * *`, `POST` a la REST API de cada objetivo, **cero objetivos en el código** (variable `KEEPALIVE_TARGETS`), y el rastro en `keepalive_ping` con `origen` propio porque la retención de logs depende del plan—. (3) **TRAMPA DE PRIVILEGIOS, y vale para toda tabla de Supabase: RLS activa sin políticas NO retira privilegios, los deja inertes.** `anon` tenía los **siete** por los grants por defecto mientras la tabla parecía cerrada [`medido`], y **la primera política que se abre los reactiva todos**, no sólo el que se quería abrir — por eso el `REVOKE` va antes del `GRANT`, mismo eje que §11 aplicado a tablas. Se comprueba **simulando `SET LOCAL ROLE anon` y mirando el efecto**, no leyendo el `GRANT`. **Cabecera anterior (`1.19`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
+_Versión: 1.19 · 2026-09-19 (**tres adiciones medidas y ninguna derogación; una de ellas corrige el alcance de una afirmación de ausencia.** (1) **El esquema `fph` de UNRLVL es un esqueleto vacío** —22 tablas creadas, `buildings` con 6 filas y `units`, `owners`, `owner_units`, `arrears` y `payments` en **0**—: **el padrón real vive en el proyecto FPHS**, con **1,378 unidades en 8 PH** [medido por CC el 2026-09-19]. Una consulta de padrón contra UNRLVL devuelve **0 filas sin error**, que es la misma familia de «0 filas ≠ no existe» del 2026-09-08 vista del otro lado: acá las tablas existen y lo que falta es el dato. (2) **`storage.objects` de UNRLVL no tiene ningún EEFF —eso se sostiene— pero tampoco tiene «sólo dos objetos» de ForumPHs: tiene 200 en cuatro buckets** [medido]. El «sólo» es cierto **acotado al bucket `brand-intel`** y falso a nivel de `storage.objects`; se escribe con su alcance porque **una afirmación de ausencia sin alcance manda a buscar en el sitio equivocado**. (3) **El keepalive de FPHS NO previene la pausa**: `cron.job` id 1 está activo y `keepalive_tick()` hace un `INSERT` **interno** vía `pg_cron`, mientras **`pg_net` y `http` están las dos SIN instalar** [medido], así que **no sale ni una petición** y la pausa se mide por **tráfico al gateway**. El cron late, la tabla crece y el contador no se mueve; hace falta un **cron externo**. **Es el mismo eje que el vigilante externo de ALERTAS-01** —lo que corre dentro de lo que observa no puede probar nada sobre ello desde fuera— y por eso **no es una nota de ForumPHs: aplica a cualquier base cuya métrica de actividad viva fuera del motor**. **Cabecera anterior (`1.18`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.18 · 2026-09-17 (**tres adiciones medidas y ninguna derogación.** (1) **CC NO PUEDE ESCRIBIR SECRETOS NI VARIABLES DE ENTORNO — LAS CARGA SAM** [medido por CC el 2026-09-16 y el 2026-09-17]: el MCP de Supabase expone `execute_sql`, `apply_migration` y `deploy_edge_function` y **ninguna gestiona secretos**; el de Vercel hace despliegues, proyectos, logs y `web_fetch_vercel_url` y **no escribe variables de entorno**; y no hay CLI instalada ni token para autenticarla. Lo que CC hace es **nombrar la clave y verificar por efecto después**. Motivo: el 2026-09-17 un PR asignó a CC la carga de dos secretos para la que no existe tool y **se perdió el ciclo entero**. (2) **Professor desde el chat: la vía operativa es `submit-learning`** — el proxy acepta también **GET con los parámetros en la cadena de consulta**, `action=submit-learning` **persiste** y devuelve `learning_id`, `relevance_score` y `filter_reason`, y **`action=checkpoint` devuelve `candidates: []` y NO persiste nada** [`medido` por Claude.ai el 2026-09-17; CC no lo midió]. **Añade a la corrección del 1.17, no la deroga.** (3) **Exposición de un esquema en PostgREST: el sitio autoritativo es `authenticator.rolconfig → pgrst.db_schemas`**, no la respuesta de la API ni la pantalla del panel, y **exponer son DOS señales** —`reload config` para la lista y `reload schema` para la caché de tablas—, entre las cuales el error pasa de **406 `PGRST106`** a **404 `PGRST205`** con un `hint` que desorienta; **lo cambia Sam desde el panel**, porque el panel reescribe esa lista. Fuente del mecanismo: `CC_PROTOCOL.md` §13, que esta entrada **apunta y no copia**. **Lo que NO entra, y la razón queda escrita:** la advertencia condicional sobre desfase entre el panel de Data API y la base **no se escribe** — panel y base **coinciden** [medido por CC y verificado por Sam el 2026-09-17], así que dejarla sería **plantar un aviso falso** en un archivo de referencia. **Cabecera anterior (`1.17`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.17 · 2026-09-13 (**tres correcciones medidas el mismo día, y las tres retiran una afirmación que había dejado de ser cierta — ninguna se borra: las tres se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal.** (1) **El proxy `api/professor` SÍ acepta POST**, y `action=submit-learning` funciona pasando **`relevance_score` explícito dentro del `1..5` del `CHECK`**: el `500` documentado el 2026-09-10 lo producía la EF calculando el valor **fuera de rango**, así que la causa raíz era correcta y **la conclusión que se sacó de ella no** — de «el `CHECK` rechaza el valor» se pasó a «no se puede por el proxy» sin medir la regla [reportado — Claude.ai, 12 learnings sembrados por esa vía el 2026-09-13 entre 13:47 y 13:49 UTC; **corroborado por CC**: 12 filas con `session_date = '2026-09-13'`, las 12 con `relevance_score = 5`, y el `CHECK` sigue siendo `>= 1 AND <= 5`]. (2) **La misma corrección retira la entrada que decía que el proxy sólo exponía GET.** (3) **El `REVOKE` sobre `intel.match_content_embeddings` ya está aplicado**: el ACL medido es `{postgres=X/postgres,service_role=X/postgres}` y `anon` y `authenticated` quedan en **falso** — la advertencia que la fila `p_match_domain` llevaba unas horas antes **se archiva**, con su reversión escrita al lado. **Cabecera anterior (`1.16`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 
@@ -562,6 +564,172 @@ sólo por SQL puede desaparecer sin que nadie lo note.
 > secuencia en orden, vive en `protocols/CC_PROTOCOL.md` **§13**. Acá queda **dónde se lee el estado**
 > y **quién lo cambia**, que es lo que este catálogo responde. Dos textos de la misma regla son dos
 > reglas en cuanto alguien toca uno.
+
+---
+
+## DÓNDE VIVE EL DATO DE FORUMPHS, Y UNA BASE QUE SE PAUSA SOLA — tres capacidades medidas el 2026-09-19
+
+> Las tres se midieron el **2026-09-19** con `Supabase:execute_sql`, `Supabase:list_extensions` y
+> `Supabase_ForumPHs:execute_sql` sobre `amlvyycfepwhiindxgzw` (UNRLVL) y `tajuoqdbnsnzkhyqvdgs`
+> (FPHS, `forumphs-db`). Las tres responden a la misma pregunta —**dónde está el dato y qué lo
+> mantiene vivo**— y las tres se escriben acá porque **se buscó en el sitio equivocado antes de
+> encontrarlas**.
+
+### 🗄️ El esquema `fph` de UNRLVL es un esqueleto vacío — el dato real vive en FPHS
+
+**Medido:** el esquema `fph` del proyecto **UNRLVL** tiene **22 tablas creadas**, y están **vacías
+salvo una**:
+
+| Tabla | Filas |
+|---|---|
+| `fph.buildings` | **6** |
+| `fph.units` | **0** |
+| `fph.owners` | **0** |
+| `fph.owner_units` | **0** |
+| `fph.arrears` | **0** |
+| `fph.payments` | **0** |
+
+**El padrón real vive en el proyecto FPHS** (`tajuoqdbnsnzkhyqvdgs`), y ahí está completo:
+**1,378 unidades en 8 PH** [medido el 2026-09-19 sobre `buildings` × `units`].
+
+**Por qué entra al catálogo:** un esquema con las tablas creadas **parece** la fuente. Quien consulte
+`fph.units` en UNRLVL recibe **0 filas sin error**, que es el peor resultado posible: no falla, sólo
+miente por omisión. **Es la misma familia que «0 filas ≠ no existe» (2026-09-08)**, del otro lado —
+acá las tablas existen y lo que no existe es el dato. **Para cualquier consulta de padrón, mora,
+propietarios o pagos de ForumPHs, el proyecto es FPHS, no UNRLVL.**
+
+### 📦 `storage.objects` de UNRLVL no tiene EEFF — pero tampoco tiene «sólo dos objetos»
+
+**Medido:** **200 objetos de ForumPHs** en **cuatro buckets** de UNRLVL.
+
+| Bucket | Objetos | Qué son |
+|---|---|---|
+| `unrlvl-media` | **196** | previsualizaciones e imágenes del carril de contenido |
+| `brand-intel` | **2** | `forumphs/bi_2025_source.html` y `forumphs/bi_2025.json` — el **BI del cliente, anonimizado** |
+| `collateral` | **1** | `ForumPHs/suite-gestion-financiera.html` — la muestra servida por enlace con token |
+| `mail-authorizations` | **1** | la autorización de buzón del 2026-08-28 |
+
+**Lo que se sostiene:** **no hay ningún estado financiero en Storage.** Los EEFF **no están en la
+base**: llegan por otra vía y no se persisten ahí.
+
+**Lo que se corrige, y es la parte útil:** la afirmación «sólo están esos dos objetos» **es cierta
+acotada al bucket `brand-intel`** y **falsa a nivel de `storage.objects`**. **Una afirmación de
+ausencia vale con su alcance dicho; sin él, manda a buscar en el sitio equivocado** — quien la lea
+como global va a concluir que no hay material de ForumPHs en Storage, y hay 200 objetos, uno de
+ellos el documento comercial que se sirve a prospectos.
+
+### 🔌 El keepalive de FPHS NO previene la pausa — un latido interno no es tráfico
+
+**Medido, las tres piezas:**
+
+| Pieza | Estado |
+|---|---|
+| `cron.job` **id 1** — `keepalive-ping-3d`, `0 12 */3 * *` | **activo**, `SELECT public.keepalive_tick();` |
+| `public.keepalive_tick()` | `INSERT INTO public.keepalive_ping (origen) VALUES ('pg_cron')` + purga a 30 días. **Nada más.** |
+| Extensión **`pg_net`** | **NO instalada** (`installed_version` nulo) |
+| Extensión **`http`** | **NO instalada** (`installed_version` nulo) |
+
+**Por qué no funciona, dicho como mecanismo y no como síntoma:** **la pausa de Supabase se mide por
+tráfico al gateway.** `keepalive_tick()` hace un `INSERT` **interno**, ejecutado por `pg_cron`
+**dentro** de la base; **no sale ni una petición**, así que el gateway no ve nada. Y **no puede
+salir**: ninguna de las dos extensiones que permitirían una llamada HTTP desde el motor —`pg_net` y
+`http`— está instalada. **El cron late, la tabla crece, y el contador que decide la pausa no se
+mueve.**
+
+> **Es el mismo eje que el vigilante externo de ALERTAS-01 (2026-09-17), y por eso conviene leerlos
+> juntos:** *un vigilante que corre dentro de lo que vigila no puede avisar de que lo vigilado se
+> cayó*. Acá: **un keepalive que corre dentro de la base no puede probar que la base recibe
+> tráfico.** La lección no es de ForumPHs ni de ese proyecto — **es de cualquier base en plan
+> gratuito cuya métrica de actividad viva fuera del motor.**
+
+**Qué lo resuelve:** un **cron externo** que llame al proyecto **por su API**, desde fuera de la
+base. Lo interno no se puede arreglar subiéndole la frecuencia: **no es poca señal, es ninguna**.
+
+**Consecuencia operativa que ya estaba anotada y ahora tiene causa:** el riesgo **R6** de
+`brands/ForumPHs/AGENDA_owner_agent.md` —«FPHS free tier auto-pausa ~7 días»— **sigue vivo**, y el
+keepalive que parecía cubrirlo no lo cubre.
+
+---
+
+### 🔌 EL KEEPALIVE, CORREGIDO Y RESUELTO (2026-09-19, adición posterior)
+
+> **Esta entrada corrige la de arriba en un punto y la completa en otro. La redacción anterior
+> se conserva íntegra y sigue siendo cierta en lo esencial** —el `INSERT` interno no sirve— **pero
+> una de sus frases afirmaba sin medir.**
+
+#### 🔴 La corrección: una frase mía iba sin etiqueta, y la fuente oficial la dice distinto
+
+La entrada de arriba dice, **dentro de una sección titulada «capacidades medidas» y sin etiqueta
+propia**:
+
+> ⛔ **NO OPERATIVO — redacción imprecisa, conservada por §0.**
+> *«la pausa de Supabase **se mide por tráfico al gateway**»*
+
+**Ese mecanismo no lo midió CC: venía del brief de Claude.ai**, y por la regla de evidencia —*una
+afirmación sin etiqueta se lee como `medido`*— quedó escrita como si CC la hubiera comprobado.
+**No la había comprobado.**
+
+**Lo que dice la fuente primaria** [`medido` el 2026-09-19 — documentación oficial de Supabase,
+`guides/platform/free-project-pausing`]:
+
+> *«A Free plan project is considered inactive if it does not receive sufficient **user database
+> activity** over the past week… Typically **a few user requests to the database each day** over the
+> previous week is enough to keep the project from being paused.»* Los remedios que nombra son
+> **llamadas de API al proyecto** o **visitar el panel**.
+
+**Qué cambia y qué no.** **La conclusión operativa no cambia**: un `INSERT` interno vía `pg_cron`
+no es una petición de usuario y sigue sin servir. **Lo que cambia es el criterio con el que se
+diseña el remedio** — no es «generar tráfico» en abstracto, son **peticiones de usuario a la API,
+y varias por día**. De ahí sale un **segundo defecto del cron viejo que la redacción anterior no
+vio**: `0 12 */3 * *` es **cada tres días**, por debajo del «cada día» que pide la documentación.
+Aunque el `INSERT` hubiera contado, la frecuencia tampoco daba.
+
+**La lección de método, que es la que vale:** se citó un mecanismo de plataforma **de segunda mano**
+en el archivo que el ecosistema consulta para decidir. La fuente primaria estaba a una consulta de
+distancia y nadie la abrió hasta el día siguiente.
+
+#### ✅ Lo que ahora existe: `unrlvl-ops` → `api/keepalive`
+
+**Un cron de Vercel hace un `POST` a la REST API de cada proyecto objetivo, tres veces al día.** Esa
+petición es **a la vez** la actividad que cuenta y el rastro de que se emitió.
+
+| Pieza | Dónde |
+|---|---|
+| Ruta y criterio | `unrlvl-ops` → `api/keepalive.ts` + `api/_objetivos.mjs` |
+| Cron | `vercel.json` → `11 2,10,18 * * *` |
+| Objetivos | variable **`KEEPALIVE_TARGETS`** — **cero objetivos en el código** |
+| Rastro | `public.keepalive_ping` del proyecto, `origen = 'unrlvl-ops/keepalive'` |
+
+**Por qué `POST` y no `GET`:** un `GET` también contaría, pero dejaría rastro **sólo en los logs**,
+cuya retención depende del plan. La fila no caduca y lleva escrito quién la emitió — que es lo que
+permite, dentro de seis meses, saber de dónde salía ese tráfico.
+
+#### 🔐 Y una trampa de privilegios que vale para TODA tabla de Supabase
+
+**Medido el 2026-09-19 sobre `public.keepalive_ping`:** el rol `anon` tenía los **siete privilegios**
+—`DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE`— **por los grants por defecto de
+Supabase**, mientras la tabla mostraba `rowsecurity = true` y **cero políticas**.
+
+> **RLS activa sin políticas no retira privilegios: los deja inertes.** Mientras no haya ninguna
+> política, todo queda denegado y la tabla *parece* cerrada. **La primera política que se abra
+> reactiva los siete**, no sólo el que se quería abrir.
+
+**Por eso el `REVOKE` va antes del `GRANT`** —mismo eje que `CC_PROTOCOL` §11 para
+`SECURITY DEFINER`, aplicado a tablas—:
+
+```sql
+REVOKE ALL ON TABLE <tabla> FROM anon;
+GRANT INSERT ON TABLE <tabla> TO anon;
+CREATE POLICY … FOR INSERT TO anon WITH CHECK (true);
+```
+
+**Cómo se comprueba, y no es leyendo el `GRANT`:** simulando el rol que PostgREST usa
+—`SET LOCAL ROLE anon`— y mirando el efecto. En este caso: `INSERT` entra, `SELECT` devuelve
+**`42501 permission denied`**. **Doble cerradura** —sin privilegio y sin política—, así que quien
+tenga la clave publicable **no puede leer el historial**.
+
+**Corolario de clave:** para un trabajo acotado se manda la **clave publicable**, nunca la de
+servicio. La de servicio **ignora RLS**, así que acotar con políticas no la limita en nada.
 
 ---
 

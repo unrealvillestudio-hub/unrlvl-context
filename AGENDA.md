@@ -1,5 +1,9 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-09-20 · v2026-09-20-v1 (**CIERRE DEL 2026-09-20 — EL CONTEO SALE DE LA BASE, UNA SOLA VEZ, Y UN «FIXABLE» DEJA DE SER UN DESCARTE.** Cuatro PR mergeados y aplicados —`unrlvl-iid-functions#188`, `Orchestrator#47`, `unrlvl-iid-functions#189` y `#190`— y cuatro migraciones (`20260920090000`, `100000`, `110000`, `120000`), las cuatro pineadas. **EL CASO:** tres instrumentos respondían la misma pregunta —cuántas piezas esperan el criterio de Sam— y daban **583**, **87** y **64**. `medido` el 2026-09-20: no era un error de resta, eran **tres preguntas distintas con el mismo nombre**. El despertador de las 7am contaba **jobs**, no piezas —**678 filas `pending` contra 2 `approved`** en `content.orchestrator_jobs`, nada las marca nunca como resueltas, así que la cifra sólo podía crecer, y **258 de ellas eran jobs fallidos que nunca produjeron pieza**—; y la sección 4 del informe contaba con **dos consultas solapadas**, `status='awaiting_approval'` y `challenged_at IS NOT NULL`: **16 piezas estaban en las DOS** —se retaron, se re-adaptaron y volvieron a la bandeja, y `readaptPiece` **no borra `challenged_at` ni debe**, porque esa fecha es el registro de que fueron retadas— y **otras 7** figuraban «en challenged» estando ya publicadas. **EL EJE, y es la regla del día: el estado vivo de una fila es su `status`; las columnas `*_at` son HISTORIA** —dicen que algo le PASÓ, no lo que la fila ES—, **y el criterio tampoco es una cadena**. Eso segundo **lo anticipó Sam antes de medir** —*«podría decir otra cosa y entonces fallaría»*— y la medición le dio la razón con un número: de las **41** piezas con veredicto `fixable` en el corpus, **TRES no llevaban el prefijo en su motivo**; de hecho **no llevaban motivo ninguno**, así que un `WHERE … ILIKE 'fixable%'` habría reparado 38 y **callado 3**. **EN PRODUCCIÓN:** la vista **`content.pieces_awaiting_criterion`** —fuente única del conteo, que el correo, el informe y el Orchestrator leen—; **`ops-daily-report` modo `digest`**, el resumen de cada 4 horas con los MISMOS contadores y **sólo conteos, sin un solo `piece_id`**, con tabla `alerting.digest_reports`, severidad **`digest`** y cron `alerting-digest-4h` `0 1,5,9,13,17,21`; el **correo por pieza apagado por dato** (`intel.iid_scheduler_config.piece_email_mode='digest'`, reversible con un `UPDATE` y fail-safe **hacia el ruido, nunca al silencio**); y **`iid-approval-digest` ADOPTADA al repositorio** — `medido`: llevaba **ACTIVA desde julio en su versión 28 sin código en ninguna rama**, y por eso sus dos defectos se atribuyeron durante días al repositorio equivocado. **UN `FIXABLE` RETA LA PIEZA, YA NO LA DESCARTA:** `discarded_at` no la saca de una bandeja, **la saca del sistema** —deja de sostenerse su imagen, el scheduler la excluye y la re-adaptación la rechaza—, así que marcar algo para arreglarlo lo estaba sacando de la cola de lo arreglable; ahora escribe `status='challenged'` y el eje nuevo **`por_arreglar`** lo distingue de `retenida`, que es el desacuerdo del juez. **Las 41 vuelven a la cola**, con su estado anterior archivado y **40 de 41 conservando su imagen**. **ESTADO MEDIDO AL CIERRE: 109 esperando criterio** = `awaiting_approval` **64** · `fixables` **41** · `aplazadas` **4**. **LO QUE COSTÓ, Y DEJA REGLA:** (1) **una orden correcta sobre una premisa falsa, aportada por quien la iba a ejecutar** — se reportó «una pieza rechazada por ti y agendada para salir» **sin leer `approved_at`**, y la medición completa mostró que el «rechazo» del 31-ago era una **PREGUNTA** —*«Si todo está bien entonces se aprueba»*— y que Sam la había **APROBADO el 12-sep**; se le devolvió la cronología y **él decidió**: corregir el corpus, no la pieza; (2) **`tsc -b` pasó en verde sobre una divergencia real** entre las dos declaraciones de `PendingState`, y lo cierra un test que **lee los dos archivos**; (3) **dos guardarraíles ficharon defectos reales y los dos se arreglaron en vez de ensancharse**. **`ecosystem.json` pasa a `2026-09-20-v1`** y sus dos derivados **se SINCRONIZAN en commit separado, no se regeneran**. **Professor cerrado ANTES de este Actualiza, y esta vez por CC**: seis learnings sembrados, **cinco aprobados por Sam** y uno en la cola de su criterio. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-20 · v2026-09-20-v2 (**CIERRE DEL 2026-09-20 — EL CONTEO SALE DE LA BASE, UNA SOLA VEZ, Y UN «FIXABLE» DEJA DE SER UN DESCARTE.** Cuatro PR mergeados y aplicados —`unrlvl-iid-functions#188`, `Orchestrator#47`, `unrlvl-iid-functions#189` y `#190`— y cuatro migraciones (`20260920090000`, `100000`, `110000`, `120000`), las cuatro pineadas. **EL CASO:** tres instrumentos respondían la misma pregunta —cuántas piezas esperan el criterio de Sam— y daban **583**, **87** y **64**. `medido` el 2026-09-20: no era un error de resta, eran **tres preguntas distintas con el mismo nombre**. El despertador de las 7am contaba **jobs**, no piezas —**678 filas `pending` contra 2 `approved`** en `content.orchestrator_jobs`, nada las marca nunca como resueltas, así que la cifra sólo podía crecer, y **258 de ellas eran jobs fallidos que nunca produjeron pieza**—; y la sección 4 del informe contaba con **dos consultas solapadas**, `status='awaiting_approval'` y `challenged_at IS NOT NULL`: **16 piezas estaban en las DOS** —se retaron, se re-adaptaron y volvieron a la bandeja, y `readaptPiece` **no borra `challenged_at` ni debe**, porque esa fecha es el registro de que fueron retadas— y **otras 7** figuraban «en challenged» estando ya publicadas. **EL EJE, y es la regla del día: el estado vivo de una fila es su `status`; las columnas `*_at` son HISTORIA** —dicen que algo le PASÓ, no lo que la fila ES—, **y el criterio tampoco es una cadena**. Eso segundo **lo anticipó Sam antes de medir** —*«podría decir otra cosa y entonces fallaría»*— y la medición le dio la razón con un número: de las **41** piezas con veredicto `fixable` en el corpus, **TRES no llevaban el prefijo en su motivo**; de hecho **no llevaban motivo ninguno**, así que un `WHERE … ILIKE 'fixable%'` habría reparado 38 y **callado 3**. **EN PRODUCCIÓN:** la vista **`content.pieces_awaiting_criterion`** —fuente única del conteo, que el correo, el informe y el Orchestrator leen—; **`ops-daily-report` modo `digest`**, el resumen de cada 4 horas con los MISMOS contadores y **sólo conteos, sin un solo `piece_id`**, con tabla `alerting.digest_reports`, severidad **`digest`** y cron `alerting-digest-4h` `0 1,5,9,13,17,21`; el **correo por pieza apagado por dato** (`intel.iid_scheduler_config.piece_email_mode='digest'`, reversible con un `UPDATE` y fail-safe **hacia el ruido, nunca al silencio**); y **`iid-approval-digest` ADOPTADA al repositorio** — `medido`: llevaba **ACTIVA desde julio en su versión 28 sin código en ninguna rama**, y por eso sus dos defectos se atribuyeron durante días al repositorio equivocado. **UN `FIXABLE` RETA LA PIEZA, YA NO LA DESCARTA:** `discarded_at` no la saca de una bandeja, **la saca del sistema** —deja de sostenerse su imagen, el scheduler la excluye y la re-adaptación la rechaza—, así que marcar algo para arreglarlo lo estaba sacando de la cola de lo arreglable; ahora escribe `status='challenged'` y el eje nuevo **`por_arreglar`** lo distingue de `retenida`, que es el desacuerdo del juez. **Las 41 vuelven a la cola**, con su estado anterior archivado y **40 de 41 conservando su imagen**. **ESTADO MEDIDO AL CIERRE: 109 esperando criterio** = `awaiting_approval` **64** · `fixables` **41** · `aplazadas` **4**. **LO QUE COSTÓ, Y DEJA REGLA:** (1) **una orden correcta sobre una premisa falsa, aportada por quien la iba a ejecutar** — se reportó «una pieza rechazada por ti y agendada para salir» **sin leer `approved_at`**, y la medición completa mostró que el «rechazo» del 31-ago era una **PREGUNTA** —*«Si todo está bien entonces se aprueba»*— y que Sam la había **APROBADO el 12-sep**; se le devolvió la cronología y **él decidió**: corregir el corpus, no la pieza; (2) **`tsc -b` pasó en verde sobre una divergencia real** entre las dos declaraciones de `PendingState`, y lo cierra un test que **lee los dos archivos**; (3) **dos guardarraíles ficharon defectos reales y los dos se arreglaron en vez de ensancharse**. **`ecosystem.json` pasa a `2026-09-20-v2`** y sus dos derivados **se SINCRONIZAN en commit separado, no se regeneran**. **Professor cerrado ANTES de este Actualiza, y esta vez por CC**: seis learnings sembrados, **cinco aprobados por Sam** y uno en la cola de su criterio. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior —el `v2026-09-20-v1` del keepalive, de la misma fecha y de otra sesión— íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-20 · v2026-09-20-v1 (**CIERRE DEL 2026-09-20 — EL KEEPALIVE PROBADO POR EFECTO, Y EL CRON INTERNO RETIRADO.** Cierra **tres de las cuatro deudas** del `v2026-09-19-v3`, que queda íntegro inmediatamente debajo. **LOS TRES DISPAROS ATERRIZARON, NO UNO** —2026-09-19 18:11:01, 2026-09-20 02:11 y 10:11 UTC, los tres con `origen = unrlvl-ops/keepalive` y al minuto exacto [`medido`]—, con lo que la cadena queda probada de punta a punta: dispara, se autentica con `CRON_SECRET`, lee `KEEPALIVE_TARGETS`, el `POST` sale, la clave publicable pasa y la política de RLS deja entrar el `INSERT`. **Lo que lo cerró NO fue una prueba sino el efecto en producción**: la pata HTTP nunca se pudo probar desde CC (403 en CONNECT contra `*.supabase.co`). **CRON INTERNO RETIRADO** —`cron.unschedule(1)` y `DROP FUNCTION public.keepalive_tick()`— **con guarda de aborto** si no hubiera latido externo, **dependencias medidas antes** (nada más la referenciaba) y **sin tocar la tabla**, que conserva sus **4 filas históricas** con `origen = pg_cron` porque borrarlas habría borrado la evidencia de por qué hizo falta cambiar de mecanismo. Estado: **0 crons**, función inexistente, **7 filas**. **`ecosystem.json` pasa a `2026-09-20-v1`** —el mapa afirmaba dos cosas que habían dejado de ser ciertas— y **sus dos derivados se SINCRONIZAN en commit separado**; `last_session` **no se toca a propósito** y la nota lo declara para que la ausencia no se lea como olvido. **Los 6 learnings del checkpoint 16 quedaron APROBADOS**: las **20** filas del 2026-09-19 están aprobadas [`medido`]. **QUEDA UNA SOLA COSA, Y ES DE CALENDARIO:** el criterio de **7 días** —FPHS activa y sin correo de aviso—, que **va por el día 1 de 7**; y sigue siendo **`deducido`** que tres peticiones diarias basten, porque la documentación dice «a few … each day» y no da número. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-19 · v2026-09-19-v3 (**CIERRE DEL 2026-09-19 — EL KEEPALIVE DESPLEGADO, Y EL NODO QUE AL ECOSISTEMA LE FALTABA.** Amplía el `v2026-09-19-v2` inmediatamente debajo; **no lo reescribe**. **EL HUECO QUE CIERRA ERA REAL:** `alerting_channel` tenía nodo propio de primer nivel desde ALERTAS-01 y **el keepalive no tenía ninguno**, así que una capacidad **en producción no existía en el mapa del ecosistema**. Alta de **`keepalive_externo`**, hermano suyo y con su misma forma, **nombrado por su función y no por la marca que lo pidió primero**. `ecosystem.json` pasa a **`v2026-09-19-v1`** —`previous` a `2026-09-17-v1`, `previous_chain` con esa versión al tope, y el `last_session` anterior **archivado íntegro** antes de escribir el nuevo; el diff borra **exactamente dos líneas**, `version` y `previous`— y **`ecosystem.md` y `ecosystem_filemap.md` se SINCRONIZAN en commit separado, con nota de cabecera y cuerpo íntegro: +27 y 0 borradas en cada uno**. **VERIFICADO TRAS EL MERGE** [`medido`]: los dos PR mergeados · despliegue de producción **READY** con el commit del merge · ruta `/api/keepalive` **viva**, `401` sin cabecera, lo que prueba que está desplegada **y** que `CRON_SECRET` está cargado. **Lo que el `401` NO prueba**: que la clave cargada abra la cerradura de Supabase — eso lo dice el primer disparo. **PROFESSOR: 6 learnings en checkpoint 16, sembrados por CC** a petición de Sam (excepción al reparto habitual) y los seis con `brand_id = ecosystem` porque **ninguno es de marca**, **pero con `approved_by_sam = false` A PROPÓSITO**: Sam pidió capturarlos, **no aprobó su texto**, y marcarlos aprobados sería afirmar algo sobre él que no ocurrió —el mismo defecto que hoy obligó a corregir la 1.19—; **`professor-get-context` sólo sirve learnings aprobados, así que hasta entonces no se sirven**. **ABIERTO:** primer disparo a las 18:11 UTC con vuelta de CC a las 18:22 · el cron interno sigue vivo **a propósito** hasta ver el primer latido · **el efecto final sólo lo prueba el tiempo** · los 6 learnings esperan aprobación. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-19 · v2026-09-19-v2 (**CIERRE DEL 2026-09-19 — EL KEEPALIVE: NO SE CORRIGIÓ EL CRON, SE CAMBIÓ EL MECANISMO.** Amplía el `v2026-09-19-v1` inmediatamente debajo; **no lo reescribe**, y cierra su **deuda 7**. Sam pidió corregir el cron y **el cron no se podía corregir**: un `INSERT` interno vía `pg_cron` **no es una petición de usuario**, y `pg_net` y `http` están las dos sin instalar, así que no podía serlo [`medido`]. **Y había un segundo defecto que el `v1` no vio:** `0 12 */3 * *` es **cada TRES días**, por debajo del **«a few user requests to the database each day»** de la documentación oficial [`medido`]. **Construido:** `unrlvl-ops` → **`api/keepalive`**, cron `11 2,10,18 * * *`, **`POST`** a la REST API de cada objetivo —que es **a la vez** la actividad que cuenta y el rastro, porque un `GET` sólo dejaría huella en los logs y su retención depende del plan—, con **cero objetivos en el código** (`KEEPALIVE_TARGETS`) y en `unrlvl-ops` y no en `forumphs-ops` porque un keepalive es **eje**, no instancia. PR `unrealvillestudio-hub/unrlvl-ops#13`; suites **18/0** y «todo verde», `tsc` y `vite build` limpios, y **las dos guardas validadas inyectándoles su regresión** (9 y 3 tests caídos). **Privilegios aplicados en FPHS con el `REVOKE` ANTES del `GRANT`** y **verificados por efecto**: `INSERT` entra, `SELECT` da **`42501`**. **DOS CORRECCIONES DE CC SOBRE SÍ MISMO:** (a) `CAPABILITIES.md` 1.19 afirmó *«la pausa se mide por tráfico al gateway»* **sin etiqueta y en una sección de «capacidades medidas»**, cuando ese mecanismo **venía del brief** — corregido en **1.20** con la redacción anterior bajo guard `⛔ NO OPERATIVO`; (b) entra al catálogo una trampa transversal que no estaba: **RLS activa sin políticas NO retira privilegios, los deja inertes**, y **la primera política que se abre los reactiva todos**. **ABIERTO:** Sam carga `KEEPALIVE_TARGETS` y mergea · el cron interno se retira **después** del primer latido externo, nunca antes · **el efecto sólo lo prueba el tiempo** y por eso no se da por cerrado del todo. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-19 · v2026-09-19-v1 (**CIERRE DEL 2026-09-19 — FORUMPHS: LOS COSTOS REALES CORRIGEN EL TARIFARIO EN UN 18.6 %, Y UN SOLO CONTRATO EXPLICA TODA LA PÉRDIDA.** Sesión de **análisis financiero y definición de modelo comercial**: **no se produjo código, migración ni siembra**, **`ecosystem.json` no cambió** y por tanto **sus dos derivados no se tocan**. El costo real de operar es **$17,391/mes** contra los $14,669 del tarifario v4, y **$12.62 por unidad administrada** contra $9.65 [`reportado`]; las dos causas son las **reservas laborales de $1,282.81/mes** que el v4 no contemplaba —pasivo de **$8,979.70** sin pagar— y un **denominador de 1,520 unidades que no existe**: el padrón real suma **1,378 unidades en 8 PH** [`medido` por CC sobre FPHS]. **LA DEUDA QUE MANDA: PH LOS ÁLAMOS** —**329 unidades, el 23.9 % del padrón** [`medido`], a **$6.08 por unidad**— **pierde $2,152/mes, más que el margen de Luxor y Venezia juntos**, y **sin ese contrato la empresa ganaría unos $2,000/mes** [`reportado`]: es **decisión de Sam** y sigue **sin tomar**. Quedan **decididos** el modelo comercial —**servicio, no horas hombre** · cartera incluida sin recargo · honorario de recuperación sobre cartera de más de 90 días · sin representación judicial— y el alcance de plataforma —WhatsApp como canal único del propietario · entrega por correo · **ACH directo a la cuenta del PH hacia Sage 50**, de donde se sigue que **el agente consulta e informa pero no transacciona**—. **Dos piezas nuevas en el Sales-Kit** (`argumento_servicio_vs_horas_hombre.md` y `correo_que_da_precio.md`) y **`CAPABILITIES.md` pasa a 1.19** con tres capacidades medidas: el esquema **`fph` de UNRLVL es un esqueleto vacío** —el padrón vive en FPHS—, **`storage.objects` no tiene ningún EEFF** y **el keepalive de FPHS NO previene la pausa** —`INSERT` interno, **`pg_net` y `http` sin instalar**, y la pausa se mide por **tráfico al gateway**: hace falta un **cron externo**—. **DOS AFIRMACIONES DEL BRIEF CORREGIDAS POR MEDICIÓN, y las dos por alcance mal puesto:** `storage.objects` **no tiene «sólo dos objetos»** de ForumPHs sino **200 en cuatro buckets** —el «sólo» vale acotado a `brand-intel`—, y el prefijo **`SALES-KIT` no está en `category`** —filtrar por ahí da **cero filas**— sino en `raw_learning`. Professor cerrado **antes** de este Actualiza por Claude.ai [`reportado`] y **corroborado por CC**: **14 filas**, las 14 aprobadas, las 14 en **checkpoint 15** [`medido`]. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-17 · v2026-09-17-v1 (**CIERRE DEL 2026-09-17 — ALERTAS-01: EL ECOSISTEMA AVISA POR TELEGRAM, INFORMA A LAS 07:00 UTC Y SE VIGILA A SÍ MISMO DESDE FUERA.** Diez PR mergeados, aplicados y verificados —cuatro del encargo (`unrlvl-iid-functions#162`, `#164`, `#165`, `unrlvl-ops#11`) y seis de arreglos del mismo día (`#166`, `#168`, `unrlvl-ops#12`, `#169`, `#170`, `#171`)—. En producción: esquema **`alerting`** con **13 tablas** y **11 funciones**, RLS en las 13 con políticas `service_only`; **tres Edge Functions** (`ops-alert-dispatch`, `ops-alert-callback`, `ops-daily-report`), las tres `verify_jwt: false` y autenticadas por **`x-cron-secret`** —quien las llama es `pg_net`, que no manda JWT de usuario—; **tres crons**; **tres disparadores** `AFTER INSERT` sobre `intel.watcher_log`, `intel.brand_publish_drain_log` y `alerting.alert_action_log`; y un **vigilante externo** en `unrlvl-ops` con cron de Vercel cada 5 minutos, **fuera de la base a propósito**: un vigilante que corre dentro de lo que vigila no puede avisar de que lo vigilado se cayó. **Estado medido al cierre** [`medido` por CC el 2026-09-17 hacia las 21:37 UTC]: carril intacto —0 errores del detector sobre el carril y 0 corridas de cron fallidas desde el PR 3—, vigilante latiendo por debajo de 5 minutos, **`watchdog_snapshot` en 135 ms en la vía real contra 17.090 ms antes del arreglo**, **0 episodios `CRON_SILENT`**, **cuatro `CRON_NEVER_RAN` abiertos y los cuatro verdaderos positivos**, 12 de 12 reglas suenan, suites **90/0** y **17/0**. **LO QUE COSTÓ, Y ES LO QUE DEJA REGLA:** (1) una medición hecha **fuera de la vía real** se etiquetó `medido`, se mergeó y **rompió el vigilante durante siete minutos en producción** —`EXPLAIN (ANALYZE)` en el nivel superior dio 259 ms y la vía real 17.090 ms contra un `statement_timeout` de 8 s, porque **`SELECT … INTO` impone un límite de filas y un plan con límite de filas no se paraleliza**—, y de ahí sale la **sexta regla de `MEASUREMENT_METHOD_RULE`**; (2) **tres guardas distintas se dispararon sobre su propia explicación** por no quitar comentarios antes de comprobar; (3) **dos comprobaciones verdes no veían su propio defecto**, y lo delató inyectarles la regresión; (4) atar **«se puede actuar»** y **«tiene que sonar»** al mismo literal de severidad dejó **cuatro episodios prioritarios sin botones**, reescalando cada hora durante 72 horas —hoy son dos ejes separados, y **el silencio es dato**: `alerting.alert_rules.silent boolean NOT NULL DEFAULT false`—. **Dos etiquetas `medido` retiradas por medición posterior**, archivadas en su PR y no borradas: el supuesto (b) de `#168` sobre el coste y la afirmación de `#170` sobre `disable_notification`. **`ecosystem.json` pasa a `2026-09-17-v1`** y sus dos derivados **se SINCRONIZAN en commit separado, no se regeneran**. Professor cerrado **antes** de este Actualiza, por Claude.ai [`reportado`]. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-13 · v2026-09-13-v2 (**CIERRE DEL 2026-09-13 — CUATRO CORRECCIONES DE SAM SOBRE EL `v1`, Y DOS FRENTES QUE SE CIERRAN EL MISMO DÍA EN QUE SE ABRIERON.** Amplía el `v2026-09-13-v1` inmediatamente debajo; **no lo reescribe**. **(1) El `REVOKE` sobre `intel.match_content_embeddings` YA ESTÁ APLICADO** por Claude.ai: ACL medido **`{postgres=X/postgres, service_role=X/postgres}`**, `anon` y `authenticated` en **falso**, `service_role` en **true** [`medido` por CC el 2026-09-13, después del cambio]. **El frente 11 del `v1` nace y muere el mismo día**, y **no se abre migración**: el único llamador es `content-watcher` con `service_role` y el Orchestrator no la usa [`reportado`]; la reversión, si alguna corrida dejara de comparar, es un `GRANT EXECUTE … TO PUBLIC` por firma completa. **(2) §5.b cambia de condición, no de estado: U-5 está mergeado y funcionando** [`reportado`], así que **la ventana «antes de U-5» se cerró y NO se fabrica un caso de prueba** — **la primera revocación real de Sam sobre una pieza programada ES la verificación**. Queda anotado como **verificación pendiente de un evento, no como tarea**, con su línea base para comparar después [`medido`]: **55 franjas `free`** (cero con pieza), **21 `reserved`** (las 21 con pieza), 4 `published`, 1 `failed` — **cero huérfanas por las dos lecturas**. **Cae la corrección 5 del `v1`:** la franja `0ed7214c…` deja de ser candidata a caso fabricado. **(3) Dos correcciones al catálogo, y las dos retiran una afirmación de acceso que era falsa:** el proxy **`api/professor` SÍ acepta POST**, y **`action=submit-learning` funciona** pasando `relevance_score` **explícito dentro del `1..5` del `CHECK`** — el `500` documentado el 2026-09-10 lo producía **la EF calculando el valor fuera de rango**, de modo que **la causa raíz era correcta y la conclusión que se sacó de ella no lo era**: de *«el `CHECK` rechaza el valor»* se pasó a *«no se puede por el proxy»* **sin medir la regla**, y eso estuvo tres días en el catálogo [`reportado` — Claude.ai, 12 learnings sembrados por esa vía entre las 13:47 y las 13:49 UTC; **corroborado por CC**: 12 filas con `session_date = '2026-09-13'`, **las 12 con `relevance_score = 5`**, y el `CHECK` sigue siendo `>= 1 AND <= 5`]. **Las dos redacciones anteriores se archivan bajo guard `⛔ NO OPERATIVO` con su texto literal, ninguna se borra.** `CAPABILITIES.md` pasa a **1.17**. **(4) El PR del voseo queda DESBLOQUEADO** — A-1 mergeado y desplegado, `content-watcher` **v57** `b0c62f50…77694` [`medido`] — **y NO entra en este PR**: es trabajo de otro repo y le faltan tres datos que CC no puede obtener solo, listados abajo. **Y un hueco que CC sí midió al ir a buscarlo:** en el `verify_pattern` de `HR-GEN-05` **no está `devolvés` NI `devolvé`** — **faltan las dos**, no una; la denylist es una **enumeración de formas literales**, así que **todo verbo no enumerado escapa**, y `devolver` es sólo el ejemplo que se nombró [`medido` el 2026-09-13 sobre `intel.watcher_rules`])_
 _Actualizada: 2026-09-13 · v2026-09-13-v1 (**CIERRE DEL 2026-09-13 — EL CARRIL DEJA DE ESTAR CIEGO POR EL LADO DEL CÓDIGO, Y SEIS AFIRMACIONES DEL BRIEF QUE LA MEDICIÓN MATIZA.** Entró en producción: **`publish-slot-reserver` v11** (`ezbr_sha256` **`c12e02c6…c606b`**) filtrando `discarded_at` —**N16 cerrado por el lado del código**—; **`blog-promoter` v6** (**`c9d262d8…0acfc`**); **`content-watcher` v57** (**`b0c62f50…77694`**); **`content-run-stage` v123** (**`8babc595…a9d5a`**) [los cuatro `medido` con `Supabase:list_edge_functions` el 2026-09-13]. El `CHECK` de `intel.brand_publish_drain_log.outcome` pasa de 6 a **13 valores** —9 de eje de desenlace más **4 alias legacy `BLOG_*`**, con el mapa completo escrito en el `COMMENT` de la columna— [`medido`]. **`intel.brand_similarity_threshold` creada y sembrada**, con el eje corregido a **`own_brand` / `cross_brand`**: cortes vigentes **NeuroneSCF `0.93739`** y **LucienSael `0.90551`**; **ForumPHs y UnrealvilleStudio en `SIN_LINEA_BASE`** [`medido`, 8 filas]. El RPC `intel.match_content_embeddings` queda en **una sola firma** con `p_match_domain boolean DEFAULT true` [`medido`]. **LO QUE CC CORRIGE POR MEDICIÓN, y son seis:** (1) `min_own_vectors = 30` **no es propuesto — está sembrado** en las ocho filas; (2) el ACL del RPC **no está acotado a `service_role`: `PUBLIC` conserva `EXECUTE`**, así que `anon` y `authenticated` lo ejecutan —no es `CC_PROTOCOL` §11 porque `prosecdef = false`, pero el `GRANT` explícito lee como si estuviera acotado—; (3) `cross_brand` está en `SIN_LINEA_BASE` **por población vacía por construcción**, no por falta de volumen —los dominios no se solapan entre marcas—; (4) ForumPHs y UnrealvilleStudio **incumplen las dos guardas**, no una; (5) la candidata de §5.b **existe y está viva** —franja `0ed7214c…` reservada para la pieza `d621e8d5…`, en `scheduled` y sin descartar—, así que revocarla **escribe en producción** y es decisión de Sam; (6) la cita caducada del §2.2 del brief **ya no sigue viva** — la cerró el PR #95 y su redacción anterior quedó bajo guard. **Regla nueva y la más cara del día, en `CAPABILITIES.md`: mergear no despliega, y desplegar tampoco despliega necesariamente lo mergeado** — cinco de ocho despliegues subieron el bundle anterior por correr desde un clon sin `git pull`, con el contador de versión subiendo igual. **El criterio de éxito de gate5 sigue SIN cumplir** y no es medible hasta que corra tráfico nuevo. `ecosystem.json` **no cambió**: sus derivados no se tocan. Professor cerrado antes: **12 learnings** del 2026-09-13, los doce con `relevance_score = 5` [`reportado` — brief de Claude.ai])_
@@ -10,11 +14,11 @@ _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA P
 
 ---
 
-## 🗓️ CIERRE 2026-09-20-v1 — el conteo sale de la base, y un «fixable» deja de ser un descarte
+## 🗓️ CIERRE 2026-09-20-v2 — el conteo sale de la base, y un «fixable» deja de ser un descarte
 
-_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-17-v1` y toda su cadena se
-conservan íntegros inmediatamente debajo. Todo lo etiquetado `medido` lo consultó **CC** el
-**2026-09-20** entre las ~17:30 y las ~22:35 UTC con `Supabase:execute_sql`,
+_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-20-v1` del keepalive, de
+esta misma fecha y de otra sesión, y toda su cadena se conservan íntegros inmediatamente debajo.
+Todo lo etiquetado `medido` lo consultó **CC** el **2026-09-20** entre las ~17:30 y las ~22:35 UTC con `Supabase:execute_sql`,
 `Supabase:list_edge_functions` y `Supabase:get_edge_function` sobre `amlvyycfepwhiindxgzw`, y contra
 los repositorios `unrlvl-iid-functions` y `Orchestrator`. Detalle completo de la sesión en
 `IID/session_log.md`, entrada del **2026-09-20**.)_
@@ -66,6 +70,274 @@ lector, no en el criterio — los tres leen de la misma vista, y un test falla s
 
 ---
 
+## 🗓️ CIERRE 2026-09-20-v1 — El keepalive probado por efecto, y el cron interno retirado
+
+_(Bloque al tope. **Cierra tres de las cuatro deudas del `v2026-09-19-v3`, que queda íntegro
+inmediatamente debajo y no se reescribe.** Lo etiquetado `medido` lo consultó CC el **2026-09-20 a
+las 11:46 UTC**. Detalle en `brands/ForumPHs/session_log.md`, entrada del **2026-09-20**.)_
+
+---
+
+### ✅ CERRADO — los tres disparos aterrizaron, no uno
+
+**2026-09-19 18:11:01 · 2026-09-20 02:11 · 2026-09-20 10:11 UTC**, los tres con
+`origen = 'unrlvl-ops/keepalive'` y **al minuto exacto** [`medido`]. La cadena queda probada de
+punta a punta: el cron dispara, se autentica con `CRON_SECRET`, lee `KEEPALIVE_TARGETS`, el `POST`
+sale, la clave publicable pasa el gateway y la política de RLS deja entrar el `INSERT`.
+
+**Lo que lo cerró no fue una prueba, sino el efecto en producción** — la pata HTTP nunca se pudo
+probar desde CC (403 en CONNECT contra `*.supabase.co`), así que la única verificación posible era
+esperar y mirar el dato.
+
+**Cron interno RETIRADO** (`retirar_keepalive_interno_tras_primer_latido_externo`):
+`cron.unschedule(1)` + `DROP FUNCTION public.keepalive_tick()`, **con guarda de aborto** si no
+hubiera latido externo, **dependencias medidas antes** —nada más la referenciaba— y **sin tocar la
+tabla**, que conserva sus 4 filas históricas. Estado: **0 crons**, función inexistente, 7 filas.
+
+**Y los 6 learnings del checkpoint 16 quedaron APROBADOS** por Sam el 2026-09-19: las **20** filas
+del día están aprobadas, 14 del checkpoint 15 y 6 del 16 [`medido`].
+
+---
+
+### 🔴 QUEDA UNA SOLA COSA, Y ES DE CALENDARIO
+
+**El criterio de 7 días** — FPHS activa y **sin correo de aviso de pausa** pasada una semana desde
+el 2026-09-19. **Va por el día 1 de 7.** Tres latidos no son siete días, y el criterio se nombró por
+adelantado para no darlo por cerrado antes de tiempo.
+
+🟡 **Sigue siendo `deducido` que tres peticiones diarias basten:** la documentación dice
+«a few … each day» y **no da número**. Si llegara un aviso, se sube editando el cron, no el código.
+
+**Y la decisión de fondo sigue sin tomar:** lo único que la documentación **garantiza** es el plan
+de pago. Esto es el remedio que ella misma sugiere, pero sigue siendo un parche sobre una política
+de plan gratuito, y **FPHS va a sostener el piloto de Venezia y Castilla**.
+
+---
+
+## 🗓️ CIERRE 2026-09-19-v3 — El keepalive desplegado, y el nodo que al ecosistema le faltaba
+
+_(Bloque al tope. **Amplía el `v2026-09-19-v2` inmediatamente debajo; no lo reescribe.** Lo
+etiquetado `medido` lo consultó CC el 2026-09-19 entre las 14:50 y las 15:20 UTC. Detalle en
+`brands/ForumPHs/session_log.md`, entrada **2026-09-19 (v3)**.)_
+
+---
+
+### ✅ CERRADO — el hueco de registro, que era real
+
+`alerting_channel` tenía nodo propio de primer nivel desde ALERTAS-01; **el keepalive no tenía
+ninguno**, así que una capacidad **en producción no existía en el mapa del ecosistema**. Alta de
+**`keepalive_externo`**, hermano suyo y con su misma forma. `ecosystem.json` pasa a
+**`v2026-09-19-v1`**, y **`ecosystem.md` y `ecosystem_filemap.md` se SINCRONIZAN en commit separado,
+con nota de cabecera y cuerpo íntegro — no se regeneran**.
+
+**Verificado tras el merge** [`medido`]: los dos PR mergeados · despliegue de producción **READY**
+con el commit del merge · ruta `/api/keepalive` **viva**, devuelve **`401`** sin cabecera, lo que
+prueba que está desplegada **y** que `CRON_SECRET` está cargado.
+
+**Lo que el `401` no prueba**, y conviene no confundirlo: que la clave cargada abra la cerradura de
+Supabase. Eso lo dice el primer disparo.
+
+---
+
+### 🎓 PROFESSOR — 6 learnings en checkpoint 16, SEMBRADOS Y SIN APROBAR
+
+**Excepción al reparto habitual, pedida por Sam:** los sembró **CC**, no Claude.ai. Los seis con
+`brand_id = 'ecosystem'` porque **ninguno es de marca**: el keepalive multimarca · qué pausa un
+proyecto del plan gratuito según la fuente primaria · citar mecanismos de plataforma de primera mano
+· **RLS sin políticas deja los privilegios inertes** · «corre bien» ≠ «sirve» · un encargo
+irrealizable en su literal se reporta antes de producir.
+
+🟡 **Van con `approved_by_sam = false` a propósito.** Sam pidió capturarlos, **no aprobó su texto**,
+y marcarlos aprobados sería afirmar algo sobre él que no ocurrió — el mismo defecto que hoy obligó a
+corregir `CAPABILITIES.md` 1.19. **`professor-get-context` sólo sirve learnings aprobados**, así que
+**hasta que Sam los apruebe no se sirven**.
+
+---
+
+### 🔴 ABIERTO — cuatro cosas, y ninguna se puede cerrar hoy
+
+1. **Primer disparo real del cron: 18:11 UTC.** Vuelta de CC programada a las **18:22 UTC**.
+2. **El cron interno `jobid 1` sigue vivo A PROPÓSITO** — se retira después del primer latido
+   externo, nunca antes.
+3. **El efecto final sólo lo prueba el tiempo:** FPHS activa pasados más de 7 días sin correo de
+   aviso. **Por eso la deuda no se da por cerrada.**
+4. **Los 6 learnings esperan la aprobación de Sam** para entrar en circulación.
+
+---
+
+## 🗓️ CIERRE 2026-09-19-v2 — El keepalive: no se corrigió el cron, se cambió el mecanismo
+
+_(Bloque al tope. **Amplía el `v2026-09-19-v1` inmediatamente debajo; no lo reescribe.** Cierra su
+**deuda 7**. Lo etiquetado `medido` lo consultó CC el 2026-09-19 entre las 13:30 y las 14:10 UTC.
+Detalle en `brands/ForumPHs/session_log.md`, entrada **2026-09-19 (v2)**.)_
+
+---
+
+### ✅ CERRADO — la deuda 7 del `v1`, con su causa corregida
+
+**Sam pidió corregir el cron. El cron no se podía corregir:** un `INSERT` interno vía `pg_cron` no
+es una petición de usuario, y `pg_net` y `http` están las dos sin instalar, así que no podía serlo
+[`medido`]. **Y había un segundo defecto que el `v1` no vio:** `0 12 */3 * *` es **cada tres días**,
+por debajo del **«a few user requests to the database each day»** que pide la documentación oficial
+[`medido` — `guides/platform/free-project-pausing`].
+
+**Lo construido:** `unrlvl-ops` → **`api/keepalive`**, cron de Vercel `11 2,10,18 * * *`, **`POST`**
+a la REST API de cada objetivo. La petición es **a la vez** la actividad que cuenta y el rastro —un
+`GET` sólo dejaría huella en los logs, cuya retención depende del plan—. **Cero objetivos en el
+código**: entran por `KEEPALIVE_TARGETS`. Va en `unrlvl-ops` y no en `forumphs-ops` porque un
+keepalive es **eje**, no instancia de una marca. PR `unrealvillestudio-hub/unrlvl-ops#13`.
+
+**Privilegios, aplicados en FPHS** (`keepalive_ping_anon_insert_only`): `REVOKE ALL … FROM anon` →
+`GRANT INSERT` → política sólo de `INSERT`. **Verificado por efecto:** `INSERT` entra, `SELECT` da
+**`42501`**.
+
+---
+
+### 🔴 LO QUE QUEDA ABIERTO DE ESTA MISMA DEUDA
+
+1. **Sam carga `KEEPALIVE_TARGETS`** en Vercel (`unrlvl-ops`, Production, **sin prefijo `VITE_`**) y
+   mergea el PR. **CC no puede escribir secretos ni variables de entorno** (`CAPABILITIES.md` 1.18).
+2. **Retirar el cron interno `jobid 1` — DESPUÉS de ver el primer latido externo**, nunca antes:
+   hacerlo ahora dejaría el proyecto sin nada. Queda como paso pendiente, no como hecho.
+3. **El efecto sólo lo prueba el tiempo:** filas con `origen = 'unrlvl-ops/keepalive'` y FPHS activa
+   pasados 7 días sin correo de aviso. **No es verificable el día de la entrega**, y por eso no se
+   da por cerrado del todo.
+4. 🟡 **La pata HTTP no se pudo probar desde CC** — el proxy de egreso devuelve **403 en CONNECT**
+   contra `*.supabase.co`, igual que contra `*.vercel.app` [`medido`]. Lo verificado es el camino de
+   privilegios, que es lo que el cambio toca.
+
+---
+
+### 📌 UNA CORRECCIÓN DE CC SOBRE SU PROPIA ENTRADA DEL MISMO DÍA
+
+`CAPABILITIES.md` **1.19** escribió *«la pausa se mide por tráfico al gateway»* **en una sección
+titulada «capacidades medidas» y sin etiqueta**. Ese mecanismo **venía del brief, no de una medición
+de CC**. La documentación oficial lo dice distinto —**actividad de usuario**, peticiones a la API— y
+de esa diferencia salió el segundo defecto del cron. **La conclusión aguantaba; el criterio de diseño
+no.** Corregido en **1.20**, con la redacción anterior bajo guard `⛔ NO OPERATIVO` y sin borrar nada.
+**La fuente primaria estaba a una consulta de distancia, y se citó de segunda mano en el archivo que
+el ecosistema consulta para decidir.**
+
+**Y una trampa de privilegios que el catálogo no tenía, transversal a toda tabla de Supabase:**
+**RLS activa sin políticas no retira privilegios — los deja inertes.** `anon` tenía los **siete** por
+los grants por defecto mientras la tabla parecía cerrada, y **la primera política que se abre los
+reactiva todos**. Por eso el `REVOKE` va antes del `GRANT`, y por eso se comprueba **simulando el rol
+y mirando el efecto**, no leyendo el `GRANT`.
+
+---
+
+## 🗓️ CIERRE 2026-09-19-v1 — ForumPHs: los costos reales corrigen el tarifario, y un contrato explica toda la pérdida
+
+_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-17-v1` y toda su cadena se
+conservan íntegros inmediatamente debajo. Sesión de **análisis financiero y definición de modelo
+comercial**: **no se produjo código, migración ni siembra**, y **`ecosystem.json` no cambió**, así que
+**sus dos derivados no se tocan**. Lo etiquetado `reportado` lo afirma el **brief de Actualiza de
+Claude.ai del 2026-09-19** y **CC no lo midió** —las cifras salen de los EEFF de enero a julio de 2026
+y de los exports de Sage—. Lo etiquetado `medido` lo consultó **CC** el **2026-09-19**. Detalle
+completo en `brands/ForumPHs/session_log.md`, entrada del **2026-09-19**.)_
+
+---
+
+### ✅ CERRADO HOY — el tarifario tiene por fin costo medido
+
+**El costo real de operar corrige el tarifario v4 en un 18.6 %:** **$17,391/mes** contra $14,669, y
+**$12.62 por unidad administrada** contra $9.65 [`reportado`]. **Dos causas, ninguna es un error de
+cálculo:** las **reservas laborales de $1,282.81/mes** que el v4 no contemplaba —pasivo de $8,979.70
+sin pagar— y un **denominador de 1,520 unidades que no existe**: el padrón real es de **1,378**
+[`medido` por CC sobre FPHS].
+
+**Quedan decididos** el **modelo comercial** —servicio y no horas hombre · cartera incluida sin
+recargo · honorario de recuperación sobre cartera de más de 90 días · sin representación judicial— y
+el **alcance de plataforma** —WhatsApp como canal único del propietario · seguimiento y entrega por
+correo · **ACH directo a la cuenta del PH hacia Sage 50** · labor diaria de campo sin mapear—
+[`reportado`]. **Dos piezas nuevas en el Sales-Kit** y `CAPABILITIES.md` a **1.19**.
+
+---
+
+### 🔴 DEUDAS ABIERTAS — ForumPHs
+
+1. 🔴 **LOS ÁLAMOS — la decisión de mayor impacto financiero de la operadora, sin tomar.**
+   **329 unidades, el 23.9 % del padrón** [`medido`], a **$6.08 por unidad**: **pierde $2,152/mes**,
+   más que el margen de Luxor y Venezia juntos. **Sin ese contrato la empresa ganaría unos
+   $2,000/mes** [`reportado`]. **Arraiján repite el patrón a menor escala.** Es **decisión de Sam**,
+   y mientras no se tome, **la pérdida es recurrente y conocida**.
+2. **Frecuencias de presencia en blanco** — visitas al mes y reuniones con la JD. Son **compromiso
+   contractual con costo**, así que un blanco ahí no es un dato que falta: es **un costo sin
+   cuantificar** que se puede regalar en una reunión.
+3. **Porcentaje del honorario de recuperación sin fijar** — sugerido **8–10 %**. Mientras no se
+   decida, el correo que cotiza **nombra el concepto y no da número**.
+4. **«Porcentaje de morosidad» no tiene definición única** — unidades morosas sobre el total, o monto
+   vencido sobre facturación. **Luxor da 110 % por la segunda**, que es la prueba de que las dos no
+   son intercambiables. **Hay que elegir una y escribirla**, o ningún cliente es comparable con otro.
+5. **Planilla de conserjería y limpieza sin modelo de costo** — sería **la primera contratación de
+   personal en sitio** de la empresa, así que no es extender una hoja de cálculo.
+6. **Metraje de áreas comunes** — no está en ningún padrón **y no es reconstruible desde las cuotas**,
+   porque la cuota no lo incluye. **Es dato a levantar, no a derivar.**
+7. 🔴 **El keepalive de FPHS no previene la pausa** — `cron.job` id 1 hace un `INSERT` **interno** y
+   **`pg_net` y `http` están las dos sin instalar**, así que **no sale ni una petición** mientras la
+   pausa se mide por **tráfico al gateway** [`medido`]. **Hace falta un cron externo.** Da causa al
+   riesgo **R6** de `AGENDA_owner_agent.md`, que seguía anotado sin diagnóstico. Detalle:
+   `CAPABILITIES.md` 1.19.
+8. **Anexos B y C** (Protocolos de Actuación y de Emergencias) — revisados con Ivette, **no
+   oficiales**, con decenas de campos `□` sin completar.
+9. **Verificar la base de cálculo PH por PH antes de usar un metraje reconstruido.** El método
+   `metraje = cuota ÷ tarifa` **está validado** —Lefevre dio 16,100 m² contra 16,079 del acta,
+   **0.1 % de desvío**— pero **Plaza España cobra monto fijo y ahí no aplica** [`reportado`]. Un
+   método validado en un PH no es un método válido en todos.
+
+---
+
+### 📌 DOS LEARNINGS CON RANGO DE REGLA — viven en el Sales-Kit, no acá
+
+1. **La métrica correcta depende del servicio que se cotiza** — costo por **unidad administrada**
+   para administración, **metro cuadrado** para limpieza. El trabajo administrativo lo generan los
+   propietarios, no la superficie: **Plaza 77 costeado por m² daba $1,047 y por unidad $757, un 38 %
+   de diferencia sobre el mismo cliente** [`reportado`]. Escrito en
+   `brands/ForumPHs/sales-kit/correo_que_da_precio.md`.
+2. **Toda tabla de costos declara quién absorbe la diferencia** — no basta mostrar cuánto cambia el
+   margen: hay que decir que **el cliente paga lo mismo en todos los escenarios** y que **la caída la
+   absorbe ForumPHs**. Es criterio de presentación y aplica a **todo documento con cifras**.
+
+---
+
+### 🔍 LO QUE CC CORRIGE POR MEDICIÓN — dos afirmaciones del brief con el alcance mal puesto
+
+1. **`storage.objects` de UNRLVL no tiene «sólo dos objetos» de ForumPHs: tiene 200 en cuatro
+   buckets** [`medido`]. Lo que **sí** se sostiene es que **ninguno es un EEFF**. El «sólo» vale
+   **acotado al bucket `brand-intel`** y es falso sin ese alcance — quien lo lea como global
+   concluirá que no hay material de ForumPHs en Storage, y ahí está el documento comercial que se
+   sirve a prospectos. En `CAPABILITIES.md` 1.19 con su tabla.
+2. **El prefijo `SALES-KIT` de los dos learnings no está en `category`** —filtrar por ahí devuelve
+   **cero filas**— sino en **`raw_learning`**, bajo `category = 'contenido'` [`medido`]. **Quien
+   busque el material del kit por categoría no lo encuentra.**
+
+---
+
+### 🎓 TRAZABILIDAD DEL PROFESSOR
+
+Cerrado **antes** de este Actualiza, por Claude.ai [`reportado`]. **Corroborado por CC** [`medido`
+el 2026-09-19 sobre `professor_learnings`]: **14 filas** con `session_date = '2026-09-19'`, las **14**
+con `approved_by_sam = true`, las **14** con `checkpoint_number = 15`, todas con el mismo `created_at`
+—**12:18:09 UTC**—. Reparto por categoría: `contenido` 6 · `arquitectura` 3 · `datos` 3 ·
+`gobernanza` 1 · `metodo` 1.
+
+---
+
+### 🧬 MULTIMARCA
+
+**No aplica por alcance:** este Actualiza **no produjo código, migración ni siembra**, así que **no
+hay test de la marca N+1 que responder sobre un eje nuevo**. `ecosystem.json` **no cambió** y **no se
+introdujo ninguna clave que nombre una marca**. Los artefactos tocados de ForumPHs —`session_log.md`,
+`AGENDA_owner_agent.md` y el directorio `sales-kit/`— son **exclusivos de la marca**
+(`MULTIBRAND_RULE.md` §3) y las dos piezas nuevas **declaran explícitamente** que lo transversal es
+la estructura y las cifras son instancia.
+
+**Y una adición que sí se escribió por su eje y no por la marca:** el punto 3 de `CAPABILITIES.md`
+1.19 —**un keepalive que corre dentro de la base no puede probar que la base recibe tráfico**— es el
+mismo eje que el **vigilante externo de ALERTAS-01** del 2026-09-17, y se redactó para **cualquier
+base cuya métrica de actividad viva fuera del motor**, no para ésta.
+
+---
 
 ## 🗓️ CIERRE 2026-09-17-v1 — ALERTAS-01: el ecosistema avisa, informa y se vigila desde fuera
 
