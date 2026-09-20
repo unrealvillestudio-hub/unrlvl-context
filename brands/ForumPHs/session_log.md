@@ -1,5 +1,60 @@
 # ForumPHs — Session Log
 
+## 2026-09-20 — El keepalive queda probado por efecto, y el cron interno se retira
+
+> **Entrada de CC.** Cierre del frente abierto el 2026-09-19. Todo lo etiquetado `medido` lo
+> consultó CC el **2026-09-20 a las 11:46 UTC**. El retiro del cron interno lo autorizó Sam el
+> 2026-09-19 —«procede como propones», sobre una propuesta que incluía retirarlo **conservando la
+> tabla**— y quedó condicionado a ver antes el primer latido externo. Lo previo se conserva íntegro debajo.
+
+### ✅ LOS TRES DISPAROS ATERRIZARON — no uno
+
+| Disparo programado | Fila registrada | `origen` |
+|---|---|---|
+| 2026-09-19 18:11 UTC | **18:11:01.683** | `unrlvl-ops/keepalive` |
+| 2026-09-20 02:11 UTC | **02:11** | `unrlvl-ops/keepalive` |
+| 2026-09-20 10:11 UTC | **10:11:01.101** | `unrlvl-ops/keepalive` |
+
+**Los tres al minuto exacto.** Eso cierra la cadena entera de punta a punta, y conviene decir qué
+prueba cada eslabón porque ninguno estaba verificado antes: el cron **dispara**, se **autentica**
+con `CRON_SECRET`, **lee** `KEEPALIVE_TARGETS` sin error, el **`POST` sale** de Vercel, la **clave
+publicable pasa** el gateway, y la **política de RLS deja entrar** el `INSERT`.
+
+**Lo que lo cerró no fue una prueba, sino el efecto en producción.** La pata HTTP nunca se pudo
+probar desde el contenedor de CC —el proxy de egreso devuelve **403 en CONNECT** contra
+`*.supabase.co`—, así que la única verificación posible era esperar y mirar el dato. Conviene
+recordarlo la próxima vez que algo dependa de una llamada saliente.
+
+### 🗑️ Cron interno retirado — con guarda, y conservando la tabla
+
+`cron.unschedule(1)` + `DROP FUNCTION public.keepalive_tick()`, aplicado como migración
+`retirar_keepalive_interno_tras_primer_latido_externo`.
+
+**Tres cautelas, y las tres importan:**
+
+1. **Guarda de aborto:** la migración cuenta primero las filas con `origen = 'unrlvl-ops/keepalive'`
+   y **lanza excepción si no hay ninguna**. Quedarse sin los dos mecanismos a la vez era el único
+   desenlace que no se podía permitir.
+2. **Dependencias medidas antes:** ninguna otra función, trigger ni vista referenciaba
+   `keepalive_tick` [`medido`]. Y `cron.job` tenía **un solo job**, el 1.
+3. **La tabla no se tocó.** Conserva sus **4 filas históricas** con `origen = 'pg_cron'`, que el
+   `COMMENT` de la columna explica que **no probaban actividad**. Borrarlas habría borrado la
+   evidencia de por qué hizo falta cambiar de mecanismo.
+
+**Estado final** [`medido` 2026-09-20 11:46 UTC]: **0 crons** en la base · función **inexistente** ·
+**7 filas** en la tabla, 4 históricas y 3 latidos externos.
+
+### 🔴 QUEDA UNA SOLA COSA, Y ES DE CALENDARIO
+
+**El criterio de 7 días:** FPHS activa y **sin correo de aviso de pausa** pasada una semana desde el
+2026-09-19. **Va por el día 1 de 7.** Tres latidos no son siete días, y el criterio se nombró por
+adelantado precisamente para no darlo por cerrado antes de tiempo.
+
+🟡 **Y sigue siendo `deducido` que tres peticiones diarias basten** — la documentación dice «a few …
+each day» y **no da número**. Si llegara un aviso, se sube editando el cron, no el código.
+
+---
+
 ## 2026-09-19 (v3) — El keepalive queda desplegado, y el ecosistema por fin lo registra
 
 > **Entrada de CC.** Cierre del tramo: Sam cargó la variable y mergeó los PR; CC verificó el

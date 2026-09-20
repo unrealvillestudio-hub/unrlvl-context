@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-19-v1",
+    "version": "2026-09-20-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-17-v1",
+    "previous": "2026-09-19-v1",
     "previous_chain": [
+      "2026-09-19-v1",
       "2026-09-17-v1",
       "2026-09-12-v1",
       "2026-09-10-v1",
@@ -2015,7 +2016,7 @@
     "_abierto": "Cuatro crons semanales que no han corrido NUNCA —uvs-cro-process-weekly, uvs-cro-research-weekly, uvs-signal-process-weekly, uvs-signal-research-weekly—, los cuatro active = true: decision de Sam entre arreglarlos o retirarlos con cron.unschedule, y mientras sigan asi avisan cada hora hasta caducar a las 72 h. El canal de CORREO no tiene ruta activa: los episodios salen solo por Telegram y el encargo pedia dos canales. cron.job_run_details crece sin purga desde el 2026-04-25 —354.339 filas, 161 MB— y no se puede indexar porque la tabla no es nuestra. Y el literal de dominio de ops-alert-dispatch:211."
   },
   "keepalive_externo": {
-    "_status": "EN PRODUCCION — creado el 2026-09-19 [medido]. Efecto final PENDIENTE DE VERIFICACION POR EVENTO: primer disparo 18:11 UTC del 2026-09-19.",
+    "_status": "EN PRODUCCION Y VERIFICADO POR EFECTO — creado el 2026-09-19. Los TRES disparos programados aterrizaron: 2026-09-19 18:11:01, 2026-09-20 02:11 y 2026-09-20 10:11 UTC, con origen unrlvl-ops/keepalive [medido el 2026-09-20 11:46 UTC]. La cadena entera queda probada de punta a punta: el cron dispara, se autentica con CRON_SECRET, lee KEEPALIVE_TARGETS, el POST sale, la clave publicable pasa y la politica de RLS deja entrar el INSERT. LO QUE SIGUE SIN PODER CERRARSE es el criterio de 7 dias: FPHS activa y sin correo de aviso pasada una semana. Va por el dia 1.",
     "_eje": "Mantener viva una base que se pausa por inactividad. EL EJE VA EN EL CODIGO Y LA INSTANCIA EN EL DATO: la ruta no nombra ni un proyecto, ni una URL, ni una clave, ni una marca — los objetivos entran por la variable de entorno KEEPALIVE_TARGETS, asi que sumar un proyecto es editar la variable y nunca el archivo. Por esa misma regla vive en unrlvl-ops y NO en forumphs-ops: un keepalive lo necesita cualquier proyecto en plan gratuito, y alojarlo bajo la marca que lo pidio primero es lo que MULTIBRAND_RULE prohibe.",
     "_por_que_fuera_de_la_base": "Mismo eje que alerting_channel.vigilante_externo, y es su segunda aparicion independiente en dos dias: lo que corre DENTRO de lo que observa no puede probar nada sobre ello desde fuera. El cron interno que habia en FPHS —cron.job id 1, keepalive-ping-3d, 0 12 */3 * *— corria bien (3 corridas succeeded, 4 filas [medido]) y no servia: un INSERT ejecutado por pg_cron dentro del motor NO es una peticion de usuario, y no podia salir del motor porque pg_net y http estan las dos SIN instalar [medido 2026-09-19].",
     "criterio_de_la_plataforma": "Un proyecto del plan gratuito se pausa por falta de ACTIVIDAD DE USUARIO en siete dias, y basta con «a few user requests to the database each day» [reportado — documentacion oficial de Supabase, guides/platform/free-project-pausing, leida el 2026-09-19]. El criterio lleva FRECUENCIA incorporada, y por eso el cron cada tres dias quedaba por debajo del liston aunque su mecanismo hubiera sido correcto. Lo unico que la documentacion GARANTIZA es el plan de pago: los proyectos Pro no se pausan. Cualquier keepalive es un parche sobre una politica de plan gratuito.",
@@ -2027,7 +2028,7 @@
     "privilegios": "En cada proyecto objetivo, anon queda acotado a INSERT sobre public.keepalive_ping, con el REVOKE ANTES del GRANT y sin politica de SELECT. Migracion keepalive_ping_anon_insert_only aplicada en FPHS el 2026-09-19. REGLA QUE DEJA, y vale para toda tabla: RLS activa sin politicas NO retira privilegios, los deja INERTES —anon tenia los SIETE por los grants por defecto mientras la tabla parecia cerrada [medido]— y la primera politica que se abre los reactiva TODOS. Se comprueba simulando el rol y mirando el efecto: INSERT entra, SELECT devuelve 42501.",
     "claves_de_configuracion": "En unrlvl-ops, por su NOMBRE y nunca por su valor: KEEPALIVE_TARGETS (JSON con los objetivos; la clave de cada uno es la PUBLICABLE, nunca la de servicio, porque la de servicio ignora RLS y acotar con politicas no la limitaria en nada) y CRON_SECRET, que ya existia para el vigilante y protege tambien esta ruta.",
     "_verificado_2026-09-19": "Suite nueva 18/0 y suite del vigilante en verde; tsc y vite build limpios; las dos guardas centrales validadas INYECTANDOLES su regresion (descartar invalidos en silencio tumba 9 tests, aceptar http tumba 3); privilegios verificados por efecto contra el proyecto real; ruta desplegada responde 401 sin cabecera, lo que prueba que esta viva y que CRON_SECRET esta cargado.",
-    "_abierto": "El efecto final solo lo prueba el tiempo: filas con origen = 'unrlvl-ops/keepalive' y FPHS activa pasados mas de 7 dias sin correo de aviso. El cron interno jobid 1 sigue vivo A PROPOSITO y se retira DESPUES del primer latido externo, nunca antes. La pata HTTP no se pudo probar desde CC: el proxy de egreso devuelve 403 en CONNECT contra *.supabase.co."
+    "_abierto": "Queda UNA sola cosa, y es de calendario: el criterio de 7 dias —FPHS activa y sin correo de aviso pasada una semana desde el 2026-09-19—. Va por el dia 1 de 7. CERRADO en cambio lo demas: el cron interno jobid 1 fue RETIRADO el 2026-09-20 con cron.unschedule(1) y su funcion public.keepalive_tick() eliminada, DESPUES de ver el primer latido externo y con una guarda que abortaba si no lo hubiera habido; nada mas en la base la referenciaba [medido]. La tabla keepalive_ping NO se toco: conserva sus 4 filas historicas con origen=pg_cron, que el COMMENT de la columna explica que no probaban actividad. Nota de metodo: la pata HTTP nunca se pudo probar desde CC —el proxy de egreso devuelve 403 en CONNECT contra *.supabase.co—, asi que lo que la cerro no fue una prueba sino el efecto en produccion."
   },
   "carril_regulator": {
     "_status": "ENCENDIDO EN SECO — BRIEF-06, 2026-09-12 [medido]",
