@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-20-v2",
+    "version": "2026-09-21-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-20-v1",
+    "previous": "2026-09-20-v2",
     "previous_chain": [
+      "2026-09-20-v2",
       "2026-09-20-v1",
       "2026-09-19-v1",
       "2026-09-17-v1",
@@ -1732,6 +1733,22 @@
         "SSRF por la url remota que descarga el servidor",
         "Sobrescritura de assets de marca en brand/{brand_id}/ — x-upsert: true convierte una subida en un reemplazo silencioso"
       ],
+      "estado": "ABIERTO"
+    },
+    "SEC-03": {
+      "titulo": "media-store — secreto cableado como valor por defecto de Deno.env.get",
+      "severidad": "ROJO",
+      "detectado": "2026-09-21",
+      "afecta": [
+        "amlvyycfepwhiindxgzw / edge function media-store"
+      ],
+      "hecho": "La linea 8 de index.ts define el secreto de la funcion como Deno.env.get('MEDIA_STORE_SECRET') ?? '<valor literal>'. El valor NO se transcribe aqui a proposito, por CC_PROTOCOL §15: una credencial encontrada se reporta por su nombre y ubicacion, nunca por su valor. La funcion corre con verify_jwt: false y escribe en Storage con service_role [medido por CC el 2026-09-21 con get_edge_function, version 11].",
+      "vectores": [
+        "Cualquiera que pueda leer el codigo de la funcion obtiene una llave de escritura en Storage sin pedirla, porque el unico control de acceso de la ruta es ese mismo secreto",
+        "El fallback convierte un fallo de configuracion en un agujero silencioso: sin la variable de entorno la funcion NO cae con error, arranca y queda abierta con el valor cableado"
+      ],
+      "remedio": "Rotar el secreto, dejarlo solo en la variable de entorno y quitar el valor por defecto para que sea fail-loud. Es despliegue sobre una EF compartida: requiere brief propio con test de la marca N+1, y NO se ejecuta dentro de un Actualiza.",
+      "eje_que_deja": "Un `?? valor` sobre un secreto es el patron, no el caso: un secreto sin variable de entorno debe fallar ruidosamente, nunca degradar a un valor por defecto. Vale para toda Edge Function del ecosistema.",
       "estado": "ABIERTO"
     },
     "MCP-AUTH-01": {
