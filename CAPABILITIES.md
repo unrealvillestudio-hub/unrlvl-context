@@ -1,4 +1,5 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.22 · 2026-09-21 (**cuatro adiciones y ninguna derogación: el ciclo comercial entra al catálogo por donde cambia una decisión —por dónde se manda cada cosa—.** (1) **El conector de Gmail ELIMINA las imágenes alojadas por URL**: al enviar, el HTML conserva el enlace vacío y **pierde la etiqueta `img`**, sin nada que lo delate en el editor; para incrustar exige **base64 en la llamada**, inviable con archivos grandes; y **envía desde la cuenta autenticada del conector, no desde el buzón de la marca** [`reportado`]. Regla que se sigue: **un correo con imagen alojada no sale por el conector**. (2) **Resend es para correo de SISTEMA**; una respuesta a un prospecto **dentro de un hilo existente va por el Gmail de la marca**, con «Responder a todos» — es cuestión de hilo y de remitente, no de preferencia. (3) **Verificar una subida a Storage SIN tocar la ruta pública**: comparar los **bytes** de `storage.objects` con el archivo local, porque una ruta que **registra aperturas** —`/bim` lleva `open_count`— se contamina al abrirla para comprobar, y esa métrica es justo la que después dice si el prospecto lo leyó. Extiende la regla 1 de `MEASUREMENT_METHOD_RULE` y **no la copia**. (4) **Los dos buckets del ciclo comercial en UNRLVL**: `collateral` **privado** —material servido por token— y `brand-assets` **público** —imágenes de correo—; **la visibilidad decide dónde va cada cosa**, porque un informe servido por token que fuera público haría que el token no significara nada. **Cabecera anterior (`1.21`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.21 · 2026-09-20 (**tres adiciones medidas y ninguna derogación.** (1) **EL PROFESSOR SE OPERA DESDE CC, Y APROBAR ES UN SEGUNDO PASO** [`medido` por CC el 2026-09-20, seis llamadas, las seis **HTTP 200**]: el proxy `api/professor` se alcanza con **`Vercel:web_fetch_vercel_url`** —**nunca `curl`**, ver 1.10— y **acepta GET con los parámetros en la cadena de consulta**, incluidos `action=submit-learning` y **`action=approve-learning`**, que hasta hoy no estaba medido desde CC. Lo que este catálogo **no decía y cuesta un ciclo**: `professor-submit-learning` escribe **SIEMPRE `approved_by_sam: false`**, así que sembrar un learning **no lo aprueba** — la aprobación es una segunda llamada con `learning_id` y `approved=true`, y el valor viaja como **cadena** que PostgREST coerciona al booleano [verificado leyendo la fila después]. **Amplía el punto (2) del 1.18, no lo deroga.** (2) **`professor-submit-learning` YA NO devuelve 500, y el `relevance_score` no se pasa: lo calcula la EF** con `claude-haiku-4-5-20251001` aplicando su filtro F1→F2→F3, y devuelve además `filter_reason`, `category`, `learning_type` y `suggested_path` [`medido`: seis learnings del 2026-09-20, los seis `filter_passed: true` y `relevance_score: 5`]. Esto **cierra la entrada del 1.13 punto (6)** —el 500 por valor fuera del `CHECK`— y **precisa la del 1.17 punto (1)**: hoy pasar el score explícito no hace falta. **Advertencia que sí queda viva:** la EF escribe una **taxonomía de `category` distinta** (`platform`/`client`/`ecosystem`/`core-business`) de la que usan las siembras por `INSERT` directo (`arquitectura`, `metodo`, `gobernanza`, `datos`…), así que **la tabla tiene dos vocabularios según quién escriba** [`medido` el 2026-09-20: **183 categorías distintas sobre 1.127 filas** en `professor_learnings`]. No se unifica aquí: se declara. (3) **UNA EDGE FUNCTION DESPLEGADA PUEDE NO TENER FUENTE EN NINGÚN REPOSITORIO, Y ESO DESVÍA EL DIAGNÓSTICO** [`medido` el 2026-09-20]: `iid-approval-digest` llevaba **ACTIVA en producción desde julio en su versión 28**, disparada por un cron, y **su código no existía en ninguna rama** — un barrido por `unrlvl-iid-functions` buscando el texto de su correo no la encontraba, así que sus dos defectos se atribuyeron **durante días al repositorio equivocado**. **La comprobación que lo cierra, y va antes de concluir dónde vive un comportamiento: `Supabase:list_edge_functions` contra `supabase/functions/`.** Una EF desplegada que no está en el repo es un **hallazgo**, y lo primero que se hace con ella es **adoptarla** — sin fuente en git no se puede revisar, ni versionar, ni corregir por PR. **Lo que NO entra, y la razón queda escrita:** la regla «`EXPLAIN` planifica, no ejecuta» **no se copia aquí** — es método de medición y su sitio es `protocols/MEASUREMENT_METHOD_RULE.md`, que este catálogo apunta desde el 1.13; lo único nuevo de hoy es su variante sobre **escrituras** (`NOT NULL`, `GENERATED`, `CHECK` no los ve ningún plan), y duplicar el enunciado aquí crearía dos textos de la misma regla. **Cabecera anterior (`1.20`) conservada íntegra e inmediatamente debajo**, por yuxtaposición. **Ninguna de las tres adiciones toca la `1.19` ni la `1.20`**, que son de otra sesión del mismo día y hablan del esquema `fph`, de `storage.objects` y del keepalive: no hay solape, así que esta versión no corrige nada de ellas)_
 _Versión: 1.20 · 2026-09-19 (**una corrección de evidencia sobre la propia 1.19, y el remedio ya construido. Ninguna derogación: la redacción anterior se conserva íntegra, con su frase imprecisa bajo guard `⛔ NO OPERATIVO`.** (1) **CORRECCIÓN — la 1.19 afirmó sin medir.** Escribió *«la pausa se mide por tráfico al gateway»* **dentro de una sección titulada «capacidades medidas» y sin etiqueta propia**, y ese mecanismo **venía del brief de Claude.ai, no de una medición de CC**. La fuente primaria dice otra cosa [`medido` el 2026-09-19 sobre la documentación oficial, `guides/platform/free-project-pausing`]: la pausa se decide por **actividad de usuario** —*«a few user requests to the database each day»*— y los remedios que nombra son **llamadas de API** o **visitar el panel**. **La conclusión operativa no cambia** —el `INSERT` interno sigue sin servir— **pero el criterio de diseño sí**, y de ahí sale un **segundo defecto del cron viejo que la 1.19 no vio: `0 12 */3 * *` es cada TRES días, por debajo del «cada día» que pide la documentación**. La lección de método: se citó un mecanismo de plataforma **de segunda mano** en el archivo que el ecosistema consulta para decidir, con la fuente primaria a una consulta de distancia. (2) **El remedio existe: `unrlvl-ops` → `api/keepalive`** —cron de Vercel `11 2,10,18 * * *`, `POST` a la REST API de cada objetivo, **cero objetivos en el código** (variable `KEEPALIVE_TARGETS`), y el rastro en `keepalive_ping` con `origen` propio porque la retención de logs depende del plan—. (3) **TRAMPA DE PRIVILEGIOS, y vale para toda tabla de Supabase: RLS activa sin políticas NO retira privilegios, los deja inertes.** `anon` tenía los **siete** por los grants por defecto mientras la tabla parecía cerrada [`medido`], y **la primera política que se abre los reactiva todos**, no sólo el que se quería abrir — por eso el `REVOKE` va antes del `GRANT`, mismo eje que §11 aplicado a tablas. Se comprueba **simulando `SET LOCAL ROLE anon` y mirando el efecto**, no leyendo el `GRANT`. **Cabecera anterior (`1.19`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.19 · 2026-09-19 (**tres adiciones medidas y ninguna derogación; una de ellas corrige el alcance de una afirmación de ausencia.** (1) **El esquema `fph` de UNRLVL es un esqueleto vacío** —22 tablas creadas, `buildings` con 6 filas y `units`, `owners`, `owner_units`, `arrears` y `payments` en **0**—: **el padrón real vive en el proyecto FPHS**, con **1,378 unidades en 8 PH** [medido por CC el 2026-09-19]. Una consulta de padrón contra UNRLVL devuelve **0 filas sin error**, que es la misma familia de «0 filas ≠ no existe» del 2026-09-08 vista del otro lado: acá las tablas existen y lo que falta es el dato. (2) **`storage.objects` de UNRLVL no tiene ningún EEFF —eso se sostiene— pero tampoco tiene «sólo dos objetos» de ForumPHs: tiene 200 en cuatro buckets** [medido]. El «sólo» es cierto **acotado al bucket `brand-intel`** y falso a nivel de `storage.objects`; se escribe con su alcance porque **una afirmación de ausencia sin alcance manda a buscar en el sitio equivocado**. (3) **El keepalive de FPHS NO previene la pausa**: `cron.job` id 1 está activo y `keepalive_tick()` hace un `INSERT` **interno** vía `pg_cron`, mientras **`pg_net` y `http` están las dos SIN instalar** [medido], así que **no sale ni una petición** y la pausa se mide por **tráfico al gateway**. El cron late, la tabla crece y el contador no se mueve; hace falta un **cron externo**. **Es el mismo eje que el vigilante externo de ALERTAS-01** —lo que corre dentro de lo que observa no puede probar nada sobre ello desde fuera— y por eso **no es una nota de ForumPHs: aplica a cualquier base cuya métrica de actividad viva fuera del motor**. **Cabecera anterior (`1.18`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
@@ -730,6 +731,57 @@ tenga la clave publicable **no puede leer el historial**.
 
 **Corolario de clave:** para un trabajo acotado se manda la **clave publicable**, nunca la de
 servicio. La de servicio **ignora RLS**, así que acotar con políticas no la limita en nada.
+
+---
+
+## CORREO Y STORAGE — cuatro capacidades del ciclo comercial (añadido 2026-09-21)
+
+> Las cuatro salen de la sesión del 2026-09-21 [`reportado` — brief de Claude.ai; **CC no las
+> midió**, salvo donde se indique]. Se escriben acá porque **cambian por dónde se manda una cosa**,
+> que es exactamente lo que un catálogo de capacidades tiene que decir.
+
+### 📧 El conector de Gmail ELIMINA las imágenes alojadas por URL
+
+**Al enviar, el HTML conserva el enlace vacío y pierde la etiqueta `img`** [`reportado` — leído del
+mensaje ya enviado, no del borrador]. El correo llega sin la imagen y **sin nada que lo delate en el
+editor**: se ve bien antes de mandarlo.
+
+**Para incrustar una imagen, el conector exige base64 dentro de la llamada**, lo que es inviable
+para un archivo grande. Y hay una segunda propiedad que suele pasarse por alto: **envía desde la
+cuenta autenticada del conector, no desde el buzón de la marca**, así que el prospecto recibe un
+remitente que no es el del hilo.
+
+> **Regla práctica que se sigue de las dos:** un correo con imagen alojada **no sale por el conector**.
+
+### ✉️ Qué sale por Resend y qué por el Gmail de la marca
+
+| Tipo de correo | Vía |
+|---|---|
+| **Correo de sistema** (avisos, notificaciones del carril) | **Resend** |
+| **Respuesta a un prospecto dentro de un hilo existente** | **Gmail de la marca**, «Responder a todos» |
+
+**El motivo no es de preferencia: es de hilo y de remitente.** Una respuesta comercial tiene que
+conservar el hilo y llegar a toda la Junta, y eso sólo lo hace el buzón de la marca.
+
+### 📦 Verificar una subida a Storage SIN tocar la ruta pública
+
+**Comparar los bytes de `storage.objects` contra el archivo local.** Es la vía cuando la ruta
+pública **registra aperturas** —como `/bim`, que lleva `open_count` por token—: abrir el enlace para
+comprobar que subió **contamina la métrica que después se usa para saber si el prospecto lo leyó**.
+
+Extiende la primera regla de `MEASUREMENT_METHOD_RULE` —`storage.objects` en vez de `HEAD`— con su
+motivo comercial, y **no la copia**.
+
+### 🪣 Los dos buckets del ciclo comercial, en UNRLVL
+
+| Bucket | Visibilidad | Qué guarda |
+|---|---|---|
+| `collateral` | **privado** | material servido por enlace con token, ruta `/bim` |
+| `brand-assets` | **público** | imágenes para correo y documentos |
+
+**La visibilidad es la que decide dónde va cada cosa, no la comodidad:** una imagen de correo tiene
+que ser pública o el cliente no la ve; un informe servido por token **no puede serlo**, o el token
+deja de significar nada.
 
 ---
 

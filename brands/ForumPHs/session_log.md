@@ -1,5 +1,85 @@
 # ForumPHs — Session Log
 
+## 2026-09-21 — El ciclo comercial completo se vuelve procedimiento
+
+> **Entrada de CC.** `HRD_ACTUALIZA` sobre el brief de Claude.ai del 2026-09-21. Lo etiquetado
+> `reportado` lo afirma ese brief y **CC no lo midió**; lo etiquetado `medido` lo consultó CC el
+> **2026-09-21**. **Sin datos de ningún prospecto** — ni nombre, ni unidades, ni ubicación, ni lo
+> que haya declarado: lo gobierna `protocols/MAIL_PRIVACY_RULE.md`. Lo previo se conserva íntegro debajo.
+
+### 📘 El procedimiento comercial queda formalizado
+
+Alta de **`brands/ForumPHs/sales-kit/PLAYBOOK_propuesta_prospecto_PH.md`**, copiado **literal** del
+original —**verificado por md5**, idéntico [`medido`]—. Es el procedimiento de principio a fin y
+**la pieza principal del kit**: manda cuando alguna otra la contradiga. Está escrito para que una
+sesión sin contexto previo ejecute una propuesta completa.
+
+### 💼 El modelo de cartera queda definitivo, y sustituye al del 2026-09-19
+
+| | Hasta 90 días | Desde 90 días |
+|---|---|---|
+| **Recuperación** | **incluida, sin costo adicional** | recomendación de **vía legal** |
+| **Expediente** | — | **completo y sin costo** |
+| **Gestión** | ForumPHs | **la Junta y su abogado** |
+
+**Sin comisión sobre lo recuperado en ninguna etapa. Sin comisión por referir abogados. Sin
+representación judicial** — quien administra el patrimonio no debe cobrar por litigar sobre él
+[`reportado`].
+
+🔴 **Sustituye al honorario porcentual del 2026-09-19** —el 8–10 % sobre lo recuperado—, que queda
+bajo guard `⛔ NO OPERATIVO` **en dos sitios**: en el `INDEX.md` del kit y **dentro de
+`correo_que_da_precio.md`**, que es donde el modelo viejo está escrito. **Marcar sólo el índice no
+bastaba:** una sesión que abriera la pieza directamente habría ofrecido un porcentaje que ya no existe.
+
+### 💵 Costeo con contratación compartida
+
+Cuando el PH nuevo obliga a contratar a alguien repartido entre varias administraciones de la misma
+ubicación: **fracción de la persona más la estructura compartida por unidad**, que da
+**$7.67/unidad/mes** [`reportado`]. La estructura compartida es todo lo que no es planilla de
+administradoras, dividido entre las unidades administradas.
+
+### 🏷️ Denominaciones fijadas
+
+«**asesoría legal idónea**» y «**Abogada Especialista en Régimen de Propiedad Horizontal**»
+[`reportado`].
+
+### 📄 Material servido y alojado
+
+- **Documento de `/bim` corregido y reemplazado** en `collateral/ForumPHs/suite-gestion-financiera.html`,
+  **verificado por bytes (73,899)** el 2026-09-21 a las 13:46 UTC [`reportado`]. La verificación por
+  bytes existe para **no tocar la ruta pública**, que registra cada apertura.
+- **Imagen de correo** alojada en `brand-assets/ForumPHs/email/`.
+
+### 🔴 Un hallazgo de seguridad, verificado por CC y SIN usar
+
+**`media-store` lleva un secreto cableado como valor por defecto** de `Deno.env.get('MEDIA_STORE_SECRET')`
+en la línea 8 de su `index.ts`, con **`verify_jwt: false`** y escritura con **`service_role`**
+[`medido` — código leído con `get_edge_function` el 2026-09-21; **el valor no se transcribe a ningún
+archivo, ni se usó**].
+
+**Eso es la regla nueva en acción:** una credencial hallada leyendo código **no se usa aunque sirva
+para la tarea** — se reporta. Queda escrita en `CC_PROTOCOL.md` §15.
+
+**No se arregla en este Actualiza:** rotar el secreto, dejarlo sólo en la variable de entorno y
+quitar el valor por defecto **es DDL y despliegue sobre una EF compartida**, y necesita brief propio
+con su test de la marca N+1.
+
+### 🔍 LO QUE CC CORRIGE POR MEDICIÓN — dos cosas del brief
+
+**a · El Professor no trae 14 learnings, trae 16.** El brief dice «14 learnings, dos con prefijo
+`SALES-KIT`, uno con `SUPERSEDES`». **Medido** sobre `professor_learnings` con
+`session_date = '2026-09-21'`: **16 filas**, **las 16 aprobadas**, **3** con prefijo `SALES-KIT` y
+**2** con `SUPERSEDES`. La diferencia no cambia nada de lo que este Actualiza escribe, pero **un
+recuento afirmado y no medido es el mismo defecto que costó la corrección del 2026-09-19**.
+
+**b · El pendiente del keepalive ya está cerrado.** El brief lo lista como abierto —«el de `pg_cron`
+no evita la pausa (registrado el 2026-09-19)»—, y **eso dejó de ser cierto el 2026-09-20**: el cron
+externo está en producción con tres latidos verificados y **el `pg_cron` interno fue retirado**.
+**No se copia a la AGENDA como deuda viva.** Lo único que sigue abierto de ese frente es el criterio
+de 7 días, que va por el día 2.
+
+---
+
 ## 2026-09-20 — El keepalive queda probado por efecto, y el cron interno se retira
 
 > **Entrada de CC.** Cierre del frente abierto el 2026-09-19. Todo lo etiquetado `medido` lo

@@ -118,6 +118,21 @@ precio por unidad más alto de la cartera**.
 
 ## Deuda conocida de esta pieza
 
+> ## ⛔ NO OPERATIVO — SUSTITUIDO el 2026-09-21
+>
+> **Todo lo que esta pieza dice sobre un «honorario de recuperación» quedó sustituido** —pasos 5 y 6
+> de la estructura, la tabla de la regla 3 y la primera deuda de abajo—. **No hay honorario de
+> recuperación, ni porcentual ni fijo, en ninguna etapa.**
+>
+> **El modelo vigente está en [`PLAYBOOK_propuesta_prospecto_PH.md`](PLAYBOOK_propuesta_prospecto_PH.md) §4:**
+> recuperación **incluida sin costo hasta los 90 días**; a partir de ahí, recomendación de vía legal
+> y **expediente completo sin costo**, con la gestión a cargo de la Junta; **sin comisión sobre lo
+> recuperado** y **sin comisión por referir abogados**; y **sin representación judicial**.
+>
+> **El resto de esta pieza sigue vigente** —la tarifa primero con su derivación, el esquema cerrado
+> de tres tarifas y cada dato pedido con su motivo—. Lo derogado es **sólo** el modelo de cobro de
+> la cartera. Se archiva y no se borra: el porqué del descarte vale más que su ausencia.
+
 🔴 **El porcentaje del honorario de recuperación no está fijado.** Sugerido **8–10 %**, sin decidir.
 Mientras no se fije, el paso 5 **nombra el concepto y no da el número** — dar un porcentaje que
 después cambia es la clase de corrección que cuesta más que la espera.

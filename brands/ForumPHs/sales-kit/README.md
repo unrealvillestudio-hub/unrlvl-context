@@ -26,6 +26,7 @@ no pertenece al kit: pertenece al registro de sesión.
 
 | Pieza | Archivo | Estado |
 |---|---|---|
+| **Propuesta a un PH prospecto — playbook completo** ⭐ | [`PLAYBOOK_propuesta_prospecto_PH.md`](PLAYBOOK_propuesta_prospecto_PH.md) | ✅ **estándar declarado 2026-09-21 · es la pieza principal y manda sobre las demás** |
 | Correo de respuesta a prospecto | [`email_respuesta_prospecto.md`](email_respuesta_prospecto.md) | ✅ estándar declarado 2026-09-08 |
 | Argumento de servicio frente a horas hombre | [`argumento_servicio_vs_horas_hombre.md`](argumento_servicio_vs_horas_hombre.md) | ✅ estándar declarado 2026-09-19 |
 | Correo que da precio | [`correo_que_da_precio.md`](correo_que_da_precio.md) | ✅ estándar declarado 2026-09-19 |

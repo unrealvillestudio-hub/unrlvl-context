@@ -1,7 +1,9 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-17-v12 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-21-v13 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v13 (2026-09-21):** una adición, ninguna derogación. **§15 — una credencial encontrada NO se usa, se reporta.** Vale para cualquier secreto que CC se tropiece leyendo código, configuración, logs o un volcado: **aunque sirva exactamente para la tarea en curso, y aunque usarla fuera lo más rápido**, no se usa, no se copia a un archivo, no se pega en un chat y no se guarda para después. Se reporta **por su nombre y su ubicación, nunca por su valor**. Motivo medido el 2026-09-21: la Edge Function `media-store` lleva un secreto **cableado como valor por defecto** de `Deno.env.get(...)` —con `verify_jwt: false` y escritura con `service_role`—, así que cualquier sesión que leyera ese archivo se llevaba una llave de escritura sin pedirla. **La tentación es real y por eso hace falta la regla:** el secreto estaba a la vista y habría ahorrado un paso. §14 queda íntegro. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
+>
 > **Cambios v12 (2026-09-17):** una adición, ninguna derogación. **§14 — una comprobación también
 > se mide: cuatro reglas de método sobre el instrumento, no sobre el código comprobado.** (1) Quitar
 > comentarios **antes** de comprobar, o la comprobación se dispara sobre su propia explicación —
@@ -574,6 +576,50 @@ un `statement_timeout` de 8 s, frente a **135 ms** después.
 **Y el corolario que ata §14.4 con `MEASUREMENT_METHOD_RULE` §6:** ese resumen **se mide en la vía que
 lo ejecuta**, no en el nivel superior. `SELECT … INTO` impone un límite de filas, y **un plan con
 límite de filas no se paraleliza**.
+
+---
+
+## 15. UNA CREDENCIAL ENCONTRADA NO SE USA — SE REPORTA
+
+**La regla, en una línea:**
+
+> **Un secreto que CC encuentra leyendo no es un secreto que CC puede usar.**
+
+Aplica a cualquier credencial con la que CC se tropiece **sin haberla pedido**: en el código de una
+Edge Function, en un archivo de configuración, en un log, en un volcado de una tabla, en el
+historial de un repositorio o en el cuerpo de un mensaje.
+
+**Qué NO se hace, y las cuatro importan por igual:**
+
+1. **No se usa** — ni siquiera cuando sirve exactamente para la tarea en curso y usarla sería el
+   camino más corto. **Ese es justo el caso que la regla cubre**; si sólo aplicara cuando es inútil,
+   no haría falta escribirla.
+2. **No se copia** a un archivo del repositorio, a un context file, a Professor, a un brief ni a un
+   cuerpo de PR. `CLAUDE.md` ya lo prohíbe para los secretos conocidos; esto lo extiende a los
+   encontrados.
+3. **No se pega en el chat**, aunque el chat sea privado. Queda en el registro de la conversación.
+4. **No se guarda «por si acaso»** para un paso posterior de la misma sesión.
+
+**Qué SÍ se hace:** se reporta **por su nombre y su ubicación — archivo y línea —, nunca por su
+valor**, y se propone la corrección: rotarlo, dejarlo sólo en la variable de entorno, y quitar el
+valor por defecto.
+
+### Por qué existe esta sección — el caso que la originó
+
+**Medido el 2026-09-21.** La Edge Function **`media-store`** lleva un secreto **escrito en el código
+como valor por defecto** de `Deno.env.get(...)`. La función corre con **`verify_jwt: false`** y
+escribe en Storage con **`service_role`**, así que ese valor por defecto es, en la práctica, **una
+llave de escritura al alcance de cualquier sesión que abra el archivo**.
+
+**Lo que hace el caso instructivo no es el descuido: es la tentación.** CC estaba verificando ese
+mismo hallazgo, tenía el secreto delante y usarlo habría sido el camino más corto. **Una regla que
+sólo se cumple cuando no cuesta nada no es una regla**, y por eso queda escrita antes de que el
+próximo hallazgo llegue con prisa.
+
+**Corolario sobre el fallback en sí, que es un patrón y no un caso:** un `Deno.env.get('X') ?? 'valor'`
+sobre un secreto **convierte un fallo de configuración en un agujero silencioso**. Sin el fallback,
+la función caería con «X no configurado» y alguien lo arreglaría; con él, arranca y queda abierta.
+**Un secreto sin variable de entorno debe ser fail-loud**, nunca un valor por defecto.
 
 ---
 
