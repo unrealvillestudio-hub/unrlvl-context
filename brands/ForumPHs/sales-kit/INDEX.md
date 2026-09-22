@@ -8,10 +8,44 @@ Qué es el kit y qué cuenta como pieza: [`README.md`](README.md).
 
 ## Piezas vivas
 
+### `PLAYBOOK_propuesta_prospecto_PH.md` — Propuesta de administración a un PH prospecto ⭐
+**Declarado estándar el 2026-09-21. Es la pieza principal del kit** y la que manda cuando algo de
+otra pieza la contradiga. Procedimiento completo de principio a fin: levantamiento, dimensionamiento
+con fuentes públicas, costeo sobre EEFF reales, modelo comercial, material de muestra, imagen de
+correo, correo, NDA y checklist final.
+
+**Está escrito para que una sesión sin contexto previo lo ejecute.** Las demás piezas del kit
+desarrollan partes de este procedimiento; ninguna lo sustituye.
+
+**Contiene método, no datos de ningún prospecto** — lo gobierna la regla de privacidad de su §0.
+
+---
+
+> ## ⛔ NO OPERATIVO — el modelo de cartera del 2026-09-19 quedó SUSTITUIDO
+>
+> **Lo que decía, y ya no rige:** honorario de recuperación **porcentual sobre lo recuperado** en
+> cartera de más de 90 días, con un rango sugerido del **8–10 %** pendiente de fijar. Aparece así en
+> [`correo_que_da_precio.md`](correo_que_da_precio.md) —pasos 5 y 6 y su bloque de deuda— y en el
+> `session_log` del 2026-09-19. **No se borra: se archiva**, porque la historia de por qué se
+> descartó vale más que su ausencia.
+>
+> **El modelo vigente está en el playbook, §4 — «Cartera»:**
+>
+> - Recuperación **incluida, sin costo adicional, hasta los 90 días** de atraso.
+> - **A partir de 90 días:** ForumPHs recomienda la vía legal y entrega el **expediente completo,
+>   sin costo**. La gestión pasa a la Junta y su abogado.
+> - **Sin comisión sobre lo recuperado en ninguna etapa**, y **ninguna comisión por referir abogados**.
+> - **Sin representación judicial:** quien administra el patrimonio no debe cobrar por litigar sobre él.
+>
+> **Por qué importa marcarlo y no sólo corregirlo:** una sesión que abra `correo_que_da_precio.md`
+> sin pasar por este índice ofrecería un porcentaje que **ya no existe**. Por eso el guard se repite
+> dentro de esa pieza, en el punto exacto donde el modelo viejo se describe.
+
+
 ### `email_respuesta_prospecto.md` — Correo de respuesta a prospecto
 **Declarado estándar el 2026-09-08.** Estructura de nueve pasos y las tres reglas que codifica:
 el enlace al final, el cierre con condición y plazo, y anticipar el riesgo no mencionado.
-Ejemplo trabajado: P.H. Plaza 77.
+Ejemplo trabajado: un PH prospecto.
 
 **Cuándo se usa:** primera respuesta sustantiva a un prospecto que ya declaró sus prioridades.
 No sirve para un primer contacto en frío — el paso 1 necesita algo que devolver.
@@ -32,7 +66,7 @@ la objeción del horario**, que se lee como reclamo de trazabilidad y no como pe
 **Declarado estándar el 2026-09-19.** Estructura de seis pasos y las tres reglas que codifica: la
 tarifa primero con su derivación pegada, el esquema cerrado de **tres tarifas con los mismos
 servicios en las tres**, y **cada dato pendiente pedido con su motivo y por separado** — nunca como
-bloque único de requisitos. Ejemplo trabajado: P.H. Plaza 77, $1,200/mes.
+bloque único de requisitos. Ejemplo trabajado: un PH prospecto, $1,200/mes.
 
 **Cuándo se usa:** en el segundo momento, cuando ya hay levantamiento suficiente para dar tarifa.
 Va **después** de `email_respuesta_prospecto.md`, no en su lugar.
@@ -63,7 +97,7 @@ revocable y registra la apertura. El documento **no genera ninguna conexión a t
 Cómo se emite un enlace, cómo se revoca y cómo se audita: `forumphs-com` →
 `docs/COLLATERAL_LINKS.md`.
 
-**Enlace vivo:** emitido a P.H. Plaza 77 el 2026-09-08, **vence 2026-10-08**.
+**Enlace vivo:** emitido a un prospecto el 2026-09-08, **vence 2026-10-08**.
 
 ---
 

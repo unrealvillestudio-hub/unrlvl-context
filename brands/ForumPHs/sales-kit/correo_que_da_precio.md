@@ -2,7 +2,7 @@
 
 **Declarado estándar por Sam el 2026-09-19.** Plantilla reutilizable. Es el correo del **segundo
 momento**: el prospecto ya recibió diagnóstico y material, y ahora espera **un número**. El ejemplo
-trabajado —P.H. Plaza 77— está al final; **la pieza es la estructura, no el ejemplo**.
+trabajado —un PH prospecto— está al final; **la pieza es la estructura, no el ejemplo**.
 
 > **Cuándo se usa:** cuando ya hay levantamiento suficiente para dar una tarifa. **No sustituye** a
 > [`email_respuesta_prospecto.md`](email_respuesta_prospecto.md): va **después**. Aquel abre y pide
@@ -87,11 +87,15 @@ cotiza aparte se lee como recorte de lo incluido en vez de como ampliación.
 
 ---
 
-## Ejemplo trabajado — P.H. Plaza 77, 2026-09-19
+## Ejemplo trabajado — un PH prospecto, 2026-09-19
 
-> Prospecto: **~6,800 m²**, cuota **$1.71/m²** — **por encima del $1.65 de Lefevre**. **No tienen un
-> problema de tarifa: tienen un problema de cobro y de gasto**, y eso cambia lo que se les ofrece.
-> Su cuota ya alcanza; lo que no funciona es lo que se hace con ella.
+> Prospecto: un PH cuya **cuota por m² estaba por encima de la del PH más caro de la cartera**.
+> **No tienen un problema de tarifa: tienen un problema de cobro y de gasto**, y eso cambia lo que
+> se les ofrece. Su cuota ya alcanza; lo que no funciona es lo que se hace con ella.
+>
+> *(Las cifras absolutas —metraje y tarifa— se retiraron el 2026-09-22 al anonimizar el kit. **La
+> lección es la comparación, no el número**: lo que decide la propuesta es que su cuota ya esté por
+> encima de la referencia, no cuánto vale.)*
 
 **1 · La tarifa.** **$1,200 mensuales.** Arriba, sin preámbulo.
 
@@ -117,6 +121,21 @@ precio por unidad más alto de la cartera**.
 ---
 
 ## Deuda conocida de esta pieza
+
+> ## ⛔ NO OPERATIVO — SUSTITUIDO el 2026-09-21
+>
+> **Todo lo que esta pieza dice sobre un «honorario de recuperación» quedó sustituido** —pasos 5 y 6
+> de la estructura, la tabla de la regla 3 y la primera deuda de abajo—. **No hay honorario de
+> recuperación, ni porcentual ni fijo, en ninguna etapa.**
+>
+> **El modelo vigente está en [`PLAYBOOK_propuesta_prospecto_PH.md`](PLAYBOOK_propuesta_prospecto_PH.md) §4:**
+> recuperación **incluida sin costo hasta los 90 días**; a partir de ahí, recomendación de vía legal
+> y **expediente completo sin costo**, con la gestión a cargo de la Junta; **sin comisión sobre lo
+> recuperado** y **sin comisión por referir abogados**; y **sin representación judicial**.
+>
+> **El resto de esta pieza sigue vigente** —la tarifa primero con su derivación, el esquema cerrado
+> de tres tarifas y cada dato pedido con su motivo—. Lo derogado es **sólo** el modelo de cobro de
+> la cartera. Se archiva y no se borra: el porqué del descarte vale más que su ausencia.
 
 🔴 **El porcentaje del honorario de recuperación no está fijado.** Sugerido **8–10 %**, sin decidir.
 Mientras no se fije, el paso 5 **nombra el concepto y no da el número** — dar un porcentaje que
