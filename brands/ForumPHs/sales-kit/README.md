@@ -51,6 +51,32 @@ encargo aparte. No cambia el enlace ni la fila.
 
 ---
 
+## Privacidad — qué NUNCA entra en una pieza del kit
+
+**Anonimizado el 2026-09-22, por decisión de Sam.** Las piezas citaban a un prospecto por su nombre,
+su ubicación, su número de unidades y **las prioridades que declaró en su correo**. Eso contradice
+`protocols/MAIL_PRIVACY_RULE.md`, que es la fuente canónica: **lo que se lee del buzón de un cliente
+o prospecto se usa en el chat y no se escribe en ningún sitio.**
+
+**Lo que NO entra en una pieza, aunque el ejemplo pierda color:**
+
+| No entra | Por qué |
+|---|---|
+| Nombre del PH o de la persona | Identifica directamente |
+| Ubicación, barrio o zona concreta | Identifica en un mercado pequeño |
+| Número de unidades, metraje o cuota **en absoluto** | Los tres juntos identifican; y de a dos, casi |
+| Lo que el prospecto **declaró** en su correo, literal | Es justo lo que la regla de buzón prohíbe |
+
+**Lo que SÍ entra, y es lo que hace útil al ejemplo:** la **estructura**, el **orden** de los pasos,
+las **relaciones** entre cifras —«su cuota estaba por encima de la del PH más caro de la cartera»— y
+**nuestras propias cifras**: precio, margen, costeo.
+
+> **El criterio, en una línea: el ejemplo enseña la regla aplicada, no a quién se le aplicó.**
+> Si al quitar el identificador la pieza deja de enseñar algo, es que estaba enseñando el caso y no
+> el método — y entonces el problema era la pieza, no la anonimización.
+
+---
+
 ## Multimarca
 
 Este directorio es **artefacto exclusivo de ForumPHs** (`MULTIBRAND_RULE.md` §3): vive bajo

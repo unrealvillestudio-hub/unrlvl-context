@@ -1736,18 +1736,22 @@
       "estado": "ABIERTO"
     },
     "SEC-03": {
-      "titulo": "media-store — secreto cableado como valor por defecto de Deno.env.get",
+      "titulo": "media-store Y meta-graph-post — el MISMO secreto cableado como valor por defecto de Deno.env.get, en las dos",
       "severidad": "ROJO",
-      "detectado": "2026-09-21",
+      "detectado": "2026-09-09",
+      "_correccion_2026-09-22": "CC lo dio de alta el 2026-09-21 como detectado ese dia y afectando a UNA sola EF. Las dos cosas eran falsas y las corrige la medicion: el hallazgo ya estaba registrado el 2026-09-09 en AGENDA.md, bloque de esa sesion, punto 6 —lleva 13 dias abierto, no uno—, y afecta a DOS Edge Functions que comparten el MISMO secreto y el MISMO literal. Alta sin medir contra lo ya escrito: el defecto es de metodo y es el mismo que la 1.19.",
       "afecta": [
-        "amlvyycfepwhiindxgzw / edge function media-store"
+        "amlvyycfepwhiindxgzw / edge function media-store (linea 8)",
+        "amlvyycfepwhiindxgzw / edge function meta-graph-post (linea 14)"
       ],
       "hecho": "La linea 8 de index.ts define el secreto de la funcion como Deno.env.get('MEDIA_STORE_SECRET') ?? '<valor literal>'. El valor NO se transcribe aqui a proposito, por CC_PROTOCOL §15: una credencial encontrada se reporta por su nombre y ubicacion, nunca por su valor. La funcion corre con verify_jwt: false y escribe en Storage con service_role [medido por CC el 2026-09-21 con get_edge_function, version 11].",
       "vectores": [
         "Cualquiera que pueda leer el codigo de la funcion obtiene una llave de escritura en Storage sin pedirla, porque el unico control de acceso de la ruta es ese mismo secreto",
         "El fallback convierte un fallo de configuracion en un agujero silencioso: sin la variable de entorno la funcion NO cae con error, arranca y queda abierta con el valor cableado"
       ],
-      "remedio": "Rotar el secreto, dejarlo solo en la variable de entorno y quitar el valor por defecto para que sea fail-loud. Es despliegue sobre una EF compartida: requiere brief propio con test de la marca N+1, y NO se ejecuta dentro de un Actualiza.",
+      "remedio": "Rotar el secreto, dejarlo solo en la variable de entorno y quitar el valor por defecto para que sea fail-loud. LAS DOS EF A LA VEZ: comparten variable y literal, asi que rotar una sola deja la otra rechazando el secreto nuevo. Requiere brief propio con test de la marca N+1 y NO se ejecuta dentro de un Actualiza.",
+      "_trampa_del_despliegue": "La tool MCP deploy_edge_function tiene verify_jwt con DEFAULT TRUE [medido el 2026-09-22 sobre su esquema]. Las dos EF corren con verify_jwt: false y se autentican por la cabecera x-store-secret, asi que un despliegue que no pase verify_jwt: false EXPLICITO las deja exigiendo JWT y todo llamador recibe 401. Es el mismo eje que el --no-verify-jwt de CC_PROTOCOL §10, por la via de la tool en vez de la CLI.",
+      "_llamadores_medidos_2026-09-22": "Ningun cron las invoca; net._http_response no registra NI UNA invocacion a ninguna de las dos; y los edge_logs de las ultimas 24 h dan cero. Se deduce que se invocan a mano desde una sesion, no por automatismo, lo que hace viable una rotacion directa en vez de una ventana de doble secreto. Lo que CC NO puede medir es si MEDIA_STORE_SECRET esta puesta en el entorno —no tiene acceso a variables— y NO lo comprueba usando el literal hallado, por CC_PROTOCOL §15.",
       "eje_que_deja": "Un `?? valor` sobre un secreto es el patron, no el caso: un secreto sin variable de entorno debe fallar ruidosamente, nunca degradar a un valor por defecto. Vale para toda Edge Function del ecosistema.",
       "estado": "ABIERTO"
     },

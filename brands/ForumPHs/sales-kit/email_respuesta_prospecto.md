@@ -1,7 +1,7 @@
 # Correo de respuesta a prospecto — estándar del Sales-Kit
 
 **Declarado estándar por Sam el 2026-09-08.** Plantilla reutilizable. El ejemplo trabajado —el envío
-a P.H. Plaza 77— está al final, para que se vea la estructura aplicada; **la pieza es la estructura,
+a un PH prospecto— está al final, para que se vea la estructura aplicada; **la pieza es la estructura,
 no el ejemplo**.
 
 ---
@@ -65,14 +65,14 @@ protege el número.
 
 ---
 
-## Ejemplo trabajado — P.H. Plaza 77, 2026-09-08
+## Ejemplo trabajado — un PH prospecto, 2026-09-08
 
-> Prospecto: 59 apartamentos y 1 local, Vía Argentina. Prioridades que **ellos** declararon: **mora
-> sin gestión** y **revisión de gastos**. Evalúan cambiar el equipo de trabajo, con las prestaciones
-> del personal saliente por definir — ese es el riesgo del paso 8.
+> Prospecto: un PH residencial de tamaño medio, en zona urbana. Prioridades que **ellos**
+> declararon: **una de cobro y otra de gasto**. Evaluaban sustituir al personal en sitio, con las
+> prestaciones del saliente por definir — ese es el riesgo del paso 8.
 
-**1 · Acuse.** Se abre nombrando las dos prioridades que ellos dieron —mora sin gestión y revisión
-de gastos—, con sus palabras, sin reformularlas en jerga nuestra.
+**1 · Acuse.** Se abre nombrando las dos prioridades que ellos dieron —la de cobro y la de gasto—,
+**con sus palabras**, sin reformularlas en jerga nuestra.
 
 **2 · Caso real.** Un PH residencial administrado por la firma, sin nombrarlo: cerró el año con
 **déficit operativo de $41,815**, **segundo año consecutivo en números rojos**. El efectivo cayó de

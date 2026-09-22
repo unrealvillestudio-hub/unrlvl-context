@@ -45,7 +45,7 @@ desarrollan partes de este procedimiento; ninguna lo sustituye.
 ### `email_respuesta_prospecto.md` — Correo de respuesta a prospecto
 **Declarado estándar el 2026-09-08.** Estructura de nueve pasos y las tres reglas que codifica:
 el enlace al final, el cierre con condición y plazo, y anticipar el riesgo no mencionado.
-Ejemplo trabajado: P.H. Plaza 77.
+Ejemplo trabajado: un PH prospecto.
 
 **Cuándo se usa:** primera respuesta sustantiva a un prospecto que ya declaró sus prioridades.
 No sirve para un primer contacto en frío — el paso 1 necesita algo que devolver.
@@ -66,7 +66,7 @@ la objeción del horario**, que se lee como reclamo de trazabilidad y no como pe
 **Declarado estándar el 2026-09-19.** Estructura de seis pasos y las tres reglas que codifica: la
 tarifa primero con su derivación pegada, el esquema cerrado de **tres tarifas con los mismos
 servicios en las tres**, y **cada dato pendiente pedido con su motivo y por separado** — nunca como
-bloque único de requisitos. Ejemplo trabajado: P.H. Plaza 77, $1,200/mes.
+bloque único de requisitos. Ejemplo trabajado: un PH prospecto, $1,200/mes.
 
 **Cuándo se usa:** en el segundo momento, cuando ya hay levantamiento suficiente para dar tarifa.
 Va **después** de `email_respuesta_prospecto.md`, no en su lugar.
@@ -97,7 +97,7 @@ revocable y registra la apertura. El documento **no genera ninguna conexión a t
 Cómo se emite un enlace, cómo se revoca y cómo se audita: `forumphs-com` →
 `docs/COLLATERAL_LINKS.md`.
 
-**Enlace vivo:** emitido a P.H. Plaza 77 el 2026-09-08, **vence 2026-10-08**.
+**Enlace vivo:** emitido a un prospecto el 2026-09-08, **vence 2026-10-08**.
 
 ---
 

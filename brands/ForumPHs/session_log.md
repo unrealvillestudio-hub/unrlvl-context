@@ -1,5 +1,74 @@
 # ForumPHs — Session Log
 
+## 2026-09-22 — El Sales-Kit se anonimiza, y dos cosas que CC había medido mal
+
+> **Entrada de CC.** Tres decisiones de Sam del 2026-09-22 aplicadas, y **dos correcciones de CC
+> sobre medidas propias**. Lo etiquetado `medido` lo consultó CC el 2026-09-22. Lo previo se
+> conserva íntegro debajo, **salvo lo que la anonimización retira a propósito** — declarado abajo.
+
+### 🔒 El Sales-Kit queda anonimizado — y esto SÍ borra líneas
+
+**Por decisión de Sam.** Retirados de las piezas del kit: **nombre del PH, ubicación, número de
+unidades, metraje y cuota absolutos, y las prioridades que el prospecto declaró en su correo**.
+**15 líneas sustituidas**, que es la única parte de todo este frente donde el diff **borra**.
+
+> **Es una excepción deliberada a `CC_PROTOCOL.md` §0, y se declara como tal.** La regla dice que un
+> context file no pierde contenido. **`MAIL_PRIVACY_RULE.md` dice que ese contenido no debía existir.**
+> Cuando dos reglas chocan, **manda la que protege a un tercero**, y la decisión la tomó Sam, no CC.
+
+**Lo que se conserva, y es lo que hacía útil al ejemplo:** la estructura, el orden de los pasos, las
+**relaciones** entre cifras —«su cuota estaba por encima de la del PH más caro de la cartera»— y
+**nuestras propias cifras**: precio, margen y costeo. **El ejemplo enseña la regla aplicada, no a
+quién se le aplicó.**
+
+**Y queda escrita la regla del kit** en su `README.md`, con la tabla de lo que nunca entra, para que
+la próxima pieza no lo reintroduzca. **Sin esa regla, la anonimización dura hasta la siguiente pieza.**
+
+### 🔍 CORRECCIÓN 1 — `SEC-03` estaba mal en dos datos, y los dos los había medido CC
+
+| | Lo que CC escribió el 2026-09-21 | Lo medido el 2026-09-22 |
+|---|---|---|
+| Detectado | 2026-09-21 | **2026-09-09** — ya estaba en `AGENDA.md`, punto 6 de esa sesión |
+| Alcance | `media-store` | **`media-store` Y `meta-graph-post`** |
+
+**Las dos EF comparten el MISMO secreto y el MISMO literal** [`medido` — código de las dos leído con
+`get_edge_function`]. **Lleva 13 días abierto, no uno.**
+
+**El defecto de método es el mismo que costó la corrección de `CAPABILITIES` 1.19:** dar de alta un
+hallazgo **sin medirlo contra lo que el repo ya tenía escrito**. La AGENDA lo decía desde hacía dos
+semanas y CC no lo buscó antes de escribir «detectado hoy».
+
+### ⛔ CORRECCIÓN 2 — Los Álamos queda DESCARTADO, y no por haberse resuelto
+
+Sam corrigió la base [`reportado`]: **el gasto operativo de los últimos siete meses está inflado por
+prestaciones no provisionadas por el socio anterior**, que ahora se sanean con un plan. La base de
+costo que se repartió por PH **arrastra ese saneamiento**, así que **«pierde $2,152/mes» mide un
+pasado que se está pagando, no el contrato**.
+
+**Y la decisión es de Ivette, no de UNRLVL.** Para el trabajo de UNRLVL **el tema queda descartado**;
+habrá un análisis más preciso **más adelante, no ahora**.
+
+**Lo que sobrevive y lo que no, porque no es lo mismo:** el padrón sigue `medido` y el **método** de
+reparto por PH sigue siendo bueno. **Lo que falló fue la base de costo que se le dio de entrada.**
+La conclusión del 2026-09-19 queda **bajo guard, archivada y no borrada** — el método se reutiliza
+en cuanto la base esté limpia.
+
+### 🔐 La rotación de `SEC-03`: lo medido que decide cómo se hace
+
+- **Nada automático las llama** [`medido`]: **ningún cron**, **ni una invocación** en
+  `net._http_response`, y **cero** en los `edge_logs` de 24 h. `deducido`: se invocan **a mano desde
+  una sesión**, lo que hace viable una **rotación directa** en vez de una ventana de doble secreto.
+- 🔴 **La trampa del despliegue:** la tool `deploy_edge_function` tiene **`verify_jwt` con DEFAULT
+  `TRUE`** [`medido` sobre su esquema]. Las dos EF corren con **`verify_jwt: false`** y se autentican
+  por cabecera, así que **un despliegue sin pasar `verify_jwt: false` explícito las deja exigiendo
+  JWT y todo llamador recibe 401**. Es el `--no-verify-jwt` de `CC_PROTOCOL` §10 por la vía de la
+  tool en vez de la CLI.
+- **Lo que CC no puede medir y NO comprobó:** si `MEDIA_STORE_SECRET` está puesta en el entorno. CC
+  no lee variables de entorno, **y no lo averiguó usando el literal hallado** — eso es exactamente
+  lo que §15 prohíbe, escrita ayer.
+
+---
+
 ## 2026-09-21 — El ciclo comercial completo se vuelve procedimiento
 
 > **Entrada de CC.** `HRD_ACTUALIZA` sobre el brief de Claude.ai del 2026-09-21. Lo etiquetado
@@ -316,6 +385,23 @@ defecto del cron que ayer no se vio. Corregido en **1.20**, con la redacción an
 
 ### 🔴 La rentabilidad por PH — un solo contrato explica toda la pérdida
 
+> ## ⛔ NO OPERATIVO — la conclusión de abajo quedó INVALIDADA el 2026-09-22
+>
+> **Lo que sigue vigente:** el padrón —**329 unidades, el 23.9 %**— está `medido` y no cambia.
+>
+> **Lo que NO es operativo: la conclusión de pérdida.** Sam lo corrigió el 2026-09-22 [`reportado`]:
+> **el gasto operativo de los últimos siete meses está inflado**, y no por pérdida de la operación,
+> sino por **prestaciones no provisionadas por el socio anterior** que ahora se están saneando. La
+> base de costo sobre la que se repartió el gasto por PH **arrastra ese saneamiento**, así que
+> **«Los Álamos pierde $2,152/mes» y «sin Los Álamos la empresa ganaría $2,000/mes» no se sostienen
+> como diagnóstico operativo**: miden un pasado que se está pagando, no el contrato.
+>
+> **Y no es decisión de UNRLVL: es de Ivette.** Para el trabajo de UNRLVL **el tema queda descartado**.
+> Un análisis más preciso se hará más adelante, **no ahora**.
+>
+> Se archiva y **no se borra**: el método de reparto por PH sigue siendo bueno, y lo que falló fue
+> la base de costo que se le dio de entrada. **Esa distinción es la lección.**
+
 **PH Los Álamos: 329 unidades, el 23.9 % del padrón, a $6.08 por unidad — pierde $2,152/mes.**
 Es **más que el margen de Luxor y Venezia juntos**. **Sin Los Álamos la empresa ganaría unos
 $2,000/mes** [`reportado`]. **PH Parque Central Arraiján repite el patrón a menor escala.**
@@ -427,7 +513,9 @@ del kit por categoría no lo encuentra**; se busca por `raw_learning LIKE 'SALES
 
 ### 🔴 PENDIENTES QUE ESTA SESIÓN REGISTRA Y NO RESUELVE
 
-1. **Los Álamos** — la decisión de mayor impacto financiero de la operadora, **sin tomar**.
+1. ~~**Los Álamos** — la decisión de mayor impacto financiero de la operadora, **sin tomar**.~~
+   ⛔ **DESCARTADO el 2026-09-22** — no es decisión de UNRLVL sino de Ivette, y la cifra que lo
+   sostenía arrastra el saneamiento de prestaciones del socio anterior. Ver el guard de arriba.
 2. **Frecuencias de presencia** (visitas al mes, reuniones con la JD) — **en blanco** en el documento.
    Son compromiso contractual **con costo**, así que un blanco ahí es un costo sin cuantificar.
 3. **Porcentaje del honorario de recuperación** — sugerido **8–10 %**, sin fijar.

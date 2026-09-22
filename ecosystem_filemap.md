@@ -32,6 +32,16 @@ _Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa:
 >
 > **Por qué no se regenera:** **no existe generador en el repo**, así que «regenerar» a mano es
 > **reescribir con interpretación** y **borra historia** (`CC_PROTOCOL.md` §0). Regla en `CLAUDE.md`.
+>
+> **⚠️ Corrección del 2026-09-22, dentro de la misma versión `v2026-09-21-v1` (rama sin mergear).**
+> El nodo `SEC-03` se dio de alta con **dos datos falsos, los dos medidos por CC**: `detectado`
+> decía **2026-09-21** cuando el hallazgo **ya estaba en `AGENDA.md` el 2026-09-09** —punto 6 de
+> aquella sesión, **13 días abierto**—, y `afecta` nombraba **una** Edge Function cuando son **dos**,
+> `media-store` y `meta-graph-post`, que **comparten el mismo secreto y el mismo literal**. Ambas
+> corregidas en el nodo, con la corrección declarada dentro de él en `_correccion_2026-09-22` y sin
+> retirar nada. Se suman `_trampa_del_despliegue` —`deploy_edge_function` tiene `verify_jwt` con
+> **default TRUE** y las dos EF corren con `false`— y `_llamadores_medidos_2026-09-22`.
+> **El valor del secreto sigue sin transcribirse**, por `CC_PROTOCOL` §15.
 
 > **Nota de sincronización — ACTUALIZA 2026-09-20 (`ecosystem.json` v2026-09-20-v1 → **v2026-09-20-v2**).**
 > **Este archivo se SINCRONIZA, no se regenera, y el cuerpo previo queda íntegro.**

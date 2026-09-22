@@ -2,7 +2,7 @@
 
 **Declarado estándar por Sam el 2026-09-19.** Plantilla reutilizable. Es el correo del **segundo
 momento**: el prospecto ya recibió diagnóstico y material, y ahora espera **un número**. El ejemplo
-trabajado —P.H. Plaza 77— está al final; **la pieza es la estructura, no el ejemplo**.
+trabajado —un PH prospecto— está al final; **la pieza es la estructura, no el ejemplo**.
 
 > **Cuándo se usa:** cuando ya hay levantamiento suficiente para dar una tarifa. **No sustituye** a
 > [`email_respuesta_prospecto.md`](email_respuesta_prospecto.md): va **después**. Aquel abre y pide
@@ -87,11 +87,15 @@ cotiza aparte se lee como recorte de lo incluido en vez de como ampliación.
 
 ---
 
-## Ejemplo trabajado — P.H. Plaza 77, 2026-09-19
+## Ejemplo trabajado — un PH prospecto, 2026-09-19
 
-> Prospecto: **~6,800 m²**, cuota **$1.71/m²** — **por encima del $1.65 de Lefevre**. **No tienen un
-> problema de tarifa: tienen un problema de cobro y de gasto**, y eso cambia lo que se les ofrece.
-> Su cuota ya alcanza; lo que no funciona es lo que se hace con ella.
+> Prospecto: un PH cuya **cuota por m² estaba por encima de la del PH más caro de la cartera**.
+> **No tienen un problema de tarifa: tienen un problema de cobro y de gasto**, y eso cambia lo que
+> se les ofrece. Su cuota ya alcanza; lo que no funciona es lo que se hace con ella.
+>
+> *(Las cifras absolutas —metraje y tarifa— se retiraron el 2026-09-22 al anonimizar el kit. **La
+> lección es la comparación, no el número**: lo que decide la propuesta es que su cuota ya esté por
+> encima de la referencia, no cuánto vale.)*
 
 **1 · La tarifa.** **$1,200 mensuales.** Arriba, sin preámbulo.
 
