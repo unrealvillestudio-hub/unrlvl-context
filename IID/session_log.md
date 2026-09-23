@@ -293,6 +293,217 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-23 · EL ESCRITOR RECIBE SU TECHO, DOS COLUMNAS DEJAN DE MENTIR, Y UNA GUARDA QUE NO GUARDABA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior.** Todo lo etiquetado `medido` lo consultó
+**CC** el **2026-09-23** con `Supabase:execute_sql`, `Supabase:get_edge_function` y lectura directa de
+los repositorios `unrlvl-iid-functions` y `unrlvl-ops`. Ocho PR en `unrlvl-iid-functions` —**#210 a
+#217**— y uno en `unrlvl-ops` —**#14**—. Professor cerrado **antes** de este Actualiza, por **CC**:
+**11 learnings**, `session_date = 2026-09-23`, `checkpoint_number = 21`, los once con
+`approved_by_sam = true` [`medido`].)_
+
+---
+
+### §9.a — El techo de caracteres: al escritor le llegaba el coste, no la longitud
+
+`medido`: **89 muertes por `COPYLAB_TRUNCATED_BODY` en 30 días**, sobre **4 marcas** y **6 canales**,
+todas contra el techo de tokens, con ratios reales de **1,4 a 3,3 chars/token**.
+
+La causa no era el modelo. Al escritor le llegaba **`max_tokens`**, que es **coste**, y **ninguna
+instrucción de longitud**. Son dos unidades distintas y tratarlas como una costó 89 piezas.
+
+**Alta de `HR-GEN-14`** en `intel.watcher_rules`, `scope = gen`, activa. Lleva el parámetro
+`max_chars`, declarado en `intel.rule_param_sources` y resuelto por `injectRuleParams`. **Eso es lo
+que hace que no haga falta tocar CopyLab**, que vive en otro repositorio y se despliega aparte: la
+instrucción viaja por el camino que ya existe.
+
+**Verificado en producción**, sobre la copia adaptada:
+
+| canal | antes | después |
+|---|---|---|
+| `linkedin` | 4/4 por encima del techo | **2/2 por debajo** |
+| `meta_ig` | por encima | **2/2 sigue por encima** — abierto |
+| `blog` | — | `HR-GEN-14: false` |
+
+Ese `false` del blog **no es un fallo, es el mecanismo**: `injectRuleParams` **descarta la regla
+entera** cuando un `{{param}}` de su `statement` no resuelve, y el blog no declara techo. En
+inyección de plantillas hacia un LLM, la ausencia de un dato debe **eliminar** la instrucción, nunca
+degradarla — emitirla con el hueco produce una orden incoherente que el escritor obedece igual.
+
+**`builder_input` pasa de 20 a 21 claves**: se suma `max_chars`, al tope como las demás. **No se suma
+`max_chars_source`**, y el motivo se declara: el resolvedor del techo **no lleva la cuenta** de qué
+capa de la cascada ganó, y una clave que declara un origen que nadie calcula es una clave que miente.
+Las dos guardas de contrato de los tests quedan fijadas en 21.
+
+### §9.b — Los dos techos se pisaban
+
+`max_tokens` quedaba **por debajo** de `max_chars` en **4 de 5 canales** —`tiktok` al **0,17×**—, de
+modo que ganaba el techo equivocado. Corregido **por derivación** (`GREATEST`), sin literales.
+
+`medido` el 2026-09-23: de las **60** filas de `public.content_type_registry`, **7 declaran
+`max_chars`**, y en las **7** se cumple `max_tokens >= max_chars`.
+
+> **Corrección de CC sobre su propio recuento.** Durante la sesión se dijo «27 filas». Ese 27 era
+> el número de filas que **tocó el `UPDATE`**, no las que declaran techo. Lo que hoy se puede medir y
+> verificar es **7 de 60**. Un recuento afirmado y no medido ya costó una corrección el 2026-09-19.
+
+**Deuda declarada, y no es un olvido:** `max_tokens = max_chars` es **~2× de exceso**. `medido` sobre
+**248 generaciones**: **2,28 chars/token** en el peor caso, **2,45** en p05, **2,89** de media. **No
+se ajusta hasta la medición del 2026-10-06**, a propósito: apretar el techo de coste antes de saber
+si la instrucción de longitud funciona confunde las dos variables y deja sin saber cuál movió qué.
+
+### §9.c — Dos columnas que mentían, y el incidente que causó retirar una
+
+`iid_content_queue.approved_by` tenía `DEFAULT 'sam'` y lo llevaban **586 de 586 filas**, de las
+cuales **CERO** tenían `approved_at` [`medido`]. La columna no decía quién aprobó: decía que existía
+un default. Igual `content_pieces.pass_type` con `DEFAULT 'clean'`, que declaraba limpio todo lo que
+nadie clasificó. **Una columna que registra QUIÉN o CÓMO no puede tener DEFAULT.**
+
+**El incidente, causado por CC y corregido el mismo día.** La migración `20260923140000` retiró el
+`DEFAULT` de `pass_type` —columna `NOT NULL`— y **su guarda comprobó, correctamente, que el DEFAULT
+ya no estaba**. A la vez, el código pasaba `pass_type` como **clave suelta** en el objeto de
+argumentos de `buildPieceRow`, que arma la fila con una **lista fija** de claves más `...a.estado`.
+**Deno borra los tipos en runtime**, así que la clave se cayó al suelo **sin un solo error**. Las dos
+cosas eran ciertas a la vez: el default ya no existía y nadie escribía el valor.
+
+**Cuatro finalizaciones murieron** con `null value in column "pass_type" ... violates not-null
+constraint`.
+
+Remedio, en este orden: **default restaurado en caliente** (`20260923160000`), **las cuatro piezas
+reparadas** —los tres labs habían devuelto `ok` y los assets estaban intactos; **sólo falló el
+`INSERT`**—, la clave movida **dentro de `estado`** vía un único `passLimpio` difundido a las tres
+ramas, y `tests/pass_limpio_test.mjs`, que importa el bloque `PIECEROW` real y **reproduce el bug**:
+afirma que la clave suelta sale `undefined`, de modo que el test se rompe el día en que el fallo deje
+de ser posible.
+
+> **La lección del día, y va escrita porque la clase se repite:** *una guarda que comprueba lo que se
+> escribió no comprueba lo que va a pasar.* La guarda miraba el **esquema**; hacía falta mirar la
+> **fila** que se construye.
+
+**La migración ofensora NO se editó**, pese a que su PR seguía sin mergear. Un registro que se edita
+para que cuadre deja de ser un registro.
+
+### §9.d — Las lentes: una corrección de Sam que era un error de categoría, no de dato
+
+`intel.iid_agents.lucien_angle_affinity` **nombraba una marca en una capa compartida**. Se midió
+**antes** de tocarla: su **único lector**, `iid-core`, la seleccionaba en el `.select(...)` y **nunca
+leía el valor** — así que el renombre no tenía riesgo de runtime. Renombrada a **`analysis_lenses`**
+y el `.select` limpiado.
+
+CC había concluido que la columna **duplicaba** `brand_topics.angles`. **Sam corrigió, y la
+corrección procedía:** los diez `angles` son **formas retóricas** —cómo se construye la pieza— y las
+lentes son **puntos de vista** —desde dónde se mira el objeto—. `psychological` y `mathematical` no
+caben en la lista de `angles` porque **no son la misma dimensión**. Vacía significaba **no sembrada**,
+no redundante. Sembrada en **las 5 filas de LucienSael** [`medido`].
+
+**Alta de `HR-GEN-15`**, que lleva el parámetro `lentes`. **Sin verificar en producción** al cierre:
+**cero piezas** de LucienSael posteriores al despliegue.
+
+### §9.e — La cuota de imagen: un fallo tolerado no es un fallo visible
+
+No había reintento, y `effectiveSuccess` ya hacía `imagelab` **no crítico**. Consecuencia: una pieza
+**nunca moría** por falta de imagen — **nacía sin imagen y en estado normal**, indistinguible de una
+completa.
+
+Ahora: el tope se comprueba **antes** de llamar; hay **un** reintento y **sólo** ante errores con
+forma de cuota; **una llamada que no se hizo no se registra** —o el tope se alimentaría a sí mismo—;
+y la pieza nace **`challenged`** con `challenged_reason` en español declarando causa, intentos, tope
+y ventana. **No crítico debe significar «no mata la pieza», jamás «no se nota».**
+
+El tope viaja en el dato **con su ventana**: `image_calls_max = 100` e `image_window_hours = 24` en
+`public.lab_configs.default_params` de ImageLab [`medido`], con **`daily_image_cap` conservado como
+alias legacy**, leído sólo como respaldo, **a retirar en un tercer PR**. El nombre describe la
+**función** —llamadas de imagen— y no el proveedor ni el calendario, así que **un cambio de modelo no
+obliga a tocar código**. Orden de la migración: **PR de código primero, DDL después.**
+
+> **El error que costó un apagón.** El tope se calculó sobre **días naturales** y se implementó como
+> **ventana rodante**. Se fijó en **60** cuando el p90 de la ventana rodante era **97** y el valor
+> vivo era **119**: el tope estaba violado **en el instante en que se escribió**, y apagó la
+> generación de imágenes. *Un número medido en una unidad y aplicado en otra no es conservador ni
+> agresivo: es otro número.*
+
+### §9.f — Los cinco dominios de Lucien, encendidos y sin pisarse
+
+`medido` sobre `cron.job`, los **diez crons activos**:
+
+| dominio | día | jobids |
+|---|---|---|
+| `ai-cognition` | lunes | 109 / 110 |
+| `ai-identity` | martes | 111 / 112 |
+| `human-essence` | jueves | 113 / 114 |
+| `power-architecture` | viernes | 115 / 116 |
+| `behavioral-science` | domingo | 105 / 106 |
+
+Los cinco `weekly`, **research a las 08:10 UTC** y **process a las 10:10 UTC**. `behavioral-science`
+bajó de **3 corridas por semana a 1**, por decisión de Sam.
+
+### §9.g — El vigilante: dos causas distintas bajo un mismo síntoma
+
+`medido` sobre 6 h de logs de runtime del proyecto **`unrlvl-ops`**: el cron corría **puntual cada 5
+minutos** y devolvía **44 respuestas 200 contra 29 con 503**, alternando. **El 40% de las pasadas.**
+Y `WATCHDOG_SILENT` anunciaba que **el vigilante externo había dejado de latir**.
+
+**Causa 1 — el 503.** `alerting.watchdog_snapshot` calculaba `failed_since` filtrando
+`cron.job_run_details` por **`end_time`, columna sin índice** —la tabla sólo tiene PK sobre `runid`—,
+lo que producía un **Seq Scan de 383.495 filas y 172 MB en cada pasada**, cada 5 minutos, contra un
+timeout de 15 s. Corregido filtrando por `r.runid > coalesce(v_runid_previo, 0)`, con la marca de
+agua leída **antes** de `refresh_cron_run_rollup()` —si se lee después, el refresco ya la movió y la
+ventana sale vacía—. Más purga diaria.
+
+| | antes | después |
+|---|---|---|
+| plan | **Seq Scan**, 20.930 buffers, **105 ms** | **Index Scan**, 5 buffers, **0,18 ms** |
+| tabla | **172 MB** | **9,9 MB** tras `VACUUM FULL` |
+| filas | 383.544 | 32.618 — la purga borró **350.926** |
+
+**Causa 2 — el aviso falso, que era independiente del 503.** El latido lo escribía **el propio
+snapshot en su última línea**, así que `alerting.watchdog_heartbeat.last_seen` respondía a **dos
+preguntas a la vez** —«el vigilante llamó» y «la foto salió bien»— y cuando la segunda fallaba, la
+primera se daba por falsa. Alta de **`alerting.watchdog_beat`**, llamada **antes** del snapshot desde
+`unrlvl-ops` (PR `unrlvl-ops#14`), en `try/catch`, con el estado del latido viajando en **las dos
+salidas**, la de 200 y la de 503.
+
+> *Una señal de vida se emite **antes** del trabajo, nunca al final. Si se emite al final, no mide
+> vida: mide éxito.*
+
+Los dos PR son **compatibles en cualquier orden de despliegue**: si `unrlvl-ops` va primero, el beat
+falla, se captura, se anota y el snapshot escribe el latido como siempre; si va primero la migración,
+la función existe sin llamante y no hace nada.
+
+**Dos errores de diagnóstico de CC, escritos porque la lección es el error:**
+
+1. Se midió el CTE `vigilados` —**52 ms**— y se declaró la base sana. **La consulta cara era otra**,
+   `failed_since`, dentro de la misma función. La medición fue real, el número correcto y la
+   conclusión falsa. *Una hipótesis descartada con la medición equivocada sigue sin descartarse.*
+2. La función hermana `refresh_cron_run_rollup` **ya documentaba esta misma lección** sobre
+   `cron.job_run_details`, escrita el 2026-09-17. **Estaba escrita y no se leyó** antes de escribir
+   la función vecina.
+
+**Y una corrección de Sam que no procedía**, que se hace constar para que no se repita la búsqueda:
+Sam situó el cron externo en el proyecto **`unrlvl-core-project`**. `medido`: ese proyecto **no tiene
+`crons` en su `vercel.json`**, su `api/` sirve sólo blog, robots y sitemap, y tuvo **1 línea de log en
+7 h**. El vigilante está en **`unrlvl-ops`**, como ya decía `ecosystem.json` y confirma
+`ecosystem_filemap.md`.
+
+### §9.h — Lo que queda abierto al cierre de la sesión
+
+| # | frente | estado |
+|---|---|---|
+| a | `fix_window_hours` y el texto nuevo del aviso | **sin verificar** — hace falta un 503 real |
+| b | `HR-GEN-15` | **sin verificar** — 0 piezas de LucienSael post-despliegue; primera corrida 10:10 UTC |
+| c | `meta_ig` sigue 2/2 por encima de su techo de marca | → medición del **2026-10-06** |
+| d | techos de token a ~2× de exceso | → misma fecha, **a propósito** |
+| e | paso 3 del alias: retirar `daily_image_cap` | tercer PR |
+| f | **`EMBED_API_429`** — cuota de embeddings de Google, 3 marcas | **sin tratar**, detectado hoy |
+| g | **`provider: "vertex-ai"` cableado** en la escritura del ledger | **sin tratar** |
+| h | el latido **no tiene historia**: `watchdog_heartbeat` es una sola fila que se sobrescribe | abierto |
+| i | sobreproducción y costeo absoluto del carril AIID en `unrlvl-ops` | **sesión nueva**, brief entregado |
+
+El brief de (i) está en `docs/BRIEF_SESION_COSTEO_Y_SOBREPRODUCCION.md` de `unrlvl-iid-functions`,
+entregado **como archivo** y no pegado: un bloque se trunca al copiarlo y el truncamiento no falla.
+
+---
+
 ## 2026-09-20 · EL CONTEO SALE DE LA BASE, Y UN «FIXABLE» DEJA DE SER UN DESCARTE
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior.** Todo lo etiquetado `medido` lo consultó
