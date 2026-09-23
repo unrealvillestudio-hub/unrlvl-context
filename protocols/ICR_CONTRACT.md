@@ -39,11 +39,67 @@ está aquí, **se dice que no está definida; no se infiere su significado.**
 |---|---|---|
 | **ICR** | **Industrial Consistency Ready** | El estándar del ecosistema: que el trabajo se haga correctamente **siempre**, que se mantenga la disciplina y que no se olviden los objetivos. Forman parte de él las HR, la regla multimarca, las QA, el protocolo de `medido`/`deducido`, el de carga de contexto, el de actualización, y el reconocimiento de labs, skills, MCPs y demás herramientas |
 | **QA** | **Quality Assurance** | **No son etiquetas: son acciones que se ejecutan.** `QA-ENCARGO` asegura haber entendido el encargo · `QA-OBJETIVO`, que ambas partes tienen claro el objetivo · `QA-INFO`, la calidad de la información que se manifiesta · `QA-PROP`, que la propuesta es la correcta según las tres anteriores |
-| **AIID** | **Agentes de Investigación, Insights y Desarrollo** | El carril lleva el mismo nombre porque el trabajo de los agentes **termina con la publicación** |
-| **IID** | **Investigación, Insights y Desarrollo** | La misma tríada que AIID. La `A` abre a «Agentes» |
+| **AIID** | **Agentic Intelligence Insights Developers** ⚠️ *propuesto, ver la nota de abajo* | El **carril de producción**. Lleva el mismo nombre que los agentes porque su trabajo **termina con la publicación**: todo lo que se consume entre el disparo del agente y la pieza publicada es del carril |
+| **IID** | **Intelligence Insights Developers** | La misma tríada que AIID; la `A` la abre a los **agentes**. Corregido por Sam el 2026-09-23 — ver la nota de abajo. Definición fundacional y canónica en `IID/session_log.md` §1, fijada el 2026-06-22 |
 | **AIFE** | **Artificial Intelligence Footprints Eraser** | Analiza los patrones y rastros que deja la escritura por IA y los altera para romper el patrón. **Declarado por Sam:** esa ruptura es **superficial y enfocada en la percepción humana**, no en la detección matemática de un sistema |
 | **CRO** | **Conversion Rate Optimization** | Que se generen los estímulos correctos **para el objetivo de cada pieza y cada formato**: si el objetivo es conversión, que estén las técnicas de conversión y que se varíen; si es educar, las que educan |
 | **PSY** | **Psycho Layers** | Aplicación de la psicología del comportamiento humano en cuanto al consumo: técnicas, estrategias y estímulos que inducen al consumo del contenido orgánico y pago, incluidos los `bp_brand_id` de cada marca y las técnicas visuales y escritas |
+
+
+> ### ⚠️ CORRECCIÓN DE SAM — 2026-09-23. Las dos filas de arriba estaban mal traducidas
+>
+> **`IID` es `Intelligence Insights Developers`**, en inglés, y siempre lo fue. La fila que esta
+> tabla cerró el 2026-09-12 escribía una **traducción al español de una sigla inglesa**, lo que
+> además rompe la correspondencia letra a letra que hace legible un acrónimo. Sam lo arbitró el
+> 2026-09-23: *«es un tema de nombre y si es así es una mala traducción; su nombre correcto es
+> Intelligence Insights Developers»*.
+>
+> **Por qué se detectó ahora:** la sesión del costeo preguntó qué era el carril AIID para delimitar
+> su alcance, y al medir aparecieron **dos definiciones cerradas por Sam que no coincidían** —ésta y
+> la de `IID/session_log.md` §1, del 2026-06-22—. Ninguna de las dos estaba mal escrita por
+> descuido: la de aquí **tradujo** la de allí. Cuál mandaba no lo decidió CC.
+>
+> **`AIID` queda `propuesto`, no cerrado.** Sam confirmó la tríada en inglés y que la `A` abre a
+> «agentes», pero **no dictó la palabra inglesa**. `Agentic` se escribe aquí **como propuesta**, no
+> como hecho. **Una sigla propuesta no se usa en una UI ni en una columna hasta que Sam la cierre.**
+>
+> ⚠️ **`AgentLab` NO tiene nada que ver con los agentes del IID**, y se dice porque una redacción
+> anterior justificaba `Agentic` alegando justamente eso. `AgentLab` es un **generador de agentes**
+> —vía Telegram, WhatsApp, API—; los agentes del AIID son los **investigadores** de
+> `intel.iid_agents`. **Comparten la palabra «agente» y nada más**, y unirlos fue un razonamiento
+> falso. La palabra la elige Sam, sin analogías. [Aclarado por Sam el 2026-09-23.]
+>
+> **EL ALCANCE DEL CARRIL, que Sam precisó en el mismo mensaje y es lo operativo:** el carril llega
+> **hasta la publicación**, e involucra **a todos los labs que participen en esa producción** —hoy
+> CopyLab, ImageLab y SocialLab; más adelante VideoLab y VoiceLab—.
+> **El carril se define por PARTICIPACIÓN EN LA PRODUCCIÓN, no por una lista de labs**, así que un
+> lab que entre mañana cuenta sin que haya que reescribir esta definición. La lista es instancia; el
+> criterio es el eje.
+>
+> **`SignalLab` NO es del carril** —una redacción anterior lo incluyó, y es un error corregido por
+> Sam el 2026-09-23—. Es **el Analytics del ecosistema**: no produce piezas, **mide los carriles**.
+> Su coste existe y **hay que identificarlo claramente**, pero **no se imputa a ningún carril**,
+> porque es transversal a todos.
+>
+> 🔴 **Y `AIID` NO VA A SER EL ÚNICO CARRIL.** Sam lo declaró el 2026-09-23: viene el **carril
+> `PaidAds`**, y **compartirá labs con el AIID**. Consecuencia de gobernanza, no de costeo: a
+> partir de ahí **«el carril» deja de ser una expresión sin ambigüedad**, y todo asiento, informe
+> o UI que diga «carril» tiene que decir **cuál**. El eje es *«a qué se imputa»*; `aiid`,
+> `paid_ads` y `analytics` son **instancias y van en el dato**.
+
+> ### ⛔ NO OPERATIVO — redacción anterior, conservada y no borrada
+>
+> Vigente entre el **2026-09-12** y el **2026-09-23**. Se archiva por `CC_PROTOCOL` §0 —un context
+> file no pierde contenido— y porque **la deriva de un nombre sólo se puede rastrear si las
+> versiones anteriores siguen legibles**:
+>
+> | Sigla | Significaba | Qué decía |
+> |---|---|---|
+> | **AIID** | Agentes de Investigación, Insights y Desarrollo | El carril lleva el mismo nombre porque el trabajo de los agentes termina con la publicación |
+> | **IID** | Investigación, Insights y Desarrollo | La misma tríada que AIID. La `A` abre a «Agentes» |
+>
+> **La columna «Qué es» de AIID nunca estuvo mal** —el criterio de alcance que aporta es el que
+> sigue vigente arriba—. Lo que estaba mal eran **las expansiones**.
 
 ---
 

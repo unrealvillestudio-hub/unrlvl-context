@@ -27,6 +27,78 @@ Este es el hogar de contexto del IID, el workstream más activo y de mayor valor
 ### Nota sobre la deriva del nombre (importante, documentada para que no se repita)
 Las siglas "IID" sufrieron **deriva de reinterpretación**: al reducir el sistema a tres letras, en sesiones sucesivas Claude reinterpretó qué podían significar, y se perdió el original. Variantes que aparecieron en resúmenes y notas: *Intelligent Intelligence Dispatcher*, *Intelligent Insight Distribution*, *Intelligent Content Distribution*. **Ninguna es canónica.** El nombre real, fijado por Sam el 2026-06-22, es **Intelligence Insights Developers** — el más acorde con la realidad de lo que el sistema hace: desarrolla insights de inteligencia (de mercado, plataformas, LLMs, e-commerce) para uso dual. Cualquier documento o resumen que use otra expansión está desactualizado.
 
+### AIID — la misma tríada, con los agentes delante (alta 2026-09-23)
+
+**`AIID`** es el **carril de producción**: lleva el mismo nombre que los agentes porque **su trabajo
+termina con la publicación**. La `A` abre la tríada a los **agentes**; el resto es idéntico a `IID`.
+
+**La palabra inglesa de la `A` está `propuesta`, no cerrada.** Sam confirmó el 2026-09-23 la tríada
+en inglés y que la `A` es por «agentes», pero **no dictó el término**. `Agentic Intelligence
+Insights Developers` se escribe **como propuesta**. **Una sigla propuesta no entra en una UI ni en
+una columna hasta que Sam la cierre.**
+
+> ⚠️ **`AgentLab` NO tiene nada que ver con los agentes del IID.** `AgentLab` es un **generador de
+> agentes** —vía Telegram, WhatsApp, API—; los agentes del AIID son los **investigadores** de
+> `intel.iid_agents`. **Comparten la palabra «agente» y nada más.** Se deja escrito porque una
+> redacción anterior de esta misma sección justificaba la propuesta `Agentic` alegando que «existe
+> AgentLab», y **ese razonamiento unía dos cosas que no se tocan**. Aclarado por Sam el 2026-09-23.
+
+**El alcance del carril, precisado por Sam el 2026-09-23:** llega **hasta la publicación**, e
+involucra **a todos los labs que participen en esa producción** — hoy CopyLab, ImageLab y SocialLab;
+más adelante VideoLab y VoiceLab.
+
+**`SignalLab` NO es del carril**, y una redacción anterior de esta sección lo incluyó: es un error
+corregido por Sam el mismo día. `SignalLab` es **el Analytics del ecosistema** — no produce piezas,
+**mide los carriles** —. Existe como nodo declarado y está **sin deployar** [`medido` sobre
+`ecosystem.json → labs`]. **Su coste hay que identificarlo claramente, pero no se imputa a ningún
+carril: es transversal.**
+
+### 🔴 AIID no va a ser el único carril — viene PaidAds (declarado 2026-09-23)
+
+Sam lo declaró el 2026-09-23: **viene el carril `PaidAds`, y compartirá labs con el AIID**. El
+mismo `ImageLab`, el mismo `CopyLab` y la misma tabla de asientos servirán a **dos carriles**, uno
+orgánico y uno pago.
+
+> **Consecuencia para el vocabulario, que es lo que le toca a este §1:** a partir de ahí **«el
+> carril» deja de ser una expresión sin ambigüedad.** Todo documento, informe, asiento o UI que
+> diga «carril» tiene que decir **cuál**. Y `AIID` deja de significar «el carril» para significar
+> **un** carril — el orgánico.
+
+**Consecuencia medida para el costeo** [`medido` el 2026-09-23 sobre `public.ops_generation_ledger`]:
+la tabla tiene **29 columnas y ninguna identifica el carril**. `source_app`, lo único parecido,
+**mezcla carril, etapa y app ajena** — `iid-carril` (5.823), `content-watcher`/`iid-research`/
+`iid-process` (705, que son etapas del mismo carril), `iid-carril-test` (40), seis valores `fphs-*`
+(14) y 132 `NULL`. **El eje de imputación no existe y hay que crearlo antes del primer asiento de
+PaidAds**: después, el histórico ya no se puede separar. Detalle y test N+1 en
+`docs/BRIEF_SESION_COSTEO_Y_SOBREPRODUCCION.md` de `unrlvl-iid-functions`.
+
+> **El carril se define por PARTICIPACIÓN EN LA PRODUCCIÓN, no por una lista de labs.** Un lab que
+> entre mañana cuenta sin que haya que reescribir nada. **La lista es instancia; el criterio es el
+> eje** — y por eso esta definición sobrevive al lab N+1.
+
+### Cuarta deriva, y la primera que no fue de Claude (2026-09-23)
+
+`protocols/ICR_CONTRACT.md` §1 —tabla cerrada por Sam el **2026-09-12** y declarada ahí **«la fuente
+única de las siete»**— escribía **`IID = Investigación, Insights y Desarrollo`**: una **traducción al
+español de una sigla inglesa**, que además rompe la correspondencia letra a letra que hace legible un
+acrónimo.
+
+**Se detectó el 2026-09-23** porque la sesión del costeo preguntó qué era el carril AIID para
+delimitar su alcance, y al medir aparecieron **dos definiciones cerradas por Sam que no coincidían**.
+CC **no la resolvió**: la reportó y la arbitró Sam — *«es una mala traducción; su nombre correcto es
+Intelligence Insights Developers»*. `ICR_CONTRACT.md` §1 quedó corregido el mismo día, con su
+redacción anterior **archivada bajo guard, no borrada**.
+
+> **LO QUE ESTA CUARTA DERIVA ENSEÑA, y es distinto de las tres de arriba:** aquéllas fueron
+> reinterpretaciones de Claude en resúmenes. Ésta entró **por una tabla de definiciones que se
+> declaraba fuente única**, es decir **por el mecanismo construido para impedir la deriva**. Una
+> tabla cerrada no protege de la deriva si **su contenido no se contrastó contra la fuente
+> fundacional** antes de cerrarla.
+>
+> **Guarda que queda:** antes de cerrar una sigla en cualquier tabla de definiciones, se comprueba
+> contra este §1. **Si discrepan, no se elige la más reciente: se para y lo decide Sam.** El criterio
+> de «manda la posterior» es razonable y aquí habría dado la respuesta equivocada.
+
 ---
 
 ## §2 — ORIGEN CONCEPTUAL Y PROPÓSITO (el porqué)
