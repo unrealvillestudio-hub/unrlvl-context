@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-23 · v2026-09-23-v1 (**CIERRE DEL 2026-09-23 — EL ESCRITOR RECIBE SU TECHO, DOS COLUMNAS DEJAN DE MENTIR, Y EL LATIDO DEJA DE DEPENDER DE LA FOTO.** Sesión de **código, migración y operación**: ocho PR en `unrlvl-iid-functions` (**#210 a #217**) y uno en `unrlvl-ops` (**#14**), con diez migraciones pineadas. **(1) EL TECHO DE CARACTERES:** `medido`, **89 muertes por `COPYLAB_TRUNCATED_BODY` en 30 días** sobre 4 marcas y 6 canales. La causa no era el modelo — al escritor le llegaba **`max_tokens`, que es COSTE**, y ninguna instrucción de longitud. Alta de **`HR-GEN-14`**, que lleva `{{max_chars}}` por `injectRuleParams` y **no obliga a tocar CopyLab**, que vive en otro repositorio. Verificado en producción: `linkedin` pasó de **4/4 por encima** a **2/2 por debajo**; `blog` muestra `HR-GEN-14: false`, que **es el mecanismo** —la regla se descarta sola sin techo declarado—; **`meta_ig` sigue 2/2 por encima y queda abierto**. **(2) LOS DOS TECHOS SE PISABAN:** `max_tokens` por debajo de `max_chars` en 4 de 5 canales, `tiktok` al **0,17×**; corregido por derivación con `GREATEST`, sin literales — **7 de 60** filas declaran techo y en las 7 se cumple `max_tokens >= max_chars` [`medido`]. **Deuda declarada:** el factor real es **2,28 chars/token** en el peor caso y **2,89** de media sobre 248 generaciones, así que sigue habiendo **~2× de exceso**, y **no se ajusta hasta el 2026-10-06 a propósito**. **(3) DOS COLUMNAS QUE MENTÍAN:** `approved_by DEFAULT 'sam'` en **586 de 586 filas con CERO `approved_at`**, y `pass_type DEFAULT 'clean'`. Retirados. **(4) INCIDENTE EN PRODUCCIÓN, CAUSADO POR CC Y CORREGIDO EL MISMO DÍA:** retirar el `DEFAULT` de `pass_type` mientras el código lo pasaba como **clave suelta** —y Deno borra los tipos— **mató cuatro finalizaciones**. Default restaurado en caliente, las cuatro piezas reparadas, la clave movida dentro de `estado` y un test que **reproduce el bug**. **La migración ofensora NO se editó** pese a tener su PR sin mergear. **LA REGLA DEL DÍA: una guarda que comprueba lo que se escribió no comprueba lo que va a pasar.** **(5) LAS LENTES:** `lucien_angle_affinity` **nombraba una marca en capa compartida**; medida antes de tocarla —su único lector la seleccionaba y **nunca leía el valor**—, renombrada a **`analysis_lenses`** y sembrada. **Corrección de Sam aceptada:** las lentes **no** duplican `brand_topics.angles` —los `angles` son formas retóricas, las lentes son puntos de vista—; vacía significaba **no sembrada**. **(6) LA CUOTA DE IMAGEN:** no había reintento y `imagelab` ya era no crítico, así que una pieza **nacía sin imagen y en silencio**. Ahora nace **`challenged`** con motivo. El tope viaja en el dato **con su ventana** (`image_calls_max` + `image_window_hours`), con `daily_image_cap` como **alias legacy**; el nombre describe la **función**, no el proveedor. **EL ERROR QUE COSTÓ UN APAGÓN:** el tope se calculó en **días naturales** y se implementó como **ventana rodante** — 60 con el p90 rodante en 97 y el valor vivo en 119. **(7) LOS CINCO DOMINIOS DE LUCIEN ENCENDIDOS**, sin pisarse, **diez crons activos** [`medido`]. **(8) EL VIGILANTE, DIAGNOSTICADO ENTERO:** corría **puntual** y daba **44×200 contra 29×503 en 6 h**. El 503 venía de un **Seq Scan de 383.495 filas y 172 MB por pasada** —`failed_since` por una columna sin índice—: corregido, **105 ms → 0,18 ms**, purga de **350.926 filas** y la tabla de **172 MB a 9,9 MB**. Y el aviso falso era **otra causa**: el latido lo escribía el snapshot **en su última línea**. Alta de **`alerting.watchdog_beat`**, llamada **antes** de la foto. **Y una corrección de Sam que no procedía, dicha:** situó el cron externo en `unrlvl-core-project`; `medido`, ese proyecto **no tiene `crons`** — está en **`unrlvl-ops`**. **Professor: 11 learnings en checkpoint 21, los once aprobados.** **Barrido de voseo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-22 · v2026-09-22-v1 (**CIERRE DEL 2026-09-22 — EL SALES-KIT SE ANONIMIZA, Y DOS MEDICIONES DE CC SE CORRIGEN.** **(1) SALES-KIT ANONIMIZADO** por decisión de Sam: fuera el nombre del PH, la ubicación, el número de unidades, el metraje y la cuota absolutos y **las prioridades que el prospecto declaró en su correo**. **15 líneas sustituidas — es la única parte de este frente donde el diff BORRA**, y es una **excepción deliberada a `CC_PROTOCOL` §0**: la regla dice que un context file no pierde contenido, **`MAIL_PRIVACY_RULE` dice que ese contenido no debía existir**, y cuando chocan manda la que protege a un tercero. Se conserva lo que hacía útil al ejemplo —estructura, orden y **relaciones** entre cifras— y queda **escrita la regla del kit en su `README.md`**, sin la cual la anonimización duraría hasta la pieza siguiente. **(2) `SEC-03` CORREGIDO EN DOS DATOS, los dos medidos por CC:** no se detectó el 21 —**ya estaba en esta AGENDA el 2026-09-09**, punto 6, así que lleva **13 días abierto**— y no afecta a una EF sino a **DOS**, `media-store` y `meta-graph-post`, que **comparten el mismo secreto y el mismo literal**. El defecto de método es el mismo de la `1.19`: **dar de alta un hallazgo sin medirlo contra lo que el repo ya tenía escrito**. Se suma el **runbook de rotación que no rompe nada** y **la trampa que sí rompería**: `deploy_edge_function` tiene **`verify_jwt` con default TRUE** y las dos EF corren con `false`. **(3) LOS ÁLAMOS DESCARTADO**, y **no por haberse resuelto**: Sam corrigió la base [`reportado`] —el gasto de los últimos siete meses **está inflado por prestaciones no provisionadas por el socio anterior**, que ahora se sanean—, así que la cifra **mide un pasado que se está pagando, no el contrato**; **la decisión es de Ivette, no de UNRLVL**; y el análisis preciso se hará **más adelante, no ahora**. **El padrón y el MÉTODO de reparto por PH siguen siendo buenos: lo que falló fue la base de costo de entrada**, y esa distinción es la lección. La conclusión del 19 queda **bajo guard, archivada y no borrada**. **Barrido de voseo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-21 · v2026-09-21-v1 (**CIERRE DEL 2026-09-21 — EL CICLO COMERCIAL SE VUELVE PROCEDIMIENTO, Y UNA CREDENCIAL ENCONTRADA NO SE USA.** **Sin datos de ningún prospecto**, por `MAIL_PRIVACY_RULE.md`. Alta del **playbook de propuesta a prospecto** en el Sales-Kit, copiado **literal y verificado por md5** [`medido`]: es **la pieza principal del kit** y manda sobre las demás. **MODELO DE CARTERA DEFINITIVO** —recuperación **incluida sin costo hasta 90 días**; desde 90 días, vía legal y **expediente sin costo** con la gestión a cargo de la Junta; **sin comisión sobre lo recuperado en ninguna etapa**; sin representación judicial [`reportado`]— que **SUSTITUYE al honorario porcentual del 2026-09-19**, archivado bajo `⛔ NO OPERATIVO` **en DOS sitios**, el índice del kit **y dentro de `correo_que_da_precio.md`**, porque marcar sólo el índice habría dejado la pieza ofreciendo un porcentaje que ya no existe. **`CC_PROTOCOL.md` pasa a v13 con la §15 nueva: una credencial encontrada NO se usa —aunque sirva para la tarea y sea el camino más corto—, se reporta por su nombre y ubicación y nunca por su valor.** `CAPABILITIES.md` a **1.22** con cuatro capacidades del ciclo comercial, encabezadas por una que cambia por dónde se manda una cosa: **el conector de Gmail ELIMINA las imágenes alojadas** y envía desde otra cuenta. **DEUDAS:** 🔐 **`media-store` lleva un secreto cableado** con `verify_jwt: false` y escritura `service_role` [`medido`; **el valor no se transcribió ni se usó**], que **necesita brief propio**; **LOS ÁLAMOS sigue sin decidir** desde el 19; y 🔍 **datos de prospecto escritos en context files**, inventariados con archivo y línea en el PR — **CC no borra: decide Sam**, porque choca con la regla de no borrar historia. **DOS CORRECCIONES DE CC AL BRIEF:** el Professor trae **16** learnings y no 14 [`medido`], y **el pendiente del keepalive ya estaba cerrado el 2026-09-20** y **no se copia como deuda viva**. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-20 · v2026-09-20-v2 (**CIERRE DEL 2026-09-20 — EL CONTEO SALE DE LA BASE, UNA SOLA VEZ, Y UN «FIXABLE» DEJA DE SER UN DESCARTE.** Cuatro PR mergeados y aplicados —`unrlvl-iid-functions#188`, `Orchestrator#47`, `unrlvl-iid-functions#189` y `#190`— y cuatro migraciones (`20260920090000`, `100000`, `110000`, `120000`), las cuatro pineadas. **EL CASO:** tres instrumentos respondían la misma pregunta —cuántas piezas esperan el criterio de Sam— y daban **583**, **87** y **64**. `medido` el 2026-09-20: no era un error de resta, eran **tres preguntas distintas con el mismo nombre**. El despertador de las 7am contaba **jobs**, no piezas —**678 filas `pending` contra 2 `approved`** en `content.orchestrator_jobs`, nada las marca nunca como resueltas, así que la cifra sólo podía crecer, y **258 de ellas eran jobs fallidos que nunca produjeron pieza**—; y la sección 4 del informe contaba con **dos consultas solapadas**, `status='awaiting_approval'` y `challenged_at IS NOT NULL`: **16 piezas estaban en las DOS** —se retaron, se re-adaptaron y volvieron a la bandeja, y `readaptPiece` **no borra `challenged_at` ni debe**, porque esa fecha es el registro de que fueron retadas— y **otras 7** figuraban «en challenged» estando ya publicadas. **EL EJE, y es la regla del día: el estado vivo de una fila es su `status`; las columnas `*_at` son HISTORIA** —dicen que algo le PASÓ, no lo que la fila ES—, **y el criterio tampoco es una cadena**. Eso segundo **lo anticipó Sam antes de medir** —*«podría decir otra cosa y entonces fallaría»*— y la medición le dio la razón con un número: de las **41** piezas con veredicto `fixable` en el corpus, **TRES no llevaban el prefijo en su motivo**; de hecho **no llevaban motivo ninguno**, así que un `WHERE … ILIKE 'fixable%'` habría reparado 38 y **callado 3**. **EN PRODUCCIÓN:** la vista **`content.pieces_awaiting_criterion`** —fuente única del conteo, que el correo, el informe y el Orchestrator leen—; **`ops-daily-report` modo `digest`**, el resumen de cada 4 horas con los MISMOS contadores y **sólo conteos, sin un solo `piece_id`**, con tabla `alerting.digest_reports`, severidad **`digest`** y cron `alerting-digest-4h` `0 1,5,9,13,17,21`; el **correo por pieza apagado por dato** (`intel.iid_scheduler_config.piece_email_mode='digest'`, reversible con un `UPDATE` y fail-safe **hacia el ruido, nunca al silencio**); y **`iid-approval-digest` ADOPTADA al repositorio** — `medido`: llevaba **ACTIVA desde julio en su versión 28 sin código en ninguna rama**, y por eso sus dos defectos se atribuyeron durante días al repositorio equivocado. **UN `FIXABLE` RETA LA PIEZA, YA NO LA DESCARTA:** `discarded_at` no la saca de una bandeja, **la saca del sistema** —deja de sostenerse su imagen, el scheduler la excluye y la re-adaptación la rechaza—, así que marcar algo para arreglarlo lo estaba sacando de la cola de lo arreglable; ahora escribe `status='challenged'` y el eje nuevo **`por_arreglar`** lo distingue de `retenida`, que es el desacuerdo del juez. **Las 41 vuelven a la cola**, con su estado anterior archivado y **40 de 41 conservando su imagen**. **ESTADO MEDIDO AL CIERRE: 109 esperando criterio** = `awaiting_approval` **64** · `fixables` **41** · `aplazadas` **4**. **LO QUE COSTÓ, Y DEJA REGLA:** (1) **una orden correcta sobre una premisa falsa, aportada por quien la iba a ejecutar** — se reportó «una pieza rechazada por ti y agendada para salir» **sin leer `approved_at`**, y la medición completa mostró que el «rechazo» del 31-ago era una **PREGUNTA** —*«Si todo está bien entonces se aprueba»*— y que Sam la había **APROBADO el 12-sep**; se le devolvió la cronología y **él decidió**: corregir el corpus, no la pieza; (2) **`tsc -b` pasó en verde sobre una divergencia real** entre las dos declaraciones de `PendingState`, y lo cierra un test que **lee los dos archivos**; (3) **dos guardarraíles ficharon defectos reales y los dos se arreglaron en vez de ensancharse**. **`ecosystem.json` pasa a `2026-09-20-v2`** y sus dos derivados **se SINCRONIZAN en commit separado, no se regeneran**. **Professor cerrado ANTES de este Actualiza, y esta vez por CC**: seis learnings sembrados, **cinco aprobados por Sam** y uno en la cola de su criterio. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior —el `v2026-09-20-v1` del keepalive, de la misma fecha y de otra sesión— íntegra inmediatamente debajo.**)_
@@ -13,6 +14,151 @@ _Actualizada: 2026-09-12 · v2026-09-12-v3 (**CIERRE DEL 2026-09-12 — SAM DECI
 _Actualizada: 2026-09-12 · v2026-09-12-v2 (**CIERRE DEL 2026-09-12 — EL PROMOTOR DE BLOGS ESTÁ VIVO EN PRODUCCIÓN, Y RECONOCER LO YA HECHO LE CUESTA EL SELLO.** `blog-promoter` v1.1 desplegada el 2026-09-12 **17:53:11 UTC**, `ezbr_sha256` **`db02acb3…fca169`**, cron **`blog-promoter-15min`** `jobid 99` `*/15 * * * *` **activo** [medido]. **CINCO AFIRMACIONES DEL BRIEF CORREGIDAS POR MEDICIÓN, y dos cambian el encargo:** (1) **no es un `dry_run`** — lleva **nueve invocaciones reales HTTP 200**, `dry_run:false`, `canales:3`, `franjas_vencidas:6`, todas `YA_PUBLICADA` [medido en `net._http_response`]; (2) 🔴 **la rama `YA_PUBLICADA` NO sella la franja**, así que **dos franjas `vercel_html` con pieza ya publicada quedan `reserved` para siempre** —`66227c12…` de LucienSael y `c09c824a…` de ForumPHs, vencidas desde el 08 y el 10 de septiembre— **reabriendo la fuga de N10 en la cabeza de la cola**, y **sus dos piezas siguen con `post_url` en NULL**, que es justo el defecto que el promotor vino a cerrar [medido]; (3) la causa raíz del blog de UnrealvilleStudio **no es código por marca** —**cero marcas hardcodeadas** en los cuatro EF del camino—: `platforms` de la fila de cola sale del **`platforms_hint` del modelo** (`iid-process/index.ts:845` → `iid-core/index.ts:112`) y **`brand_topics.platforms` nunca se consulta**; (4) el contador de hashtags **NO miente** — `hashtags_out:2` es exacto sobre `social.adapted[0].copy` (2 hashtags, 1.187 chars, español), y **`assets.copy` es OTRO texto** (0 hashtags, 3.747 chars, inglés): **la bandeja muestra un texto y el publicador manda otro**, y las 22 notas de Sam se escribieron mirando el que no publica; (5) el corte por **percentil 99 no da 0,97 y 0,94 sino 0,9603 y 0,9046** —ésas eran los máximos— y **LucienSael no tiene línea base de dominios distintos: sus 52 vectores son de un solo dominio**. **Confirmado exacto:** las 4 medias de coseno sobre los **241 vectores**, el reparto de las **56** piezas devueltas a la bandeja (NSCF 32 · FPHS 12 · LUC 8 · UVS 4), los dominios por marca (32 · 9 · 6+1 · 4) y el handle **`hair-intelligence`** de Shopify. **El umbral `0.80` es literal en `content-watcher/index.ts` en NUEVE sitios y TRES gates** (449, 450, 456, 458, 1059, 1073, 1101, 1454, 1456) y la línea 964 ya lo confesaba. **SERIE N:** N07, N08 y N13 dejan de ser `SIN CONTENIDO` · **N13 CERRADO** con su defecto abierto · **N16 DADO DE ALTA** —**24** piezas `scheduled` sin franja contra **43** franjas libres futuras, peor que el 13/45 del brief— · N05A confirmado `UNIQUE INDEX` por tercera vez, **y es por qué «11 cerradas» no tiene representación en el dato**. **Y un hallazgo que reordena el Frente 4:** los dominios declarados **no producen** — ForumPHs escribe sobre **5 de 32**, LucienSael sobre **1 de 4**: primero el agente y su cron, después el dominio nuevo. **Barrido de voseo sobre el bloque nuevo: cero apariciones** [medido con el `verify_pattern` de `HR-GEN-05`]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-12 · v2026-09-12-v1 (**CIERRE DEL 2026-09-12 — EL MÉTODO DE PUBLICAR SE VUELVE CARGABLE, Y N10 QUEDA APLICADO A MEDIAS.** Alta de **`skills/publicacion-operativa/SKILL.md` v1.0**, capa MÉTODO y destino CARGABLE, entregado por Sam y **registrado literal** —md5 idéntico contra el origen—: cubre el hueco que `BRIEF-06` §4.4 nombró y que **no existía en el repo** [medido]. **BRIEF-06 encendido en seco:** `intel.carril_regulation_log` creada, `carril-regulator` desplegada y su `dry_run` corrido —**16 canales, 14 `SUPPLY_ABSENT` y 2 `HOLD`, cero liberadas, cero aparcadas, déficit total 75,2**—, `carril-regulator-daily` **ACTIVADO** y `carril-cobertura-alarma-daily` **apagado a propósito** [medido, todo]. **N10:** la DDL está —columna, intervalo en config y RPC con backoff— y el **punto 5 aplicado**: `intel.v_carril_cobertura` gana `franjas_sin_publicador` y `primera_sin_publicador` **sin cambiar ninguna fórmula** [medido]. **LO QUE ESTE BLOQUE ABRE, Y ES LO URGENTE: `content-scheduler` NO lleva el código de N10.** La desplegada es la **v17 del 2026-09-10 21:43 UTC** —trae el tope de caption, **cero apariciones** de `sellarBackoff`, `last_drain_check_at` y `SLOT_BACKOFF_FAILED`— y el efecto lo confirma: **120 `PROVIDER_NOT_DRAINABLE` en 6 horas y CERO franjas selladas** [medido]. **El backoff no está operando.** Los 12 crons de UnrealvilleStudio reprogramados a semanal, lunes a sábado [medido: los 12 activos]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido]. **Adición 2026-09-10 — SERIE N, sección propia:** los identificadores `N05A`, `N07`, `N08`, `N10`, `N13`, `N14` y `N15` **no estaban en ningún context file**, y por eso un encargo que los nombrara era irresoluble. Ahora tienen registro con su estado medido. **N10 es lo urgente y empeora solo**: `intel.drain_due_slots` **no filtra por proveedor**, las franjas no drenables nunca alcanzan estado terminal y ocupan la cabeza de la cola —**544 filas acumuladas y 4 franjas atascadas, dos de ellas desde el 2026-09-08**—; al llegar a las 50 del techo, **la publicación se detiene sin un solo error**. **N14 no se reproduce**: ninguno de los dos `cron.job.command` lleva secreto en claro [medido con volcado redactado]. **N15 se abarata**: el tope ya vive en `platform_configs.char_limit`, así que es enrutar un dato que existe, no crearlo. **N07, N08 y N13 quedan declarados SIN CONTENIDO** — nombrados y sin definición en ninguna parte.)_
+
+---
+
+## 🗓️ CIERRE 2026-09-23-v1 — El escritor recibe su techo, dos columnas dejan de mentir, y el latido deja de depender de la foto
+
+_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-21-v1` con su corrección
+del 22 y toda su cadena quedan íntegros inmediatamente debajo. **Sesión de CÓDIGO, MIGRACIÓN y
+OPERACIÓN**, no sólo context files: ocho PR en `unrlvl-iid-functions` —**#210 a #217**— y uno en
+`unrlvl-ops` —**#14**—. Todo lo etiquetado `medido` lo consultó **CC** el **2026-09-23**. Professor
+cerrado **antes** de este Actualiza, por **CC**: **11 learnings**, `checkpoint_number = 21`, los once
+aprobados por Sam. Detalle completo en `IID/session_log.md`, entrada del **2026-09-23**.)_
+
+---
+
+### ✅ CERRADO HOY
+
+1. **EL TECHO DE CARACTERES LLEGA AL ESCRITOR.** `medido`: **89 muertes por
+   `COPYLAB_TRUNCATED_BODY` en 30 días**, 4 marcas, 6 canales. La causa no era el modelo: al escritor
+   le llegaba **`max_tokens`, que es COSTE**, y ninguna instrucción de longitud. Alta de
+   **`HR-GEN-14`**, que lleva `{{max_chars}}` por `injectRuleParams` y por tanto **no obliga a tocar
+   CopyLab**, que vive en otro repositorio. **Verificado en producción:** `linkedin` pasó de **4/4 por
+   encima** del techo a **2/2 por debajo**; `blog` muestra `HR-GEN-14: false`, que **es el mecanismo**
+   —la regla se descarta sola cuando el canal no declara techo—.
+
+2. **LOS DOS TECHOS DEJAN DE PISARSE.** `max_tokens` quedaba **por debajo** de `max_chars` en 4 de 5
+   canales, `tiktok` al **0,17×**. Corregido **por derivación** (`GREATEST`), sin literales. `medido`:
+   **7 de 60** filas de `content_type_registry` declaran `max_chars`, y en las 7 se cumple
+   `max_tokens >= max_chars`.
+
+3. **DOS COLUMNAS QUE MENTÍAN, RETIRADAS.** `iid_content_queue.approved_by` tenía `DEFAULT 'sam'` en
+   **586 de 586 filas** con **CERO** `approved_at`; `content_pieces.pass_type` tenía `DEFAULT
+   'clean'`. **Una columna que registra QUIÉN o CÓMO no puede tener DEFAULT.**
+
+4. **LAS LENTES DE ANÁLISIS.** `lucien_angle_affinity` **nombraba una marca en capa compartida**.
+   Medida **antes** de tocarla —su único lector, `iid-core`, la seleccionaba y **nunca leía el
+   valor**—, renombrada a **`analysis_lenses`** y sembrada en las 5 filas de LucienSael. Alta de
+   **`HR-GEN-15`**.
+
+5. **LA CUOTA DE IMAGEN, CON SU VENTANA EN EL DATO.** Tope comprobado **antes** de llamar, **un**
+   reintento sólo ante errores con forma de cuota, y la pieza nace **`challenged`** con motivo en
+   español en vez de nacer **sin imagen y en silencio**. `image_calls_max = 100` e
+   `image_window_hours = 24` en `lab_configs` de ImageLab; **`daily_image_cap` conservado como alias
+   legacy**. El nombre describe la **función**, no el proveedor: **un cambio de modelo no obliga a
+   tocar código**.
+
+6. **LOS CINCO DOMINIOS DE LUCIEN, ENCENDIDOS Y SIN PISARSE.** `ai-cognition` lunes, `ai-identity`
+   martes, `human-essence` jueves, `power-architecture` viernes, `behavioral-science` domingo. Los
+   cinco `weekly`, **diez crons activos** [`medido`]. `behavioral-science` bajó de 3 por semana a 1,
+   por decisión de Sam.
+
+7. **EL VIGILANTE, DIAGNOSTICADO ENTERO Y CORREGIDO POR LAS DOS CAUSAS.** Corría **puntual** cada 5
+   minutos y daba **44 respuestas 200 contra 29 con 503** en 6 h. **(a) El 503:** `watchdog_snapshot`
+   filtraba `failed_since` por `end_time`, **columna sin índice** → **Seq Scan de 383.495 filas y
+   172 MB por pasada**. Corregido filtrando por `runid` contra la marca de agua leída **antes** del
+   refresco: **Seq Scan 20.930 buffers / 105 ms → Index Scan 5 buffers / 0,18 ms**; la purga borró
+   **350.926 filas** y `VACUUM FULL` llevó la tabla de **172 MB a 9,9 MB**. **(b) El aviso falso, que
+   era independiente:** el latido lo escribía el snapshot **en su última línea**, así que
+   `WATCHDOG_SILENT` anunciaba una muerte que no midió. Alta de **`alerting.watchdog_beat`**, llamada
+   **antes** de la foto desde `unrlvl-ops`.
+
+---
+
+### 🔴 QUEDA ABIERTO — nueve frentes, ninguno bloqueante
+
+1. **`fix_window_hours` y el texto nuevo del aviso: sin verificar.** Hace falta **un 503 real**. No es
+   tarea: es un evento que hay que esperar.
+2. **`HR-GEN-15`: sin verificar.** `medido`: **cero piezas** de LucienSael posteriores al despliegue.
+   La primera corrida es **al día siguiente, 10:10 UTC**.
+3. **`meta_ig` sigue 2/2 por encima de su techo de marca** → medición del **2026-10-06**.
+4. **Los techos de token siguen a ~2× de exceso.** `medido` sobre 248 generaciones: **2,28
+   chars/token** en el peor caso, 2,45 p05, 2,89 de media. **No se ajusta hasta el 2026-10-06, a
+   propósito**: apretar el coste antes de probar la instrucción de longitud confunde las dos
+   variables.
+5. **Paso 3 del alias:** retirar `daily_image_cap` de `lab_configs`, en un **tercer PR**.
+6. 🆕 **`EMBED_API_429` — cuota de embeddings de Google, 3 marcas. SIN TRATAR**, detectado hoy.
+7. 🆕 **`provider: "vertex-ai"` cableado** en la escritura del ledger. **SIN TRATAR** — es un
+   proveedor escrito como constante donde debería ser dato.
+8. 🆕 **El latido no tiene historia.** `alerting.watchdog_heartbeat` es **una sola fila que se
+   sobrescribe**, así que no se puede medir cuánto lleva fallando nada.
+9. ➡️ **Sobreproducción y costeo absoluto del carril AIID en `unrlvl-ops`** — coste por publicación
+   efectiva y por producción de agentes IID, **por carril y por marca**, incluyendo fallos, fixes y
+   challenges. **SESIÓN NUEVA**, por decisión de Sam. Brief entregado **como archivo** en
+   `docs/BRIEF_SESION_COSTEO_Y_SOBREPRODUCCION.md` de `unrlvl-iid-functions`.
+
+**Sigue abierto de sesiones anteriores, sin tocar hoy:** la rotación de **`SEC-03`** (`media-store` y
+`meta-graph-post`, mismo secreto cableado, **14 días abierto**) y los cinco frentes de ForumPHs del
+`v2026-09-21-v1`, íntegros abajo.
+
+---
+
+### ⚠️ EL INCIDENTE DEL DÍA — causado por CC, corregido por CC, y escrito entero
+
+Retirar el `DEFAULT` de `content_pieces.pass_type` —columna `NOT NULL`— mientras el código lo pasaba
+como **clave suelta** en el objeto de argumentos de `buildPieceRow` **mató cuatro finalizaciones**
+con `23502`. `buildPieceRow` arma la fila con una **lista fija** de claves más `...a.estado`, y
+**Deno borra los tipos en runtime**: la clave se cayó al suelo **sin un solo error**.
+
+**La guarda de la migración comprobó que el DEFAULT ya no estaba, y era verdad.** Las dos cosas lo
+eran: el default no existía **y** nadie escribía el valor.
+
+Remedio el mismo día: **default restaurado en caliente**, **las cuatro piezas reparadas** —los tres
+labs habían dado `ok` y los assets estaban intactos, sólo falló el `INSERT`—, la clave movida
+**dentro de `estado`**, y `tests/pass_limpio_test.mjs`, que **reproduce el bug**. **La migración
+ofensora no se editó** pese a tener su PR sin mergear: un registro que se edita para que cuadre deja
+de ser un registro.
+
+> **Regla que queda:** *una guarda que comprueba lo que se escribió no comprueba lo que va a pasar.*
+> La guarda miraba el **esquema**; hacía falta mirar la **fila**.
+
+Y su gemela, del mismo día: *un número medido en una unidad y aplicado en otra no es conservador ni
+agresivo: es otro número.* El tope de imágenes se calculó en **días naturales** y se implementó como
+**ventana rodante**; se fijó en **60** cuando el p90 rodante era **97** y el valor vivo **119** — **el
+tope estaba violado en el instante en que se escribió**, y apagó la generación de imágenes.
+
+---
+
+### 🔍 LO QUE CC CORRIGE POR MEDICIÓN — tres cosas, dos de ellas suyas
+
+1. **«27 filas de techo» era un recuento no medido.** Ese 27 eran las filas que **tocó el `UPDATE`**,
+   no las que declaran techo. Lo verificable hoy es **7 de 60** filas con `max_chars`.
+2. **El checkpoint del Professor es el 21, no el 17.** Se había leído **16** como último, y 16 era el
+   máximo **de una fecha**, no del conteo: `medido`, el máximo global era **20** (2026-09-20).
+3. **La ubicación del cron externo que dio Sam no procedía**, y se hace constar para que no se repita
+   la búsqueda: Sam lo situó en **`unrlvl-core-project`**; `medido`, ese proyecto **no tiene `crons`
+   en su `vercel.json`**, su `api/` sirve sólo blog, robots y sitemap, y tuvo **1 línea de log en
+   7 h**. El vigilante está en **`unrlvl-ops`**.
+
+---
+
+### 🎓 PROFESSOR — 11 learnings en checkpoint 21, SEMBRADOS Y APROBADOS
+
+`medido` sobre `public.professor_learnings`: **11 filas** con `session_date = '2026-09-23'`,
+`checkpoint_number = 21`, **las once con `approved_by_sam = true`**. Sam los aprobó en el chat antes
+de la siembra. **Las dos de cabecera son errores propios de CC**, a propósito: *una guarda que
+comprueba lo que se escribió no comprueba lo que va a pasar* y *un número medido en una unidad y
+aplicado en otra es otro número*.
+
+---
+
+### ⏳ PENDIENTE DE SAM — no es tarea de CC
+
+1. **Mergear y borrar** `unrlvl-iid-functions#217` y `unrlvl-ops#14` por **GitHub Web UI**.
+2. **Desplegar `unrlvl-ops` en Vercel** tras mergear el #14 — el cron corre sobre el despliegue, no
+   sobre `main`.
+3. **Mergear y borrar** el PR de este Actualiza en `unrlvl-context`.
 
 ---
 
