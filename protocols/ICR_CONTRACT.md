@@ -60,16 +60,32 @@ está aquí, **se dice que no está definida; no se infiere su significado.**
 > descuido: la de aquí **tradujo** la de allí. Cuál mandaba no lo decidió CC.
 >
 > **`AIID` queda `propuesto`, no cerrado.** Sam confirmó la tríada en inglés y que la `A` abre a
-> «agentes», pero **no dictó la palabra inglesa**. `Agentic` es la forma que encaja con el
-> vocabulario del ecosistema —existe `AgentLab`— y se escribe aquí **como propuesta**, no como
-> hecho. **Una sigla propuesta no se usa en una UI ni en una columna hasta que Sam la cierre.**
+> «agentes», pero **no dictó la palabra inglesa**. `Agentic` se escribe aquí **como propuesta**, no
+> como hecho. **Una sigla propuesta no se usa en una UI ni en una columna hasta que Sam la cierre.**
+>
+> ⚠️ **`AgentLab` NO tiene nada que ver con los agentes del IID**, y se dice porque una redacción
+> anterior justificaba `Agentic` alegando justamente eso. `AgentLab` es un **generador de agentes**
+> —vía Telegram, WhatsApp, API—; los agentes del AIID son los **investigadores** de
+> `intel.iid_agents`. **Comparten la palabra «agente» y nada más**, y unirlos fue un razonamiento
+> falso. La palabra la elige Sam, sin analogías. [Aclarado por Sam el 2026-09-23.]
 >
 > **EL ALCANCE DEL CARRIL, que Sam precisó en el mismo mensaje y es lo operativo:** el carril llega
 > **hasta la publicación**, e involucra **a todos los labs que participen en esa producción** —hoy
-> CopyLab, ImageLab y SocialLab; más adelante VideoLab, VoiceLab y probablemente SignalLab—.
+> CopyLab, ImageLab y SocialLab; más adelante VideoLab y VoiceLab—.
 > **El carril se define por PARTICIPACIÓN EN LA PRODUCCIÓN, no por una lista de labs**, así que un
 > lab que entre mañana cuenta sin que haya que reescribir esta definición. La lista es instancia; el
 > criterio es el eje.
+>
+> **`SignalLab` NO es del carril** —una redacción anterior lo incluyó, y es un error corregido por
+> Sam el 2026-09-23—. Es **el Analytics del ecosistema**: no produce piezas, **mide los carriles**.
+> Su coste existe y **hay que identificarlo claramente**, pero **no se imputa a ningún carril**,
+> porque es transversal a todos.
+>
+> 🔴 **Y `AIID` NO VA A SER EL ÚNICO CARRIL.** Sam lo declaró el 2026-09-23: viene el **carril
+> `PaidAds`**, y **compartirá labs con el AIID**. Consecuencia de gobernanza, no de costeo: a
+> partir de ahí **«el carril» deja de ser una expresión sin ambigüedad**, y todo asiento, informe
+> o UI que diga «carril» tiene que decir **cuál**. El eje es *«a qué se imputa»*; `aiid`,
+> `paid_ads` y `analytics` son **instancias y van en el dato**.
 
 > ### ⛔ NO OPERATIVO — redacción anterior, conservada y no borrada
 >
