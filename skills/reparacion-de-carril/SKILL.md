@@ -7,8 +7,10 @@ destino: CARGABLE
 audiencia: UNRLVL infra — transversal a todos los carriles y todas las marcas
 descripcion: >
   Qué hacer cuando llega un aviso de un carril de producción: diagnosticar la causa
-  real, corregirla en el orden correcto y verificarla POR EFECTO. Nace de una sesión
-  en la que se diagnosticaron cinco defectos con el mismo método cinco veces. No
+  real, corregirla en el orden correcto y verificarla POR EFECTO. Cubre las DOS mitades
+  del carril —la de la base y la que vive fuera, en los crons externos—, el catálogo de
+  remediación por código de fallo, y el criterio fail-loud frente a fail-soft. Nace de una
+  sesión en la que se diagnosticaron cinco defectos con el mismo método cinco veces. No
   opera el carril —eso es publicacion-operativa— ni produce texto —eso es
   content-pipeline—. CERO ESTADO: lleva las consultas, no las cifras.
 ---
@@ -126,6 +128,44 @@ argumenta, no se consulta**, y eso se dice en el reporte en vez de disimularlo.
 
 ---
 
+## §2-BIS — EL CARRIL NO VIVE SÓLO EN LA BASE
+
+**Un reparador que sólo mira Supabase no ve la mitad del sistema**, y esa mitad es
+precisamente la que vigila a la otra. Costó una hora de búsqueda en el proyecto
+equivocado: **antes de diagnosticar, resuelve dónde vive el componente.**
+
+| dónde vive | qué hay allí | cómo se lee |
+|---|---|---|
+| **Supabase** | Edge Functions, `pg_cron`, esquemas, reglas | SQL y la función **servida** |
+| **Vercel** | los **crons externos** y las apps que llaman al carril desde fuera | `vercel.json` del repo **y** los logs de runtime del despliegue |
+| **Otros repos** | los labs. El carril los llama por su `api_endpoint`; **nunca construye su motor** | su propio repo, nunca desde aquí |
+
+> **Por qué hay vigilancia fuera de la base, y no es un capricho:** *un vigilante que corre
+> dentro de lo que vigila no puede avisar de que lo vigilado se cayó.* Por eso hay
+> vigilancia mutua — algo fuera mira la base, y algo en la base mira que eso de fuera
+> siga llamando.
+
+**Cómo se localiza un cron externo, que es donde se pierde el tiempo:**
+
+1. **No se adivina por el nombre del proyecto.** Se lee el `vercel.json` del repo: si no
+   tiene bloque `crons`, ese proyecto **no dispara nada**, por sugerente que sea su nombre.
+2. **Se confirma por sus logs de runtime**, que dicen la hora real de cada pasada y su
+   código de estado. Un proyecto con una línea de log en siete horas no está corriendo un
+   cron cada cinco minutos.
+3. **El reloj se lee del historial, no de la expresión cron** (§3-F5).
+
+**Tres trampas medidas de la mitad externa:**
+
+- **El despliegue no es el merge.** Si el proyecto está conectado a git, el merge dispara
+  el despliegue **solo**; si no, hay que desplegarlo. **Compruébalo en vez de suponerlo:
+  el cron corre sobre el despliegue, no sobre `main`.**
+- **La ruta de la API puede comérsela un `rewrite` catch-all.** Si el `vercel.json` tiene
+  una regla que manda todo a la app, `/api` debe quedar **excluido** explícitamente.
+- **El endpoint suele exigir un secreto de cron en la cabecera.** No se prueba a mano con
+  el valor: **no manejas ese valor** (§6). Se diagnostica por logs y por efecto.
+
+---
+
 ## §3 — LAS CINCO FASES
 
 ### F1 · Recibir el aviso y NO creérselo
@@ -158,6 +198,19 @@ where public_ref = :ref;   -- o: order by last_seen desc limit 10
 
 **Quién escribió esa frase, literalmente.** No dónde crees que se escribe: dónde se
 escribe.
+
+**Pero antes de abrir código: mira si ese fallo ya tiene respuesta escrita.**
+
+```sql
+-- PRIMERA PARADA. Puede que alguien ya diagnosticara esto y dejara qué hacer.
+select code, subcode, what_to_do, why, permanent_fix, auto_action
+from alerting.failure_remediation
+where code = :code and coalesce(subcode,'') = coalesce(:subcode,'');
+```
+
+Si hay fila, **`why` te ahorra la fase 3 entera** y `permanent_fix` te dice si lo que vas
+a hacer es un parche o el arreglo. **Si no hay fila, tu trabajo termina escribiéndola**
+(§7).
 
 ```sql
 -- La regla que disparó: su condición, su umbral, su cubo de agrupación y su ruta
@@ -377,6 +430,30 @@ retención. Y a veces **la lección ya estaba escrita** en la función vecina, s
 **Se corrige:** filtrando por una columna indexada —una marca de agua leída **antes** del
 refresco que la mueve— **más una purga con retención desde el primer día**.
 
+### 4.9 · Un servicio mal configurado que responde `200`
+**Síntoma:** ninguno hasta que alguien pregunta. El servicio contesta, y contesta bien.
+**Raíz:** arranca sin una variable, un secreto o un destino, y **degrada en silencio** en
+vez de negarse. Es la cara opuesta de §4.5: allí el fallo se capturaba y no se miraba;
+aquí **ni siquiera llega a ser un fallo**.
+**Se confirma:** forzando la ausencia en un entorno que no sea producción, o leyendo el
+arranque del servicio y buscando qué hace cuando le falta algo.
+**Se corrige:** **fail-loud**. Si falta lo que necesita para hacer su trabajo, devuelve un
+error que se vea.
+
+> **El criterio, y se aplica también al arreglo que estés escribiendo:**
+> **un vigilante mal configurado que devuelve `200` es peor que uno caído, porque nadie lo
+> mira.** Un servicio degradado que calla convierte un problema de configuración —barato,
+> de minutos— en un problema de confianza: el día que de verdad haga falta, nadie sabrá
+> que llevaba semanas sin hacer nada.
+
+**Dónde elegir entre las dos formas**, porque no es preferencia:
+
+| situación | forma correcta |
+|---|---|
+| le falta **configuración** para existir | **fail-loud** — 4.9 |
+| falla **un paso opcional** de un trabajo que puede seguir | **fail-soft, con el fallo observable** — 4.5 |
+| falla **el paso que da sentido al trabajo** | fail-loud, aunque duela |
+
 > **Al añadir una clase nueva a este catálogo, escribe las cinco líneas: síntoma, raíz,
 > cómo se confirma, cómo se corrige y qué costó.** Una entrada sin «cómo se confirma» es
 > una anécdota.
@@ -387,6 +464,35 @@ refresco que la mueve— **más una purga con retención desde el primer día**.
 
 **Consultas, no cifras.** El mapa operativo completo vive en `publicacion-operativa`;
 aquí van sólo las del diagnóstico.
+
+**Lo primero, siempre: ¿este código de fallo ya tiene respuesta escrita?**
+
+```sql
+-- El catálogo entero, para ver qué está cubierto y qué no
+select code, subcode, left(what_to_do, 80) as que_hacer,
+       left(permanent_fix, 80) as arreglo_definitivo, auto_action
+from alerting.failure_remediation order by code, subcode;
+```
+
+```sql
+-- Y los códigos que el carril está produciendo de verdad, que no son los mismos
+select rule_code, payload->>'causa' as causa, count(*) n, max(last_seen) ultimo
+from alerting.alert_events
+where first_seen > now() - interval '7 days'
+group by 1,2 order by n desc limit 20;
+```
+
+> **Los dos conjuntos no coinciden, y la diferencia es el trabajo:** lo que el carril
+> produce y el catálogo no cubre es **exactamente lo que falta por diagnosticar**.
+
+⚠️ **Trampa al escribir en esa tabla:** su índice único va **por expresión** sobre
+`(code, coalesce(subcode,''))`, así que **un `ON CONFLICT (code, subcode)` no matchea**. Y
+`why` es `NOT NULL` — a propósito: **una remediación sin causa es una receta, y las recetas
+se aplican sin pensar.**
+
+> **`auto_action` es la semilla del corrector automático y hoy no lo lee nadie**
+> [`reportado`, `ecosystem.json`]. Escríbelo igual, pensando en que algún día se ejecute
+> solo: es la diferencia entre dejar una nota y dejar un mecanismo.
 
 **¿Está vivo el canal de avisos, o es que no hay nada que decir?** — la pregunta que
 distingue las dos clases de silencio:
@@ -481,7 +587,13 @@ CLASE:        [§4.x, o «nueva» + sus cinco líneas]
 ARREGLO:      [qué, y en qué orden]            REVERSIÓN: [un paso]
 VERIFICADO:   [el efecto observable, medido]   [y el efecto negativo]
 QUEDA ABIERTO:[lo que no se tocó, y por qué]
+REMEDIACIÓN:  [fila escrita en alerting.failure_remediation, o por qué no aplica]
 ```
+
+> **La última línea no es burocracia: es lo que hace que el próximo aviso igual cueste
+> minutos en vez de horas.** Si diagnosticaste un código que no estaba en el catálogo y
+> no lo escribes, **el siguiente lo diagnostica desde cero** — que es justamente lo que
+> este skill existe para evitar.
 
 ---
 
@@ -492,7 +604,8 @@ QUEDA ABIERTO:[lo que no se tocó, y por qué]
 > efecto observable **antes** de arreglar? ¿Provoqué el fallo, o estoy suponiendo que el
 > camino de recuperación funciona? ¿El arreglo sobrevive a otra marca **y a otro carril**?
 > ¿Hay un test que **reproduce** el defecto, y lo he visto ponerse rojo? ¿Dije lo que
-> queda abierto?
+> queda abierto? ¿Comprobé si el componente vive **fuera** de la base antes de buscarlo
+> dentro? ¿Dejé escrita la remediación del código que diagnostiqué?
 
 **Y la que cierra de verdad:**
 
