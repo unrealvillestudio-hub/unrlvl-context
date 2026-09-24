@@ -1,7 +1,7 @@
 ---
 name: reparacion-de-carril
-version: 1.0
-fecha: 2026-09-24
+version: 1.1
+fecha: 2026-09-25
 capa: MÉTODO
 destino: CARGABLE
 audiencia: UNRLVL infra — transversal a todos los carriles y todas las marcas
@@ -10,7 +10,8 @@ descripcion: >
   real, corregirla en el orden correcto y verificarla POR EFECTO. Cubre las DOS mitades
   del carril —la de la base y la que vive fuera, en los crons externos—, las DOS puertas de
   entrada —canal de alertas y bandeja de aprobación—, el catálogo de
-  remediación por código de fallo, y el criterio fail-loud frente a fail-soft. Nace de una
+  remediación por código de fallo, el criterio fail-loud frente a fail-soft, y la clase de
+  defecto en que la reparación se deshace sola mientras el registro la da por viva. Nace de una
   sesión en la que se diagnosticaron cinco defectos con el mismo método cinco veces. No
   opera el carril —eso es publicacion-operativa— ni produce texto —eso es
   content-pipeline—. CERO ESTADO: lleva las consultas, no las cifras.
@@ -552,6 +553,50 @@ alguien llamó sin la llave —que sí es urgente— y que **el operador legíti
 sobre un episodio que ya estaba cerrado** — que es operación normal. Resultado: **leer un
 aviso tarde generaba un aviso urgente**. Dos veces, con el mismo patrón, antes de que
 alguien preguntara.
+
+### 4.12 · La reparación que se deshizo sola, y el registro que la dio por viva
+**Síntoma:** ninguno, y además **con coartada**: el mapa, el context file o el propio
+protocolo afirman que el arreglo está puesto. El defecto vuelve a estar abierto y nadie
+lo revisa **porque ya figura como cerrado**.
+**Raíz:** un `REVOKE`, un `GRANT` o un `ALTER` viven en la ACL o en el catálogo de **una
+firma concreta**. Recrear el objeto con firma distinta —`CREATE OR REPLACE` con otro
+número de argumentos— crea una entrada nueva en `pg_proc`, y esa entrada **nace con los
+permisos por defecto de Postgres**: `EXECUTE` a `PUBLIC`. La sentencia no se hereda, nada
+falla y nadie avisa.
+**Se confirma:** midiendo la ACL **hoy**, nunca leyendo lo que el registro afirma.
+
+```sql
+-- La pregunta que de verdad importa es la que hace PostgREST, no la que hace el mapa.
+select n.nspname||'.'||p.proname as fn,
+       pg_get_function_identity_arguments(p.oid)               as args,
+       coalesce(array_to_string(p.proacl,' | '),'SIN ACL: PUBLIC') as acl,
+       has_function_privilege('anon', p.oid, 'EXECUTE')        as anon_puede,
+       has_function_privilege('service_role', p.oid, 'EXECUTE') as service_role_puede
+from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+where p.proname = :fn order by 2;
+```
+
+`=X/postgres` **es PUBLIC**. Se lee mal con facilidad: parece una entrada vacía y es la
+concesión a todo el mundo. Y ojo con las **sobrecargas**: dos filas con el mismo nombre y
+distintos `args` son dos objetos distintos, con dos ACL distintas.
+
+**Se corrige:** reemitiendo la sentencia **con su mitad complementaria** (§4.4), y —esto
+es lo que cierra la clase— **haciendo que la migración termine leyendo el estado final**
+con `has_function_privilege` en vez de confiar en haber ejecutado las sentencias. Una
+migración que sólo ejecuta afirma; una que además lee, comprueba.
+
+> ⚠️ **La regla que se deriva, y aplica a cualquier context file:** una afirmación de
+> estado con fecha vieja **no es un hecho, es una hipótesis**. Antes de apoyarse en ella
+> —y sobre todo antes de descartar un hallazgo del advisor citándola— se re-mide. Un mapa
+> que existe para distinguir el ruido de diseño de un agujero real hace lo contrario en
+> cuanto una de sus líneas envejece: convierte el agujero en ruido.
+
+**Caso real:** `supabase_access_map.json` afirmaba «REVOKE PUBLIC/anon aplicado
+2026-06-03» sobre la función que escribe el libro de costos. El 2026-09-24 se midió y
+`PUBLIC` tenía `EXECUTE`. La función se había recreado con 27 argumentos en agosto por una
+razón que nada tenía que ver con permisos. **Casi cuatro meses de un permiso abierto que el
+registro daba por cerrado** — y el advisor lo marcaba cada semana, pero el mapa estaba ahí
+para explicar que ese WARN era de diseño.
 
 > **Al añadir una clase nueva a este catálogo, escribe las cinco líneas: síntoma, raíz,
 > cómo se confirma, cómo se corrige y qué costó.** Una entrada sin «cómo se confirma» es
