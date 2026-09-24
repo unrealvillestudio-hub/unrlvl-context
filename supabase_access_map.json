@@ -1,7 +1,16 @@
 {
   "_meta": {
-    "version": "2026-06-03-v2",
-    "previous": "2026-06-03-v1",
+    "version": "2026-09-25-v1",
+    "previous": "2026-06-03-v2",
+    "correccion_2026_09_25": {
+      "titulo": "UN REVOKE NO ES UN ESTADO: ES UNA SENTENCIA QUE UN CREATE OR REPLACE POSTERIOR BORRA",
+      "que_afirmaba_este_mapa": "Que el REVOKE de PUBLIC/anon sobre ops_log_generation y ops_compute_cost estaba aplicado desde 2026-06-03.",
+      "que_se_midio_el_2026_09_24": "Que PUBLIC tenía EXECUTE sobre las dos. El acl decía `=X/postgres`, que es PUBLIC. La afirmación llevaba casi cuatro meses sin ser cierta.",
+      "el_mecanismo": "ops_log_generation se recreó con 27 argumentos en agosto (BRIEF 6). Una función con firma nueva NACE CON EXECUTE A PUBLIC: el REVOKE no viaja con el CREATE OR REPLACE. Nadie lo deshizo a mano — se deshizo solo.",
+      "por_que_importa_mas_que_el_permiso": "Este archivo existe para distinguir un WARN de diseño de un agujero real. Mientras afirmó un REVOKE que no existía, hizo lo contrario: convirtió un agujero real en ruido de diseño que nadie volvió a mirar.",
+      "la_regla_que_se_deriva": "Toda afirmación de permiso en este mapa se re-mide contra pg_proc.proacl o has_function_privilege en la sesión en que se escribe, y lleva su fecha. Una entrada sin fecha reciente es una hipótesis, no un hecho. Y toda migración que recree una función con firma nueva vuelve a emitir su REVOKE.",
+      "donde_se_corrigio": "unrlvl-iid-functions, migración 20260924230000_la_llave_publicable_deja_de_disparar_el_carril.sql (PR #226), aplicada el 2026-09-24. Termina leyendo has_function_privilege en vez de confiar en haber ejecutado las sentencias."
+    },
     "maintained_by": "Claude (supabase-auditor)",
     "purpose": "Mapa de acceso a Supabase: para cada objeto (tabla/función/vista) registra qué app del ecosistema lo consume, con qué credencial (anon/service_role/PUBLIC), en qué operación, y si ese acceso es intencional. Es la fuente de verdad para interpretar los Security Advisors de Supabase: distingue un WARN de diseño (intencional) de un agujero real.",
     "linked_to": {
@@ -10,7 +19,7 @@
       "join_key": "caller.repo coincide con los nodos LAB-* / APP-* del ecosystem_graph"
     },
     "coverage": "partial",
-    "coverage_note": "Bloque 1 del primer run completo cerrado (flujo protagonista): Orchestrator, CopyLab, ImageLab, SocialLab, VideoLab verificados en codigo. Pendiente bloque 2: WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject, MCPs, forumphs-*, DDMV-Assistant, XMMs. coverage sigue 'partial'.",
+    "coverage_note": "Bloque 1 del primer run completo cerrado (flujo protagonista): Orchestrator, CopyLab, ImageLab, SocialLab, VideoLab verificados en codigo. 2026-09-25: barrido de los 23 repositorios del ecosistema buscando llamantes de las 11 funciones SECURITY DEFINER alcanzables por anon y de las 6 tablas sin RLS — ese barrido es el que sostiene las entradas nuevas de esta version. Pendiente bloque 2 completo: WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject, MCPs, forumphs-*, DDMV-Assistant, XMMs. coverage sigue 'partial'.",
     "project": {
       "name": "unrlvl-db",
       "id": "amlvyycfepwhiindxgzw"
@@ -29,7 +38,9 @@
   "design_principles": {
     "dual_mode_sync": "Los labs (CopyLab, ImageLab, Orchestrator) operan en modo dual sync/async. El modo sync escribe a Supabase directamente desde el browser con la ANON key. Por diseño, ciertas funciones SECURITY DEFINER y policies permisivas con anon son NECESARIAS y aparecerán perpetuamente como WARN en el advisor. Este mapa las marca intentional=true para que no se revoquen por error.",
     "service_role_bypass": "Las Edge Functions y los endpoints serverless server-side usan service_role, que bypasea RLS. Por eso habilitar RLS y revocar anon/PUBLIC en objetos server-side-only tiene impacto operativo nulo.",
-    "advisor_interpretation": "Un WARN 'anon can execute SECURITY DEFINER' o 'permissive RLS policy' NO es automáticamente un bug. Se cruza contra este mapa: si intentional=true, es ruido de diseño; si la función/tabla no tiene caller anon registrado, es vestigial y se cierra."
+    "advisor_interpretation": "Un WARN 'anon can execute SECURITY DEFINER' o 'permissive RLS policy' NO es automáticamente un bug. Se cruza contra este mapa: si intentional=true, es ruido de diseño; si la función/tabla no tiene caller anon registrado, es vestigial y se cierra.",
+    "un_revoke_no_sobrevive_a_una_firma_nueva": "MEDIDO 2026-09-24. Un `REVOKE ... FROM PUBLIC` vive en la ACL de UNA firma concreta. Recrear la función con argumentos distintos crea una entrada nueva en pg_proc, que nace con EXECUTE a PUBLIC por defecto de Postgres. El REVOKE no se hereda y nadie avisa. Por eso: (1) toda migración que recree una función con firma nueva vuelve a emitir su REVOKE y su GRANT; (2) toda afirmación de permiso en este mapa se re-mide contra proacl en la sesión en que se escribe.",
+    "la_plantilla_de_supabase_no_es_nuestra_regla": "La plantilla que Supabase recomienda para el cambio del 30-oct-2026 concede SELECT a anon en cada tabla nueva de public. En este ecosistema NO: service_role siempre, anon nunca por defecto y sólo con motivo declarado. Así se acumularon las seis tablas sin RLS legibles con la clave publicable — tabla a tabla, cada una concediendo a anon «porque era lo que se hacía». Lo vigila unrlvl-iid-functions/tests/grant_tras_create_table_test.mjs."
   },
   "access_entries": [
     {
@@ -63,9 +74,14 @@
         "file": "src/lib/queries.ts (writeBrandCache)"
       },
       "intentional": true,
-      "verified_in": "CopyLab/src/lib/queries.ts — llama rpc/upsert_brand_cache con VITE_SUPABASE_ANON_KEY. Comentario en código: 'Usar RPC SECURITY DEFINER para escribir con privilegios elevados desde el browser'.",
-      "security_note": "Aparecerá perpetuamente como WARN 'anon can execute SECURITY DEFINER'. ES INTENCIONAL (dual-mode sync). NO revocar. Nota: falta grant explícito a service_role; si alguna vez se revoca PUBLIC, otorgar antes a service_role.",
-      "last_verified_sha": "session-2026-06-03"
+      "verified_in": "MEDIDO 2026-09-25 (proacl): `postgres=X | anon=X | authenticated=X | service_role=X`. Se retiró SÓLO el EXECUTE por PUBLIC; el GRANT explícito a anon SE CONSERVA porque CopyLab/src/lib/queries.ts:105 la llama desde el navegador con VITE_SUPABASE_ANON_KEY. La función escribe public.brand_context_cache, que MEDIDO 2026-09-25 sólo usa CopyLab (leer y escribir): no es la misma tabla que brand_cache_snapshots, que es la del ecosistema.",
+      "security_note": "ESTE MAPA ANTICIPÓ LA TRAMPA Y ACERTÓ: la nota de 2026-06-03 decía «falta grant explícito a service_role; si alguna vez se revoca PUBLIC, otorgar antes a service_role». 20260924230000 lo hizo en esa orden. El acceso de anon sigue siendo intencional PERO queda en la Fase 2 (sacar las escrituras de producción de la clave publicable), no como diseño permanente.",
+      "last_verified_sha": "session-2026-09-25",
+      "⛔ NO OPERATIVO — afirmación anterior, conservada porque explica cómo se llegó aquí": {
+        "verified_in": "CopyLab/src/lib/queries.ts — llama rpc/upsert_brand_cache con VITE_SUPABASE_ANON_KEY. Comentario en código: 'Usar RPC SECURITY DEFINER para escribir con privilegios elevados desde el browser'.",
+        "security_note": "Aparecerá perpetuamente como WARN 'anon can execute SECURITY DEFINER'. ES INTENCIONAL (dual-mode sync). NO revocar. Nota: falta grant explícito a service_role; si alguna vez se revoca PUBLIC, otorgar antes a service_role.",
+        "last_verified_sha": "session-2026-06-03"
+      }
     },
     {
       "object": "public.rotate_sequence_current",
@@ -79,9 +95,14 @@
         "file": "src/services/sequenceBridge.ts (initSequenceRun)"
       },
       "intentional": true,
-      "verified_in": "Orchestrator/src/services/sequenceBridge.ts — llama rpc/rotate_sequence_current con VITE_SUPABASE_ANON_KEY desde el dispatcher de recogida. También la usa lab-worker con service_role.",
-      "security_note": "Aparecerá perpetuamente como WARN. ES INTENCIONAL (dispatcher de recogida del Orchestrator + lab-worker). NO revocar de anon. En la sesión 2026-06-03 se revocó por error y se restauró el GRANT a anon, authenticated.",
-      "last_verified_sha": "session-2026-06-03"
+      "verified_in": "MEDIDO 2026-09-25 (proacl): `postgres=X | service_role=X | anon=X | authenticated=X`. NO se tocó en 20260924230000, a propósito: Orchestrator/src/services/sequenceBridge.ts:86 la llama desde el navegador con VITE_SUPABASE_ANON_KEY, y unrlvl-context/api/lab-invoke.js y api/job-runner.js la llaman server-side.",
+      "security_note": "Se mantiene el aviso de 2026-06-03 —se revocó por error una vez— y se confirma: NO revocar sin cambiar antes el cliente. Entra en la Fase 2.",
+      "last_verified_sha": "session-2026-09-25",
+      "⛔ NO OPERATIVO — afirmación anterior, conservada porque explica cómo se llegó aquí": {
+        "verified_in": "Orchestrator/src/services/sequenceBridge.ts — llama rpc/rotate_sequence_current con VITE_SUPABASE_ANON_KEY desde el dispatcher de recogida. También la usa lab-worker con service_role.",
+        "security_note": "Aparecerá perpetuamente como WARN. ES INTENCIONAL (dispatcher de recogida del Orchestrator + lab-worker). NO revocar de anon. En la sesión 2026-06-03 se revocó por error y se restauró el GRANT a anon, authenticated.",
+        "last_verified_sha": "session-2026-06-03"
+      }
     },
     {
       "object": "public.copylab_jobs",
@@ -229,8 +250,14 @@
         "file": "lab-worker Edge Function"
       },
       "intentional": true,
-      "verified_in": "Confirmado en sesión previa: lab-worker llama ops_compute_cost con service_role. unrlvl-ops NO la usa (escribe la tabla ops_costs directo). REVOKE PUBLIC/anon aplicado 2026-06-03.",
-      "last_verified_sha": "session-2026-06-03"
+      "verified_in": "MEDIDO 2026-09-25 (proacl): `postgres=X | service_role=X`. PUBLIC ya NO. La afirmación anterior —«REVOKE aplicado 2026-06-03»— era FALSA: la función no tenía ACL propia, así que el acceso de todos llegaba POR PUBLIC, incluido el de service_role. Revocar sin conceder la habría dejado sin ningún llamante.",
+      "last_verified_sha": "session-2026-09-25",
+      "⛔ NO OPERATIVO — afirmación anterior, conservada porque explica cómo se llegó aquí": {
+        "verified_in": "Confirmado en sesión previa: lab-worker llama ops_compute_cost con service_role. unrlvl-ops NO la usa (escribe la tabla ops_costs directo). REVOKE PUBLIC/anon aplicado 2026-06-03.",
+        "security_note": null,
+        "last_verified_sha": "session-2026-06-03"
+      },
+      "security_note": "El GRANT a service_role es OBLIGATORIO aquí, no cortesía: antes de 20260924230000 no lo tenía. Es el defecto de watchdog_beat (2026-09-23) y lo vigila tests/grant_tras_revoke_test.mjs."
     },
     {
       "object": "public.ops_log_generation",
@@ -244,8 +271,14 @@
         "file": "lab-worker Edge Function"
       },
       "intentional": true,
-      "verified_in": "lab-worker llama ops_log_generation con service_role. REVOKE PUBLIC/anon aplicado 2026-06-03.",
-      "last_verified_sha": "session-2026-06-03"
+      "verified_in": "MEDIDO 2026-09-25 (proacl): `postgres=X | service_role=X`. PUBLIC ya NO. La afirmación anterior —«REVOKE aplicado 2026-06-03»— era FALSA desde agosto: la función se recreó con 27 argumentos (BRIEF 6) y volvió a nacer con EXECUTE a PUBLIC. Llamantes medidos con service_role: 6 Edge Functions de unrlvl-iid-functions (content-run-stage, content-watcher, iid-process, iid-research) y, cruzando proyecto, forumphs-document-factory y forumphs-speaks.",
+      "last_verified_sha": "session-2026-09-25",
+      "⛔ NO OPERATIVO — afirmación anterior, conservada porque explica cómo se llegó aquí": {
+        "verified_in": "lab-worker llama ops_log_generation con service_role. REVOKE PUBLIC/anon aplicado 2026-06-03.",
+        "security_note": null,
+        "last_verified_sha": "session-2026-06-03"
+      },
+      "security_note": "El REVOKE se reemitió en 20260924230000 CON su GRANT a service_role en la misma migración. Si esta función vuelve a recrearse con otra firma, la migración que la recree DEBE reemitir ambos."
     },
     {
       "object": "public.ops_generation_ledger",
@@ -336,8 +369,13 @@
         "file": "no llamadas por front anon"
       },
       "intentional": true,
-      "verified_in": "CopyLab/queries.ts solo hace SELECTs + upsert_brand_cache; no llama invalidate_*. Administrativas/cron. REVOKE PUBLIC/anon aplicado 2026-06-03.",
-      "last_verified_sha": "session-2026-06-03"
+      "verified_in": "MEDIDO 2026-09-25 (proacl): invalidate_brand_cache e invalidate_all_brand_caches tienen `postgres=X | service_role=X`, sin PUBLIC. Aquí la afirmación de 2026-06-03 SÍ se sostiene — se re-midió y se confirma, en vez de darse por buena.",
+      "last_verified_sha": "session-2026-09-25",
+      "⛔ NO OPERATIVO — afirmación anterior, conservada porque explica cómo se llegó aquí": {
+        "verified_in": "CopyLab/queries.ts solo hace SELECTs + upsert_brand_cache; no llama invalidate_*. Administrativas/cron. REVOKE PUBLIC/anon aplicado 2026-06-03.",
+        "security_note": null,
+        "last_verified_sha": "session-2026-06-03"
+      }
     },
     {
       "object": "trigger functions (tgfn_invalidate_brand_cache, tgfn_invalidate_all_brand_caches, trigger_lab_worker, update_df_jobs_updated_at, sync_profiler_to_crm, content.invalidate_cache_brand_root, content.invalidate_cache_child_table)",
@@ -351,8 +389,13 @@
         "file": "disparadas internamente por triggers"
       },
       "intentional": true,
-      "verified_in": "Funciones de trigger — corren como owner, nunca por RPC. REVOKE PUBLIC/anon aplicado 2026-06-03 sin impacto (no necesitan grant a service_role).",
-      "last_verified_sha": "session-2026-06-03"
+      "verified_in": "MEDIDO 2026-09-25 (proacl): tgfn_invalidate_brand_cache, tgfn_invalidate_all_brand_caches y trigger_lab_worker tienen `postgres=X` y nada más. Correcto: una función de disparador la ejecuta el motor como parte de la sentencia, sin comprobar EXECUTE sobre el rol que escribe. La afirmación de 2026-06-03 se sostiene y se re-midió.",
+      "last_verified_sha": "session-2026-09-25",
+      "⛔ NO OPERATIVO — afirmación anterior, conservada porque explica cómo se llegó aquí": {
+        "verified_in": "Funciones de trigger — corren como owner, nunca por RPC. REVOKE PUBLIC/anon aplicado 2026-06-03 sin impacto (no necesitan grant a service_role).",
+        "security_note": null,
+        "last_verified_sha": "session-2026-06-03"
+      }
     },
     {
       "object": "ImageLab front (read-only)",
@@ -463,9 +506,76 @@
       "intentional": true,
       "verified_in": "VideoLab/api/execute.ts — worker puro de Kling AI (text2video submit/poll, JWT HS256 con KLING_ACCESS_KEY/SECRET_KEY). No usa Supabase. Output fluye via Orchestrador. VideoLab confirma el patron: front anon read-only + serverless que llama al motor IA sin escribir DB directo.",
       "last_verified_sha": "session-2026-06-03"
+    },
+    {
+      "object": "public.ops_set_client_terms",
+      "object_type": "function_security_definer",
+      "credential": "anon",
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "unrlvl-ops",
+        "file": "src/components/ClientTermsEditor.tsx"
+      },
+      "intentional": "debatable",
+      "verified_in": "MEDIDO 2026-09-25 (proacl): `postgres=X | anon=X | service_role=X`. El GRANT a anon es EXPLÍCITO y está en uso: la consola de costos escribe los términos comerciales por marca desde el navegador con VITE_SUPABASE_ANON_KEY (src/lib/supabase.ts).",
+      "security_note": "ESCRIBE LOS TÉRMINOS COMERCIALES DE CADA CLIENTE —margen, retainer, tarifa de mano de obra— y la única autenticación es POSEER la clave publicable. `authenticated` NI SIQUIERA PUEDE: el camino con sesión está cerrado y el anónimo abierto. La página está tras SSO de Vercel, pero el SSO protege la página, no la RPC. FASE 2: mover la escritura a una ruta server-side de unrlvl-ops con service_role y revocar después. NO revocar antes: rompe la consola.",
+      "last_verified_sha": "session-2026-09-25"
+    },
+    {
+      "object": "public.ops_set_cost_residual",
+      "object_type": "function_security_definer",
+      "credential": "anon",
+      "operations": [
+        "execute"
+      ],
+      "caller": {
+        "repo": "unrlvl-ops",
+        "file": "src/components/ResidualEditor.tsx"
+      },
+      "intentional": "debatable",
+      "verified_in": "MEDIDO 2026-09-25 (proacl): `postgres=X | anon=X | service_role=X`. Mismo patrón y mismo llamante que ops_set_client_terms.",
+      "security_note": "Misma inversión: anon puede, authenticated no. FASE 2 junto con ops_set_client_terms.",
+      "last_verified_sha": "session-2026-09-25"
+    },
+    {
+      "object": "public.v_cost_pivot, v_cost_unified, v_client_terms_vigente, v_cost_residual_vigente, v_cost_por_dimension, v_rate_gaps, v_model_efficiency, v_iid_piece_cost, v_iid_funnel, v_client_margin, v_cost_by_brand_lab, v_reconciliacion",
+      "object_type": "view_security_definer_group",
+      "credential": "anon",
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "unrlvl-ops",
+        "file": "src/lib/clientTerms.ts, src/lib/residual.ts, src/pages/CostLayer.tsx y otros"
+      },
+      "intentional": "debatable",
+      "verified_in": "MEDIDO 2026-09-25: las DOCE tienen SELECT para anon y son SECURITY DEFINER. Su único consumidor en el ecosistema es unrlvl-ops [medido sobre 23 repositorios]. Ninguna app lee directo las tablas base.",
+      "security_note": "AQUÍ ESTÁ LA LECTURA REAL DE LA CAPA DE COSTOS, y por eso ACTIVAR RLS SOBRE LAS TABLAS BASE NO CIERRA NADA: una vista SECURITY DEFINER elude RLS por definición. El orden correcto es Fase 2 (mover las lecturas de unrlvl-ops a una ruta server-side y revocar el SELECT de anon sobre las doce) y sólo DESPUÉS plantear RLS. Al revés da sensación de arreglo sin cambiar quién puede leer.",
+      "last_verified_sha": "session-2026-09-25"
+    },
+    {
+      "object": "public.ops_client_terms, public.ops_cost_residual, public.ops_credits, public.ops_rate_transitions, intel.brand_topics, intel.rule_param_sources",
+      "object_type": "table_group_sin_rls",
+      "credential": "anon",
+      "operations": [
+        "select"
+      ],
+      "caller": {
+        "repo": "(ninguno medido)",
+        "file": "ningún repositorio las lee directo"
+      },
+      "intentional": "false",
+      "verified_in": "MEDIDO 2026-09-25 sobre 23 repositorios: NINGUNA app las lee directamente. anon tiene SELECT y las tablas no tienen RLS. intel.watcher_rules e intel.brand_sector también carecen de RLS pero ahí anon NO tiene grant, sólo authenticated.",
+      "security_note": "Candidatas a cerrar, pero DESPUÉS de las doce vistas: mientras las vistas SECURITY DEFINER sigan legibles por anon, cerrar las tablas no cambia lo que se puede leer. Cerrar primero lo que no sirve de nada da por resuelto lo que no lo está.",
+      "last_verified_sha": "session-2026-09-25"
     }
   ],
   "open_items_for_full_audit": [
+    "FASE 2 (abierta, la que queda): sacar de la clave publicable las cuatro escrituras de producción (ops_set_client_terms, ops_set_cost_residual, rotate_sequence_current, upsert_brand_cache) y las doce vistas de costos. Es un cambio de camino en el cliente —rutas server-side con service_role en unrlvl-ops, Orchestrator y CopyLab—, no una revocación. Revocar antes de cambiar el cliente rompe producción.",
+    "FASE 2 bis: sólo DESPUÉS de lo anterior, RLS sobre las seis tablas sin RLS. Antes no cierra nada.",
+    "brand_context_cache (CopyLab) y brand_cache_snapshots (ecosistema) son DOS cachés del mismo concepto. MEDIDO 2026-09-25: la primera sólo la usa CopyLab. Deuda de arquitectura declarada, no cerrada.",
     "BLOQUE 2 (pendiente): WebLab, VoiceLab, AgentLab, BlueprintLab, OnboardingApp, CoreProject, los MCP (shopify/supabase/meta), forumphs-*, DDMV-Assistant, XMMs.",
     "Confirmar policies/RLS exactas de las tablas nuevas: scheduled_posts (debe ser service_role-only), brand_social_accounts (verificar que NO exponga tokens de plataforma a anon), humanize_profiles.",
     "Confirmar policies de content_sequence_pieces y content_sequences (de v1).",
