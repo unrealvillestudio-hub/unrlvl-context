@@ -523,6 +523,36 @@ intersección — las que están en las dos son la prueba.
 **Se corrige:** contando por `status`, siempre; y si de verdad hace falta la historia, se
 nombra como historia y no se suma con el presente.
 
+### 4.11 · El código de fallo nombra una causa que no ocurrió
+**Síntoma:** salta una alerta **urgente** con nombre alarmante, y al mirar no pasó nada
+de lo que el nombre dice.
+**Raíz:** el filtro de la regla es **más ancho que su intención**. Mira un campo que
+significa *«esto se rechazó»* y **no mira POR QUÉ**, así que mete en el mismo saco un
+fallo de seguridad y una operación normal.
+**Se confirma:** **leyendo el `payload`, no el `code`.**
+
+```sql
+select public_ref, rule_code, severity, first_seen,
+       payload->>'reason' as motivo_real, payload->>'action' as accion
+from alerting.alert_events
+where rule_code = :code order by first_seen desc limit 10;
+```
+
+**Se corrige:** haciendo que el motivo del rechazo sea **un campo estructurado**, y que el
+filtro de la regla mire ese campo.
+
+> ⚠️ **Lo que NO se hace, y es la trampa:** filtrar por el texto del motivo. Eso es §4.10
+> —un criterio no es una cadena—, y el arreglo barato aquí **reintroduce el defecto que
+> acabas de catalogar**. Si el arreglo limpio exige código y despliegue, **se dice y se
+> espera**; no se sustituye por uno sucio que cabe en un `UPDATE`.
+
+**Caso real:** una regla abría episodio **urgente** en cuanto el registro de acciones
+marcaba `accepted = false`. Pero `accepted = false` significa **al menos dos cosas**: que
+alguien llamó sin la llave —que sí es urgente— y que **el operador legítimo pulsó «leído»
+sobre un episodio que ya estaba cerrado** — que es operación normal. Resultado: **leer un
+aviso tarde generaba un aviso urgente**. Dos veces, con el mismo patrón, antes de que
+alguien preguntara.
+
 > **Al añadir una clase nueva a este catálogo, escribe las cinco líneas: síntoma, raíz,
 > cómo se confirma, cómo se corrige y qué costó.** Una entrada sin «cómo se confirma» es
 > una anécdota.
@@ -602,6 +632,37 @@ order by r.severity;
 > ⚠️ **Que una severidad no tenga ruta a un transporte puede ser deliberado.** Comprueba
 > la decisión escrita antes de «arreglarlo»: **Telegram es para alertas; los informes son
 > los ya establecidos** (decisión de Sam, 2026-09-23).
+
+**¿Llegó al escritor la regla que creé, o se descartó por el camino?** — la pregunta que
+aparece cada vez que se toca una regla de generación:
+
+```sql
+select j.brand_id,
+       (j.assets->'builder_meta'->>'max_chars') as techo,
+       (j.assets->'builder_meta'->'rules_injected') ? :code as lleva_la_regla,
+       jsonb_array_length(j.assets->'builder_meta'->'rules_injected') as inyectadas,
+       (j.assets->'builder_meta'->'rules_skipped') as descartadas,
+       (j.assets->'builder_meta'->'rules_excluded_by_condition') as excluidas_por_condicion
+from content.orchestrator_jobs j
+where j.assets->'builder_meta' ? 'rules_injected'
+order by j.created_at desc limit 5;
+```
+
+> **Las tres listas dicen cosas distintas, y confundirlas cuesta un diagnóstico:**
+> `rules_injected` es lo que **llegó al prompt**; `rules_skipped` es lo que el inyector
+> **descartó solo** —normalmente porque un parámetro suyo no resolvía, que es su
+> comportamiento fail-safe y **no un fallo**—; y `rules_excluded_by_condition` es lo que la
+> regla misma **decidió no aplicar** a ese canal o esa marca.
+>
+> **Una regla ausente de las tres listas no existe, no está activa, o su `scope` no es el
+> de este paso.** Las reglas de generación viven en **`intel.watcher_rules`**, no en el
+> esquema de alertas — **y saberlo es la diferencia entre buscar un minuto y buscar una
+> hora**:
+>
+> ```sql
+> select code, scope, active, left(statement, 90) as enunciado
+> from intel.watcher_rules where code = :code;
+> ```
 
 **El carril en sí** — cobertura de asientos, fallos por lab, piezas atascadas: las
 consultas viven en `publicacion-operativa` Parte D. **No se duplican aquí.**
