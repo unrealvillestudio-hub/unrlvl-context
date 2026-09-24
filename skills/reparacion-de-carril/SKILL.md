@@ -8,7 +8,8 @@ audiencia: UNRLVL infra — transversal a todos los carriles y todas las marcas
 descripcion: >
   Qué hacer cuando llega un aviso de un carril de producción: diagnosticar la causa
   real, corregirla en el orden correcto y verificarla POR EFECTO. Cubre las DOS mitades
-  del carril —la de la base y la que vive fuera, en los crons externos—, el catálogo de
+  del carril —la de la base y la que vive fuera, en los crons externos—, las DOS puertas de
+  entrada —canal de alertas y bandeja de aprobación—, el catálogo de
   remediación por código de fallo, y el criterio fail-loud frente a fail-soft. Nace de una
   sesión en la que se diagnosticaron cinco defectos con el mismo método cinco veces. No
   opera el carril —eso es publicacion-operativa— ni produce texto —eso es
@@ -166,6 +167,60 @@ equivocado: **antes de diagnosticar, resuelve dónde vive el componente.**
 
 ---
 
+## §2-TER — LAS DOS PUERTAS DE ENTRADA, Y NO SE TRABAJAN IGUAL
+
+Un aviso llega por **una de dos**, y el diagnóstico arranca por sitios distintos:
+
+| llega por | qué te está diciendo | por dónde se tira del hilo |
+|---|---|---|
+| **el canal de alertas** (Telegram) | **una regla** se disparó | de la **regla** al evento, y del evento a la pieza |
+| **la bandeja de aprobación** (`content-approval@`) o un informe | **un número o una pieza** no cuadra | de la **pieza** hacia atrás, hasta el paso que falló |
+
+### Cuando el aviso llega por la bandeja: se tira de la PIEZA
+
+```sql
+-- De la pieza hacia atrás: en qué estado está y qué dejó escrito cada paso
+select id, brand_id, domain, platform, status, pass_type,
+       created_at, approved_at, challenged_at, discarded_at, published_at,
+       challenged_reason, deferred_reason, discarded_reason, orchestrator_job_id
+from content.content_pieces
+where id = :piece_id;   -- o: where status = 'challenged' order by created_at desc limit 20
+```
+
+```sql
+-- Qué consumió esa pieza, paso a paso, con sus fallos: el ledger es la caja negra
+select lab, output_type, provider, model_id, status, cost_usd,
+       duration_ms, left(coalesce(error_msg,''), 140) as error, generated_at
+from public.ops_generation_ledger
+where piece_id = :piece_id order by generated_at;
+```
+
+> **La pieza dice QUÉ le falta; el ledger dice QUIÉN se lo debía.** Una pieza en
+> `challenged` cuyo ledger muestra el lab en `failed` ya tiene el diagnóstico hecho: lo
+> que queda es la causa del fallo de ese lab, y ahí vuelves a **§3-F2**.
+
+### Y si el aviso es «este número no cuadra»
+
+**Antes de buscar el fallo, comprueba que las dos cifras cuentan lo mismo.** Ha pasado:
+tres instrumentos respondían *«cuántas piezas esperan criterio»* y daban **tres números
+distintos**, y ninguno estaba roto — **contaban cosas distintas con el mismo nombre**.
+
+```sql
+-- El reparto por estado, que es la pregunta bien hecha
+select status, count(*) n, max(created_at) ultimo
+from content.content_pieces group by 1 order by n desc;
+```
+
+> ### La regla que sale de aquel caso, y es §4.10
+>
+> **El estado vivo de una fila es su `status`; las columnas `*_at` son HISTORIA.** Una
+> `*_at` dice que algo le **pasó** a la fila, no lo que la fila **es**. Dos consultas
+> correctas por separado —una por `status`, otra por una fecha— **mienten juntas y en las
+> dos direcciones**: cuentan de más las que están en ambas, y de menos las que cambiaron
+> de estado después.
+
+---
+
 ## §3 — LAS CINCO FASES
 
 ### F1 · Recibir el aviso y NO creérselo
@@ -256,9 +311,12 @@ explain (analyze, buffers, format text) <la consulta sospechosa>;
 
 ```sql
 -- ¿La tabla crece sin purga? Clase de defecto §4.8
-select relname, n_live_tup, pg_size_pretty(pg_total_relation_size(c.oid)) as tamano
+select s.schemaname, s.relname, s.n_live_tup,
+       pg_size_pretty(pg_total_relation_size(c.oid)) as tamano
 from pg_class c join pg_stat_user_tables s on s.relid = c.oid
-where relname = :tabla;
+where s.relname = :tabla;
+-- `relname` va cualificada a proposito: existe en las DOS tablas y sin prefijo
+-- Postgres devuelve 42702 «column reference is ambiguous». Probada el 2026-09-24.
 ```
 
 **Antes de pasar a F4, contesta por escrito:** *¿qué tendría que ser cierto para que mi
@@ -453,6 +511,17 @@ error que se vea.
 | le falta **configuración** para existir | **fail-loud** — 4.9 |
 | falla **un paso opcional** de un trabajo que puede seguir | **fail-soft, con el fallo observable** — 4.5 |
 | falla **el paso que da sentido al trabajo** | fail-loud, aunque duela |
+
+### 4.10 · Contar por una columna `*_at` es contar el pasado y llamarlo presente
+**Síntoma:** dos instrumentos responden la misma pregunta con números distintos, y
+ninguno está roto.
+**Raíz:** **el estado vivo de una fila es su `status`.** Las columnas `*_at` son historia:
+dicen que algo le **pasó**, no lo que **es**. Y un criterio **tampoco es una cadena**: un
+veredicto no se reconoce porque su motivo empiece por una palabra.
+**Se confirma:** contando por `status` y por la fecha **por separado**, y mirando la
+intersección — las que están en las dos son la prueba.
+**Se corrige:** contando por `status`, siempre; y si de verdad hace falta la historia, se
+nombra como historia y no se suma con el presente.
 
 > **Al añadir una clase nueva a este catálogo, escribe las cinco líneas: síntoma, raíz,
 > cómo se confirma, cómo se corrige y qué costó.** Una entrada sin «cómo se confirma» es
