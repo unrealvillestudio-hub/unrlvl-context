@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.13 · 2026-09-12 · Mantenido por: Claude_
+_Versión: 1.14 · 2026-09-24 · Mantenido por: Claude_
 
 ---
 
@@ -21,6 +21,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
 | `publicacion-operativa` | `skills/publicacion-operativa/SKILL.md` | **Publicar una pieza, operar el carril, diagnosticar por qué algo no salió, o desplegar y encender un componente de publicación.** MÉTODO sin estado: el reparto Sam↔Claude, las cuatro QA e ICR como acciones, once entradas How2 y dónde se mira cada cosa. **No produce texto** — eso es `content-pipeline` | UNRLVL infra — transversal |
+| `reparacion-de-carril` | `skills/reparacion-de-carril/SKILL.md` | **Llega un aviso de un carril —Telegram, `content-approval@`, un informe— y hay que averiguar qué falló y arreglarlo.** MÉTODO sin estado: las cinco fases del diagnóstico, **once** clases de defecto con su forma de confirmarse, la técnica de fallo controlado, **las dos mitades del carril —base y crons externos—**, **las dos puertas de entrada —canal de alertas y bandeja de aprobación, que no se trabajan igual—**, y la **tabla de remediación por código de fallo**. Pensado para **abrir sesión nueva y cargarlo solo**. **No opera el carril** —eso es `publicacion-operativa`, que invoca en F2— ni produce texto | UNRLVL infra — transversal a todos los carriles |
 | `voice-craft` | `skills/voice-craft/SKILL.md` | **CAPA PRIMARIA — siempre que se calibre o genere CUALQUIER voz.** Oficio comunicacional transversal: arsenal operado, artefacto de destino, ejemplo-como-mecanismo, capas PSY/AIFE/Watcher declaradas, reparto genoma↔angle, triage técnica/intención | Multimarca — toda voz |
 | `comm-arsenal` | `skills/comm-arsenal/SKILL.md` | **SE CARGA JUNTO CON `voice-craft`** — es el arsenal que `voice-craft` §2 exige operar. Cuerpo de técnicas de comunicación oral y escrita: estructuras persuasivas, niveles de conciencia, aperturas por canal, prueba/objeción/contraste/analogía/especificidad/reencuadre, tipología de cierres, ritmo micro, ejecución escrita vs oral, anti-patrones | Multimarca — toda redacción y todo guion |
 | `voice-conversion` | `skills/voice-conversion/SKILL.md` | Calibrar o generar una voz de CONVERSIÓN (la que VENDE al decisor). Perfil secundario delgado — **invoca `voice-craft`** | Multimarca — marcas de producto/servicio |
@@ -42,6 +43,30 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.14
+
+**Cambios respecto a v1.13:**
+
+- **`reparacion-de-carril` v1.0 — ALTA.** Skill nuevo, capa **MÉTODO**, destino **CARGABLE**,
+  transversal a **todos los carriles** y a todas las marcas. Cubre un hueco real: `publicacion-operativa`
+  dice **dónde se mira cada cosa**, y no había nada que dijera **qué hacer con lo que se ve**.
+- **Nace de una sesión medida, no de una idea.** El 2026-09-23 se diagnosticaron y corrigieron **cinco
+  defectos en producción** —cuatro introducidos ese mismo día— y **el método fue idéntico las cinco
+  veces**. El skill es ese método, más las ocho clases de defecto que aparecieron.
+- **Su columna vertebral es la VERIFICACIÓN, no un catálogo de parches**, y el orden de las secciones lo
+  refleja a propósito: §1 es la regla, §4 el catálogo. **Un reparador que va rápido es un reparador que
+  comprueba lo que escribió**, y ese es exactamente el defecto que el skill viene a evitar.
+- **Declara en su §0 lo que NO ahorra:** no sustituye la carga de los protocolos. Ahorra el **método**,
+  no la **gobernanza**. Un arreglo que llega sin las cuatro QA y sin el test N+1 se devuelve.
+- **Es CERO ESTADO y MULTICARRIL por construcción.** No nombra AIID ni PaidAds como si fueran el
+  sistema: son instancias, y su §2 obliga a resolver de qué carril es el aviso **antes** de tocar nada.
+  Donde alguien esperaría una cifra, hay una consulta — `protocols/ARQUITECTURA_DEL_CONOCIMIENTO.md` §2.
+- **Límite con `publicacion-operativa`, escrito en los dos sentidos** para no repetir la ambigüedad que
+  la v1.13 dejó abierta entre `content-pipeline` y `publicacion-operativa`: el nuevo **invoca** al otro
+  en su fase 2 y **no duplica** sus consultas de operación.
 
 ---
 
