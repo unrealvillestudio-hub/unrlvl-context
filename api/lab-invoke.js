@@ -41,6 +41,9 @@ const SELF_URL    = 'https://unrlvl-context.vercel.app';
 const SB_URL_ENV  = () => process.env.SUPABASE_URL      ?? '';
 const SB_KEY_ENV  = () => process.env.SUPABASE_ANON_KEY ?? '';
 const BRIDGE_SECRET = () => process.env.CLAUDE_BRIDGE_SECRET ?? '';
+// Credencial para hablar con la EF que rota secuencias. NO es service_role a proposito:
+// ver el bloque sobre la rotacion, mas abajo.
+const CRON_SECRET   = () => process.env.IID_CRON_SECRET ?? '';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -104,19 +107,44 @@ async function getPreviousMechanism(sequenceId, position, language) {
   } catch { return null; }
 }
 
+// ── LA ROTACIÓN PASA POR UNA PUERTA CON CLAVE DE SERVICIO · 2026-09-25 ────────
+// `rotate_sequence_current` es SECURITY DEFINER —escribe en `content_sequences`— y se invocaba
+// desde aquí con `SUPABASE_ANON_KEY`. Era la ÚLTIMA de las once funciones que la clave publicable
+// podía ejecutar: las otras diez se cerraron el 2026-09-25.
+//
+// No se movió la credencial a este repositorio a propósito. La regla que `api/brand-cache.js` ya
+// fijó el 2026-08-16 sigue valiendo: «un lab que necesita service_role para tener contexto está
+// mal cableado». Así que la escritura va donde las claves de servicio YA viven —una Edge Function
+// del ecosistema— y aquí sólo viaja `IID_CRON_SECRET`, que es lo que esa puerta acepta y lo que
+// este proyecto ya usaba para delegar en `brand-snapshot-builder`.
 async function initSequenceRun(brandId, sequenceType, language) {
+  const secreto = CRON_SECRET();
+  if (!secreto) {
+    // Fail-loud y nominal. La alternativa —caer a la clave publicable— es la que este cambio
+    // viene a cerrar, y reintroducirla como «fallback» la reintroduce del todo.
+    console.error(
+      '[lab-invoke] IID_CRON_SECRET no definida: no se puede rotar la secuencia por sequence-rotate. ' +
+      'Definirla en el entorno; NO se cae a la clave publicable.');
+    return null;
+  }
   try {
-    const res = await fetch(
-      `${SB_URL_ENV()}/rest/v1/rpc/rotate_sequence_current`,
-      {
-        method:  'POST',
-        headers: { apikey: SB_KEY_ENV(), Authorization: `Bearer ${SB_KEY_ENV()}`, 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ p_brand_id: brandId, p_sequence_type: sequenceType, p_language: language }),
-      }
-    );
-    if (!res.ok) return null;
-    return await res.json();
-  } catch { return null; }
+    const res = await fetch(`${SB_URL_ENV()}/functions/v1/sequence-rotate`, {
+      method:  'POST',
+      // x-cron-secret y no Authorization: la EF lee `x-cron-secret ?? authorization`, y mandar un
+      // Bearer con otra clave haría fallar su comprobación. Mismo patrón que api/brand-cache.js.
+      headers: { 'Content-Type': 'application/json', 'x-cron-secret': secreto },
+      body:    JSON.stringify({ brand_id: brandId, sequence_type: sequenceType, language }),
+    });
+    if (!res.ok) {
+      console.error('[lab-invoke] sequence-rotate', res.status, (await res.text()).slice(0, 300));
+      return null;
+    }
+    const { sequence_id } = await res.json();
+    return typeof sequence_id === 'string' ? sequence_id : null;
+  } catch (e) {
+    console.error('[lab-invoke] sequence-rotate:', e?.message ?? e);
+    return null;
+  }
 }
 
 async function savePiece(sequenceId, parsed, meta) {
