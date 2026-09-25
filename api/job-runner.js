@@ -25,6 +25,8 @@ export const config = {
 
 const SB_URL       = () => process.env.SUPABASE_URL      ?? '';
 const SB_ANON      = () => process.env.SUPABASE_ANON_KEY ?? '';
+// Para la EF que rota secuencias. NO es service_role a proposito: ver el bloque mas abajo.
+const CRON_SECRET  = () => process.env.IID_CRON_SECRET ?? '';
 const RUNNER_SECRET = () => process.env.CLAUDE_BRIDGE_SECRET ?? '';
 const SELF_URL     = 'https://unrlvl-context.vercel.app';
 
@@ -124,13 +126,35 @@ async function getPreviousMechanism(seqId, position, language) {
   return data[0]?.mechanism_primary ?? null;
 }
 
+// ── LA ROTACIÓN PASA POR UNA PUERTA CON CLAVE DE SERVICIO · 2026-09-25 ────────
+// `rotate_sequence_current` es SECURITY DEFINER —escribe en `content_sequences`— y se invocaba
+// desde aquí con `SUPABASE_ANON_KEY`. Era la ÚLTIMA de las once funciones que la clave publicable
+// podía ejecutar: las otras diez se cerraron el 2026-09-25.
+//
+// No se movió la credencial a este repositorio a propósito. La regla que `api/brand-cache.js` ya
+// fijó el 2026-08-16 sigue valiendo: «un lab que necesita service_role para tener contexto está
+// mal cableado». Así que la escritura va donde las claves de servicio YA viven —una Edge Function
+// del ecosistema— y aquí sólo viaja `IID_CRON_SECRET`, que es lo que esa puerta acepta y lo que
+// este proyecto ya usaba para delegar en `brand-snapshot-builder`.
 async function initSequenceRun(brandId, seqType, language) {
-  const res = await fetch(`${SB_URL()}/rest/v1/rpc/rotate_sequence_current`, {
+  const secreto = CRON_SECRET();
+  if (!secreto) {
+    console.error(
+      '[job-runner] IID_CRON_SECRET no definida: no se puede rotar la secuencia por sequence-rotate. ' +
+      'Definirla en el entorno; NO se cae a la clave publicable.');
+    return null;
+  }
+  const res = await fetch(`${SB_URL()}/functions/v1/sequence-rotate`, {
     method: 'POST',
-    headers: sbHeaders(),
-    body: JSON.stringify({ p_brand_id: brandId, p_sequence_type: seqType, p_language: language }),
+    headers: { 'Content-Type': 'application/json', 'x-cron-secret': secreto },
+    body: JSON.stringify({ brand_id: brandId, sequence_type: seqType, language }),
   });
-  return res.ok ? await res.json() : null;
+  if (!res.ok) {
+    console.error('[job-runner] sequence-rotate', res.status, (await res.text()).slice(0, 300));
+    return null;
+  }
+  const { sequence_id } = await res.json();
+  return typeof sequence_id === 'string' ? sequence_id : null;
 }
 
 async function savePiece(sequenceId, parsed, meta) {
