@@ -1,5 +1,53 @@
 # ForumPHs — Session Log
 
+## 2026-09-26 — El criterio de 7 días del keepalive: 21 de 21
+
+> **Entrada de CC.** Verificación diferida, programada el 2026-09-19 cuando se nombró el criterio
+> por adelantado. **No es una sesión nueva:** es el cierre del último frente que quedaba abierto de
+> aquella. Todo lo `medido` se consultó el **2026-09-26 a las 12:01 UTC**.
+
+### ✅ CUMPLIDO, y sin margen de duda
+
+| | Esperado | Medido |
+|---|---|---|
+| Latidos en la ventana | ~21 (3/día × 7 días) | **21 — ni uno perdido** |
+| Primero | — | 2026-09-19 **18:11:01** |
+| Último | — | 2026-09-26 **10:11:00** |
+| Fechas distintas | 7–8 | **8** |
+| Estado del proyecto | activo | **`ACTIVE_HEALTHY`** |
+
+**21 de 21 significa cero corridas fallidas del cron en una semana.** No hizo falta mirar los logs
+de Vercel: el resultado esperado y el medido coinciden exactamente, que es la única forma en que
+este chequeo se cierra sin investigar.
+
+### 📏 «Tres peticiones diarias bastan» deja de ser `deducido`
+
+Era la última etiqueta blanda del frente. La documentación de Supabase dice **«a few … each day»**
+y **no da número**; el tres se eligió con margen, declarado como `deducido` **desde el primer día**
+precisamente para no darlo por cierto. **Ahora hay una ventana completa que lo respalda**, y pasa a
+`medido` — en el nodo de `ecosystem.json` y en la línea del cron, que es donde alguien iría a
+cambiarlo.
+
+### 🟡 La mitad del criterio que CC NO puede medir, dicha en vez de callada
+
+El criterio se enunció con **dos** partes: **FPHS activa** *y* **sin correo de aviso de pausa**.
+**CC sólo pudo medir la primera.** No lee el buzón de Sam, y `MAIL_PRIVACY_RULE` lo impide.
+
+**Esa mitad queda `reportado` por Sam o sin verificar**, y el nodo lo escribe. **Declarar cumplido
+el conjunto sin esta nota habría sido afirmar sin medir justo la mitad** — el mismo defecto que
+costó la corrección de `CAPABILITIES` 1.19. Lo que sí sostiene el resultado es que **un proyecto
+pausado no aparece `ACTIVE_HEALTHY`**: el estado medido es incompatible con una pausa consumada.
+
+### 🧰 Lo que el frente deja como capacidad, más allá de su caso
+
+**Un keepalive de eje**, con los objetivos en el dato y **cero proyectos en el código**: cualquier
+otra base en plan gratuito entra añadiendo un objeto a `KEEPALIVE_TARGETS`, **sin tocar código ni
+desplegar nada**. Eso es lo que sobrevive a ForumPHs, que fue el caso que lo pidió primero.
+
+**Y el frente no deja nada abierto.**
+
+---
+
 ## 2026-09-22 — El Sales-Kit se anonimiza, y dos cosas que CC había medido mal
 
 > **Entrada de CC.** Tres decisiones de Sam del 2026-09-22 aplicadas, y **dos correcciones de CC
