@@ -1,8 +1,24 @@
 # BP_BRAND_CONTEXT — Neurone South & Central Florida
 **Schema:** BP_BRAND_1.1  
-**Versión:** 2026-09-06-v1.2 · base previa 2026-08-08-v1.1 · 2026-05-19-v1.0  
+**Versión:** 2026-09-26-v1.3 · base previa 2026-09-06-v1.2 · 2026-08-08-v1.1 · 2026-05-19-v1.0  
 **Fuentes:** BP_BRAND_NeuroneSCF_v1.0.json (historial WebLab 2026-03-23) + brand.json v11 + humanize_profiles + brand_voice_genome po_consumer v0.6 + Shopify B2C auditado 2026-05-19  
 **Mantenido por:** Claude / Unrealville Studio
+
+---
+
+## 🆕 TÉRMINO DE MARCA — «Nanotribología», una sola palabra (2026-09-26)
+
+**Se escribe «Nanotribología» (ES) y «Nanotribology» (EN), en una sola palabra.** Decisión de Sam del 2026-09-26. Es el término científico: la rama de la tribología que estudia fricción, desgaste y lubricación a escala nanométrica (Wikcionario «nanotribología»; Wikipedia EN «Nanotribology»).
+
+- **Siempre con mayúscula inicial: «Nanotribología» / «Nanotribology»**, también dentro de una frase («con tecnología de Nanotribología», «La respuesta tiene nombre: Nanotribología»). Decisión de Sam del 2026-09-26: la marca lo trata como nombre propio de su tecnología, no como sustantivo común. Aplica a copy, texto sobre la imagen, títulos, etiquetas, web y context files.
+- **Formas retiradas:** «Nano Tribología», «nano tribologia», «NANO TRIBOLOGY», «nano-tribological». El proveedor usa ambas formas en sus fichas técnicas, así que **no sirve de referencia** para este término.
+- **Aplicado el 2026-09-26** en tienda Shopify (tema, plantillas, textos ES/EN, La Ciencia, 2 artículos del blog) y en las fuentes del carril (`unrlvl-iid-functions`, migración `20260926200000_nanotribologia_es_una_sola_palabra`).
+- **Mayúscula aplicada el 2026-09-26** en las fuentes del carril (`unrlvl-iid-functions`, migración `20260926230000_nanotribologia_siempre_con_mayuscula`: genoma de voz activo, topic, snapshot de caché) y en las 4 piezas de la publicación urgente de Nanotribología. En la tienda Shopify, el mismo día: `locales/es.default.json` y `locales/en.json` (subtítulo del hero) y la página La Ciencia (2 apariciones); barrido de 52 archivos del tema, 12 páginas, 6 artículos, 8 colecciones y 41 productos con 0 minúsculas restantes.
+- **Registro:** la regla «Heredadas de Neurone global» de este documento decía «nano tribología»; se corrige abajo y la forma anterior queda citada aquí.
+
+> **⛔ NO OPERATIVO — regla de mayúsculas anterior, sustituida el mismo 2026-09-26.** Se conserva sólo por trazabilidad y **no se obedece**:
+> *«**Mayúscula inicial** en títulos, etiquetas y como nombre de la tecnología («Nanotribología Capilar»); **minúscula** dentro de una frase («con tecnología de nanotribología»).»*
+> La sustituyó la decisión de Sam de escribirla **siempre** con mayúscula inicial.
 
 ---
 
@@ -152,7 +168,7 @@ Resumen operativo del genoma:
 
 ### Heredadas de Neurone global (no modificar)
 - Logotipo Neurone — tipografía, casing y proporción exacta del logo global
-- Claims de producto aprobados por Neurone global (neurocosmética, nano tribología)
+- Claims de producto aprobados por Neurone global (neurocosmética, Nanotribología)
 - Nomenclatura oficial de líneas: Restore, Moisture, Styling, Scalp, Color Rescue, Pro Salon
 - Paleta primaria: negro + azul #0076A8 + blanco (base universal)
 
