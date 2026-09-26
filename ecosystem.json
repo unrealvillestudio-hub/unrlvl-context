@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-26-v1",
+    "version": "2026-09-26-v2",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-23-v1",
+    "previous": "2026-09-26-v1",
     "previous_chain": [
+      "2026-09-26-v1",
       "2026-09-23-v1",
       "2026-09-21-v1",
       "2026-09-20-v2",
@@ -1720,6 +1721,14 @@
       "🆕 IID 2026-06-22 — decidir destino de los 14 UNRLVL-* sin ejecutar + IID-* legacy voz Lucien"
     ]
   },
+  "crm_multimarca": {
+    "_status": "ESQUEMA EXISTENTE Y VACIO, con piso de acceso aplicado el 2026-09-26. Sin flujos consumidores todavia.",
+    "_eje": "Registro multimarca de prospeccion y relacion comercial. LA ESTRUCTURA ES DEL SISTEMA; cada cliente es una fila de crm.orgs y todo cuelga de org_id. Decision de Sam el 2026-09-26: el registro vive en el CRM de UNRLVL y NO en la base de cada marca, para que los flujos de los distintos clientes lo consuman. CC habia propuesto lo contrario —moverlo a la base de la marca— y era SOBRE-APLICAR MAIL_PRIVACY_RULE, que prohibe escribir lo leido de un buzon en context files, Professor, AGENDA y session_log, y no dice nada contra un sistema de registro con control de acceso.",
+    "tablas": "13 en el esquema crm: orgs (el cliente), contacts (persona, global), contact_orgs (la relacion, con pipeline_stage, assigned_tier, fit_score, source, monthly_retainer), deals, pipelines, interactions, segments, segment_contacts, tags, contact_tags, email_sequences, sequence_enrollments, hygiene_rules. Todas con org_id salvo contacts, que es global, y las tres que lo resuelven por join.",
+    "piso_de_acceso_2026-09-26": "Migracion crm_rls_linea_base_denegar_por_defecto: RLS habilitada en las 13 SIN politicas, es decir denegar por defecto. Verificado 13 de 13, cero politicas, cero grants. Lo medido antes que hizo el cambio seguro: las 13 tenian rowsecurity false y cero politicas; anon, authenticated y service_role tenian CERO privilegios de tabla; crm NO esta expuesto en PostgREST; y crm no tiene entrada en pg_default_acl, asi que una tabla nueva no hereda grants. Luego RLS apagada era exposicion LATENTE y no viva —solo postgres alcanzaba el esquema—, y habilitarla no rompio a ningun consumidor porque no hay ninguno.",
+    "_valor_preventivo": "RLS ANTES DEL GRANT. Es la leccion de keepalive_ping invertida: alli los grants estaban y RLS los mantenia inertes; aca RLS se pone de antemano para que el dia que alguien haga un GRANT o exponga el esquema, ese GRANT no abra la tabla por si solo.",
+    "_abierto": "LO QUE RLS NO RESUELVE, y es decision de arquitectura pendiente de Sam: service_role tiene rolbypassrls = true [medido], asi que RLS NO lo restringe. Si los flujos de los clientes entran con service_role, el aislamiento por org_id NO lo da la migracion: tiene que darlo la capa que llama. La responsabilidad de datos NO queda descargada por haber habilitado RLS, y decirlo importa porque el nombre RLS sugiere lo contrario. Las dos salidas: o el filtro por org_id es disciplina explicita en cada Edge Function, o cada cliente entra con su propio rol y entonces RLS si aisla. Queda escrito en el COMMENT del esquema, donde lo encontrara quien escriba el primer flujo. Pendiente ademas: dar de alta ForumPHs como org y migrar las 2 filas de public.collateral_links que hoy llevan recipient_name y recipient_email."
+  },
   "security": {
     "_note": "Deuda de seguridad transversal del ecosistema. Clave NUEVA el 2026-08-27. Lo cerrado no se borra: se marca cerrado con su fecha y su evidencia.",
     "SEC-01": {
@@ -1781,7 +1790,9 @@
       "_trampa_del_despliegue": "La tool MCP deploy_edge_function tiene verify_jwt con DEFAULT TRUE [medido el 2026-09-22 sobre su esquema]. Las dos EF corren con verify_jwt: false y se autentican por la cabecera x-store-secret, asi que un despliegue que no pase verify_jwt: false EXPLICITO las deja exigiendo JWT y todo llamador recibe 401. Es el mismo eje que el --no-verify-jwt de CC_PROTOCOL §10, por la via de la tool en vez de la CLI.",
       "_llamadores_medidos_2026-09-22": "Ningun cron las invoca; net._http_response no registra NI UNA invocacion a ninguna de las dos; y los edge_logs de las ultimas 24 h dan cero. Se deduce que se invocan a mano desde una sesion, no por automatismo, lo que hace viable una rotacion directa en vez de una ventana de doble secreto. Lo que CC NO puede medir es si MEDIA_STORE_SECRET esta puesta en el entorno —no tiene acceso a variables— y NO lo comprueba usando el literal hallado, por CC_PROTOCOL §15.",
       "eje_que_deja": "Un `?? valor` sobre un secreto es el patron, no el caso: un secreto sin variable de entorno debe fallar ruidosamente, nunca degradar a un valor por defecto. Vale para toda Edge Function del ecosistema.",
-      "estado": "ABIERTO"
+      "estado": "CERRADO 2026-09-26",
+      "_cierre_2026-09-26": "Las dos mitades se cerraron por separado, porque eran problemas distintos. (1) EL LITERAL ERA LA LLAVE VIVA: Sam creo la variable MEDIA_STORE_SECRET, y con eso Deno.env.get gana sobre el ?? y la rotacion surtio efecto al instante. (2) EL LITERAL ESTABA EN EL CODIGO: CC desplego media-store v1.3 y meta-graph-post v1.2 sin el valor por defecto. VERIFICADO POR EFECTO EN TRES CAPAS [medido]: bundle desplegado leido en las dos —llevan ?? '' y el marcador de version nuevo, porque el contador de version no basta (CAPABILITIES 1.16)—; verify_jwt: false PRESERVADO en las dos, pasado explicito porque la tool lo tiene con default TRUE; y prueba en vivo con pg_net, 4 casos y 4 x 401 —secreto incorrecto y sin cabecera contra cada funcion—, SIN usar el literal hallado (CC_PROTOCOL §15). UN 401 QUE PRUEBA MAS DE LO QUE PARECE: si la variable no estuviera puesta, la guarda devolveria 500 «no configurado» en vez de 401, asi que el 401 confirma que el secreto ESTA puesto sin que CC lo haya leido ni usado nunca — la guarda fail-loud resulto ser tambien una sonda de configuracion.",
+      "_defecto_que_el_arreglo_habria_creado": "meta-graph-post NO tenia guarda de configuracion. Quitarle el literal a secas dejaba SECRET = '' y la comparacion '' !== '' da FALSO: una peticion SIN cabecera habria pasado como autorizada, en una ruta que publica en Meta por cualquier marca. Retirar el literal sin anadir la guarda habria ABIERTO la ruta en vez de cerrarla. EL EJE QUE DEJA, y no es el caso: al retirar un valor por defecto hay que mirar que pasa con el valor VACIO — un ?? que degrada a '' sobre algo que despues se COMPARA no solo pierde el valor, puede invertir el sentido de la comparacion."
     },
     "MCP-AUTH-01": {
       "titulo": "Patron de autenticacion para los MCPs del ecosistema",
