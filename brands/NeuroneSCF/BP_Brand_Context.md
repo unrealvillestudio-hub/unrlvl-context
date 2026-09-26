@@ -10,10 +10,15 @@
 
 **Se escribe «Nanotribología» (ES) y «Nanotribology» (EN), en una sola palabra.** Decisión de Sam del 2026-09-26. Es el término científico: la rama de la tribología que estudia fricción, desgaste y lubricación a escala nanométrica (Wikcionario «nanotribología»; Wikipedia EN «Nanotribology»).
 
-- **Mayúscula inicial** en títulos, etiquetas y como nombre de la tecnología («Nanotribología Capilar»); **minúscula** dentro de una frase («con tecnología de nanotribología»).
+- **Siempre con mayúscula inicial: «Nanotribología» / «Nanotribology»**, también dentro de una frase («con tecnología de Nanotribología», «La respuesta tiene nombre: Nanotribología»). Decisión de Sam del 2026-09-26: la marca lo trata como nombre propio de su tecnología, no como sustantivo común. Aplica a copy, texto sobre la imagen, títulos, etiquetas, web y context files.
 - **Formas retiradas:** «Nano Tribología», «nano tribologia», «NANO TRIBOLOGY», «nano-tribological». El proveedor usa ambas formas en sus fichas técnicas, así que **no sirve de referencia** para este término.
 - **Aplicado el 2026-09-26** en tienda Shopify (tema, plantillas, textos ES/EN, La Ciencia, 2 artículos del blog) y en las fuentes del carril (`unrlvl-iid-functions`, migración `20260926200000_nanotribologia_es_una_sola_palabra`).
+- **Mayúscula aplicada el 2026-09-26** en las fuentes del carril (`unrlvl-iid-functions`, migración `20260926230000_nanotribologia_siempre_con_mayuscula`: genoma de voz activo, topic, snapshot de caché) y en las 4 piezas de la publicación urgente de Nanotribología. En la tienda Shopify se hace en un barrido aparte.
 - **Registro:** la regla «Heredadas de Neurone global» de este documento decía «nano tribología»; se corrige abajo y la forma anterior queda citada aquí.
+
+> **⛔ NO OPERATIVO — regla de mayúsculas anterior, sustituida el mismo 2026-09-26.** Se conserva sólo por trazabilidad y **no se obedece**:
+> *«**Mayúscula inicial** en títulos, etiquetas y como nombre de la tecnología («Nanotribología Capilar»); **minúscula** dentro de una frase («con tecnología de nanotribología»).»*
+> La sustituyó la decisión de Sam de escribirla **siempre** con mayúscula inicial.
 
 ---
 
@@ -163,7 +168,7 @@ Resumen operativo del genoma:
 
 ### Heredadas de Neurone global (no modificar)
 - Logotipo Neurone — tipografía, casing y proporción exacta del logo global
-- Claims de producto aprobados por Neurone global (neurocosmética, nanotribología)
+- Claims de producto aprobados por Neurone global (neurocosmética, Nanotribología)
 - Nomenclatura oficial de líneas: Restore, Moisture, Styling, Scalp, Color Rescue, Pro Salon
 - Paleta primaria: negro + azul #0076A8 + blanco (base universal)
 
