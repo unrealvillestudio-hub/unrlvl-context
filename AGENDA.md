@@ -1,5 +1,6 @@
 # AGENDA — Unrealville Studio
-_Actualizada: 2026-09-26 · v2026-09-26-v1 (**CIERRE DEL 2026-09-26 — EL CRITERIO DE 7 DÍAS DEL KEEPALIVE: 21 DE 21, Y EL FRENTE CIERRA.** Verificación **diferida**, programada el 2026-09-19 cuando el criterio se nombró por adelantado; **no es una sesión nueva**. **21 latidos de 21 posibles** —3 al día por 7 días, **ni uno perdido**— del **2026-09-19 18:11:01** al **2026-09-26 10:11:00**, en **8 fechas**, con FPHS en **`ACTIVE_HEALTHY`** [`medido` a las 12:01 UTC]. **21 de 21 es cero corridas fallidas en una semana**, así que no hizo falta abrir los logs de Vercel. **«Tres peticiones diarias bastan» deja de ser `deducido` y pasa a `medido`** —era la última etiqueta blanda del frente: la documentación dice «a few … each day» **sin dar número**, y el tres se declaró `deducido` **desde el primer día** para no darlo por cierto—. 🟡 **Y la mitad que CC NO puede medir se escribe en vez de callarse:** el criterio tenía **dos** partes —proyecto activo **y** sin correo de aviso— y **CC sólo midió la primera**, porque no lee el buzón de Sam y `MAIL_PRIVACY_RULE` lo impide; esa mitad queda **`reportado` o sin verificar**, y declarar cumplido el conjunto sin la nota habría sido **afirmar sin medir justo la mitad**. Lo que sí sostiene el resultado: **un proyecto pausado no aparece `ACTIVE_HEALTHY`**. **`ecosystem.json` pasa a `2026-09-26-v1`** y sus dos derivados **se SINCRONIZAN en commit separado**; `last_session` **no se toca a propósito** y la nota lo declara. **El frente no deja nada abierto** y entrega **un keepalive de eje** reutilizable por cualquier base en plan gratuito **sin tocar código**. **Barrido de voseo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-26 · v2026-09-26-v2 (**CIERRE DEL 2026-09-26 — EL CRITERIO DE 7 DÍAS DEL KEEPALIVE: 21 DE 21, Y EL FRENTE CIERRA.** Verificación **diferida**, programada el 2026-09-19 cuando el criterio se nombró por adelantado; **no es una sesión nueva**. **21 latidos de 21 posibles** —3 al día por 7 días, **ni uno perdido**— del **2026-09-19 18:11:01** al **2026-09-26 10:11:00**, en **8 fechas**, con FPHS en **`ACTIVE_HEALTHY`** [`medido` a las 12:01 UTC]. **21 de 21 es cero corridas fallidas en una semana**, así que no hizo falta abrir los logs de Vercel. **«Tres peticiones diarias bastan» deja de ser `deducido` y pasa a `medido`** —era la última etiqueta blanda del frente: la documentación dice «a few … each day» **sin dar número**, y el tres se declaró `deducido` **desde el primer día** para no darlo por cierto—. 🟡 **Y la mitad que CC NO puede medir se escribe en vez de callarse:** el criterio tenía **dos** partes —proyecto activo **y** sin correo de aviso— y **CC sólo midió la primera**, porque no lee el buzón de Sam y `MAIL_PRIVACY_RULE` lo impide; esa mitad queda **`reportado` o sin verificar**, y declarar cumplido el conjunto sin la nota habría sido **afirmar sin medir justo la mitad**. Lo que sí sostiene el resultado: **un proyecto pausado no aparece `ACTIVE_HEALTHY`**. **`ecosystem.json` pasa a `2026-09-26-v1`** y sus dos derivados **se SINCRONIZAN en commit separado**; `last_session` **no se toca a propósito** y la nota lo declara. **El frente no deja nada abierto** y entrega **un keepalive de eje** reutilizable por cualquier base en plan gratuito **sin tocar código**. **Barrido de voseo: cero apariciones.** **Amplía el `v2026-09-26-v1` inmediatamente debajo, que cerró otro frente el mismo día; no lo reescribe. La colisión de numeración se resolvió cediendo el `-v1` al que mergeó primero.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+_Actualizada: 2026-09-26 · v2026-09-26-v1 (**CIERRE DEL 2026-09-26 — LA CLAVE PUBLICABLE DEJA DE LEER LA RELACIÓN COMERCIAL, Y DOS TABLAS CON EL MISMO NOMBRE DEJAN DE SER UNA TRAMPA.** Sesión de **código, migración y operación** en `unrlvl-iid-functions`: **PR #249 y #250**, con **cuatro migraciones pineadas** (`20260926070000`, `100000`, `110000`, y el renombre de las dos últimas). **(1) EL VEREDICTO LLEGA A LAS VISTAS:** `20260926060000` había llevado la regla del 2026-09-12 —`discarded_at` manda sobre `status`— a cuatro lectores, pero el barrido cubrió **funciones y Edge Functions, no vistas**, y quedó declarado como deuda en el cuerpo del PR. Pagada: de seis vistas que leen `content_pieces`, **dos no filtraban el veredicto** [`medido`]. **ForumPHs figuraba con 4 piezas pendientes y tiene 0** —el 100% de su bandeja era trabajo ya decidido—, UnrealvilleStudio 105 por 98, LucienSael 18 por 12, y `published` de ForumPHs 17 por 16. **El filtro entra SÓLO en los contadores de estado actual**: `pieces_count` y `pieces_created` siguen contando lo descartado **a propósito**, porque producir una pieza y luego tirarla no deshace que se produjo, y una vista de velocidad que lo borrara mentiría justo cuando se la consulta para dimensionar gasto. **Prevención, no reparación, y se dijo así:** ni `anon`, ni `authenticated`, ni `service_role` podían leer esas dos vistas [`medido`], así que ningún informe mostró esos números. **(2) LA CLAVE PUBLICABLE:** Sam pidió «RLS sobre las seis tablas» y **no son seis, son ocho** —el advisor de Supabase las nombra una por una en su clase `rls_disabled_in_public`, nivel ERROR [`medido`]—. La peor es **`public.ops_client_terms`: `margin_pct`, `retainer_amount` y `labor_rate_amount`**, que no es configuración sino la relación comercial con cada cliente. **Cerrarlas no rompió nada y eso se midió antes de tocar:** `pg_stat_statements` agrupado por `userid` da **36.812 llamadas reales del rol `anon`** —los labs leen presets con esa clave, así que una revocación a ciegas SÍ rompía cosas— y **cero** sobre esas ocho. Advisor **de 8 a 0** tras aplicar [`medido`]; los labs siguen leyendo, 3 de 3. **Los dos guards generales no nombran tablas: nombran condiciones**, y son los que atraparán a la novena. **(3) DOS HOMÓNIMAS:** `content.brand_context_cache` (10 columnas, la que lee la EF `context-cache` v1.3) y `public.brand_context_cache` (24 columnas, que el carril NO lee), esta última con **15 filas, `is_stale = true` en las quince** y `compiled_at` de once de ellas en **2026-05-20**: un `SELECT` ahí devuelve contexto de mayo **sin fallar**. Resuelto con `COMMENT ON TABLE` en las dos, **cada una nombrando a la otra**; **no se borra ni se revoca** porque tiene 48 llamadas de `anon` de un cliente no identificado. **TRES CORRECCIONES DE CC SOBRE SÍ MISMO, todas en el registro público del PR #250:** (a) **denuncié una exposición de márgenes que ya estaba cerrada, y la había cerrado yo** el 2026-09-25 con `20260925040000` — leí un contador acumulado (`pg_stat_statements`) como prueba de un privilegio vigente, **el mismo patrón que ya había cometido horas antes** con seis asientos anteriores a un despliegue; (b) **el `REVOKE` sobre `net.*` no hizo nada y la migración cerró en verde**: las tablas son de `supabase_admin` y el grant es a PUBLIC concedido por él, así que `postgres` no puede revocarlo y PostgreSQL emite **WARNING, no ERROR** — ninguno de mis siete guards comprobaba que la acción hubiese surtido efecto; (c) **declaré cerrada la vía del Professor tras UN solo intento fallido** (`trigger_iid_agent`, 401) **sin verificar contra `CAPABILITIES.md` 1.21**, que documenta la que sí funciona. **Y al corregirme apareció un defecto latente:** el **500 de `professor-submit-learning` NO está arreglado** —`1.21` lo dio por cerrado—, sólo dejó de verse, porque la EF inserta el `relevance_score` del modelo **sin acotarlo** al `CHECK` de 1..5 [`medido` hoy]. **DEUDAS ABIERTAS:** 🔐 el `REVOKE` de `net.*` necesita un guard que verifique el efecto **y** lo puede hacer sólo `supabase_admin`; ⚠️ la UI de CopyLab tiene INSERT y UPDATE abiertos a `anon` con `USING true` y **cero tráfico medido** —no se cierra sin saber si la UI encola con esa clave—; 🔍 quién lee `public.brand_context_cache` con la clave publicable; y el arreglo del `relevance_score`. **Professor cerrado ANTES de este Actualiza: 9 learnings, `session_date = 2026-09-26`, los nueve con `approved_by_sam = true`** [`medido`]. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-23 · v2026-09-23-v1 (**CIERRE DEL 2026-09-23 — EL ESCRITOR RECIBE SU TECHO, DOS COLUMNAS DEJAN DE MENTIR, Y EL LATIDO DEJA DE DEPENDER DE LA FOTO.** Sesión de **código, migración y operación**: ocho PR en `unrlvl-iid-functions` (**#210 a #217**) y uno en `unrlvl-ops` (**#14**), con diez migraciones pineadas. **(1) EL TECHO DE CARACTERES:** `medido`, **89 muertes por `COPYLAB_TRUNCATED_BODY` en 30 días** sobre 4 marcas y 6 canales. La causa no era el modelo — al escritor le llegaba **`max_tokens`, que es COSTE**, y ninguna instrucción de longitud. Alta de **`HR-GEN-14`**, que lleva `{{max_chars}}` por `injectRuleParams` y **no obliga a tocar CopyLab**, que vive en otro repositorio. Verificado en producción: `linkedin` pasó de **4/4 por encima** a **2/2 por debajo**; `blog` muestra `HR-GEN-14: false`, que **es el mecanismo** —la regla se descarta sola sin techo declarado—; **`meta_ig` sigue 2/2 por encima y queda abierto**. **(2) LOS DOS TECHOS SE PISABAN:** `max_tokens` por debajo de `max_chars` en 4 de 5 canales, `tiktok` al **0,17×**; corregido por derivación con `GREATEST`, sin literales — **7 de 60** filas declaran techo y en las 7 se cumple `max_tokens >= max_chars` [`medido`]. **Deuda declarada:** el factor real es **2,28 chars/token** en el peor caso y **2,89** de media sobre 248 generaciones, así que sigue habiendo **~2× de exceso**, y **no se ajusta hasta el 2026-10-06 a propósito**. **(3) DOS COLUMNAS QUE MENTÍAN:** `approved_by DEFAULT 'sam'` en **586 de 586 filas con CERO `approved_at`**, y `pass_type DEFAULT 'clean'`. Retirados. **(4) INCIDENTE EN PRODUCCIÓN, CAUSADO POR CC Y CORREGIDO EL MISMO DÍA:** retirar el `DEFAULT` de `pass_type` mientras el código lo pasaba como **clave suelta** —y Deno borra los tipos— **mató cuatro finalizaciones**. Default restaurado en caliente, las cuatro piezas reparadas, la clave movida dentro de `estado` y un test que **reproduce el bug**. **La migración ofensora NO se editó** pese a tener su PR sin mergear. **LA REGLA DEL DÍA: una guarda que comprueba lo que se escribió no comprueba lo que va a pasar.** **(5) LAS LENTES:** `lucien_angle_affinity` **nombraba una marca en capa compartida**; medida antes de tocarla —su único lector la seleccionaba y **nunca leía el valor**—, renombrada a **`analysis_lenses`** y sembrada. **Corrección de Sam aceptada:** las lentes **no** duplican `brand_topics.angles` —los `angles` son formas retóricas, las lentes son puntos de vista—; vacía significaba **no sembrada**. **(6) LA CUOTA DE IMAGEN:** no había reintento y `imagelab` ya era no crítico, así que una pieza **nacía sin imagen y en silencio**. Ahora nace **`challenged`** con motivo. El tope viaja en el dato **con su ventana** (`image_calls_max` + `image_window_hours`), con `daily_image_cap` como **alias legacy**; el nombre describe la **función**, no el proveedor. **EL ERROR QUE COSTÓ UN APAGÓN:** el tope se calculó en **días naturales** y se implementó como **ventana rodante** — 60 con el p90 rodante en 97 y el valor vivo en 119. **(7) LOS CINCO DOMINIOS DE LUCIEN ENCENDIDOS**, sin pisarse, **diez crons activos** [`medido`]. **(8) EL VIGILANTE, DIAGNOSTICADO ENTERO:** corría **puntual** y daba **44×200 contra 29×503 en 6 h**. El 503 venía de un **Seq Scan de 383.495 filas y 172 MB por pasada** —`failed_since` por una columna sin índice—: corregido, **105 ms → 0,18 ms**, purga de **350.926 filas** y la tabla de **172 MB a 9,9 MB**. Y el aviso falso era **otra causa**: el latido lo escribía el snapshot **en su última línea**. Alta de **`alerting.watchdog_beat`**, llamada **antes** de la foto. **Y una corrección de Sam que no procedía, dicha:** situó el cron externo en `unrlvl-core-project`; `medido`, ese proyecto **no tiene `crons`** — está en **`unrlvl-ops`**. **Professor: 11 learnings en checkpoint 21, los once aprobados.** **Barrido de voseo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-22 · v2026-09-22-v1 (**CIERRE DEL 2026-09-22 — EL SALES-KIT SE ANONIMIZA, Y DOS MEDICIONES DE CC SE CORRIGEN.** **(1) SALES-KIT ANONIMIZADO** por decisión de Sam: fuera el nombre del PH, la ubicación, el número de unidades, el metraje y la cuota absolutos y **las prioridades que el prospecto declaró en su correo**. **15 líneas sustituidas — es la única parte de este frente donde el diff BORRA**, y es una **excepción deliberada a `CC_PROTOCOL` §0**: la regla dice que un context file no pierde contenido, **`MAIL_PRIVACY_RULE` dice que ese contenido no debía existir**, y cuando chocan manda la que protege a un tercero. Se conserva lo que hacía útil al ejemplo —estructura, orden y **relaciones** entre cifras— y queda **escrita la regla del kit en su `README.md`**, sin la cual la anonimización duraría hasta la pieza siguiente. **(2) `SEC-03` CORREGIDO EN DOS DATOS, los dos medidos por CC:** no se detectó el 21 —**ya estaba en esta AGENDA el 2026-09-09**, punto 6, así que lleva **13 días abierto**— y no afecta a una EF sino a **DOS**, `media-store` y `meta-graph-post`, que **comparten el mismo secreto y el mismo literal**. El defecto de método es el mismo de la `1.19`: **dar de alta un hallazgo sin medirlo contra lo que el repo ya tenía escrito**. Se suma el **runbook de rotación que no rompe nada** y **la trampa que sí rompería**: `deploy_edge_function` tiene **`verify_jwt` con default TRUE** y las dos EF corren con `false`. **(3) LOS ÁLAMOS DESCARTADO**, y **no por haberse resuelto**: Sam corrigió la base [`reportado`] —el gasto de los últimos siete meses **está inflado por prestaciones no provisionadas por el socio anterior**, que ahora se sanean—, así que la cifra **mide un pasado que se está pagando, no el contrato**; **la decisión es de Ivette, no de UNRLVL**; y el análisis preciso se hará **más adelante, no ahora**. **El padrón y el MÉTODO de reparto por PH siguen siendo buenos: lo que falló fue la base de costo de entrada**, y esa distinción es la lección. La conclusión del 19 queda **bajo guard, archivada y no borrada**. **Barrido de voseo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-21 · v2026-09-21-v1 (**CIERRE DEL 2026-09-21 — EL CICLO COMERCIAL SE VUELVE PROCEDIMIENTO, Y UNA CREDENCIAL ENCONTRADA NO SE USA.** **Sin datos de ningún prospecto**, por `MAIL_PRIVACY_RULE.md`. Alta del **playbook de propuesta a prospecto** en el Sales-Kit, copiado **literal y verificado por md5** [`medido`]: es **la pieza principal del kit** y manda sobre las demás. **MODELO DE CARTERA DEFINITIVO** —recuperación **incluida sin costo hasta 90 días**; desde 90 días, vía legal y **expediente sin costo** con la gestión a cargo de la Junta; **sin comisión sobre lo recuperado en ninguna etapa**; sin representación judicial [`reportado`]— que **SUSTITUYE al honorario porcentual del 2026-09-19**, archivado bajo `⛔ NO OPERATIVO` **en DOS sitios**, el índice del kit **y dentro de `correo_que_da_precio.md`**, porque marcar sólo el índice habría dejado la pieza ofreciendo un porcentaje que ya no existe. **`CC_PROTOCOL.md` pasa a v13 con la §15 nueva: una credencial encontrada NO se usa —aunque sirva para la tarea y sea el camino más corto—, se reporta por su nombre y ubicación y nunca por su valor.** `CAPABILITIES.md` a **1.22** con cuatro capacidades del ciclo comercial, encabezadas por una que cambia por dónde se manda una cosa: **el conector de Gmail ELIMINA las imágenes alojadas** y envía desde otra cuenta. **DEUDAS:** 🔐 **`media-store` lleva un secreto cableado** con `verify_jwt: false` y escritura `service_role` [`medido`; **el valor no se transcribió ni se usó**], que **necesita brief propio**; **LOS ÁLAMOS sigue sin decidir** desde el 19; y 🔍 **datos de prospecto escritos en context files**, inventariados con archivo y línea en el PR — **CC no borra: decide Sam**, porque choca con la regla de no borrar historia. **DOS CORRECCIONES DE CC AL BRIEF:** el Professor trae **16** learnings y no 14 [`medido`], y **el pendiente del keepalive ya estaba cerrado el 2026-09-20** y **no se copia como deuda viva**. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
@@ -18,9 +19,9 @@ _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA P
 
 ---
 
-## 🗓️ CIERRE 2026-09-26-v1 — El criterio de 7 días del keepalive: 21 de 21, y el frente cierra
+## 🗓️ CIERRE 2026-09-26-v2 — El criterio de 7 días del keepalive: 21 de 21, y el frente cierra
 
-_(Bloque al tope. **No reescribe ninguna versión anterior.** **Verificación diferida**, programada
+_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-26-v1`, que cerró otro frente el mismo día, queda íntegro inmediatamente debajo.** **Verificación diferida**, programada
 el 2026-09-19 cuando el criterio se nombró por adelantado: **no es una sesión nueva**, es el cierre
 del último frente abierto de aquella. Todo lo `medido` se consultó el **2026-09-26 a las 12:01 UTC**.
 Detalle en `brands/ForumPHs/session_log.md`, entrada del **2026-09-26**.)_
@@ -47,6 +48,201 @@ sí sostiene el resultado: **un proyecto pausado no aparece `ACTIVE_HEALTHY`**.
 
 **El frente no deja nada abierto**, y entrega como capacidad **un keepalive de eje** reutilizable
 por cualquier base en plan gratuito **añadiendo un objeto a `KEEPALIVE_TARGETS`, sin tocar código**.
+## 🗓️ CIERRE 2026-09-26-v1 — La clave publicable deja de leer la relación comercial, y dos tablas con el mismo nombre dejan de ser una trampa
+
+_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-23-v1` y toda su cadena
+quedan íntegros inmediatamente debajo. **Sesión de CÓDIGO, MIGRACIÓN y OPERACIÓN**: dos PR en
+`unrlvl-iid-functions` —**#249 y #250**— con cuatro migraciones pineadas. Todo lo etiquetado `medido`
+lo consultó **CC** el **2026-09-26** con `Supabase:execute_sql`, `Supabase:get_advisors`,
+`Supabase:get_edge_function` y lectura directa del repositorio. Professor cerrado **antes** de este
+Actualiza, por **CC**: **9 learnings**, `session_date = 2026-09-26`, los nueve con
+`approved_by_sam = true` [`medido`].)_
+
+---
+
+### §a — El veredicto llega a las vistas: la deuda que el PR anterior declaró
+
+`20260926060000` llevó la regla del 2026-09-12 —**`discarded_at` manda sobre `status`**— a cuatro
+lectores, pero **ese barrido cubrió funciones y Edge Functions, no vistas**, y quedó escrito como
+deuda en el cuerpo del PR, con la lectura que la cerraría nombrada por adelantado. Esto la paga.
+
+De **seis** vistas que leen `content_pieces`, cuatro filtraban el veredicto y **dos no** [`medido`]:
+`public.v_ops_content_velocity` y `public.v_ops_pipeline_kpis`.
+
+| marca | «pendientes» decía | son | fantasma |
+|---|---:|---:|---:|
+| UnrealvilleStudio | 105 | 98 | 7 |
+| LucienSael | 18 | 12 | 6 |
+| **ForumPHs** | **4** | **0** | **4** |
+| NeuroneSCF | 44 | 44 | 0 |
+
+Y `published` de ForumPHs figuraba con **17** siendo **16**. El caso de ForumPHs no es un redondeo:
+es una marca pidiendo criterio sobre cuatro piezas cuando no tiene ninguna.
+
+**La distinción que la migración fija, y que no existía:** los contadores de **ESTADO ACTUAL**
+—«está pendiente», «está publicada»— filtran el veredicto; los de **PRODUCCIÓN** —«se creó»— **no**.
+`pieces_count` y `pieces_created` siguen contando lo descartado **a propósito**: producir una pieza y
+luego tirarla no deshace que se produjo —costó tokens, una imagen y una decisión—, y una vista de
+velocidad que lo borrara mentiría en el otro sentido, justo cuando se la consulta para dimensionar
+gasto.
+
+🟢 **Prevención, no reparación, y se declaró así en la cabecera de la migración:** ni `anon`, ni
+`authenticated`, ni `service_role` tenían SELECT sobre esas dos vistas [`medido`], así que **ningún
+informe mostró esos números y ninguna decisión se tomó sobre ellos**. Se arreglaron igual porque una
+vista equivocada y cerrada es una trampa esperando a quien le abra el acceso.
+
+Verificado tras aplicar [`medido`]: las cuatro marcas cuadran exactamente con su tabla, producción
+**459 = 459**, y **cero** vistas de piezas quedan sin filtrar el veredicto.
+
+---
+
+### §b — No son seis tablas, son ocho, y la peor es la relación comercial con cada cliente
+
+Sam pidió «RLS sobre las seis tablas». **Al medir no son seis: son ocho**, y el advisor de Supabase
+las nombra una por una en su clase `rls_disabled_in_public`, **nivel ERROR** [`medido`]. La cifra seis
+venía de una auditoría anterior; se corrige porque contar de memoria es afirmar sin medir.
+
+`pgrst.db_schemas = public, intel, content, alerting` [`medido` sobre `pg_db_role_setting`]. Con RLS
+apagada **y** un GRANT a una clave pública, quedaban legibles:
+
+| tabla | rol | filas | qué contiene |
+|---|---|---:|---|
+| `public.ops_client_terms` | `anon` | 4 | `margin_pct`, `retainer_amount`, `labor_rate_amount` |
+| `public.ops_cost_residual` | `anon` | 4 | `residual_pct` por ámbito |
+| `public.ops_credits` | `anon` | 3 | saldos de crédito por servicio |
+| `public.ops_rate_transitions` | `anon` | 0 | historial de cambios de tarifa |
+| `intel.brand_topics` | `anon` | 53 | el plan editorial de cada marca |
+| `intel.rule_param_sources` | `anon` | 5 | de dónde sale cada param de prompt |
+| `intel.watcher_rules` | `authenticated` | 61 | `statement`, `instruction`, `condition`, `fix_replacement` |
+| `intel.brand_sector` | `authenticated` | 9 | sector por marca |
+
+**`ops_client_terms` no es configuración: es lo que cada cliente paga y con qué margen.**
+
+**Por qué cerrarlas no rompió nada, y se midió ANTES de tocar:** `extensions.pg_stat_statements`
+agrupado por `userid` da **36.812 llamadas reales del rol `anon`** —los labs leen presets y tokens de
+diseño con esa clave, así que **una revocación a ciegas SÍ rompía cosas**— y **cero** sobre esas ocho.
+Las cuatro de `intel` sólo las lee `service_role`. Y `service_role` tiene **`rolbypassrls = true`**
+[`medido`], así que activar RLS no le quita nada.
+
+El **GUARD PREVIO B remide el tráfico en el momento de aplicar** y se niega a cerrar una puerta que
+alguien esté usando; antes comprueba que **el contador tenga memoria**, porque «cero llamadas» y «cero
+registro» se leen igual.
+
+**Efecto observable, nombrado por adelantado y cumplido:** el advisor pasó de **8 a 0** en
+`rls_disabled_in_public` [`medido` tras aplicar]. Sube `rls_enabled_no_policy` de 13 a 22, **nivel
+INFO**, que es el estado correcto: RLS sin política niega todo. Los labs siguen leyendo, **3 de 3**.
+
+**Los dos guards que importan a futuro no nombran tablas: nombran condiciones** —«legible por clave
+pública sin RLS en esquema expuesto» y «columna con forma de credencial legible por clave pública»—.
+Son los que atraparán a la novena tabla, la que nadie ha escrito todavía.
+
+**Y una trampa latente que NO era una fuga, dicho con precisión:** `public.brand_social_accounts`
+tiene `access_token` y `refresh_token` y **dos políticas con `USING true` para `anon`**, pero
+**ningún GRANT** —ni `anon`, ni `authenticated`, ni `service_role` [`medido`]—. **Una política sin
+privilegio no deja pasar a nadie.** Se retiraron igual, porque el día que alguien conceda SELECT para
+conectar una cuenta esas políticas ya dicen `true`. **El advisor no la señala**, porque ahí RLS sí
+está activada y su regla no mira qué dice la política: los dos puntos ciegos son complementarios.
+
+---
+
+### §c — Dos tablas con el mismo nombre es un defecto que devuelve datos plausibles
+
+El pendiente anotado era «retirar la lectura muerta de CopyLab». **Ya no existe:**
+`content-run-stage/index.ts:6834` la cerró en el PR #100, y el otro punto de llamada, `:7948`, es la
+ruta de `recompose`, donde el contexto **sí** lo consume ImageLab [`medido`].
+
+Lo que hay es otra cosa. Existen **dos** tablas `brand_context_cache`:
+
+| tabla | columnas | quién la lee |
+|---|---:|---|
+| `content.brand_context_cache` | 10 (`context_json`, `dirty`, `ttl_minutes`) | **la EF `context-cache` v1.3**, que responde a `getBrandContext()` |
+| `public.brand_context_cache` | 24 (`copy_profile`, `goals`, `is_stale`…) | el carril **no** la lee |
+
+La EF abre su cliente con `db: { schema: "content" }` [`medido` sobre la EF desplegada, versión 54], y
+las tres columnas que lee **sólo existen en la de `content`**.
+
+La de `public` tiene **15 filas, `is_stale = true` en las quince**, invalidadas todas en el mismo
+instante —2026-09-25 22:54:01— por un disparador de `psycho_presets`, y **`compiled_at` de once de
+ellas es 2026-05-20** [`medido`]. **Un `SELECT` ahí devuelve contexto de mayo sin fallar.** Un error
+que devuelve datos del tipo correcto no se detecta: se propaga — la misma familia que la mentira de
+`provider`.
+
+Resuelto con `COMMENT ON TABLE` en las dos, **y cada comentario nombra a la otra**, porque un aviso
+puesto en una sola cara no lo ve quien llega por la otra. **No se borra ni se revoca:** tiene 48
+llamadas de `anon` de un cliente no identificado, y cambiar un dato rancio por un 404 igual de
+invisible no es un arreglo. Retiro propuesto en tres pasos reversibles.
+
+---
+
+### §d — Tres correcciones de CC sobre sí mismo, las tres en el registro público del PR
+
+🔴 **(a) Denuncié una exposición de márgenes que ya estaba cerrada, y la había cerrado yo.** El cuerpo
+del PR #250 afirmaba que `v_client_margin` y `v_client_terms_vigente` servían márgenes a la clave
+publicable, y sobre eso **levanté una decisión para Sam con dos opciones**. Falso: el ACL de las ocho
+vistas es `postgres=arwdDxtm | service_role=r` [`medido`], y lo cerró
+`20260925040000_la_capa_de_costos_sale_del_alcance_de_la_llave_publicable.sql` **el día anterior**.
+Leí las 146 / 94 / 49 llamadas de `anon` en `pg_stat_statements` como prueba de un privilegio
+vigente: ese contador es **historia acumulada, no estado actual**. **Es el mismo patrón que ya había
+cometido horas antes**, cuando leí seis asientos anteriores a un despliegue como prueba posterior a
+ese despliegue. Consecuencia benigna: el GUARD 5 midió la realidad y emitió su rama correcta; **la
+cabecera que lo justificaba era lo que estaba mal**.
+
+🔴 **(b) El `REVOKE` sobre `net.*` no hizo nada, y la migración cerró en verde.**
+`net.http_request_queue` y `net._http_response` siguen con `anon` en SELECT tras aplicar [`medido`]:
+son de **`supabase_admin`** y su ACL es `=arwdDxtm/supabase_admin`, es decir el privilegio está
+concedido **a PUBLIC por él**, y `postgres` no puede revocar lo que concedió otro. **PostgreSQL emite
+WARNING, no ERROR**, y la transacción commiteó limpia. **Ninguno de mis siete guards comprobaba que la
+acción de la migración hubiese surtido efecto**: los tres generales miran sólo esquemas expuestos, y
+el cuarto sólo que `service_role` **conserve** privilegios. Sin exposición real —`net` no está en
+`pgrst.db_schemas`—, pero **una afirmación falsa en la base es peor que un hueco conocido**.
+
+🔴 **(c) Declaré cerrada la vía del Professor tras UN intento fallido.** `intel.trigger_iid_agent` dio
+**401** —manda `x-cron-secret` y la EF exige `PROFESSOR_SECRET` en `authorization`— y de ahí concluí
+que CC no podía usar el pipeline, **sin verificar contra `CAPABILITIES.md` 1.21**, que documenta la
+vía que sí funciona: `Vercel:web_fetch_vercel_url` contra `api/professor`. Medido después: **el proxy
+responde y alcanza la EF**. La procedencia del score quedó corregida en las nueve filas.
+
+🟠 **Y al corregirme apareció un defecto latente que el catálogo daba por cerrado.** La llamada de
+comprobación por el proxy devolvió **500: `violates check constraint
+professor_learnings_relevance_score_check`** — exactamente el defecto del 2026-09-10 que
+`CAPABILITIES.md` **1.21 punto (2) declaró cerrado**. La causa raíz nunca se tocó: **la EF inserta el
+`relevance_score` del modelo sin acotarlo** al rango 1..5 del `CHECK`. Deja de verse porque un
+aprendizaje genuino puntúa entre 1 y 5; un texto que el filtro descarta puntúa 0 y rompe la inserción
+con un 500 en vez de devolver un descarte limpio. **La lección de método: «un defecto deja de
+aparecer» y «un defecto está arreglado» no son lo mismo, y el catálogo escribió el segundo habiendo
+medido el primero.**
+
+---
+
+### §e — Dos ramas abiertas a la vez chocan en el timestamp, no sólo en el pin
+
+El PR **#245** aterrizó en `main` mientras **#250** estaba abierto y **tomó los dos mismos prefijos**,
+`20260926080000` y `090000`. El conflicto visible era `MIGRACIONES_CONGELADAS.md`, pero el de fondo era
+el **nombre del archivo**: dos migraciones con el mismo prefijo se ordenan de forma indefinida.
+Resuelto renombrando las de #250 a **`100000`** y **`110000`**.
+
+🟢 **Dato que evita recalcular pines por miedo:** el pin es el **sha de BLOB de git**, que es del
+contenido y **no del nombre** — renombrar no lo mueve, y se verificó tras el `git mv`. «La respuesta
+nunca es actualizar el pin» se sostuvo sin excepción. `MIGRACIONES_CONGELADAS.md` quedó con **las
+cuatro** líneas en orden cronológico.
+
+**Y una corrección menor, también en el registro:** el cuerpo de #249 citó el pin como `8be03416…`,
+que es el **`sha1sum` a secas**, no el sha de blob que el test recalcula. El archivo y el pin siempre
+estuvieron bien; el texto del PR, no.
+
+---
+
+### §f — Deudas abiertas, con dueño
+
+| # | deuda | quién |
+|---|---|---|
+| 1 | 🔐 El `REVOKE` de `net.*` sigue sin efecto. Hace falta un guard que **verifique el efecto de un REVOKE** —regla nueva— y el revoke en sí sólo lo puede hacer `supabase_admin`. `pg_net` en `public` ya lo marca el advisor como `extension_in_public`. | CC propone · Sam decide si escala a Supabase |
+| 2 | ⚠️ `public.copylab_jobs` tiene **INSERT y UPDATE abiertos a `anon` con `USING true`** y **cero tráfico de `anon` medido** frente a 184.337 llamadas de `service_role`. No se cierra sin saber si la UI de CopyLab encola con la clave publicable. | Sam responde · CC ejecuta |
+| 3 | 🔍 Quién lee `public.brand_context_cache` con la clave publicable (48 llamadas). Sin eso, el retiro de la homónima heredada no arranca. | Sam |
+| 4 | 🟠 El `relevance_score` sin acotar en `professor-submit-learning`. **La EF no está en `unrlvl-iid-functions`**, así que antes hay que adoptarla (caso `CAPABILITIES` 1.21 punto 3). | CC, con brief |
+| 5 | 🎨 Una sola relación de aspecto para las imágenes del blog: cuatro del respaldo son 1024×1024 y la del 14-sep 1024×576. **Es parámetro del lab**, no de estas EFs. | Sam decide |
+
+**Barrido de voseo sobre este bloque: cero apariciones.**
 
 ---
 

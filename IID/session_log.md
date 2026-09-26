@@ -365,6 +365,130 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-26 · LA CLAVE PUBLICABLE DEJA DE LEER LA RELACIÓN COMERCIAL, Y DOS TABLAS CON EL MISMO NOMBRE DEJAN DE SER UNA TRAMPA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior.** Todo lo etiquetado `medido` lo consultó
+**CC** el **2026-09-26** con `Supabase:execute_sql`, `Supabase:get_advisors`,
+`Supabase:get_edge_function` y lectura directa del repositorio. Dos PR en `unrlvl-iid-functions`
+—**#249 y #250**— con cuatro migraciones pineadas. Professor cerrado **antes** de este Actualiza, por
+**CC**: **9 learnings**, `session_date = 2026-09-26`, los nueve con `approved_by_sam = true`
+[`medido`].)_
+
+---
+
+### §9.a — El veredicto llega a las vistas, y la deuda la había declarado el PR anterior
+
+`20260926070000`. La regla del 2026-09-12 —**`discarded_at` manda sobre `status`**— había llegado a
+cuatro lectores con `20260926060000`, pero **ese barrido cubrió funciones y Edge Functions, no
+vistas**, y así quedó escrito en el cuerpo del PR, con la lectura pendiente nombrada. Esto la paga.
+
+De seis vistas que leen `content_pieces`, **dos no filtraban el veredicto** [`medido`]:
+`v_ops_content_velocity` y `v_ops_pipeline_kpis`. **ForumPHs figuraba con 4 piezas pendientes y tiene
+0** —el 100% de su bandeja—, UnrealvilleStudio 105 por 98, LucienSael 18 por 12, y `published` de
+ForumPHs 17 por 16.
+
+**Lo que NO se filtró, y es la mitad que importa:** `pieces_count` y `pieces_created` siguen contando
+lo descartado. Producir una pieza y luego tirarla no deshace que se produjo —costó tokens, una imagen
+y una decisión—, y una vista de velocidad que lo borrara mentiría justo cuando se la consulta para
+dimensionar gasto. **Los contadores de estado actual filtran el veredicto; los de producción, no.**
+
+Verificado tras aplicar [`medido`]: las cuatro marcas cuadran con su tabla, producción **459 = 459**,
+cero vistas de piezas sin filtrar. Declarado en la cabecera: **es prevención, no reparación** — ningún
+rol podía leer esas dos vistas, así que ningún informe mostró esos números.
+
+---
+
+### §9.b — Ocho tablas, no seis, y la peor es lo que cada cliente paga
+
+`20260926100000`. El encargo decía «las seis tablas»; **son ocho**, y el advisor de Supabase las nombra
+una por una en `rls_disabled_in_public`, **nivel ERROR** [`medido`]. Con RLS apagada y GRANT a una
+clave pública quedaban legibles `ops_client_terms` (**`margin_pct`, `retainer_amount`,
+`labor_rate_amount`**), `ops_cost_residual`, `ops_credits`, `ops_rate_transitions`,
+`intel.brand_topics` (53 filas, el plan editorial de cada marca), `intel.rule_param_sources`,
+`intel.watcher_rules` (61 filas: `statement`, `instruction`, `condition`, `fix_replacement`) e
+`intel.brand_sector`.
+
+**La medición que permitió cerrarlas sin romper nada, y va antes de cualquier revocación:**
+`pg_stat_statements` agrupado por `userid` da **36.812 llamadas reales del rol `anon`** —los labs leen
+presets con esa clave, así que una revocación a ciegas **sí** rompía cosas— y **cero** sobre esas ocho.
+`service_role` tiene `rolbypassrls = true`, así que activar RLS no le quita nada.
+
+**Advisor de 8 a 0** tras aplicar [`medido`]. Sube `rls_enabled_no_policy` de 13 a 22, **nivel INFO**,
+que es el estado correcto. Labs siguen leyendo, 3 de 3.
+
+Los dos guards generales **no nombran tablas: nombran condiciones**, y son los que atraparán a la
+novena. Y el GUARD PREVIO B **remide el tráfico al aplicar** —comprobando antes que el contador tenga
+historial, porque «cero llamadas» y «cero registro» se leen igual—.
+
+---
+
+### §9.c — Dos `brand_context_cache`, y la heredada devuelve contexto de mayo sin fallar
+
+`20260926110000`. El pendiente anotado era retirar la lectura muerta de CopyLab: **ya no existe**
+(`content-run-stage/index.ts:6834`, PR #100), y el otro punto de llamada, `:7948`, es `recompose`,
+donde **ImageLab sí consume** el contexto [`medido`].
+
+Lo real: `content.brand_context_cache` (10 columnas, con `context_json` / `dirty` / `ttl_minutes`) es
+**la que lee la EF `context-cache` v1.3** —abre su cliente con `db: { schema: "content" }`, medido
+sobre la versión 54—, y `public.brand_context_cache` (24 columnas) **el carril no la lee**. Esta última
+tiene **15 filas con `is_stale = true` en las quince**, invalidadas todas en el mismo instante por un
+disparador de `psycho_presets`, y `compiled_at` de once de ellas en **2026-05-20**.
+
+**Un `SELECT` ahí devuelve contexto de mayo sin fallar**, que es la familia de defecto que no se detecta
+porque devuelve datos del tipo correcto. Resuelto con `COMMENT ON TABLE` en las dos, **cada una
+nombrando a la otra**. **No se borra ni se revoca:** 48 llamadas de `anon` de un cliente no
+identificado, y cambiar un dato rancio por un 404 igual de invisible no es un arreglo.
+
+---
+
+### §9.d — Tres correcciones de CC sobre sí mismo, y un defecto latente que apareció al corregirse
+
+🔴 **Denuncié una exposición de márgenes que ya estaba cerrada, y la había cerrado yo** el 2026-09-25
+con `20260925040000`. Leí 146 / 94 / 49 llamadas de `anon` en `pg_stat_statements` como prueba de un
+privilegio vigente, cuando el ACL real es `postgres=arwdDxtm | service_role=r` [`medido`]. **Mismo
+patrón cometido dos veces el mismo día** —antes con seis asientos anteriores a un despliegue—: **un
+contador acumulado no prueba un estado presente**.
+
+🔴 **El `REVOKE` sobre `net.*` no hizo nada y la migración cerró en verde.** Las dos tablas son de
+`supabase_admin` con el privilegio concedido **a PUBLIC por él**, y `postgres` no puede revocarlo:
+PostgreSQL emite **`WARNING`, no `ERROR`** [`medido`]. **Ninguno de mis siete guards comprobaba que la
+acción hubiese surtido efecto.** Sin exposición —`net` no está en `pgrst.db_schemas`—, pero una
+afirmación falsa en la base es peor que un hueco conocido.
+
+🔴 **Declaré cerrada la vía del Professor tras un solo intento fallido** (`trigger_iid_agent`, 401) sin
+verificar contra `CAPABILITIES.md` 1.21, que documenta la que funciona.
+
+🟠 **Y al corregirme salió un defecto latente:** el **500 de `professor-submit-learning` no está
+arreglado** —`CAPABILITIES.md` 1.21 punto (2) lo dio por cerrado—, sólo dejó de verse: la EF inserta el
+`relevance_score` del modelo **sin acotarlo** al `CHECK` de 1..5, así que un texto que el filtro
+descarta puntúa 0 y rompe la inserción [`medido`]. **«Deja de aparecer» y «está arreglado» no son la
+misma frase.**
+
+---
+
+### §9.e — Dos ramas abiertas chocan en el timestamp, y el pin no se movió
+
+#245 aterrizó en `main` con #250 abierto y tomó **los dos mismos prefijos** `20260926080000` y
+`090000`: no era sólo el pin, era **colisión de nombre de archivo**, y dos migraciones con el mismo
+prefijo se ordenan de forma indefinida. Renombradas a `100000` y `110000`. **El pin es el sha de BLOB
+de git —del contenido, no del nombre—, así que renombrar no lo movió**, verificado tras el `git mv`.
+«La respuesta nunca es actualizar el pin» se sostuvo.
+
+---
+
+### §9.f — Suites y estado
+
+`124` archivos de test, `0` fallidos, tras el merge [`medido`]. Test nuevo:
+`tests/clave_publica_no_lee_credenciales_test.mjs`, que **extrae la expresión del guard de credenciales
+del propio archivo de migración** —no una copia que se desincroniza— y la somete a nombres de columna
+reales, incluidos los que **no** deben disparar (`api_key_ref` es una referencia, no una clave).
+
+**Deudas abiertas:** el `REVOKE` de `net.*` sin efecto y sin guard que lo verifique · `copylab_jobs`
+con INSERT y UPDATE abiertos a `anon` y cero tráfico medido · quién lee `public.brand_context_cache`
+con la clave publicable · el `relevance_score` sin acotar en una EF que **no está en este repositorio**.
+
+---
+
 ## 2026-09-23 · EL ESCRITOR RECIBE SU TECHO, DOS COLUMNAS DEJAN DE MENTIR, Y UNA GUARDA QUE NO GUARDABA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior.** Todo lo etiquetado `medido` lo consultó
