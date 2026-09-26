@@ -365,6 +365,108 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-26 (v2) · SEC-03 CERRADO, Y EL CRM RECIBE SU PISO ANTES DE LA PRIMERA FILA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-26` de la clave publicable
+queda íntegra debajo. Todo lo `medido` lo consultó **CC** el **2026-09-26** con
+`Supabase:get_edge_function`, `Supabase:execute_sql` y `pg_net` contra las rutas reales. Sam creó el
+secreto; CC desplegó y verificó.)_
+
+---
+
+### §9.a — SEC-03 cerrado: el secreto rotado y el literal fuera del código
+
+**Las dos mitades del problema, que eran distintas y se resolvieron por separado:**
+
+| Mitad | Quién | Qué cerró |
+|---|---|---|
+| El literal era la **llave viva** | **Sam** creó `MEDIA_STORE_SECRET` | La rotación — `Deno.env.get` gana sobre el `??`, surte efecto al instante |
+| El literal estaba **escrito en el código** | **CC** desplegó `media-store` **v1.3** y `meta-graph-post` **v1.2** | El borrado del valor expuesto |
+
+**Verificado por efecto, en tres capas** [`medido`]:
+
+1. **Bundle desplegado leído en las dos** — llevan `Deno.env.get('MEDIA_STORE_SECRET') ?? ''` y el
+   marcador de versión nuevo. **No basta el contador de versión** (`CAPABILITIES` 1.16): lo que
+   cierra el caso es el marcador dentro del bundle. `ezbr_sha256` nuevo en ambas.
+2. **`verify_jwt: false` preservado en las dos.** La tool `deploy_edge_function` tiene ese parámetro
+   con **default `TRUE`**, así que se pasó **explícito**; sin eso las dos habrían quedado exigiendo
+   JWT y todo llamador habría recibido 401.
+3. **Prueba en vivo con `pg_net` desde la propia base, 4 casos y 4 × `401`:** secreto incorrecto y
+   sin cabecera, contra cada función. **Sin usar el literal hallado**, que es lo que `CC_PROTOCOL`
+   §15 prohíbe — escrita cuatro días antes y aplicada aquí a sí misma.
+
+### §9.b — Un `401` que prueba más de lo que parece
+
+**La guarda fail-loud resultó ser también una sonda de configuración.** Si
+`MEDIA_STORE_SECRET` **no** estuviera puesta, las funciones devolverían **`500` «no configurado»**,
+no `401`. Devolvieron `401`.
+
+> **Luego el secreto está puesto — medido sin que CC lo haya leído ni usado nunca.**
+
+Es el caso raro en que **lo que se construyó para fallar ruidosamente sirve para verificar en
+silencio**: el código de error distingue «mal configurado» de «no autorizado», y esa distinción es
+la que permite comprobar la configuración desde fuera **sin credenciales**.
+
+### §9.c — El defecto que retirar el literal habría CREADO en una de las dos
+
+🔴 **`meta-graph-post` no tenía guarda de configuración.** Quitarle el literal a secas dejaba
+`SECRET = ''`, y `'' !== ''` es **falso**: **una petición sin cabecera habría pasado como
+autorizada**.
+
+**Retirar el literal sin añadir la guarda habría ABIERTO la ruta en vez de cerrarla** — y la ruta
+publica en Meta por cualquier marca. Se añadió el `if (!SECRET) → 500` **antes** de comparar, en las
+dos, y el caso «sin cabecera» de §9.a es exactamente el test de esa guarda.
+
+**El eje que deja, y no es el caso:** al retirar un valor por defecto hay que mirar **qué pasa con
+el valor vacío**. Un `??` que degrada a `''` sobre algo que después se **compara** no sólo pierde el
+valor: **puede invertir el sentido de la comparación.**
+
+### §9.d — El CRM recibe su piso: RLS en 13 tablas antes de la primera fila
+
+**Decisión de Sam:** el registro de prospección es el **`crm` de UNRLVL**, multimarca, con cada
+cliente como su propia `org` — consumible por los flujos de los distintos clientes. **CC había
+propuesto lo contrario** —moverlo a la base de la marca— y era **sobre-aplicar
+`MAIL_PRIVACY_RULE`**, que prohíbe escribir lo leído de un buzón en **context files, Professor,
+AGENDA y `session_log`**, y **no dice nada contra un sistema de registro con control de acceso**.
+
+**Lo medido antes de tocar nada, que es lo que hizo la migración segura:**
+
+| Hecho | Estado |
+|---|---|
+| Las 13 tablas | `rowsecurity = false`, **cero** políticas |
+| `anon`, `authenticated`, `service_role` | **cero** privilegios de tabla en `crm` |
+| `crm` en PostgREST | **NO expuesto** — `pgrst.db_schemas = public, intel, content, alerting` |
+| `crm` en `pg_default_acl` | **sin entrada** — una tabla nueva no hereda grants |
+
+> **Luego RLS apagada era exposición LATENTE, no viva:** hoy el esquema sólo lo alcanza `postgres`.
+> Habilitarla **no rompe a ningún consumidor porque no hay ninguno**, y es el único momento en que
+> este cambio sale gratis.
+
+**Aplicado** (`crm_rls_linea_base_denegar_por_defecto`): RLS en las **13**, **sin políticas** —
+denegar por defecto. **Verificado: 13 de 13, cero políticas, cero grants.**
+
+**Qué compra, dicho sin exagerar:** es **preventivo**. El día que alguien haga un `GRANT` o exponga
+el esquema, **ese `GRANT` no abre la tabla por sí solo**. Es la lección de `keepalive_ping`
+invertida —allí los grants estaban y RLS los mantenía inertes— aplicada de antemano: **RLS ANTES
+DEL GRANT.**
+
+### §9.e — 🟡 Lo que RLS NO resuelve, y es la decisión que sigue abierta
+
+**`service_role` tiene `rolbypassrls = true`** [`medido`]. **RLS no lo restringe.**
+
+> **Si los flujos de los clientes entran con `service_role`, el aislamiento por `org_id` NO lo da
+> esta migración: tiene que darlo la capa que llama.**
+
+Eso significa que **la responsabilidad de datos no queda descargada por haber habilitado RLS**, y
+decirlo importa porque el nombre «RLS» sugiere lo contrario. Queda escrito en el `COMMENT` del
+esquema, que es donde lo encontrará quien vaya a escribir el primer flujo.
+
+**Es una decisión de arquitectura, no una tarea**, y queda para Sam: o el filtro por `org_id` es
+disciplina explícita en cada Edge Function, o cada cliente entra con su propio rol y entonces RLS
+sí aísla. **CC no la toma.**
+
+---
+
 ## 2026-09-26 · LA CLAVE PUBLICABLE DEJA DE LEER LA RELACIÓN COMERCIAL, Y DOS TABLAS CON EL MISMO NOMBRE DEJAN DE SER UNA TRAMPA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior.** Todo lo etiquetado `medido` lo consultó
