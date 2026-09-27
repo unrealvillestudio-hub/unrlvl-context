@@ -384,7 +384,7 @@ romper algo (las 3 EFs desplegadas a mano también)»*.)_
 - **Un PR, #254 en `unrlvl-iid-functions`, que cierra 23 puertas sin dejar fuera a ningún llamador.**
 
 **No se hizo:**
-- **No se desplegó nada** (`HRD-R14`).
+- **CC no desplegó nada** (`HRD-R14`): **Sam** mergeó #254 y lo desplegó en los 3 pasos el mismo día, y CC verificó cada paso antes del siguiente. Detalle en AGENDA, `CIERRE 2026-09-27-v1` → «Despliegue verificado».
 - **No se retiró ninguna EF**: es decisión de Sam.
 - **No se tocó ninguna credencial**: se reportan por nombre y línea (§15).
 

@@ -1966,7 +1966,15 @@
         "sin_puerta_en_la_misma_ruta": "nscf-fulfillment-watcher recibe el MISMO webhook orders/paid (17 de 18 entregas al mismo segundo que nscf-attribution, medido en logs) y NO verificaba nada: con cualquier POST encolaba un pedido para despacho al 3PL o registraba una comision.",
         "remedio": "unrealvillestudio-hub/unrlvl-iid-functions#254 — 23 EF (11 del repo + 12 adoptadas BYTE A BYTE desde el deploy, commit 20f55f2) mas la firma HMAC en tiempo constante en los dos webhooks. Tests: detector estatico con 19 controles (6 copiados de formas desplegadas) + test de efecto 20 EF x 5 + iid-core x 6 + 2 webhooks x 5; suite 127/127. Inyeccion de regresion reproduce los estados medidos en produccion (200 en nscf-attribution, 400 en iid-core).",
         "orden_de_despliegue_OBLIGATORIO": "Paso 1: las 20 con la llave puesta (sin cambio de comportamiento hoy). Paso 2: iid-core, SOLO despues del paso 1 — acepta IID_CORE_SECRET o la service role, y sus cuatro llamadores (iid-inbound, iid-process, iid-ecommerce, iid-ecommerce-process) la mandan desde el paso 1. Paso 3: los dos webhooks, SOLO despues de que Sam ponga NSCF_WEBHOOK_SECRET con la clave con la que la tienda firma sus webhooks (admin de Shopify). Al reves, cada pedido pagado recibe 503.",
-        "estado_2026-09-27": "ABIERTO — remedio en PR #254 sin mergear; nada desplegado"
+        "estado_2026-09-27": "CERRADO EN PRODUCCION salvo confirmacion por trafico real — #254 mergeado (13423f4) y DESPLEGADO por Sam en los 3 pasos el 2026-09-27; cada paso verificado por CC",
+        "_despliegue_verificado_2026-09-27": {
+          "paso_1": "20 EF: ezbr_sha256 cambiado en las 20; 18 identicas byte a byte a main (modulo del ESZIP) y 2 leidas con la puerta nueva; verify_jwt false; sondas blog-promoter y professor-approve-learning en 401; crons de las 14:00 UTC en 200",
+          "paso_2": "iid-core v74 identica a main; POST {} sin credencial 400 -> 401",
+          "secret": "NSCF_WEBHOOK_SECRET puesta por Sam con la clave de la tienda b2c (los pedidos #1051 y #1048 del webhook existen en b2c, 404 en b2b); sonda sin firma 200 -> 401",
+          "paso_3": "nscf-attribution v54 y nscf-fulfillment-watcher v47 identicas a main; sin firma 401 en las dos",
+          "pendiente_de_trafico_real": "(a) primer orders/paid → 200 en las dos (prueba que la clave es la correcta); (b) iid-process → iid-core en 200 en la corrida del lunes 2026-09-28 ~10:00 UTC",
+          "sigue_abierta": "claude-lab-bridge (CLAUDE_BRIDGE_SECRET no existe) — propuesta de retiro"
+        }
       }
     },
     "_barrido_2026-09-26": {
@@ -2004,7 +2012,7 @@
         "SEC-09 (propuesto)": "Flujos VIVOS de NSCF sin puerta: nscf-kiosko-draft (crea pedidos PAGADOS sin cobro con un ambassador_id que nscf-kiosko-data lista en publico), nscf-mailer (relay de correo desde el dominio del cliente; devuelve el token del portal; pin_reset sin limite de intentos), nscf-kiosko-data (PIN de 4 digitos sin limite). Remedio: encargo propio y coordinado, porque sus llamadores son el navegador del kiosko y dos EF que la llaman SIN cabecera.",
         "SEC-10 (propuesto)": "ForumPHs: fphs-bi-data, fphs-bi-report y fphs-bi-status sin puerta (mora por unidad, escritura de cartera, firma de CPA falsificable); fphs-session enumera propietarios por correo antes del OTP. Remedio: puerta en bi-* (cero usos en 91 dias) y corregir session con encargo propio."
       },
-      "estado": "BARRIDO COMPLETO. Corregido en PR #254 lo que se podia corregir SIN decision ni secreto nuevo; lo demas espera decision de Sam (retiro por niveles, rotaciones, encargos de flujos vivos)."
+      "estado": "BARRIDO COMPLETO. Corregido en PR #254 —mergeado y desplegado el mismo dia— lo que se podia corregir SIN decision ni secreto nuevo; lo demas espera decision de Sam (retiro por niveles, rotaciones, encargos de flujos vivos)."
     }
   },
   "_repos_nuevos_2026-08-27": {
