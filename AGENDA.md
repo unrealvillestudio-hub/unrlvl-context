@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-09-26 · v2026-09-26-v4 (**CIERRE DEL 2026-09-26 — EL BARRIDO DE SECRETOS, Y UNA CLASE DE DEFECTO QUE NADIE HABÍA NOMBRADO: LA PUERTA QUE ABRE CUANDO FALTA LA LLAVE.** Amplía el `v2026-09-26-v3` inmediatamente debajo; **no lo reescribe**. Sam pidió *«da de alta SEC-04 y haz el barrido»*, y el barrido devolvió **dos hallazgos de clases distintas**, así que se dan de alta **dos identificadores y no uno**: meter el segundo dentro de `SEC-04` habría sido repetir el defecto de método que obligó a corregir `SEC-03` el 22-sep —**dar de alta sin medir contra lo que ya estaba escrito**—. **`SEC-04` — EL TERCER HERMANO:** `unrlvl-crm-api` **v54** lleva el mismo patrón de `SEC-03`, un secreto con valor por defecto cableado (**línea 13 del bundle desplegado**; el valor **no se transcribe ni se usa**, §15), y es **peor en dos puntos**: usa `||` y no `??`, así que degrada **también con cadena vacía**, y detrás de la puerta hay `service_role` sobre **el CRM multimarca completo**, no un bucket. **NO es explotable hoy por TRES medidas independientes** [`medido`]: `crm` fuera de `pgrst.db_schemas` —`public,intel,content,alerting`, leído del `rolconfig` de `authenticator`, que es la autoridad según §13—, **cero grants** de `service_role` sobre `crm` y `USAGE` en `false`, y **RLS denegando por defecto** en las 13 tablas. **Y la trampa se escribe donde la va a leer quien la pise:** tres capas **no son tres candados en serie**, basta **abrir una** para que el literal vuelva a ser llave, así que **exponer `crm` en PostgREST es un cambio de una línea que revive la ruta**. 🟡 **`SEC-05` — LA CLASE NUEVA:** cuatro EF escriben la puerta del cron como **`if (CRON_SECRET && !auth.includes(CRON_SECRET)) return 401`**. Si la variable falta, el `&&` **corta en falso, el 401 nunca se evalúa** y la petición entra al cuerpo: la puerta no cierra mal, **desaparece**. `blog-image-backfill`, `blog-promoter`, `brand-snapshot-builder` y `carril-regulator`, **las cuatro con `verify_jwt: false`** [`medido`: 4 de 119 EF lo tienen en `true`, y ninguna es de estas], así que **el código no es la segunda línea de defensa: es la única**. **LATENTE, NO VIVO** [`medido` por `pg_net`]: un `GET` sin cabeceras devuelve **`401`** en las dos que se pueden sondear sin efecto, y **un `401` aquí prueba que la variable está puesta** —si estuviera vacía la respuesta sería el `405` del freno de método—, por la misma vía que el `401` de `SEC-03`. **Sigue siendo defecto** porque el día que `IID_CRON_SECRET` se rote mal, se borre o se renombre, **estas cuatro rutas no fallan: se abren, en silencio**; y el arreglo **no hay que inventarlo**, porque las otras cuatro EF que leen **la misma variable** ya lo hacen bien. **EL EJE: la guarda de un secreto DENIEGA, nunca CONDICIONA** — son **dos sentencias, no una**: primero se niega la ausencia, después se compara la presencia. **HALLAZGO ESTRUCTURAL, y es el que cambia una prioridad:** las **tres** EF con literal cableado —`media-store`, `meta-graph-post`, `unrlvl-crm-api`— **son exactamente las tres desplegadas a mano, fuera de control de versiones**; ninguna de las 27 que viven en el repo tiene un literal. **«Está en el repo» pasa a ser un predictor `medido`**, y eso hace del barrido de las **92 EF restantes** una prioridad mayor que revisar otra vez las 27. **EL INSTRUMENTO SE VERIFICÓ ANTES DE CREERLE, y falló:** la primera versión del barrido dio **cero hallazgos** y etiquetó **34 secretos** como «no comparado» — **era falso**, sólo reconocía operadores desnudos (`!==`, `===`) y las puertas reales comparan con **helpers** (`safeEqual`, `secretoIgual`) o con **`.includes()`**. **Un barrido que no reconoce cómo compara el código no encuentra cero: encuentra nada, y lo informa como cero.** La v2 corre con **cuatro controles conocidos dentro del MISMO run** —dos que reproducen los defectos, dos las formas sanas— así que el resultado sobre las 27 no es «no salió nada» sino **«no salió nada con el instrumento encendido»** (§14). **De 12 rojos en bruto: 2 eran los controles y 6 eran FALSOS** —`judge-arbitration` y `piece-edit` comparten un bloque `EFAUTH` **byte a byte idéntico, 189 líneas, `diff` vacío**, que ya es **fail-closed** y cuyo comentario nombra la misma degradación por `includes("")` que el barrido perseguía—; **los 4 reales se confirmaron LEYENDO la línea**, no aceptando la etiqueta. **LO QUE NO SE MIDIÓ, dicho:** **no** se comprobó que los 27 `index.ts` del repo coincidan con su **bundle desplegado** (`CAPABILITIES` 1.16), así que `SEC-05` afirma de **la fuente**; y **las 92 EF sin fuente en el repo quedan sin barrer**, nombradas como punto abierto. **EL CRM RECIBE SU CONDICIÓN DE DISPARO, no una fecha:** Sam declaró que **sólo él y CC escriben** y que la escritura automática vendrá de **flujos internos controlados**, así que la capa de aislamiento **no hace falta todavía** y montarla ahora sería **andamio sin edificio**; **el disparador es la entrada de un SEGUNDO ACTOR** —una app de cliente, una integración externa, cualquier flujo que no sea Sam ni CC— leyendo o escribiendo directo en `crm`: ahí el aislamiento por `org_id` **deja de ser opcional**, porque deja de haber alguien que responda por cada fila. Queda escrito **en `ecosystem.json` y no en esta AGENDA**, porque **una agenda se reordena y una condición no**. **Y el estado inoperante de `unrlvl-crm-api` queda registrado como DELIBERADO**, decisión de Sam —*«déjala inoperante por ahora»*—, porque el riesgo real **no es la EF: es que alguien la encuentre rota y la arregle**. **DOS CORRECCIONES DE CC SOBRE SÍ MISMO:** (a) el barrido v1 **informó cero como si fuera un resultado** y sólo dejó de serlo al mirar cómo compara el código de verdad; (b) CC leyó el título de **#116** —«ctx 2026-09-26-v3»— como un **error de versión**, y no lo era: **AGENDA y `ecosystem.json` llevan contadores independientes** y AGENDA va una por delante **desde #114, que la subió sin tocar el JSON** [`medido`], así que los títulos citan la versión de AGENDA. La inferencia contraria queda anotada en `_meta` **como inferencia falsa**, no borrada. **`ecosystem.json` pasa a `2026-09-26-v3`** —sin perder ni una hoja: **1.559 comprobadas una por una por valor**, cero pérdidas— y **sus dos derivados se SINCRONIZAN en commit separado**. **Barrido de voseo sobre el bloque nuevo: cero apariciones** (locale UTF-8, no `C`). **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-26 · v2026-09-26-v3 (**CIERRE DEL 2026-09-26 — SEC-03 CERRADO, Y EL CRM RECIBE SU PISO ANTES DE LA PRIMERA FILA.** Amplía el `v2026-09-26-v2` inmediatamente debajo; **no lo reescribe**. **SEC-03 CERRADO tras 13 días**, con las dos mitades resueltas por separado: **Sam creó `MEDIA_STORE_SECRET`** —y con eso la rotación surtió efecto al instante, porque `Deno.env.get` gana sobre el `??`— y **CC desplegó `media-store` v1.3 y `meta-graph-post` v1.2** sin el valor por defecto. **Verificado por efecto en TRES capas** [`medido`]: bundle desplegado leído en las dos —el contador de versión no basta—, **`verify_jwt: false` preservado y pasado EXPLÍCITO** porque la tool lo tiene con **default TRUE**, y **prueba en vivo por `pg_net`: 4 casos, 4 × `401`**, **sin usar el literal hallado** (§15, escrita cuatro días antes y aplicada a sí misma). **UN `401` QUE PRUEBA MÁS DE LO QUE PARECE:** sin la variable la guarda daría **`500` «no configurado»**, así que el `401` confirma que el secreto **está puesto sin que CC lo haya leído ni usado nunca** — la guarda fail-loud resultó ser también una **sonda de configuración**. 🔴 **Y EL DEFECTO QUE EL ARREGLO HABRÍA CREADO:** `meta-graph-post` **no tenía guarda**, y quitarle el literal a secas dejaba `SECRET` vacío con una comparación que da **falso** — una petición **sin cabecera** habría pasado como autorizada **en una ruta que publica en Meta por cualquier marca**; el eje que deja es que **al retirar un valor por defecto se mira qué pasa con el valor VACÍO**, porque un `??` que degrada a `''` sobre algo que se **compara** puede **invertir el sentido de la comparación**. **EL CRM DE PROSPECCIÓN, por decisión de Sam, vive en el `crm` de UNRLVL** —multimarca por `org_id`, cada cliente su `org`— y **CC había propuesto lo contrario**, que era **sobre-aplicar `MAIL_PRIVACY_RULE`**: esa regla prohíbe escribir lo leído de un buzón en context files, Professor, AGENDA y `session_log`, **y no dice nada contra un sistema de registro con control de acceso**. **Aplicado el piso: RLS en las 13 tablas SIN políticas** —denegar por defecto, **13 de 13 verificado**—, seguro porque lo medido antes decía que la exposición era **LATENTE y no viva**: cero grants, `crm` **no expuesto** en PostgREST y **sin entrada en `pg_default_acl`**. **Su valor es preventivo: RLS ANTES DEL GRANT**, la lección de `keepalive_ping` invertida. 🟡 **ABIERTO, y es decisión de arquitectura: RLS NO aísla inquilinos frente a `service_role`**, que tiene `rolbypassrls` [`medido`] — **la responsabilidad de datos no queda descargada por haber habilitado RLS**, y las dos salidas son filtro explícito por `org_id` en cada Edge Function o un rol por cliente. **CC no la toma.** **Barrido de voseo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-26 · v2026-09-26-v2 (**CIERRE DEL 2026-09-26 — EL CRITERIO DE 7 DÍAS DEL KEEPALIVE: 21 DE 21, Y EL FRENTE CIERRA.** Verificación **diferida**, programada el 2026-09-19 cuando el criterio se nombró por adelantado; **no es una sesión nueva**. **21 latidos de 21 posibles** —3 al día por 7 días, **ni uno perdido**— del **2026-09-19 18:11:01** al **2026-09-26 10:11:00**, en **8 fechas**, con FPHS en **`ACTIVE_HEALTHY`** [`medido` a las 12:01 UTC]. **21 de 21 es cero corridas fallidas en una semana**, así que no hizo falta abrir los logs de Vercel. **«Tres peticiones diarias bastan» deja de ser `deducido` y pasa a `medido`** —era la última etiqueta blanda del frente: la documentación dice «a few … each day» **sin dar número**, y el tres se declaró `deducido` **desde el primer día** para no darlo por cierto—. 🟡 **Y la mitad que CC NO puede medir se escribe en vez de callarse:** el criterio tenía **dos** partes —proyecto activo **y** sin correo de aviso— y **CC sólo midió la primera**, porque no lee el buzón de Sam y `MAIL_PRIVACY_RULE` lo impide; esa mitad queda **`reportado` o sin verificar**, y declarar cumplido el conjunto sin la nota habría sido **afirmar sin medir justo la mitad**. Lo que sí sostiene el resultado: **un proyecto pausado no aparece `ACTIVE_HEALTHY`**. **`ecosystem.json` pasa a `2026-09-26-v1`** y sus dos derivados **se SINCRONIZAN en commit separado**; `last_session` **no se toca a propósito** y la nota lo declara. **El frente no deja nada abierto** y entrega **un keepalive de eje** reutilizable por cualquier base en plan gratuito **sin tocar código**. **Barrido de voseo: cero apariciones.** **Amplía el `v2026-09-26-v1` inmediatamente debajo, que cerró otro frente el mismo día; no lo reescribe. La colisión de numeración se resolvió cediendo el `-v1` al que mergeó primero.** **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-26 · v2026-09-26-v1 (**CIERRE DEL 2026-09-26 — LA CLAVE PUBLICABLE DEJA DE LEER LA RELACIÓN COMERCIAL, Y DOS TABLAS CON EL MISMO NOMBRE DEJAN DE SER UNA TRAMPA.** Sesión de **código, migración y operación** en `unrlvl-iid-functions`: **PR #249 y #250**, con **cuatro migraciones pineadas** (`20260926070000`, `100000`, `110000`, y el renombre de las dos últimas). **(1) EL VEREDICTO LLEGA A LAS VISTAS:** `20260926060000` había llevado la regla del 2026-09-12 —`discarded_at` manda sobre `status`— a cuatro lectores, pero el barrido cubrió **funciones y Edge Functions, no vistas**, y quedó declarado como deuda en el cuerpo del PR. Pagada: de seis vistas que leen `content_pieces`, **dos no filtraban el veredicto** [`medido`]. **ForumPHs figuraba con 4 piezas pendientes y tiene 0** —el 100% de su bandeja era trabajo ya decidido—, UnrealvilleStudio 105 por 98, LucienSael 18 por 12, y `published` de ForumPHs 17 por 16. **El filtro entra SÓLO en los contadores de estado actual**: `pieces_count` y `pieces_created` siguen contando lo descartado **a propósito**, porque producir una pieza y luego tirarla no deshace que se produjo, y una vista de velocidad que lo borrara mentiría justo cuando se la consulta para dimensionar gasto. **Prevención, no reparación, y se dijo así:** ni `anon`, ni `authenticated`, ni `service_role` podían leer esas dos vistas [`medido`], así que ningún informe mostró esos números. **(2) LA CLAVE PUBLICABLE:** Sam pidió «RLS sobre las seis tablas» y **no son seis, son ocho** —el advisor de Supabase las nombra una por una en su clase `rls_disabled_in_public`, nivel ERROR [`medido`]—. La peor es **`public.ops_client_terms`: `margin_pct`, `retainer_amount` y `labor_rate_amount`**, que no es configuración sino la relación comercial con cada cliente. **Cerrarlas no rompió nada y eso se midió antes de tocar:** `pg_stat_statements` agrupado por `userid` da **36.812 llamadas reales del rol `anon`** —los labs leen presets con esa clave, así que una revocación a ciegas SÍ rompía cosas— y **cero** sobre esas ocho. Advisor **de 8 a 0** tras aplicar [`medido`]; los labs siguen leyendo, 3 de 3. **Los dos guards generales no nombran tablas: nombran condiciones**, y son los que atraparán a la novena. **(3) DOS HOMÓNIMAS:** `content.brand_context_cache` (10 columnas, la que lee la EF `context-cache` v1.3) y `public.brand_context_cache` (24 columnas, que el carril NO lee), esta última con **15 filas, `is_stale = true` en las quince** y `compiled_at` de once de ellas en **2026-05-20**: un `SELECT` ahí devuelve contexto de mayo **sin fallar**. Resuelto con `COMMENT ON TABLE` en las dos, **cada una nombrando a la otra**; **no se borra ni se revoca** porque tiene 48 llamadas de `anon` de un cliente no identificado. **TRES CORRECCIONES DE CC SOBRE SÍ MISMO, todas en el registro público del PR #250:** (a) **denuncié una exposición de márgenes que ya estaba cerrada, y la había cerrado yo** el 2026-09-25 con `20260925040000` — leí un contador acumulado (`pg_stat_statements`) como prueba de un privilegio vigente, **el mismo patrón que ya había cometido horas antes** con seis asientos anteriores a un despliegue; (b) **el `REVOKE` sobre `net.*` no hizo nada y la migración cerró en verde**: las tablas son de `supabase_admin` y el grant es a PUBLIC concedido por él, así que `postgres` no puede revocarlo y PostgreSQL emite **WARNING, no ERROR** — ninguno de mis siete guards comprobaba que la acción hubiese surtido efecto; (c) **declaré cerrada la vía del Professor tras UN solo intento fallido** (`trigger_iid_agent`, 401) **sin verificar contra `CAPABILITIES.md` 1.21**, que documenta la que sí funciona. **Y al corregirme apareció un defecto latente:** el **500 de `professor-submit-learning` NO está arreglado** —`1.21` lo dio por cerrado—, sólo dejó de verse, porque la EF inserta el `relevance_score` del modelo **sin acotarlo** al `CHECK` de 1..5 [`medido` hoy]. **DEUDAS ABIERTAS:** 🔐 el `REVOKE` de `net.*` necesita un guard que verifique el efecto **y** lo puede hacer sólo `supabase_admin`; ⚠️ la UI de CopyLab tiene INSERT y UPDATE abiertos a `anon` con `USING true` y **cero tráfico medido** —no se cierra sin saber si la UI encola con esa clave—; 🔍 quién lee `public.brand_context_cache` con la clave publicable; y el arreglo del `relevance_score`. **Professor cerrado ANTES de este Actualiza: 9 learnings, `session_date = 2026-09-26`, los nueve con `approved_by_sam = true`** [`medido`]. **Barrido de voseo sobre el bloque nuevo: cero apariciones.** **Cabecera anterior íntegra inmediatamente debajo.**)_
@@ -17,6 +18,183 @@ _Actualizada: 2026-09-12 · v2026-09-12-v3 (**CIERRE DEL 2026-09-12 — SAM DECI
 _Actualizada: 2026-09-12 · v2026-09-12-v2 (**CIERRE DEL 2026-09-12 — EL PROMOTOR DE BLOGS ESTÁ VIVO EN PRODUCCIÓN, Y RECONOCER LO YA HECHO LE CUESTA EL SELLO.** `blog-promoter` v1.1 desplegada el 2026-09-12 **17:53:11 UTC**, `ezbr_sha256` **`db02acb3…fca169`**, cron **`blog-promoter-15min`** `jobid 99` `*/15 * * * *` **activo** [medido]. **CINCO AFIRMACIONES DEL BRIEF CORREGIDAS POR MEDICIÓN, y dos cambian el encargo:** (1) **no es un `dry_run`** — lleva **nueve invocaciones reales HTTP 200**, `dry_run:false`, `canales:3`, `franjas_vencidas:6`, todas `YA_PUBLICADA` [medido en `net._http_response`]; (2) 🔴 **la rama `YA_PUBLICADA` NO sella la franja**, así que **dos franjas `vercel_html` con pieza ya publicada quedan `reserved` para siempre** —`66227c12…` de LucienSael y `c09c824a…` de ForumPHs, vencidas desde el 08 y el 10 de septiembre— **reabriendo la fuga de N10 en la cabeza de la cola**, y **sus dos piezas siguen con `post_url` en NULL**, que es justo el defecto que el promotor vino a cerrar [medido]; (3) la causa raíz del blog de UnrealvilleStudio **no es código por marca** —**cero marcas hardcodeadas** en los cuatro EF del camino—: `platforms` de la fila de cola sale del **`platforms_hint` del modelo** (`iid-process/index.ts:845` → `iid-core/index.ts:112`) y **`brand_topics.platforms` nunca se consulta**; (4) el contador de hashtags **NO miente** — `hashtags_out:2` es exacto sobre `social.adapted[0].copy` (2 hashtags, 1.187 chars, español), y **`assets.copy` es OTRO texto** (0 hashtags, 3.747 chars, inglés): **la bandeja muestra un texto y el publicador manda otro**, y las 22 notas de Sam se escribieron mirando el que no publica; (5) el corte por **percentil 99 no da 0,97 y 0,94 sino 0,9603 y 0,9046** —ésas eran los máximos— y **LucienSael no tiene línea base de dominios distintos: sus 52 vectores son de un solo dominio**. **Confirmado exacto:** las 4 medias de coseno sobre los **241 vectores**, el reparto de las **56** piezas devueltas a la bandeja (NSCF 32 · FPHS 12 · LUC 8 · UVS 4), los dominios por marca (32 · 9 · 6+1 · 4) y el handle **`hair-intelligence`** de Shopify. **El umbral `0.80` es literal en `content-watcher/index.ts` en NUEVE sitios y TRES gates** (449, 450, 456, 458, 1059, 1073, 1101, 1454, 1456) y la línea 964 ya lo confesaba. **SERIE N:** N07, N08 y N13 dejan de ser `SIN CONTENIDO` · **N13 CERRADO** con su defecto abierto · **N16 DADO DE ALTA** —**24** piezas `scheduled` sin franja contra **43** franjas libres futuras, peor que el 13/45 del brief— · N05A confirmado `UNIQUE INDEX` por tercera vez, **y es por qué «11 cerradas» no tiene representación en el dato**. **Y un hallazgo que reordena el Frente 4:** los dominios declarados **no producen** — ForumPHs escribe sobre **5 de 32**, LucienSael sobre **1 de 4**: primero el agente y su cron, después el dominio nuevo. **Barrido de voseo sobre el bloque nuevo: cero apariciones** [medido con el `verify_pattern` de `HR-GEN-05`]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-12 · v2026-09-12-v1 (**CIERRE DEL 2026-09-12 — EL MÉTODO DE PUBLICAR SE VUELVE CARGABLE, Y N10 QUEDA APLICADO A MEDIAS.** Alta de **`skills/publicacion-operativa/SKILL.md` v1.0**, capa MÉTODO y destino CARGABLE, entregado por Sam y **registrado literal** —md5 idéntico contra el origen—: cubre el hueco que `BRIEF-06` §4.4 nombró y que **no existía en el repo** [medido]. **BRIEF-06 encendido en seco:** `intel.carril_regulation_log` creada, `carril-regulator` desplegada y su `dry_run` corrido —**16 canales, 14 `SUPPLY_ABSENT` y 2 `HOLD`, cero liberadas, cero aparcadas, déficit total 75,2**—, `carril-regulator-daily` **ACTIVADO** y `carril-cobertura-alarma-daily` **apagado a propósito** [medido, todo]. **N10:** la DDL está —columna, intervalo en config y RPC con backoff— y el **punto 5 aplicado**: `intel.v_carril_cobertura` gana `franjas_sin_publicador` y `primera_sin_publicador` **sin cambiar ninguna fórmula** [medido]. **LO QUE ESTE BLOQUE ABRE, Y ES LO URGENTE: `content-scheduler` NO lleva el código de N10.** La desplegada es la **v17 del 2026-09-10 21:43 UTC** —trae el tope de caption, **cero apariciones** de `sellarBackoff`, `last_drain_check_at` y `SLOT_BACKOFF_FAILED`— y el efecto lo confirma: **120 `PROVIDER_NOT_DRAINABLE` en 6 horas y CERO franjas selladas** [medido]. **El backoff no está operando.** Los 12 crons de UnrealvilleStudio reprogramados a semanal, lunes a sábado [medido: los 12 activos]. **Cabecera anterior íntegra inmediatamente debajo.**)_
 _Actualizada: 2026-09-09 · v2026-09-09-v1 (**HRD_ACTUALIZA 2026-09-09 — UNA PUBLICACIÓN FUERA DEL CARRIL, DOS EDGE FUNCTIONS DE EJE, Y OCHO FRENTES QUE QUEDAN ANOTADOS.** Publicado el carrusel del **Proyecto de Ley 678** de ForumPHs en Instagram (`18016965923948414`) y Facebook (`1184045168120977_122135449431355949`) **fuera del carril y con aprobación de Sam** [reportado — brief de Claude.ai, 2026-09-09]. Desplegadas **`media-store`** y **`meta-graph-post`** en `amlvyycfepwhiindxgzw`: las dos son **eje** —bucket, ruta, bytes, `brand_id`, mensaje e imágenes entran por el cuerpo— y **ninguna cablea marca** [medido: código de las dos EF leído con `get_edge_function` al escribir este bloque]. Publicadas por marcado las dos piezas de blog de ForumPHs y la primera de LucienSael; corregidas y pasadas a `scheduled` tres piezas de NeuroneSCF marcadas `fixable` por Sam [reportado — brief]. **Lo que este Actualiza deja ABIERTO, y es lo que importa:** no existe **promotor de blogs** que mueva una pieza de `scheduled` a `published` · las **14 reglas `blocking`** del Watcher están **todas inactivas**, así que hoy ninguna regla puede detener una pieza · **no hay regla de registro gramatical** en ninguna marca · **16 piezas en `awaiting_approval`** —la más vieja del 31 de julio— **no aparecieron en la bandeja de calibración** · el **drenaje reintenta sin fin** contra proveedores no drenables (164 intentos en un día entre `blog` y `x` de LucienSael) · hay un **secreto literal como fallback** en las dos EF nuevas · y **dos libros mayores discrepan**: `scheduled_posts` registró una publicación que `brand_publish_slots` no reflejó. **Cerrado:** `vercel_html` **sí publica**, por lectura y no por drenaje — `PROVIDER_NOT_DRAINABLE` es correcto por diseño para ese proveedor. **Decisión pendiente para Sam:** la rotación de esta AGENDA, que con **365.851 b** es **3,2 veces** su propio archivo histórico [medido]. **Adición 2026-09-10 — SERIE N, sección propia:** los identificadores `N05A`, `N07`, `N08`, `N10`, `N13`, `N14` y `N15` **no estaban en ningún context file**, y por eso un encargo que los nombrara era irresoluble. Ahora tienen registro con su estado medido. **N10 es lo urgente y empeora solo**: `intel.drain_due_slots` **no filtra por proveedor**, las franjas no drenables nunca alcanzan estado terminal y ocupan la cabeza de la cola —**544 filas acumuladas y 4 franjas atascadas, dos de ellas desde el 2026-09-08**—; al llegar a las 50 del techo, **la publicación se detiene sin un solo error**. **N14 no se reproduce**: ninguno de los dos `cron.job.command` lleva secreto en claro [medido con volcado redactado]. **N15 se abarata**: el tope ya vive en `platform_configs.char_limit`, así que es enrutar un dato que existe, no crearlo. **N07, N08 y N13 quedan declarados SIN CONTENIDO** — nombrados y sin definición en ninguna parte.)_
+
+---
+
+## 🗓️ CIERRE 2026-09-26-v4 — El barrido de secretos, y la puerta que abre cuando falta la llave
+
+_(Bloque al tope. **No reescribe ninguna versión anterior** — el `v2026-09-26-v3`, el `-v2` y el `-v1`
+quedan íntegros debajo. Todo lo `medido` lo consultó CC el **2026-09-26**. Sam pidió el alta y el
+barrido y decidió el estado de `unrlvl-crm-api`; CC midió, verificó y registró. Detalle en
+`IID/session_log.md`, entrada **2026-09-26 (v3)**.)_
+
+---
+
+### 🔴 SEC-04 — `unrlvl-crm-api`: el tercer hermano del secreto cableado
+
+| Qué | Dónde | Estado |
+|---|---|---|
+| `Deno.env.get('CRM_SECRET') \|\| '<literal de 15 caracteres>'` | `unrlvl-crm-api` **v54**, línea 13 del bundle desplegado | **ABIERTO** — inoperante por diseño |
+
+**El valor no se transcribe ni se usa**, por `CC_PROTOCOL` §15: nombre y ubicación, nunca valor.
+La puerta es una sola comparación —`if (req.headers.get('x-crm-secret') !== API_SECRET) → 401`— y
+detrás el cliente se construye con `SUPABASE_SERVICE_ROLE_KEY`, con **`verify_jwt: false`** [`medido`].
+
+**Peor que `SEC-03` en dos puntos.** Usa **`||` y no `??`**, así que degrada también con **cadena
+vacía**, no sólo con `undefined`. Y lo que hay detrás no es escribir en un bucket: es `service_role`
+sobre **el CRM multimarca completo**, alcanzando **las 7 orgs** y no la de un cliente.
+
+**No es explotable hoy, por tres medidas independientes** [`medido`]:
+
+| Capa | Medición |
+|---|---|
+| `crm` no está expuesto en PostgREST | `pgrst.db_schemas = public,intel,content,alerting` — del `rolconfig` de `authenticator`, la autoridad según §13 |
+| `service_role` no tiene llaves en `crm` | **cero** grants de tabla · `has_schema_privilege('service_role','crm','USAGE')` = `false` |
+| Las 13 tablas deniegan por defecto | RLS habilitada, **cero** políticas, desde `crm_rls_linea_base_denegar_por_defecto` |
+
+⚠️ **Y la trampa, escrita donde la leerá quien la pise:** tres capas **no son tres candados en
+serie**. Basta **abrir una** para que el literal vuelva a ser una llave viva. En particular, **exponer
+`crm` en PostgREST «para que el API funcione» es un cambio de una línea** que convierte un literal
+del código en una llave `service_role` sobre las 7 orgs. Quien vaya a resucitar la EF **hace primero
+el remedio de `SEC-04`, no después**.
+
+---
+
+### 🟡 SEC-05 — Cuatro puertas de cron que ABREN cuando falta el secreto
+
+```
+if (CRON_SECRET && !auth.includes(CRON_SECRET)) return 401;   // ← la forma defectuosa
+```
+
+Si `IID_CRON_SECRET` no está puesta, `CRON_SECRET` es cadena vacía, **el `&&` corta en falso, el
+`401` nunca se evalúa** y la petición sigue al cuerpo. No es que la comparación dé un resultado
+equivocado: **es que la puerta entera desaparece.**
+
+| EF | Línea | `verify_jwt` | Freno de método tras la puerta |
+|---|---|---|---|
+| `blog-image-backfill` | 196 | `false` | sí — `POST only` |
+| `blog-promoter` | 309 | `false` | sí — `POST only` |
+| `brand-snapshot-builder` | 217 | `false` | **no** |
+| `carril-regulator` | 634 | `false` | **no** |
+
+**El agravante es que no hay segunda puerta.** Las cuatro corren con `verify_jwt: false` [`medido`:
+**4 de 119** EF desplegadas lo tienen en `true`, y ninguna es de estas], así que el gateway no pide
+nada antes de entrar: la comprobación en código **no es la segunda línea de defensa, es la única**.
+
+**Y por qué la sonda sólo tocó dos de las cuatro.** `brand-snapshot-builder` y `carril-regulator`
+**no comprueban el método**: pasada la puerta, un `GET` entra directo al cuerpo —`carril-regulator` en
+su modo por defecto `regulate`, que **escribe y puede despachar alertas**—. **Medir no puede costar un
+efecto en producción**, así que se sondearon sólo las dos que frenan en `405`.
+
+**Estado: LATENTE, NO VIVO** [`medido` por `pg_net`, porque el proxy de CC da 403 en CONNECT contra
+`*.supabase.co`]. `GET` sin cabeceras → **`401`** en las dos. **Un `401` aquí prueba más de lo que
+parece**, por la misma vía que en `SEC-03`: si la variable estuviera vacía el `&&` cortaría y la
+respuesta sería el **`405`** del freno de método, no un `401`. **El `401` confirma que la variable
+está puesta, sin que CC la haya leído nunca.**
+
+**Sigue siendo un defecto aunque esté latente**, y esto es lo que importa: el día que
+`IID_CRON_SECRET` se rote mal, se borre o se renombre, **estas cuatro rutas no fallan — se abren, y
+en silencio**. El arreglo **no hay que inventarlo**: las otras cuatro EF que leen **la misma
+variable** —`iid-approval-digest`, `ops-alert-dispatch`, `ops-daily-report`, `sequence-rotate`— ya lo
+hacen bien, y el patrón correcto vive además en `storage-orphan-sweep` y `publish-slot-reserver`.
+
+> **EL EJE: la guarda de un secreto DENIEGA, nunca CONDICIONA.**
+> `if (SECRET && !valido) denegar` **se lee** como «si hay secreto, compruébalo», y **hace** «si no
+> hay secreto, no compruebes nada». La forma correcta son **dos sentencias, no una**: primero se
+> niega la ausencia, después se compara la presencia. Es el complemento exacto del eje de `SEC-03`
+> —allí el peligro era el valor por defecto; aquí es **la condición que lo envuelve**.
+
+---
+
+### 📐 El hallazgo estructural — y cambia una prioridad
+
+**Las tres EF con literal cableado del ecosistema —`media-store`, `meta-graph-post` y
+`unrlvl-crm-api`— son exactamente las tres que se desplegaron a mano, fuera de control de
+versiones.** Ninguna de las 27 que tienen fuente en el repo lleva un literal: las 27 caen a `""` o a
+`null`.
+
+El defecto **no se reparte al azar** por el ecosistema: **se concentra donde no hubo diff que leer.**
+Eso convierte «está en el repo» en un **predictor `medido`**, y hace del barrido de **las 92 EF
+restantes** una prioridad mayor que revisar otra vez las 27.
+
+---
+
+### 🔬 El instrumento se verificó antes de creerle — y la primera versión estaba mal
+
+La v1 del barrido dio **cero hallazgos** y etiquetó **34 secretos** como «no comparado». **Era
+falso.** Su segunda etapa sólo reconocía **operadores desnudos** (`!==`, `===`), y las puertas reales
+del ecosistema comparan con **helpers** (`safeEqual`, `secretoIgual`) o con **`.includes()`**.
+
+> **Un barrido que no reconoce la forma en que el código compara no encuentra cero: encuentra nada, y
+> lo informa como cero.**
+
+La v2 reconoce las cuatro formas, clasifica en `FAIL-LOUD-OK` / `FAIL-OPEN` / `SIN-GUARDA` /
+`SOLO-SALIENTE`, y corre con **cuatro controles conocidos dentro del MISMO run** que el barrido real
+—`CC_PROTOCOL` §14—: dos reproducen los defectos (la forma de `meta-graph-post` antes del arreglo y
+la forma fail-open) y dos las formas sanas. Los dos rojos salen rojos y los dos verdes salen verdes
+**en cada corrida**, así que el resultado sobre las 27 no es «no salió nada» sino **«no salió nada con
+el instrumento encendido»**.
+
+**De 12 rojos en bruto:** 2 eran los controles · **6 eran FALSOS** —`judge-arbitration` y `piece-edit`
+comparten un bloque `EFAUTH` **byte a byte idéntico, 189 líneas, `diff` vacío**, que ya es
+**fail-closed** (`if (keys.length === 0) … no se autoriza a nadie`) y cuyo comentario **nombra la misma
+degradación por `includes("")`** que el barrido perseguía; el barrido no ve dentro del helper— ·
+**4 reales**, los de `SEC-05`, **confirmados LEYENDO la línea**, no aceptando la etiqueta.
+
+**Alcance y límites, dichos y no insinuados.** **27 de 119** EF desplegadas [`medido`: son **119**, no
+las 117 que se reportaron antes en esta sesión]. **No** se comprobó que los 27 `index.ts` coincidan
+con su **bundle desplegado** (`CAPABILITIES` 1.16: mergear no despliega, y desplegar no despliega
+necesariamente lo que se mergeó), así que `SEC-05` afirma de **la fuente**; lo único medido en el
+despliegue es `verify_jwt`. **Las 92 EF sin fuente en el repo quedan sin barrer.**
+
+---
+
+### 🧭 El CRM recibe una condición de disparo, no una fecha
+
+Sam declaró el criterio: *«en el `crm` sólo escribimos tú y yo y tú lo haces cuando yo te lo pido. La
+escritura automática provendrá de flujos internos y de forma controlada, no hay en los planes ningún
+externo»*. Con eso, **hoy los dos únicos actores son Sam y CC**, el filtro por `org_id` es disciplina
+de dos manos conocidas, y **la capa de aislamiento no hace falta todavía**: montarla ahora sería
+andamio sin edificio.
+
+**El disparador es la entrada de un SEGUNDO ACTOR.** En el momento en que una app de cliente, una
+integración externa o cualquier flujo que no sea Sam ni CC **lea o escriba directo** en `crm`, el
+aislamiento por `org_id` **deja de ser opcional**, porque deja de haber alguien que responda por cada
+fila. **No es una fecha ni una prioridad de agenda: es una condición, y se cumple sola el día que se
+cumple.** Queda escrita en `ecosystem.json` → `crm_multimarca`, **y no en esta AGENDA, porque una
+agenda se reordena y una condición no.**
+
+**`unrlvl-crm-api` queda inoperante POR DECISIÓN**, no por olvido —Sam: *«déjala inoperante por
+ahora, `crm` no iniciará operaciones por lo pronto, tenemos otras prioridades»*—, y eso se registra
+**en el nodo del CRM además de en `SEC-04`**, porque el riesgo real **no es la EF: es que alguien la
+encuentre rota y la arregle.**
+
+---
+
+### 🔁 Dos correcciones de CC sobre sí mismo
+
+1. **El barrido v1 informó «cero» como si fuera un resultado.** Sólo dejó de serlo al mirar cómo
+   compara el código de verdad. Es la tercera vez en esta sesión que el defecto es el mismo:
+   **afirmar del conjunto habiendo medido un subconjunto.**
+2. **CC leyó el título de #116 —«ctx 2026-09-26-v3»— como un error de versión, y no lo era.** AGENDA y
+   `ecosystem.json` llevan **contadores independientes**, y AGENDA va una por delante **desde #114,
+   que la subió sin tocar el JSON** [`medido`: `git show 431e4a5 --stat` no lista `ecosystem.json`],
+   así que los títulos de commit citan la versión de **AGENDA**. La inferencia falsa queda **anotada
+   en `_meta` como inferencia falsa, no borrada.**
+
+---
+
+### 📌 Abre — con lo que hace falta para cerrarlo
+
+| # | Punto | Qué falta |
+|---|---|---|
+| 1 | 🔴 **Remedio de `SEC-05`** — invertir la condición en las 4 EF | Una línea por EF (`if (!CRON_SECRET) return 503` **antes** de comparar). **Brief propio con test de la marca N+1**; NO se ejecuta dentro de un `Actualiza`. Al desplegar, **`verify_jwt: false` EXPLÍCITO** |
+| 2 | 🔴 **Barrido de las 92 EF sin fuente en el repo** | Prioridad **subida** por el hallazgo estructural: el literal aparece precisamente donde no hubo diff que leer |
+| 3 | 🟠 **Repo ≠ desplegado, sin comprobar** | Los 27 `index.ts` frente a su bundle (`CAPABILITIES` 1.16). Hasta entonces `SEC-05` afirma de la fuente |
+| 4 | 🟠 **Remedio de `SEC-04`**, cuando el CRM arranque | Rotar `CRM_SECRET`, desplegar sin valor por defecto **y con guarda fail-loud previa a la comparación**. Mientras el CRM no opere, el remedio correcto es **no tocarla** |
+| 5 | 🟡 **Migración de las 2 filas de `public.collateral_links`** a `contacts`/`contact_orgs` | **Sin decisión de Sam** —*«no sé qué contestar»*—, así que **no se presiona**. El alta de ForumPHs como `org` ya existía desde el **2026-04-15** |
+| 6 | 🟡 **`email-ux`** como hermano de `ui-ux-layer` | **Va DESPUÉS del motor de dimensionamiento**, por decisión de secuencia. Sam apuntó que **un botón clicable en un correo es vulnerabilidad**, y el mecanismo se diseña antes que el skill |
+| 7 | 🟡 **Registro Público de Panamá** — m² inscritos por finca | **Sam lo investiga a mano primero** (acceso web con usuario y contraseña); el skill se carga **después**, ya con la información. Reduce el levantamiento: con los m² y la fórmula, el cuestionario se acorta, y **son sólo 3 tiers con los mismos servicios** |
 
 ---
 

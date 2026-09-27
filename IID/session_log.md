@@ -365,6 +365,189 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-26 (v3) · EL BARRIDO DE SECRETOS, Y LA PUERTA QUE ABRE CUANDO FALTA LA LLAVE
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-26 (v2)` queda íntegra
+debajo. Todo lo `medido` lo consultó **CC** el **2026-09-26** con `list_edge_functions`,
+`get_edge_function`, `execute_sql` y `pg_net` contra las rutas reales. Sam pidió el alta y el barrido
+y decidió el estado de `unrlvl-crm-api`; CC midió, verificó y registró.)_
+
+---
+
+### §9.a — El encargo, y por qué devolvió DOS identificadores y no uno
+
+Sam: *«sí, da de alta SEC-04 y haz el barrido»*. El barrido encontró **dos cosas de clases
+distintas**, y meterlas bajo un solo identificador habría repetido el defecto de método que obligó a
+corregir `SEC-03` el 22-sep: **dar de alta sin medir contra lo que ya estaba escrito.**
+
+| Id | Clase | Por qué es suya y no del otro |
+|---|---|---|
+| **`SEC-04`** | Literal cableado como valor por defecto | Es **la misma clase de `SEC-03`**, en la tercera EF. No se cuelga de `SEC-03` porque ese nodo está **CERRADO con su evidencia**, y reabrirlo para añadirle un caso **borra la trazabilidad del cierre** |
+| **`SEC-05`** | La puerta cuelga de que el secreto exista | **Clase nueva.** No hay literal: el fallback es `""`, que es **exactamente lo que `SEC-03` pedía como arreglo**. El remedio es otro — allí se quita un literal, **aquí se invierte una condición** |
+
+---
+
+### §9.b — `SEC-04`: `unrlvl-crm-api`, el tercer hermano
+
+`unrlvl-crm-api` **v54**, línea 13 del bundle desplegado:
+`Deno.env.get('CRM_SECRET') || '<literal de 15 caracteres>'`. **El valor no se transcribe ni se usa**
+(`CC_PROTOCOL` §15). Puerta única: `if (req.headers.get('x-crm-secret') !== API_SECRET) → 401`, y
+detrás `createClient` con `SUPABASE_SERVICE_ROLE_KEY`. **`verify_jwt: false`** [`medido`].
+
+**Peor que `SEC-03` en dos puntos:** es **`||` y no `??`**, así que degrada **también con cadena
+vacía**; y detrás de la puerta está **el CRM multimarca completo** —las **7 orgs**—, no un bucket.
+
+**Inoperante hoy por tres medidas independientes** [`medido`]: `crm` fuera de `pgrst.db_schemas`
+(`public,intel,content,alerting`, del `rolconfig` de `authenticator` — la autoridad según §13) ·
+`service_role` con **cero** grants y `USAGE` en `false` · **RLS denegando por defecto** en las 13
+tablas.
+
+⚠️ **Tres capas no son tres candados en serie.** Basta **abrir una** para que el literal vuelva a ser
+llave. **Exponer `crm` en PostgREST es un cambio de una línea** que convierte un literal del código
+en `service_role` sobre las 7 orgs.
+
+---
+
+### §9.c — `SEC-05`: cuatro puertas que abren cuando falta el secreto
+
+```js
+const CRON_SECRET = Deno.env.get("IID_CRON_SECRET") ?? "";
+// ...
+if (CRON_SECRET && !auth.includes(CRON_SECRET)) return json({ error: "Unauthorized" }, 401);
+```
+
+Sin la variable, `CRON_SECRET` es `""`, **el `&&` corta en falso, el `401` nunca se evalúa** y la
+petición sigue al cuerpo. **La puerta no cierra mal: desaparece.**
+
+| EF | Línea | `verify_jwt` | `POST only` tras la puerta |
+|---|---|---|---|
+| `blog-image-backfill` | 196 | `false` | sí |
+| `blog-promoter` | 309 | `false` | sí |
+| `brand-snapshot-builder` | 217 | `false` | **no** |
+| `carril-regulator` | 634 | `false` | **no** |
+
+**Las cuatro leen la MISMA variable de proyecto**, `IID_CRON_SECRET`. Y **las otras cuatro que la
+leen** —`iid-approval-digest`, `ops-alert-dispatch`, `ops-daily-report`, `sequence-rotate`— **ya lo
+hacen bien**: el arreglo no hay que inventarlo, se copia de al lado.
+
+**Sin segunda puerta.** Las cuatro con `verify_jwt: false` [`medido`: **4 de 119** EF lo tienen en
+`true`], así que la comprobación en código **es la única**, no la segunda.
+
+**La sonda tocó sólo dos de las cuatro, y por qué.** `brand-snapshot-builder` y `carril-regulator`
+**no comprueban el método**: pasada la puerta, un `GET` entra al cuerpo —`carril-regulator` en su modo
+por defecto `regulate`, que **escribe y puede despachar alertas**—. **Medir no puede costar un efecto
+en producción.**
+
+**Resultado: LATENTE, NO VIVO** [`medido` por `pg_net`; el proxy de CC da 403 en CONNECT contra
+`*.supabase.co`]. `GET` sin cabeceras → **`401`** en las dos sondeables, y **`401` en el control**
+`iid-approval-digest`, que falla-fuerte por código.
+
+> **Un `401` aquí prueba que la variable está puesta.** Si `IID_CRON_SECRET` estuviera vacía, el `&&`
+> cortaría y la respuesta sería el **`405`** del freno de método, **no un `401`**. Es la misma
+> propiedad que el cierre de `SEC-03` encontró en la guarda fail-loud: **la puerta, bien escrita,
+> también es una sonda de configuración** — y se midió **sin leer ni usar ninguna credencial**.
+
+**Latente no es inofensivo.** El día que la variable se rote mal, se borre o se renombre, **estas
+cuatro rutas no fallan: se abren, y en silencio.**
+
+> **EL EJE: la guarda de un secreto DENIEGA, nunca CONDICIONA.** `if (SECRET && !valido) denegar`
+> **se lee** «si hay secreto, compruébalo» y **hace** «si no hay secreto, no compruebes nada». Son
+> **dos sentencias, no una**: primero se niega la ausencia, después se compara la presencia.
+
+---
+
+### §9.d — El hallazgo estructural: el defecto está donde no hubo diff que leer
+
+**Las tres EF con literal cableado del ecosistema —`media-store`, `meta-graph-post`,
+`unrlvl-crm-api`— son exactamente las tres desplegadas a mano, fuera de control de versiones.**
+Ninguna de las 27 con fuente en el repo lleva literal: las 27 caen a `""` o a `null`.
+
+«Está en el repo» pasa a ser un **predictor `medido`**, y eso **sube la prioridad** del barrido de las
+**92 EF restantes** por encima de revisar otra vez las 27.
+
+---
+
+### §9.e — El instrumento se verificó antes de creerle, y la v1 estaba mal
+
+La v1 dio **cero hallazgos** y etiquetó **34 secretos** como «no comparado». **Falso:** sólo
+reconocía **operadores desnudos** (`!==`, `===`), y las puertas reales comparan con **helpers**
+(`safeEqual`, `secretoIgual`) o con **`.includes()`**.
+
+> **Un barrido que no reconoce cómo compara el código no encuentra cero: encuentra nada, y lo informa
+> como cero.**
+
+La v2 reconoce las cuatro formas y clasifica en `FAIL-LOUD-OK` / `FAIL-OPEN` / `SIN-GUARDA` /
+`SOLO-SALIENTE`. **Cuatro controles conocidos corren DENTRO del mismo run** que el barrido real
+(`CC_PROTOCOL` §14) — dos reproducen los defectos, dos las formas sanas:
+
+| Control | Forma | Esperado | Obtenido en cada corrida |
+|---|---|---|---|
+| `control-vivo` | `?? ""` + comparación desnuda | `SIN-GUARDA` | `SIN-GUARDA` ✅ |
+| `control-fail-open` | `if (X && !auth.includes(X))` | `FAIL-OPEN` | `FAIL-OPEN` ✅ |
+| `control-sano` | guarda `if (!X) return 500` | limpio | `FAIL-LOUD-OK` ✅ |
+| `control-helper-ok` | `safeEqual` con guarda previa | limpio | `FAIL-LOUD-OK` ✅ |
+
+Por eso el resultado sobre las 27 no es «no salió nada» sino **«no salió nada con el instrumento
+encendido»**.
+
+**De 12 rojos en bruto:** 2 controles · **6 falsos** · **4 reales**.
+
+Los 6 falsos son `judge-arbitration` y `piece-edit`: comparten un bloque `EFAUTH` **byte a byte
+idéntico —189 líneas, `diff` vacío—** que **ya es fail-closed** (`if (keys.length === 0) … no se
+autoriza a nadie`) y cuyo comentario **nombra la misma degradación por `includes("")`** que el barrido
+perseguía. **El barrido no ve dentro del helper.** Los 4 reales **se confirmaron leyendo la línea**,
+no aceptando la etiqueta.
+
+**Alcance y límites.** **27 de 119** EF [`medido`: son **119**, no las 117 reportadas antes en esta
+sesión] · **no** se comprobó repo contra bundle desplegado (`CAPABILITIES` 1.16), así que `SEC-05`
+afirma de **la fuente**; lo único medido en el despliegue es `verify_jwt` · **las 92 sin fuente en el
+repo quedan sin barrer**, nombradas como punto abierto.
+
+---
+
+### §9.f — El CRM: una condición de disparo, no una fecha
+
+Sam: *«en el `crm` sólo escribimos tú y yo y tú lo haces cuando yo te lo pido. La escritura automática
+provendrá de flujos internos y de forma controlada, no hay en los planes ningún externo»*. Hoy, por
+tanto, **los dos únicos actores son Sam y CC**, y la capa de aislamiento **sería andamio sin
+edificio**.
+
+**El disparador queda escrito por adelantado:** cuando una app de cliente, una integración externa o
+cualquier flujo que no sea Sam ni CC **lea o escriba directo** en `crm`, el aislamiento por `org_id`
+**deja de ser opcional**, porque deja de haber alguien que responda por cada fila. **No es una fecha:
+es una condición, y se cumple sola.** Vive en `ecosystem.json` → `crm_multimarca`, **no en AGENDA,
+porque una agenda se reordena y una condición no.**
+
+**`unrlvl-crm-api` inoperante POR DECISIÓN** —Sam: *«déjala inoperante por ahora»*—, registrado **en
+el nodo del CRM además de en `SEC-04`**, porque el riesgo real **no es la EF: es que alguien la
+encuentre rota y la arregle.**
+
+---
+
+### §9.g — Dos correcciones de CC sobre sí mismo
+
+1. **El barrido v1 informó «cero» como resultado.** Tercera vez en esta sesión con el mismo defecto:
+   **afirmar del conjunto habiendo medido un subconjunto.** Lo que lo cazó fue mirar **cómo compara el
+   código de verdad**, no repetir la consulta.
+2. **CC leyó el título de #116 —«ctx 2026-09-26-v3»— como un error de versión.** No lo era: AGENDA y
+   `ecosystem.json` llevan **contadores independientes**, y AGENDA va una por delante **desde #114,
+   que la subió sin tocar el JSON** [`medido`: `git show 431e4a5 --stat` no lista `ecosystem.json`].
+   La inferencia falsa queda **anotada en `_meta` como inferencia falsa, no borrada.**
+
+---
+
+### §9.h — Preservación de contexto
+
+`ecosystem.json` **`2026-09-26-v2` → `2026-09-26-v3`**, y el diff **sólo añade**: las **1.559 hojas**
+del JSON anterior se compararon **una por una por valor** contra el nuevo — **cero pérdidas**, cero
+valores cambiados salvo `_meta.version`, `_meta.previous` y el corrimiento de `previous_chain`. Las
+tres líneas que el `git diff` muestra como borradas son **el mismo texto re-emitido con coma final**
+porque ahora les sigue una clave nueva. AGENDA **`v2026-09-26-v4`**, cabecera y bloque **al tope, sin
+reescribir** ninguno de los tres anteriores del mismo día. **Barrido de voseo sobre todo lo nuevo:
+cero apariciones** (locale UTF-8 — en locale `C` el barrido da falsos positivos).
+
+---
+
 ## 2026-09-26 (v2) · SEC-03 CERRADO, Y EL CRM RECIBE SU PISO ANTES DE LA PRIMERA FILA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-26` de la clave publicable
