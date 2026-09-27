@@ -1,4 +1,5 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.25 · 2026-09-27 (**una sección nueva y ninguna derogación: cómo se barre un conjunto de Edge Functions SIN ROMPER nada.** (1) **EL CÓDIGO DESPLEGADO SE EXTRAE BYTE A BYTE DEL ESZIP** (`unrlvl-supabase-mcp:get_edge_function` → archivo → `sourcesContent`), no se retranscribe: así se adoptaron al repo 12 EF desplegadas a mano. (2) **`query_logs` GUARDA ~91 DÍAS** de `function_edge_logs`, un día por consulta, y el user agent dice quién llama: **71 de 119 EF no se ejecutaron nunca** [`medido`], que es la evidencia para retirar. (3) **EL GRAFO DE LLAMADAS CON SU CREDENCIAL** se lee del código de las 119, y la arista peligrosa es la que añade la cabecera `if (secret)`. (4) **UNA SONDA `pg_net` MANDA SIEMPRE JSON VÁLIDO** (el cuerpo es `jsonb`): la de `claude-lab-bridge` contaba con uno inválido y llamó una vez a CopyLab. (5) **LA API DE SHOPIFY SÓLO LISTA LOS WEBHOOKS DE SU APP**: los del admin se firman con la clave de la tienda. Sección nueva: «BARRIDO DE EDGE FUNCTIONS», antes de «DESPLIEGUE». Versión anterior íntegra debajo.)_
 _Versión: 1.24 · 2026-09-26 (**dos adiciones medidas y ninguna derogación; las dos son de MÉTODO DE MEDICIÓN, no de acceso.** (1) **UN BARRIDO QUE NO RECONOCE LA FORMA EN QUE EL CÓDIGO COMPARA NO ENCUENTRA CERO: ENCUENTRA NADA, Y LO INFORMA COMO CERO** — la v1 del barrido de secretos del 2026-09-26 dio cero hallazgos y etiquetó **34 secretos** como «no comparado» porque sólo reconocía operadores desnudos (`!==`, `===`), y las puertas reales del ecosistema comparan con **helpers** (`safeEqual`, `secretoIgual`) o con **`.includes()`**; los 4 hallazgos reales aparecieron al ampliar el instrumento. **El control conocido-vivo no basta si mide la etapa equivocada:** el control de la v1 pasaba, porque reproducía la forma que la v1 sí reconocía. **Un control prueba el instrumento sólo si reproduce las formas que el corpus real usa** — se toman del corpus, no de la memoria. (2) **UNA GUARDA BIEN ESCRITA ES TAMBIÉN UNA SONDA DE CONFIGURACIÓN, Y ESO PERMITE MEDIR SIN CREDENCIAL** [`medido` 2026-09-26]: en una EF cuya puerta falla-fuerte, la **forma** de la respuesta dice si el secreto está puesto sin leerlo ni usarlo — `500` «no configurado» contra `401` cuando la guarda existe (cierre de `SEC-03`), y `401` contra el `405` del freno de método cuando la puerta es un `if (SECRET && …)` (`SEC-05`). **Permite cumplir §15 y medir de todas formas.** Corolario operativo: **una sonda no se lanza contra una ruta que no frena por método** — `carril-regulator` y `brand-snapshot-builder` entran al cuerpo con un `GET`, y el modo por defecto del primero escribe y despacha alertas, así que **medir habría costado un efecto en producción**. **Redacciones anteriores íntegras inmediatamente debajo.**)_
 _Versión: 1.23 · 2026-09-26 (**cuatro adiciones medidas y UNA CORRECCIÓN que retira una afirmación de cierre: un defecto que deja de aparecer no es un defecto arreglado.** (1) **CORRECCIÓN — el `500` de `professor-submit-learning` NO está arreglado: está LATENTE, y la `1.21` punto (2) lo dio por cerrado.** [`medido` por CC el 2026-09-26, una llamada por `Vercel:web_fetch_vercel_url` contra `api/professor`]: devolvió **`500` con `violates check constraint professor_learnings_relevance_score_check`**, que es exactamente el defecto documentado el 2026-09-10. **La causa raíz nunca se tocó:** la EF inserta el `relevance_score` que le devuelve el modelo **sin acotarlo** al `1..5` del `CHECK`. Deja de verse porque un aprendizaje genuino puntúa entre 1 y 5; **un texto que el filtro descarta puntúa 0 y rompe la inserción con un 500 en vez de devolver un descarte limpio**. La redacción de la `1.21` que decía *«ya no devuelve 500»* queda bajo guard `⛔ NO OPERATIVO` **en su sitio, no borrada**: lo que sigue vigente de ella es que **el score no se pasa, lo calcula la EF**; lo que se retira es **la conclusión de que el fallo estaba resuelto**. La lección de método, que es lo que vale para el próximo caso: **«no se reproduce con entradas típicas» y «está corregido» no son la misma frase**, y sólo lo segundo se escribe habiendo leído el código o provocado el caso límite. **Arreglo propuesto:** acotar con `greatest(1, least(5, n))` y registrar el descarte. (2) **AUDITAR ACCESO EXIGE MIRAR TRES CAPAS, Y EL ADVISOR SÓLO VE UNA.** [`medido` el 2026-09-26]: `get_advisors(type=security)` marca `rls_disabled_in_public` cuando hay **grant sin RLS**, y **NO ve una política con `USING true` cuando RLS está encendida** — su regla no lee el texto de la política. El caso que lo destapó: `public.brand_social_accounts` tiene `access_token` y `refresh_token` y **dos políticas abiertas a `anon`**, y **no es una fuga** porque la tabla **no tiene GRANT para nadie**, ni `anon`, ni `authenticated`, ni `service_role`. **Una política sin privilegio no deja pasar a nadie, y un privilegio sin RLS no lo detiene nadie:** las tres capas son **grant · RLS · texto de la política**, y ninguna sola basta. **Extiende la trampa de la `1.20` punto (3)** —«RLS activa sin políticas no retira privilegios, los deja inertes»— **y no la deroga**: es la misma familia vista por la cara contraria. (3) **UN `REVOKE` PUEDE NO HACER NADA Y LA MIGRACIÓN CIERRA EN VERDE.** [`medido` el 2026-09-26 sobre `net.http_request_queue` y `net._http_response`]: son de **`supabase_admin`** con ACL `=arwdDxtm/supabase_admin` —privilegio concedido **a PUBLIC por él**—, y `postgres` **no puede revocar lo que concedió otro rol**. En ese caso PostgreSQL emite **`WARNING`, no `ERROR`**, así que la transacción commitea limpia y el privilegio sigue ahí. **La regla que queda, hermana de la de `grant_tras_revoke_test.mjs`** —ahí fue «revocar a PUBLIC y conceder a quien llama son dos mitades»—: **revocar y comprobar que se revocó son dos mitades**; toda migración que revoca lee el privilegio **después** y falla si sobrevive. Se comprueba con `has_table_privilege`, y el dueño se lee en `pg_class.relowner` **antes** de dar el `REVOKE` por hecho. (4) **`pg_stat_statements` ES HISTORIA ACUMULADA, NO ESTADO ACTUAL — Y SIRVE PARA ALGO DISTINTO DE LO QUE PARECE.** [`medido` el 2026-09-26]: agrupado por `userid` contra `pg_roles` dice **qué rol ejecutó qué**, y es **la única vía barata para saber si una revocación va a romper un lector vivo** —36.812 llamadas del rol `anon` en este proyecto, de las que **cero** tocaban las ocho tablas que se cerraron—. Pero **no prueba un privilegio vigente**: sus llamadas pueden ser anteriores a un `REVOKE`, y leerlas como estado presente hizo que CC denunciara una exposición **que ya había cerrado él mismo el día anterior**. **Se usa para decidir si algo se está usando; el privilegio se mide contra `relacl` / `has_table_privilege` en el momento de afirmarlo.** Dos precauciones más: el contador **se puede haber reiniciado** —«cero llamadas» y «cero registro» se leen igual, así que se comprueba que tenga historial antes de concluir— y **registra también las sentencias que fallaron**, así que una fila no prueba que la lectura tuviera éxito. **Cabecera anterior (`1.22`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
 _Versión: 1.22 · 2026-09-21 (**cuatro adiciones y ninguna derogación: el ciclo comercial entra al catálogo por donde cambia una decisión —por dónde se manda cada cosa—.** (1) **El conector de Gmail ELIMINA las imágenes alojadas por URL**: al enviar, el HTML conserva el enlace vacío y **pierde la etiqueta `img`**, sin nada que lo delate en el editor; para incrustar exige **base64 en la llamada**, inviable con archivos grandes; y **envía desde la cuenta autenticada del conector, no desde el buzón de la marca** [`reportado`]. Regla que se sigue: **un correo con imagen alojada no sale por el conector**. (2) **Resend es para correo de SISTEMA**; una respuesta a un prospecto **dentro de un hilo existente va por el Gmail de la marca**, con «Responder a todos» — es cuestión de hilo y de remitente, no de preferencia. (3) **Verificar una subida a Storage SIN tocar la ruta pública**: comparar los **bytes** de `storage.objects` con el archivo local, porque una ruta que **registra aperturas** —`/bim` lleva `open_count`— se contamina al abrirla para comprobar, y esa métrica es justo la que después dice si el prospecto lo leyó. Extiende la regla 1 de `MEASUREMENT_METHOD_RULE` y **no la copia**. (4) **Los dos buckets del ciclo comercial en UNRLVL**: `collateral` **privado** —material servido por token— y `brand-assets` **público** —imágenes de correo—; **la visibilidad decide dónde va cada cosa**, porque un informe servido por token que fuera público haría que el token no significara nada. **Cabecera anterior (`1.21`) conservada íntegra e inmediatamente debajo**, por yuxtaposición)_
@@ -473,6 +474,66 @@ ocurrió — y las cuatro separan **«no pude medir»** de **«medí y salió es
 **Dónde se cargan:** no en la apertura. Se cargan **cuando la tarea mide contra producción** — un
 barrido, un inventario de Storage, la verificación de un deploy, o cualquier `curl` que devuelva
 `000`.
+
+---
+
+## BARRIDO DE EDGE FUNCTIONS — qué corre, quién la llama y si la llave está puesta (añadido 2026-09-27)
+
+Cinco capacidades **medidas** en el barrido de las 92 EF sin fuente en el repo. Sirven para
+cualquier cambio de puerta o de retiro «sin romper»: antes de tocar una EF se sabe **quién la llama,
+con qué credencial, cuántas veces y si su llave existe**.
+
+### 📦 El código desplegado, byte a byte — ESZIP, no retranscripción
+`unrlvl-supabase-mcp:get_edge_function` devuelve el bundle ESZIP entero. Suele pesar 6–9 MB y **se
+guarda solo en un archivo**, así que no entra al contexto. El módulo propio está en `sourcesContent`
+de los source maps del bundle (ruta `source/index.ts`) y se extrae **por script, byte a byte**.
+Sirve para dos cosas:
+- **Comparar lo desplegado contra `main`** (`HRD-R16`).
+- **Adoptar al repo una EF desplegada a mano sin retranscribirla.**
+
+Un bundle pequeño **vuelve inline** en vez de a archivo: ése no se extrae por script, y lo que se
+copie a mano **se declara retranscrito**.
+`Supabase:get_edge_function` (el otro conector) devuelve la fuente plana, cómoda para **leer**, no
+para comparar.
+
+### 📈 Uso real de cada EF — `query_logs` guarda ~91 días
+`function_edge_logs` guardaba el **2026-09-27** datos desde el **2026-06-29** [`medido`]. Cada
+consulta cubre como mucho 24 h, así que un histórico se arma **un día por consulta**, agregando por
+slug, user agent y estado.
+
+El user agent dice **quién llama**:
+
+| User agent | Llamador |
+|---|---|
+| `pg_net/…` | cron o función de base |
+| `Deno/… SupabaseEdgeRuntime` | otra EF |
+| `Shopify-Captain-Hook` | webhook de Shopify |
+| `node` | scripts y sesiones |
+| navegador | una UI |
+
+**Cero invocaciones en 91 días es la evidencia para retirar sin romper**; un nombre en un documento
+no lo es.
+
+### 🕸️ Quién llama a quién, y con qué credencial
+El grafo sale de **leer el código de las 119**. Se buscan `functions/v1/<slug>`,
+`functions.invoke(…)` y las URL armadas con variables. En cada arista se anota **qué cabecera y qué
+variable** viajan, y **si la cabecera se añade condicionada** (`if (secret) headers[…]`): ésa es la
+llamada que se rompe al cerrar la puerta de destino.
+
+### 🔎 Si una llave existe, sin leer secretos — sondas `pg_net` diseñadas para no tener efecto
+CC no lee variables de entorno. Una sonda las infiere por la respuesta: 401 con la llave puesta;
+400, 200 o 405 con la puerta saltada. **Se diseña para que el rechazo ocurra ANTES de cualquier
+llamada o escritura, con el cuerpo que REALMENTE se manda**.
+
+⚠ `net.http_post` recibe el cuerpo como **`jsonb`**, así que **siempre es JSON válido**: una sonda
+que cuente con «JSON inválido» no lo manda. Medido el 2026-09-27: la de `claude-lab-bridge` mandó
+una cadena JSON, pasó la puerta y llamó una vez a CopyLab.
+
+### 🛍️ Webhooks de Shopify — la API sólo ve los de su propia app
+`webhooks.json` con el token de una app lista **sólo los webhooks creados por esa app**. Los
+creados desde el admin de la tienda no aparecen, y se firman con **la clave de la tienda** (*Settings
+→ Notifications → Webhooks*), no con el `client_secret` de una app. Medido el 2026-09-27: 0 webhooks
+por API en b2c y b2b de NSCF, y 17–18 entregas reales de `Shopify-Captain-Hook` en los logs.
 
 ---
 

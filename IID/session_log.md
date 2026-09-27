@@ -365,6 +365,78 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-27 (v1) · EL BARRIDO DE LAS 92 TERMINA, Y LA PUERTA ANIDADA ABRE TRES RUTAS HOY
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-26 (v3)` queda íntegra
+debajo. Todo lo `medido` lo consultó **CC** el **2026-09-27** con `get_edge_function` (las 92, más
+extracción del ESZIP donde hacía falta byte a byte), `list_edge_functions`, `query_logs` (91 días),
+`execute_sql` y sondas `pg_net`. Sam pidió *«SEC-05: hazlo; barrido EFs y corregir… cuidado con
+romper algo (las 3 EFs desplegadas a mano también)»*.)_
+
+---
+
+### §9.a — Qué se hizo, y qué NO
+
+**Se hizo:**
+- El barrido completo de las 92 EF sin fuente en el repo.
+- El grafo de llamadas entre las 119, con la credencial que viaja en cada arista.
+- El uso real en 91 días.
+- **Un PR, #254 en `unrlvl-iid-functions`, que cierra 23 puertas sin dejar fuera a ningún llamador.**
+
+**No se hizo:**
+- **CC no desplegó nada** (`HRD-R14`): **Sam** mergeó #254 y lo desplegó en los 3 pasos el mismo día, y CC verificó cada paso antes del siguiente. Detalle en AGENDA, `CIERRE 2026-09-27-v1` → «Despliegue verificado».
+- **No se retiró ninguna EF**: es decisión de Sam.
+- **No se tocó ninguna credencial**: se reportan por nombre y línea (§15).
+
+### §9.b — El instrumento falló dos veces, y las dos veces lo corrigió un control real
+
+1. **`SEC-05` contado en 4 cuando eran 8.** El barrido del 26 buscaba la **declaración** `?? ""`, y cuatro EF declaran con el `!` de TypeScript. Sus controles pasaban porque reproducían formas que el barrido ya conocía. **El detector nuevo busca la PUERTA.**
+2. **La forma anidada no estaba en el detector.** `if (secret) { if (!auth.includes(secret)) 401 }`, con el nombre en minúsculas, apareció **leyendo el código desplegado de las 92**. Con esas formas copiadas como controles, el detector encontró **tres casos más dentro del repo**: `iid-core`, `iid-process` e `iid-research`.
+
+**Un control prueba un instrumento sólo si reproduce las formas que usa el corpus real**, y el corpus
+real incluye lo que está desplegado fuera del repo.
+
+### §9.c — Tres rutas abiertas hoy, medidas sin efecto (una sonda sí lo tuvo, y se declara)
+
+| Sonda (`pg_net`) | Respuesta | Lectura |
+|---|---|---|
+| `POST {}` a `iid-core`, sin cabecera | **400** «Required: agent_id…» | `IID_CORE_SECRET` no existe: la puerta se saltó |
+| `POST {}` a `nscf-attribution`, sin firma | **200** «OK» | `NSCF_WEBHOOK_SECRET` no existe: no verifica HMAC |
+| `POST "no-es-un-objeto"` a `claude-lab-bridge` | **502** «Lab 400» | `CLAUDE_BRIDGE_SECRET` no existe. **La sonda llamó una vez a CopyLab**: se quería un JSON inválido y una cadena JSON es **válida** |
+| `POST {}` a `professor-approve-learning` | **401** | `PROFESSOR_SECRET` puesta |
+
+### §9.d — «Sin romper»: con qué se midió
+
+- **Llamadores.** Grafo leído de las 119 EF: 27 aristas.
+  - `iid-core` tiene cuatro llamadores. `iid-inbound` manda la service role, y `iid-process` e `iid-ecommerce*` mandan `IID_CORE_SECRET` **sólo si existe** (hoy salen sin cabecera).
+  - Por eso `iid-core` acepta cualquiera de las dos llaves, y sus llamadores pasan a mandar una siempre.
+- **Uso.** 91 días de `function_edge_logs`, una consulta por día, 294.531 invocaciones.
+  - **71 de las 119 EF no se ejecutaron nunca.**
+  - Los dos webhooks de NSCF **sí** reciben tráfico real de Shopify (última entrega, 30 de agosto).
+  - Por eso su llave se pone **antes** de desplegar.
+- **Código.** Desplegado frente a `main` para `iid-core`, `iid-process`, `iid-research` y `content-run-stage` v153 (este último, tras #255): **idénticos byte a byte**.
+- **Adopción.** Las 12 EF adoptadas vienen del ESZIP por script, no retranscritas.
+- **Tests.** Suite 127/127 antes y después de integrar #255.
+
+### §9.e — Lo que sale del barrido y queda para Sam
+
+- **Rotaciones:** clave privada de Klaviyo de NSCF, Resend, y dos `client_secret` de apps Shopify de NSCF.
+- **Retiro por niveles:**
+  - **A**, sin decisión de producto: scripts de una vez, pruebas, `klaviyo-*`, `shopify-oauth`, `nscf-about-fix`, `claude-lab-bridge` y `theme-i18n-fix`.
+  - **B**, producto o retiro: familia `shopify-*`, `seo-*-batch`, `fphs-bi-*`, `brand-cache-builder` y `lab-worker`.
+- **Encargo coordinado para los flujos vivos de NSCF:** `nscf-kiosko-draft` crea pedidos pagados sin cobro, y `nscf-mailer` es un relay abierto.
+- **`fphs-session`**.
+- **Por verificar:** los testimonios con `@handles` que escribe `sp-fix-targeted`.
+
+`SEC-06` a `SEC-10` quedan **propuestos**, no dados de alta.
+
+### §9.f — Correcciones de CC sobre sí mismo
+
+- **(a)** El «exactamente las tres desplegadas a mano» del 26 era falso en su número. Queda corregido con nota aditiva en AGENDA y en `ecosystem.json`, **sin borrar el texto original**.
+- **(b)** La sonda de `claude-lab-bridge` tuvo efecto: una llamada a CopyLab, rechazada. Una sonda «sin efecto» se diseña para que el rechazo ocurra **antes** de cualquier llamada **con el cuerpo que realmente se manda**, y en `pg_net` ese cuerpo es `jsonb`, así que siempre es JSON válido.
+
+---
+
 ## 2026-09-26 (v3) · EL BARRIDO DE SECRETOS, Y LA PUERTA QUE ABRE CUANDO FALTA LA LLAVE
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-26 (v2)` queda íntegra
