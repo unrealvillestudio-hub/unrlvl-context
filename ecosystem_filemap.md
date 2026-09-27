@@ -16,6 +16,7 @@ _Regenerado desde ecosystem.json **v2026-08-16-v1** (2026-08-16) · base previa:
 >    - `SEC-05` pasa de **4 a 23 EF**: el `!` de TypeScript y la forma **anidada** `if (secret) { … }`.
 >    - **Tres rutas abiertas hoy** [`medido`]: `iid-core`, `nscf-attribution` y `claude-lab-bridge`.
 >    - Remedio: unrealvillestudio-hub/unrlvl-iid-functions#254, con **orden de despliegue obligatorio en 3 pasos**.
+>    - **Mergeado y desplegado por Sam en los 3 pasos el mismo día**, cada paso verificado por CC (`_despliegue_verificado_2026-09-27`). Queda abierta sólo `claude-lab-bridge`.
 > 2. **`security._barrido_2026-09-26._correccion_2026-09-27_hallazgo_estructural`** — **clave nueva, aditiva.**
 >    - El «exactamente las tres desplegadas a mano» era falso en su número: fuera del repo había 92, y el literal apareció en 8 más.
 >    - El texto original **no se toca**.
