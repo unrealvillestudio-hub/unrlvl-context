@@ -1,5 +1,54 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-09-27 — La imagen deja de inventar: persona, lugar y producto reales
+
+> **Entrada de CC.** Sesión del 2026-09-24 al 2026-09-28 (hora de Florida hasta el 27 por la noche).
+> **35 PR mergeados** [`medido` por GitHub, `is:merged`]. Lo que sigue es lo que cambió **para la
+> marca**; el detalle del carril está en `IID/session_log.md` y el del ecosistema en `ecosystem.json`
+> `2026-09-27-v2`.
+
+### 1 · La imagen usa lo que la marca es, no lo que el modelo imagina
+- **Patricia** entra en la imagen sólo si la pieza o una directriz la nombran (`brand_persons`, #238).
+  Su salón es **Vizos Salón**; «Salón Neurone Miami» no existe (#239, BluePrints#6).
+- **Locaciones como dato** (`brand_locations`, #255): Vizos Salón y Miami Beach, con sus fotos del CDN
+  de BluePrints. La directriz manda sobre el copy (#256).
+- **Producto real, pintado a su tamaño** (opción c, decisión de Sam): el generador recibe la foto y la
+  medida de `product_blueprints.physical_size`. **48 productos con medida** [`medido`]; regla: pump de
+  400 ml ≈ 19,5 cm por volumen + alturas relativas de 20 fotos de kits. Tabla **aprobada por Sam**.
+- **Kits con foto de grupo**: 13 PNG recortados con alfa (BluePrints#10); **9 kits** apuntan a la suya
+  [`medido`]. Sin foto: Restore & Shield (102T), Perfect Blonde Plus (103VP), Hydra Boost (SDUO).
+- **Calibrar obedece** (#258): si la directriz nombra un producto o kit, ése va; si calibra sin
+  nombrarlo, va un producto de kit, estable por pieza. Editar la imagen actual ya no la reubica.
+- **Composición** (ImageLab #21, #22): poco aire sobre el sujeto, Patricia manda sobre el lugar, y su
+  gesto sigue el gancho (sonrisa con producto, preocupación ante un daño).
+
+### 2 · El texto
+- **«Nanotribología»**, una palabra y siempre con mayúscula (#115, #252). **20 piezas** no publicadas
+  corregidas el 2026-09-27 [`medido`: 0 formas incorrectas después].
+- **Voseo** retirado de **14 piezas** no publicadas, sólo en copy y adaptados [`medido`: 0 después].
+  **La causa está en la generación de CopyLab**: queda un PR de raíz para el 2026-09-28.
+- **Tope de caracteres**: 7 captions de IG estaban por encima de 2200; todos quedaron por debajo
+  [`medido`: 0 piezas sobre el tope]. **Corrección de CC:** cambió «diagnóstico gratuito» por
+  «personalizado» sin leer el dato; `cta_options` de la marca **declara el diagnóstico gratuito** con
+  Patricia. Revertido en las dos piezas.
+
+### 3 · Publicación en 48 h (pedido de Sam)
+Cadencia base: **1 por semana por red** [`medido` en `brand_publish_policies`]. Sam pidió 3–4 por
+plataforma en 48 h: **11 franjas** creadas o movidas [`medido`]. FB 4 (28 12:00 y 18:00, 29 12:00 y
+18:00), IG 4 (28 13:00 y 19:00, 29 13:00 y 19:00), blog 2 (28 y 29 10:00, Shopify) y TikTok 2
+**manuales** (28 y 29 20:00). Publicado el 27: blog 10:00, FB 12:00 e IG 19:00, **sin fallos**.
+
+### 4 · Incidente
+La API de texto respondió **400** todo el 27: CopyLab no pudo escribir y el adaptador devolvía el
+maestro sin adaptar. **Causa: cuenta sin saldo** [`reportado` por Sam]; recarga el 2026-09-28. Lo ya
+escrito y aprobado se publica igual.
+
+### Pendiente
+PR de raíz (voseo en CopyLab, estado tras `readapt`, `scheduled_for` viejos) · TikTok manual con Sam ·
+cadencia con todos los formatos de imagen por plataforma (carrusel, etc.) para todas las marcas activas.
 
 ---
 

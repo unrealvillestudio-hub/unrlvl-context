@@ -365,6 +365,61 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-27 (v2) · LA IMAGEN DEJA DE INVENTAR, Y EL TEXTO SE MIDE EN VEZ DE PEDIRSE
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-27 (v1)` queda íntegra
+debajo. Sesión de CC del 2026-09-24 al 2026-09-28. **35 PR mergeados** [`medido` por GitHub,
+`is:merged`]: `unrlvl-iid-functions` #228 #230 #232 #233 #234 #236 #238 #239 #242 #244 #245 #251
+#252 #253 #255 #256 #257 #258 #259 · `ImageLab` #18–#22 · `BluePrints` #5–#10 · `CopyLab` #42 ·
+`Orchestrator` #53 #54 · `unrlvl-context` #115 #118.)_
+
+### 1 · La imagen: persona, lugar y producto son dato, y entran por mención
+- **Constructor de prompt de imagen** (BRIEF-IMG-01, #232 #233 #234): el carril manda la pieza entera
+  a ImageLab; el constructor es dato versionado con su tarifa.
+- **Personas** (`brand_persons`, #238) y **locaciones** (`brand_locations`, #255) por marca, con la
+  regla b1: entran sólo si la pieza o una directriz las nombran; **la directriz manda sobre el copy**,
+  la más reciente primero (#256).
+- **Producto real a su tamaño** (opción c, #256 #257, ImageLab #20): foto + `physical_size`; el
+  compositor sólo pega con `product.mode = 'composite'` (compose.ts v1.2.0). Anti-collage y tope de
+  referencias por rol (persona 2–3, lugar 1, producto 2).
+- **La directriz manda también en el producto** (#258): directriz > oferta nombrada por la pieza >
+  al calibrar sin producto nombrado, un producto de kit estable por pieza. Un kit viaja con su foto
+  de grupo si la tiene. El eco guarda `product_source`.
+- **Editar no reubica** (#258): en `edit_from_current` la locación sólo viaja si una directriz la
+  pide. El Orchestrator corrige sobre la imagen actual por defecto (Orchestrator#54).
+- **Encuadre y gesto** (ImageLab #21, #22): `SUBJECT_FRAMING_CLAUSE` y `PERSONA_EXPRESSION_CLAUSE`,
+  cláusulas del motor sin marca.
+
+### 2 · El texto se mide, no se pide
+- **FIRMA-CABE-02** (#258): el presupuesto del cuerpo (tope del canal − firma − colchón) ya existía,
+  pero **sólo se pedía en el prompt**: el adaptador devolvió 2153 sobre 2076 y nadie lo midió
+  [`medido`, pieza `6bb3ebc0`]. Ahora se mide y se reintenta una vez con el número exacto.
+- **ADAPT-ERR** (#259): el cuerpo del error del proveedor queda en el log. Antes un 400 dejaba la
+  pieza con el maestro sin adaptar y el log sólo decía «HTTP 400».
+- **El drenaje sólo publica lo aprobado** (#253). No mira la cadencia: una franja `reserved` extra
+  se publica igual [`medido` en `intel.drain_due_slots`].
+
+### 3 · Incidente del 2026-09-27
+API de texto con **400** todo el día: CopyLab, 8 fallos (11:30 y 12:00 UTC) [`medido` en
+`function_logs` y en los logs de Vercel]; el adaptador, en cada re-adaptación. **Causa: cuenta sin
+saldo** [`reportado` por Sam]; recarga el 2026-09-28. `professor-submit-learning` depende de la misma
+API: los 4 learnings del día se insertaron directo en `professor_learnings`, con procedencia en
+`filter_reason`.
+
+### 4 · Learnings aprobados por Sam (en Professor)
+1. Un modelo no cumple un largo porque se lo pidas: hay que medir lo que devuelve.
+2. Editar una imagen no es reubicarla.
+3. Antes de cambiar un dato de la marca, se lee en su fuente.
+4. Un error del proveedor que se calla convierte una avería en contenido sin adaptar.
+
+### 5 · Deuda abierta (PR de raíz confirmados por Sam para el 2026-09-28)
+- Voseo en la generación de CopyLab (hoy se limpió a mano en 14 piezas).
+- `readapt` saca de `challenged` las piezas que re-adapta.
+- Origen de los `scheduled_for` viejos: piezas aprobadas sin franja y con fecha vencida que el
+  reservador no toma (`publish-slot-reserver/index.ts:236` exige `scheduled_for` nulo).
+
+---
+
 ## 2026-09-27 (v1) · EL BARRIDO DE LAS 92 TERMINA, Y LA PUERTA ANIDADA ABRE TRES RUTAS HOY
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-26 (v3)` queda íntegra
