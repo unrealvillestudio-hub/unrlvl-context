@@ -365,6 +365,54 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-29 · EL REGULADOR DE ENTRADA, Y LAS CORRECCIONES DE SAM SE VUELVEN REGLA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-27 (v2)` queda íntegra
+debajo. Sesión de CC del 2026-09-28 al 2026-09-29. PR mergeados [`medido` por GitHub]:
+`unrlvl-iid-functions` #260 #261 #262 #263 #264 #265 #266 · `ImageLab` #23–#29. **Abierto:**
+`unrlvl-iid-functions` #267.)_
+
+### 1 · Regulador de entrada: cadencia + 3, antes de producir
+- **Qué faltaba** [`medido`]: `carril-regulator` actúa después de producir (una válvula) y liberó
+  0 y aparcó 0 todos los días; el dispatcher producía todo lo encolado; la producción la marcaban
+  los crons de los agentes, no la demanda. UnrealvilleStudio acumuló 15–28 piezas por canal
+  esperando aprobación sin franjas que llenar.
+- **Decisión de Sam (2026-09-29):** «Regulador de entrada = cadencia + 3». La cadencia fija las
+  franjas; las políticas de publicación sólo dicen cuándo publica SocialLab; el margen cubre los
+  descartes.
+- **Construido (#267):** margen 3 en todos los canales activos (los tres `linkedin` no tenían fila);
+  vista `intel.v_carril_entrada` (cupo = franjas futuras sin pieza + margen − piezas en camino − en
+  producción; las piezas en fixable cuentan como en camino); `content-dispatcher` v2.6 sólo despacha
+  con cupo > 0. **Vista y margen aplicados; la EF, sin desplegar al cierre.**
+- **«Techo duro de 25 por marca» — DESCARTADO por Sam el 2026-09-29.** Estaba en AGENDA (BRIEF-06)
+  como valor «ya decidido por Sam» desde un Actualiza del 2026-09-06; Sam no lo reconoce. CC lo había
+  citado como decisión de Sam sin marcarlo `reportado`: corregido y registrado en Professor.
+- **Producción pausada** [`medido`]: 22 crons de research y process de UnrealvilleStudio y
+  LucienSael, a la espera del regulador. Reactivarlos es decisión de Sam.
+
+### 2 · Las correcciones de Sam se vuelven dato o cláusula
+- Persona: gesto por catálogo (#262), ropa por catálogo (#263), descripción como en sus fotos (#264),
+  nunca seria y con mirada con destino (#265, ImageLab #29), **recortes de cara y no fotos
+  completas** (#266), **cabello exacto** (#267).
+- Producto: al lado contrario del texto y con ángulo (ImageLab #29), kits en estante (ImageLab #28),
+  tamaño corregido (#265), etiqueta que se pega en vez de pedirse (Professor `75331271`).
+- Texto: voseo limpiado en la fuente (#261), `readapt` conserva el reto (#260), mecanismo del producto
+  y promesa cumplida en el genoma (#265).
+- **Texto de imagen en modo diálogo en todos los canales activos** (#267): responde al título.
+- **Vertical 9:16 con referencias** [`medido` 2 de 2]: la persona salió copiada de la foto con una
+  franja; una directriz de «una sola foto de borde a borde» lo corrigió 2 de 2. Sam pidió un modelo
+  de referencia 9:16 generado desde cero: frente abierto.
+
+### 3 · Operación
+- **Tope de imágenes** de ImageLab: 100 → **180** hasta el 2026-10-03 (decisión de Sam; el tope es
+  nuestro, no de Vertex). Vertex además responde 429 en paralelo: las correcciones van de a una.
+- **ForumPHs:** 6 agentes nuevos (crons 122–133), primera corrida con 8 hallazgos y 1 elegible.
+- **Método de fixables** escrito en `skills/reparacion-de-carril` §4 bis (v1.2).
+- **Professor:** 14 filas de la sesión 2026-09-28/29, todas con `approved_by_sam` [`medido`]; una de ellas, `be834ee8`, queda marcada ⛔ refutada y la corrige `2494af45`.
+
+### Pendiente
+Ver `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.
+
 ## 2026-09-27 (v2) · LA IMAGEN DEJA DE INVENTAR, Y EL TEXTO SE MIDE EN VEZ DE PEDIRSE
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-27 (v1)` queda íntegra

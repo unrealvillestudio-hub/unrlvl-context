@@ -1,5 +1,30 @@
 # ForumPHs — Session Log
 
+## 2026-09-29 — Seis agentes nuevos para llenar octubre, y el umbral queda en manos de Sam
+
+> **Entrada de CC.** Pedido de Sam (2026-09-28/29): ForumPHs no tenía producción; ampliar la
+> búsqueda de sus agentes «hasta completar el requerimiento de octubre y algo más».
+
+- **Hueco medido el 2026-09-28** hasta el 31 de octubre: FB −8, IG −9, blog −2 [`medido`].
+- **Pieza pedida por Sam** para las 27 h siguientes: `babcc7de` (IG), encolada a mano y **aprobada por
+  Sam** [`reportado`].
+- **6 agentes nuevos** en `intel.iid_agents`, semanales, con la misma exigencia legal (Ley 284) y
+  las voces de `brand_topics.voice_by_destination`: FPHS-ADMIN-SIN-SISTEMA,
+  FPHS-ADMINISTRADO-VS-ATENDIDO, FPHS-DINERO-SIN-PROYECCION, FPHS-MORA-QUE-SE-PERSIGUE,
+  FPHS-PATRIMONIO-VS-APARTAMENTO, FPHS-MIS-DERECHOS. Crons **122–133** (research y process).
+- **Primera corrida** [`medido`]: 6 de 6 research con éxito (50 a 94 fuentes), **8 hallazgos**,
+  **1 sobre el umbral de 70**: «La calidad de administración explica entre 15 % y 25 % del valor
+  de reventa…» (72). Encolado para FB e IG: la pieza FB `54ac1010` está en la bandeja; el job de IG
+  **falló** y queda por leer su error.
+- **Observación:** ese hallazgo cita una fuente de Medellín para una marca de Panamá. Revisar la
+  jurisdicción en el `search_config` del agente.
+- **Decisión de Sam pendiente:** bajar el umbral a 60 significaría producir también los hallazgos de
+  60 a 69; con 60 entrarían 2 más de esta corrida (63 y 60).
+- **Regulador de entrada** (cadencia + 3, `unrlvl-iid-functions` #267): al aplicarlo, ForumPHs es la
+  marca con cupo — FB 4, IG 6, blog 2 [`medido`].
+
+---
+
 ## 2026-09-26 — El criterio de 7 días del keepalive: 21 de 21
 
 > **Entrada de CC.** Verificación diferida, programada el 2026-09-19 cuando se nombró el criterio
