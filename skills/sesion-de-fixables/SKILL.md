@@ -1,7 +1,8 @@
 ---
 name: sesion-de-fixables
-version: 1.0
+version: 1.1
 fecha: 2026-09-29
+cambios_1_1: "2026-09-29 (tarde): cinco motivos nuevos en §3.1 y dos avisos de barrido (texto pintado en la imagen; texto que se publica). v1.0 íntegra: sólo se añade."
 capa: MÉTODO
 destino: CARGABLE
 audiencia: UNRLVL infra — transversal a todas las marcas y todos los carriles de contenido
@@ -106,6 +107,20 @@ nuevo se añade aquí al cerrar la sesión (§9).
 | Términos de marca mal escritos | ficha de marca + corrección en piezas no publicadas | «Nanotribología», #115 |
 | Precio, oferta o promesa comercial que la marca no hace | ficha de marca (`cta_options`); **leer el dato antes de cambiarlo** | «diagnóstico gratuito», 2026-09-27 |
 | El título simplifica un dato del estudio contra lo que dice el cuerpo | reescribir el título con el dato del cuerpo | 6bb3ebc0, 48175596 |
+| Un competidor nombrado como FUENTE de un dato («según Dall Italia», «K18 documenta…») | `HR-GEN-12` ampliada: un competidor no se nombra nunca, tampoco como fuente; el dato se atribuye a la categoría. Salones y personas sí. Lista de competidores: `brands.competitors` | Sam, 2026-09-29; 13 piezas; `unrlvl-iid-functions` #271 |
+| Hashtag de marca inventado o mal escrito (#NeuronesCFlorida, #NeuroneCF) | el set fijo de la marca en su genoma (`application_constraints.hashtags`) + regla de marca con patrón (`HR-NSCF-09`). El patrón compila con la bandera `i`: una variante que sólo cambia mayúsculas la ve el juez, no el patrón | Sam, 2026-09-29; 15 variantes |
+| Un dato de otro país sin conectarlo con el mercado de la marca | `HR-GEN-18` con `{{mercado_de_la_marca}}` ← `application_constraints.home_market` del genoma; una marca sin mercado declarado no recibe la regla | 69f34e2b, Sam 2026-09-29 |
+| Una línea «Distribución exclusiva…» que funciona como segunda firma | `signature_closer.rule` del genoma + `HR-GEN-11`; se quita la línea, la firma es una | 48175596, 17763bd1 |
+| Voseo que el léxico no conoce | se EXTIENDE `HR-GEN-05` (nunca se rehace) tras un barrido morfológico por terminación y por enclítico | 2026-09-29: +9 formas |
+
+**El texto pintado en la imagen también es texto** (2026-09-29). Vive en `image.overlay.headline`,
+`image.overlay.subheadline` y `copy.image_support`. Un barrido que corrige `copy` y no recompone deja
+el defecto en la imagen publicada (medido: 1abf8376, 812adaae, 5047ae26). **Después de corregir texto,
+se barren esos tres campos y se recompone con (a)** lo que no coincida con `copy`.
+
+**El texto que se publica es `assets.social.adapted[].copy`**, no `assets.copy`. Un barrido cubre los
+dos y además `copy.title`, `copy.image_hook` y `copy.aife_filtered`, y comprueba si ya existe fila en
+`public.scheduled_posts` sin publicar: ahí vive otra copia del texto.
 
 ### 3.2 · Imagen
 

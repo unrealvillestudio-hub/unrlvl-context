@@ -1,5 +1,24 @@
 # ForumPHs — Session Log
 
+## 2026-09-29 (v3) — El dato de otro país se contrasta con Panamá, y Neivor no se nombra
+
+> **Entrada de CC.** No reescribe la entrada `2026-09-29 (v2)` de abajo.
+
+- **Sam sobre 69f34e2b:** «me parece bien que mencione datos de otros países, pero debes decir algo
+  como "...en Panamá..."», y que sea regla. Se corrigió la pieza y sus cinco hermanas del mismo
+  hallazgo: 54ac1010, 8617209a, 4007e3db, a4597530 y b22f3601 [`medido` en `intel.piece_edits`].
+  **69f34e2b vuelve a la bandeja**, revisada.
+- **Regla:** `HR-GEN-18` con `{{mercado_de_la_marca}}`, resuelto desde
+  `application_constraints.home_market = 'Panamá'` en las tres voces activas
+  (`unrlvl-iid-functions` #271, aplicada en la base).
+- **Neivor** (plataforma de administración en México) es competidor: se sustituyó por la categoría en
+  a4597530 y b22f3601, y figura en `brands.competitors`. REMAX y la Lonja de Medellín se conservan: son
+  corredoras y gremio citados como fuente, no competidores.
+- **cd8a6842:** su job falló el 29 por un 429 de Vertex. Al reencolarlo, el Watcher lo rechazó por
+  `duplication`, porque duplicaba 69f34e2b. Queda en `failed` a propósito.
+
+---
+
 ## 2026-09-29 (v2) — Umbral en 60 y dos carruseles con imagen propia por lámina
 
 > **Entrada de CC.** No reescribe la entrada de abajo.
