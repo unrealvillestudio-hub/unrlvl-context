@@ -5,6 +5,19 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-09-29 — Crons reactivados y dos carruseles con imagen propia por lámina
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior.
+
+- **Crons de research y process de UnrealvilleStudio reactivados** por decisión de Sam, con el
+  regulador de entrada ya desplegado (#267): produce solo con cupo.
+- **Carruseles del 29:**
+  - **da5fe472** (FB, 13:30 NY): revisado y con la franja liberada.
+  - **021dc019** (IG, 18:30 NY): en cierre.
+  - Estética oscura de la marca: carretera, circuito, sala de control, invernadero y escritorio.
+
+---
+
 ## 2026-09-12 — El blog está vacío porque nadie le pregunta a la marca qué canales tiene
 
 > **Entrada de CC.** Todo lo etiquetado `medido` se consultó con `execute_sql` y lectura del working
