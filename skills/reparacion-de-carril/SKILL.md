@@ -610,6 +610,9 @@ para explicar que ese WARN era de diseño.
 > veintena de piezas NSCF devueltas con nota `fixable:`. Aquí van las consultas y el orden; los
 > identificadores de piezas son ejemplos de dónde salió cada regla, no trabajo pendiente.
 
+> **Desde el 2026-09-29 el método completo vive en `skills/sesion-de-fixables/SKILL.md`**, que Sam
+> convoca con «sesión de fixables». Esta sección queda como resumen y no se amplía: lo nuevo va allí.
+
 **Se aplica cuando** una pieza está en `challenged` con `challenged_reason` que empieza por
 `fixable:` (Sam rechazó con nota: la corrección es mecánica y la pieza vuelve — ver
 `publicacion-operativa` §C.7). **Sin esa nota es descarte y no se toca.**

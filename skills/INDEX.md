@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.15 · 2026-09-29 · Mantenido por: Claude_ · base previa: 1.14 · 2026-09-24
+_Versión: 1.16 · 2026-09-29 · Mantenido por: Claude_ · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
 
 ---
 
@@ -21,6 +21,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ui-ux-layer` | `skills/ui-ux-layer/SKILL.md` | Cualquier output HTML / CSS / React / visual | Multimarca — todo output visual |
 | `content-pipeline` | `skills/content-pipeline/SKILL.md` | **Cualquier texto público** — blog, producto, ad, social, landing, email, script | Multimarca — todo output de texto |
 | `publicacion-operativa` | `skills/publicacion-operativa/SKILL.md` | **Publicar una pieza, operar el carril, diagnosticar por qué algo no salió, o desplegar y encender un componente de publicación.** MÉTODO sin estado: el reparto Sam↔Claude, las cuatro QA e ICR como acciones, once entradas How2 y dónde se mira cada cosa. **No produce texto** — eso es `content-pipeline` | UNRLVL infra — transversal |
+| `sesion-de-fixables` | `skills/sesion-de-fixables/SKILL.md` | **Se convoca SÓLO cuando Sam abre con «sesión de fixables».** MÉTODO sin estado para trabajar lo que Sam devolvió desde la bandeja: vías (bandeja, `content-approval@`, Telegram, chat), leer y separar cada motivo en texto, imagen o fuente, **catálogo de motivos ya resueltos**, corregir la fuente antes que la pieza, las tres llamadas de `recompose`, la cola temporal de a una con cron, revisión visual obligatoria, la entrega a Sam con `piece_id`, el cierre (limpieza de crons, Professor) y el aprendizaje de cada calibración. Trabaja con `reparacion-de-carril` cuando la causa es de máquina | UNRLVL infra — transversal a todas las marcas |
 | `reparacion-de-carril` | `skills/reparacion-de-carril/SKILL.md` | **Es también el SKILL DE FIXABLES (§4 bis, v1.2): una pieza que Sam devolvió con `fixable:` se corrige con él** — motivo separado en texto e imagen, fuente corregida antes que la pieza, directriz por pieza en cola de a una, revisión visual antes de volver a la bandeja. **Llega un aviso de un carril —Telegram, `content-approval@`, un informe— y hay que averiguar qué falló y arreglarlo.** MÉTODO sin estado: las cinco fases del diagnóstico, **once** clases de defecto con su forma de confirmarse, la técnica de fallo controlado, **las dos mitades del carril —base y crons externos—**, **las dos puertas de entrada —canal de alertas y bandeja de aprobación, que no se trabajan igual—**, y la **tabla de remediación por código de fallo**. Pensado para **abrir sesión nueva y cargarlo solo**. **No opera el carril** —eso es `publicacion-operativa`, que invoca en F2— ni produce texto | UNRLVL infra — transversal a todos los carriles |
 | `voice-craft` | `skills/voice-craft/SKILL.md` | **CAPA PRIMARIA — siempre que se calibre o genere CUALQUIER voz.** Oficio comunicacional transversal: arsenal operado, artefacto de destino, ejemplo-como-mecanismo, capas PSY/AIFE/Watcher declaradas, reparto genoma↔angle, triage técnica/intención | Multimarca — toda voz |
 | `comm-arsenal` | `skills/comm-arsenal/SKILL.md` | **SE CARGA JUNTO CON `voice-craft`** — es el arsenal que `voice-craft` §2 exige operar. Cuerpo de técnicas de comunicación oral y escrita: estructuras persuasivas, niveles de conciencia, aperturas por canal, prueba/objeción/contraste/analogía/especificidad/reencuadre, tipología de cierres, ritmo micro, ejecución escrita vs oral, anti-patrones | Multimarca — toda redacción y todo guion |
@@ -43,6 +44,19 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.16
+
+**Cambios respecto a v1.15:**
+
+- **`sesion-de-fixables` v1.0 — ALTA.** Skill nuevo, capa **MÉTODO**, destino **CARGABLE**, con
+  **disparador explícito**: se convoca sólo cuando Sam abre con «sesión de fixables» (Sam,
+  2026-09-29: «todo lo que tú has estado haciendo en esta sesión debería ser trasladado a un skill…
+  se convocará solo cuando yo empiece diciendo "sesión de fixables"»). Recoge el método de la
+  sesión del 2026-09-28/29 y su catálogo de motivos. La §4 bis de `reparacion-de-carril` queda como
+  resumen y apunta aquí.
 
 ---
 
