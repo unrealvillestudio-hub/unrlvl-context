@@ -1,7 +1,7 @@
 ---
 name: reparacion-de-carril
-version: 1.1
-fecha: 2026-09-25
+version: 1.2
+fecha: 2026-09-29
 capa: MÉTODO
 destino: CARGABLE
 audiencia: UNRLVL infra — transversal a todos los carriles y todas las marcas
@@ -601,6 +601,83 @@ para explicar que ese WARN era de diseño.
 > **Al añadir una clase nueva a este catálogo, escribe las cinco líneas: síntoma, raíz,
 > cómo se confirma, cómo se corrige y qué costó.** Una entrada sin «cómo se confirma» es
 > una anécdota.
+
+---
+
+## §4 bis — FIXABLES: CÓMO SE CORRIGE UNA PIEZA QUE SAM DEVOLVIÓ (añadido 2026-09-29, v1.2)
+
+> **Método, no estado.** Nace de la sesión del 2026-09-28/29, en la que se corrigieron una
+> veintena de piezas NSCF devueltas con nota `fixable:`. Aquí van las consultas y el orden; los
+> identificadores de piezas son ejemplos de dónde salió cada regla, no trabajo pendiente.
+
+**Se aplica cuando** una pieza está en `challenged` con `challenged_reason` que empieza por
+`fixable:` (Sam rechazó con nota: la corrección es mecánica y la pieza vuelve — ver
+`publicacion-operativa` §C.7). **Sin esa nota es descarte y no se toca.**
+
+### Paso 1 — Leer el motivo y separarlo en TEXTO e IMAGEN
+
+```sql
+select id, platform, status, challenged_reason,
+       assets->'copy'->>'title'       as titulo,
+       assets->'copy'->>'image_hook'  as texto_de_imagen,
+       assets->'image'->>'url'        as imagen,
+       assets->'image'->'overlay'->>'text_source' as fuente_del_texto_de_imagen
+from content.content_pieces
+where status = 'challenged' and challenged_reason ilike 'fixable%'
+order by created_at desc;
+```
+
+**Una pasada de imagen no resuelve un motivo de texto** (Professor `8e24f4b7`). Cada motivo se
+clasifica antes de actuar:
+
+| Motivo | Dónde se corrige | Cómo |
+|---|---|---|
+| El texto sobre la imagen repite el título | dato del canal + la pieza | `brand_publish_channels.image_title_mode = 'dialogue'`; `copy.image_hook` que **responde** al título; recompose **sin** regenerar imagen |
+| Voz, promesa sin cumplir, hashtag, mecanismo del producto | texto de la pieza (+ genoma si se repite) | edición registrada en `intel.piece_edits` (`edited_by 'cc:fixable'`) |
+| La persona no se parece, sale pegada o con edad equivocada | dato de la persona | `person_blueprints.reference_photos` = **recortes de cara**, nunca fotos completas; `imagelab_description` escrita mirando sus fotos, cabello incluido |
+| Producto grande, sin etiqueta, imposible de sostener | directriz de la pieza o corrector | tamaño en `product_blueprints.physical_size`; la etiqueta se **pega**, no se pide (Professor `75331271`) |
+| Franja negra o blanca, foto pegada en vertical | directriz de la pieza | «una sola fotografía que llena todo el cuadro de borde a borde» |
+
+### Paso 2 — Si el motivo se repetirá, se corrige la FUENTE antes que la pieza
+
+Una corrección de Sam que vale para la próxima pieza se vuelve **dato** (persona, producto, genoma,
+canal) o **cláusula del motor**, y se fija en migración. Corregir sólo la pieza deja el defecto
+vivo para la siguiente. Test de la marca N+1 antes de escribir.
+
+### Paso 3 — Directriz por pieza y cola de a una
+
+La corrección de imagen se lanza con `action:'recompose'` y una `visual_directive` escrita para esa
+pieza. **De a una**: el proveedor de imagen devuelve 429 en paralelo, y un 429 en una tanda deja
+piezas sin imagen. Patrón usado: una tabla temporal con `piece_id`, `orden`, `directiva`, `estado`,
+una función que cierra la lanzada anterior y lanza la siguiente, y un cron cada 2 minutos. **Se
+borra al terminar** (`cron.unschedule`).
+
+```sql
+-- Sólo texto de imagen: se conserva la imagen limpia y se recompone encima
+select intel.trigger_iid_agent('content-run-stage', jsonb_build_object(
+  'action','recompose','piece_id', :piece_id, 'regenerate_image', false,
+  'edit_reason', :motivo, 'edited_by','cc:fixable'));
+```
+
+### Paso 4 — Revisión visual ANTES de devolver a la bandeja
+
+**Nada vuelve a `awaiting_approval` sin que CC haya mirado la imagen compuesta.** Se descarga
+`assets.image.url`, se mira, y se compara con el motivo de Sam punto por punto. Si falla, vuelve a
+la cola con una directriz corregida; si falla dos veces por la misma causa, se para la cola y se
+busca la causa en la fuente (paso 2).
+
+```sql
+update content.content_pieces set status = 'awaiting_approval'
+ where id = :piece_id and status = 'challenged';   -- sólo tras la revisión visual
+```
+
+### Paso 5 — Registrar
+
+Cada corrección que se volvió regla va a Professor como learning; cada migración, a
+`MIGRACIONES_CONGELADAS.md`; y el cierre, al `session_log` de la marca.
+
+**VERIFICA:** la pieza en `awaiting_approval` con la imagen revisada, el motivo de Sam resuelto
+punto por punto, y la fuente corregida si el motivo se iba a repetir.
 
 ---
 

@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-27-v2",
+    "version": "2026-09-29-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-27-v1",
+    "previous": "2026-09-27-v2",
     "previous_chain": [
+      "2026-09-27-v2",
       "2026-09-27-v1",
       "2026-09-26-v3",
       "2026-09-26-v2",
@@ -204,7 +205,16 @@
     "_actualiza_2026-09-23-v1": "Version de SESION NUEVA, no de correccion: el last_session anterior (2026-09-19, ya desplazado por las sesiones del 21 y 22, que no tocaron este archivo) se archiva INTEGRO bajo _last_session_archivo_2026-09-23-v1 sin reescribir su texto, y previous_sessions NO se toca — mismo criterio que _last_session_archivo_2026-09-10-v1 y _actualiza_2026-09-17-v1. NODOS QUE CAMBIAN EN EL JSON, Y NADA MAS: (a) _meta — version, previous, previous_chain, last_session archivado y sustituido, y esta misma clave; (b) supabase.main.schemas.alerting.functions — de 11 a 13, y la entrada de watchdog_snapshot amplia su descripcion; (c) supabase.main.schemas.alerting.tables_list — la entrada de watchdog_heartbeat dice ahora QUIEN la escribe, y la de cron_run_rollup gana la purga; (d) supabase.main.schemas.alerting.migraciones — de 5 a 6 pines; (e) alerting_channel.crons — alta de alerting-purga-historial-cron-daily; (f) alerting_channel.vigilante_externo — el beat va antes de la foto; (g) alerting_channel._actualiza_2026-09-23 — clave nueva con el diagnostico completo del 503; (h) iid_subsystem._techo_de_caracteres_y_cuota_de_imagen_2026-09-23 — clave nueva. NOTA SOBRE _meta.version: quedo en 2026-09-21-v1 mientras AGENDA.md llego a v2026-09-22-v1, porque la sesion del 22 fue una correccion dentro del bloque del 21 y no toco este archivo. No se retoca hacia atras: se hace constar y se sigue.",
     "_nota_titulo_pr_116": "LOS DOS CONTADORES DE VERSION SON INDEPENDIENTES Y NO ESTAN DESALINEADOS POR ERROR. AGENDA.md va una por delante de este archivo desde el 2026-09-26: el PR #114 subio AGENDA a v2026-09-26-v1 SIN TOCAR ecosystem.json [medido: git show 431e4a5 --stat no lo lista], asi que el titulo de cada commit —que cita la version de AGENDA— queda uno por encima del _meta.version que ese mismo commit escribe. Por eso #116 se titula «ctx 2026-09-26-v3» y el diff de este archivo sube v1 -> v2 [medido: git show 6947b4c -- ecosystem.json]. Se anota porque la coincidencia de nombres invita a leer un error donde no lo hay, y porque la inferencia contraria —«el titulo esta mal»— fue la primera lectura de CC en esta pasada y era falsa. Esta version es 2026-09-26-v3 de ecosystem.json y v2026-09-26-v4 de AGENDA.",
     "_actualiza_2026-09-27-v1": "Version de SESION. Nodos que cambian: security.SEC-05 (+_ampliacion_2026-09-27), security._barrido_2026-09-26 (+_correccion_2026-09-27_hallazgo_estructural, aditiva: el texto original queda), security._barrido_2026-09-27 (nodo nuevo). Ningun nodo se borra ni se reescribe.",
-    "_sesion_2026-09-27-v2": "NSCF: la imagen deja de inventar. 35 PR mergeados entre el 2026-09-24 y el 2026-09-28 [medido por GitHub, is:merged]: unrlvl-iid-functions #228 #230 #232 #233 #234 #236 #238 #239 #242 #244 #245 #251 #252 #253 #255 #256 #257 #258 #259; ImageLab #18 #19 #20 #21 #22; BluePrints #5 #6 #7 #8 #9 #10; CopyLab #42; Orchestrator #53 #54; unrlvl-context #115 #118. Nodos que cambian: supabase.main.tablas_nuevas_2026-09-27, labs.imagelab._imagen_con_blueprints_2026-09-27, iid_subsystem._imagen_con_blueprints_2026-09-27, brands[NeuroneSCF]._sesion_2026-09-27. Todo lo demas, intacto."
+    "_sesion_2026-09-27-v2": "NSCF: la imagen deja de inventar. 35 PR mergeados entre el 2026-09-24 y el 2026-09-28 [medido por GitHub, is:merged]: unrlvl-iid-functions #228 #230 #232 #233 #234 #236 #238 #239 #242 #244 #245 #251 #252 #253 #255 #256 #257 #258 #259; ImageLab #18 #19 #20 #21 #22; BluePrints #5 #6 #7 #8 #9 #10; CopyLab #42; Orchestrator #53 #54; unrlvl-context #115 #118. Nodos que cambian: supabase.main.tablas_nuevas_2026-09-27, labs.imagelab._imagen_con_blueprints_2026-09-27, iid_subsystem._imagen_con_blueprints_2026-09-27, brands[NeuroneSCF]._sesion_2026-09-27. Todo lo demas, intacto.",
+    "_sesion_2026-09-29-v1": {
+      "date": "2026-09-29",
+      "conducted_by": "Sam x CC. Sesión de código, migración, datos y corrección de piezas del 2026-09-28 al 2026-09-29.",
+      "prs_mergeados": "unrlvl-iid-functions #260–#266 · ImageLab #23–#29 [medido por GitHub]",
+      "pr_abierto": "unrlvl-iid-functions #267 (regulador de entrada, blogs en diálogo, cabello de Patricia)",
+      "professor": "14 filas de la sesión con approved_by_sam [medido]; be834ee8 marcado ⛔ refutado y corregido por 2494af45.",
+      "brief_de_continuacion": "docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md",
+      "skill": "skills/reparacion-de-carril v1.2 — §4 bis FIXABLES (el skill de fixables)."
+    }
   },
   "studio": {
     "name": "Unrealville Studio",
@@ -369,7 +379,8 @@
         "texto": "Nanotribologia siempre con mayuscula y en una palabra (#115, #252): 20 piezas no publicadas corregidas. Voseo retirado de 14 piezas no publicadas. Ninguna pieza sobre el tope de su canal [medido 2026-09-28].",
         "publicacion_48h": "Cadencia base 1 por semana por red; Sam pidio 3-4 por plataforma en 48 h: 11 franjas creadas o movidas (FB 4, IG 4, blog 2 en Shopify, TikTok 2 manuales) [medido].",
         "pendiente": "PR de raiz: voseo en CopyLab, estado tras readapt, origen de scheduled_for viejos (confirmado por Sam para el 2026-09-28). TikTok manual con Sam el 2026-09-28."
-      }
+      },
+      "_sesion_2026-09-29": "Patricia: recortes de cara como referencia (#266) y cabello exacto (#267); voz nscf_conversion con mecanismo del producto y promesa cumplida (#265); texto de imagen en diálogo; una veintena de piezas corregidas y revisadas visualmente; blog −7 producido; 6bb3ebc0 espera el corrector de producto. Detalle en brands/NeuroneSCF/session_log.md 2026-09-29."
     },
     {
       "id": "DiamondDetails",
@@ -626,7 +637,8 @@
       "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ForumPHs DEJA DE SER LA UNICA MARCA DEL CARRIL: sigue con rollout_started_at 2026-08-22 (primera del ecosistema) y hoy entran UnrealvilleStudio, LucienSael y NeuroneSCF. ADICIONES DEL DIA EN ESTA MARCA: el angulo objecion entra en los 11 DOMINIOS DE CONVERSION (verificado: son exactamente 11; los once ya llevaban expertise/artefacto/pregunta/consecuencia del 25-ago, objecion SE SUMA y quedan con 5). NO entra en los editoriales: es angulo de venta y la definition del catalogo lo dice. theme «Amatista Carbon» y fonts_href pasan a DATO DEL CANAL en brand_publish_channels.config del canal blog_forumphs — Cinzel es utility y no tiene token propio en el renderizador, asi que VIAJA EN fonts_href para estar disponible. Ruta VERIFICADA contra forumphs.com el 2026-08-26: rotulo «Sin tecnicismos», ruta /blog, desacoplados a proposito. linkedin pasa a INACTIVO por decision de Sam del 2026-08-26 (fuera para TODAS las marcas hasta segunda orden). LO QUE ESTA MARCA LE PRESTA AL RESTO: PUB-01 cerrado (content-scheduler v6) es lo que faltaba del hito del 22-ago; y BLOG-01 PR-2 SACA EL RENDERIZADOR de forumphs-com al repo nuevo unrlvl-blog, con blog_path como dato — lo que era codigo de una marca pasa a ser eje del ecosistema y la instancia queda en el dato. Test de la marca N+1: lo pasa por construccion. Detalle en brands/ForumPHs/session_log.md (2026-08-26).",
       "publish_timezone": "America/Panama",
       "_publish_timezone_nota": "Sembrado 2026-09-06 [medido]. Nombre IANA, NUNCA desfase: el CHECK brands_publish_timezone_es_iana rechaza -05:00, +04:00, UTC-5 y Etc/GMT+-N. America/Panama no cambia la hora; America/New_York si. 12 de 16 marcas siguen sin huso y es correcto: se siembra cuando la marca entra al calendario.",
-      "_update_2026-09-08": "Ruta /bim/[token] en produccion sobre el sitio de la marca (repo forumphs-com, PR #8 y #9 mergeados). Sirve material comercial confidencial con caducidad, revocacion y registro de apertura. El MECANISMO es eje y vive en api/_collateral.js, que no conoce ninguna marca; /bim es la direccion que ESTE sitio publica y vive en api/bim.js, que si es artefacto de una marca. Otra marca monta el mismo modulo bajo la direccion que quiera, con su BRAND_ID, y sus filas apuntan a su carpeta del bucket collateral: cero cambios de esquema y cero codigo tocado. El documento servido no genera ninguna conexion a terceros — Chart.js y tipografias interiorizadas en el propio proyecto. Detalle operativo: forumphs-com → docs/COLLATERAL_LINKS.md."
+      "_update_2026-09-08": "Ruta /bim/[token] en produccion sobre el sitio de la marca (repo forumphs-com, PR #8 y #9 mergeados). Sirve material comercial confidencial con caducidad, revocacion y registro de apertura. El MECANISMO es eje y vive en api/_collateral.js, que no conoce ninguna marca; /bim es la direccion que ESTE sitio publica y vive en api/bim.js, que si es artefacto de una marca. Otra marca monta el mismo modulo bajo la direccion que quiera, con su BRAND_ID, y sus filas apuntan a su carpeta del bucket collateral: cero cambios de esquema y cero codigo tocado. El documento servido no genera ninguna conexion a terceros — Chart.js y tipografias interiorizadas en el propio proyecto. Detalle operativo: forumphs-com → docs/COLLATERAL_LINKS.md.",
+      "_sesion_2026-09-29": "6 agentes nuevos semanales (crons 122–133); primera corrida con 8 hallazgos y 1 sobre el umbral de 70; umbral en 60 pendiente de decisión de Sam. Detalle en brands/ForumPHs/session_log.md 2026-09-29."
     },
     {
       "id": "SamPublisher",
@@ -769,7 +781,8 @@
         "referencias": "Fotos adjuntas nombradas por posicion: imagen actual (si se edita), persona (2 si hay otras referencias, si no 3), locacion (1), producto (2). REFERENCE_PHOTOS_CLAUSE prohibe collage.",
         "clausulas_del_motor": "NO_TEXT, DISTINCT_SUBJECTS, SINGLE_FRAME, SUBJECT_FRAMING (solo al generar desde cero: poco aire sobre el sujeto, la persona manda sobre el lugar), PERSONA_EXPRESSION (el gesto sigue el tono del gancho). Ninguna nombra marca.",
         "compositor": "compose.ts v1.2.0: pega el producto solo con product.mode='composite'; si no, marca PRODUCT_IN_SCENE."
-      }
+      },
+      "_sesion_2026-09-29": "ImageLab #23–#29: zona de texto libre, luz por capas, persona con identidad sin vestuario, producto al lado contrario del texto y con ángulo, mirada con destino, sin franjas. Tope de imágenes (lab_configs.image_calls_max) 100 → 180 hasta el 2026-10-03: el tope es nuestro, no de Vertex."
     },
     "sociallab": {
       "url": "social-lab-flame.vercel.app",
@@ -2260,6 +2273,15 @@
     "_dry_run_2026-09-12": "16 canales: 14 SUPPLY_ABSENT y 2 HOLD con codigo COVERAGE_SUFFICIENT. Cero liberadas, cero aparcadas, deficit total 75,2. Encenderlo NO cambia produccion hoy: solo escribe su bitacora, y esa serie es la que hara falta para saber si el sistema arranca. [medido en intel.carril_regulation_log]",
     "_por_que_la_alarma_sigue_apagada": "Con 14 de 16 canales en SUPPLY_ABSENT, la alarma enviaria un correo diario repitiendo una condicion ya conocida y documentada, y lo primero que ensenaria es a ignorarla. BRIEF-06 dice que la alarma existe contra la degradacion SILENCIOSA; esta degradacion no es silenciosa: esta medida y tiene encargo abierto. CONDICION PARA ENCENDERLA, ESCRITA POR ADELANTADO: cuando SUPPLY_ABSENT baje de 14 a 4 o menos. Decision de Claude.ai autorizada por Sam el 2026-09-12; Sam la revierte cuando quiera.",
     "_cadencia_manda": "intel.brand_cadence es la fuente que manda. brand_topics.cadence queda LEGACY por comentario de columna desde el 2026-09-11 y NO se borra hasta medir que ningun consumidor la lea. intel.brand_publish_policies dice CUANDO se publica, no CUANTAS piezas.",
-    "_abierto": "Nada reconcilia intel.iid_agents.run_frequency con cron.job. El 2026-09-12 se alinearon a mano los 12 crons de UnrealvilleStudio; la proxima divergencia no la detecta nadie."
+    "_abierto": "Nada reconcilia intel.iid_agents.run_frequency con cron.job. El 2026-09-12 se alinearon a mano los 12 crons de UnrealvilleStudio; la proxima divergencia no la detecta nadie.",
+    "_entrada_2026-09-29": {
+      "_decision": "Sam 2026-09-29: «Regulador de entrada = cadencia + 3». La cadencia fija las franjas; las políticas de publicación sólo dicen cuándo publica SocialLab; el margen (3) cubre los descartes.",
+      "vista": "intel.v_carril_entrada — cupo = franjas futuras sin pieza + margen − piezas en camino (incluye fixable) − en producción (6 h). Aplicada [medido].",
+      "margen": "3 en todos los canales activos; filas nuevas para los tres linkedin [medido].",
+      "consumidor": "content-dispatcher v2.6 (#267) — sólo despacha con cupo > 0; lee hasta 50 candidatas y despacha hasta 5; falla alto si la vista no se lee. SIN DESPLEGAR al cierre.",
+      "medicion_al_aplicar": "con cupo: ForumPHs meta_fb 4, meta_ig 6, blog_forumphs 2; LucienSael x 1. El resto en 0 [medido 2026-09-29].",
+      "techo_25_por_marca": "DESCARTADO por Sam el 2026-09-29. Estaba en AGENDA (BRIEF-06) como «ya decidido por Sam» desde el Actualiza del 2026-09-06; no era decisión de Sam y no existía en el código.",
+      "crons_pausados": "22 crons de research y process de UnrealvilleStudio y LucienSael, pausados el 2026-09-29 a pedido de Sam hasta que el regulador funcione. Reactivar es decisión de Sam."
+    }
   }
 }

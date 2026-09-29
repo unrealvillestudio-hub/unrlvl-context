@@ -1,5 +1,62 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-09-29 (las correcciones de Sam se vuelven regla: Patricia desde su cara y con su cabello, el producto con su mecanismo, el texto de imagen responde al título; una veintena de piezas corregidas y revisadas; blog -7 producido) · base previa: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-09-29 — Las correcciones de Sam se vuelven regla
+
+> **Entrada de CC.** Sesión del 2026-09-28 al 2026-09-29. PR mergeados [`medido` por GitHub]:
+> `unrlvl-iid-functions` #260–#266 · `ImageLab` #23–#29. Pendiente de merge: `unrlvl-iid-functions`
+> #267. El detalle del carril está en `IID/session_log.md` 2026-09-29.
+
+### 1 · Patricia
+- **Referencias:** el 2026-09-28 se cambiaron sus recortes de cara por fotos completas, y el
+  generador empezó a **pegar la foto del blueprint** en la escena y a **envejecerla** (5 piezas
+  devueltas por Sam). Revertido a **recortes de cara sonriendo** (#266). Professor `be834ee8`
+  marcado como refutado y corregido por `2494af45`.
+- **Cabello:** su descripción decía «shoulder-length straight» y salía con el cabello corto y
+  partido al medio. Sam: «su cabello es una de sus herramientas de venta». Ahora: largo hasta la
+  mitad del pecho, capas largas, raya muy al costado, castaño con balayage caramelo y miel; nunca
+  corto ni partido al medio (#267, aplicado en la base).
+- **Gesto y mirada:** nunca seria; como mínimo, satisfacción; la mirada va a la cámara, a la clienta
+  o al producto, nunca perdida (#265, ImageLab #29).
+- **Ropa:** catálogo por ambiente; las fotos definen identidad, no vestuario (#263, ImageLab #26).
+
+### 2 · Producto
+- Del lado contrario al texto, con un ángulo de 15 a 25 grados y la etiqueta legible (ImageLab #29);
+  kits en un estante a la altura del hombro (ImageLab #28).
+- **Dyfensor Serum** vuelve a 9,5 cm: se veía un 40 % más grande (#265).
+- **a9ba1afa:** la etiqueta real se **pegó** sobre el frasco en lugar de pedirla al generador, y se
+  publicó en IG el 28 a las 13:15 (Nueva York) en reemplazo de la de las 13:00 (Professor `75331271`).
+- Lo que sostiene Patricia tiene que ser físicamente posible: un producto en la mano, el resto del
+  kit sobre una superficie (861681cd).
+
+### 3 · Texto
+- Voz `nscf_conversion`: el producto se explica con su **mecanismo** («gracias a qué» → beneficio
+  «ahora»), una **promesa de explicación se cumple** en la misma pieza, y hashtag de marca `#Neurone`
+  sin variantes ni competidores (#265).
+- **El texto sobre la imagen responde al título, no lo repite** (HR de Sam): los blogs pasan a modo
+  diálogo y se escribió el texto de imagen de 7 blogs (#267, aplicado en la base).
+
+### 4 · Piezas
+- **Corregidas y revisadas visualmente por CC antes de volver a la bandeja** [`medido`]: 83b65e2f,
+  5fcdc19d, 685d5275, 7c4c7240, 844f834a, 861681cd, a719763b, fe6730dd, bea0754e, 2481d652, 1f81a727.
+- **Aprobadas por Sam** [`reportado` por Sam]: 6a1d466a, 398c80b5 y 6110a5a7 (esta última con el
+  producto aún algo grande).
+- **Blog −7** producido: a719763b, fe6730dd, bea0754e, 2481d652, 861681cd, 1f81a727 y 6be0fe81
+  (esta, sin imagen por un 429 de Vertex, en la cola de corrección al cierre).
+- **6bb3ebc0** sigue en fixable: el frasco sale sin etiqueta en 2 intentos; espera el corrector de
+  producto.
+
+### 5 · Volumen
+- La producción de NSCF supera sus franjas hasta el 31 de octubre en FB, IG y TikTok [`medido` el
+  2026-09-28]. Con el **regulador de entrada** (cadencia + 3, #267) la marca no produce más hasta que
+  su cupo lo permita: al aplicarlo, **cupo 0** en los cuatro canales [`medido`].
+
+### Pendiente
+- Corrector de producto (6110a5a7 tamaño, 6bb3ebc0 etiqueta) — plan antes que código.
+- Modelo de referencia vertical 9:16 de Patricia (sesión de ImageLab).
+- Brief de continuación: `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.
 
 ---
 
