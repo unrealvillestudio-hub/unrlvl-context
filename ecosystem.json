@@ -224,6 +224,7 @@
       "operacion": "8 carruseles del 29 con 6 imágenes distintas, revisados lámina por lámina; 6d24a1cd publicado a las 12:00 NY como CAROUSEL de 6 [medido]. Tokens CAROUSEL con velo degradado (anterior en _previous), decisión de Sam pendiente.",
       "umbral": "intel.brand_topics.min_content_score por suscripción (#268); ForumPHs en 60.",
       "professor": "Learnings de la sesión listados en brands/NeuroneSCF/session_log.md 2026-09-29 (v2), con approved_by_sam=false hasta la aprobación de Sam.",
+      "professor_aprobacion_2026-09-29": "7 learnings aprobados por Sam el 2026-09-29 (ids en brands/NeuroneSCF/session_log.md 2026-09-29 (v2)); 4 sembrados por el proxy api/professor con Vercel:web_fetch_vercel_url. Sustituye como estado vigente a la clave professor, que queda como registro del momento del Actualiza.",
       "brief_de_continuacion": "docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md — versión 2 al tope; la versión 1 bajo guard ⛔ NO OPERATIVO."
     }
   },
