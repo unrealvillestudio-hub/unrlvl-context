@@ -1,5 +1,64 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-09-29 (las correcciones de Sam se vuelven regla: Patricia desde su cara y con su cabello, el producto con su mecanismo, el texto de imagen responde al título; una veintena de piezas corregidas y revisadas; blog -7 producido) · base previa: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-09-29 v2 (el carrusel con una imagen propia por lámina: 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY; 77 textos de imagen que responden al título; 7 learnings a la espera de Sam) · base previa: 2026-09-29 (las correcciones de Sam se vuelven regla: Patricia desde su cara y con su cabello, el producto con su mecanismo, el texto de imagen responde al título; una veintena de piezas corregidas y revisadas; blog -7 producido) · base previa: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-09-29 (v2) — El carrusel: una imagen propia por lámina
+
+> **Entrada de CC.** Segunda mitad de la sesión del 2026-09-29. **No reescribe la entrada
+> `2026-09-29` de abajo**, que queda íntegra. PR mergeados [`medido` por GitHub; despliegue
+> `reportado` por Sam]: `unrlvl-iid-functions` #267, #268, #269 y #270 · `SocialLab` #6 ·
+> `unrlvl-meta-mcp` #5 · `unrlvl-context` #121 y #122.
+
+### 1 · Carrusel en todas las marcas y plataformas que lo admiten
+- **Decisión de Sam:** «carrousel para todas las marcas y plataformas que lo permitan», con 5–7
+  láminas. Hoy manual; «para mañana … el carril ampliado a los distintos formatos».
+- **Construido:**
+  - La pieza guarda N láminas en `assets.carousel`, con `format = 'carousel'` (#269).
+  - `content-scheduler` las pasa a `scheduled_posts.media_type` / `media_urls`.
+  - SocialLab publica el carrusel en IG y en FB (#6), y el MCP de Meta tiene `fb_publish_photos` (#5).
+- **Imagen por lámina.** Sam: «las láminas cambian el texto, pero no deberían también cambiar la
+  imagen… Necesitamos que ImageLab cumpla». Hasta entonces, las láminas 2–6 se componían sobre la
+  misma escena. Nueva acción `carousel_slide` (#270): cada lámina genera su escena, con solo su texto
+  y su directriz.
+- **Hoy, 8 carruseles** (NSCF 4, ForumPHs 2, UVS 2), cada uno con 6 imágenes distintas y revisados
+  lámina por lámina. **6d24a1cd publicado a las 12:00 NY** como `CAROUSEL` de 6
+  (post `122130867860735330`) [`medido`].
+
+### 2 · Por qué 4 carruseles NSCF salieron sin Patricia y con producto genérico
+- Se generaron del 11 al 16 de septiembre, antes del motor de persona y producto real
+  (`persona_used = null`) [`medido`].
+- Se regeneraron con Patricia y el producto real antes de componerse.
+- **Pendiente:** detectar las piezas aprobadas con el motor viejo antes de que se publiquen.
+
+### 3 · Texto sobre la imagen
+- **77 piezas** en modo eco recibieron un texto de imagen que responde al título y se recompusieron
+  [`medido`].
+- 10 no tenían ya imagen limpia; las 3 de Lucien volvieron a la cola.
+- Voseo «Pedile» corregido en f89f768b.
+- Cierre de 6d24a1cd sin alusión al dinero: «Que tu color dure lo que debe».
+
+### 4 · Learnings de la sesión (Professor; `approved_by_sam = false` hasta que Sam los apruebe)
+1. **Un carrusel no es una imagen con cinco textos:** cada lámina lleva su imagen (portada;
+   desarrollo sin rostro; bodegón del producto real; objeto o lugar del dato; cierre con la persona
+   a cámara).
+2. **`recompose` acumula las directrices de la pieza y el constructor elige entre ellas.** Se pidió
+   «borde de piscina, sin personas» y el `prompt_full` salió como el retrato de cierre anterior
+   [`medido`]. #270 lo evita en las láminas; en `recompose` sigue igual.
+3. **La persona y el producto entran por mención en el copy completo.** Si el copy nombra a Patricia
+   y a un producto, aparecen aunque la lámina pida «sin personas» [`medido`].
+4. **Un kit en escena con persona viaja como foto de grupo** y el modelo lo pinta entero en la mano.
+   Nombrar un componente lo resuelve (cf57fe53). Ya estaba en Professor, aprobado (`53de3cd5`).
+5. **«Espacio limpio a la izquierda» se pinta literal**, como una franja blanca (da5fe472). Hay que
+   pedir «una sola fotografía de borde a borde».
+6. **Gemini bloquea por SAFETY escenas inocuas** (carpetas, escritorio) cuando el copy de la pieza
+   habla de denuncias o de exposición legal. 4 bloqueos en babcc7de y 021dc019. **Deducido:** lo
+   dispara el copy completo, no la escena.
+7. **Para retener una franja sin moverla:** `last_drain_check_at = now()`; el drain la salta durante
+   su backoff. Se libera con `null`.
+
+### Pendiente
+- Brief de continuación, versión 2: `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.
 
 ---
 

@@ -1,5 +1,20 @@
 # ForumPHs — Session Log
 
+## 2026-09-29 (v2) — Umbral en 60 y dos carruseles con imagen propia por lámina
+
+> **Entrada de CC.** No reescribe la entrada de abajo.
+
+- **Umbral de hallazgos en 60**, por decisión de Sam, como dato por suscripción
+  (`brand_topics.min_content_score`, #268).
+- **Carruseles del 29:**
+  - **3735b1da** (FB, 13:30 NY): revisado y con la franja liberada.
+  - **babcc7de** (IG, 20:00 NY): en cierre; su lámina 6 se genera con `carousel_slide`.
+  - **Escenas:** asamblea, registro, conteo, depósitos, lobby, expedientes y torre.
+  - **Nota:** 4 bloqueos SAFETY de Gemini en escenas inocuas. **Deducido:** los dispara el copy
+    legal completo que `recompose` envía al constructor.
+
+---
+
 ## 2026-09-29 — Seis agentes nuevos para llenar octubre, y el umbral queda en manos de Sam
 
 > **Entrada de CC.** Pedido de Sam (2026-09-28/29): ForumPHs no tenía producción; ampliar la

@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-29-v1",
+    "version": "2026-09-29-v2",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-27-v2",
+    "previous": "2026-09-29-v1",
     "previous_chain": [
+      "2026-09-29-v1",
       "2026-09-27-v2",
       "2026-09-27-v1",
       "2026-09-26-v3",
@@ -214,6 +215,16 @@
       "professor": "14 filas de la sesión con approved_by_sam [medido]; be834ee8 marcado ⛔ refutado y corregido por 2494af45.",
       "brief_de_continuacion": "docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md",
       "skill": "skills/reparacion-de-carril v1.2 — §4 bis FIXABLES (el skill de fixables)."
+    },
+    "_sesion_2026-09-29-v2": {
+      "date": "2026-09-29",
+      "conducted_by": "Sam x CC. Segunda mitad de la sesión del 2026-09-29: carrusel de extremo a extremo e imagen propia por lámina.",
+      "prs_mergeados": "unrlvl-iid-functions #267 #268 #269 #270 · SocialLab #6 · unrlvl-meta-mcp #5 · unrlvl-context #121 #122 [medido por GitHub; despliegue de EF reportado por Sam]",
+      "carrusel": "La pieza guarda N láminas en assets.carousel (format='carousel'); content-scheduler las pasa a scheduled_posts.media_type/media_urls; SocialLab publica en IG (contenedores hijos) y FB (fb_publish_photos). Acción carousel_slide (#270): cada lámina genera su escena con solo su texto y su directriz, sin heredar directrices, persona ni producto de la portada.",
+      "operacion": "8 carruseles del 29 con 6 imágenes distintas, revisados lámina por lámina; 6d24a1cd publicado a las 12:00 NY como CAROUSEL de 6 [medido]. Tokens CAROUSEL con velo degradado (anterior en _previous), decisión de Sam pendiente.",
+      "umbral": "intel.brand_topics.min_content_score por suscripción (#268); ForumPHs en 60.",
+      "professor": "Learnings de la sesión listados en brands/NeuroneSCF/session_log.md 2026-09-29 (v2), con approved_by_sam=false hasta la aprobación de Sam.",
+      "brief_de_continuacion": "docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md — versión 2 al tope; la versión 1 bajo guard ⛔ NO OPERATIVO."
     }
   },
   "studio": {
@@ -380,7 +391,8 @@
         "publicacion_48h": "Cadencia base 1 por semana por red; Sam pidio 3-4 por plataforma en 48 h: 11 franjas creadas o movidas (FB 4, IG 4, blog 2 en Shopify, TikTok 2 manuales) [medido].",
         "pendiente": "PR de raiz: voseo en CopyLab, estado tras readapt, origen de scheduled_for viejos (confirmado por Sam para el 2026-09-28). TikTok manual con Sam el 2026-09-28."
       },
-      "_sesion_2026-09-29": "Patricia: recortes de cara como referencia (#266) y cabello exacto (#267); voz nscf_conversion con mecanismo del producto y promesa cumplida (#265); texto de imagen en diálogo; una veintena de piezas corregidas y revisadas visualmente; blog −7 producido; 6bb3ebc0 espera el corrector de producto. Detalle en brands/NeuroneSCF/session_log.md 2026-09-29."
+      "_sesion_2026-09-29": "Patricia: recortes de cara como referencia (#266) y cabello exacto (#267); voz nscf_conversion con mecanismo del producto y promesa cumplida (#265); texto de imagen en diálogo; una veintena de piezas corregidas y revisadas visualmente; blog −7 producido; 6bb3ebc0 espera el corrector de producto. Detalle en brands/NeuroneSCF/session_log.md 2026-09-29.",
+      "_sesion_2026-09-29-v2": "Carrusel con imagen propia por lámina: 4 carruseles NSCF (6d24a1cd publicado a las 12:00 NY [medido], f89f768b, 8e22fbae, cf57fe53), Patricia en la lámina de cierre y bodegón del producto real. 4 carruseles generados del 11 al 16-sep sin persona ni producto real (persona_used=null) regenerados antes de componer. Detalle en brands/NeuroneSCF/session_log.md 2026-09-29 (v2)."
     },
     {
       "id": "DiamondDetails",
@@ -782,7 +794,8 @@
         "clausulas_del_motor": "NO_TEXT, DISTINCT_SUBJECTS, SINGLE_FRAME, SUBJECT_FRAMING (solo al generar desde cero: poco aire sobre el sujeto, la persona manda sobre el lugar), PERSONA_EXPRESSION (el gesto sigue el tono del gancho). Ninguna nombra marca.",
         "compositor": "compose.ts v1.2.0: pega el producto solo con product.mode='composite'; si no, marca PRODUCT_IN_SCENE."
       },
-      "_sesion_2026-09-29": "ImageLab #23–#29: zona de texto libre, luz por capas, persona con identidad sin vestuario, producto al lado contrario del texto y con ángulo, mirada con destino, sin franjas. Tope de imágenes (lab_configs.image_calls_max) 100 → 180 hasta el 2026-10-03: el tope es nuestro, no de Vertex."
+      "_sesion_2026-09-29": "ImageLab #23–#29: zona de texto libre, luz por capas, persona con identidad sin vestuario, producto al lado contrario del texto y con ángulo, mirada con destino, sin franjas. Tope de imágenes (lab_configs.image_calls_max) 100 → 180 hasta el 2026-10-03: el tope es nuestro, no de Vertex.",
+      "_sesion_2026-09-29-v2": "Fiabilidad medida en la pasada de carruseles: cerca de la mitad de las generaciones necesitaron regenerarse; deriva de identidad; kit entero en la mano; producto en la mano pese a la directriz; frasco sin etiqueta; «espacio limpio a la izquierda» pintado como franja blanca; bloqueos SAFETY en escenas inocuas (deducido: por el copy completo que envía recompose). Frente abierto en el brief v2."
     },
     "sociallab": {
       "url": "social-lab-flame.vercel.app",

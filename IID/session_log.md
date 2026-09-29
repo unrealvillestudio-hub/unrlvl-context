@@ -365,6 +365,52 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-29 (v2) · EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-09-29` queda íntegra debajo.
+PR mergeados [`medido` por GitHub; despliegue de EF `reportado` por Sam]: `unrlvl-iid-functions`
+#267 #268 #269 #270 · `SocialLab` #6 · `unrlvl-meta-mcp` #5.)_
+
+### 1 · El formato viaja hasta el publicador
+- **#269:**
+  - `scheduled_posts.media_type` (CHECK: IMAGE / CAROUSEL / REELS / VIDEO / STORY) y `media_urls`.
+  - Filas de tokens `CAROUSEL` por marca.
+  - Acción `carousel` en `content-run-stage`.
+  - `carouselMediaOf` en `content-scheduler`.
+- **SocialLab #6:** IG con contenedores hijos `is_carousel_item`, cada uno esperado hasta `FINISHED`.
+  FB por `fb_publish_photos`.
+- **meta-mcp #5:** `fb_publish_photos`, con 2–10 fotos sin publicar más `attached_media`.
+
+### 2 · Imagen propia por lámina (#270)
+- **Qué fallaba** [`medido` en 6d24a1cd]:
+  - `recompose` acumula las directrices (`directivesOfImage` + `appendDirective`) y el constructor
+    eligió una anterior.
+  - La persona y el producto entraban por mención en el copy completo, aunque la lámina pidiera no
+    llevarlos.
+- **Acción `carousel_slide`:**
+  - Una lámina por invocación.
+  - La escena se construye solo con el texto de la lámina y su directriz. La persona entra si la
+    lámina la nombra; el producto, si la directriz lo nombra, sin defecto de kit.
+  - No toca `assets.image`.
+  - Deja asiento de costo de la generación y del constructor.
+- **Tests:** 131 en verde. Inventarios de llamadas a ImageLab (3) y de asientos sin proveedor (7)
+  actualizados con motivo.
+
+### 3 · Operación del día
+- **Paso temporal, para no esperar al despliegue:** cola `intel.cc_laminas_2026_09_29` con crons 134
+  y 135, lámina a lámina.
+  - Directrices vaciadas antes de cada generación.
+  - Persona de NSCF desactivada solo durante las láminas sin rostro y restaurada al final
+    [`medido`: `active = true`].
+- **Franjas retenidas** con `last_drain_check_at` mientras se regeneraban, y liberadas tras la
+  revisión.
+- **Velo de los tokens `CAROUSEL`:** de sólido al 72 % a degradado inferior; el anterior está en
+  `_previous`. Decisión de Sam pendiente.
+
+### 4 · Umbral por suscripción (#268)
+- `intel.brand_topics.min_content_score` (por defecto 70) y `subscribersForScore()` en el fanout.
+  ForumPHs en 60.
+
 ## 2026-09-29 · EL REGULADOR DE ENTRADA, Y LAS CORRECCIONES DE SAM SE VUELVEN REGLA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior** — la `2026-09-27 (v2)` queda íntegra
