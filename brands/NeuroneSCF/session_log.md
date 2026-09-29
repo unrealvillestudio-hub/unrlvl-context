@@ -39,6 +39,13 @@ _Actualizado: 2026-09-29 v2 (el carrusel con una imagen propia por lámina: 8 ca
 - Cierre de 6d24a1cd sin alusión al dinero: «Que tu color dure lo que debe».
 
 ### 4 · Learnings de la sesión (Professor; `approved_by_sam = false` hasta que Sam los apruebe)
+
+> **Actualización 2026-09-29 (tarde):** los 7 **aprobados por Sam** [`medido`: `approve-learning` → `updated: true`
+> en cada uno]. Ids en Professor: 1 `fa8a0137` · 2 `8af010bc` · 3 `d6283d04` · 4 `53de3cd5` · 5 `6a0899c2` ·
+> 6 `fef0fc90` · 7 `edee1a69`. Los 3, 5, 6 y 7 se sembraron por el proxy `api/professor` (`submit-learning`)
+> con `Vercel:web_fetch_vercel_url`. La lámina 6 de babcc7de, bloqueada 3 veces por SAFETY vía `recompose`,
+> salió al primer intento con `carousel_slide` (#270) [`medido`].
+
 1. **Un carrusel no es una imagen con cinco textos:** cada lámina lleva su imagen (portada;
    desarrollo sin rostro; bodegón del producto real; objeto o lugar del dato; cierre con la persona
    a cámara).
