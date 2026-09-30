@@ -127,7 +127,7 @@ antes de que se publiquen. Hoy aparecieron 4 carruseles NSCF generados del 11 al
   - Referencias: recortes de cara.
   - Cabello exacto.
   - Nunca seria; la mirada siempre tiene destino.
-- **Texto de imagen:** responde al título, nunca lo repite.
+- **Texto de imagen:** abre la tensión y **el título le responde** (`HR-GEN-17`); nunca lo repite. _Corregido 2026-09-30 por Sam: antes decía «responde al título, nunca lo repite», dirección invertida._
 - **Nunca** precios, marcas competidoras ni alusiones al dinero.
 - «Nanotribología», con mayúscula.
 - El diagnóstico con Patricia es gratuito.
