@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-09-30 (v4) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-09-30-v4`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-26-v2`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-26 · v2026-09-26-v2 (**CIERRE DEL 2026-09-26 — EL CRITERIO DE 7 DÍAS DEL KEEPALIVE: 21 DE 21, Y EL FRENTE CIERRA.** Verificación **diferida**, programada el 2026-09-19 cuando el criterio se nombró por adelantado; **no es una sesión nueva**. **21 latidos de 21 posibles** —3 al día por 7 días, **ni uno perdido**— del **2026-09-19 18:11:01** al **2026-09-26 10:11:00**, en **8 fechas**, con FPHS en **`ACTIVE_HEALTHY`** [`medido` a las 12:01 UTC]. **21 de 21 es cero corridas fallidas en una semana**, así que no hizo falta abrir los logs de Vercel. **«Tres peticiones diarias bastan» deja de ser `deducido` y pasa a `medido`** —era la última etiqueta blanda del frente: la documentación dice «a few … each day» **sin dar número**, y el tres se declaró `deducido` **desde el primer día** para no darlo por cierto—. 🟡 **Y la mitad que CC NO puede medir se escribe en vez de callarse:** el criterio tenía **dos** partes —proyecto activo **y** sin correo de aviso— y **CC sólo midió la primera**, porque no lee el buzón de Sam y `MAIL_PRIVACY_RULE` lo impide; esa mitad queda **`reportado` o sin verificar**, y declarar cumplido el conjunto sin la nota habría sido **afirmar sin medir justo la mitad**. Lo que sí sostiene el resultado: **un proyecto pausado no aparece `ACTIVE_HEALTHY`**. **`ecosystem.json` pasa a `2026-09-26-v1`** y sus dos derivados **se SINCRONIZAN en commit separado**; `last_session` **no se toca a propósito** y la nota lo declara. **El frente no deja nada abierto** y entrega **un keepalive de eje** reutilizable por cualquier base en plan gratuito **sin tocar código**. **Barrido de voseo: cero apariciones.** **Amplía el `v2026-09-26-v1` inmediatamente debajo, que cerró otro frente el mismo día; no lo reescribe. La colisión de numeración se resolvió cediendo el `-v1` al que mergeó primero.** **Cabecera anterior íntegra inmediatamente debajo.**)_
+
+---
+
 ## Migración 2026-09-30 — cabecera de AGENDA.md (16 líneas de versión)
 
 > **Regla nueva de Sam (2026-09-30), escrita en `protocols/HRD_PROTOCOL.md` v1.12, paso 10:** la cabecera
