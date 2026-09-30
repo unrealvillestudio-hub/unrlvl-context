@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.29 · 2026-09-30 (**una subsección nueva y ninguna derogación: el regulador decide antes de investigar, reparte por marca y por canal, y guarda una reserva de hallazgos que caduca.** Subsección nueva **«Antes de investigar, por canal, y la reserva de hallazgos»** en la sección del regulador, inmediatamente debajo del cupo de entrada: `intel.v_carril_disponible` (cupo − cola), la bitácora `intel.research_gate_log`, la reserva (`iid_findings.reserve_status`, `intel.brand_finding_reserve`, `intel.v_reserva_hallazgos`), las tres alertas que preguntan por el dato y la regla de Sam «ningún cron se apaga para frenar producción». La regla del cupo (cadencia + 3) no cambia. `unrlvl-iid-functions` #274 #279 #280.)_
+
 _Versión: 1.28 · 2026-09-30 (**una adición en DESPLIEGUE y ninguna derogación: dónde vive la fuente de una EF y cómo se despliega una EF pública.** (1) **Las EF se versionan y se despliegan desde `unrlvl-iid-functions`** [`reportado` por Sam, 2026-09-30: la regla existía y no estaba escrita]. (2) **Una EF que entra sin versionar llega primero tal como corre**, con `SNAPSHOT.md`. (3) **Las EF que llama una página pública se despliegan con `--no-verify-jwt`.** (4) **Variante nueva del árbol sin `git pull`:** si el archivo no existe en la copia local, la CLI falla con «Entrypoint path does not exist» y producción no cambia [`medido` el 2026-09-30].)_
 
 _Versión: 1.27 · 2026-09-30 (**una sección nueva y ninguna derogación: qué puede y qué no puede medir CC desde su contenedor en la nube.** Sección nueva **«CC EN LA NUBE — NAVEGADOR, DNS Y SALIDA»**: Chromium y Playwright preinstalados y usados para verificar maquetación; `add_repo` da push a `unrlvl-context` y lectura de `BluePrints` desde una sesión abierta en otro repo; **los registros DNS NO se pueden leer** (DoH bloqueado por el proxy) y la zona de los dominios de las marcas está en **Cloudflare**, no en Vercel; `faq.whatsapp.com` y `developers.facebook.com` bloqueados; `WebSearch` sí responde. Todo `medido` por CC el 2026-09-29/30.)_
@@ -421,6 +423,59 @@ escribe.** Lo que se retuvo en una corrida aparece en la respuesta del dispatche
 
 > El «techo duro de 25 por marca» que AGENDA atribuía a Sam (BRIEF-06) **quedó descartado** el
 > 2026-09-29: no era una decisión de Sam. No existe en el código.
+
+### 🧭 Antes de investigar, por canal, y la reserva de hallazgos (añadido 2026-09-30)
+
+**Decisiones de Sam (2026-09-30).** El regulador actúa **antes del research**, reparte **por marca y
+por canal**, y lo que un memo trae de más va a una **reserva que caduca**. La regla del cupo de
+arriba (cadencia + 3) **no cambia**. `unrlvl-iid-functions` #274, #279 y #280.
+
+**1 · Cuánto le falta a cada canal — el disponible.** Es el cupo menos las filas que ya esperan en
+la cola. Lo leen `iid-research`, `iid-process` e `iid-core`. El despachador **no**: sigue con el
+cupo, porque si descontara la cola se bloquearía con sus propias candidatas.
+
+```sql
+SELECT brand_id, platform_key, cupo, en_cola, disponible
+  FROM intel.v_carril_disponible
+ ORDER BY disponible DESC, brand_id, platform_key;
+```
+
+**2 · Qué decidió el regulador en cada corrida.** Una fila por decisión de research o process:
+`run`, `skip` (ningún canal con disponible), `unregulated` (agente sin marca o marca sin canales) o
+`reserve` (publicó desde la reserva en vez de investigar).
+
+```sql
+SELECT ran_at, etapa, agent_name, brand_id, decision, reason
+  FROM intel.research_gate_log
+ ORDER BY ran_at DESC LIMIT 20;
+```
+
+**3 · La reserva de hallazgos.** De cada memo se publican tantos hallazgos como huecos (el canal de
+la marca con más disponible), los siguientes mejores por `content_score` van a reserva hasta
+`reserva_max`, y el resto **no se escribe**. La reserva se consume antes de investigar y caduca a
+los `caducidad_dias`. Estado en `iid_findings.reserve_status`: `publicado` · `reserva` ·
+`descartado`, con fecha y motivo. NULL = hallazgo anterior al 2026-09-30.
+
+```sql
+SELECT brand_id, domain, title, content_score, created_at
+  FROM intel.v_reserva_hallazgos
+ ORDER BY brand_id, content_score DESC;
+
+UPDATE intel.brand_finding_reserve        -- DEFAULT (2, 30); una fila por marca la pisa
+   SET reserva_max = <N>, caducidad_dias = <D>
+ WHERE brand_id = '<marca>';
+```
+
+**4 · Las alertas preguntan por el dato** (Telegram): `AGENT_CRON_OFF` (agente activo con marca y su
+cron apagado o inexistente), `SLOT_UNCOVERED` (franjas en 72 h sin pieza aprobada; motivo
+`por_aprobar` o `en_produccion`), `ENTRY_REGULATOR_STUCK` (franjas sin cubrir, nada en camino y
+cupo 0) y `FINDING_RESERVE_MONTHLY` (resumen de la reserva el día 1).
+
+> **Ningún cron se apaga para frenar producción: la frena el regulador** (Sam, 2026-09-30). Un cron
+> apagado no lo ve el vigilante, que sólo mira crons activos, y un cron reactivado después de su
+> hora pierde la semana. Si hay que recuperarla, se dispara por pg_cron (`cron.alter_job` a un
+> minuto concreto y se restaura): un `intel.trigger_iid_agent` lanzado a mano por SQL no escribe en
+> `cron.job_run_details` y no cierra la alerta.
 
 ### 🎚️ Cómo se sube el volumen — SE SUBE EL MARGEN, NUNCA LA CADENCIA
 

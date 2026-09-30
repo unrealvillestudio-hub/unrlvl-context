@@ -365,6 +365,74 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-30 (v4) · EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y CANAL, Y LA RESERVA DE HALLAZGOS
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-09-29 (v2)` queda íntegra
+debajo. PR mergeados [`medido` por GitHub]: `unrlvl-iid-functions` #274 #276 #279 #280. Migraciones
+aplicadas por CC y verificadas: `20260930010000`, `20260930020000`, `20260930030000`,
+`20260930040000`. EF desplegadas por Sam y verificadas contra `main` por literales:
+`iid-research` v65, `iid-process` v70, `iid-core` v78 [`medido`].)_
+
+### 1 · Qué eran los avisos de Telegram
+- **Cuatro crons semanales no corrieron el martes 29-09** (`uvs-aiind-research/process`,
+  `lucien-aiid-research/process`) [`medido`: ni en `cron.job_run_details`, ni en
+  `alerting.cron_run_rollup`, ni en `intel.iid_cron_runs`].
+- **Causa:** se apagaron por sobreproducción y se reencendieron en una sola transacción entre 10:30
+  y 10:45 UTC del 29-09, ya pasada su hora [`medido` por `xmin 2940852`, acotado con el `xmin` de
+  filas de `iid_cron_runs` que llevan hora].
+- **El vigilante no los vio apagados:** `alerting.watchdog_snapshot` sólo mira crons activos.
+  Saltaron CRON_SILENT / CRON_NEVER_RAN 24 h después de su hora.
+- **Corrección:** los cuatro se dispararon por pg_cron (`cron.alter_job` a un minuto concreto y
+  restaurado). Un disparo manual por SQL no escribe en `cron.job_run_details` y no cierra la alerta.
+- **Decisión de Sam:** «deberían estar todos encendidos y el regulador haciendo su trabajo».
+
+### 2 · El regulador decide antes de investigar (#274)
+- Bloque `GATE`, idéntico en `iid-research` e `iid-process`: si ningún canal activo de la marca
+  tiene disponible, no se investiga ni se destila. Falla alto si la vista no se lee.
+- Bitácora `intel.research_gate_log` (`run` · `skip` · `unregulated` · `reserve`).
+- **Probado en producción el 30-09:** `uvs-aiind-research` → `skip`, 0 memos, 0 asientos de costo
+  [`medido`].
+
+### 3 · Reparte por marca y por canal (#279)
+- **La regla no cambia:** cupo = franjas + margen 3 − en camino − en producción
+  (`intel.v_carril_entrada`, «cadencia + 3»).
+- **Se añade** `intel.v_carril_disponible`: disponible = cupo − filas que ya esperan en la cola.
+  Lo leen el `GATE` y `iid-core/fanout.ts` (bloque `REPARTO`), que encola en cada canal como mucho
+  su disponible. El despachador sigue con el cupo bruto.
+- **Caso que lo motivó** [`medido`]: `LUCIEN-AI-IDENTITY`, 5 hallazgos, un canal con cupo 1 ⇒ 30
+  filas encoladas, 29 retenidas.
+
+### 4 · Reserva de hallazgos (#280, idea de Sam con tres ajustes)
+- Se publican tantos hallazgos como huecos (el canal de la marca con más disponible); los siguientes
+  mejores por `content_score` van a reserva hasta 2; el resto **no se escribe**.
+- Con hueco y reserva, `iid-research` publica primero desde la reserva y esa corrida no investiga.
+- Lo que pasa 30 días en reserva caduca solo (cron 140). Resumen mensual a Telegram el día 1
+  (cron 141, `FINDING_RESERVE_MONTHLY`).
+- Límites por marca en `intel.brand_finding_reserve` (DEFAULT 2, 30).
+- **Motivo** [`medido`]: 161 hallazgos en 14 días; todos los aptos se encolaron en todos los canales.
+
+### 5 · Las alertas preguntan por el dato (#274)
+- `AGENT_CRON_OFF`: agente activo con marca y su cron apagado o inexistente (diario 06:35).
+- `SLOT_UNCOVERED`: franjas en 72 h sin pieza aprobada, con motivo `por_aprobar` o `en_produccion`
+  (cada 6 h).
+- `ENTRY_REGULATOR_STUCK` (urgente): franjas sin cubrir, nada en camino y cupo 0.
+- **Medido el 30-09:** el cuello de UVS es la aprobación, no la producción. Stock aprobado 0 en
+  varios canales con 15–28 piezas esperando.
+
+### 6 · Retiros, con archivo
+- **14 agentes `IID-*` sin marca** y sus 26 crons apagados (#276). 0 hallazgos, 0 cola y 0 piezas
+  dependían de ellos [`medido`]. `IID-SEEDER` se queda: `iid-inbound` lo usa.
+- **`iid-brief-biweekly`** (job 2) retirado (#280): Sam no recibe ni lee el informe.
+- Todo queda entero en `intel.archivo_retirados`, con la reversión probada sobre PostgreSQL
+  desechable.
+
+### 7 · Estado al cierre
+- 29 agentes con marca activos, todos con sus dos crons encendidos [`medido`].
+- 71 filas en cola retenidas como reserva de su canal hasta consumirse (Sam).
+- Comprobación programada: jueves 01-10, 12:30 UTC (`trig_01EgMZ196zQb5XQ6aJ12rfLe`).
+- **Professor:** 8 learnings aprobados y registrados [`medido`]: `ec31d0cb`, `626c337c`,
+  `4ace2cf4`, `e822810a`, `d02c717e`, `fdc18af4`, `096720a9`, `e5f4adad`.
+
 ## 2026-09-29 (v2) · EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-09-29` queda íntegra debajo.

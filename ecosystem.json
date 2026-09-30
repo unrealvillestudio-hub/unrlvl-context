@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-30-v2",
+    "version": "2026-09-30-v3",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-30-v1",
+    "previous": "2026-09-30-v2",
     "previous_chain": [
+      "2026-09-30-v2",
       "2026-09-30-v1",
       "2026-09-29-v2",
       "2026-09-29-v1",
@@ -252,6 +253,21 @@
       "professor": "5 learnings aprobados por Sam y registrados en professor_learnings (session_date 2026-09-30): 8bdeb970, 63abc3c8, 7294d886, e0a97165, f845365d [medido].",
       "test_marca_n_mas_1": "NO APLICA a este Actualiza: sólo context files. El código de la sesión vive en repos y EF exclusivos de ForumPHs.",
       "detalle": "brands/ForumPHs/session_log.md 2026-09-30 (v2) · AGENDA.md v2026-09-30-v2 · CAPABILITIES.md 1.28."
+    },
+    "_sesion_2026-09-30-v3": {
+      "date": "2026-09-30",
+      "conducted_by": "Sam x CC. Tercera parte de la sesión del 2026-09-30, abierta por los avisos de Telegram: sesión de CÓDIGO, MIGRACIÓN y OPERACIÓN. Professor cerrado ANTES de este Actualiza, por CC: 8 learnings con session_date=2026-09-30, approved_by_sam=true, aprobados por Sam en el chat [medido].",
+      "prs_mergeados": "unrlvl-iid-functions #274 #276 #279 #280 [medido por GitHub]",
+      "migraciones": "20260930010000, 20260930020000, 20260930030000 y 20260930040000, aplicadas por CC y verificadas con consultas de estado [medido].",
+      "despliegue": "iid-research v65, iid-process v70 e iid-core v78, desplegadas por Sam y verificadas por CC contra main por literales (0 ausentes salvo uno que vive en un comentario) [medido].",
+      "avisos": "Cuatro crons semanales (uvs-aiind-*, lucien-aiid-*) no corrieron el 29-09: apagados por sobreproducción y reencendidos entre 10:30 y 10:45 UTC, después de su hora [medido por xmin]. Disparados por pg_cron (cron.alter_job y restauración). Decisión de Sam: ningún cron se apaga para frenar producción.",
+      "regulador": "Decide antes de investigar (GATE en iid-research e iid-process) y reparte por marca y canal (disponible = cupo − cola, intel.v_carril_disponible; fanout encola hasta el disponible de cada canal). La regla del cupo (cadencia + 3) no cambia.",
+      "reserva_de_hallazgos": "Idea de Sam con tres ajustes: tantos como huecos, como mucho 2 a reserva, el resto no se escribe; consumo antes de investigar; caducidad 30 días; resumen mensual a Telegram.",
+      "alertas": "AGENT_CRON_OFF, SLOT_UNCOVERED (por_aprobar / en_produccion), ENTRY_REGULATOR_STUCK y FINDING_RESERVE_MONTHLY.",
+      "retiros": "14 agentes IID-* sin marca y sus 26 crons (#276) e iid-brief-biweekly (#280), archivados en intel.archivo_retirados. IID-SEEDER se queda (iid-inbound).",
+      "professor": "8 learnings aprobados y registrados: ec31d0cb, 626c337c, 4ace2cf4, e822810a, d02c717e, fdc18af4, 096720a9, e5f4adad [medido].",
+      "test_marca_n_mas_1": "Respondido en los cuerpos de #274, #276, #279 y #280. Este Actualiza sólo toca context files.",
+      "detalle": "IID/session_log.md 2026-09-30 (v4) · AGENDA.md v2026-09-30-v4 · CAPABILITIES.md 1.29."
     }
   },
   "studio": {
@@ -1270,6 +1286,7 @@
     },
     "agents": {
       "_total_active": 29,
+      "_estado_2026-09-30": "VIGENTE [medido 2026-09-30]: 29 agentes activos, todos con marca (ForumPHs 12, LucienSael 5, NeuroneSCF 6, UnrealvilleStudio 6), cada uno con su cron de research y de process encendido. IID-SEEDER (ce44ac81) sigue, inactivo: lo usa iid-inbound. Los 14 IID-* sin marca (IID-CORE y los 13 de legacy_iid) se RETIRARON el 2026-09-30 con sus 26 crons, archivados en intel.archivo_retirados (unrlvl-iid-functions #276). ⛔ NO OPERATIVO desde esta fecha: `_breakdown` y `legacy_iid` de abajo describen el estado anterior y se conservan como historia.",
       "_breakdown": "29 agentes = 1 core (IID-CORE) + 13 legacy IID-* (corriendo) + 14 UNRLVL-* (last_run NULL) + 1 sentinela IID-SEEDER (ce44ac81, is_active=false, solo satisface FK agent_id de iid-inbound, NO corre research). 28 activos de research + 1 sentinela inactivo. default_voice='lucien' en 4 legacy = legado del encaje a la fuerza; el fan-out v22 YA NO usa default_voice (lo ignora; la voz sale de brand_topics.voice_by_destination).",
       "tier1_method": [
         "UNRLVL-CONTEXT-ENGINEERING",
@@ -2263,6 +2280,7 @@
     "_decisiones_de_sam_2026-09-17": "Telegram es canal de SALIDA; la unica entrada son los botones Leido y Posponer desde su chat. NO existe la categoria INCIDENCIA: todo cabe en URGENTE o en el informe diario. El informe sale a las 07:00 UTC con copia por correo. SIN ENLACES en ningun mensaje del canal. V3: la cadencia observada —60 min y despues 240— se deja como esta, y el criterio del brief NO se ajusto al resultado.",
     "_verificacion_2026-09-17": "V1, V2, V3, V4, V5, V9, V10 y V11 cerradas; V2 y V4 con la parte que depende de los disparadores cerrada tras el PR 3. Confirmacion de punta a punta en el dispositivo de Sam a las 21:36:35: sono, los botones funcionan, el episodio quedo reconocido y el Leido aplicado sobre A-0917-01. V6 ejecutable, V7 programada para el 2026-09-18 07:00 UTC con verificacion a las 07:15, V8 pendiente de reespecificacion.",
     "_abierto": "Cuatro crons semanales que no han corrido NUNCA —uvs-cro-process-weekly, uvs-cro-research-weekly, uvs-signal-process-weekly, uvs-signal-research-weekly—, los cuatro active = true: decision de Sam entre arreglarlos o retirarlos con cron.unschedule, y mientras sigan asi avisan cada hora hasta caducar a las 72 h. El canal de CORREO no tiene ruta activa: los episodios salen solo por Telegram y el encargo pedia dos canales. cron.job_run_details crece sin purga desde el 2026-04-25 —354.339 filas, 161 MB— y no se puede indexar porque la tabla no es nuestra. Y el literal de dominio de ops-alert-dispatch:211.",
+    "_alertas_2026-09-30": {"AGENT_CRON_OFF": "action_required · diario 06:35 (cron 138) · agente activo con marca y su cron de research o process apagado o inexistente. Excluye agentes sin marca.", "SLOT_UNCOVERED": "action_required · cada 6 h (cron 139) · franjas en 72 h sin pieza aprobada; motivo por_aprobar (hay piezas esperando decisión) o en_produccion (el regulador ya abrió cupo).", "ENTRY_REGULATOR_STUCK": "urgent · mismo detector · franjas sin cubrir, nada en camino y cupo 0: el regulador frena lo que hace falta.", "FINDING_RESERVE_MONTHLY": "acuse · día 1, 07:55 (cron 141) · resumen de la reserva de hallazgos por marca.", "_por_que": "Sam, 2026-09-30: «las alertas son cuestión de dato: ¿cron apagado? sí/no. ¿Regulador regulando? sí/no». El vigilante de crons sólo miraba crons activos."},
     "_actualiza_2026-09-23": "EL DIAGNOSTICO COMPLETO DEL 503, porque el sintoma y la causa eran DOS cosas distintas y confundirlas costo una hipotesis. Medido el 2026-09-23 sobre 6 h de logs de runtime del proyecto unrlvl-ops: el cron corria PUNTUAL cada 5 minutos y devolvia 44 respuestas 200 contra 29 con 503, alternando — el 40% de las pasadas. (1) EL 503 venia de watchdog_snapshot fallando dos veces a 15 s, y su causa era el Seq Scan de 172 MB de failed_since; corregido en la migracion 20260923200000 filtrando por runid. (2) EL AVISO FALSO era independiente del 503: el latido lo escribia el propio snapshot al terminar; corregido en unrlvl-ops#14. Los dos PR son compatibles EN CUALQUIER ORDEN DE DESPLIEGUE: si unrlvl-ops va primero, el beat falla, se captura y el snapshot escribe el latido como siempre; si va primero la migracion, la funcion existe sin llamante. DOS ERRORES DE DIAGNOSTICO DE CC QUEDAN ESCRITOS PORQUE LA LECCION ES EL ERROR: (a) se midio el CTE vigilados —52 ms— y se declaro la base sana, cuando la consulta cara era OTRA dentro de la misma funcion: una hipotesis descartada con la medicion equivocada sigue sin descartarse. (b) La funcion hermana refresh_cron_run_rollup YA DOCUMENTABA esta misma leccion sobre cron.job_run_details, escrita el 2026-09-17, y no se leyo antes de escribir la funcion vecina. Y UNA CORRECCION DE SAM QUE NO PROCEDIA, que se hace constar para que no se repita la busqueda: Sam situo el cron externo en el proyecto unrlvl-core-project; medido, ese proyecto NO tiene crons en su vercel.json, su api/ sirve solo blog, robots y sitemap, y tuvo 1 linea de log en 7 h. El vigilante esta en unrlvl-ops, como ya decia este nodo y como confirma ecosystem_filemap.md. AMPLIACION DEL MISMO DIA, 20:00 UTC: el 503 controlado que Sam pidio para VERIFICAR el arreglo encontro un tercer defecto, este nuestro y de hoy — watchdog_beat no tenia GRANT a service_role, asi que el arreglo estaba INERTE desde su despliegue sin un solo sintoma. Corregido en 20260923220000 y verificado por efecto con el snapshot bloqueado. Los dos 503 provocados (19:40:43 y 19:50:43) dejaron el latido sin escribir; el tercero (19:55:43), ya con el GRANT, lo escribio con la foto caida. WATCHDOG_SILENT no abrio episodio en ninguno de los tres, que era el criterio. DATO DE OPERACION que costo una ventana fallida: el cron de Vercel dispara a los ~43 SEGUNDOS del minuto, no en el minuto exacto [medido sobre siete pasadas consecutivas]."
   },
   "criterio_de_bandeja": {
@@ -2324,6 +2342,17 @@
       "medicion_al_aplicar": "con cupo: ForumPHs meta_fb 4, meta_ig 6, blog_forumphs 2; LucienSael x 1. El resto en 0 [medido 2026-09-29].",
       "techo_25_por_marca": "DESCARTADO por Sam el 2026-09-29. Estaba en AGENDA (BRIEF-06) como «ya decidido por Sam» desde el Actualiza del 2026-09-06; no era decisión de Sam y no existía en el código.",
       "crons_pausados": "22 crons de research y process de UnrealvilleStudio y LucienSael, pausados el 2026-09-29 a pedido de Sam hasta que el regulador funcione. Reactivar es decisión de Sam."
+    },
+    "_entrada_2026-09-30": {
+      "_decision": "Sam 2026-09-30: el regulador actúa ANTES del research, reparte por marca y por canal, y ningún cron se apaga para frenar producción. La regla del cupo no cambia.",
+      "crons_pausados_resuelto": "Los 22 crons pausados el 2026-09-29 están activos [medido 2026-09-30]. Cuatro se reactivaron después de su hora y perdieron la semana; se dispararon por pg_cron.",
+      "disponible": "intel.v_carril_disponible — disponible = cupo − filas pendientes de la cola (pending · aife passed · aprobación pending o autopublished). La leen iid-research, iid-process e iid-core; el despachador sigue con el cupo.",
+      "gate": "iid-research / iid-process: sin disponible en ningún canal de la marca, no se investiga ni se destila. Bitácora intel.research_gate_log (run · skip · unregulated · reserve). Probado el 30-09: UVS skip, 0 memos, 0 gasto [medido].",
+      "reparto": "iid-core/fanout.ts bloque REPARTO: cada canal encola como mucho su disponible; lo retenido sale en retenidas_por_regulador.",
+      "reserva": "iid_findings.reserve_status (publicado · reserva · descartado); intel.brand_finding_reserve DEFAULT (2, 30); intel.v_reserva_hallazgos; crons 140 (caducidad diaria) y 141 (resumen mensual).",
+      "alertas": "AGENT_CRON_OFF, SLOT_UNCOVERED, ENTRY_REGULATOR_STUCK y FINDING_RESERVE_MONTHLY — ver alerting_channel._alertas_2026-09-30.",
+      "reserva_en_cola": "71 filas pendientes al cierre, conservadas como reserva de su canal hasta consumirse (Sam).",
+      "prs": "unrlvl-iid-functions #274 #279 #280."
     }
   }
 }
