@@ -1,7 +1,8 @@
 ---
 name: sesion-de-fixables
-version: 1.0
+version: 1.1
 fecha: 2026-09-29
+cambios_1_1: "2026-09-29 (tarde): cinco motivos nuevos en §3.1 y dos avisos de barrido (texto pintado en la imagen; texto que se publica). v1.0 íntegra: sólo se añade."
 capa: MÉTODO
 destino: CARGABLE
 audiencia: UNRLVL infra — transversal a todas las marcas y todos los carriles de contenido
@@ -97,7 +98,7 @@ nuevo se añade aquí al cerrar la sesión (§9).
 
 | Motivo de Sam | Dónde vive la corrección | Origen |
 |---|---|---|
-| El texto sobre la imagen repite el título | `brand_publish_channels.image_title_mode='dialogue'` + `copy.image_hook` que **responde** al título; recompose **sin** regenerar imagen | HR de Sam, 2026-09-29 |
+| El texto sobre la imagen repite el título | `brand_publish_channels.image_title_mode='dialogue'` + `copy.image_hook` que **abre la tensión** y un título que **le responde** (`HR-GEN-17`); recompose **sin** regenerar imagen. _Corregido 2026-09-30 (Sam): esta fila decía «`copy.image_hook` que **responde** al título», que es la dirección invertida._ | HR de Sam, 2026-09-29 |
 | El producto se nombra sin su mecanismo | genoma de la voz: `argumentative_architecture.product_mechanism_chain` | 82347653, 6a1d466a, 844f834a |
 | La pieza promete una explicación y no la da | genoma: `promise_fulfilment` | 398c80b5 |
 | Hashtags inventados o de un competidor | genoma: `application_constraints.hashtags` | 6ddf17fe, 685d5275 |
@@ -106,6 +107,20 @@ nuevo se añade aquí al cerrar la sesión (§9).
 | Términos de marca mal escritos | ficha de marca + corrección en piezas no publicadas | «Nanotribología», #115 |
 | Precio, oferta o promesa comercial que la marca no hace | ficha de marca (`cta_options`); **leer el dato antes de cambiarlo** | «diagnóstico gratuito», 2026-09-27 |
 | El título simplifica un dato del estudio contra lo que dice el cuerpo | reescribir el título con el dato del cuerpo | 6bb3ebc0, 48175596 |
+| Un competidor del que se habla mal, o presentado como equivocado como un hecho | `HR-GEN-12` (ampliación del 2026-09-30): la fuente real **se nombra**; lo que no se hace es hablar mal de ella. El contraste lo dice la vocera como opinión en primera persona («en mi experiencia…»). Nunca un hashtag con su nombre | Sam, 2026-09-30; `unrlvl-iid-functions` #272. _⛔ La versión del 2026-09-29 de esta fila («un competidor no se nombra nunca, tampoco como fuente») queda derogada: Sam la corrigió al día siguiente, porque ocultar la fuente resta credibilidad._ |
+| Hashtag de marca inventado o mal escrito (#NeuronesCFlorida, #NeuroneCF) | el set fijo de la marca en su genoma (`application_constraints.hashtags`) + regla de marca con patrón (`HR-NSCF-09`). El patrón compila con la bandera `i`: una variante que sólo cambia mayúsculas la ve el juez, no el patrón | Sam, 2026-09-29; 15 variantes |
+| Un dato de otro país sin conectarlo con el mercado de la marca | `HR-GEN-18` con `{{mercado_de_la_marca}}` ← `application_constraints.home_market` del genoma; una marca sin mercado declarado no recibe la regla | 69f34e2b, Sam 2026-09-29 |
+| Una línea «Distribución exclusiva…» que funciona como segunda firma | `signature_closer.rule` del genoma + `HR-GEN-11`; se quita la línea, la firma es una | 48175596, 17763bd1 |
+| Voseo que el léxico no conoce | se EXTIENDE `HR-GEN-05` (nunca se rehace) tras un barrido morfológico por terminación y por enclítico | 2026-09-29: +9 formas |
+
+**El texto pintado en la imagen también es texto** (2026-09-29). Vive en `image.overlay.headline`,
+`image.overlay.subheadline` y `copy.image_support`. Un barrido que corrige `copy` y no recompone deja
+el defecto en la imagen publicada (medido: 1abf8376, 812adaae, 5047ae26). **Después de corregir texto,
+se barren esos tres campos y se recompone con (a)** lo que no coincida con `copy`.
+
+**El texto que se publica es `assets.social.adapted[].copy`**, no `assets.copy`. Un barrido cubre los
+dos y además `copy.title`, `copy.image_hook` y `copy.aife_filtered`, y comprueba si ya existe fila en
+`public.scheduled_posts` sin publicar: ahí vive otra copia del texto.
 
 ### 3.2 · Imagen
 

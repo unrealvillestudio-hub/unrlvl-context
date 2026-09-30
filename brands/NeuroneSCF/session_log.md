@@ -1,5 +1,44 @@
 # SESSION LOG — NeuroneSCF B2B
-_Actualizado: 2026-09-29 v2 (el carrusel con una imagen propia por lámina: 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY; 77 textos de imagen que responden al título; 7 learnings a la espera de Sam) · base previa: 2026-09-29 (las correcciones de Sam se vuelven regla: Patricia desde su cara y con su cabello, el producto con su mecanismo, el texto de imagen responde al título; una veintena de piezas corregidas y revisadas; blog -7 producido) · base previa: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+_Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags de marca y firma corregidos en las piezas vivas y convertidos en regla — `unrlvl-iid-functions` #271) · base previa: 2026-09-29 v2 (el carrusel con una imagen propia por lámina: 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY; 77 textos de imagen que responden al título; 7 learnings a la espera de Sam) · base previa: 2026-09-29 (las correcciones de Sam se vuelven regla: Patricia desde su cara y con su cabello, el producto con su mecanismo, el texto de imagen responde al título; una veintena de piezas corregidas y revisadas; blog -7 producido) · base previa: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-09-29 (v3) — Sesión de fixables: lo que Sam devolvió se corrige en la pieza y se vuelve regla
+
+> **Entrada de CC.** No reescribe la entrada `2026-09-29 (v2)` de abajo, que queda íntegra.
+> Migración `20260929050000_los_motivos_de_sam_del_29_se_vuelven_regla` **aplicada en la base**
+> [`medido`]; PR `unrlvl-iid-functions` #271 pendiente de merge. Skill `sesion-de-fixables` v1.1.
+
+### Decisiones de Sam (chat, 2026-09-29)
+- **Voseo:** se corrige todo.
+- **Competidores:** no se nombran, tampoco como fuente de un dato. Salones y personas, sí.
+- **Hashtags de marca:** set fijo de siete: #Neurone, #NeuroneSCFlorida, #NeuroneFlorida,
+  #NeuroneRituals, #HairIntelligence, #Nanotribología, #NeuroCosmetica.
+- **Firma:** social «Neurone South & Central Florida — Ciencia capilar aplicada al clima de la
+  Florida.»; blog y editorial «Neurone South & Central Florida — HAIR INTELLIGENCE». «Distribuidor
+  exclusivo» no va como firma. Ya era regla en `application_constraints.signature_closer` [`medido`].
+
+### Lo que se midió
+- **El texto que se publica es `assets.social.adapted[].copy`**, no `assets.copy`.
+- **Voseo que el barrido del 28 no atrapó:** «Solicitale» (16 piezas), «Pedile» (5), «llevá», «tocá»,
+  «echás» y otras; y **voseo pintado en la imagen** con el copy ya corregido: 1abf8376, 812adaae y
+  5047ae26. `HR-GEN-05` ya tenía tres de esas formas y es `warn`: marca y no frena.
+- **Competidores como fuente:** Dall Italia, Redken, K18, Olaplex y L'Oréal Professionnel en 11 piezas.
+- **DY Fazza Color** es el tercer paso de Restore Therapy, Restore & Shield y Blonde Guard: nombrarlo en
+  piezas de reparación es correcto. El error era describir el bifásico como «dos fases» de aplicación
+  (8b54749b, bcfe6b34).
+- **Hallazgo sin corregir:** los kits Restore citan DY Fazza Color como `T061` (200 ml) y el catálogo
+  sólo tiene `T062` [`medido` en `product_blueprints`].
+
+### Lo que se corrigió (`intel.piece_edits`, `edited_by = 'cc:fixable'`)
+- **60 piezas de NSCF** en texto, sin cambiar su estado (26 en bandeja, 18 retadas, 16 programadas). Todos los barridos posteriores dan 0.
+- **3 imágenes recompuestas** sin regenerar la escena, revisadas a ojo: 1abf8376, 812adaae, 5047ae26.
+- **cc5bd3b8** bajó de 2.203 a 2.193 caracteres quitando un hashtag.
+
+### Pendiente
+- **Decisión de Sam:** severidad de `HR-GEN-05` (`warn` → `blocking`).
+- Fixables de producto (clase A), de imagen del motor viejo y sin imagen (7 piezas con el archivo
+  borrado del almacenamiento): siguientes puntos de la sesión.
 
 ---
 
