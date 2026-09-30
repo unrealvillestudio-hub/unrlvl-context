@@ -2,6 +2,10 @@
 _Ergonomía física · Thumb zone · Touch targets · Safe areas · PWA vs React Native_
 _Versión: 1.0 · 2026-05-21_
 
+> **Nota v1.1 (2026-09-30).** Este módulo se escribió para apps (OPS de campo, portal) y sigue
+> vigente íntegro. Para un **sitio web público** —landing y blog— los patrones de navegación, barra
+> de acción, grillas y verificación en navegador están en **`SKILL.md` §18**: allí manda.
+
 ## CUÁNDO CARGAR ESTE MÓDULO
 Cualquier proyecto con output que se usa en un dispositivo móvil.
 OPS app campo · Portal propietario · Quality Dashboard móvil · Apps nativas futuras.

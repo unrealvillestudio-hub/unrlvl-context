@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.16 · 2026-09-29 · Mantenido por: Claude_ · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
+_Versión: 1.17 · 2026-09-30 · Mantenido por: Claude_ · base previa: 1.16 · 2026-09-29 · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
 
 ---
 
@@ -44,6 +44,22 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 | `ecosystem-updater` | `skills/ecosystem-updater/SKILL.md` | Actualizar ecosystem.json + ecosystem_graph.json post-audit | UNRLVL infra — bajo demanda |
 | `supabase-auditor` | `skills/supabase-auditor/SKILL.md` | Protocolo auditor — cruzar código↔DB, producir/actualizar supabase_access_map.json, detectar vestigiales/bugs/agujeros | UNRLVL infra — bajo demanda |
 | `voice-reference-extractor` | `skills/voice-reference-extractor/SKILL.md` | Pipeline local: videos TikTok → transcripción Whisper + OCR on-screen → consolidado .md/.json por cuenta. Paso 1 de construcción de voice genome. | UNRLVL interno — voice research |
+
+---
+
+## NOTAS DE VERSIÓN v1.17
+
+**Cambios respecto a v1.16:**
+
+- **`ui-ux-layer` v3.2 → v3.3 (mismo día):** §18.8 **texto ampliado** (min-width:0, sin `nowrap` en contenido, verificación por borde derecho con texto al 130–150 %) y **§19 CTA en alto relieve e interacción**. Por decisión de Sam, §19 permite en sitio público el degradado tonal y el resplandor del propio color que §15 prohíbe; §15 sigue vigente en el resto de outputs.
+- **`ui-ux-layer` v3.1 → v3.2: una adición y ninguna derogación.** Nueva **§18 SITIO WEB PÚBLICO
+  (landing + blog)**, medida sobre el rediseño de forumphs.com (`forumphs-com` #11): fuentes servidas
+  desde el propio dominio, **tabla de contraste medida** de la paleta ForumPHs (Amatista sobre Carbon
+  Deep da **1.98:1** y no sirve como acento de texto), navegación móvil con bloqueo de scroll y foco
+  atrapado, barra de acción en la zona del pulgar, grillas con `minmax(min(100%, N), 1fr)` y
+  **verificación obligatoria en navegador**. Fila nueva en la tabla de activación. `mobile-ux.md` y
+  `a11y.md` llevan una nota que apunta a §18 sin tocar su cuerpo. La fila de la tabla de decisión no
+  cambia: el disparador sigue siendo «cualquier output HTML / CSS / React / visual».
 
 ---
 
