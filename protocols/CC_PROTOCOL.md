@@ -1,7 +1,14 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-21-v13 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-09-30-v14 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v14 (2026-09-30):** una adición, ninguna derogación. **§16 — las Edge Functions se versionan y
+> se despliegan desde `unrlvl-iid-functions`.** Antes de tocar una EF se localiza su fuente allí. Si no
+> está, entra primero tal como corre, con `SNAPSHOT.md`, y el cambio va en un commit aparte. Una copia en
+> otro repo se retira con una nota que remita a la ubicación vigente. El procedimiento vive en
+> `CAPABILITIES.md` → DESPLIEGUE; esta sección lo **invoca** y no lo duplica. Nace del 2026-09-30: CC pidió
+> desplegar `fphs-chat` desde el repo de la página, y Sam lo corrigió.
+>
 > **Cambios v13 (2026-09-21):** una adición, ninguna derogación. **§15 — una credencial encontrada NO se usa, se reporta.** Vale para cualquier secreto que CC se tropiece leyendo código, configuración, logs o un volcado: **aunque sirva exactamente para la tarea en curso, y aunque usarla fuera lo más rápido**, no se usa, no se copia a un archivo, no se pega en un chat y no se guarda para después. Se reporta **por su nombre y su ubicación, nunca por su valor**. Motivo medido el 2026-09-21: la Edge Function `media-store` lleva un secreto **cableado como valor por defecto** de `Deno.env.get(...)` —con `verify_jwt: false` y escritura con `service_role`—, así que cualquier sesión que leyera ese archivo se llevaba una llave de escritura sin pedirla. **La tentación es real y por eso hace falta la regla:** el secreto estaba a la vista y habría ahorrado un paso. §14 queda íntegro. **Barrido de voseo sobre las líneas nuevas: cero apariciones.**
 >
 > **Cambios v12 (2026-09-17):** una adición, ninguna derogación. **§14 — una comprobación también
@@ -620,6 +627,38 @@ próximo hallazgo llegue con prisa.
 sobre un secreto **convierte un fallo de configuración en un agujero silencioso**. Sin el fallback,
 la función caería con «X no configurado» y alguien lo arreglaría; con él, arranca y queda abierta.
 **Un secreto sin variable de entorno debe ser fail-loud**, nunca un valor por defecto.
+
+---
+
+## 16. LAS EDGE FUNCTIONS SE VERSIONAN Y SE DESPLIEGAN DESDE `unrlvl-iid-functions`
+
+**La regla (Sam, 2026-09-30):** toda EF del ecosistema tiene su fuente en
+`unrealvillestudio-hub/unrlvl-iid-functions/supabase/functions/<slug>/`, y se despliega **desde ahí**.
+- **Nunca desde el repo de una página o de un lab**, aunque ese repo tenga una carpeta
+  `supabase/functions/` con una copia.
+- **La excepción ya escrita en §10.1 no cambia:** una EF que no cabe en las tools MCP de deploy
+  (`content-run-stage`) la despliega Sam desde su terminal, **desde este mismo repo**.
+
+**Qué hace CC:**
+1. **Antes de proponer un cambio en una EF,** localiza su fuente en `unrlvl-iid-functions`.
+2. **Si no está, la trae tal como corre** (`get_edge_function`), con un `SNAPSHOT.md`: procedencia,
+   build real y `verify_jwt`. **El cambio va en un commit aparte.**
+3. **Si encuentra una copia en otro repo,** propone retirarla y dejar una nota que remita a la ubicación
+   vigente.
+4. **En el PR declara `verify_jwt`.** Una EF que llama una página pública se despliega con
+   `--no-verify-jwt`; si se olvida, la página deja de responder **sin error en el código**.
+
+**El procedimiento completo** (snapshot, secuencia de despliegue con `git pull`, verificación por
+`ezbr_sha256` y marcador dentro del bundle) vive en `CAPABILITIES.md` → DESPLIEGUE. **Esta sección lo
+invoca y no lo copia:** dos textos de la misma regla son dos reglas en cuanto alguien toca uno.
+
+**Por qué existe:**
+- **El caso:** el 2026-09-30, CC modificó `fphs-chat` en el repo de la página (`forumphs-speaks`), que
+  era donde estaba su única copia en git, y pidió a Sam desplegarla desde ahí.
+- **La corrección de Sam:** «el versionamiento de las efs va por iid-functions».
+- **Cómo se cerró:**
+  - `unrlvl-iid-functions#275`: snapshot `_44` + cambio, desplegado como build `_64`;
+  - `forumphs-speaks#4`: la copia se retira y queda una nota que remite a la ubicación vigente.
 
 ---
 
