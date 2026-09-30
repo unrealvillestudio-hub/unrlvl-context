@@ -74,14 +74,16 @@
   - **Sin nombres ni cargos personales en Speaks:** «Supervisado y gestionado con criterio jurídico
     por ForumPHs», más un aviso de información general que puede contener errores.
   - **El agente de WhatsApp responderá también desde Speaks.** Por ahora es solo una proyección.
-- **Cargo de Ivette, sin resolver.** Sam indicó que «Abogada y Gerente General» no es el cargo de
-  Ivette. `brand.json → people.ivette_flores.role` sigue diciendo «Gerente General»: no se cambia sin
-  el dato correcto, que tiene que dar Sam. forumphs.com muestra «Abogada · Especialista en Régimen de
-  Propiedad Horizontal» [`medido`].
+- **Cargo de Ivette, corregido** (Sam, 2026-09-30): «Abogada · Especialista en Régimen de Propiedad
+  Horizontal». «Gerente General» no es su cargo.
+  - Queda así en `brand.json → people.ivette_flores` (lo anterior, bajo guard) y en la sección de
+    personas de `BP_Brand_Context.md`.
+  - Coincide con lo que ya mostraba forumphs.com [`medido`].
+  - ForumPHs Speaks no nombra personas: firma «Supervisado y gestionado con criterio jurídico por
+    ForumPHs».
 
 ### Pendiente
 
-- **Sam:** dar el cargo correcto de Ivette, para corregir `brand.json` y revisar forumphs.com.
 - **Ivette:** vincular WhatsApp Business a la página de Facebook y a Instagram (en el Centro de
   cuentas de ForumPHs). En LinkedIn, como máximo, como dato de contacto del perfil: el canal de
   publicación sigue INACTIVO por decisión de Sam del 2026-08-26.

@@ -41,8 +41,14 @@
       "also": "Unrealville Studio — gestión de marca, tecnología y marketing"
     },
     "ivette_flores": {
-      "role": "Gerente General",
-      "title": "Abogada especialista en propiedad horizontal",
+      "role": "Abogada · Especialista en Régimen de Propiedad Horizontal",
+      "title": "Abogada · Especialista en Régimen de Propiedad Horizontal",
+      "_cargo_fuente": "Sam, 2026-09-30: «Ivette Flores - Abogada · Especialista en Régimen de Propiedad Horizontal». «Gerente General» no es su cargo.",
+      "_cargo_anterior_2026-09-30": {
+        "_guard": "⛔ NO OPERATIVO — cargo registrado hasta el 2026-09-30, corregido por Sam. Se conserva por historia; no usar en piezas nuevas.",
+        "role": "Gerente General",
+        "title": "Abogada especialista en propiedad horizontal"
+      },
       "cedula": "8-368-46",
       "honorarios_reales": "$1,200–$1,700/mes (no $4,800 — corrección sesión 2026-05-09)",
       "decision_style": "Ver BP_Brand_Context.md capa relacional",

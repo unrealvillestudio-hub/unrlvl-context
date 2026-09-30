@@ -60,7 +60,8 @@ debajo. Sesión de CC «protocolo actualización - forumphs» del 2026-09-29/30.
 6. **Mergear `forumphs-com` #12 y `forumphs-speaks` #3.** Después, Sam despliega `fphs-chat`
    (HRD-R14): así el agente nombra la ley como «la Ley vigente de Régimen de Propiedad Horizontal»
    y cierra sin cargos personales.
-7. **Cargo de Ivette:** Sam da el correcto y se corrige `brand.json → people.ivette_flores.role`.
+7. **Cargo de Ivette, corregido** (Sam, 2026-09-30): «Abogada · Especialista en Régimen de Propiedad
+   Horizontal». Ninguna pieza nueva la presenta como «Gerente General».
 
 ---
 

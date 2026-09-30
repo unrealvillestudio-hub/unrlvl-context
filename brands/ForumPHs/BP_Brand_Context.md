@@ -231,7 +231,9 @@ Sam no es cliente de ForumPHs — es socio. Unrealville Studio gestiona la marca
 
 ForumPHs es también el **laboratorio** donde Unrealville Studio desarrolla y afina metodologías (Financial Intelligence Engine, Document Factory, actas automatizadas) antes de exportarlas al ecosistema o usarlas como filtro de onboarding de clientes UNRLVL.
 
-### Ivette Flores — Gerente General
+### Ivette Flores — Abogada · Especialista en Régimen de Propiedad Horizontal
+
+_Cargo corregido por Sam el 2026-09-30; antes aquí figuraba «Gerente General», que no es su cargo. El resto de la sección no cambia._
 - Abogada especialista en propiedad horizontal. Su perspectiva es siempre legal primero.
 - Toma decisiones con rigor pero puede necesitar tiempo para procesar propuestas complejas — no por indecisión sino por minuciosidad.
 - Aprecia la transparencia total y la documentación formal.
