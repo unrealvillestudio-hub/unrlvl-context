@@ -1,6 +1,7 @@
 # SKILL — ui-ux-layer · CORE
 _UNRLVL Brand Visual Reference · Multimarca · B2C/B2B · Supabase-powered_
-_Versión: 3.2 · 2026-09-30 · base previa: 3.1 · 2026-05-22 (cuerpo conservado íntegro)_
+_Versión: 3.3 · 2026-09-30 · base previa: 3.2 · 2026-09-30 · base previa: 3.1 · 2026-05-22 (cuerpo conservado íntegro)_
+_v3.3: dos adiciones — **§18.8 texto ampliado** y **§19 CTA en alto relieve e interacción**. §19 deja sin efecto, SÓLO en sitio web público, dos prohibiciones de §15 por decisión de Sam (2026-09-30); en el resto de outputs siguen vigentes._
 _v3.2: una adición y ninguna derogación — **§18 SITIO WEB PÚBLICO (landing + blog)**, medida sobre el rediseño de forumphs.com (`forumphs-com` #11)._
 _Capas: Comunicación · Geometría · Psicología Visual · Instinto Fotográfico · Disrupción · **Vida y Movimiento**_
 
@@ -18,6 +19,7 @@ Al inicio de cualquier sesión que produzca HTML / CSS / JS / React, Claude:
 6. Elige la arquitectura de tensión (Sección 14) antes de hacer el layout
 7. **Aplica al menos 3 ítems de SECCIÓN 17 (Vida y Movimiento) — OBLIGATORIO desde v3.1**
 8. **Si el output es un SITIO WEB PÚBLICO: aplica la SECCIÓN 18 completa — OBLIGATORIO desde v3.2** (mobile-first, fuentes propias, contraste medido, navegación móvil, verificación en navegador)
+9. **Y la SECCIÓN 19 en todo CTA de sitio público — OBLIGATORIO desde v3.3** (relieve, estados, interacción)
 
 **Regla absoluta:** Nunca hardcodear colores ni fuentes sin pasar por este protocolo.
 **Regla v3.0:** Nunca generar un output visual sin definir primero QUÉ comunica y QUÉ reacción busca provocar.
@@ -395,8 +397,8 @@ FIRMA 6 — Cormorant display momento editorial · MAX 1 por output
 
 **Prohibiciones:**
 ```
-❌ Gradientes en botones
-❌ Sombras de colores (solo rgba negros)
+❌ Gradientes en botones  ← (v3.3) en SITIO WEB PÚBLICO se permite el degradado TONAL del mismo color (§19). Sigue prohibido en el resto
+❌ Sombras de colores (solo rgba negros)  ← (v3.3) en SITIO WEB PÚBLICO se permite el resplandor del PROPIO color del CTA (§19). Sigue prohibido en el resto
 ❌ border-radius > 12px en cards principales
 ❌ Emojis en contextos institucionales
 ❌ Background plano sin textura ni profundidad (v3.1)
@@ -777,8 +779,112 @@ Una entrega de sitio sin esta verificación es `deducido`, aunque el CSS «esté
 - [ ] Inputs a 16 px (sin zoom en iOS) y `autocomplete` en el formulario
 - [ ] Verificación en navegador de §18.6 con su resultado en el PR
 
+### 18.8 — Texto ampliado: el caso que §18.6 no veía (v3.3)
+
+**Medido el 2026-09-30 en el teléfono de Sam:** la portada de forumphs.com se cortaba a la derecha
+aunque la verificación de §18.6 salía en verde. Su Chrome escala el texto (Accesibilidad → escalado de
+texto o zoom predeterminado). Con letras más grandes:
+
+- una línea con `white-space: nowrap` (la píldora del hero, los rótulos de las cifras) se hace más ancha
+  que la pantalla;
+- **un hijo de grid o flex no se encoge por debajo de su contenido** (`min-width: auto` por defecto),
+  así que la columna entera crece y arrastra el hero: **414 px de contenido en 360**;
+- **`overflow-x: hidden` en el `body` lo esconde**: no hay scroll lateral, sólo texto recortado. Por eso
+  `scrollWidth === clientWidth` dio verde. **Esa comprobación no basta.**
+
+**Reglas:**
+1. **`min-width: 0`** en los hijos de toda grilla y fila flex de contenido. Las columnas con
+   `minmax(0, 1fr)`, no con `1fr` a secas.
+2. **Nada de `white-space: nowrap`** en texto de contenido, salvo etiquetas de tres palabras dentro de un
+   contenedor que se desplaza. Las filas de cifras o etiquetas van con `flex-wrap`.
+3. Cabeceras con **flex y envoltura**: si la marca y el botón no caben, el botón baja de línea.
+4. **Verificación:** medir el **borde derecho de cada elemento** (`getBoundingClientRect().right >
+   clientWidth`), no el `scrollWidth`, en estos escenarios:
+   - anchos 240 y 280 px, que es lo que queda con zoom alto;
+   - 360 y 320 px con el texto al **130 % y al 150 %**, emulado multiplicando el `font-size` calculado de
+     cada elemento; sólo crece la letra, como en el escalado de Chrome Android.
+
+   Referencia: `forumphs-com/scripts/verify-layout.mjs`. Con el fallo original inyectado pone 5 escenarios en rojo.
+
+---
+
+## SECCIÓN 19 — CTA EN ALTO RELIEVE E INTERACCIÓN (v3.3 — NUEVO)
+
+_(Decisión de Sam, 2026-09-30: «Los CTA buttons deben mejorar en quality, alto relieve, sombras, bordes
+brillantes, destellos, hover… Están muy básicos, ¿el skill es de aprendiz o de experto?». Respuesta
+honesta: **la v3.1 tenía las reglas de marca y no la técnica**. Prohibía el degradado y la sombra de
+color, que es exactamente lo que da relieve a un botón oscuro, y no documentaba los estados. Esta sección
+lo corrige. Fuentes consultadas: [Josh W. Comeau — Designing Beautiful Shadows](https://www.joshwcomeau.com/css/designing-shadows/),
+[CodeTV — Animated CSS gradient borders](https://codetv.dev/blog/animated-css-gradient-border),
+[UDT — CSS Button Styles 2026](https://ultimatedesigntools.com/blog/css-button-styles-guide/).)_
+
+### 19.1 — Anatomía de un CTA con relieve (capas, de dentro afuera)
+
+| Capa | Técnica | Para qué |
+|---|---|---|
+| Cuerpo | `linear-gradient(180deg, <color +10 % luz>, <color>, <color −10 %>)` — **tonal, el MISMO tono** | volumen; nunca un degradado entre dos colores de marca |
+| Luz interior | `inset 0 1px 0 rgba(255,255,255,.3)` | el canto superior refleja la luz |
+| Sombra interior | `inset 0 -2px 0 rgba(0,0,0,.3)` | el canto inferior pesa |
+| Contacto | `0 1px 1px rgba(0,0,0,.45)` | apoya en la superficie |
+| Ambiente | `0 6px 14px -4px rgba(0,0,0,.6)` | lo separa del fondo |
+| Resplandor | `0 16px 34px -12px <el color del CTA, .8>` | **el propio color ilumina el fondo** — sólo en CTA primarios |
+| Contorno | `border: 1px solid rgba(255,255,255,.3–.45)` | define el borde sobre fondo oscuro |
+| Destello | `conic-gradient` enmascarado al borde, con el ángulo registrado con **`@property`** y animado | un brillo que recorre el contorno. **Sin `@property` no gira: salta** |
+| Brillo | franja oblicua (`::after`) que cruza al pasar y cada ~7 s en el CTA principal | «destello» que invita sin gritar |
+| Foco de luz | `radial-gradient` en `var(--px) var(--py)`, actualizado con `pointermove` | la luz sigue al cursor |
+
+**Textos:** sobre el verde de WhatsApp o sobre Terra, el texto va en Carbon Deep (§18.2). Sobre Amatista,
+Parchment con `text-shadow: 0 1px 1px rgba(0,0,0,.35)`.
+
+### 19.2 — Estados: cada uno se ve distinto
+
+- **Reposo:** relieve completo.
+- **Hover** (sólo con `@media (hover: hover) and (pointer: fine)`): sube 2 px, el resplandor crece, el
+  borde se aclara, el destello acelera, cruza el brillo, la flecha avanza 4 px y aparece un anillo de
+  4 px del propio color con baja opacidad.
+- **Activo:** el botón **baja** 1 px y se reduce al 98,5 %. Pierde las sombras exteriores y gana una
+  interior (`inset 0 2px 8px`). Transición de 60 ms: la respuesta al toque tiene que ser inmediata.
+- **Foco (teclado):** `outline` de 2 px en Amatista Tint con 3 px de separación. Nunca se quita.
+- **Táctil:** sin hover. El `:active` es el feedback. `touch-action: manipulation` quita la espera del
+  doble toque.
+
+### 19.3 — Interacción de escritorio
+
+- **Atracción magnética** en los 2 o 3 CTA principales: el botón se desplaza hasta 4 px hacia el cursor.
+  Sólo con puntero fino y sin `prefers-reduced-motion`.
+- **Nunca** en móvil, nunca en todos los botones y nunca en enlaces de texto.
+
+### 19.4 — Titulares y menú
+
+- **Titular del hero:** revelado por líneas al cargar. Cada línea sube desde detrás de una máscara
+  (`overflow: hidden` + `translateY(105%) → 0`), con 160 ms de escalonado. Una sola vez, nunca en bucle.
+- **Menú móvil:** índice numerado en Cinzel (`01…06`), en Terra, delante de cada enlace grande.
+
+### 19.5 — El visual del hero tiene que decir algo
+
+Un dibujo decorativo con etiquetas genéricas («SLA auditables», «Reporte mensual») no aporta nada (Sam,
+2026-09-30). El visual **encarna el mensaje**. Caso forumphs.com:
+
+- un PH en **3D de alambre** (CSS 3D, sin librerías) que gira despacio;
+- cada ventana es un hogar, y sus luces se encienden y se apagan **a ritmo irregular**, porque un
+  edificio habitado no parpadea a compás;
+- el contorno late con **doble pulso**, como un corazón;
+- pie: «Cada luz, un hogar. Cada hogar, un patrimonio.»;
+- **se pausa fuera de pantalla** (IntersectionObserver y `visibilitychange`) y se queda quieto con
+  movimiento reducido.
+
+### 19.6 — Checklist de CTA
+
+- [ ] Cuerpo con degradado tonal + luz interior + sombra interior + sombras en capas
+- [ ] Resplandor del propio color sólo en los primarios
+- [ ] Destello de contorno con `@property` (el ángulo registrado)
+- [ ] Hover sólo con puntero fino; activo que hunde; foco visible
+- [ ] Contraste del texto contra §18.2
+- [ ] Todo el movimiento se apaga con `prefers-reduced-motion`
+
 ---
 
 _ui-ux-layer CORE v3.1 · Unrealville Studio · 2026-05-22_
 _Extensiones: motion.md · 3d-spatial.md · mobile-ux.md · design-tokens.md · a11y.md_
 _v3.2 · 2026-09-30 · §18 Sitio web público_
+_v3.3 · 2026-09-30 · §18.8 texto ampliado · §19 CTA en alto relieve e interacción_

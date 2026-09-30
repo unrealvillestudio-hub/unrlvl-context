@@ -51,6 +51,7 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
 
 **Cambios respecto a v1.16:**
 
+- **`ui-ux-layer` v3.2 → v3.3 (mismo día):** §18.8 **texto ampliado** (min-width:0, sin `nowrap` en contenido, verificación por borde derecho con texto al 130–150 %) y **§19 CTA en alto relieve e interacción**. Por decisión de Sam, §19 permite en sitio público el degradado tonal y el resplandor del propio color que §15 prohíbe; §15 sigue vigente en el resto de outputs.
 - **`ui-ux-layer` v3.1 → v3.2: una adición y ninguna derogación.** Nueva **§18 SITIO WEB PÚBLICO
   (landing + blog)**, medida sobre el rediseño de forumphs.com (`forumphs-com` #11): fuentes servidas
   desde el propio dominio, **tabla de contraste medida** de la paleta ForumPHs (Amatista sobre Carbon
