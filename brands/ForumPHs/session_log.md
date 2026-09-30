@@ -60,8 +60,28 @@
 - **Sin verificar en el sitio** (heredado del sitio anterior y conservado tal cual): testimonios,
   panel de SLA y cifras de cartera. Queda como decisión de Sam.
 
+### Adenda — la misma sesión, después del merge de #11
+
+- **PR abiertos, sin mergear** [`medido`]:
+  - `forumphs-com` #12: red de PH en alambre con núcleo que late y el logotipo en el núcleo;
+  - `forumphs-speaks` #3: rediseño de ForumPHs Speaks.
+- **Decisiones de Sam:**
+  - **La ley se nombra por lo que es, no por su número:** «la Ley vigente de Régimen de Propiedad
+    Horizontal». Un número de ley pierde vigencia. En `fphs-chat`, el texto base queda como un solo
+    dato interno (`LEY_BASE`).
+  - **Público frente a exclusivo:** «Consulta legal pública» frente a «Solo propietarios de PHs
+    administrados por ForumPHs».
+  - **Sin nombres ni cargos personales en Speaks:** «Supervisado y gestionado con criterio jurídico
+    por ForumPHs», más un aviso de información general que puede contener errores.
+  - **El agente de WhatsApp responderá también desde Speaks.** Por ahora es solo una proyección.
+- **Cargo de Ivette, sin resolver.** Sam indicó que «Abogada y Gerente General» no es el cargo de
+  Ivette. `brand.json → people.ivette_flores.role` sigue diciendo «Gerente General»: no se cambia sin
+  el dato correcto, que tiene que dar Sam. forumphs.com muestra «Abogada · Especialista en Régimen de
+  Propiedad Horizontal» [`medido`].
+
 ### Pendiente
 
+- **Sam:** dar el cargo correcto de Ivette, para corregir `brand.json` y revisar forumphs.com.
 - **Ivette:** vincular WhatsApp Business a la página de Facebook y a Instagram (en el Centro de
   cuentas de ForumPHs). En LinkedIn, como máximo, como dato de contacto del perfil: el canal de
   publicación sigue INACTIVO por decisión de Sam del 2026-08-26.
