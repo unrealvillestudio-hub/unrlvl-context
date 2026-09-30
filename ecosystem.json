@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-29-v2",
+    "version": "2026-09-30-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-29-v1",
+    "previous": "2026-09-29-v2",
     "previous_chain": [
+      "2026-09-29-v2",
       "2026-09-29-v1",
       "2026-09-27-v2",
       "2026-09-27-v1",
@@ -226,6 +227,18 @@
       "professor": "Learnings de la sesión listados en brands/NeuroneSCF/session_log.md 2026-09-29 (v2), con approved_by_sam=false hasta la aprobación de Sam.",
       "professor_aprobacion_2026-09-29": "7 learnings aprobados por Sam el 2026-09-29 (ids en brands/NeuroneSCF/session_log.md 2026-09-29 (v2)); 4 sembrados por el proxy api/professor con Vercel:web_fetch_vercel_url. Sustituye como estado vigente a la clave professor, que queda como registro del momento del Actualiza.",
       "brief_de_continuacion": "docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md — versión 2 al tope; la versión 1 bajo guard ⛔ NO OPERATIVO."
+    },
+    "_sesion_2026-09-30-v1": {
+      "date": "2026-09-30",
+      "conducted_by": "Sam x CC. Sesión «protocolo actualización - forumphs» del 2026-09-29/30: sitio público de ForumPHs y canal de WhatsApp de ventas.",
+      "prs_mergeados": "forumphs-com #11 · unrlvl-context #126 [medido por GitHub]",
+      "sitio_forumphs": "Portada y blog mobile-first sobre BP_BRAND_ForumPHs_v1.0; tipografías servidas desde el propio dominio (assets/site/); torre 3D viva y órbita de edificios; CTA en alto relieve; pie con la franja estándar UNRLVL; api/contact.js escapa lo que escribe el visitante. Pruebas nuevas: scripts/verify-layout.mjs (borde derecho de cada elemento, texto al 130 % y 150 %) y scripts/verify-contact.mjs.",
+      "skill": "ui-ux-layer v3.3 (#126): §18 sitio web público, §18.8 texto ampliado, §19 CTA premium e interacción.",
+      "dos_numeros": "WhatsApp Business +507 6722-7355 = prospección y ventas (teléfono de Ivette; Irja y Sam como dispositivos vinculados). El agente de propietarios usa la API con SU PROPIO número (Sam, 2026-09-30). Fuente: brands/ForumPHs/brand.json → brand.contact.",
+      "fphs_form": "FPHS-FORM (abierto el 2026-08-28) sigue abierto: la prueba propia de Sam del 2026-09-30 llegó a Spam [reportado por Sam]. PR antispam propuesto; SPF/DKIM/DMARC sin medir (DoH bloqueado desde CC; zona DNS de forumphs.com en Cloudflare [medido con Vercel list_domains]).",
+      "professor": "9 learnings aprobados por Sam y registrados en professor_learnings (session_date 2026-09-30): e2e5f640, 03cf673b, 3135d6c7, a91846c2, 6249f04f, f16eea44, 39e844c9, 43ece901, 04ad6ae1 [medido].",
+      "test_marca_n_mas_1": "NO APLICA a este Actualiza: sólo context files. El código de la sesión (forumphs-com #11) es de un repo exclusivo de la marca; api/_render.js conserva el tema como dato del canal.",
+      "detalle": "brands/ForumPHs/session_log.md 2026-09-30 · AGENDA.md v2026-09-30-v1."
     }
   },
   "studio": {
@@ -651,7 +664,8 @@
       "publish_timezone": "America/Panama",
       "_publish_timezone_nota": "Sembrado 2026-09-06 [medido]. Nombre IANA, NUNCA desfase: el CHECK brands_publish_timezone_es_iana rechaza -05:00, +04:00, UTC-5 y Etc/GMT+-N. America/Panama no cambia la hora; America/New_York si. 12 de 16 marcas siguen sin huso y es correcto: se siembra cuando la marca entra al calendario.",
       "_update_2026-09-08": "Ruta /bim/[token] en produccion sobre el sitio de la marca (repo forumphs-com, PR #8 y #9 mergeados). Sirve material comercial confidencial con caducidad, revocacion y registro de apertura. El MECANISMO es eje y vive en api/_collateral.js, que no conoce ninguna marca; /bim es la direccion que ESTE sitio publica y vive en api/bim.js, que si es artefacto de una marca. Otra marca monta el mismo modulo bajo la direccion que quiera, con su BRAND_ID, y sus filas apuntan a su carpeta del bucket collateral: cero cambios de esquema y cero codigo tocado. El documento servido no genera ninguna conexion a terceros — Chart.js y tipografias interiorizadas en el propio proyecto. Detalle operativo: forumphs-com → docs/COLLATERAL_LINKS.md.",
-      "_sesion_2026-09-29": "6 agentes nuevos semanales (crons 122–133); primera corrida con 8 hallazgos y 1 sobre el umbral de 70; umbral en 60 pendiente de decisión de Sam. Detalle en brands/ForumPHs/session_log.md 2026-09-29."
+      "_sesion_2026-09-29": "6 agentes nuevos semanales (crons 122–133); primera corrida con 8 hallazgos y 1 sobre el umbral de 70; umbral en 60 pendiente de decisión de Sam. Detalle en brands/ForumPHs/session_log.md 2026-09-29.",
+      "_sesion_2026-09-30-v1": "forumphs.com rehecho mobile-first (forumphs-com #11); WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios; FPHS-FORM sigue abierto (prueba propia en Spam, reportado por Sam). Detalle en brands/ForumPHs/session_log.md 2026-09-30."
     },
     {
       "id": "SamPublisher",

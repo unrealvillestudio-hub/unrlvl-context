@@ -1,5 +1,79 @@
 # ForumPHs — Session Log
 
+## 2026-09-30 — forumphs.com rehecho mobile-first, WhatsApp de ventas en el sitio y dos números separados
+
+> **Entrada de CC.** No reescribe la entrada de abajo. Sesión «protocolo actualización - forumphs»
+> del 2026-09-29/30. Lo `medido` se consultó el **2026-09-30**.
+
+### Decisiones de Sam
+
+- **El WhatsApp Business de ForumPHs (+507 6722-7355) es un canal de prospección y ventas, NO
+  operativo.** El agente de WhatsApp para propietarios y JD de los PH administrados irá por la API
+  (Twilio o Cloud API) **con su propio número**. En palabras de Sam: «Dos funciones distintas, dos
+  medios distintos y dos números distintos».
+- **Un solo correo visible en el sitio:** `contacto@forumphs.com`. Enlace de WhatsApp con mensaje
+  prellenado.
+- **TikTok fuera** de la lista de plataformas a vincular.
+- **WhatsApp Business vive en el teléfono de Ivette** (confirmado por Sam). Irja y Sam lo usarán
+  como dispositivos vinculados.
+- **El sitio muestra el estándar, no el inventario.** Se retiraron las tarjetas de propiedades y la
+  cifra «8 PH administrados». El sitio habla ahora de «el patrimonio de +1,500 familias» y de un
+  solo estándar.
+
+### Lo hecho
+
+- **`forumphs-com` #11 mergeado** (2026-09-30 01:47 UTC) [`medido`]:
+  - portada reescrita mobile-first sobre `BP_BRAND_ForumPHs_v1.0` (Amatista, Carbon y Terra);
+  - tipografías servidas desde el propio dominio (`assets/site/`, 38 woff2);
+  - menú móvil tipo cajón y barra de acción fija (WhatsApp + Diagnóstico gratis);
+  - torre 3D viva en el hero y órbita 3D de edificios alrededor de «FORUM PHS»;
+  - CTA en alto relieve;
+  - pie con la franja estándar UNRLVL (`#0F0F0F`, borde `#00FFD1`);
+  - blog (`api/_render.js`) con la misma paleta y botones rehechos.
+- **`api/contact.js` escapa todo lo que escribe el visitante** y valida el correo antes de enviar.
+  Antes insertaba los campos crudos en el HTML del correo.
+- **Pruebas nuevas:** `verify-layout` (9 escenarios, incluido el texto ampliado al 130 % y al
+  150 %) y `verify-contact` (23 casos). En la última corrida pasaban layout 9/0, blog 149/0,
+  bim 52/0 y contact 23/0 [`medido` antes del merge].
+- **`unrlvl-context` #126 mergeado:** `ui-ux-layer` v3.3, con §18 sitio web público, §18.8 texto
+  ampliado y §19 CTA premium [`medido`].
+- **Professor:** 9 learnings aprobados por Sam, registrados en `professor_learnings` con
+  `session_date` 2026-09-30 [`medido`]:
+  - `e2e5f640`, `03cf673b`, `3135d6c7`, `a91846c2`, `6249f04f`;
+  - `f16eea44`, `39e844c9`, `43ece901`, `04ad6ae1`.
+
+### Hallazgos
+
+- **Recorte en el teléfono de Sam.** El escalado de texto de Chrome Android ensanchaba una columna
+  de la grilla, y `overflow-x: hidden` lo ocultaba. Una primera verificación de CC lo dio por bueno
+  porque medía `scrollWidth`. Ahora se mide el borde derecho de cada elemento
+  (`scripts/verify-layout.mjs`).
+- **Contraste:** el Amatista sobre Carbon Deep da 1,98:1, así que como acento de texto sobre fondo
+  oscuro se usa Amatista Tint.
+- **`FPHS-FORM` (abierto desde el 2026-08-28) recibe su «prueba propia».** Sam envió una consulta
+  de prueba desde el sitio el 2026-09-30 y **llegó a Spam** [`reportado` por Sam]. Sigue sin
+  defensa contra bots.
+  - Plan entregado a Sam: trampa + tiempo mínimo + asunto fijo + texto plano.
+  - Falta la lectura de SPF/DKIM/DMARC. CC no pudo medirla: DoH bloqueado por el proxy, y la zona
+    DNS de forumphs.com está en Cloudflare, no en Vercel [`medido`].
+  - Por `MAIL_PRIVACY_RULE`, aquí solo se anota el resultado de la prueba, nada más del buzón.
+- **Sin verificar en el sitio** (heredado del sitio anterior y conservado tal cual): testimonios,
+  panel de SLA y cifras de cartera. Queda como decisión de Sam.
+
+### Pendiente
+
+- **Ivette:** vincular WhatsApp Business a la página de Facebook y a Instagram (en el Centro de
+  cuentas de ForumPHs). En LinkedIn, como máximo, como dato de contacto del perfil: el canal de
+  publicación sigue INACTIVO por decisión de Sam del 2026-08-26.
+- **Irja y Sam:** dispositivos vinculados (teléfono y ordenador). El teléfono principal tiene que
+  abrir la app al menos cada 14 días [`reportado`: ayuda de WhatsApp].
+- **Sam:** decidir la verificación en dos pasos y el PIN del número de ventas.
+- **Sam:** confirmar el objetivo del PR antispam del formulario y enviar la captura de «Mostrar
+  original» (SPF/DKIM/DMARC).
+- **Sam:** decidir si se mantienen, verifican o retiran los testimonios, el panel de SLA y las cifras.
+
+---
+
 ## 2026-09-29 (v2) — Umbral en 60 y dos carruseles con imagen propia por lámina
 
 > **Entrada de CC.** No reescribe la entrada de abajo.

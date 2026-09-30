@@ -1,8 +1,9 @@
 {
   "_meta": {
-    "version": "2026-08-26",
-    "previous": "2026-08-23",
-    "_previous_chain": "2026-08-26 ← 2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "version": "2026-09-30",
+    "previous": "2026-08-26",
+    "_previous_chain": "2026-09-30 ← 2026-08-26 ← 2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "_update_2026-09-30": "HRD_ACTUALIZA 2026-09-30. CAMBIO: brand.contact pasa al canal de prospección y ventas (contacto@forumphs.com + WhatsApp Business +50767227355, enlace con mensaje prellenado). El contacto anterior NO se borra: queda en brand._contact_anterior_2026-09-30. ADICIONES: brand.contact._uso · brand.contact._no_es · estado_2026-09-30. Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-09-30).",
     "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ADICIONES: publish_channels.blog.theme + publish_channels.blog.fonts_href + publish_channels.blog._nota_2026-08-26 (verificación de ruta) · publish_channels.linkedin (canal NUEVO, INACTIVO) · angulos_de_conversion (el ángulo objecion entra en los 11 dominios de conversión) · content_angles_catalogo (catálogo NUEVO intel.content_angles, 10 ángulos) · estado_2026-08-26. Nada removido. Verificado con execute_sql el 2026-08-27 (HRD-R13). Detalle en brands/ForumPHs/session_log.md (2026-08-26) y en IID/session_log.md (2026-08-26).",
     "_update_2026-08-23": "HRD_ACTUALIZA 2026-08-23. ADICIONES: publish_channels (blog operativo + email declarado y NO operativo) · public_themes (5 temas públicos) · voice_and_content.register (usted; HR-FPHS-07 rige la INSTRUCCIÓN al escritor, no sólo el texto entregado) · voice_and_content._resolved_2026-08-23. Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-08-23).",
     "maintained_by": "Claude",
@@ -20,6 +21,15 @@
     "wordmark_rule": "Puramente tipográfico — sin PNG ni raster",
     "domain": "forumphs.com",
     "contact": {
+      "email": "contacto@forumphs.com",
+      "whatsapp": "+50767227355",
+      "wa_link": "https://wa.me/50767227355",
+      "wa_prefill": "Hola, escribo desde forumphs.com y quisiera información sobre la administración de mi PH.",
+      "_uso": "Prospección y ventas. Es el único correo y el único WhatsApp visibles en forumphs.com (decisión de Sam, 2026-09-30). El WhatsApp Business vive en el teléfono de Ivette; Irja y Sam lo operan como dispositivos vinculados.",
+      "_no_es": "NO es canal operativo. El agente de WhatsApp para propietarios y JD de los PH administrados usa la API con SU PROPIO número (Sam, 2026-09-30: «Dos funciones distintas, dos medios distintos y dos números distintos»)."
+    },
+    "_contact_anterior_2026-09-30": {
+      "_guard": "⛔ NO OPERATIVO — contacto público hasta el 2026-09-30. Se conserva por historia; no usar en piezas nuevas.",
       "email": "ivetteflores@forumphs.com",
       "whatsapp": "+50766866775",
       "wa_link": "https://wa.me/50766866775"
@@ -442,5 +452,12 @@
     "blog_01_pr_2": "unrlvl-blog #1 (repo NUEVO) — el renderizador SALE de forumphs-com: blog_path como dato, router propio, tema y copia por canal. Lo que era código de una marca pasa a ser eje del ecosistema.",
     "falsos_positivos_medidos": "Sobre los 9 arbitrajes de intel.judge_calibration, recontado el 2026-08-27: HR-FPHS-15 3/3 = 100% · HR-FPHS-13 2/2 = 100% · HR-LEGAL-01 3/4 = 75%. ES LA CONDICIÓN PARA ENCENDER EL CRON 66.",
     "linkedin": "Pasa a INACTIVO por decisión de Sam del 2026-08-26 — fuera para TODAS las marcas hasta segunda orden."
+  },
+  "estado_2026-09-30": {
+    "sitio": "forumphs-com #11 mergeado el 2026-09-30: portada y blog rehechos mobile-first sobre BP_BRAND_ForumPHs_v1.0, tipografías servidas desde el propio dominio, CTA en alto relieve, pie con la franja estándar UNRLVL.",
+    "mensaje_del_sitio": "El sitio muestra el ESTÁNDAR, no el inventario: sin tarjetas de propiedades ni «8 PH administrados»; «el patrimonio de +1,500 familias» y un solo estándar (decisión de Sam, 2026-09-30).",
+    "contraste": "Amatista sobre Carbon Deep = 1,98:1. Como acento de TEXTO sobre fondo oscuro se usa Amatista Tint.",
+    "formulario": "api/contact.js escapa lo que escribe el visitante (#11). FPHS-FORM sigue abierto: sin defensa contra bots, y la prueba propia de Sam del 2026-09-30 llegó a Spam (reportado por Sam). PR antispam propuesto, pendiente de que Sam confirme el objetivo.",
+    "sin_verificar_en_el_sitio": "Testimonios, panel de SLA y cifras de cartera heredados del sitio anterior. Decisión de Sam pendiente."
   }
 }

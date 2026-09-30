@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.27 · 2026-09-30 (**una sección nueva y ninguna derogación: qué puede y qué no puede medir CC desde su contenedor en la nube.** Sección nueva **«CC EN LA NUBE — NAVEGADOR, DNS Y SALIDA»**: Chromium y Playwright preinstalados y usados para verificar maquetación; `add_repo` da push a `unrlvl-context` y lectura de `BluePrints` desde una sesión abierta en otro repo; **los registros DNS NO se pueden leer** (DoH bloqueado por el proxy) y la zona de los dominios de las marcas está en **Cloudflare**, no en Vercel; `faq.whatsapp.com` y `developers.facebook.com` bloqueados; `WebSearch` sí responde. Todo `medido` por CC el 2026-09-29/30.)_
+
 _Versión: 1.26 · 2026-09-29 (**una adición medida y ninguna derogación: el regulador de entrada deja de ser sólo consultable y decide antes de producir.** Subsección nueva **«Cuánto puede producir un canal — el cupo de entrada»** en la sección del regulador: la vista `intel.v_carril_entrada` y la regla de Sam «cadencia + 3». Lo demás de la sección queda igual.)_
 
 _Versión: 1.25 · 2026-09-27 (**una sección nueva y ninguna derogación: cómo se barre un conjunto de Edge Functions SIN ROMPER nada.** (1) **EL CÓDIGO DESPLEGADO SE EXTRAE BYTE A BYTE DEL ESZIP** (`unrlvl-supabase-mcp:get_edge_function` → archivo → `sourcesContent`), no se retranscribe: así se adoptaron al repo 12 EF desplegadas a mano. (2) **`query_logs` GUARDA ~91 DÍAS** de `function_edge_logs`, un día por consulta, y el user agent dice quién llama: **71 de 119 EF no se ejecutaron nunca** [`medido`], que es la evidencia para retirar. (3) **EL GRAFO DE LLAMADAS CON SU CREDENCIAL** se lee del código de las 119, y la arista peligrosa es la que añade la cabecera `if (secret)`. (4) **UNA SONDA `pg_net` MANDA SIEMPRE JSON VÁLIDO** (el cuerpo es `jsonb`): la de `claude-lab-bridge` contaba con uno inválido y llamó una vez a CopyLab. (5) **LA API DE SHOPIFY SÓLO LISTA LOS WEBHOOKS DE SU APP**: los del admin se firman con la clave de la tienda. Sección nueva: «BARRIDO DE EDGE FUNCTIONS», antes de «DESPLIEGUE». Versión anterior íntegra debajo.)_
@@ -870,6 +872,51 @@ motivo comercial, y **no la copia**.
 **La visibilidad es la que decide dónde va cada cosa, no la comodidad:** una imagen de correo tiene
 que ser pública o el cliente no la ve; un informe servido por token **no puede serlo**, o el token
 deja de significar nada.
+
+---
+
+## CC EN LA NUBE — NAVEGADOR, DNS Y SALIDA (añadido 2026-09-30)
+
+_Todo `medido` por CC el 2026-09-29/30, en la sesión del sitio de ForumPHs. Dice qué se puede
+comprobar desde el contenedor y qué hay que pedirle a Sam._
+
+### 🧭 Navegador real para verificar maquetación — sí
+
+**Chromium y Playwright vienen preinstalados** en el contenedor de CC
+(`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`). No se ejecuta `playwright install`.
+- Si el repo no trae Playwright, se apunta al global:
+  `PLAYWRIGHT_MODULE="$(npm root -g)/playwright/index.mjs"`.
+- Uso de referencia: `forumphs-com/scripts/verify-layout.mjs`. Mide el borde derecho de cada
+  elemento en varios anchos y con texto ampliado. Método en `skills/ui-ux-layer/SKILL.md` §18.
+- **Límite:** emula el escalado de texto; no es el teléfono de Sam. Una captura de Sam sigue
+  mandando sobre la emulación.
+
+### 🔗 Otro repo desde una sesión abierta en uno — sí, con `add_repo`
+
+- **Push a `unrlvl-context`:** funciona desde una sesión abierta en `forumphs-com` (PR #126
+  publicado así).
+- **Lectura de `BluePrints`:** también funciona por esa vía.
+- El alcance se amplía **durante** la sesión. No hace falta abrir otra.
+
+### 🌐 Registros DNS (SPF, DKIM, DMARC, MX) — NO desde CC
+
+- **El proxy de salida bloquea el DNS por HTTPS:**
+  - `dns.google`: `EGRESS_BLOCKED` en `WebFetch`, respuesta no JSON en `curl`;
+  - `cloudflare-dns.com`: `403` en CONNECT.
+- **Sin DNS, CC no puede afirmar si un dominio está bien autenticado para correo.**
+- **La zona DNS de los dominios de las marcas está en Cloudflare**, no en Vercel. Lo dice
+  `Vercel:list_domains` → `nameservers: *.ns.cloudflare.com`, con `zone: false` en `forumphs.com`,
+  `neuronescflorida.com` y `luciensael.com`. Los registros se editan en Cloudflare.
+- **El MCP de Cloudflare conectado no expone DNS:** solo D1, KV, R2, Workers, Hyperdrive y docs.
+- **Vía que sí funciona.** Sam abre un correo recibido → **«Mostrar original»** en Gmail. El
+  recuadro de arriba da SPF, DKIM y DMARC (PASS o FAIL). Sam envía la captura: es una medición de
+  Sam, `reportado` para CC.
+
+### 🚫 Documentación de Meta y WhatsApp — bloqueada; `WebSearch` sí
+
+- **Bloqueados por el proxy:** `faq.whatsapp.com` y `developers.facebook.com`.
+- **`WebSearch` responde.** Lo que se afirme sobre WhatsApp o Meta desde CC va como `reportado`,
+  con su fuente, nunca como `medido`.
 
 ---
 

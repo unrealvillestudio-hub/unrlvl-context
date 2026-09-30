@@ -1,5 +1,47 @@
 # BP_Brand_Context — ForumPHs
-**Versión:** 2026-08-26 · base previa 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+**Versión:** 2026-09-30 · base previa 2026-08-26 · base previa 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+
+---
+
+## 🆕 CANAL DE VENTAS Y SITIO PÚBLICO (2026-09-30)
+
+_Adición al tope. Nada de lo anterior se borra: la sección del 2026-08-25 sigue vigente inmediatamente debajo._
+
+### Un canal de ventas, un canal operativo, y no se mezclan
+
+| | Ventas y prospección | Operación (propietarios y JD) |
+|---|---|---|
+| **Medio** | WhatsApp Business (app) | API de WhatsApp (Twilio → Cloud API) |
+| **Número** | **+507 6722-7355** | **uno propio**, todavía sin asignar |
+| **Quién** | Ivette (teléfono principal); Irja y Sam como dispositivos vinculados | el agente de propietarios (`AGENDA_owner_agent.md`) |
+| **Dónde aparece** | forumphs.com, Facebook, Instagram | sólo en la comunicación con PH administrados |
+
+**Decisión de Sam, 2026-09-30:** «Dos funciones distintas, dos medios distintos y dos números
+distintos». Una pieza pública nunca remite al canal operativo. Un propietario que escribe al número
+de ventas por un asunto operativo recibe una respuesta que lo redirige; ahí no se atiende.
+
+**Correo público único:** `contacto@forumphs.com`. El enlace de WhatsApp lleva mensaje prellenado.
+Ambos datos viven en `brand.json → brand.contact`, que es la fuente para cualquier pieza.
+
+### El sitio muestra el estándar, no el inventario
+
+- **Decisión de Sam (2026-09-30).** No se enumeran propiedades ni se da el número de PH
+  administrados («8 PH» quedó fuera).
+- **Qué se dice en su lugar:** «el patrimonio de +1,500 familias» y «un solo estándar».
+- **Por qué** (`deducido` del pedido de Sam): un número pequeño de edificios resta. Un estándar que
+  se aplica a todos por igual suma, y crece sin tener que reescribir el sitio.
+- **Cifras sin verificar.** Testimonios, panel de SLA y cifras de cartera heredados del sitio
+  anterior siguen sin verificar. Ninguna pieza nueva las cita hasta que Sam decida.
+
+### Sistema visual del sitio (forumphs-com #11)
+
+- **Paleta.** Amatista `#5C3472`, Amatista Deep `#3A1F4A`, Terra `#C4622D`, Carbon `#1C2233`,
+  Carbon Deep `#0E1018` y Parchment `#F0EDE8` (`BP_BRAND_ForumPHs_v1.0`).
+- **Acento de texto sobre fondo oscuro:** Amatista Tint `#EAD9F5`. El Amatista puro sobre Carbon
+  Deep da 1,98:1 y no se lee.
+- **Tipografías servidas desde forumphs.com:** EB Garamond, Cormorant Garamond, Cinzel y DM Sans.
+  Se ven igual en cualquier navegador o teléfono.
+- **Pie.** El pie de ForumPHs termina en la franja estándar UNRLVL (`BP_BRAND_UNRLVL_v1.5 → footer`).
 
 ---
 
