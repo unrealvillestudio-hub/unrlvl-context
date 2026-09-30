@@ -11,6 +11,23 @@ _Destino sugerido en repo: `brands/ForumPHs/AGENDA_owner_agent.md`_
 
 ---
 
+## 🔼 ACTUALIZACIÓN 2026-09-30 — el «número dedicado» de 1.A.2 NO es el WhatsApp de ventas
+
+> **Entrada de CC.** `reportado`: lo decidió Sam el 2026-09-30. **Nada de lo anterior se deroga.**
+> Esta nota precisa la tarea **1.A.2**.
+
+- ForumPHs ya tiene un **WhatsApp Business: +507 6722-7355**, en el teléfono de Ivette. Es un canal
+  de **prospección y ventas**: es el que aparece en forumphs.com y en las redes.
+- **El agente de propietarios NO usa ese número.** Va por la API (Twilio → Cloud API al escalar)
+  con **su propio número**. Sam lo dijo así: «Dos funciones distintas, dos medios distintos y dos
+  números distintos».
+- **Consecuencia para 1.A.2.** El número dedicado se consigue aparte. **No se migra** el número de
+  ventas a la API; tampoco se usa en modo Coexistence (app + API sobre el mismo número).
+- **Al 2026-09-30 no hay número operativo asignado.** Es `deducido` (no aparece en el repo) y lo
+  confirmaría Sam.
+
+---
+
 ## 🔼 ACTUALIZACIÓN 2026-09-19 — el agente deja de ser una funcionalidad y pasa a habilitar el modelo comercial
 
 > **Entrada de CC.** Todo lo de este bloque es `reportado` — lo decidió Sam en la sesión de análisis
