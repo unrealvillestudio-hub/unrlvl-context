@@ -635,7 +635,7 @@ clasifica antes de actuar:
 
 | Motivo | Dónde se corrige | Cómo |
 |---|---|---|
-| El texto sobre la imagen repite el título | dato del canal + la pieza | `brand_publish_channels.image_title_mode = 'dialogue'`; `copy.image_hook` que **responde** al título; recompose **sin** regenerar imagen |
+| El texto sobre la imagen repite el título | dato del canal + la pieza | `brand_publish_channels.image_title_mode = 'dialogue'`; `copy.image_hook` que **abre la tensión** y un título que **le responde** (`HR-GEN-17`; corregido 2026-09-30 — antes decía «que **responde** al título», dirección invertida); recompose **sin** regenerar imagen |
 | Voz, promesa sin cumplir, hashtag, mecanismo del producto | texto de la pieza (+ genoma si se repite) | edición registrada en `intel.piece_edits` (`edited_by 'cc:fixable'`) |
 | La persona no se parece, sale pegada o con edad equivocada | dato de la persona | `person_blueprints.reference_photos` = **recortes de cara**, nunca fotos completas; `imagelab_description` escrita mirando sus fotos, cabello incluido |
 | Producto grande, sin etiqueta, imposible de sostener | directriz de la pieza o corrector | tamaño en `product_blueprints.physical_size`; la etiqueta se **pega**, no se pide (Professor `75331271`) |
