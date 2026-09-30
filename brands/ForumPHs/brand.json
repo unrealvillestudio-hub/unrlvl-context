@@ -1,8 +1,9 @@
 {
   "_meta": {
-    "version": "2026-09-30",
-    "previous": "2026-08-26",
-    "_previous_chain": "2026-09-30 ← 2026-08-26 ← 2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "version": "2026-09-30-v2",
+    "previous": "2026-09-30",
+    "_previous_chain": "2026-09-30-v2 ← 2026-09-30 ← 2026-08-26 ← 2026-08-23 ← 2026-08-09 ← 2026-08-08. Ninguna clave anterior se borra: esta pasada es ADICIÓN.",
+    "_update_2026-09-30-v2": "HRD_ACTUALIZA 2026-09-30 (v2). ADICIÓN: estado_2026-09-30-v2 (ForumPHs Speaks rehecho, la ley nombrada por lo que es, firma sin personas, fphs-chat en unrlvl-iid-functions). Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-09-30 v2).",
     "_update_2026-09-30": "HRD_ACTUALIZA 2026-09-30. CAMBIO: brand.contact pasa al canal de prospección y ventas (contacto@forumphs.com + WhatsApp Business +50767227355, enlace con mensaje prellenado). El contacto anterior NO se borra: queda en brand._contact_anterior_2026-09-30. ADICIONES: brand.contact._uso · brand.contact._no_es · estado_2026-09-30. Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-09-30).",
     "_update_2026-08-26": "HRD_ACTUALIZA 2026-08-26. ADICIONES: publish_channels.blog.theme + publish_channels.blog.fonts_href + publish_channels.blog._nota_2026-08-26 (verificación de ruta) · publish_channels.linkedin (canal NUEVO, INACTIVO) · angulos_de_conversion (el ángulo objecion entra en los 11 dominios de conversión) · content_angles_catalogo (catálogo NUEVO intel.content_angles, 10 ángulos) · estado_2026-08-26. Nada removido. Verificado con execute_sql el 2026-08-27 (HRD-R13). Detalle en brands/ForumPHs/session_log.md (2026-08-26) y en IID/session_log.md (2026-08-26).",
     "_update_2026-08-23": "HRD_ACTUALIZA 2026-08-23. ADICIONES: publish_channels (blog operativo + email declarado y NO operativo) · public_themes (5 temas públicos) · voice_and_content.register (usted; HR-FPHS-07 rige la INSTRUCCIÓN al escritor, no sólo el texto entregado) · voice_and_content._resolved_2026-08-23. Nada removido. Detalle en brands/ForumPHs/session_log.md (2026-08-23).",
@@ -465,5 +466,12 @@
     "contraste": "Amatista sobre Carbon Deep = 1,98:1. Como acento de TEXTO sobre fondo oscuro se usa Amatista Tint.",
     "formulario": "api/contact.js escapa lo que escribe el visitante (#11). FPHS-FORM sigue abierto: sin defensa contra bots, y la prueba propia de Sam del 2026-09-30 llegó a Spam (reportado por Sam). PR antispam propuesto, pendiente de que Sam confirme el objetivo.",
     "sin_verificar_en_el_sitio": "Testimonios, panel de SLA y cifras de cartera heredados del sitio anterior. Decisión de Sam pendiente."
+  },
+  "estado_2026-09-30-v2": {
+    "speaks": "forumphs-speaks #3 mergeado: ForumPHs Speaks rehecho sobre el BP (paleta, tipografías propias, móvil primero, CTA en alto relieve, pie estándar UNRLVL). «Consulta legal pública» frente a «Solo propietarios de PHs administrados por:».",
+    "ley_vigente": "Regla de marca (Sam, 2026-09-30): en público la ley se nombra «la Ley vigente de Régimen de Propiedad Horizontal», nunca por su número ni por su año. En fphs-chat el texto base es un solo dato interno (LEY_BASE).",
+    "firma_institucional": "ForumPHs Speaks no nombra personas ni cargos: «Supervisado y gestionado con criterio jurídico por ForumPHs» + aviso de información general que puede contener errores.",
+    "fphs_chat": "Vive en unrealvillestudio-hub/unrlvl-iid-functions/supabase/functions/fphs-chat (#275). Desplegado build _64 con verify_jwt=false (obligatorio: la llama la página pública). La copia de forumphs-speaks se retira (#4).",
+    "fphs_session": "Sin fuente en git (medido 2026-09-30): antes de cambiarla, snapshot en unrlvl-iid-functions."
   }
 }

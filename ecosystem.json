@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-09-30-v1",
+    "version": "2026-09-30-v2",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-09-29-v2",
+    "previous": "2026-09-30-v1",
     "previous_chain": [
+      "2026-09-30-v1",
       "2026-09-29-v2",
       "2026-09-29-v1",
       "2026-09-27-v2",
@@ -239,6 +240,18 @@
       "professor": "9 learnings aprobados por Sam y registrados en professor_learnings (session_date 2026-09-30): e2e5f640, 03cf673b, 3135d6c7, a91846c2, 6249f04f, f16eea44, 39e844c9, 43ece901, 04ad6ae1 [medido].",
       "test_marca_n_mas_1": "NO APLICA a este Actualiza: sólo context files. El código de la sesión (forumphs-com #11) es de un repo exclusivo de la marca; api/_render.js conserva el tema como dato del canal.",
       "detalle": "brands/ForumPHs/session_log.md 2026-09-30 · AGENDA.md v2026-09-30-v1."
+    },
+    "_sesion_2026-09-30-v2": {
+      "date": "2026-09-30",
+      "conducted_by": "Sam x CC. Segunda mitad de la sesión del 2026-09-30: ForumPHs Speaks rehecho y fphs-chat llevado al repo de las EF.",
+      "prs_mergeados": "forumphs-com #12 · forumphs-speaks #3 · unrlvl-iid-functions #275 · unrlvl-context #127 [medido por GitHub]",
+      "prs_abiertos": "forumphs-speaks #4 (retiro de la copia de fphs-chat)",
+      "fphs_chat": "Vive en unrlvl-iid-functions/supabase/functions/fphs-chat (snapshot _44 + cambio, #275). Desplegado por Sam: build _64, verify_jwt=false, ezbr_sha256 58710ac0…, marcador LEY-PROMPT en el bundle [medido con get_edge_function].",
+      "regla_ef": "Las EF se versionan y se despliegan desde unrlvl-iid-functions (reportado por Sam; escrita en CAPABILITIES 1.28, sección DESPLIEGUE). Las EF públicas se despliegan con --no-verify-jwt.",
+      "deuda": "fphs-session sin fuente en git [medido].",
+      "professor": "5 learnings aprobados por Sam y registrados en professor_learnings (session_date 2026-09-30): 8bdeb970, 63abc3c8, 7294d886, e0a97165, f845365d [medido].",
+      "test_marca_n_mas_1": "NO APLICA a este Actualiza: sólo context files. El código de la sesión vive en repos y EF exclusivos de ForumPHs.",
+      "detalle": "brands/ForumPHs/session_log.md 2026-09-30 (v2) · AGENDA.md v2026-09-30-v2 · CAPABILITIES.md 1.28."
     }
   },
   "studio": {
@@ -665,7 +678,8 @@
       "_publish_timezone_nota": "Sembrado 2026-09-06 [medido]. Nombre IANA, NUNCA desfase: el CHECK brands_publish_timezone_es_iana rechaza -05:00, +04:00, UTC-5 y Etc/GMT+-N. America/Panama no cambia la hora; America/New_York si. 12 de 16 marcas siguen sin huso y es correcto: se siembra cuando la marca entra al calendario.",
       "_update_2026-09-08": "Ruta /bim/[token] en produccion sobre el sitio de la marca (repo forumphs-com, PR #8 y #9 mergeados). Sirve material comercial confidencial con caducidad, revocacion y registro de apertura. El MECANISMO es eje y vive en api/_collateral.js, que no conoce ninguna marca; /bim es la direccion que ESTE sitio publica y vive en api/bim.js, que si es artefacto de una marca. Otra marca monta el mismo modulo bajo la direccion que quiera, con su BRAND_ID, y sus filas apuntan a su carpeta del bucket collateral: cero cambios de esquema y cero codigo tocado. El documento servido no genera ninguna conexion a terceros — Chart.js y tipografias interiorizadas en el propio proyecto. Detalle operativo: forumphs-com → docs/COLLATERAL_LINKS.md.",
       "_sesion_2026-09-29": "6 agentes nuevos semanales (crons 122–133); primera corrida con 8 hallazgos y 1 sobre el umbral de 70; umbral en 60 pendiente de decisión de Sam. Detalle en brands/ForumPHs/session_log.md 2026-09-29.",
-      "_sesion_2026-09-30-v1": "forumphs.com rehecho mobile-first (forumphs-com #11); WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios; FPHS-FORM sigue abierto (prueba propia en Spam, reportado por Sam). Detalle en brands/ForumPHs/session_log.md 2026-09-30."
+      "_sesion_2026-09-30-v1": "forumphs.com rehecho mobile-first (forumphs-com #11); WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios; FPHS-FORM sigue abierto (prueba propia en Spam, reportado por Sam). Detalle en brands/ForumPHs/session_log.md 2026-09-30.",
+      "_sesion_2026-09-30-v2": "ForumPHs Speaks rehecho (forumphs-speaks #3); la ley se nombra «la Ley vigente de Régimen de Propiedad Horizontal»; Speaks firma sin personas ni cargos; fphs-chat vive en unrlvl-iid-functions (#275, build _64); fphs-session sin fuente en git. Detalle en brands/ForumPHs/session_log.md 2026-09-30 (v2)."
     },
     {
       "id": "SamPublisher",

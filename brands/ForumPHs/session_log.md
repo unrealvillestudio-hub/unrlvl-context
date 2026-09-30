@@ -1,5 +1,64 @@
 # ForumPHs — Session Log
 
+## 2026-09-30 (v2) — Speaks rehecho, fphs-chat pasa a unrlvl-iid-functions y la ley se nombra por lo que es
+
+> **Entrada de CC.** No reescribe la entrada `2026-09-30` de abajo: es la segunda mitad de la misma
+> sesión, después del merge de #127. Todo lo `medido` se consultó el **2026-09-30**.
+
+### Mergeado y desplegado [`medido`]
+
+- **`forumphs-com` #12** (15:36 UTC): red de PH en alambre con el núcleo que late y el logotipo de
+  ForumPHs en el núcleo.
+- **`forumphs-speaks` #3** (15:36 UTC): ForumPHs Speaks rehecho sobre el BP.
+  - **Diseño:** paleta de marca, tipografías servidas desde el propio dominio, diseño pensado primero
+    para el teléfono y CTA en alto relieve.
+  - **Contenido:** el logotipo en cada pantalla, «Consulta legal pública» frente a «Solo propietarios
+    de PHs administrados por:» y el pie estándar de forumphs.com.
+  - **Arreglos:** plantilla única del formulario de propietario, caracteres recuperados, escape de
+    HTML y preguntas frecuentes sin renglones montados.
+- **`unrlvl-iid-functions` #275:** `fphs-chat` entra al repo de las EF en dos commits, primero el
+  snapshot del build `_44` y después el cambio. Sam lo desplegó: build `_64` a las 16:03 UTC, con
+  `verify_jwt: false` y el marcador `LEY-PROMPT` en el bundle.
+- **`unrlvl-context` #127** (15:50 UTC): Actualiza de la primera mitad, con el cargo de Ivette
+  corregido.
+
+### Decisiones de Sam
+
+- **La ley se nombra por lo que es:** «la Ley vigente de Régimen de Propiedad Horizontal». El
+  número de una ley pierde vigencia. En `fphs-chat`, el texto base queda como un solo dato interno
+  (`LEY_BASE`) y el revisor trata el número como error.
+- **ForumPHs Speaks no nombra personas ni cargos:**
+  - firma «Supervisado y gestionado con criterio jurídico por ForumPHs»;
+  - aviso de información general;
+  - bienvenida con el texto de Sam: «…y puesto que estoy soportado sobre infraestructura
+    tecnológica podría equivocarme».
+- **El agente de WhatsApp responderá también desde Speaks.** Por ahora es solo una proyección.
+- **Las EF se versionan y se despliegan desde `unrlvl-iid-functions`.** Sam corrigió a CC, que
+  había pedido desplegar desde `forumphs-speaks`. La copia de `fphs-chat` en `forumphs-speaks` se
+  elimina y queda una nota que remite a la ubicación vigente (`forumphs-speaks` #4, abierto).
+
+### Hallazgos
+
+- **`fphs-session` no tiene fuente en git** [`medido`]. Solo existe desplegada.
+- **El primer intento de despliegue falló** porque la copia local de Sam no tenía el merge
+  («Entrypoint path does not exist»). Producción no cambió [`medido`]. Tras el `git pull`, el
+  despliegue salió bien.
+
+### Professor
+
+5 learnings aprobados por Sam, registrados en `professor_learnings` (`session_date` 2026-09-30)
+[`medido`]: `8bdeb970`, `63abc3c8`, `7294d886`, `e0a97165` y `f845365d`.
+
+### Pendiente
+
+- **Sam:** mergear `forumphs-speaks` #4 (retiro de la copia de `fphs-chat`).
+- **Sam:** probar el agente de Speaks desde el teléfono con una consulta real.
+- **Siguiente cambio en `fphs-session`:** traerla antes a `unrlvl-iid-functions` con su `SNAPSHOT.md`.
+- **Pendientes de la entrada de abajo:** siguen en pie (`FPHS-FORM`, testimonios y cifras,
+  vinculación de WhatsApp, dispositivos vinculados).
+
+---
+
 ## 2026-09-30 — forumphs.com rehecho mobile-first, WhatsApp de ventas en el sitio y dos números separados
 
 > **Entrada de CC.** No reescribe la entrada de abajo. Sesión «protocolo actualización - forumphs»
