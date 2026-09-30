@@ -1,6 +1,7 @@
 # SKILL — ui-ux-layer · CORE
 _UNRLVL Brand Visual Reference · Multimarca · B2C/B2B · Supabase-powered_
-_Versión: 3.1 · 2026-05-22_
+_Versión: 3.2 · 2026-09-30 · base previa: 3.1 · 2026-05-22 (cuerpo conservado íntegro)_
+_v3.2: una adición y ninguna derogación — **§18 SITIO WEB PÚBLICO (landing + blog)**, medida sobre el rediseño de forumphs.com (`forumphs-com` #11)._
 _Capas: Comunicación · Geometría · Psicología Visual · Instinto Fotográfico · Disrupción · **Vida y Movimiento**_
 
 ---
@@ -16,6 +17,7 @@ Al inicio de cualquier sesión que produzca HTML / CSS / JS / React, Claude:
 5. Responde las 4 preguntas de comunicación (Sección 9) antes de diseñar
 6. Elige la arquitectura de tensión (Sección 14) antes de hacer el layout
 7. **Aplica al menos 3 ítems de SECCIÓN 17 (Vida y Movimiento) — OBLIGATORIO desde v3.1**
+8. **Si el output es un SITIO WEB PÚBLICO: aplica la SECCIÓN 18 completa — OBLIGATORIO desde v3.2** (mobile-first, fuentes propias, contraste medido, navegación móvil, verificación en navegador)
 
 **Regla absoluta:** Nunca hardcodear colores ni fuentes sin pasar por este protocolo.
 **Regla v3.0:** Nunca generar un output visual sin definir primero QUÉ comunica y QUÉ reacción busca provocar.
@@ -38,6 +40,7 @@ Al inicio de cualquier sesión que produzca HTML / CSS / JS / React, Claude:
 | Componente React/Next.js | med | med | med | ✅ | ✅ |
 | App nativa (RN / Swift) | ✅ | med | ✅ | ✅ | ✅ |
 | Momento hero / marketing | ✅ | ✅ | med | ❌ | med |
+| **Sitio web público (landing + blog) — v3.2** | ✅ | med | ✅ | med | ✅ |
 
 **Leyenda:** ✅ Cargar completo · med Cargar si el output lo justifica · ❌ No aplicable
 
@@ -320,6 +323,7 @@ Leading lines: border-left terra → apunta al CTA
 **Brand compliance:**
 - [ ] brand_id identificado
 - [ ] Google Fonts desde css_import real
+- [ ] **(v3.2) Sitio web público: fuentes servidas desde el propio dominio, NO desde Google (§18.1).** La línea anterior sigue rigiendo artefactos internos (suites, dashboards, documentos).
 - [ ] Footer con border-top: 2px solid var(--accent)
 - [ ] Tabs activos con var(--terra)
 
@@ -670,5 +674,111 @@ el usuario no puede nombrar qué es diferente, pero lo siente. Esa sensación ES
 
 ---
 
+## SECCIÓN 18 — SITIO WEB PÚBLICO: LANDING + BLOG (v3.2 — NUEVO)
+
+_(Adición del 2026-09-30. Todo lo de arriba sigue vigente. Nace del rediseño de forumphs.com
+—`unrealvillestudio-hub/forumphs-com` #11—, donde cada regla de abajo corrigió un defecto
+**medido** en producción, no una preferencia.)_
+
+**Principio rector:** un sitio público se diseña primero para el teléfono, se sirve sin depender
+de terceros y se verifica en un navegador real antes de entregarlo. «Se ve bien en escritorio»
+no es un criterio de aceptación.
+
+### 18.1 — Fuentes servidas desde el propio dominio
+
+- **Nunca Google Fonts en tiempo de ejecución en un sitio público.** Con la hoja pedida a
+  `fonts.googleapis.com`, el texto se dibuja primero con la fuente del sistema y cambia al
+  llegar la de marca, y un bloqueador o un firewall deja el wordmark en Times. La licencia SIL OFL
+  de las familias del ecosistema permite alojarlas.
+- **Método:** un script de interiorización en el repo del sitio que descarga los `woff2`
+  (subconjuntos `latin` y `latin-ext`) y reescribe las `@font-face` a rutas locales. Referencia:
+  `forumphs-com/scripts/vendor-site-fonts.mjs`, que reutiliza `vendorFonts` de
+  `vendor-collateral.mjs` en vez de copiarla.
+- **Precarga** sólo los 2 o 3 cortes que pintan la primera pantalla (`<link rel="preload" as="font"
+  crossorigin>`). Lo demás lo resuelve `unicode-range`: el navegador baja sólo lo que usa.
+- **Pila de respaldo declarada** en cada variable (`'EB Garamond', Georgia, serif`), y **sólo los
+  pesos que se cargan**: pedir un 600 que no existe sintetiza una negrita falsa.
+
+### 18.2 — Contraste MEDIDO de la paleta ForumPHs (fórmula WCAG 2.1, 2026-09-30)
+
+Corrige y amplía la tabla aproximada de `a11y.md` A11Y-1, que se conserva. **Donde discrepan,
+manda esta:**
+
+| Combinación | Ratio | Uso correcto |
+|---|---|---|
+| Parchment `#F0EDE8` sobre Carbon Deep `#0E1018` | **16.26** | texto principal |
+| Amatista Tint `#EAD9F5` sobre Carbon Deep | **14.23** | **acento de texto sobre oscuro** (cursivas, etiquetas, cifras) |
+| Dust `#B8B0A8` sobre Carbon Deep | **8.87** | texto secundario |
+| **Amatista `#5C3472` sobre Carbon Deep** | **1.98 ❌** | **nunca como texto ni acento sobre oscuro** — sólo relleno de botón, borde o fondo |
+| Parchment sobre Amatista | **8.21** | texto de botón primario |
+| Terra `#C4622D` sobre Carbon Deep | **4.64** | etiqueta pequeña, sólo sobre carbon-d |
+| Terra sobre superficie `#141927` | **4.28 ❌** texto normal | sobre tarjetas, Terra sólo en texto grande, reglas y bordes |
+| Terra sobre Carbon `#1C2233` | **3.87 ❌** texto normal | ídem |
+| Blanco sobre Terra | **4.09 ❌** texto normal | botón Terra con texto **Carbon Deep** (4.64) |
+| Blanco sobre verde WhatsApp `#25D366` | **1.98 ❌** | botón WhatsApp con texto **Carbon Deep** (9.57) |
+
+**La trampa que motivó la tabla:** usar Amatista, el primario institucional, como color de
+acento en titulares sobre fondo oscuro. Se ve «de marca» en el monitor del diseñador y no se lee
+en un teléfono al sol. En sitio oscuro, **Amatista rellena y Amatista Tint escribe.**
+
+### 18.3 — Navegación móvil de un sitio (no de una app)
+
+- **Panel a pantalla completa**, no un desplegable colgado del header: enlaces grandes arriba
+  (≥ 56 px de alto), CTA primarios **abajo, en la zona del pulgar** (MOB-1).
+- **Comportamiento de diálogo:** `role="dialog"` + `aria-modal`, **bloqueo del scroll del fondo**,
+  **foco atrapado** (el botón de menú incluido), cierre con **Escape**, al tocar un enlace (antes
+  de navegar, o el panel tapa el ancla) y al pasar a escritorio.
+- **Barra de acción inferior** en el teléfono, con los dos CTA de conversión. Aparece al dejar
+  atrás el hero y **se oculta** en la sección de contacto, en el pie y con el menú abierto. Respeta
+  `env(safe-area-inset-bottom)` y exige `viewport-fit=cover`.
+- **El menú completo pasa a la cabecera sólo cuando cabe sin partir líneas**: todos sus enlaces con
+  `white-space: nowrap`. Medido: 8 elementos + subtítulo de marca partían en dos líneas a 1280 px.
+  El punto de corte se elige por el contenido, no por un número de costumbre.
+- **En el blog** (tres enlaces) no hace falta panel: dos filas en el teléfono —marca + CTA arriba,
+  pestañas de 48 px a todo el ancho debajo— y una sola fila fija desde 720 px.
+
+### 18.4 — Grillas que no desbordan
+
+`grid-template-columns: repeat(auto-fill, minmax(min(100%, 292px), 1fr))`. **Sin el `min()`**, una
+columna mínima fija más ancha que el teléfono desborda la página en horizontal: con 292 px y
+24 px de margen a cada lado, cualquier pantalla de 340 px o menos.
+
+### 18.5 — El contenido no depende del JS para verse
+
+Las animaciones de entrada se condicionan a una clase que pone el propio script
+(`document.documentElement.classList.add('js')` en el `<head>` + `.js .reveal { opacity: 0 }`).
+Sin JS, o con JS roto, todo queda visible. Acordeones con `<details>` nativo: funcionan sin JS y
+con teclado.
+
+### 18.6 — Verificación en navegador — OBLIGATORIA antes de entregar
+
+Con Playwright, que está preinstalado en el contenedor de CC:
+
+- anchos **360 · 390 · 768 · 1280 · 1440**, con `isMobile` y `hasTouch` en los tres primeros;
+- **`document.documentElement.scrollWidth === clientWidth`** en todos, es decir, sin desborde horizontal;
+- **objetivos táctiles ≥ 44 px** medidos con `getBoundingClientRect`, no estimados;
+- **`document.fonts`**: la lista de familias cargadas coincide con las del BP;
+- **cero errores** de consola y de página;
+- capturas del menú abierto y de la barra inferior tras hacer scroll.
+
+Una entrega de sitio sin esta verificación es `deducido`, aunque el CSS «esté bien»
+(`DELIVERY_AND_VERIFICATION_RULE` §4).
+
+### 18.7 — Checklist de sitio público
+
+- [ ] Mobile-first: estilos base del teléfono, `min-width` para crecer
+- [ ] Fuentes propias, precarga de 2 o 3 cortes, pila de respaldo (§18.1)
+- [ ] Combinaciones de color contrastadas contra §18.2
+- [ ] Navegación móvil con bloqueo de scroll, foco atrapado y Escape (§18.3)
+- [ ] CTA de conversión en la zona del pulgar
+- [ ] Grillas con `minmax(min(100%, N), 1fr)` (§18.4)
+- [ ] Contenido visible sin JS (§18.5)
+- [ ] `prefers-reduced-motion` e `:focus-visible`
+- [ ] Inputs a 16 px (sin zoom en iOS) y `autocomplete` en el formulario
+- [ ] Verificación en navegador de §18.6 con su resultado en el PR
+
+---
+
 _ui-ux-layer CORE v3.1 · Unrealville Studio · 2026-05-22_
 _Extensiones: motion.md · 3d-spatial.md · mobile-ux.md · design-tokens.md · a11y.md_
+_v3.2 · 2026-09-30 · §18 Sitio web público_
