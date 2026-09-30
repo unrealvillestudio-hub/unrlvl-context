@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.28 · 2026-09-30 (**una adición en DESPLIEGUE y ninguna derogación: dónde vive la fuente de una EF y cómo se despliega una EF pública.** (1) **Las EF se versionan y se despliegan desde `unrlvl-iid-functions`** [`reportado` por Sam, 2026-09-30: la regla existía y no estaba escrita]. (2) **Una EF que entra sin versionar llega primero tal como corre**, con `SNAPSHOT.md`. (3) **Las EF que llama una página pública se despliegan con `--no-verify-jwt`.** (4) **Variante nueva del árbol sin `git pull`:** si el archivo no existe en la copia local, la CLI falla con «Entrypoint path does not exist» y producción no cambia [`medido` el 2026-09-30].)_
+
 _Versión: 1.27 · 2026-09-30 (**una sección nueva y ninguna derogación: qué puede y qué no puede medir CC desde su contenedor en la nube.** Sección nueva **«CC EN LA NUBE — NAVEGADOR, DNS Y SALIDA»**: Chromium y Playwright preinstalados y usados para verificar maquetación; `add_repo` da push a `unrlvl-context` y lectura de `BluePrints` desde una sesión abierta en otro repo; **los registros DNS NO se pueden leer** (DoH bloqueado por el proxy) y la zona de los dominios de las marcas está en **Cloudflare**, no en Vercel; `faq.whatsapp.com` y `developers.facebook.com` bloqueados; `WebSearch` sí responde. Todo `medido` por CC el 2026-09-29/30.)_
 
 _Versión: 1.26 · 2026-09-29 (**una adición medida y ninguna derogación: el regulador de entrada deja de ser sólo consultable y decide antes de producir.** Subsección nueva **«Cuánto puede producir un canal — el cupo de entrada»** en la sección del regulador: la vista `intel.v_carril_entrada` y la regla de Sam «cadencia + 3». Lo demás de la sección queda igual.)_
@@ -593,6 +595,44 @@ bundle desplegado** — una cadena que sólo existe en el código nuevo.
 3. **Leer `ezbr_sha256`** con `Supabase:list_edge_functions` y compararlo con el de antes.
 4. **Buscar el marcador del cambio dentro del bundle desplegado.** Sin este paso, el punto 3 sólo
    descarta el caso más burdo.
+
+### 📍 Dónde vive la fuente de una EF, y las EF públicas (añadido 2026-09-30)
+
+**Las Edge Functions se versionan y se despliegan desde `unrealvillestudio-hub/unrlvl-iid-functions`**
+(`supabase/functions/<slug>/`) [`reportado` por Sam, 2026-09-30].
+- **Por qué se escribe ahora:** la regla existía pero no estaba escrita, y CC pidió desplegar
+  `fphs-chat` desde el repo de la página (`forumphs-speaks`), que era donde estaba su única copia en
+  git. Dos repos con la misma función son dos fuentes en cuanto alguien toca una.
+
+**Antes de tocar una EF:**
+1. **Localizar su fuente** en `unrlvl-iid-functions`.
+2. **Si no está, el primer commit la trae tal como corre:**
+   - la fuente sale de `get_edge_function`;
+   - se añade un `SNAPSHOT.md` con la procedencia, el **build real** y `verify_jwt`. El build real es
+     el sufijo `_N` del `entrypoint_path`; el contador `version` **no** es la versión.
+   - Formato de referencia: `supabase/functions/approve-piece/SNAPSHOT.md`.
+3. **El cambio va en un commit aparte**, para que el PR muestre solo el cambio.
+4. **La copia que quede en otro repo se retira** con una nota que remita a la ubicación vigente.
+   Caso: `fphs-chat` → `unrlvl-iid-functions` #275 y `forumphs-speaks` #4.
+
+**Las EF que llama una página pública se despliegan con `--no-verify-jwt`:** `fphs-chat` desde
+forumphs-speaks, y las que `ecosystem.json` marca «PUBLICA POR DISENO».
+- **Qué pasa si se olvida:** se activa `verify_jwt` y la página deja de recibir respuestas, sin ningún
+  error en el código.
+- **Dónde se escribe:** en el `SNAPSHOT.md` y en el PR.
+- **Después de cada despliegue:** verificar el campo con `get_edge_function`.
+
+**Variante nueva del árbol sin `git pull`** [`medido` el 2026-09-30]:
+- **Síntoma:** si el archivo aún no existe en la copia local, la CLI falla con «failed to read file» y
+  «unexpected deploy status 400: Entrypoint path does not exist».
+- **Efecto:** producción **no cambia**; el `ezbr_sha256` sigue igual.
+- **Es el caso benigno del de arriba:** allí el árbol viejo **sí** tenía el archivo y subía el código
+  anterior sin avisar. Tras el `git pull`, la secuencia 1-4 cerró el caso:
+  - `ezbr_sha256` `a756ec0c…` → `58710ac0…`;
+  - marcador `LEY-PROMPT` presente en el bundle.
+
+**Deuda medida:** `fphs-session`, la EF de sesiones y códigos de propietario de ForumPHs Speaks,
+**no tiene fuente en git**. Antes de cambiarla, se trae a `unrlvl-iid-functions` con su snapshot.
 
 > **Por qué esta sección vive acá y no en el protocolo:** `protocols/MEASUREMENT_METHOD_RULE.md` §4 es
 > la **fuente** de cómo se verifica un despliegue. Esta entrada **no la copia**: añade el tramo del

@@ -1,5 +1,20 @@
 # BP_Brand_Context — ForumPHs
-**Versión:** 2026-09-30 · base previa 2026-08-26 · base previa 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+**Versión:** 2026-09-30-v2 · base previa 2026-09-30 · base previa 2026-08-26 · base previa 2026-08-25 · base previa 2026-08-23 · base previa 2026-08-08 · base original 2026-03-22 | **Mantenido por:** Claude | **Lectura:** Inicio de cada sesión ForumPHs
+
+---
+
+## 🆕 CÓMO SE NOMBRA LA LEY Y QUIÉN FIRMA (2026-09-30, v2)
+
+_Adición al tope. Nada de lo anterior se borra: la sección de abajo sigue vigente._
+
+- **La ley se nombra por lo que es:** «la Ley vigente de Régimen de Propiedad Horizontal», o «la ley
+  vigente». Nunca por su número ni por su año: un número de ley pierde vigencia cuando la ley se
+  reforma o se sustituye (Sam, 2026-09-30). Los artículos sí se citan por número.
+- **Los productos automatizados de la marca no nombran personas ni cargos.** Firman «Supervisado y
+  gestionado con criterio jurídico por ForumPHs» y llevan un aviso: información general, no asesoría
+  legal, y puede equivocarse por funcionar sobre infraestructura tecnológica.
+- **Lo público y lo exclusivo se distinguen a la vista.** En ForumPHs Speaks: «Consulta legal
+  pública» frente a «Solo propietarios de PHs administrados por ForumPHs», este último resaltado.
 
 ---
 
