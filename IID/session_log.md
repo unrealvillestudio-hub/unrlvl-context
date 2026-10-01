@@ -365,6 +365,59 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-01 · GOOGLE COBRA LA IMAGEN POR TOKEN, LA IMAGEN SIN CUOTA SE REINTENTA SOLA Y EL OCR VA SIEMPRE A UNA MARCA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Sesión de CC del 2026-10-01 con acceso de
+lectura a Google Cloud. PR mergeados [`medido` por GitHub]: `ImageLab` #32 · `unrlvl-iid-functions`
+#288 #289 #290 #291 #293 #294.)_
+
+### 1 · Dónde y cómo factura Google [`medido`]
+- **Proyecto y API:** todo se factura por **Vertex AI** en `gen-lang-client-0491381650`, cuenta
+  `0166F8-A81829-D70C0F`. Cero cargos de Gemini API (AI Studio). Fuentes: exportación de facturación a
+  BigQuery y código de ImageLab (`api/execute.ts`, `aiplatform.googleapis.com`).
+- **Imagen (`gemini-2.5-flash-image`):** por token. Salida 30 USD/1M (SKU «Gemini 2.5 Flash Image Output
+  - Predictions»), **1,290 tokens por imagen**; entrada 0.30 USD/1M. En 27 imágenes del 1-2 sep, los
+  tokens del libro (14,955 / 34,830) son idénticos a los facturados.
+- **Embeddings (`gemini-embedding-001`):** SKU «Large Text Embedding Model - Predictions», 0.15 USD/1M;
+  4,325 tokens en libro y factura.
+- **OCR:** Cloud Vision «Document Text Detection» 0.0015 USD/imagen (primeras 1,000/mes a 0 USD).
+  Document AI OCR cuesta lo mismo.
+- **Precios de lista:** Cloud Billing Catalog API. **Provisioned Throughput:** 2,000 a 2,700 USD/mes por
+  GSU (no se justifica a ~35 USD/mes).
+
+### 2 · Lo que cambió en el carril
+- **#289:** `logImageGenerated` + bloque `IMAGEN-EJE`. La unidad de la imagen la decide la tarifa vigente
+  (`tokens_out` vigente ⇒ tokens). Migración `20261001090000`: `per_image` 0.04 → `historico`, siembra
+  `tokens_out` 30 y `tokens_in` 0.30. No recalcula el libro. Primera imagen: 0.038913 USD [`medido`].
+- **#290:** `iid-expert-ocr` asienta por `ops_log_generation`. Tarifa `20261001060000`.
+- **#293:** OCR sin marca ⇒ 400 antes de Vision; varias marcas ⇒ reparto a partes iguales (a confirmar
+  por Sam). Backfill `20261001110000`: 10 capturas, 94 frames, 0.141 USD, `status='backfill'`.
+- **#291:** reintento diferido de imagen (bloque `REINTENTO-IMAGEN`), esperas `[15,30,60]` y ritmo 1 en
+  `lab_configs.imagelab.default_params`; vista `content.pieces_alive` con `image_fix_cause` e
+  `image_retry` (`20261001070000`); cron `content-image-retry-5min` (`20261001080000`).
+- **#294:** `image_retry_causes = ["cuota","tope"]` (`20261001100000`); `otro` nunca se reintenta. La
+  impugnada sólo por imagen que la consigue pasa a `awaiting_approval`. Al resolverse, el reintento se
+  cierra con `motivo_fin='resuelto'`.
+- **Verificado [`medido` 2026-10-01 ~16:50 UTC]:** el cron corre cada 5 min sin error; las 4 piezas de
+  cuota ya tienen imagen; quedan 15 por `tope` en la cola de reintento.
+
+### 3 · Lo que se aprendió (Professor, 8 learnings aprobados)
+- El límite de 2 peticiones/min de «image generation requests» es un *system limit* no ajustable con uso
+  0 %: **no** es la causa de los 429; la causa es la cuota compartida dinámica.
+- Dos PR abiertos a la vez no pueden compartir versión de migración (#289 chocó con #287). Se reservan
+  timestamps al repartir trabajo y los pines van en posiciones distintas de `MIGRACIONES_CONGELADAS.md`.
+- Calibración = `awaiting_approval`. El cuello del flujo es la aprobación: 250 piezas, mediana 219 h.
+- El crédito GenAI App Builder no cubre Gemini; el Free Trial venció el 2026-08-26 con 280.97 USD sin
+  usar.
+
+### 4 · Abierto
+- Cuadre del libro contra la factura cuando la exportación tenga el mes completo; carga de
+  `ops_invoice_by_app`.
+- Prueba de Vertex Batch con 4-5 referencias (decisión de Sam).
+- Tope de imágenes 180 → 100 el 2026-10-03 (recordatorio agendado).
+
+---
+
 ## 2026-09-30 · LA LÁMINA NO HEREDA LA PORTADA, LA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ SE PROHÍBE
 
 _(Entrada al tope de la §9 por orden de cierre. **No reescribe ninguna anterior**. Segunda mitad de la
