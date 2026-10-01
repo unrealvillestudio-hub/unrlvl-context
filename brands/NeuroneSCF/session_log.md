@@ -1,5 +1,41 @@
 # SESSION LOG — NeuroneSCF B2B
+_Actualizado: 2026-10-01 (sesión de fixables, segunda parte: fotos y fichas del proveedor en tienda y blueprints, textos de imagen, carruseles y la frase del supermercado — `IID/session_log.md` 2026-10-01)._
 _Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags de marca y firma corregidos en las piezas vivas y convertidos en regla — `unrlvl-iid-functions` #271) · base previa: 2026-09-29 v2 (el carrusel con una imagen propia por lámina: 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY; 77 textos de imagen que responden al título; 7 learnings a la espera de Sam) · base previa: 2026-09-29 (las correcciones de Sam se vuelven regla: Patricia desde su cara y con su cabello, el producto con su mecanismo, el texto de imagen responde al título; una veintena de piezas corregidas y revisadas; blog -7 producido) · base previa: 2026-09-27 (la imagen deja de inventar: Patricia, Vizos Salón, Miami Beach y el producto real a su tamaño; «Nanotribología» con mayúscula y sin voseo en las piezas en cola; 11 franjas extra para 48 h) · base previa: 2026-09-12 (handle del blog de Shopify corregido y definitivo: `blog_path` `/blogs/hair-intelligence` y `shopify_blog_handle` `hair-intelligence`, `nota_handle` retirada [medido]. **El blog de la marca sigue SIN publicador**: `shopify_blog` es el tercer modelo de publicación y no lo atiende ni `content-scheduler` —sólo `meta_graph`— ni `blog-promoter` —sólo `vercel_html`— [medido en código]. **Tres piezas de la marca están a la vez `scheduled` y con `discarded_at` sellado** [medido], lo que contradice el cierre del brief. Y las notas de Sam sobre piezas sociales se escribieron mirando `assets.copy`, que **no es el texto que se publica** [medido]) · base previa: _Actualizado: 2026-09-09 (calibracion de Sam sobre 13 piezas —9 a scheduled y 4 a rejected [reportado]— y 3 piezas rescatadas por correccion de voseo y firma repetida, con approved_by='sam' y edited_by='claude' [medido el 2026-09-10]. Contexto que lo enmarca: las 14 reglas blocking del Watcher siguen TODAS inactivas, asi que hoy ninguna regla puede detener una pieza [medido], y no existe regla de registro gramatical en ninguna marca) · base previa: 2026-08-28 (buzon neuronescflorida@gmail.com dado de alta en el MCP de correo; titular declarado Patricia Osorio C. con autorizacion firmada, PDF pendiente de subir. NOTA MAIL-PRIV-01: un item de esta entrada se retiro el 2026-08-28; reescrita por MAIL-PRIV-02 el mismo dia) · base previa: 2026-08-26 (entrada al Scheduler: rollout_started_at 2026-08-26, 5 canales, 12 filas de cadencia, ángulos en los 9 dominios) · base previa 2026-08-09 · base previa 2026-08-08 (base previa 2026-06-16, sesión 7)
+
+---
+
+## 2026-10-01 — Las fotos y fichas salen del proveedor, y la clienta de Neurone no compra en el supermercado
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
+> `medido` se consultó entre el 2026-09-30 y el 2026-10-01. El detalle del ecosistema (bandejas del
+> Orchestrator, reservador de franjas, editor) está en `IID/session_log.md` 2026-10-01. SMA no
+> consultado: Sam no lo pidió.
+
+### Tienda y blueprints
+- **Fotos de producto corregidas en Shopify (b2c) el 2026-09-30** [`medido`]: 6 productos con la
+  imagen del sitio del proveedor. Neurona Gloss en TR-016 y TR-017; DY Fazza en TR-013 y BTP-003;
+  DY Fazza Color en TR-015 y BTP-004. Las imágenes viejas se **desvincularon sin borrarse**
+  (`fileUpdate` con `referencesToRemove`), así que el cambio se puede revertir.
+- **BluePrints #11:** Thermo Dual y Neurona Gloss tenían las fotos cruzadas; DY Fazza usaba la de
+  otro producto; Thermo Dual suma su pH 7,50–8,50 en la ficha. Los valores anteriores se conservan
+  en `*_previous`. En `public.product_blueprints`, T042 (foto oscura y pH), T032, T029 y T062, con
+  lo anterior en `raw_config.previo_2026_09_30`.
+- **unrlvl-iid-functions #273:** las presentaciones de un kit entran a la imagen con su ficha.
+
+### Piezas
+- 5 textos de imagen reescritos para que abran la tensión que el título responde; 50 piezas
+  regeneradas; 4 piezas convertidas a carrusel (16 láminas) [`medido`]. 26 quedaron en Arreglos
+  marcadas «CC 2026-09-30».
+- **`1f81a727` (blog):** «el acondicionador genérico que compró en el supermercado» pasa a «un
+  acondicionador profesional, sí, pero de fórmula genérica y pensado para otros climas» (Sam:
+  las clientas de Neurone no compran en el supermercado). Está en Arreglos como «corregida».
+- **Nota para Sam:** la lámina 4 de `3c58d5a1` muestra el frasco de Humit fiel en forma, color y
+  logo, pero sin la etiqueta frontal «HUMIT SHAMPOO · MOISTURE». Quedó como «pasa»; si la quiere
+  regenerada, es una decisión suya.
+
+### Professor
+- `078f8303` (supermercado frente a salón) y `d19121b2` (fotos y fichas del proveedor; cambio sin
+  borrar en Shopify), aprobados por Sam.
 
 ---
 
