@@ -57,8 +57,23 @@ Sesión de Sam con CC del 2026-10-01, abierta con el informe del carril AIID. De
 ### Próxima sesión
 1. **Decisión de Sam — términos comerciales de `StudioOperations`.** Hasta que existan, ningún
    informe Cliente que la incluya se genera.
-2. **Decisión de Sam — tarifa de `gemini-2.5-flash-image` por `tokens_in`** (y si Vertex es la vía).
-   Hoy esas filas cuentan como costo incierto.
+2. **Tarifa de `gemini-2.5-flash-image` — RESPONDIDA el 01-10, en ejecución en otra sesión.**
+   - **Vía:** Vertex AI factura el 100 %, en el proyecto `gen-lang-client-0491381650`.
+   - **Precio:** por token, no por imagen. US$30 por millón de salida (1.290 tokens por imagen) y
+     US$0,30 por millón de entrada, también para las imágenes de referencia.
+   - **Conciliación:** en la ventana ya exportada (27 imágenes) los tokens coinciden al 100 %; el
+     libro va 2,9 % por encima por los US$0,04 fijos.
+   - **Fuente:** [`reportado` por la sesión con acceso a Google Cloud, medido allí contra la
+     exportación de facturación a BigQuery y la Cloud Billing Catalog API].
+   - **El cambio a tarifa por token lo hace la rama `claude/imagen-a-tarifa-oficial-por-tokens`
+     de `unrlvl-iid-functions`.** Esta sesión NO siembra esas filas: se duplicaría la tarifa vigente.
+     Al cierre, la rama no está publicada [`medido` con `git ls-remote`].
+   - **Pendiente de la carga de la factura:** la conciliación del 02-09 al 01-10 y si se cobra la
+     entrada de una petición bloqueada por seguridad.
+   - **Decisión de Sam — cuota:** la generación de imagen tiene 2 peticiones por minuto en Vertex
+     [`reportado`, misma fuente]. Pedir el aumento no tiene costo. *Provisioned Throughput*
+     (desde US$2.000 al mes) no se justifica frente a unos US$35 al mes; Vertex Batch está en
+     evaluación en `unrlvl-iid-functions` #288.
 3. **Verificar la primera fila de Professor en el libro**: debe caer en `StudioOperations`, con la
    tarifa de Haiku y costo mayor que 0. Al cierre no había ninguna del 01-10 [`medido`]; los 8
    learnings de esta sesión se registraron por SQL, no por la EF.
