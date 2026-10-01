@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-01 · v2026-10-01-v4 (**CIERRE DEL 2026-10-01 (v4) — LOS CARRUSELES DE NSCF SE CIERRAN CON IMAGEN PROPIA POR LÁMINA, UNA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ QUEDA PROHIBIDA.** Amplía el `v2026-10-01-v3` inmediatamente debajo; **no lo reescribe**. Segunda mitad de la sesión de CC del 2026-09-29/30 (la de #270). PR mergeados `SocialLab` #7, `unrlvl-context` #123 #124 [`medido` por GitHub]. 11 carruseles NSCF/UVS/ForumPHs publicados con imagen por lámina [`medido`]; regla `HR-GEN-19`; 8 learnings aprobados en Professor; skill `sesion-de-fixables` v1.2. Detalle en `brands/NeuroneSCF/session_log.md` e `IID/session_log.md` 2026-09-30.)
 _Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE.** Amplía el `v2026-10-01-v2` inmediatamente debajo; **no lo reescribe**. PR mergeado `unrlvl-iid-functions` #287 [`medido` por GitHub]; #292 abierto. Migración `20261001050000` aplicada y verificada; `iid-process` v71 e `iid-research` v67 verificadas contra `origin/main`. Un hallazgo que cita la Ley 284, un año o a un competidor se escribe y se transforma al redactar; una marca con un memo sin destilar no abre otra investigación; el aviso «PUBLICADA» resuelto dejará de esconder marca y canal. Professor: 4 learnings. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR.** Amplía el `v2026-10-01-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #60, `unrlvl-iid-functions` #282 #283 #284 #285 #286, `ImageLab` #31, `CopyLab` #43 y `unrlvl-ops` #16 #17 [`medido` por GitHub]. Cinco migraciones aplicadas por CC con autorización de Sam. Búsquedas web y fallos con costo explicado; 187 filas históricas reclasificadas con respaldo; alerta `COST_NOT_COMPUTED`; tarifa de Haiku 4.5. Entidad `StudioOperations` (sin términos: su informe Cliente no se genera). `brand-context-builder` con puerta y PR; `iid-ecommerce*` retiradas. Pestaña «Manual» con «Publicada». unrlvl-ops multimarca y móvil. 8 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR.** Amplía el `v2026-09-30-v4` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30 y `BluePrints` #11 [`medido` por GitHub]. Una pieza, una pestaña; `sin_imagen` a Arreglos; Retenidas a «Más»; orden por la próxima franja; aprobar no se repite. **Incidente:** `publish-slot-reserver` 12 h en 500 y 45 piezas aprobadas sin fecha, con disparador de CC; datos reparados y **v21 desplegada por CC a petición expresa de Sam** [`medido`]. 11 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01.)_
@@ -8,9 +9,40 @@ _Actualizada: 2026-09-30 · v2026-09-30-v2 (**CIERRE DEL 2026-09-30 (v2) — FOR
 _Actualizada: 2026-09-30 · v2026-09-30-v1 (**CIERRE DEL 2026-09-30 — FORUMPHS.COM REHECHO MOBILE-FIRST, Y EL WHATSAPP DE VENTAS NO ES EL DEL AGENTE.** Amplía el `v2026-09-29-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #11 y `unrlvl-context` #126 [`medido` por GitHub]. Sitio y blog de ForumPHs mobile-first sobre su BP, tipografías propias, CTA en alto relieve, `api/contact.js` escapado; `ui-ux-layer` v3.3; WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios (Sam). 9 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30.)_
 _Actualizada: 2026-09-29 · v2026-09-29-v2 (**CIERRE DEL 2026-09-29 (v2) — EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA.** Amplía el `v2026-09-29-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #267 #268 #269 #270, `SocialLab` #6, `unrlvl-meta-mcp` #5 y `unrlvl-context` #121 #122 [`medido` por GitHub; despliegue de EF `reportado` por Sam]. Carrusel de extremo a extremo; imagen propia por lámina (`carousel_slide`); 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY [`medido`]. Umbral de hallazgos por suscripción, ForumPHs en 60. 77 textos de imagen que responden al título. Detalle en `brands/NeuroneSCF/session_log.md` 2026-09-29 (v2) e `IID/session_log.md` 2026-09-29 (v2); brief de continuación **v2** en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
 _Actualizada: 2026-09-29 · v2026-09-29-v1 (**CIERRE DEL 2026-09-29 — EL REGULADOR DE ENTRADA PRODUCE CADENCIA + 3, Y LAS CORRECCIONES DE SAM SE VUELVEN REGLA.** Amplía el `v2026-09-27-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #260–#266 e `ImageLab` #23–#29 [`medido` por GitHub]; #267 abierto. Regulador de entrada construido (vista aplicada, EF sin desplegar). **El «techo duro de 25 por marca» de BRIEF-06 queda DESCARTADO por Sam.** Patricia desde su cara y con su cabello; texto de imagen en diálogo; blog NSCF −7 producido; ForumPHs con 6 agentes nuevos; 22 crons de UVS y Lucien pausados. Detalle en `IID/session_log.md` 2026-09-29, `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md` 2026-09-29; brief de continuación en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
-_Actualizada: 2026-09-27 · v2026-09-27-v2 (**CIERRE DEL 2026-09-27 — NSCF: LA IMAGEN DEJA DE INVENTAR, Y EL TEXTO SE MIDE EN VEZ DE PEDIRSE.** Amplía el `v2026-09-27-v1` inmediatamente debajo; **no lo reescribe**. **35 PR mergeados** del 2026-09-24 al 2026-09-28 [`medido` por GitHub]. Persona, locación y producto real a su tamaño entran a la imagen como dato y por mención; la directriz manda; editar no reubica; kits con foto de grupo. FIRMA-CABE-02: el presupuesto de caracteres se mide. 11 franjas NSCF para 48 h. Incidente: API de texto en 400 por falta de saldo [`reportado` por Sam]. 4 learnings en Professor. Detalle en `IID/session_log.md` 2026-09-27 (v2) y `brands/NeuroneSCF/session_log.md` 2026-09-27.)
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v3)» (1 línea, `v2026-09-27-v1`), «Migración 2026-10-01 (v2)» (1 línea, `v2026-09-26-v4`) y «Migración 2026-10-01» (1 línea, `v2026-09-26-v3`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v4)» (1 línea, `v2026-09-27-v2`), «Migración 2026-10-01 (v3)» (1 línea, `v2026-09-27-v1`) y «Migración 2026-10-01 (v2)» (1 línea, `v2026-09-26-v4`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-01-v4 — Los carruseles de NSCF se cierran con imagen propia por lámina, una publicación fallida vuelve al publicador y la escasez queda prohibida
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**. Segunda mitad de la sesión de CC del
+2026-09-29/30. Detalle en `IID/session_log.md` y `brands/NeuroneSCF/session_log.md` 2026-09-30.)_
+
+### Hecho [`medido`]
+- **11 carruseles publicados con una imagen propia por lámina**: los 8 del 29-sep, más dae462b1,
+  76f483df y 5047ae26 el 30-sep. Cada uno revisado lámina por lámina.
+- **cf57fe53 falló en Instagram** (9004 en la lámina 6, transitorio) y se devolvió al publicador.
+  **`SocialLab` #7**: Instagram reintenta la creación de contenedores ante fallos transitorios.
+- **Regla `HR-GEN-19`** (eje, todas las marcas): prohibida la presión de venta por escasez o urgencia
+  (Sam: «esto no es un mercado de pulgas»).
+- **Portadas y textos de NSCF** sin alusiones al dinero; 3 TikTok y 2 portadas del motor viejo,
+  regenerados con Patricia.
+- **Professor:** 8 learnings de este tramo aprobados.
+- **Skill `sesion-de-fixables` v1.2.**
+
+### Sam, falta esto para completar el sprint de 48 h de NSCF
+1. **Publicar los 3 TikTok** (f0e49a09, 62f6094e, c11a5bbe), en `manual_pending`, con el paquete que te
+   entregó CC, y pasar sus enlaces para marcar las franjas como publicadas.
+
+### Pendiente para el carril
+1. **`recompose` debería copiar la portada nueva a `assets.carousel.slides[0]`** cuando la pieza es
+   carrusel. Hoy se hace a mano (Professor `265aadfa`).
+2. **El carril ampliado a formatos:** sigue el brief v2 de
+   `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`, frente 1.
+3. **Limpieza:** crons 119 y 121 (pausados) con sus tablas `cc_fix_48h_2026_09_28` y
+   `cc_pasada_nscf_2026_09_28`.
+4. **2026-10-03:** `image_calls_max` de ImageLab vuelve de 180 a 100.
 
 ---
 

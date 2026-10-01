@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-01 (v4) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v4`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-27-v2`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-27 · v2026-09-27-v2 (**CIERRE DEL 2026-09-27 — NSCF: LA IMAGEN DEJA DE INVENTAR, Y EL TEXTO SE MIDE EN VEZ DE PEDIRSE.** Amplía el `v2026-09-27-v1` inmediatamente debajo; **no lo reescribe**. **35 PR mergeados** del 2026-09-24 al 2026-09-28 [`medido` por GitHub]. Persona, locación y producto real a su tamaño entran a la imagen como dato y por mención; la directriz manda; editar no reubica; kits con foto de grupo. FIRMA-CABE-02: el presupuesto de caracteres se mide. 11 franjas NSCF para 48 h. Incidente: API de texto en 400 por falta de saldo [`reportado` por Sam]. 4 learnings en Professor. Detalle en `IID/session_log.md` 2026-09-27 (v2) y `brands/NeuroneSCF/session_log.md` 2026-09-27.)
+
+---
+
 ## Migración 2026-10-01 (v3) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v3`,

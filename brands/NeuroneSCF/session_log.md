@@ -4,6 +4,49 @@ _Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags 
 
 ---
 
+## 2026-09-30 — Los carruseles se cierran con imagen propia por lámina, y la escasez queda prohibida
+
+> **Entrada de CC.** Segunda mitad de la sesión del 2026-09-29/30 (la de `unrlvl-iid-functions` #270).
+> Se escribe encima de la del 2026-10-01 por orden de cierre, no de fecha; **no reescribe ninguna
+> entrada**. PR mergeados [`medido` por GitHub]: `SocialLab` #7 · `unrlvl-context` #123 #124.
+
+### 1 · Carruseles [`medido` en `scheduled_posts`]
+- **Publicados como `CAROUSEL` de 6, con una imagen propia por lámina:** 6d24a1cd, f89f768b, 8e22fbae,
+  cf57fe53, dae462b1, 76f483df y 5047ae26.
+- **cf57fe53:** falló en Instagram por un 9004 transitorio en la lámina 6. Se reprodujo sin publicar,
+  se devolvió la franja al publicador y salió (post `18127015876874356`). Instagram reintenta desde
+  `SocialLab` #7.
+- **dae462b1:** aprobado por Sam con la franja vencida. Se retuvo, se convirtió en carrusel y se
+  publicó (post `17932517994142534`).
+- **76f483df y 5047ae26:** portadas regeneradas con Patricia y el producto real (Kerasin HB Mask, DY
+  Fazza Color). Las anteriores eran del motor viejo.
+
+### 2 · Texto
+- **5047ae26:** fuera «el color que pagó como inversión», «Te vendieron» y «Quedan pocas unidades
+  disponibles este mes». El diagnóstico dice «gratuito». El texto de la portada pasa de «Compré el
+  color equivocado — no, compraste…» a «No elegiste mal el tono. Faltó el paso que nadie te explicó.».
+- **76f483df:** se quitaron del texto maestro dos nombres citados como fuente de un dato. Con la versión
+  vigente de `HR-GEN-12` (30-sep) **no hacía falta**: la fuente se nombra. Sin impacto, porque el texto
+  publicado no los nombraba.
+- **62f6094e (TikTok):** fuera `#HairBarNYC`, el nombre de otro salón.
+- **Regla nueva `HR-GEN-19`** (todas las marcas): prohibida la presión de venta por escasez o urgencia.
+
+### 3 · Sprint de 48 h (28–30 sep) [`medido`]
+- **Facebook 4/4, Instagram 4/4, blog 2/2.**
+- **TikTok 0/3:** f0e49a09, 62f6094e y c11a5bbe, en `manual_pending`. Imágenes regeneradas con Patricia;
+  paquete con enlaces, descripciones y pasos entregado a Sam.
+
+### 4 · Learnings aprobados por Sam (Professor)
+`59de2a6a` (reintento de Meta) · `fc0d10f0` (cerrar una actividad diciendo lo que falta) · `4d304119`
+(escasez prohibida) · `265aadfa` (portada nueva → lámina 1) · `c8bf9b3b` (encuadre y rostro de
+Patricia) · `47f9750a` (letras y objetos sueltos) · `f3e4d694` (canal sin publicador) · `99c089e0`
+(leer la regla vigente antes de aplicarla).
+
+### Sam, falta esto para completar la actividad
+- **Publicar los 3 TikTok** y pasar sus enlaces.
+
+---
+
 ## 2026-10-01 — Las fotos y fichas salen del proveedor, y la clienta de Neurone no compra en el supermercado
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
