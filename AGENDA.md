@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-01 · v2026-10-01-v6 (**CIERRE DE LA COLA DE CORRECCIÓN DE LA SESIÓN DE FIXABLES, Y UNA CASA TAMBIÉN PUEDE SER PH.** Amplía el `v2026-10-01-v5` inmediatamente debajo; **no lo reescribe**. 70 piezas regeneradas, 88 láminas revisadas y 22 carruseles completos; cron 137, tablas, funciones y respaldos temporales borrados, con confirmación de Sam [`medido`: 0 restantes]. Learning `6d26e96e` (Los Álamos), aprobado por Sam. Detalle en `IID/session_log.md` 2026-10-01 (v6) y `brands/ForumPHs/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v5 (**CIERRE DEL 2026-10-01 (v5) — GOOGLE COBRA LA IMAGEN POR TOKEN Y EL LIBRO YA LO ASIENTA ASÍ; LA IMAGEN QUE SE QUEDA SIN CUOTA SE REINTENTA SOLA Y EL OCR SIEMPRE VA A UNA MARCA.** Amplía el `v2026-10-01-v4` inmediatamente debajo; **no lo reescribe**. Sesión de CC del 2026-10-01 con acceso de lectura a Google Cloud (cuenta `claude-ops`). PR mergeados `ImageLab` #32 y `unrlvl-iid-functions` #288 #289 #290 #291 #293 #294 [`medido` por GitHub]. Migraciones `20261001060000` a `20261001110000` aplicadas y verificadas [`medido`]. Professor: 8 learnings aprobados por Sam. Detalle en `IID/session_log.md` 2026-10-01 y `labs/ImageLab/session_log.md`.)_
 _Actualizada: 2026-10-01 · v2026-10-01-v4 (**CIERRE DEL 2026-10-01 (v4) — LOS CARRUSELES DE NSCF SE CIERRAN CON IMAGEN PROPIA POR LÁMINA, UNA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ QUEDA PROHIBIDA.** Amplía el `v2026-10-01-v3` inmediatamente debajo; **no lo reescribe**. Segunda mitad de la sesión de CC del 2026-09-29/30 (la de #270). PR mergeados `SocialLab` #7, `unrlvl-context` #123 #124 [`medido` por GitHub]. 11 carruseles NSCF/UVS/ForumPHs publicados con imagen por lámina [`medido`]; regla `HR-GEN-19`; 8 learnings aprobados en Professor; skill `sesion-de-fixables` v1.2. Detalle en `brands/NeuroneSCF/session_log.md` e `IID/session_log.md` 2026-09-30.)
 _Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE.** Amplía el `v2026-10-01-v2` inmediatamente debajo; **no lo reescribe**. PR mergeado `unrlvl-iid-functions` #287 [`medido` por GitHub]; #292 abierto. Migración `20261001050000` aplicada y verificada; `iid-process` v71 e `iid-research` v67 verificadas contra `origin/main`. Un hallazgo que cita la Ley 284, un año o a un competidor se escribe y se transforma al redactar; una marca con un memo sin destilar no abre otra investigación; el aviso «PUBLICADA» resuelto dejará de esconder marca y canal. Professor: 4 learnings. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
@@ -8,9 +9,34 @@ _Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL 
 _Actualizada: 2026-09-30 · v2026-09-30-v3 (**ARCHIVADO DE CABECERA — LA CABECERA CONSERVA LAS 10 VERSIONES MÁS RECIENTES.** Amplía el `v2026-09-30-v2` inmediatamente debajo; **no lo reescribe**. Regla de Sam (2026-09-30): esta cabecera guarda sólo las 10 versiones más recientes y las anteriores bajan **íntegras** a `historical_AGENDA.md` en cada Actualiza (escrita en `protocols/HRD_PROTOCOL.md` v1.12, paso 10). Esta pasada baja 16 líneas, del `v2026-09-09-v1` al `v2026-09-26-v1`, a `historical_AGENDA.md` → «Migración 2026-09-30». En el mismo PR: `CC_PROTOCOL.md` v14 §16 — las EF se versionan y se despliegan desde `unrlvl-iid-functions`.)_
 _Actualizada: 2026-09-30 · v2026-09-30-v2 (**CIERRE DEL 2026-09-30 (v2) — FORUMPHS SPEAKS REHECHO, Y fphs-chat SE VERSIONA DONDE SE VERSIONAN LAS EF.** Amplía el `v2026-09-30-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #12, `forumphs-speaks` #3, `unrlvl-iid-functions` #275 y `unrlvl-context` #127 [`medido` por GitHub]; `fphs-chat` build `_64` desplegado por Sam [`medido`]. La ley se nombra por lo que es; Speaks firma sin personas; regla «las EF se versionan en `unrlvl-iid-functions`» escrita en CAPABILITIES 1.28. 5 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30 (v2).)_
 _Actualizada: 2026-09-30 · v2026-09-30-v1 (**CIERRE DEL 2026-09-30 — FORUMPHS.COM REHECHO MOBILE-FIRST, Y EL WHATSAPP DE VENTAS NO ES EL DEL AGENTE.** Amplía el `v2026-09-29-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #11 y `unrlvl-context` #126 [`medido` por GitHub]. Sitio y blog de ForumPHs mobile-first sobre su BP, tipografías propias, CTA en alto relieve, `api/contact.js` escapado; `ui-ux-layer` v3.3; WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios (Sam). 9 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30.)_
-_Actualizada: 2026-09-29 · v2026-09-29-v2 (**CIERRE DEL 2026-09-29 (v2) — EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA.** Amplía el `v2026-09-29-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #267 #268 #269 #270, `SocialLab` #6, `unrlvl-meta-mcp` #5 y `unrlvl-context` #121 #122 [`medido` por GitHub; despliegue de EF `reportado` por Sam]. Carrusel de extremo a extremo; imagen propia por lámina (`carousel_slide`); 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY [`medido`]. Umbral de hallazgos por suscripción, ForumPHs en 60. 77 textos de imagen que responden al título. Detalle en `brands/NeuroneSCF/session_log.md` 2026-09-29 (v2) e `IID/session_log.md` 2026-09-29 (v2); brief de continuación **v2** en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v4)» (1 línea, `v2026-09-27-v2`), «Migración 2026-10-01 (v3)» (1 línea, `v2026-09-27-v1`) y «Migración 2026-10-01 (v2)» (1 línea, `v2026-09-26-v4`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v6)» (1 línea, `v2026-09-29-v2`), «Migración 2026-10-01 (v5)» (1 línea, `v2026-09-29-v1`) y «Migración 2026-10-01 (v4)» (1 línea, `v2026-09-27-v2`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-01-v6 — La cola de corrección de la sesión de fixables se cierra, y una casa también puede ser PH
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-01-v5` queda íntegro debajo.
+Cierre de la cola del cron 137 de la sesión de fixables de CC. Detalle en `IID/session_log.md`
+2026-10-01 (v6).)_
+
+### Hecho
+- **Cola completa** [`medido`]: 70 piezas regeneradas, 88 láminas revisadas a ojo, 22 carruseles
+  completos y 0 de 36 láminas medidas con franja. `69f34e2b` (ForumPHs) queda completo y programado
+  para el 02-10 a las 00:00 UTC.
+- **Borrado con confirmación de Sam** [`medido`]: cron 137, 5 tablas y 4 funciones temporales; quedan
+  0 de cada uno.
+- **Professor:** `6d26e96e`, aprobado por Sam. En Panamá también hay residenciales de casas en PH,
+  como Los Álamos, que administra ForumPHs.
+
+### Cierra de la «Próxima sesión» del `v2026-10-01-v1`
+- **Punto 1** (cola del cron 137) → **CERRADO** [`medido`: 0 objetos restantes].
+
+### Próxima sesión
+1. **La tarjeta del Orchestrator debe mostrar todas las láminas de un carrusel**, no solo la
+   portada. Sam aprobó `8a1a5e89` y `69f34e2b` viendo solo la portada; `buildHtml` pinta únicamente
+   `assets.image.url` [`medido` en el código].
+2. **Siguen en pie** los puntos 2 a 6 del `v2026-10-01-v1`.
 
 ---
 

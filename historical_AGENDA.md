@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-01 (v6) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v6`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-29-v2`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-29 · v2026-09-29-v2 (**CIERRE DEL 2026-09-29 (v2) — EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA.** Amplía el `v2026-09-29-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #267 #268 #269 #270, `SocialLab` #6, `unrlvl-meta-mcp` #5 y `unrlvl-context` #121 #122 [`medido` por GitHub; despliegue de EF `reportado` por Sam]. Carrusel de extremo a extremo; imagen propia por lámina (`carousel_slide`); 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY [`medido`]. Umbral de hallazgos por suscripción, ForumPHs en 60. 77 textos de imagen que responden al título. Detalle en `brands/NeuroneSCF/session_log.md` 2026-09-29 (v2) e `IID/session_log.md` 2026-09-29 (v2); brief de continuación **v2** en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
+
+---
+
 ## Migración 2026-10-01 (v5) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v5`,

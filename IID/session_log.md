@@ -365,6 +365,27 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-01 (v6) · LA COLA DE CORRECCIÓN DE LA SESIÓN DE FIXABLES SE CIERRA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Cierre de la cola del cron 137, abierta
+el 2026-09-30 por la sesión de fixables de CC; ver la entrada `2026-10-01` de esa sesión, más abajo.)_
+
+- **Cola completa** [`medido`]: 70 de 70 piezas regeneradas; 88 láminas hechas y revisadas a ojo; 22
+  carruseles completos y ninguno con una lámina vacía; 0 de 36 láminas medidas con franja.
+- **`69f34e2b` (ForumPHs):** sus láminas 2 y 3 se relanzaron a mano y pasan. La 2 había caído por
+  SAFETY y la 3 mostraba una casa de estilo inglés. Sam la aprobó a la 01:54, cuando le faltaban
+  láminas; sale el 02-10 a las 00:00 UTC con las 5.
+- **El cron 137 no lo retiró nadie:** la propia función de la cola se desprograma al verla vacía, y
+  a las 11:32 UTC una lámina en `error` contaba como cola vacía [`medido` en el código].
+- **Borrado, confirmado por Sam** [`medido`: 0 tablas, 0 funciones y 0 crons]: las tablas
+  `intel.cc_fix_2026_09_30`, `_hooks` y `_slides`; las funciones `cc_fix_2026_09_30_paso`,
+  `cc_fix_a_arreglos`, `cc_fix_20260929_texto` y `cc_fix_20260930_sin_fuentes`; y los respaldos
+  `intel.cc_fix_2026_10_01_franjas` y `_aprobacion`. Los respaldos se borraron porque
+  `publish-slot-reserver` v21 sumaba 1.121 corridas de canal en OK y ninguna falla.
+- **El borrado desde CC se cortó tres veces a los 60 s:** el conector de Supabase pide confirmación
+  para sentencias destructivas y nadie respondió a tiempo [`deducido`: no había locks]. Lo aplicó Sam.
+- **Professor:** `6d26e96e` (ForumPHs, Los Álamos), aprobado por Sam [`medido`].
+
 ## 2026-10-01 · GOOGLE COBRA LA IMAGEN POR TOKEN, LA IMAGEN SIN CUOTA SE REINTENTA SOLA Y EL OCR VA SIEMPRE A UNA MARCA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. Sesión de CC del 2026-10-01 con acceso de

@@ -1,5 +1,21 @@
 # ForumPHs — Session Log
 
+## 2026-10-01 (v2) — Una casa también puede ser PH, y el carrusel `69f34e2b` queda completo
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
+> `medido` se consultó el 2026-10-01. SMA no consultado: Sam no lo pidió.
+
+- **Corrección de Sam:** en Panamá también hay residenciales de casas bajo el régimen de propiedad
+  horizontal, como **Los Álamos**, que administra ForumPHs. CC había rechazado la lámina 3 de
+  `69f34e2b` con el motivo «una casa unifamiliar no es un PH». El motivo era falso; el reparo válido
+  era que la casa tenía estilo inglés y no panameño. **Criterio para revisar imágenes de la marca:**
+  que se vea Panamá y vida en comunidad, no necesariamente un edificio en altura. Professor
+  `6d26e96e`, aprobado por Sam.
+- **`69f34e2b`:** carrusel completo con 5 láminas, revisado y sin franja [`medido`]. Programado para
+  el 2026-10-02 a las 00:00 UTC.
+
+---
+
 ## 2026-10-01 — Textos de imagen y carruseles corregidos, y las aprobaciones dejan de repetirse
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
