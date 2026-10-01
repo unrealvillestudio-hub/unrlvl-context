@@ -1,4 +1,6 @@
 # CAPABILITIES — Unrealville Studio
+_Versión: 1.30 · 2026-10-01 (**una sección nueva y ninguna derogación: CC lee Google Cloud bajo demanda.** Sección nueva **«GOOGLE CLOUD — LECTURA BAJO DEMANDA CON `claude-ops`»**: cómo se activa la credencial, qué se puede leer (catálogo oficial de precios, exportación de facturación a BigQuery, cuotas, servicios) y qué no (saldo de créditos, otros dos proyectos de la cuenta, documentación de Google por el proxy). Medido por CC el 2026-10-01.)_
+
 _Versión: 1.29 · 2026-09-30 (**una subsección nueva y ninguna derogación: el regulador decide antes de investigar, reparte por marca y por canal, y guarda una reserva de hallazgos que caduca.** Subsección nueva **«Antes de investigar, por canal, y la reserva de hallazgos»** en la sección del regulador, inmediatamente debajo del cupo de entrada: `intel.v_carril_disponible` (cupo − cola), la bitácora `intel.research_gate_log`, la reserva (`iid_findings.reserve_status`, `intel.brand_finding_reserve`, `intel.v_reserva_hallazgos`), las tres alertas que preguntan por el dato y la regla de Sam «ningún cron se apaga para frenar producción». La regla del cupo (cadencia + 3) no cambia. `unrlvl-iid-functions` #274 #279 #280.)_
 
 _Versión: 1.28 · 2026-09-30 (**una adición en DESPLIEGUE y ninguna derogación: dónde vive la fuente de una EF y cómo se despliega una EF pública.** (1) **Las EF se versionan y se despliegan desde `unrlvl-iid-functions`** [`reportado` por Sam, 2026-09-30: la regla existía y no estaba escrita]. (2) **Una EF que entra sin versionar llega primero tal como corre**, con `SNAPSHOT.md`. (3) **Las EF que llama una página pública se despliegan con `--no-verify-jwt`.** (4) **Variante nueva del árbol sin `git pull`:** si el archivo no existe en la copia local, la CLI falla con «Entrypoint path does not exist» y producción no cambia [`medido` el 2026-09-30].)_
@@ -149,6 +151,49 @@ Alcance de los ecosystem/gh audits: Context System · Vercel · GitHub repos · 
 **La protección de Vercel es mitigación, no cierre.** `all_except_custom_domains` **no cubre un dominio propio**: el día que uno de estos MCPs reciba un dominio, la protección desaparece sin que nadie toque nada. El cierre correcto es **MCP-AUTH-01 extendido a los tres** — entregado, pendiente de merge, `MCP_AUTH_TOKEN`, deploy y **verificación de 401**.
 
 **Agravante sistémico:** en la DB que alcanza `execute_sql` viven `shopify_stores` y `meta_accounts`, **con los tokens de los otros dos**. Un solo endpoint abierto no expone un MCP: expone los tres.
+
+---
+
+## GOOGLE CLOUD — LECTURA BAJO DEMANDA CON `claude-ops` (añadido 2026-10-01)
+
+**Qué es** [`medido` por CC el 2026-10-01]: la cuenta de servicio
+`claude-ops@gen-lang-client-0491381650.iam.gserviceaccount.com`, con **Viewer** en el proyecto
+`gen-lang-client-0491381650` («UNRLVL - Gemini Project»), **Billing Account Viewer** en la cuenta de
+facturación `0166F8-A81829-D70C0F`, y **BigQuery Job User** + **BigQuery Data Viewer** sobre el dataset
+`billing_export`. **Sólo lectura.** El acceso es **bajo demanda**: Sam aprueba la activación en cada
+sesión (decisión del 2026-10-01).
+
+**Cómo se activa** (nunca se muestra la clave ni el valor de variables):
+1. La clave está en la variable de entorno `GCP_SA_KEY_B64` del entorno de CC.
+2. Se decodifica a un archivo con permisos 600 bajo `$HOME`, **nunca en un repo**.
+3. `env -u CLOUDSDK_AUTH_ACCESS_TOKEN /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=<archivo>`.
+   El contenedor trae `CLOUDSDK_AUTH_ACCESS_TOKEN`, que Google rechaza: se excluye **sólo** al ejecutar
+   `gcloud` y `bq` (autorizado por Sam).
+4. Al terminar: se borra el archivo y `gcloud auth revoke --all`.
+
+**Qué se puede leer** [`medido`]:
+| Qué | Cómo |
+|---|---|
+| **Precios de lista oficiales por SKU** | Cloud Billing Catalog API: `GET cloudbilling.googleapis.com/v1/services` y `/v1/services/{id}/skus?currencyCode=USD`. Vertex AI = `C7E2-9256-1C43`, Cloud Vision = `C08E-37B9-80D3`, Cloud Document AI = `D870-408D-92A6`, Gemini API = `AEFD-7695-64FA` |
+| **La factura real, por proyecto, servicio y SKU** | BigQuery: `gen-lang-client-0491381650.billing_export.gcp_billing_export_v1_0166F8_A81829_D70C0F` (US, particionada por día). El historial se cargó por partes desde el 2026-10-01 |
+| **Proyectos y estado de facturación** | `gcloud billing projects list --billing-account=0166F8-A81829-D70C0F` (3 proyectos: `gen-lang-client-0491381650`, `unrlvl-mail-mcp`, `utopian-planet-490622-f1`) |
+| **APIs habilitadas** | `gcloud services list --enabled --project=gen-lang-client-0491381650` |
+| **Cuotas de Vertex** | Service Usage `v1beta1/projects/32577846028/services/aiplatform.googleapis.com/consumerQuotaMetrics` |
+
+**Qué NO se puede** [`medido`]:
+- **El saldo de los créditos:** ninguna API lo expone. Se ve en la consola, Facturación → Créditos.
+- **Los otros dos proyectos** de la cuenta: permiso denegado.
+- **Cuentas de servicio y claves API:** las APIs `iam` y `apikeys` no están habilitadas.
+- **Escribir nada:** ni habilitar APIs, ni crear jobs, ni buckets.
+- **La documentación de Google:** `docs.cloud.google.com` y `ai.google.dev` están bloqueados por el proxy
+  de CC. Un precio que se puede medir en el catálogo **no se declara `reportado`**.
+
+**Datos medidos que no cambian a menudo:**
+- Toda la IA de Google se factura por **Vertex AI** en `gen-lang-client-0491381650`.
+- `gemini-2.5-flash-image` se cobra **por token**: 1,290 tokens de salida por imagen a 30 USD/1M.
+- El límite «Generate content with image generation requests … per minute per base_model» (2 RPM) es un
+  **system limit no ajustable** con uso 0 %: los 429 vienen de la cuota compartida dinámica, no de él.
+- Créditos: «Trial credit for GenAI App Builder», 1,000 USD hasta el 2027-05-29, **no cubre Gemini**.
 
 ---
 

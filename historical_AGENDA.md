@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-01 (v5) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v5`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-29-v1`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-29 · v2026-09-29-v1 (**CIERRE DEL 2026-09-29 — EL REGULADOR DE ENTRADA PRODUCE CADENCIA + 3, Y LAS CORRECCIONES DE SAM SE VUELVEN REGLA.** Amplía el `v2026-09-27-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #260–#266 e `ImageLab` #23–#29 [`medido` por GitHub]; #267 abierto. Regulador de entrada construido (vista aplicada, EF sin desplegar). **El «techo duro de 25 por marca» de BRIEF-06 queda DESCARTADO por Sam.** Patricia desde su cara y con su cabello; texto de imagen en diálogo; blog NSCF −7 producido; ForumPHs con 6 agentes nuevos; 22 crons de UVS y Lucien pausados. Detalle en `IID/session_log.md` 2026-09-29, `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md` 2026-09-29; brief de continuación en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
+
+---
+
 ## Migración 2026-10-01 (v4) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v4`,

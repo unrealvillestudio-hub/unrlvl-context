@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-01 · v2026-10-01-v5 (**CIERRE DEL 2026-10-01 (v5) — GOOGLE COBRA LA IMAGEN POR TOKEN Y EL LIBRO YA LO ASIENTA ASÍ; LA IMAGEN QUE SE QUEDA SIN CUOTA SE REINTENTA SOLA Y EL OCR SIEMPRE VA A UNA MARCA.** Amplía el `v2026-10-01-v4` inmediatamente debajo; **no lo reescribe**. Sesión de CC del 2026-10-01 con acceso de lectura a Google Cloud (cuenta `claude-ops`). PR mergeados `ImageLab` #32 y `unrlvl-iid-functions` #288 #289 #290 #291 #293 #294 [`medido` por GitHub]. Migraciones `20261001060000` a `20261001110000` aplicadas y verificadas [`medido`]. Professor: 8 learnings aprobados por Sam. Detalle en `IID/session_log.md` 2026-10-01 y `labs/ImageLab/session_log.md`.)_
 _Actualizada: 2026-10-01 · v2026-10-01-v4 (**CIERRE DEL 2026-10-01 (v4) — LOS CARRUSELES DE NSCF SE CIERRAN CON IMAGEN PROPIA POR LÁMINA, UNA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ QUEDA PROHIBIDA.** Amplía el `v2026-10-01-v3` inmediatamente debajo; **no lo reescribe**. Segunda mitad de la sesión de CC del 2026-09-29/30 (la de #270). PR mergeados `SocialLab` #7, `unrlvl-context` #123 #124 [`medido` por GitHub]. 11 carruseles NSCF/UVS/ForumPHs publicados con imagen por lámina [`medido`]; regla `HR-GEN-19`; 8 learnings aprobados en Professor; skill `sesion-de-fixables` v1.2. Detalle en `brands/NeuroneSCF/session_log.md` e `IID/session_log.md` 2026-09-30.)
 _Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE.** Amplía el `v2026-10-01-v2` inmediatamente debajo; **no lo reescribe**. PR mergeado `unrlvl-iid-functions` #287 [`medido` por GitHub]; #292 abierto. Migración `20261001050000` aplicada y verificada; `iid-process` v71 e `iid-research` v67 verificadas contra `origin/main`. Un hallazgo que cita la Ley 284, un año o a un competidor se escribe y se transforma al redactar; una marca con un memo sin destilar no abre otra investigación; el aviso «PUBLICADA» resuelto dejará de esconder marca y canal. Professor: 4 learnings. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR.** Amplía el `v2026-10-01-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #60, `unrlvl-iid-functions` #282 #283 #284 #285 #286, `ImageLab` #31, `CopyLab` #43 y `unrlvl-ops` #16 #17 [`medido` por GitHub]. Cinco migraciones aplicadas por CC con autorización de Sam. Búsquedas web y fallos con costo explicado; 187 filas históricas reclasificadas con respaldo; alerta `COST_NOT_COMPUTED`; tarifa de Haiku 4.5. Entidad `StudioOperations` (sin términos: su informe Cliente no se genera). `brand-context-builder` con puerta y PR; `iid-ecommerce*` retiradas. Pestaña «Manual» con «Publicada». unrlvl-ops multimarca y móvil. 8 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01 (v2).)_
@@ -8,9 +9,56 @@ _Actualizada: 2026-09-30 · v2026-09-30-v3 (**ARCHIVADO DE CABECERA — LA CABEC
 _Actualizada: 2026-09-30 · v2026-09-30-v2 (**CIERRE DEL 2026-09-30 (v2) — FORUMPHS SPEAKS REHECHO, Y fphs-chat SE VERSIONA DONDE SE VERSIONAN LAS EF.** Amplía el `v2026-09-30-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #12, `forumphs-speaks` #3, `unrlvl-iid-functions` #275 y `unrlvl-context` #127 [`medido` por GitHub]; `fphs-chat` build `_64` desplegado por Sam [`medido`]. La ley se nombra por lo que es; Speaks firma sin personas; regla «las EF se versionan en `unrlvl-iid-functions`» escrita en CAPABILITIES 1.28. 5 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30 (v2).)_
 _Actualizada: 2026-09-30 · v2026-09-30-v1 (**CIERRE DEL 2026-09-30 — FORUMPHS.COM REHECHO MOBILE-FIRST, Y EL WHATSAPP DE VENTAS NO ES EL DEL AGENTE.** Amplía el `v2026-09-29-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #11 y `unrlvl-context` #126 [`medido` por GitHub]. Sitio y blog de ForumPHs mobile-first sobre su BP, tipografías propias, CTA en alto relieve, `api/contact.js` escapado; `ui-ux-layer` v3.3; WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios (Sam). 9 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30.)_
 _Actualizada: 2026-09-29 · v2026-09-29-v2 (**CIERRE DEL 2026-09-29 (v2) — EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA.** Amplía el `v2026-09-29-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #267 #268 #269 #270, `SocialLab` #6, `unrlvl-meta-mcp` #5 y `unrlvl-context` #121 #122 [`medido` por GitHub; despliegue de EF `reportado` por Sam]. Carrusel de extremo a extremo; imagen propia por lámina (`carousel_slide`); 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY [`medido`]. Umbral de hallazgos por suscripción, ForumPHs en 60. 77 textos de imagen que responden al título. Detalle en `brands/NeuroneSCF/session_log.md` 2026-09-29 (v2) e `IID/session_log.md` 2026-09-29 (v2); brief de continuación **v2** en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
-_Actualizada: 2026-09-29 · v2026-09-29-v1 (**CIERRE DEL 2026-09-29 — EL REGULADOR DE ENTRADA PRODUCE CADENCIA + 3, Y LAS CORRECCIONES DE SAM SE VUELVEN REGLA.** Amplía el `v2026-09-27-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #260–#266 e `ImageLab` #23–#29 [`medido` por GitHub]; #267 abierto. Regulador de entrada construido (vista aplicada, EF sin desplegar). **El «techo duro de 25 por marca» de BRIEF-06 queda DESCARTADO por Sam.** Patricia desde su cara y con su cabello; texto de imagen en diálogo; blog NSCF −7 producido; ForumPHs con 6 agentes nuevos; 22 crons de UVS y Lucien pausados. Detalle en `IID/session_log.md` 2026-09-29, `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md` 2026-09-29; brief de continuación en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
 
 _Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v4)» (1 línea, `v2026-09-27-v2`), «Migración 2026-10-01 (v3)» (1 línea, `v2026-09-27-v1`) y «Migración 2026-10-01 (v2)» (1 línea, `v2026-09-26-v4`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-01-v5 — Google cobra la imagen por token y el libro ya lo asienta así; la imagen sin cuota se reintenta sola y el OCR siempre va a una marca
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**. Sesión de CC del 2026-10-01 sobre costos de
+Google, capacidad de imagen y OCR. Detalle en `IID/session_log.md` 2026-10-01.)_
+
+### Hecho [`medido`]
+- **Acceso de lectura a Google Cloud** con la cuenta de servicio `claude-ops` (Viewer + Billing Account
+  Viewer), bajo demanda. Sam habilitó Cloud Billing, Resource Manager, Service Usage, BigQuery y
+  BigQuery Data Transfer, y creó la **exportación de facturación** a
+  `gen-lang-client-0491381650.billing_export` (US). Cómo se usa: `CAPABILITIES.md` v1.30.
+- **Todo Gemini se factura por Vertex AI** en `gen-lang-client-0491381650`: imagen, constructor de
+  prompt, embeddings y Vision. Cero cargos de Gemini API (AI Studio).
+- **Google cobra `gemini-2.5-flash-image` por token**: salida 30 USD/1M, **1,290 tokens por imagen**;
+  entrada 0.30 USD/1M. Libro y factura coinciden token a token en la ventana cargada (27 imágenes).
+- **`ImageLab` #32:** endpoint `global` de Vertex. `GOOGLE_CLOUD_LOCATION=global` puesto por Sam.
+- **#289:** la imagen se asienta según la tarifa vigente; la `per_image` 0.04 quedó `historico`. Primera
+  imagen nueva: 0.038913 USD.
+- **#290 + #293:** el OCR (`iid-expert-ocr`) asienta su gasto, 0.0015 USD por imagen, siempre a una
+  marca; sin marca se rechaza antes de llamar a Google. Las 10 capturas de junio-julio quedaron
+  asentadas como backfill: 94 frames, 0.141 USD.
+- **#291 + #294:** una pieza sin imagen por **cuota o tope** se reintenta sola a los 15, 30 y 60 min,
+  dentro del tope. Cron `content-image-retry-5min` activo. Una impugnada sólo por imagen que la
+  consigue pasa a calibración (`awaiting_approval`). Las 4 piezas de cuota ya tienen imagen.
+- **#288:** investigación de Vertex Batch. No se construye todavía.
+- **Crédito «Trial credit for GenAI App Builder»** (1,000 USD, vence 2027-05-29): no cubre Gemini; no se
+  integra en FPHs Document Factory (no necesita OCR; volumen mínimo).
+- **Cuota:** el límite de 2 peticiones/min de «image generation requests» es un *system limit* **no
+  ajustable** con uso 0 %: no es la causa de los 429 (captura de Sam). La causa es la cuota compartida
+  dinámica de Google.
+
+### Sam, queda esto
+1. **3 de octubre:** aprobar que el tope de imágenes vuelva de 180 a 100 (recordatorio agendado).
+2. **Decisión:** prueba de Vertex Batch con 5 imágenes y 4-5 referencias (≈ 0.30 USD). Requiere dar a
+   `claude-ops` permiso temporal para crear un job y un bucket, o correrla Sam.
+3. **Decisión:** confirmar el reparto a partes iguales de un OCR con varias marcas (#293).
+4. **Cuello del flujo:** 250 piezas esperando aprobación, mediana 219 h, y 43 franjas vencidas sin pieza
+   [`medido` 2026-10-01]. Tema para otra sesión.
+
+### Pendiente para el carril y los costos
+1. **Cuadrar libro contra factura** cuando la exportación tenga septiembre completo, y cargar
+   `ops_invoice_by_app` en unrlvl-ops con aprobación de Sam.
+2. **Medir en 7 días** los dos criterios de éxito: 429 por debajo del 1 % con `global`, y libro de imagen
+   a menos del 2 % de la factura.
+3. **Proyectos `unrlvl-mail-mcp` y `utopian-planet-490622-f1`:** los paga la misma cuenta y `claude-ops`
+   no los ve; su costo no está en el libro.
 
 ---
 

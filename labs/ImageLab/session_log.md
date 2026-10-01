@@ -1,5 +1,22 @@
 # ImageLab — Session Log
 
+## 2026-10-01 — Endpoint `global` de Vertex y cobro por token
+
+- **PR #32 (mergeado):** `vertexBaseUrl(location, project)` en el bloque `ENDPOINT-VERTEX` de
+  `api/execute.ts`. La ubicación `global` usa `aiplatform.googleapis.com` sin prefijo de región; antes la
+  plantilla regional daba un host inexistente. Test `tests/endpoint_vertex_test.mjs` (5 casos).
+- **Configuración:** Sam puso `GOOGLE_CLOUD_LOCATION=global` en Vercel (`image-lab`) y redesplegó.
+- **Motivo:** Gemini 2.5 en Vertex usa cuota compartida dinámica; los 429 medidos fueron 138 en agosto y
+  32 en septiembre. El límite de 2 peticiones/min de «image generation requests» es un *system limit*
+  no ajustable con uso 0 % [`medido`, captura de la consola]: no es la causa.
+- **Costo:** Google factura la imagen por token (1,290 tokens de salida por imagen a 30 USD/1M). El libro
+  del carril asienta así desde `unrlvl-iid-functions` #289.
+- **Referencias:** se mandan como `inlineData`, una por referencia, sin tope en el código. El 40 % de las
+  piezas usa 4-5 referencias y funciona en síncrono [`medido` en #288]; la documentación de Batch habla
+  de un máximo de 3 [`reportado`].
+
+---
+
 ## 2026-06-24 — Migración P0 Imagen→Gemini + BGRemover
 
 ### Sprint A — Migración Vertex Imagen → gemini-2.5-flash-image (P0, CERRADO)
