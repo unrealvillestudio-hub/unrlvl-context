@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-01 · v2026-10-01-v7 (**UN CARRUSEL SE APRUEBA ENTERO: LA VISTA DE LA PIEZA MUESTRA TODAS SUS LÁMINAS.** Amplía el `v2026-10-01-v6` inmediatamente debajo; **no lo reescribe**. PR mergeado `Orchestrator` #61 [`medido` por GitHub], desplegado en `7d14348` [`medido`] y verificado por Sam [`reportado`]. El artefacto pinta todas las láminas con el mismo criterio que la publicación. Sam declara el carril listo para calibrar, aprobar, arreglar y fluir. Learning `0a2bfad5` pendiente de aprobación. Detalle en `IID/session_log.md` 2026-10-01 (v7).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v6 (**CIERRE DE LA COLA DE CORRECCIÓN DE LA SESIÓN DE FIXABLES, Y UNA CASA TAMBIÉN PUEDE SER PH.** Amplía el `v2026-10-01-v5` inmediatamente debajo; **no lo reescribe**. 70 piezas regeneradas, 88 láminas revisadas y 22 carruseles completos; cron 137, tablas, funciones y respaldos temporales borrados, con confirmación de Sam [`medido`: 0 restantes]. Learning `6d26e96e` (Los Álamos), aprobado por Sam. Detalle en `IID/session_log.md` 2026-10-01 (v6) y `brands/ForumPHs/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v5 (**CIERRE DEL 2026-10-01 (v5) — GOOGLE COBRA LA IMAGEN POR TOKEN Y EL LIBRO YA LO ASIENTA ASÍ; LA IMAGEN QUE SE QUEDA SIN CUOTA SE REINTENTA SOLA Y EL OCR SIEMPRE VA A UNA MARCA.** Amplía el `v2026-10-01-v4` inmediatamente debajo; **no lo reescribe**. Sesión de CC del 2026-10-01 con acceso de lectura a Google Cloud (cuenta `claude-ops`). PR mergeados `ImageLab` #32 y `unrlvl-iid-functions` #288 #289 #290 #291 #293 #294 [`medido` por GitHub]. Migraciones `20261001060000` a `20261001110000` aplicadas y verificadas [`medido`]. Professor: 8 learnings aprobados por Sam. Detalle en `IID/session_log.md` 2026-10-01 y `labs/ImageLab/session_log.md`.)_
 _Actualizada: 2026-10-01 · v2026-10-01-v4 (**CIERRE DEL 2026-10-01 (v4) — LOS CARRUSELES DE NSCF SE CIERRAN CON IMAGEN PROPIA POR LÁMINA, UNA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ QUEDA PROHIBIDA.** Amplía el `v2026-10-01-v3` inmediatamente debajo; **no lo reescribe**. Segunda mitad de la sesión de CC del 2026-09-29/30 (la de #270). PR mergeados `SocialLab` #7, `unrlvl-context` #123 #124 [`medido` por GitHub]. 11 carruseles NSCF/UVS/ForumPHs publicados con imagen por lámina [`medido`]; regla `HR-GEN-19`; 8 learnings aprobados en Professor; skill `sesion-de-fixables` v1.2. Detalle en `brands/NeuroneSCF/session_log.md` e `IID/session_log.md` 2026-09-30.)
@@ -8,9 +9,31 @@ _Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BAND
 _Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y POR CANAL, Y LOS HALLAZGOS QUE SOBRAN VAN A UNA RESERVA QUE CADUCA.** Amplía el `v2026-09-30-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #274 #276 #279 #280 [`medido` por GitHub]; migraciones `20260930010000` a `20260930040000` aplicadas por CC y verificadas; `iid-research` v65, `iid-process` v70 e `iid-core` v78 desplegadas por Sam y verificadas contra `main` [`medido`]. Tres alertas nuevas que preguntan por el dato; 14 agentes sin marca retirados con archivo; informe quincenal retirado. Detalle en `IID/session_log.md` 2026-09-30 (v4).)_
 _Actualizada: 2026-09-30 · v2026-09-30-v3 (**ARCHIVADO DE CABECERA — LA CABECERA CONSERVA LAS 10 VERSIONES MÁS RECIENTES.** Amplía el `v2026-09-30-v2` inmediatamente debajo; **no lo reescribe**. Regla de Sam (2026-09-30): esta cabecera guarda sólo las 10 versiones más recientes y las anteriores bajan **íntegras** a `historical_AGENDA.md` en cada Actualiza (escrita en `protocols/HRD_PROTOCOL.md` v1.12, paso 10). Esta pasada baja 16 líneas, del `v2026-09-09-v1` al `v2026-09-26-v1`, a `historical_AGENDA.md` → «Migración 2026-09-30». En el mismo PR: `CC_PROTOCOL.md` v14 §16 — las EF se versionan y se despliegan desde `unrlvl-iid-functions`.)_
 _Actualizada: 2026-09-30 · v2026-09-30-v2 (**CIERRE DEL 2026-09-30 (v2) — FORUMPHS SPEAKS REHECHO, Y fphs-chat SE VERSIONA DONDE SE VERSIONAN LAS EF.** Amplía el `v2026-09-30-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #12, `forumphs-speaks` #3, `unrlvl-iid-functions` #275 y `unrlvl-context` #127 [`medido` por GitHub]; `fphs-chat` build `_64` desplegado por Sam [`medido`]. La ley se nombra por lo que es; Speaks firma sin personas; regla «las EF se versionan en `unrlvl-iid-functions`» escrita en CAPABILITIES 1.28. 5 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30 (v2).)_
-_Actualizada: 2026-09-30 · v2026-09-30-v1 (**CIERRE DEL 2026-09-30 — FORUMPHS.COM REHECHO MOBILE-FIRST, Y EL WHATSAPP DE VENTAS NO ES EL DEL AGENTE.** Amplía el `v2026-09-29-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #11 y `unrlvl-context` #126 [`medido` por GitHub]. Sitio y blog de ForumPHs mobile-first sobre su BP, tipografías propias, CTA en alto relieve, `api/contact.js` escapado; `ui-ux-layer` v3.3; WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios (Sam). 9 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30.)_
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v6)» (1 línea, `v2026-09-29-v2`), «Migración 2026-10-01 (v5)» (1 línea, `v2026-09-29-v1`) y «Migración 2026-10-01 (v4)» (1 línea, `v2026-09-27-v2`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v7)» (1 línea, `v2026-09-30-v1`), «Migración 2026-10-01 (v6)» (1 línea, `v2026-09-29-v2`) y «Migración 2026-10-01 (v5)» (1 línea, `v2026-09-29-v1`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-01-v7 — Un carrusel se aprueba entero: la vista de la pieza muestra todas sus láminas
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-01-v6` queda íntegro debajo.
+Detalle en `IID/session_log.md` 2026-10-01 (v7).)_
+
+### Hecho
+- **`Orchestrator` #61** [`medido` por GitHub]: el artefacto de la pieza pinta todas las láminas de un
+  carrusel, en el orden en que se publican (`manualImagesOf`, el mismo criterio que la publicación), en
+  una tira deslizable con «n / N». Vale en Arreglos, Calibración y Publicación, también para las piezas
+  que ya existían. Producción en `7d14348`, READY [`medido`].
+- **Verificado por Sam** [`reportado`]: «se ven todas las láminas».
+- **Sam declara el carril listo** para calibrar, aprobar, arreglar y dejar que fluya.
+
+### Cierra de la «Próxima sesión» del `v2026-10-01-v6`
+- **Punto 1** (la tarjeta debe mostrar todas las láminas) → **CERRADO** por #61.
+
+### Sam, queda esto
+1. **Aprobar o rechazar el learning `0a2bfad5`** (la vista de aprobación muestra todo lo que se
+   publica, con el mismo criterio que el publicador).
+2. **Siguen en pie** los puntos 2 a 6 del `v2026-10-01-v1`.
 
 ---
 

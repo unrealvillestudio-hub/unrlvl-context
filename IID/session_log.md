@@ -365,6 +365,29 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-01 (v7) · UN CARRUSEL SE APRUEBA ENTERO: LA VISTA DE LA PIEZA MUESTRA TODAS SUS LÁMINAS
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Cierra el punto 1 de la «Próxima sesión»
+del `v2026-10-01-v6`. PR mergeado `Orchestrator` #61 [`medido` por GitHub].)_
+
+- **Causa** [`medido` en el código]: el artefacto de cada pieza (`api/_calibrationShared.ts →
+  buildHtml`) pintaba sólo `assets.image.url`, que en un carrusel es la portada. Sam aprobó `8a1a5e89`
+  y `69f34e2b` sin ver el resto de las láminas.
+- **#61:** el artefacto toma las láminas con `manualImagesOf`, la misma función que la publicación
+  manual y el drenaje, y las pinta en una tira deslizable con «n / N» y la nota «Carrusel · N láminas —
+  desliza para verlas todas». Sin JS, porque el artefacto se dibuja en un `<iframe sandbox="">`. Un
+  carrusel con una sola lámina válida vuelve a la portada. Tests: 3 nuevos, 503/503 [`medido`].
+- **Alcance** [`medido`]: `ensureArtifact` arma el HTML en cada apertura, así que vale para Arreglos,
+  Calibración y Publicación y para las piezas que ya existían, sin regenerar nada.
+- **Desplegado** [`medido`]: producción de Vercel en `7d14348`, estado READY.
+- **Verificado por Sam** [`reportado` por Sam, 2026-10-01]: «se ven todas las láminas». Probó con los
+  carruseles de Arreglos (`3c58d5a1`, `61a9d27b`, `791bbb1a`); en esa pestaña había 20 carruseles
+  pendientes de su visto bueno [`medido`].
+- **Sam declara el carril listo** para calibrar, aprobar, arreglar y dejar que fluya (2026-10-01).
+- **Professor:** `0a2bfad5`, **pendiente de aprobación de Sam** [`medido`: `approved_by_sam=false`].
+  Una vista de aprobación que muestra menos de lo que se publica aprueba a ciegas; comparte criterio
+  con el publicador.
+
 ## 2026-10-01 (v6) · LA COLA DE CORRECCIÓN DE LA SESIÓN DE FIXABLES SE CIERRA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. Cierre de la cola del cron 137, abierta
