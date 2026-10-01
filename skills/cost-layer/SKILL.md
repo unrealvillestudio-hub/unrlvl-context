@@ -1,6 +1,7 @@
-# SKILL — cost-layer v2.0
+# SKILL — cost-layer v2.1
 _UNRLVL-OPS · Costo real desde el ledger · Tarifas con procedencia · Guardián de vencimientos_
-_Versión: 2.0 · 2026-07-30 (M-6). Reescritura completa de v1.0 — ver [ARCHIVE_v1.md](ARCHIVE_v1.md)._
+_Versión: 2.1 · 2026-10-01. Amplía la SECCIÓN 2 (vocabulario de `rate_source` tras «los costos se computan siempre») y añade la marca de operaciones del estudio; el texto anterior de la SECCIÓN 2 queda archivado debajo de la nueva, bajo guarda ⛔ NO OPERATIVO._
+_Versión anterior: 2.0 · 2026-07-30 (M-6). Reescritura completa de v1.0 — ver [ARCHIVE_v1.md](ARCHIVE_v1.md)._
 
 ---
 
@@ -37,17 +38,53 @@ Son **dos cosas distintas** desde M-4:
 
 ---
 
-## SECCIÓN 2 — PROCEDENCIA DEL COSTO: `rate_source`, `UNSEEDED`, `NULL`
+## SECCIÓN 2 — PROCEDENCIA DEL COSTO: `rate_source` (v2.1, 2026-10-01)
 
-Cada asiento del ledger (`ops_generation_ledger`) congela **su** tarifa y de dónde salió, en `rate_source`:
+Cada asiento del ledger (`ops_generation_ledger`) congela **su** tarifa y de dónde salió, en `rate_source`.
+Regla de Sam (2026-10-01): **los costos se computan siempre**. Toda llamada a un proveedor deja fila,
+también la que falla, y la fila dice por qué cuesta lo que cuesta.
 
-| `rate_source` | Significa | Auditable |
-|---|---|---|
-| `ops_lab_rates:<uuid>[+<uuid>]` | Costo derivado de esa(s) fila(s) de tarifa, congeladas al momento del asiento | **Sí** — el uuid apunta a la tarifa exacta |
-| `UNSEEDED` | No había tarifa vigente para ese `(lab, model, unit_type, fecha)` → costo 0, a la espera de sembrar la tarifa | **Sí** — estado explícito, no un agujero |
-| `NULL` | Fila **anterior a M-4** (antes de que existiera el congelado de tarifa) | **No.** No se rellena nunca con supuestos. |
+| `rate_source` | Significa | Costo | ¿Incierto? |
+|---|---|---|---|
+| `ops_lab_rates:<uuid>[+<uuid>]` | Costo derivado de esa(s) fila(s) de tarifa, congeladas al momento del asiento | calculado | No |
+| `NOT_BILLED:PROVIDER_HTTP_<código>` | El proveedor respondió con error y **no cobró** (p. ej. 429) | 0 afirmado | No |
+| `NOT_BILLED:PROVIDER_NOT_CALLED` | El fallo ocurrió antes de llamar al proveedor | 0 afirmado | No |
+| `OWN_COMPUTE` | Cómputo propio, sin proveedor que facture | 0 afirmado | No |
+| `UNSEEDED` | Falta la tarifa vigente para ese `(lab, model, unit_type, fecha)` | 0 provisional | **Sí** |
+| `USAGE_UNREPORTED` | El proveedor pudo cobrar y **no informó el consumo** | desconocido | **Sí** |
+| `NULL` | Fila **anterior a M-4** (antes del congelado de tarifa) | el de entonces; no se rellena nunca | **Sí** |
 
-**`NULL` ≠ `UNSEEDED`.** Un asiento pre-M-4 con `rate_source NULL` no es auditable y **jamás** se completa con una tarifa inferida — su costo se calculó con la lógica vieja y así queda. `UNSEEDED` es un estado nuevo y deliberado: "faltó tarifa, lo dejamos en 0 y visible". El tablero cuenta ambos como "filas sin tarifa" para no mentir en el total.
+- **Una sola regla de incertidumbre:** `public.ops_costo_incierto(rate_source)` = `NULL`, `UNSEEDED` o `USAGE_UNREPORTED`. Las vistas
+  (`v_cost_pivot`, `v_iid_piece_cost`) y unrlvl-ops la leen de ahí; no se reescribe en otro sitio.
+- **Guarda ejecutable:** la alerta `COST_NOT_COMPUTED` salta con filas `UNSEEDED` o `USAGE_UNREPORTED`.
+  Remedio: sembrar la tarifa que falta (REGLA CERO) o hacer que el lab devuelva su consumo.
+- **Nunca** `units:1` ni tarifa inferida para un trabajo que no existe (una imagen bloqueada no es una imagen).
+- **Búsquedas web:** `unit_type='per_search'` contra una tarifa genérica de búsqueda, no contra un lab.
+- **Reclasificar el histórico** sólo con respaldo previo y sin mover importes: el 2026-10-01 se
+  reclasificaron 187 filas (`ops_generation_ledger_respaldo_costos01`).
+
+### Marca de operaciones del estudio
+
+El gasto que no es de ninguna marca cliente (Professor, `brand-context-builder`, tareas internas) se
+asienta en la entidad de tipo `studio_operations` de `public.brands` —hoy `StudioOperations`—, que
+`ops_marca_de_operaciones()` resuelve **por tipo**, no por nombre. `ops_log_generation` normaliza
+`NULL`, `''` y `'NULL'` a ella; sin entidad, el asiento se conserva y avisa `LEDGER_BRAND_UNRESOLVED`.
+Un informe Cliente que la incluya **no se genera** hasta que tenga términos comerciales (decisión de Sam).
+
+> ⛔ **NO OPERATIVO — SECCIÓN 2 de la v2.0 (2026-07-30), archivada el 2026-10-01.** Se conserva íntegra
+> como registro. No describe el vocabulario vigente: no conoce `NOT_BILLED:*`, `USAGE_UNREPORTED` ni
+> `OWN_COMPUTE`, y trata `UNSEEDED` como no incierto. Usar la tabla de arriba.
+
+> #### (archivo) SECCIÓN 2 — PROCEDENCIA DEL COSTO: `rate_source`, `UNSEEDED`, `NULL`
+> Cada asiento del ledger (`ops_generation_ledger`) congela **su** tarifa y de dónde salió, en `rate_source`:
+>
+> | `rate_source` | Significa | Auditable |
+> |---|---|---|
+> | `ops_lab_rates:<uuid>[+<uuid>]` | Costo derivado de esa(s) fila(s) de tarifa, congeladas al momento del asiento | **Sí** — el uuid apunta a la tarifa exacta |
+> | `UNSEEDED` | No había tarifa vigente para ese `(lab, model, unit_type, fecha)` → costo 0, a la espera de sembrar la tarifa | **Sí** — estado explícito, no un agujero |
+> | `NULL` | Fila **anterior a M-4** (antes de que existiera el congelado de tarifa) | **No.** No se rellena nunca con supuestos. |
+>
+> **`NULL` ≠ `UNSEEDED`.** Un asiento pre-M-4 con `rate_source NULL` no es auditable y **jamás** se completa con una tarifa inferida — su costo se calculó con la lógica vieja y así queda. `UNSEEDED` es un estado nuevo y deliberado: "faltó tarifa, lo dejamos en 0 y visible". El tablero cuenta ambos como "filas sin tarifa" para no mentir en el total.
 
 ---
 
@@ -186,6 +223,6 @@ REGISTRO / SERVICIOS (sin cambios):
 
 ---
 
-_SKILL cost-layer v2.0 · Unrealville Studio · M-6 guardián de tarifas._
+_SKILL cost-layer v2.1 · Unrealville Studio · M-6 guardián de tarifas · 2026-10-01 costos siempre computados._
 _Fuente única de tarifas: `ops_lab_rates` vía `ops_resolve_rate`. Cero precios literales en este archivo._
 _Historia: ver [ARCHIVE_v1.md](ARCHIVE_v1.md) (v1.0, obsoleto — no usar como fuente)._

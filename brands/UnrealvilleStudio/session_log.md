@@ -5,6 +5,27 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-10-01 (v2) — Las operaciones del estudio tienen marca propia, y los informes suman varias marcas
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
+> `medido` se consultó el 2026-10-01. El detalle del carril (costos, retiros, pestaña «Manual») está
+> en `IID/session_log.md` 2026-10-01 (v2). SMA no consultado: Sam no lo pidió.
+
+- **`StudioOperations`**: el gasto que no es de ninguna marca cliente (Professor, `brand-context-builder`,
+  tareas internas) ya no queda sin marca ni como `'NULL'`: se asienta en esta entidad de
+  `public.brands` (`type='studio_operations'`, `status='internal'`). Professor va siempre ahí
+  (decisión de Sam, opción A). 0 filas con `brand_id='NULL'` [`medido`].
+- **Sin términos comerciales todavía**: hasta que Sam los fije, ningún informe Cliente que incluya
+  `StudioOperations` se genera (decisión de Sam).
+- **unrlvl-ops #16 #17**: informe de una, varias o todas las marcas, con una sección por marca y el
+  total; el modo Cliente muestra un solo importe por línea (costo + margen), sin «consumo» ni
+  «margen» por separado; «Excluir pruebas» en OFF; cualquier mes en el calendario; vista móvil,
+  color por marca y selector de columnas.
+- **Professor**: su tarifa (Haiku 4.5) quedó sembrada con confirmación de Sam. La primera fila suya
+  en el libro aún no existe al cierre [`medido`]: los learnings de hoy se registraron por SQL.
+
+---
+
 ## 2026-10-01 — El Orchestrator pasa a móvil, y el hashtag que Sam corrigió sí estaba guardado
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
