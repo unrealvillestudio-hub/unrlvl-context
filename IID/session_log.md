@@ -365,6 +365,83 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-01 (v2) · LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-10-01` queda íntegra debajo.
+Sesión de Sam con CC del 2026-10-01, abierta con el informe del carril AIID. PR mergeados por Sam
+[`medido` por GitHub]: `Orchestrator` #60; `unrlvl-iid-functions` #282 #283 #284 #285 #286;
+`ImageLab` #31; `CopyLab` #43; `unrlvl-ops` #16 #17. Migraciones aplicadas por CC con autorización de
+Sam y verificadas: `20261001000000`, `20261001010000`, `20261001020000`, `20261001030000`,
+`20261001040000`. EF desplegadas por Sam y verificadas por CC contra el código desplegado. SMA no
+consultado: Sam no lo pidió.)_
+
+### 1 · El informe del carril (apertura)
+- **Ayer, miércoles 30-09, 2 de 7 franjas salieron solas** [`medido`]: NeuroneSCF FB y NeuroneSCF IG,
+  con su post verificado en la plataforma. Quedaron 3 pendientes de mano (Lucien LinkedIn, Lucien
+  TikTok, UVS TikTok) y 2 franjas vacías (UVS LinkedIn y ForumPHs LinkedIn) por falta de pieza aprobada.
+- **El cuello de botella es la aprobación** [`medido` el 01-10]: 249 piezas esperando decisión; 15
+  de 19 canales en alarma de cobertura; el stock aprobado se concentra en canales manuales.
+- La pieza `cf57fe53` (NSCF IG) no aparece en el feed que devuelve la API de Meta; **Sam confirma
+  que está publicada** [`reportado`]. Se deja como está.
+
+### 2 · Los costos se computan siempre (#282, #283, ImageLab #31, CopyLab #43)
+Orden de Sam: «siempre los costos deben estar computados». Huecos medidos y cerrados:
+- **Las búsquedas web nunca se cobraron**: la tarifa existía con `lab='research'`, que nadie
+  resuelve. Ahora `iid-research` registra `per_search` contra una fila genérica. **Primer efecto
+  medido**: 2 corridas, 16 búsquedas, US$0,16.
+- **Fallos sin costo**: ImageLab y CopyLab devuelven modelo, consumo y código del proveedor al
+  fallar; el carril registra el fallo con su motivo (`NOT_BILLED:*` o `USAGE_UNREPORTED`), nunca
+  `UNSEEDED` ni `units:1` para una imagen que no existe. Texto cortado de CopyLab, readaptaciones,
+  `watcher_unreachable`, el juez sin texto, el constructor del respaldo de blog,
+  `brand-context-builder` y Professor dejan fila.
+- **Histórico**: 187 filas `UNSEEDED`/`UNKNOWN` reclasificadas con respaldo
+  (`ops_generation_ledger_respaldo_costos01`): 169 `NOT_BILLED:PROVIDER_HTTP_429`, 4
+  `NOT_BILLED:PROVIDER_NOT_CALLED`, 14 `USAGE_UNREPORTED` [`medido`]. Ni un centavo movido.
+- **Tarifa de Haiku 4.5** (modelo de Professor) sembrada con confirmación de Sam: US$1 / US$5 por
+  millón [`reportado`: referencia de precios de Anthropic incluida en Claude Code].
+- **Guarda ejecutable**: alerta `COST_NOT_COMPUTED` (`UNSEEDED` o `USAGE_UNREPORTED`).
+- **Irrecuperable, sin estimar**: búsquedas web históricas, 96 textos cortados, 45 readaptaciones,
+  25 `watcher_unreachable`, 14 bloqueos de imagen y todo el gasto pasado de Professor y
+  `brand-context-builder`.
+
+### 3 · Studio Operations y el costo incierto (#286)
+- **Entidad `StudioOperations`** en `public.brands` (`type='studio_operations'`, `status='internal'`).
+  `ops_log_generation` resuelve por tipo la marca ausente; Professor va siempre ahí. Sin entidad, el
+  asiento se conserva y avisa `LEDGER_BRAND_UNRESOLVED`. 0 filas con `brand_id='NULL'` [`medido`].
+- **Sin términos comerciales**: hasta que Sam los fije, el informe Cliente que la incluya no se
+  genera (decisión de Sam).
+- **Costo incierto con una sola regla** (`ops_costo_incierto`): `tarifa_incierta` en `v_cost_pivot`
+  pasó de 132 a 146 filas y en `v_iid_piece_cost` de 26 a 36 [`medido`, coincide con lo anunciado].
+
+### 4 · Seguridad y retiros (#284, #285)
+- **`brand-context-builder`** corría sin JWT ni secreto y escribía en `main` de `unrlvl-context`.
+  Ahora exige `IID_CRON_SECRET` y escribe por rama + PR. Medido: sin secreto responde 401.
+- **`iid-ecommerce`, `iid-ecommerce-research` e `iid-ecommerce-process` retiradas**: 0 invocaciones
+  desde el 03-07, código fuera del repo y funciones borradas por Sam (404 [`medido`]).
+
+### 5 · Publicación manual desde el Orchestrator (#60)
+- Pestaña Publicación → «Manual»: fotos con su URL y un solo bloque con título, cuerpo, hashtags y
+  firma, con la misma regla que el drenaje. Filtrable por marca y canal. 27 tarjetas el 01-10
+  [`medido`].
+- **«Publicada»** exige el link del post y deja el mismo rastro que el drenaje (franja, pieza,
+  bitácora y cierre del aviso). Escrituras probadas contra producción en una transacción revertida.
+
+### 6 · unrlvl-ops (#16, #17)
+- Informe de una, varias o todas las marcas, con sección por marca y total; modo Cliente con un solo
+  importe por línea y bloqueo por marca sin términos; «Excluir pruebas» en OFF; cualquier mes en el
+  calendario; costo incierto marcado igual en todas las pantallas.
+- Móvil: sin desplazamiento lateral a 375 px, filtros plegables, tarjetas deslizables, color por
+  marca calculado desde su `brand_id` y selector de columnas recordado por navegador.
+
+### 7 · Operación
+- **Cron temporal 137**: su función se desprograma sola cuando no le queda trabajo (cambio aplicado
+  por CC el 01-10 a pedido de Sam). Al cierre ya no existe en `cron.job`; su última corrida fue a las
+  11:32 UTC, `succeeded` [`medido`].
+
+### 8 · Professor
+- **8 learnings aprobados por Sam y registrados** [`medido`]: `b23975c3`, `c6b09763`, `af7cb351`,
+  `49d4ecf2`, `2137980a`, `a87a5523`, `d6220105`, `175dd8b6`.
+
 ## 2026-10-01 · LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-09-30 (v4)` queda íntegra
