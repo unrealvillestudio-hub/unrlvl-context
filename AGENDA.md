@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE.** Amplía el `v2026-10-01-v2` inmediatamente debajo; **no lo reescribe**. PR mergeado `unrlvl-iid-functions` #287 [`medido` por GitHub]; #292 abierto. Migración `20261001050000` aplicada y verificada; `iid-process` v71 e `iid-research` v67 verificadas contra `origin/main`. Un hallazgo que cita la Ley 284, un año o a un competidor se escribe y se transforma al redactar; una marca con un memo sin destilar no abre otra investigación; el aviso «PUBLICADA» resuelto dejará de esconder marca y canal. Professor: 4 learnings. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR.** Amplía el `v2026-10-01-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #60, `unrlvl-iid-functions` #282 #283 #284 #285 #286, `ImageLab` #31, `CopyLab` #43 y `unrlvl-ops` #16 #17 [`medido` por GitHub]. Cinco migraciones aplicadas por CC con autorización de Sam. Búsquedas web y fallos con costo explicado; 187 filas históricas reclasificadas con respaldo; alerta `COST_NOT_COMPUTED`; tarifa de Haiku 4.5. Entidad `StudioOperations` (sin términos: su informe Cliente no se genera). `brand-context-builder` con puerta y PR; `iid-ecommerce*` retiradas. Pestaña «Manual» con «Publicada». unrlvl-ops multimarca y móvil. 8 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR.** Amplía el `v2026-09-30-v4` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30 y `BluePrints` #11 [`medido` por GitHub]. Una pieza, una pestaña; `sin_imagen` a Arreglos; Retenidas a «Más»; orden por la próxima franja; aprobar no se repite. **Incidente:** `publish-slot-reserver` 12 h en 500 y 45 piezas aprobadas sin fecha, con disparador de CC; datos reparados y **v21 desplegada por CC a petición expresa de Sam** [`medido`]. 11 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01.)_
 _Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y POR CANAL, Y LOS HALLAZGOS QUE SOBRAN VAN A UNA RESERVA QUE CADUCA.** Amplía el `v2026-09-30-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #274 #276 #279 #280 [`medido` por GitHub]; migraciones `20260930010000` a `20260930040000` aplicadas por CC y verificadas; `iid-research` v65, `iid-process` v70 e `iid-core` v78 desplegadas por Sam y verificadas contra `main` [`medido`]. Tres alertas nuevas que preguntan por el dato; 14 agentes sin marca retirados con archivo; informe quincenal retirado. Detalle en `IID/session_log.md` 2026-09-30 (v4).)_
@@ -8,9 +9,60 @@ _Actualizada: 2026-09-30 · v2026-09-30-v1 (**CIERRE DEL 2026-09-30 — FORUMPHS
 _Actualizada: 2026-09-29 · v2026-09-29-v2 (**CIERRE DEL 2026-09-29 (v2) — EL CARRUSEL: UNA IMAGEN PROPIA POR LÁMINA.** Amplía el `v2026-09-29-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #267 #268 #269 #270, `SocialLab` #6, `unrlvl-meta-mcp` #5 y `unrlvl-context` #121 #122 [`medido` por GitHub; despliegue de EF `reportado` por Sam]. Carrusel de extremo a extremo; imagen propia por lámina (`carousel_slide`); 8 carruseles de 6 imágenes, 6d24a1cd publicado a las 12:00 NY [`medido`]. Umbral de hallazgos por suscripción, ForumPHs en 60. 77 textos de imagen que responden al título. Detalle en `brands/NeuroneSCF/session_log.md` 2026-09-29 (v2) e `IID/session_log.md` 2026-09-29 (v2); brief de continuación **v2** en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
 _Actualizada: 2026-09-29 · v2026-09-29-v1 (**CIERRE DEL 2026-09-29 — EL REGULADOR DE ENTRADA PRODUCE CADENCIA + 3, Y LAS CORRECCIONES DE SAM SE VUELVEN REGLA.** Amplía el `v2026-09-27-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #260–#266 e `ImageLab` #23–#29 [`medido` por GitHub]; #267 abierto. Regulador de entrada construido (vista aplicada, EF sin desplegar). **El «techo duro de 25 por marca» de BRIEF-06 queda DESCARTADO por Sam.** Patricia desde su cara y con su cabello; texto de imagen en diálogo; blog NSCF −7 producido; ForumPHs con 6 agentes nuevos; 22 crons de UVS y Lucien pausados. Detalle en `IID/session_log.md` 2026-09-29, `brands/NeuroneSCF/session_log.md` y `brands/ForumPHs/session_log.md` 2026-09-29; brief de continuación en `docs/briefs/2026-09-30_continuacion_imagelab_fixables_regulador.md`.)
 _Actualizada: 2026-09-27 · v2026-09-27-v2 (**CIERRE DEL 2026-09-27 — NSCF: LA IMAGEN DEJA DE INVENTAR, Y EL TEXTO SE MIDE EN VEZ DE PEDIRSE.** Amplía el `v2026-09-27-v1` inmediatamente debajo; **no lo reescribe**. **35 PR mergeados** del 2026-09-24 al 2026-09-28 [`medido` por GitHub]. Persona, locación y producto real a su tamaño entran a la imagen como dato y por mención; la directriz manda; editar no reubica; kits con foto de grupo. FIRMA-CABE-02: el presupuesto de caracteres se mide. 11 franjas NSCF para 48 h. Incidente: API de texto en 400 por falta de saldo [`reportado` por Sam]. 4 learnings en Professor. Detalle en `IID/session_log.md` 2026-09-27 (v2) y `brands/NeuroneSCF/session_log.md` 2026-09-27.)
-_Actualizada: 2026-09-27 · v2026-09-27-v1 (**CIERRE DEL 2026-09-27 — EL BARRIDO DE LAS 92 TERMINA, Y LA PUERTA ANIDADA ABRE TRES RUTAS HOY.** Amplía el `v2026-09-26-v4` inmediatamente debajo; **no lo reescribe**. **TRES RUTAS ABIERTAS HOY** [`medido` por sondas `pg_net` sin efecto]: `iid-core` (vive en el repo; `IID_CORE_SECRET` no existe), `nscf-attribution` (webhook de comisiones; `NSCF_WEBHOOK_SECRET` no existe) y `claude-lab-bridge` (a retirar), más `nscf-fulfillment-watcher`, que **no verificaba nada**. **`SEC-05` pasa de 4 a 23 EF** y las cierra **unrealvillestudio-hub/unrlvl-iid-functions#254** —12 de ellas adoptadas **byte a byte** desde el deploy—, con **orden de despliegue en 3 pasos** para no dejar fuera a ningún llamador; integrado y verificado con #255. **Mergeado y DESPLEGADO por Sam en los 3 pasos el mismo día, cada paso verificado por CC** [`medido`]: las 23 idénticas a `main`, `iid-core` 400→401 y `nscf-attribution` 200→401; de las tres rutas abiertas queda sólo `claude-lab-bridge`, que va al retiro. **El barrido de las 92 queda completo**: 9 con credencial en el código, 19 que escriben en la tienda de **cualquier** marca sin credencial, 22 con escritura sin puerta en NSCF. **71 de las 119 EF no se ejecutaron ni una vez en 91 días** [`medido`], que es la evidencia para **retirar sin romper**: queda **propuesto por niveles**, decisión de Sam. **Corrección de CC**: el «exactamente las tres desplegadas a mano» del `v4` era falso en su número; la dirección se sostiene. **`SEC-06` a `SEC-10` quedan PROPUESTOS, no dados de alta.** Cabecera anterior íntegra inmediatamente debajo.)_
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v2)» (1 línea, `v2026-09-26-v4`), «Migración 2026-10-01» (1 línea, `v2026-09-26-v3`) y «Migración 2026-09-30 (v4)» (1 línea, `v2026-09-26-v2`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v3)» (1 línea, `v2026-09-27-v1`), «Migración 2026-10-01 (v2)» (1 línea, `v2026-09-26-v4`) y «Migración 2026-10-01» (1 línea, `v2026-09-26-v3`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-01-v3 — La procedencia se anota sin bloquear, el regulador cuenta la investigación en curso y el acuse resuelto conserva qué y dónde
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-01-v2` queda íntegro debajo.
+Cuarta parte de la sesión de CC iniciada el 2026-09-30, abierta con la verificación programada del
+10-01. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
+
+### Hecho
+- **La procedencia se anota, no bloquea** (`unrlvl-iid-functions` #287) [`medido`]: decisión de
+  Sam, «nosotros regeneramos nuestro propio texto». Los hits quedan en
+  `raw_data.provenance_hits`; el juez sigue aplicando las reglas sobre la pieza. Motivo medido:
+  ForumPHs perdió 7 de 9 hallazgos el 10-01.
+- **El regulador cuenta la investigación en curso** (#287, migración `20261001050000`) [`medido`]:
+  `intel.v_investigacion_en_curso`; `iid-research` no abre otra investigación de una marca con un
+  memo sin destilar (24 h). Motivo medido: tres investigaciones de ForumPHs para un solo hueco.
+- **Despliegue verificado** [`medido`]: `iid-process` v71 e `iid-research` v67 contra
+  `origin/main` `6f8709b` (92/92 y 54/54 literales).
+- **Alertas del carril revisadas** [`medido`]: `A-1001-14` se resolvió sola (14:25 UTC);
+  `A-1001-13` (`COST_NOT_COMPUTED`) queda para #289; ningún cron apagado ni franja sin cubrir abierta.
+- **Professor:** 4 learnings aprobados por Sam y registrados [`medido`]: `444296ff`, `79b67083`,
+  `98e6e0fd`, `59d2e63f`.
+
+### Verificación contra fuente (paso 10-bis) de la «Próxima sesión» del `v2026-10-01-v2`
+- **Punto 1** — términos comerciales de `StudioOperations` → **ABIERTO**: esta sesión no lo tocó.
+- **Punto 2** — tarifa de `gemini-2.5-flash-image` → **ABIERTO PARCIAL**: la rama
+  `claude/imagen-a-tarifa-oficial-por-tokens` ya está publicada y su PR es `unrlvl-iid-functions`
+  #289, abierto [`medido` por `git ls-remote` y GitHub]. Al cierre del `v2` no estaba publicada.
+- **Punto 3** — primera fila de Professor en el libro → **ABIERTO**: 0 filas de Professor en
+  `ops_generation_ledger` desde el 01-10 [`medido`]. Los 4 learnings de esta sesión también se
+  registraron por SQL, no por la EF.
+- **Punto 4** — no volver a correr el patch de `unrlvl-ops` → instrucción vigente, sin cambio.
+- **Punto 5** — puntos 2 a 5 del `v2026-10-01-v1` → **ABIERTOS**: esta sesión no los tocó.
+
+### Barrido de archivado (paso 10)
+- **Cabecera:** baja íntegra 1 línea (`v2026-09-27-v1`) a `historical_AGENDA.md` → «Migración
+  2026-10-01 (v3)».
+- **Ítems:** sin candidatos nuevos. Sigue en pie la propuesta del `v2026-10-01-v1` (bloques
+  «ACTUALIZA» de julio y agosto): **decisión de Sam**.
+
+### Próxima sesión
+1. **#292 — el acuse resuelto conserva marca, canal y franja**: Sam mergea y despliega
+   `ops-alert-dispatch`; CC verifica contra `origin/main` y mira el próximo `PUBLISH_OK` editado.
+2. **Verificación programada 2026-10-02 13:30 UTC** (`trig_019Zw7Dqa5ZxwQjjhupaxsw3`): esperado
+   [`deducido` de `cron.job`] que `fphs-patrimonio-research` (10:15 UTC) investigue y
+   `fphs-derechos-research` (11:15 UTC) se salte por investigación en curso; y que el process de
+   las 12:15 escriba los hallazgos con hits en vez de saltarlos.
+3. **Acción de Sam — aprobaciones**: `APPROVAL_BACKLOG` por antigüedad en ForumPHs (21 esperando,
+   7 vencidas), NeuroneSCF (78/25), LucienSael (50/11) y UnrealvilleStudio (100/6) [`medido` el
+   10-01 06:45].
+4. **Siguen en pie** los puntos 1 a 3 y 5 del `v2026-10-01-v2`.
 
 ---
 
