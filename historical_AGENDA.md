@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-01 (v7) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v7`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-30-v1`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-30 · v2026-09-30-v1 (**CIERRE DEL 2026-09-30 — FORUMPHS.COM REHECHO MOBILE-FIRST, Y EL WHATSAPP DE VENTAS NO ES EL DEL AGENTE.** Amplía el `v2026-09-29-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #11 y `unrlvl-context` #126 [`medido` por GitHub]. Sitio y blog de ForumPHs mobile-first sobre su BP, tipografías propias, CTA en alto relieve, `api/contact.js` escapado; `ui-ux-layer` v3.3; WhatsApp Business +507 6722-7355 como canal de ventas y número propio para el agente de propietarios (Sam). 9 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30.)_
+
+---
+
 ## Migración 2026-10-01 (v6) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v6`,
