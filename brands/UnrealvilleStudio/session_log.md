@@ -5,6 +5,24 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-10-01 — El Orchestrator pasa a móvil, y el hashtag que Sam corrigió sí estaba guardado
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
+> `medido` se consultó entre el 2026-09-30 y el 2026-10-01. El detalle del ecosistema (bandejas del
+> Orchestrator, reservador de franjas, editor) está en `IID/session_log.md` 2026-10-01. SMA no
+> consultado: Sam no lo pidió.
+
+- 23 textos de imagen reescritos; 11 piezas regeneradas; 3 piezas convertidas a carrusel (12
+  láminas) [`medido`]. 25 en Arreglos marcadas «CC 2026-09-30».
+- **`3c1fa264` (TikTok):** Sam quitó `#UNRLVLStudio` con el editor el 2026-09-30 y la pantalla le
+  mostraba el texto viejo. La edición estaba guardada [`medido`]; el texto que se publica termina en
+  `#BrandIntelligenceInfrastructure #UnrealvilleStudio #Personalization #CRO`. Vuelve a Arreglos
+  como «corregida». La pantalla se corrigió en Orchestrator #59.
+- **El Orchestrator del estudio** (#56–#59) pasa a móvil, con las bandejas que decidió Sam y el
+  lector en voz alta a 1,5× y 2×.
+
+---
+
 ## 2026-09-29 — Crons reactivados y dos carruseles con imagen propia por lámina
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior.

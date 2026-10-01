@@ -365,6 +365,75 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-01 · LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-09-30 (v4)` queda íntegra
+debajo. Sesión de fixables de CC del 2026-09-30/01-10. PR mergeados [`medido` por GitHub]:
+`Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30, `BluePrints` #11.
+`publish-slot-reserver` **v21 desplegada por CC el 2026-10-01 a petición expresa de Sam** («¿podrías
+desplegar las EFs que hacen falta solo por hoy?»), con `verify_jwt: false` como la v20 [`medido`].
+SMA no consultado: Sam no lo pidió.)_
+
+### 1 · Una pieza, una pestaña (Orchestrator #56 y #57)
+- **El defecto** [`medido` en el código]: Calibración devolvía los seis ejes de pendiente;
+  Publicación, todo lo no resuelto; Retenidas, arbitrajes cuya pieza ya se había movido; Historial,
+  una fila por veredicto. La misma pieza salía en varias pestañas.
+- **Aprobar se podía repetir**: 6 piezas de ForumPHs aprobadas 2–3 veces [`medido`]. Ahora
+  `calibration-verdict` responde **409** si el contrato de acciones no permite la acción, y el PATCH
+  de aprobación sólo mueve piezas pendientes.
+- **Regresión de CC en #56, corregida en #57:** al sacar `retenida` de Calibración, 17 piezas
+  **sin imagen** (challenged, sin juicio de Sam y sin arbitraje) quedaron fuera de las cinco pestañas.
+- **Mobile-first:** barra inferior con las bandejas, tarjeta con marca, canal, estado y título
+  arriba, lo pedido, la pieza y las acciones; lo técnico en «Detalles».
+
+### 2 · Las bandejas que decidió Sam (Orchestrator #58)
+- **`sin_imagen` es un eje propio y va a Arreglos**: espera «Generar imagen», no un veredicto.
+- **Retenidas sale de la barra del móvil a «Más»** (un mes sin casos: último arbitraje del
+  2026-08-27); Calibración avisa con enlace si hay un arbitraje abierto (`open_challenges`).
+- **Orden por defecto = la franja libre más próxima del canal.** Embudo de 7 días [`medido`]: 152
+  producidas, 86 aprobadas, 30 publicadas; el límite es la capacidad de publicar.
+- **El volumen de producción no se toca desde las bandejas: es trabajo del regulador de entrada**
+  (Sam, 2026-10-01).
+
+### 3 · El reservador de franjas estuvo 12 h caído (unrlvl-iid-functions #281, Orchestrator #58)
+- **Medido:** desde el 2026-09-30 12:30 UTC cada corrida devolvía 500
+  (`brand_publish_slots_pieza_uniq`) y ninguna marca recibió franja; 45 piezas aprobadas quedaron
+  sin fecha.
+- **Disparador (CC):** la función temporal `intel.cc_fix_a_arreglos` liberaba sólo franjas
+  `reserved`; 12 piezas devueltas a Arreglos quedaron atadas a su franja `manual_pending`.
+- **Defecto de fondo:** la elegibilidad excluía tres estados y dejaba pasar cualquier pieza con
+  `approved_at`; 19 piezas devueltas a revisión recibieron franja nueva. El `throw` de un canal
+  abortaba la corrida entera.
+- **Reparación de datos con respaldo** (`intel.cc_fix_2026_10_01_franjas`, 33 filas;
+  `intel.cc_fix_2026_10_01_aprobacion`, 84 filas): 33 franjas liberadas y `approved_at` retirado de
+  las piezas en revisión. Corrida de las 00:45: 200, 19 canales OK, 7 franjas a piezas `scheduled`
+  [`medido`].
+- **Código:** elegible = `scheduled`; un canal que falla se registra como `CHANNEL_FAILED` y la
+  corrida sigue; el Orchestrator libera también `manual_pending`.
+- **El publicador no sacó nada no aprobado:** `drain_due_slots` exige `scheduled` [`medido`].
+- **Al cierre** [`medido` 01:44 UTC]: 34 piezas `scheduled` sin franja (canales sin franja libre) y 0
+  franjas reservadas desde las 00:30 a piezas no programadas.
+
+### 4 · El editor y el lector (Orchestrator #59)
+- **«Vuelve como estaba»: la edición SÍ se guardaba** [`medido`: `intel.piece_edits` y
+  `assets.copy.raw`/`social.adapted` de `1f81a727` y `3c1fa264`]. La tarjeta reabría el editor con
+  el texto con que la cargó y no rehacía la vista previa. Ahora la rehace, edita también el título
+  y muestra los avisos de la guarda (la UI leía `guard.warnings`; la EF manda `guard.hits`).
+- **Lector en voz alta:** fuera de «Detalles», 1×/1,5×/2×, sin bloque de texto; lee la pieza entera.
+
+### 5 · La cola de corrección de la sesión (cron 137)
+- 64 textos de imagen reescritos para que abran la tensión que el título responde; 70 piezas
+  regeneradas; 22 piezas convertidas a carrusel con imagen propia por lámina [`medido`].
+- 100 piezas quedaron en Arreglos marcadas «CC 2026-09-30» (1 ya aprobada por Sam).
+- **ImageLab #30:** la franja vertical la pintaba el modelo; la foto continúa por la zona de texto.
+  0 de 11 láminas con franja en la primera ronda [`medido`].
+- **Sigue en marcha al cierre:** 8 láminas pendientes; el check-in `trig_01X9CQqcxys3dGsyxQkLcgbo`
+  (02:16 UTC) revisa, cierra el cron 137 y borra los objetos temporales.
+
+### 6 · Professor
+- **11 learnings aprobados por Sam y registrados** [`medido`]: `a3ac1dcf`, `dd49416f`, `3e6bf320`,
+  `26ab8a23`, `280a143c`, `078f8303`, `65e920ad`, `6445d4ac`, `0650fc02`, `3ae8a286`, `d19121b2`.
+
 ## 2026-09-30 (v4) · EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y CANAL, Y LA RESERVA DE HALLAZGOS
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-09-29 (v2)` queda íntegra

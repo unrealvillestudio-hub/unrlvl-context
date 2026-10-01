@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-10-01 — Veinticinco textos de imagen y trece carruseles
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
+> `medido` se consultó entre el 2026-09-30 y el 2026-10-01. El detalle del ecosistema (bandejas del
+> Orchestrator, reservador de franjas, editor) está en `IID/session_log.md` 2026-10-01. SMA no
+> consultado: Sam no lo pidió.
+
+- 25 textos de imagen reescritos para que abran la tensión que el título responde; 8 piezas
+  regeneradas; 13 piezas convertidas a carrusel con imagen propia por lámina (48 láminas hechas y
+  4 pendientes al cierre) [`medido`]. 37 en Arreglos marcadas «CC 2026-09-30».
+- **Revisión visual de láminas:** las 7 de la ronda del 01-10 que son de esta marca pasan, sin
+  franja (0 filas uniformes arriba y abajo) [`medido`].
+- **El reservador de franjas** se cayó 12 h el 30-09 para todas las marcas. En LucienSael, 10
+  franjas estaban ocupadas por piezas devueltas a Arreglos (7 manuales vencidas y 3 reservadas) y
+  se liberaron [`medido` en `intel.cc_fix_2026_10_01_franjas`] (`IID/session_log.md` 2026-10-01 §3).
+
+---
+
 ## 2026-09-12 (v2) — La franja del 8 de septiembre queda cerrada, y el artículo ya tiene URL
 
 > **Entrada de CC.** Sam decidió; CC ejecutó con el método que él fijó —en seco, lectura,

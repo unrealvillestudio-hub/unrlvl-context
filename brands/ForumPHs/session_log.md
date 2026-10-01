@@ -1,5 +1,24 @@
 # ForumPHs — Session Log
 
+## 2026-10-01 — Textos de imagen y carruseles corregidos, y las aprobaciones dejan de repetirse
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
+> `medido` se consultó entre el 2026-09-30 y el 2026-10-01. El detalle del ecosistema (bandejas del
+> Orchestrator, reservador de franjas, editor) está en `IID/session_log.md` 2026-10-01. SMA no
+> consultado: Sam no lo pidió.
+
+- 11 textos de imagen reescritos para que abran la tensión que el título responde; 1 pieza
+  regenerada; 2 piezas convertidas a carrusel, `69f34e2b` incluida («ForumPHs, sí, conviértela»,
+  Sam) [`medido`]. 12 marcadas «CC 2026-09-30»: 11 en Arreglos y 1 ya aprobada por Sam.
+- **Aprobaciones repetidas** [`medido`]: 6 piezas se aprobaron 2–3 veces (`295c037d`, `5272a276`,
+  `65489cd5`, `8f63cb40`, `a9c6b099`, `f2b40254`), 4 sin edición entre una y otra. Causa: la pieza
+  seguía apareciendo en otras pestañas. Cerrado en Orchestrator #56: una pieza, una pestaña, y el
+  servidor rechaza la segunda aprobación con 409.
+- **Al cierre** quedaban láminas de `8a1a5e89` en la cola de corrección; las revisa el check-in de
+  las 02:16 UTC.
+
+---
+
 ## 2026-09-30 (v2) — Speaks rehecho, fphs-chat pasa a unrlvl-iid-functions y la ley se nombra por lo que es
 
 > **Entrada de CC.** No reescribe la entrada `2026-09-30` de abajo: es la segunda mitad de la misma
