@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-01 (v3) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v3`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-27-v1`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-27 · v2026-09-27-v1 (**CIERRE DEL 2026-09-27 — EL BARRIDO DE LAS 92 TERMINA, Y LA PUERTA ANIDADA ABRE TRES RUTAS HOY.** Amplía el `v2026-09-26-v4` inmediatamente debajo; **no lo reescribe**. **TRES RUTAS ABIERTAS HOY** [`medido` por sondas `pg_net` sin efecto]: `iid-core` (vive en el repo; `IID_CORE_SECRET` no existe), `nscf-attribution` (webhook de comisiones; `NSCF_WEBHOOK_SECRET` no existe) y `claude-lab-bridge` (a retirar), más `nscf-fulfillment-watcher`, que **no verificaba nada**. **`SEC-05` pasa de 4 a 23 EF** y las cierra **unrealvillestudio-hub/unrlvl-iid-functions#254** —12 de ellas adoptadas **byte a byte** desde el deploy—, con **orden de despliegue en 3 pasos** para no dejar fuera a ningún llamador; integrado y verificado con #255. **Mergeado y DESPLEGADO por Sam en los 3 pasos el mismo día, cada paso verificado por CC** [`medido`]: las 23 idénticas a `main`, `iid-core` 400→401 y `nscf-attribution` 200→401; de las tres rutas abiertas queda sólo `claude-lab-bridge`, que va al retiro. **El barrido de las 92 queda completo**: 9 con credencial en el código, 19 que escriben en la tienda de **cualquier** marca sin credencial, 22 con escritura sin puerta en NSCF. **71 de las 119 EF no se ejecutaron ni una vez en 91 días** [`medido`], que es la evidencia para **retirar sin romper**: queda **propuesto por niveles**, decisión de Sam. **Corrección de CC**: el «exactamente las tres desplegadas a mano» del `v4` era falso en su número; la dirección se sostiene. **`SEC-06` a `SEC-10` quedan PROPUESTOS, no dados de alta.** Cabecera anterior íntegra inmediatamente debajo.)_
+
+---
+
 ## Migración 2026-10-01 (v2) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v2`,

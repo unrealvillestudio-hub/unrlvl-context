@@ -365,6 +365,76 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-01 (v3) · LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-10-01 (v2)` queda íntegra
+debajo. Cuarta parte de la sesión de CC iniciada el 2026-09-30, abierta con la verificación programada
+del 10-01 a las 12:30 UTC. PR mergeado por Sam [`medido` por GitHub]: `unrlvl-iid-functions` #287
+(merge `6f8709b`). Abierto al cierre: #292. Migración aplicada por CC tras el «aplica» de Sam y
+verificada: `20261001050000`. EF desplegadas por Sam y verificadas por CC. SMA no consultado: Sam no
+lo pidió.)_
+
+### 1 · Lo que midió la verificación del 10-01
+- **ForumPHs tenía un solo canal con hueco (`meta_ig`, disponible 2) y corrieron TRES
+  investigaciones de la marca**: FPHS-ASAMBLEA 10:01, FPHS-RENDICION-JD 10:31 y
+  FPHS-RENDICION-DOLIENTE 11:01 [`medido` en `intel.research_gate_log` e `iid_research_raw`]. El
+  disponible sólo baja cuando hay fila en la cola, y la cola se llena cuando `iid-process` destila el
+  memo, unas 2 h después.
+- **La procedencia bloqueó 7 de 9 hallazgos** de los dos primeros memos (3 de 4 y 4 de 5); los dos
+  limpios puntuaron 51 y 34, bajo el umbral, y quedaron `descartado` [`medido`]. El tercer memo
+  (13:00) publicó 1 hallazgo y descartó otro [`medido`].
+
+### 2 · La procedencia se anota, no bloquea (#287)
+Sam: «un hallazgo que nombre la ley 284 no es motivo de bloqueo porque al final nosotros regeneramos
+nuestro propio texto». Lo mismo una mención agresiva a un competidor.
+- `iid-process` (PROC-01 corte C) **escribe** el hallazgo con hits: `BRIEF_PROVENANCE_FLAGGED`, los
+  hits en `iid_findings.raw_data.provenance_hits`, contador `provenance_flagged`.
+- El escritor recibe las reglas como `instruction` (`content-run-stage`) y el juez las aplica sobre
+  la pieza (`HR-LEGAL-01` y `HR-FPHS-13` con `enforced_on = piece_and_brief`) [`medido`].
+
+### 3 · El regulador cuenta la investigación en curso (#287, migración `20261001050000`)
+Sam: «no porque haya una franja abierta se va a enviar a investigar a todos los agentes».
+- `intel.v_investigacion_en_curso`: por marca, memos con `processed = false` de las últimas 24 h.
+- `iid-research` la lee **después** de consumir la reserva y **antes** del modelo; con un memo en
+  curso registra `skip` «ya hay N investigacion(es) de la marca en curso» y no gasta.
+- La ventana de 24 h evita que un memo que nunca se destila bloquee a su marca para siempre.
+- Reconstrucción con `processed_at` [`medido`]: con la vista, las corridas de 10:31 y 11:01 se
+  habrían saltado.
+- Despliegue verificado contra `origin/main` `6f8709b` [`medido`]: `iid-process` v71 (92/92
+  literales) e `iid-research` v67 (54/54).
+
+### 4 · Alertas del carril (punto 3 de Sam)
+- **`A-1001-14` `GENERATION_STEP_FAILED`** (ForumPHs, `meta_ig`): una regeneración de imagen de la
+  pieza `69f34e2b` bloqueada por SAFETY a las 11:24; los reintentos de 11:26, 11:28 y 11:30 salieron
+  bien, US$0,04 cada uno [`medido` en `ops_generation_ledger`]. Se resolvió sola a las 14:25 UTC.
+- **`A-1001-13` `COST_NOT_COMPUTED`**: el fallo buscó tarifa por tokens de `gemini-2.5-flash-image`,
+  que está inactiva. Queda para la línea de costos (`unrlvl-iid-functions` #289, tarifa por tokens).
+- **`APPROVAL_BACKLOG`** en 4 marcas (antigüedad) y **`MANUAL_PUBLICATION_PENDING`** (canales
+  manuales): acción de Sam, no de código.
+- Ningún cron apagado ni `SLOT_UNCOVERED` abierto [`medido`].
+
+### 5 · El acuse resuelto conserva qué y dónde (#292, ABIERTO)
+Sam: «quiero que el mensaje de "publicada" me diga qué marca y plataforma se publicó. En el preview
+aparece pero luego se esconde».
+- **Causa** [`medido` en `ops-alert-dispatch`]: al resolver, el latido EDITABA el aviso con
+  `payload: {}` y `payload_fields: []`; quedaba «PUBLICADA — la pieza programada para:» sin nada.
+  Además «resuelto 15:01» salía en UTC y «Primera vez 17:00» en Europe/Madrid.
+- **Arreglo**: el aviso resuelto es el mismo texto con su título de resuelto; la hora de resolución
+  y los campos-instante van en `alert_operators.timezone`. Aplica a todas las reglas.
+- `PUBLISH_OK` tiene una sola ruta activa: Telegram [`medido`]. No hay acuse de publicación por
+  correo a `content-approval`.
+
+### 6 · Professor
+4 learnings aprobados por Sam y registrados en `professor_learnings` [`medido`]: `444296ff`
+(procedencia), `79b67083` (investigación en curso), `98e6e0fd` (acuse resuelto), `59d2e63f` (se
+verifica contra `origin/main`).
+
+### 7 · Abierto
+1. **#292**: Sam mergea y despliega `ops-alert-dispatch`; CC verifica contra `origin/main`.
+2. **Verificación programada 2026-10-02 13:30 UTC** (`trig_019Zw7Dqa5ZxwQjjhupaxsw3`): esperado
+   [`deducido` de `cron.job`] que `fphs-patrimonio-research` (10:15) investigue y
+   `fphs-derechos-research` (11:15) se salte por investigación en curso.
+
 ## 2026-10-01 (v2) · LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-10-01` queda íntegra debajo.
