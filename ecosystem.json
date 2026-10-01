@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-10-01-v3",
+    "version": "2026-10-01-v4",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-10-01-v2",
+    "previous": "2026-10-01-v3",
     "previous_chain": [
+      "2026-10-01-v3",
       "2026-10-01-v2",
       "2026-10-01-v1",
       "2026-09-30-v3",
@@ -265,6 +266,17 @@
       "incidente": "publish-slot-reserver devolvió 500 en cada corrida desde el 2026-09-30 12:30 UTC (brand_publish_slots_pieza_uniq): 12 h sin franjas para ninguna marca y 45 piezas aprobadas sin fecha. Disparador: la función temporal de CC intel.cc_fix_a_arreglos liberaba sólo franjas reserved. Defecto de fondo: elegibilidad por approved_at con lista de exclusión, y un throw por canal que abortaba la corrida. Datos reparados con respaldo (intel.cc_fix_2026_10_01_franjas, 33; intel.cc_fix_2026_10_01_aprobacion, 84); corrida de las 00:45 en 200 con 7 franjas a piezas scheduled [medido]. Ninguna pieza no aprobada se publicó: drain_due_slots exige scheduled [medido].",
       "nodos_que_cambian": "_meta (versión y esta entrada), criterio_de_bandeja._update_2026-10-01 y publish_pipeline._update_2026-10-01. Nada se borra.",
       "detalle": "IID/session_log.md 2026-10-01 y AGENDA.md v2026-10-01-v1."
+    },
+    "_sesion_2026-10-01-v4": {
+      "date": "2026-09-30",
+      "conducted_by": "Sam x CC. Segunda mitad de la sesión del 2026-09-29/30 (la de unrlvl-iid-functions #270).",
+      "prs_mergeados": "SocialLab #7 · unrlvl-context #123 #124 [medido por GitHub]",
+      "carruseles": "11 carruseles publicados como CAROUSEL de 6 con imagen propia por lámina (carousel_slide en producción) [medido en scheduled_posts].",
+      "publicacion_fallida": "cf57fe53 (IG) 9004 transitorio; SocialLab #7 reintenta la creación de contenedores; la franja se devolvió a reserved y salió.",
+      "regla_nueva": "HR-GEN-19 en intel.watcher_rules (brand_id NULL): prohibida la presión de venta por escasez o urgencia.",
+      "professor": "8 learnings de este tramo aprobados por Sam; ids en brands/NeuroneSCF/session_log.md 2026-09-30.",
+      "skill": "skills/sesion-de-fixables v1.2; skills/INDEX.md 1.18.",
+      "pendiente": "TikTok del sprint de 48 h (3, manual_pending) a cargo de Sam; recompose debe copiar la portada nueva a assets.carousel.slides[0]."
     },
     "_sesion_2026-10-01-v3": {
       "date": "2026-10-01",

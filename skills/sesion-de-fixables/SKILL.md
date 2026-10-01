@@ -1,7 +1,8 @@
 ---
 name: sesion-de-fixables
-version: 1.1
-fecha: 2026-09-29
+version: 1.2
+fecha: 2026-10-01
+cambios_1_2: "2026-10-01: carrusel con imagen por lámina (carousel_slide), directrices acumuladas, portada → lámina 1, retener franja, publicación fallida devuelta al publicador, canal sin publicador, HR-GEN-19 y cierre de actividad con lo que falta. v1.1 íntegra: sólo se añade."
 cambios_1_1: "2026-09-29 (tarde): cinco motivos nuevos en §3.1 y dos avisos de barrido (texto pintado en la imagen; texto que se publica). v1.0 íntegra: sólo se añade."
 capa: MÉTODO
 destino: CARGABLE
@@ -112,6 +113,8 @@ nuevo se añade aquí al cerrar la sesión (§9).
 | Un dato de otro país sin conectarlo con el mercado de la marca | `HR-GEN-18` con `{{mercado_de_la_marca}}` ← `application_constraints.home_market` del genoma; una marca sin mercado declarado no recibe la regla | 69f34e2b, Sam 2026-09-29 |
 | Una línea «Distribución exclusiva…» que funciona como segunda firma | `signature_closer.rule` del genoma + `HR-GEN-11`; se quita la línea, la firma es una | 48175596, 17763bd1 |
 | Voseo que el léxico no conoce | se EXTIENDE `HR-GEN-05` (nunca se rehace) tras un barrido morfológico por terminación y por enclítico | 2026-09-29: +9 formas |
+| Presión de venta por escasez o urgencia («quedan pocas unidades», «solo por hoy», «oferta por tiempo limitado») | `HR-GEN-19` (eje, todas las marcas): el recurso está prohibido sea cierto o no; citarlo para criticarlo no incumple | 5047ae26; Sam, 2026-09-30: «esto no es un mercado de pulgas» |
+| Alusión al dinero (pagar, comprar, vender, «inversión») en el texto o en el texto de la portada | se reescribe el campo y **también el `copy.image_hook`** si la portada lo repite; se recompone la portada | 5047ae26, 2026-09-30 |
 
 **El texto pintado en la imagen también es texto** (2026-09-29). Vive en `image.overlay.headline`,
 `image.overlay.subheadline` y `copy.image_support`. Un barrido que corrige `copy` y no recompone deja
@@ -136,6 +139,11 @@ dos y además `copy.title`, `copy.image_hook` y `copy.aife_filtered`, y comprueb
 | Sostener algo imposible (un kit entero en una mano) | directriz: un producto en la mano, el resto sobre una superficie | 861681cd |
 | Franja blanca o negra, foto pegada en vertical | directriz «una sola fotografía que llena todo el cuadro de borde a borde» | 7c4c7240, 685d5275 |
 | Mancha o artefacto en una imagen por lo demás buena | regenerar con directriz que nombra la zona limpia | bea0754e |
+| En un plano cerrado la persona sale con el cabello cortado, o al describir el cabello cambia la cara | directriz: «idéntica a sus fotos de referencia (mismo rostro, misma edad), plano medio desde la cintura, el encuadre muestra su cabello completo» + la descripción del cabello | dae462b1, 76f483df, 5047ae26 (Professor `c8bf9b3b`) |
+| Letras o rótulos pintados dentro de la imagen (un diagrama con palabras) | directriz «sin diagramas, letras ni rótulos de ningún tipo» | dae462b1 (Professor `47f9750a`) |
+| Objeto suelto o imposible (cabello colgando del secador sin persona) | directriz que **ancla** el objeto a quien lo lleva («el cabello nace de la cabeza de la clienta, nunca suelto») | dae462b1 |
+| Pieza aprobada generada con el motor viejo: sin la persona de la marca, producto genérico o franjas negras | regenerar con persona y producto real (b); **detectarla antes de publicar**: `assets.image` sin `persona_used` y fecha anterior al motor de persona | 4 carruseles del 29-sep, portada de 76f483df, 3 TikTok del sprint |
+| El proveedor bloquea por SAFETY una escena inocua | el disparador es el copy completo que manda `recompose` (deducido): en carruseles se usa `carousel_slide`, que sólo manda el texto de la lámina; si no, una escena más neutra | babcc7de (Professor `fef0fc90`) |
 
 ### 3.3 · ¿Máquina, no contenido?
 
@@ -178,7 +186,23 @@ select intel.trigger_iid_agent('content-run-stage', jsonb_build_object(
 
 -- (c) La respuesta: net._http_response.id = el valor que devolvió la llamada
 select status_code, left(content, 400) from net._http_response where id = :req;
+
+-- (d) Una lámina de carrusel con su propia imagen (#270). Una por invocación, en serie.
+--     La escena sale SOLO del texto de la lámina y su directriz: no hereda las de la portada.
+select intel.trigger_iid_agent('content-run-stage', jsonb_build_object(
+  'action','carousel_slide','piece_id', :piece_id,
+  'slide', jsonb_build_object('n', :n, 'headline', :titular, 'subheadline', :apoyo,
+                              'visual_directive', :directriz),
+  'edit_reason', :motivo, 'edited_by','cc:fixable'));
 ```
+
+- **`recompose` ACUMULA las directrices de la pieza** (`assets.image.visual_directives`) y el
+  constructor elige entre ellas: para una escena **distinta** se vacían antes
+  (`jsonb_set(assets,'{image,visual_directives}','[]')` y `visual_directive_piece = null`). Medido:
+  se pidió «piscina sin personas» y salió el retrato de cierre de la directriz anterior (Professor `8af010bc`).
+- **Regenerar la portada de un carrusel NO actualiza su lámina 1**: después de (b), se copia
+  `assets.image.url` (y `copy.image_hook` como `headline`) a `assets.carousel.slides[0]`, porque es
+  esa lista la que el scheduler manda a `media_urls` (Professor `265aadfa`).
 
 - **(a) falla con `COMPOSITOR_IMAGE_FETCH_FAILED … 400`** cuando la imagen limpia ya no existe en
   `temp/` (piezas antiguas). Entonces se usa (b).
@@ -228,9 +252,33 @@ select cron.schedule('cc-fix-<fecha>', '*/2 * * * *', $$select intel.cc_fix_<fec
    ```
 4. No pasa → vuelve a la cola con la directriz corregida. **Dos fallos por la misma causa = se para
    la cola y se busca en la fuente** (§4).
-5. Si la pieza tenía franja reservada y se regenera, se libera antes (`brand_publish_slots`) para
+5. **Para retener una franja sin mover su hora**: `last_drain_check_at = now()` en
+   `intel.brand_publish_slots`; el drain la salta durante `drain_backoff_sin_publicador` (6 h) y se
+   libera con `null` en cuanto la pieza está revisada. **Vence sola**: si la revisión se alarga, se
+   renueva (Professor `edee1a69`).
+6. Si la pieza tenía franja reservada y se regenera, se libera antes (`brand_publish_slots`) para
    que no se publique una imagen que nadie revisó. **Una pieza `scheduled` que cambia de imagen
    vuelve a `awaiting_approval`.**
+
+### 6 bis · Una publicación que falló: revisar, corregir y devolver al publicador
+
+1. **Leer el motivo:** `public.scheduled_posts.error_message` y `intel.brand_publish_drain_log` de la
+   pieza.
+2. **Reproducir sin publicar:** crear sólo el contenedor o la llamada que falló con el MCP de la
+   plataforma. Si ahora funciona, el fallo fue **transitorio** (medido: 9004 de Instagram en la lámina
+   6 de cf57fe53; SocialLab #7 reintenta desde entonces).
+3. **Corregir** la imagen, el texto o el código según la causa.
+4. **Devolver la franja:** `status = 'reserved'`, `failed_reason = null`. Una fila `failed` en
+   `scheduled_posts` **no bloquea** el reencolado (`filasQueBloquean`).
+5. **Relanzar el drain** con la misma llamada del cron 66:
+   `select intel.trigger_iid_agent('content-scheduler','{"mode":"placement"}');`
+6. **Verificar** en `scheduled_posts` el nuevo `platform_post_id` y el `media_type`.
+
+### 6 ter · Canal sin publicador (TikTok)
+
+Las franjas manuales quedan en `manual_pending`. Se entrega a Sam **un archivo** con el enlace de cada
+imagen, la descripción lista para pegar y los pasos en la app, después de revisar la imagen; la franja
+se marca publicada cuando Sam pasa el enlace del post (Professor `f3e4d694`).
 
 ---
 
@@ -245,6 +293,12 @@ acción en negrita, etiqueta `medido / reportado / deducido`.
   como hallazgo, no se corrige en silencio.
 - **Las decisiones son de Sam**, marcadas como **decisión**.
 - Si la sesión se alarga, un aviso breve de qué se está haciendo; nunca silencio largo.
+- **Una actividad con meta (sprint, run, campaña) se cierra diciendo lo que falta**, sin esperar a
+  que Sam pregunte: «Sam, falta esto para completar [actividad]», con la acción de cada pendiente.
+  Se mide contra la meta completa —franjas del periodo por canal: publicadas, pendientes,
+  bloqueadas—, no sólo contra lo último que se tocó (Sam, 2026-09-30; Professor `fc0d10f0`).
+- **Antes de aplicar una regla de contenido, se lee su versión vigente** en `intel.watcher_rules`:
+  el catálogo cambia en el día y otra sesión puede haberlo cambiado (Professor `99c089e0`).
 
 ---
 

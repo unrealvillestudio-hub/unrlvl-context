@@ -365,6 +365,35 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-09-30 · LA LÁMINA NO HEREDA LA PORTADA, LA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ SE PROHÍBE
+
+_(Entrada al tope de la §9 por orden de cierre. **No reescribe ninguna anterior**. Segunda mitad de la
+sesión de CC del 2026-09-29/30. PR mergeados [`medido` por GitHub]: `unrlvl-iid-functions` #270 ·
+`SocialLab` #7.)_
+
+### 1 · `carousel_slide` en producción (#270)
+- **Primera llamada real:** babcc7de, lámina 6, que había fallado 3 veces por SAFETY vía `recompose`.
+  Salió al primer intento, con `persona_used: false` y `product: null` [`medido`].
+- **Después** se usó para 3 carruseles completos: 15 láminas en serie, con un cron temporal ya
+  retirado.
+
+### 2 · Lo que `recompose` no hace
+- **Acumula directrices:** para una escena distinta se vacían antes.
+- **No copia la portada nueva a `assets.carousel.slides[0]`:** hoy se hace a mano. **Pendiente de
+  código** (Professor `265aadfa`).
+
+### 3 · Publicación fallida (SocialLab #7)
+- **El fallo:** 9004 en la creación de un ítem de carrusel de Instagram.
+- **Diagnóstico** [`medido`]: transitorio, la misma URL se creó una hora después.
+- **Arreglo:** `crearContenedorIg` reintenta 9004, 2207003, 2207052, 1, 2 e `is_transient` a los 3 y
+  8 s; no reintenta permisos, token ni parámetros.
+- **Cómo se devolvió la franja al publicador:** se pasó a `reserved`, y la fila `failed` no bloquea el
+  reencolado.
+
+### 4 · Regla `HR-GEN-19` (eje, `brand_id` NULL)
+- **Prohíbe** la presión de venta por escasez o urgencia, sea cierto o no.
+- **No incumple** citar o criticar el recurso: un caso de LucienSael lo denuncia y no se tocó.
+
 ## 2026-10-01 (v3) · LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**: la `2026-10-01 (v2)` queda íntegra

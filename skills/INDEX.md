@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.17 · 2026-09-30 · Mantenido por: Claude_ · base previa: 1.16 · 2026-09-29 · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
+_Versión: 1.18 · 2026-10-01 · Mantenido por: Claude_ · base previa: 1.17 · 2026-09-30 · base previa: 1.16 · 2026-09-29 · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
 
 ---
 
@@ -60,6 +60,23 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
   **verificación obligatoria en navegador**. Fila nueva en la tabla de activación. `mobile-ux.md` y
   `a11y.md` llevan una nota que apunta a §18 sin tocar su cuerpo. La fila de la tabla de decisión no
   cambia: el disparador sigue siendo «cualquier output HTML / CSS / React / visual».
+
+---
+
+## NOTAS DE VERSIÓN v1.18
+
+**Cambios respecto a v1.17:**
+
+- **`sesion-de-fixables` v1.1 → v1.2.** Todo es adición:
+  - **§3:** 2 motivos de texto (`HR-GEN-19` escasez y urgencia; alusión al dinero también en la
+    portada) y 6 de imagen (encuadre y rostro de la persona, letras en la imagen, objetos sueltos,
+    motor viejo, bloqueos SAFETY).
+  - **§5.1 (d):** la llamada `carousel_slide`. Además, vaciar las directrices acumuladas y copiar la
+    portada regenerada a la lámina 1.
+  - **§6:** retener una franja.
+  - **§6 bis:** publicación fallida, cómo se devuelve al publicador.
+  - **§6 ter:** canal sin publicador.
+  - **§7:** cerrar una actividad diciendo lo que falta, y leer la regla vigente antes de aplicarla.
 
 ---
 
