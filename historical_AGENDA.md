@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-02 (v3) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v3`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-30-v4`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y POR CANAL, Y LOS HALLAZGOS QUE SOBRAN VAN A UNA RESERVA QUE CADUCA.** Amplía el `v2026-09-30-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #274 #276 #279 #280 [`medido` por GitHub]; migraciones `20260930010000` a `20260930040000` aplicadas por CC y verificadas; `iid-research` v65, `iid-process` v70 e `iid-core` v78 desplegadas por Sam y verificadas contra `main` [`medido`]. Tres alertas nuevas que preguntan por el dato; 14 agentes sin marca retirados con archivo; informe quincenal retirado. Detalle en `IID/session_log.md` 2026-09-30 (v4).)_
+
+---
+
 ## Migración 2026-10-02 (v2) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v2`,

@@ -4,6 +4,29 @@ _Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags 
 
 ---
 
+## 2026-10-02 (v3) — HR-NSCF-06 pasa a producción por el banco de reglas, y el cambio del juez para HR-NSCF-08 se revierte
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-02 (v3). SMA no consultado: Sam no lo pidió.
+
+- **`HR-NSCF-06` a producción** [`medido`]:
+  - en el lote `2026-10-02-test-de-reglas` (30 piezas, 10 de NeuroneSCF) fue uno de los 4 candidatos que
+    parecían mejorar;
+  - en la confirmación con los candidatos solos (`2026-10-02-confirmacion`, 18 piezas de NeuroneSCF y
+    ForumPHs) fue el único que repitió: de 1 a 11 y de 1 a 8 avisos en 30 juicios;
+  - Sam: «sí, promueve HR-NSCF-06». Migración `20261002234000`, aplicada a las 19:54 UTC; el enunciado
+    anterior queda guardado en `notes` (`unrlvl-iid-functions` #313).
+- **`HR-NSCF-05` no se promovió:** en la confirmación invirtió la dirección [`medido`]. En la prueba de humo
+  de las citas (pieza `5fcdc19d`), su aviso venía con la cita «Cumple la regla»: un aviso falso.
+- **`HR-NSCF-08`: el cambio del juez se revirtió.**
+  - `unrlvl-iid-functions` #314 hacía que el juez recibiera la ficha de lo que la pieza nombra. Medido con
+    el banco [`medido`]: 1 pieza mejora (`1f81a727`) y 2 empeoran (`bea0754e`, aviso falso nuevo;
+    `6be0fe81`, calla donde debía avisar).
+  - Revertido en #315; `content-run-stage` v186 verificada igual a `main` [`medido`].
+  - La premisa era errónea: «4 de 8 aciertos» era del enunciado candidato; la regla en producción acertaba
+    6 de 7 [`deducido`].
+  - Sólo se retoma por el banco, con juez candidato (`unrlvl-iid-functions` #322).
+
 ## 2026-10-02 — Marisol revisa las bandejas de Neurone, y el carril auto-fix corrige antes de la bandeja
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del

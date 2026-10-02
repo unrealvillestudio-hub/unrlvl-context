@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-02 · v2026-10-02-v3 (**EL BANCO DE REGLAS: NINGÚN CAMBIO DE ENUNCIADO NI DEL JUEZ LLEGA A PRODUCCIÓN SIN PROBARSE CON PIEZAS REALES; HR-NSCF-06 PASA Y EL CAMBIO DEL JUEZ #314 SE REVIERTE.** Amplía el `v2026-10-02-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #307 #313 #314 #315 #320 #322 y `unrlvl-context` #143 [`medido` por GitHub]. Migración `20261002234000` (`HR-NSCF-06`) aplicada a las 19:54 UTC; `content-run-stage` v191 verificada igual a `main` [`medido`]. El juez no repite qué regla cita (74 % de los avisos varía) pero sí si la pieza pasa; de 18 candidatos sólo `HR-NSCF-06` se confirmó al probarse solo. Gasto de las pruebas reclasificado a `estructura` (371 filas, 22,56 US$). CC_PROTOCOL v18 §18 y skill `banco-de-reglas` v1.0. Professor: 6 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-02 (v3).)_
 _Actualizada: 2026-10-02 · v2026-10-02-v2 (**EL PATRÓN CONFIRMA LO QUE EL JUEZ NO MARCÓ, EL AUTO-FIX TERMINA LO QUE EMPIEZA Y LOS PENDIENTES PARA SAM LLEGAN UNA VEZ AL DÍA, AGRUPADOS POR SESIÓN.** Amplía el `v2026-10-02-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #292 #300 #302 #303 #304 #306 #308 #309 #310 y `unrlvl-context` #139 #140 #141 [`medido` por GitHub]. Migraciones `20261002150000`–`20261002180000` y `20261002210000` aplicadas por CC y verificadas [`medido`]. Correo a content-approval apagado; crons 119/121/86 e `iid-brief-generator` retirados; fixables y barrido del auto-fix encendidos por Sam; resumen diario de pendientes a las 07:00 UTC. CC_PROTOCOL v17. Professor: 8 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-02 (v2).)_
 _Actualizada: 2026-10-02 · v2026-10-02-v1 (**EL CARRIL AUTO-FIX CORRIGE ANTES DE LA BANDEJA, Y MARISOL REVISA NEURONESCF.** Amplía el `v2026-10-01-v7` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #295 #296 y `Orchestrator` #62 #63 [`medido` por GitHub]. Migraciones `20261001120000` y `20261001130000` aplicadas por CC y verificadas; `content-run-stage` v171 desplegada por Sam y verificada contra `main`; carril encendido por CC a pedido de Sam [`medido`]. Professor: 6 learnings aprobados, más `0a2bfad5`. Detalle en `IID/session_log.md` 2026-10-02 y 2026-10-01 (v8).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v7 (**UN CARRUSEL SE APRUEBA ENTERO: LA VISTA DE LA PIEZA MUESTRA TODAS SUS LÁMINAS.** Amplía el `v2026-10-01-v6` inmediatamente debajo; **no lo reescribe**. PR mergeado `Orchestrator` #61 [`medido` por GitHub], desplegado en `7d14348` [`medido`] y verificado por Sam [`reportado`]. El artefacto pinta todas las láminas con el mismo criterio que la publicación. Sam declara el carril listo para calibrar, aprobar, arreglar y fluir. Learning `0a2bfad5` pendiente de aprobación. Detalle en `IID/session_log.md` 2026-10-01 (v7).)_
@@ -8,9 +9,81 @@ _Actualizada: 2026-10-01 · v2026-10-01-v4 (**CIERRE DEL 2026-10-01 (v4) — LOS
 _Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE.** Amplía el `v2026-10-01-v2` inmediatamente debajo; **no lo reescribe**. PR mergeado `unrlvl-iid-functions` #287 [`medido` por GitHub]; #292 abierto. Migración `20261001050000` aplicada y verificada; `iid-process` v71 e `iid-research` v67 verificadas contra `origin/main`. Un hallazgo que cita la Ley 284, un año o a un competidor se escribe y se transforma al redactar; una marca con un memo sin destilar no abre otra investigación; el aviso «PUBLICADA» resuelto dejará de esconder marca y canal. Professor: 4 learnings. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR.** Amplía el `v2026-10-01-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #60, `unrlvl-iid-functions` #282 #283 #284 #285 #286, `ImageLab` #31, `CopyLab` #43 y `unrlvl-ops` #16 #17 [`medido` por GitHub]. Cinco migraciones aplicadas por CC con autorización de Sam. Búsquedas web y fallos con costo explicado; 187 filas históricas reclasificadas con respaldo; alerta `COST_NOT_COMPUTED`; tarifa de Haiku 4.5. Entidad `StudioOperations` (sin términos: su informe Cliente no se genera). `brand-context-builder` con puerta y PR; `iid-ecommerce*` retiradas. Pestaña «Manual» con «Publicada». unrlvl-ops multimarca y móvil. 8 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR.** Amplía el `v2026-09-30-v4` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30 y `BluePrints` #11 [`medido` por GitHub]. Una pieza, una pestaña; `sin_imagen` a Arreglos; Retenidas a «Más»; orden por la próxima franja; aprobar no se repite. **Incidente:** `publish-slot-reserver` 12 h en 500 y 45 piezas aprobadas sin fecha, con disparador de CC; datos reparados y **v21 desplegada por CC a petición expresa de Sam** [`medido`]. 11 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01.)_
-_Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y POR CANAL, Y LOS HALLAZGOS QUE SOBRAN VAN A UNA RESERVA QUE CADUCA.** Amplía el `v2026-09-30-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #274 #276 #279 #280 [`medido` por GitHub]; migraciones `20260930010000` a `20260930040000` aplicadas por CC y verificadas; `iid-research` v65, `iid-process` v70 e `iid-core` v78 desplegadas por Sam y verificadas contra `main` [`medido`]. Tres alertas nuevas que preguntan por el dato; 14 agentes sin marca retirados con archivo; informe quincenal retirado. Detalle en `IID/session_log.md` 2026-09-30 (v4).)_
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-02 (v2)» (1 línea, `v2026-09-30-v3`), «Migración 2026-10-02 (v1)» (1 línea, `v2026-09-30-v2`) y «Migración 2026-10-01 (v7)» (1 línea, `v2026-09-30-v1`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-02 (v3)» (1 línea, `v2026-09-30-v4`), «Migración 2026-10-02 (v2)» (1 línea, `v2026-09-30-v3`) y «Migración 2026-10-02 (v1)» (1 línea, `v2026-09-30-v2`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-02-v3 — El banco de reglas: un enunciado o un cambio del juez se prueba antes de producción
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-02-v2` queda íntegro debajo.
+Segunda parte de la sesión de CC del `v2026-10-02-v1` (rama `claude/fixables-session-88uq62`, PR #138
+mergeado); este Actualiza va en la rama nueva `claude/actualiza-2026-10-02-banco`, por elección de Sam.
+Detalle en `IID/session_log.md` 2026-10-02 (v3), `brands/NeuroneSCF/session_log.md` y
+`brands/ForumPHs/session_log.md` 2026-10-02 (v3).)_
+
+### Hecho [`medido`]
+- **#307** — el banco de reglas: `intel.watcher_rules_candidates` + `judge_replay` +
+  `intel.rule_replay_results`.
+- **Lote `2026-10-02-test-de-reglas`** — 18 enunciados candidatos, 30 piezas reales de 4 marcas, 3 juicios
+  por variante: 180 pares, 10,83 US$. El juez no repite qué regla cita (28 de 38 avisos de reglas sin
+  cambio varían entre dos corridas iguales), pero sí si la pieza pasa (0 rechazos por regla en 145
+  juicios). Un enunciado nuevo cambia a qué regla se atribuye un defecto, no cuántos.
+- **Corrección:** «parte de las piezas llega a revisión por azar», dicho por CC a Sam esa tarde, no se
+  sostiene.
+- **Lote `2026-10-02-confirmacion`** — 4 candidatos solos, 18 piezas de NeuroneSCF y ForumPHs, 6,91 US$.
+  Sólo `HR-NSCF-06` repitió. `HR-NSCF-05`, `HR-FPHS-05` y `HR-FPHS-12` no se promovieron.
+- **#313** — `HR-NSCF-06` a producción con el «sí» de Sam: migración `20261002234000`, aplicada a las
+  19:54 UTC, con el enunciado anterior en `notes`.
+- **#314 → #315** — el cambio del juez para `HR-NSCF-08` midió 1 mejora y 2 regresiones y se revirtió;
+  v186 verificada igual a `main`.
+- **#320** — una cita por aviso (`intel.rule_replay_results.explanations`) y lectura por mayoría
+  (`intel.v_rule_replay_mayoria`); `v_rule_replay_diff` marcada REEMPLAZADA.
+- **Costo** — los juicios de prueba pasan de `refacturable` a `estructura`: 371 filas, 22,56 US$.
+- **#322** — juez candidato separado de producción (`intel.rule_replay_judges`,
+  `scripts/juez_candidato.sh`, lo corre Sam).
+- **Despliegue final** — `content-run-stage` v191 verificada igual a `main` (blob `116bf08`); prueba de
+  humo `2026-10-02-humo-citas`: la cita se guarda, 0,004 US$ por variante.
+- **`unrlvl-context` #143** — `skills/banco-de-reglas/SKILL.md` v1.0, `CC_PROTOCOL.md` v18 §18,
+  `skills/INDEX.md` 1.20.
+- **Interruptores del carril auto-fix** (medidos el 2026-10-02 por la noche): `autofix_enabled`,
+  `autofix_fixables_enabled` y `autofix_sweep_enabled` en `true` (tope 10 US$ diarios);
+  `autofix_image_enabled`, `autofix_learning_enabled` y `autofix_rule_proposals_enabled` en `false`.
+- **Professor:** `f9886c75`, `5b083775`, `f7d327ff`, `489581c6`, `b9a6c7bf` y `06ba9f42`, aprobados por Sam.
+
+### Verificación contra fuente (paso 10-bis) del `v2026-10-02-v2`
+- **«Sam, queda esto», punto 1** (leer el primer resumen diario) → **ABIERTO**: el primer envío es el
+  2026-10-03 a las 07:02 UTC.
+- **«Sam, queda esto», punto 2** (revisar `fadfe938-50ac-4ad1-b305-c7548a6c8816` en Calibración) →
+  **ABIERTO**: esta sesión no lo midió.
+- **«Sam, queda esto», punto 3** (mergear `unrlvl-iid-functions` #316 y desplegar `content-run-stage`) →
+  **CERRADO**: #316 mergeado el 2026-10-02 a las 20:44 UTC [`medido` por GitHub]; `content-run-stage`
+  v191, verificada igual a `main` [`medido`], lo incluye [`deducido` del orden: el despliegue final es
+  posterior al merge].
+- **«Próxima sesión», punto 1** (2026-10-03 13:30 UTC, `trig_01JTXTT46y7LHVD29VurNCCb`) → **ABIERTO**:
+  programado para mañana.
+- **«Próxima sesión», punto 2** (barrido del auto-fix: gasto diario contra el tope) → **ABIERTO**: esta
+  sesión sólo midió los interruptores (`autofix_sweep_enabled` = `true`).
+- **«Próxima sesión», punto 3** (2026-10-25 06:30 UTC, `trig_01Tew7wkWfUrunLaeEYuBjBC`) → **ABIERTO**:
+  programado.
+
+### Barrido de archivado (paso 10)
+- **Cabecera:** baja íntegra 1 línea (`v2026-09-30-v4`) a `historical_AGENDA.md` → «Migración
+  2026-10-02 (v3)». La cabecera queda con 10.
+- **Cuerpo:** ningún ítem cumple las tres condiciones de archivado en este bloque; no se mueve nada más.
+
+### Sam, queda esto
+1. **`HR-FPHS-12` y la exención de prensa:** decidir en el Orchestrator.
+2. **Secretos en texto plano en `intel.iid_scheduler_config`:** sigue abierto desde el `v2026-10-02-v1`.
+3. **Las 6 preguntas de criterio del test de reglas:** sin cambios.
+4. **Cuándo encender** imagen, aprendizaje y propuestas de regla del carril (`autofix_image_enabled`,
+   `autofix_learning_enabled` y `autofix_rule_proposals_enabled`, hoy en `false`).
+
+### Próxima sesión
+1. **`HR-NSCF-08`** sólo se retoma por el banco, con juez candidato (`scripts/juez_candidato.sh`, lo corre
+   Sam) y en un lote nuevo (`CC_PROTOCOL.md` §18).
+2. **Los puntos abiertos del `v2026-10-02-v2`:** el primer resumen diario, la revisión del
+   2026-10-03 13:30 UTC y el gasto del barrido del auto-fix.
 
 ---
 

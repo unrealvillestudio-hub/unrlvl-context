@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-10-02-v2",
+    "version": "2026-10-02-v3",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-10-02-v1",
+    "previous": "2026-10-02-v2",
     "previous_chain": [
+      "2026-10-02-v2",
       "2026-10-02-v1",
       "2026-10-01-v4",
       "2026-10-01-v3",
@@ -279,6 +280,21 @@
       "professor": "8 learnings de este tramo aprobados por Sam; ids en brands/NeuroneSCF/session_log.md 2026-09-30.",
       "skill": "skills/sesion-de-fixables v1.2; skills/INDEX.md 1.18.",
       "pendiente": "TikTok del sprint de 48 h (3, manual_pending) a cargo de Sam; recompose debe copiar la portada nueva a assets.carousel.slides[0]."
+    },
+    "_sesion_2026-10-02-v3": {
+      "date": "2026-10-02",
+      "conducted_by": "Sam x CC. Segunda parte de la sesión de CC del v2026-10-02-v1 (rama claude/fixables-session-88uq62, PR #138 mergeado): el banco de reglas. Este Actualiza va en la rama nueva claude/actualiza-2026-10-02-banco, por elección de Sam. Professor cerrado ANTES de este Actualiza: 6 learnings aprobados por Sam y registrados por CC (f9886c75, 5b083775, f7d327ff, 489581c6, b9a6c7bf, 06ba9f42; approved_by_sam = true) [medido].",
+      "prs_mergeados": "unrlvl-iid-functions #307 #313 #314 #315 #320 #322 · unrlvl-context #143 [medido por GitHub].",
+      "migraciones": "#313: 20261002233000 (registro de la confirmación; renombrada desde 20261002210000 por choque con #310) y 20261002234000 (HR-NSCF-06 a producción, aplicada 19:54 UTC, enunciado anterior en notes) [medido]. #320: 20261002235000 y 20261002235100. #322: 20261002235200. Todas aplicadas por CC el 2026-10-02 [medido en supabase_migrations.schema_migrations].",
+      "banco_de_reglas": "#307: intel.watcher_rules_candidates + judge_replay + intel.rule_replay_results. Lote 2026-10-02-test-de-reglas: 18 enunciados candidatos, 30 piezas reales (ForumPHs 8, LucienSael 6, NeuroneSCF 10, UnrealvilleStudio 6), 3 juicios por variante, 180 pares, 10,83 US$, 1 fallo técnico repetido. El juez no repite qué regla cita (28 de 38 avisos de reglas sin cambio, 74 %, varían entre dos corridas iguales) pero sí si la pieza pasa (0 rechazos por regla en 145 juicios; 3 de 30 piezas cambian entre tener y no tener avisos). Un enunciado nuevo cambia a qué regla se atribuye un defecto, no cuántos (1,39 frente a 1,42 avisos por juicio). Confirmación 2026-10-02-confirmacion (4 candidatos solos, 18 piezas NSCF+FPHS, 6,91 US$): sólo HR-NSCF-06 repitió y pasó a producción; HR-NSCF-05, HR-FPHS-05 y HR-FPHS-12 no se promovieron [medido].",
+      "juez": "#314 (el juez recibía la ficha de lo que la pieza nombra, para HR-NSCF-08) content-run-stage desplegado v184 y medido con el banco: 1 pieza mejora y 2 empeoran; revertido en #315, content-run-stage v186 = main [medido]. #320: una cita por aviso (intel.rule_replay_results.explanations) y vista intel.v_rule_replay_mayoria; v_rule_replay_diff marcada REEMPLAZADA. #322: juez candidato separado de producción (intel.rule_replay_judges, scripts/juez_candidato.sh, lo corre Sam).",
+      "costo": "Los juicios de prueba se asentaban refacturable; corregido a estructura: 371 filas, 22,56 US$ (350 del banco = 21,20 US$, Claude Sonnet 5, 10.124.603 tokens de entrada a 2 US$/M y 95.113 de salida a 10 US$/M; 21 del modo prueba del carril = 1,36 US$). Desde #320 un juicio callado y la cita se asientan estructura [medido].",
+      "despliegue": "content-run-stage v191 = main (blob 116bf08) [medido]. Prueba de humo 2026-10-02-humo-citas (pieza 5fcdc19d): la cita se guarda, 0,004 US$ por variante; la cita de HR-NSCF-05 decía «Cumple la regla» (aviso falso).",
+      "protocolo": "unrlvl-context #143: skills/banco-de-reglas/SKILL.md v1.0, CC_PROTOCOL.md v18 §18 (ningún cambio de enunciado ni del juez a producción sin banco), skills/INDEX.md 1.20.",
+      "interruptores_autofix": "Medido el 2026-10-02 por la noche: autofix_enabled, autofix_fixables_enabled y autofix_sweep_enabled = true (tope 10 US$/día; encendidos por decisión de Sam en otra sesión, Professor 17c186a0); autofix_image_enabled, autofix_learning_enabled y autofix_rule_proposals_enabled = false.",
+      "pendiente": "Decisiones de Sam: HR-FPHS-12 y la exención de prensa (en el Orchestrator); secretos en texto plano en intel.iid_scheduler_config; las 6 preguntas de criterio del test de reglas; cuándo encender imagen, aprendizaje y propuestas de regla del carril. HR-NSCF-08 sólo se retoma por el banco con juez candidato.",
+      "nodos_que_cambian": "_meta (versión, cadena y esta entrada). Nada se borra.",
+      "detalle": "IID/session_log.md 2026-10-02 (v3), brands/NeuroneSCF/session_log.md y brands/ForumPHs/session_log.md 2026-10-02 (v3), y AGENDA.md v2026-10-02-v3."
     },
     "_sesion_2026-10-02-v2": {
       "date": "2026-10-02",
