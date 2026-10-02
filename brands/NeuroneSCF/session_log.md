@@ -4,6 +4,26 @@ _Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags 
 
 ---
 
+## 2026-10-02 — Marisol revisa las bandejas de Neurone, y el carril auto-fix corrige antes de la bandeja
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-01 (v8) y 2026-10-02. SMA no consultado: Sam no lo
+> pidió.
+
+- **Marisol revisa NeuroneSCF** (Orchestrator #62, unrlvl-iid-functions #295) [`medido`]:
+  - ve Calibración, Arreglos, Retenidas y Publicación sólo con piezas de NeuroneSCF, con las mismas
+    acciones que Sam;
+  - sus veredictos quedan firmados `marisol`;
+  - el permiso es la fila `marisol → NeuroneSCF` de `intel.operator_review_scope`.
+- **Inventario al abrirle las bandejas** [`medido` el 2026-10-01]: 66 en Arreglos (35 corregidas + 31
+  por arreglar) y 44 en Calibración (43 esperando + 1 aplazada).
+- **Carril auto-fix encendido el 2026-10-02.** Las piezas nuevas de Neurone con `warn` de texto se
+  corrigen antes de la bandeja.
+  - La regla de la marca más frecuente en `warn` es `HR-NSCF-08` (mecanismo verificable): 59 en 14
+    días [`medido`].
+  - Pide material: el carril la corrige sólo con el material del brief, y si no alcanza la pieza sale a
+    Arreglos sin inventar.
+
 ## 2026-09-30 — Los carruseles se cierran con imagen propia por lámina, y la escasez queda prohibida
 
 > **Entrada de CC.** Segunda mitad de la sesión del 2026-09-29/30 (la de `unrlvl-iid-functions` #270).

@@ -365,6 +365,89 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-02 · EL CARRIL AUTO-FIX CORRIGE ANTES DE LA BANDEJA (corte 1)
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. PR mergeados [`medido` por GitHub]:
+`unrlvl-iid-functions` #296 y `Orchestrator` #63. Diseño validado por Sam el 2026-10-01 («sí a las
+propuestas, arranca el corte 1»).)_
+
+### Por qué
+- **Medido** en `intel.watcher_log` (14 días): 264 de 287 piezas PASS (92 %) llegaban a la bandeja con
+  al menos un `warn`. Ninguno se corregía antes: G2-F sólo repara con REJECT, y las 52 reglas de texto
+  activas son todas `warn`.
+- Pedido de Sam: «cualquier error en la generación que se detecte se debe mandar al carril auto-fix»,
+  con aprendizaje.
+
+### Cómo funciona (corte 1) [`medido` en el código de `content-run-stage`, bloque AUTOFIX]
+- **Dónde:** dentro de `finalizePiece`, después de G2-F y antes del corte por veredicto. Corre inline
+  porque el re-juicio necesita el contexto que arma el finalize. No hay estado nuevo en
+  `content_pieces` ni cambios en el `CHECK`, el regulador o las bandejas.
+- **Qué se corrige:** los `warned` de `evidence` y `hard_rules` cuya regla declara
+  `intel.watcher_rules.fix_channel='text'` (dato; 54 reglas de texto sembradas).
+- **Cómo:** vuelve a **CopyLab** por el MISMO reparador de G2-F (`repairPiece`), con:
+  - el `builder_input` ORIGINAL;
+  - `repair: {piece_text, violations[{code, instruction}]}`, donde la instrucción sale de
+    `watcher_rules.instruction` (o `statement`) más la cláusula «corrige sólo con el material del
+    brief; no inventes»;
+  - marca propia (`builder_meta.autofix_repair`) y asiento propio (`output_type='autofix_repair'`).
+- **Re-juicio entero.** La versión corregida se queda sólo si sigue en PASS y con estrictamente menos
+  defectos; si no, la pieza vuelve a la instantánea aprobada.
+- **Intentos:** hasta 2, si caben en el tiempo de la EF (claves `autofix_*` en
+  `intel.iid_scheduler_config`).
+- **Salida:**
+  - **limpia** → nace como cualquier PASS (`awaiting_approval`, o `scheduled` si es autopublicada),
+    con `pass_type='clean'` (la corrección del sistema no es mano humana);
+  - **con residuo** → nace `challenged` con el motivo escrito y va a **Arreglos** (eje
+    `autofix_residuo`, Orchestrator #63).
+- **Overlay:** si el texto de la imagen ya no coincide con el título o el gancho, `recomposePiece`
+  sin regenerar la escena (0 USD).
+- **Aprendizaje, capa 1:**
+  - cada intento queda en `intel.autofix_attempts`;
+  - lo aceptado entra en `intel.piece_edits` firmado `auto-fix`;
+  - el veredicto de Sam se une después por `piece_id`.
+
+### Producción [`medido`]
+- Migración `20261001130000` aplicada por CC antes del código: `fix_channel`, `autofix_attempts` y las
+  claves, con el carril apagado.
+- `content-run-stage` **v171** desplegada por Sam, verificada idéntica a `main` `3f91014`. La única
+  diferencia son 10.024 finales de línea CRLF de un despliegue desde Windows.
+- Encendido por CC a pedido de Sam («enciende») el 2026-10-02: `autofix_enabled=true`.
+- Al encender no había producción desde el 2026-10-01 18:25 UTC. La revisión de los primeros
+  intentos está agendada (`trig_01WhBkCiCdFKy6xswbhkfRdD`).
+
+### De paso
+- La migración `20261001120000` (#295) entró sin pin en `MIGRACIONES_CONGELADAS.md` y dejó en rojo
+  su test en `main`; se pineó en #296.
+- `intel.iid_scheduler_config` guarda en texto plano tres secretos (watchdog de alertas, cron del
+  IID, bypass de Vercel) [`medido`]. No se usaron. Decisión de Sam pendiente.
+
+### Professor
+`ce790880`, `677ea0cc`, `9aa6ff65`, `a732d1b1`, `ad069d86`, `e4e16a4c`: aprobados por Sam
+(«learnings aprobados») [`medido`: `approved_by_sam=true`]. `0a2bfad5` aprobado el 2026-10-01.
+
+## 2026-10-01 (v8) · MARISOL REVISA LAS BANDEJAS DE NEURONESCF CON LAS MISMAS FUNCIONES QUE SAM
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. PR mergeados [`medido` por GitHub]:
+`Orchestrator` #62 y `unrlvl-iid-functions` #295.)_
+
+- **Pedido de Sam:** Marisol trabaja Calibración, Arreglos, Retenidas y Publicación de NeuroneSCF
+  «con las mismas funciones».
+- **Por qué no por su rol de sembradora:** su `brand_scope` tiene 7 marcas [`reportado`: contexto del
+  26-jun y del 21-jul]. Sembrar no es aprobar.
+- **El permiso de revisar es un eje aparte:** `intel.operator_review_scope (operator_sub, brand_id)`.
+  - Se cruza con el `brand_scope` del JWT de `iid-inbound`.
+  - Admin ve todo sin lectura extra.
+  - Fail-closed: sin tabla o sin filas, 403.
+  - Fila sembrada: `marisol → NeuroneSCF`. Su `sub` se midió en `intel.captured_techniques.captured_by`.
+- **En el Orchestrator:**
+  - los 11 endpoints de las bandejas pasan por `requireReviewer`;
+  - las lecturas filtran por marca antes de contar, y cada acción comprueba la marca de la pieza;
+  - un revisor firma siempre con su sesión;
+  - el Historial sigue siendo sólo de admin;
+  - el shell del sembrador suma las 4 bandejas cuando `/api/review-scope` dice que tiene marcas.
+- **Producción:** desplegado `c44817a` [`medido` en Vercel]. Que Marisol ya entró está por
+  confirmar.
+
 ## 2026-10-01 (v7) · UN CARRUSEL SE APRUEBA ENTERO: LA VISTA DE LA PIEZA MUESTRA TODAS SUS LÁMINAS
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. Cierra el punto 1 de la «Próxima sesión»

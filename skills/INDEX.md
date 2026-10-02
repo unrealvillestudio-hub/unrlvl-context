@@ -1,5 +1,5 @@
 # SKILLS INDEX — Unrealville Studio
-_Versión: 1.18 · 2026-10-01 · Mantenido por: Claude_ · base previa: 1.17 · 2026-09-30 · base previa: 1.16 · 2026-09-29 · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
+_Versión: 1.19 · 2026-10-02 · Mantenido por: Claude_ · base previa: 1.18 · 2026-10-01 · base previa: 1.17 · 2026-09-30 · base previa: 1.16 · 2026-09-29 · base previa: 1.15 · 2026-09-29 · base previa: 1.14 · 2026-09-24
 
 ---
 
@@ -60,6 +60,17 @@ Es liviano — solo la tabla de decisión. Los skills individuales se cargan baj
   **verificación obligatoria en navegador**. Fila nueva en la tabla de activación. `mobile-ux.md` y
   `a11y.md` llevan una nota que apunta a §18 sin tocar su cuerpo. La fila de la tabla de decisión no
   cambia: el disparador sigue siendo «cualquier output HTML / CSS / React / visual».
+
+---
+
+## NOTAS DE VERSIÓN v1.19
+
+**Cambios respecto a v1.18:**
+
+- **`sesion-de-fixables` v1.2 → v1.3.** Sólo adición: **§0-bis**. El carril auto-fix (2026-10-02)
+  corrige antes de la bandeja los `warn` de texto. Lo que llega a Arreglos tiene dos orígenes
+  (`por_arreglar` y `autofix_residuo`), y antes de corregir a mano un residuo se lee
+  `intel.autofix_attempts`. La fila de la tabla de activación no cambia.
 
 ---
 

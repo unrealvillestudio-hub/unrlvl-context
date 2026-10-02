@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-10-01-v4",
+    "version": "2026-10-02-v1",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-10-01-v3",
+    "previous": "2026-10-01-v4",
     "previous_chain": [
+      "2026-10-01-v4",
       "2026-10-01-v3",
       "2026-10-01-v2",
       "2026-10-01-v1",
@@ -277,6 +278,19 @@
       "professor": "8 learnings de este tramo aprobados por Sam; ids en brands/NeuroneSCF/session_log.md 2026-09-30.",
       "skill": "skills/sesion-de-fixables v1.2; skills/INDEX.md 1.18.",
       "pendiente": "TikTok del sprint de 48 h (3, manual_pending) a cargo de Sam; recompose debe copiar la portada nueva a assets.carousel.slides[0]."
+    },
+    "_sesion_2026-10-02-v1": {
+      "date": "2026-10-02",
+      "conducted_by": "Sam x CC. Sesión de CÓDIGO, MIGRACIÓN y OPERACIÓN del 2026-10-01 (tarde) al 2026-10-02. Las versiones de AGENDA v2026-10-01-v5 a v7 no tocaron este archivo: su detalle está en AGENDA.md y en IID/session_log.md.",
+      "prs_mergeados": "unrlvl-iid-functions #295 #296 · Orchestrator #61 #62 #63 [medido por GitHub]",
+      "carril_autofix": "Corte 1 del carril auto-fix en content-run-stage (bloque AUTOFIX): los warn de evidence/hard_rules cuya regla declara intel.watcher_rules.fix_channel='text' vuelven a CopyLab por el reparador de G2-F con la instrucción de la regla y la cláusula de no inventar; re-juicio entero; se queda la versión sólo si mejora; hasta 2 intentos; limpia → awaiting_approval/scheduled (pass_type clean); residuo → challenged, eje autofix_residuo en Arreglos. Registro en intel.autofix_attempts (capa 1 del aprendizaje). Interruptor intel.iid_scheduler_config.autofix_enabled = true desde el 2026-10-02 [medido]. content-run-stage v171 = main 3f91014 [medido].",
+      "revision_por_marca": "intel.operator_review_scope (operator_sub, brand_id) cruzado con el brand_scope del JWT de iid-inbound: Marisol revisa las 4 bandejas de NeuroneSCF en el Orchestrator (requireReviewer en 11 endpoints; admin sin cambios) [medido].",
+      "carrusel_en_la_vista": "Orchestrator #61: el artefacto de la pieza muestra todas las láminas (manualImagesOf) [medido].",
+      "tablas_nuevas": "intel.operator_review_scope, intel.autofix_attempts; columna intel.watcher_rules.fix_channel; claves autofix_* en intel.iid_scheduler_config.",
+      "professor": "ce790880, 677ea0cc, 9aa6ff65, a732d1b1, ad069d86, e4e16a4c y 0a2bfad5, aprobados por Sam [medido].",
+      "pendiente": "Medir los primeros intentos del carril y el criterio a 14 días (≤ 10 % de piezas con warn reparables); cortes 1-bis, 2, 3, 5 y 4; decisión de Sam sobre tres secretos en texto plano en intel.iid_scheduler_config.",
+      "nodos_que_cambian": "_meta (versión, cadena y esta entrada). Nada se borra.",
+      "detalle": "IID/session_log.md 2026-10-02 y 2026-10-01 (v8); AGENDA.md v2026-10-02-v1."
     },
     "_sesion_2026-10-01-v3": {
       "date": "2026-10-01",

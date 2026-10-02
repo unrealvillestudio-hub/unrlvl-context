@@ -1,7 +1,8 @@
 ---
 name: sesion-de-fixables
-version: 1.2
-fecha: 2026-10-01
+version: 1.3
+fecha: 2026-10-02
+cambios_1_3: "2026-10-02: §0-bis — el carril auto-fix corrige antes de la bandeja los warn de texto; la sesión de fixables queda para el residuo del carril (eje autofix_residuo) y para los fixable de Sam. v1.2 íntegra: sólo se añade."
 cambios_1_2: "2026-10-01: carrusel con imagen por lámina (carousel_slide), directrices acumuladas, portada → lámina 1, retener franja, publicación fallida devuelta al publicador, canal sin publicador, HR-GEN-19 y cierre de actividad con lo que falta. v1.1 íntegra: sólo se añade."
 cambios_1_1: "2026-09-29 (tarde): cinco motivos nuevos en §3.1 y dos avisos de barrido (texto pintado en la imagen; texto que se publica). v1.0 íntegra: sólo se añade."
 capa: MÉTODO
@@ -49,6 +50,27 @@ mecánica y la pieza vuelve—. **Sin esa nota es descarte y no se toca** (`publ
 `protocols/DELIVERY_AND_VERIFICATION_RULE.md` (desde el repo; Vercel sólo con
 `Vercel:web_fetch_vercel_url`), este skill, y de cada marca afectada `brand.json`,
 `BP_Brand_Context.md` y la entrada más reciente de su `session_log.md`.
+
+### §0-bis — El carril auto-fix hace antes una parte de esta sesión (2026-10-02, v1.3)
+
+Desde el 2026-10-02, `content-run-stage` (bloque AUTOFIX, unrlvl-iid-functions #296) corrige **antes de
+la bandeja** los `warn` de texto de toda pieza que el Watcher aprueba. Usa CopyLab con la instrucción de
+cada regla y vuelve a juzgar la pieza entera; la corrección sólo se queda si mejora. Lo que esto cambia
+para esta sesión:
+
+- **Lo que llega a Arreglos tiene dos orígenes, y se distinguen en la tarjeta:**
+  - `por_arreglar`: un `fixable` de Sam, con su propuesta;
+  - `autofix_residuo`: lo que el carril no pudo resolver, con `challenged_reason` «Auto-fix: tras N
+    intentos no pudo resolver …».
+- **Antes de corregir a mano un residuo**, se lee qué intentó el carril:
+  `intel.autofix_attempts WHERE piece_id = …` (texto antes/después, códigos que persisten o
+  aparecieron). Si la regla pedía material que el brief no traía, el arreglo es **de fuente** (§2), no de
+  redacción: el carril no inventa, y la sesión tampoco.
+- **Un motivo que el carril resuelve solo** ya no debería llegar como `fixable`. Si llega, es señal de que
+  la regla no tiene `fix_channel` o de que el carril estaba apagado
+  (`intel.iid_scheduler_config.autofix_enabled`). Se comprueba antes de corregir a mano.
+- **El catálogo de §3 sigue valiendo.** El carril cubre hoy sólo el canal de texto. Imagen, inspección
+  visual y los `fixable` de Sam entran en cortes posteriores (AGENDA `v2026-10-02-v1`).
 
 ---
 

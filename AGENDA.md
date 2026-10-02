@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-02 · v2026-10-02-v1 (**EL CARRIL AUTO-FIX CORRIGE ANTES DE LA BANDEJA, Y MARISOL REVISA NEURONESCF.** Amplía el `v2026-10-01-v7` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #295 #296 y `Orchestrator` #62 #63 [`medido` por GitHub]. Migraciones `20261001120000` y `20261001130000` aplicadas por CC y verificadas; `content-run-stage` v171 desplegada por Sam y verificada contra `main`; carril encendido por CC a pedido de Sam [`medido`]. Professor: 6 learnings aprobados, más `0a2bfad5`. Detalle en `IID/session_log.md` 2026-10-02 y 2026-10-01 (v8).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v7 (**UN CARRUSEL SE APRUEBA ENTERO: LA VISTA DE LA PIEZA MUESTRA TODAS SUS LÁMINAS.** Amplía el `v2026-10-01-v6` inmediatamente debajo; **no lo reescribe**. PR mergeado `Orchestrator` #61 [`medido` por GitHub], desplegado en `7d14348` [`medido`] y verificado por Sam [`reportado`]. El artefacto pinta todas las láminas con el mismo criterio que la publicación. Sam declara el carril listo para calibrar, aprobar, arreglar y fluir. Learning `0a2bfad5` pendiente de aprobación. Detalle en `IID/session_log.md` 2026-10-01 (v7).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v6 (**CIERRE DE LA COLA DE CORRECCIÓN DE LA SESIÓN DE FIXABLES, Y UNA CASA TAMBIÉN PUEDE SER PH.** Amplía el `v2026-10-01-v5` inmediatamente debajo; **no lo reescribe**. 70 piezas regeneradas, 88 láminas revisadas y 22 carruseles completos; cron 137, tablas, funciones y respaldos temporales borrados, con confirmación de Sam [`medido`: 0 restantes]. Learning `6d26e96e` (Los Álamos), aprobado por Sam. Detalle en `IID/session_log.md` 2026-10-01 (v6) y `brands/ForumPHs/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v5 (**CIERRE DEL 2026-10-01 (v5) — GOOGLE COBRA LA IMAGEN POR TOKEN Y EL LIBRO YA LO ASIENTA ASÍ; LA IMAGEN QUE SE QUEDA SIN CUOTA SE REINTENTA SOLA Y EL OCR SIEMPRE VA A UNA MARCA.** Amplía el `v2026-10-01-v4` inmediatamente debajo; **no lo reescribe**. Sesión de CC del 2026-10-01 con acceso de lectura a Google Cloud (cuenta `claude-ops`). PR mergeados `ImageLab` #32 y `unrlvl-iid-functions` #288 #289 #290 #291 #293 #294 [`medido` por GitHub]. Migraciones `20261001060000` a `20261001110000` aplicadas y verificadas [`medido`]. Professor: 8 learnings aprobados por Sam. Detalle en `IID/session_log.md` 2026-10-01 y `labs/ImageLab/session_log.md`.)_
@@ -8,9 +9,52 @@ _Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS
 _Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR.** Amplía el `v2026-09-30-v4` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30 y `BluePrints` #11 [`medido` por GitHub]. Una pieza, una pestaña; `sin_imagen` a Arreglos; Retenidas a «Más»; orden por la próxima franja; aprobar no se repite. **Incidente:** `publish-slot-reserver` 12 h en 500 y 45 piezas aprobadas sin fecha, con disparador de CC; datos reparados y **v21 desplegada por CC a petición expresa de Sam** [`medido`]. 11 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01.)_
 _Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y POR CANAL, Y LOS HALLAZGOS QUE SOBRAN VAN A UNA RESERVA QUE CADUCA.** Amplía el `v2026-09-30-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #274 #276 #279 #280 [`medido` por GitHub]; migraciones `20260930010000` a `20260930040000` aplicadas por CC y verificadas; `iid-research` v65, `iid-process` v70 e `iid-core` v78 desplegadas por Sam y verificadas contra `main` [`medido`]. Tres alertas nuevas que preguntan por el dato; 14 agentes sin marca retirados con archivo; informe quincenal retirado. Detalle en `IID/session_log.md` 2026-09-30 (v4).)_
 _Actualizada: 2026-09-30 · v2026-09-30-v3 (**ARCHIVADO DE CABECERA — LA CABECERA CONSERVA LAS 10 VERSIONES MÁS RECIENTES.** Amplía el `v2026-09-30-v2` inmediatamente debajo; **no lo reescribe**. Regla de Sam (2026-09-30): esta cabecera guarda sólo las 10 versiones más recientes y las anteriores bajan **íntegras** a `historical_AGENDA.md` en cada Actualiza (escrita en `protocols/HRD_PROTOCOL.md` v1.12, paso 10). Esta pasada baja 16 líneas, del `v2026-09-09-v1` al `v2026-09-26-v1`, a `historical_AGENDA.md` → «Migración 2026-09-30». En el mismo PR: `CC_PROTOCOL.md` v14 §16 — las EF se versionan y se despliegan desde `unrlvl-iid-functions`.)_
-_Actualizada: 2026-09-30 · v2026-09-30-v2 (**CIERRE DEL 2026-09-30 (v2) — FORUMPHS SPEAKS REHECHO, Y fphs-chat SE VERSIONA DONDE SE VERSIONAN LAS EF.** Amplía el `v2026-09-30-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #12, `forumphs-speaks` #3, `unrlvl-iid-functions` #275 y `unrlvl-context` #127 [`medido` por GitHub]; `fphs-chat` build `_64` desplegado por Sam [`medido`]. La ley se nombra por lo que es; Speaks firma sin personas; regla «las EF se versionan en `unrlvl-iid-functions`» escrita en CAPABILITIES 1.28. 5 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30 (v2).)_
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-01 (v7)» (1 línea, `v2026-09-30-v1`), «Migración 2026-10-01 (v6)» (1 línea, `v2026-09-29-v2`) y «Migración 2026-10-01 (v5)» (1 línea, `v2026-09-29-v1`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-02 (v1)» (1 línea, `v2026-09-30-v2`), «Migración 2026-10-01 (v7)» (1 línea, `v2026-09-30-v1`) y «Migración 2026-10-01 (v6)» (1 línea, `v2026-09-29-v2`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-02-v1 — El carril auto-fix corrige antes de la bandeja, y Marisol revisa NeuroneSCF
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-01-v7` queda íntegro debajo.
+Detalle en `IID/session_log.md` 2026-10-02 y 2026-10-01 (v8).)_
+
+### Hecho [`medido`]
+- **Marisol revisa NeuroneSCF** (Orchestrator #62, unrlvl-iid-functions #295): las 4 bandejas, sólo con
+  piezas de esa marca y las mismas acciones que Sam. El permiso es una fila de
+  `intel.operator_review_scope`, cruzada con su `brand_scope`.
+- **Carril auto-fix, corte 1** (unrlvl-iid-functions #296, Orchestrator #63). Los `warn` de texto de
+  una pieza aprobada:
+  - vuelven a CopyLab con la instrucción de su regla y la cláusula de no inventar;
+  - se re-juzgan enteros, y la versión sólo se queda si mejora (hasta 2 intentos);
+  - si queda limpia llega a Calibración; si no, nace en Arreglos (`autofix_residuo`).
+  - Si el título o el gancho cambian, el overlay se recompone sin regenerar la imagen.
+  - Cada intento queda en `intel.autofix_attempts` (capa 1 del aprendizaje).
+- **Producción:** migraciones aplicadas por CC; `content-run-stage` v171 desplegada por Sam y
+  verificada idéntica a `main`; carril **encendido** el 2026-10-02.
+- **Professor:** `ce790880`, `677ea0cc`, `9aa6ff65`, `a732d1b1`, `ad069d86` y `e4e16a4c`, aprobados por
+  Sam; `0a2bfad5` aprobado.
+
+### Cierra de «Sam, queda esto» del `v2026-10-01-v7`
+- **Punto 1** (aprobar `0a2bfad5`) → **CERRADO**: aprobado por Sam [`medido`].
+
+### Sam, queda esto
+1. **Decisión:** los tres secretos guardados en texto plano en `intel.iid_scheduler_config` (watchdog
+   de alertas, cron del IID y bypass de Vercel). ¿Se mueven a Vault o a los secretos de las EF?
+2. **Confirmar** que Marisol entró y ve «Revisas: NeuroneSCF».
+
+### Próxima sesión
+1. **Medir los primeros intentos del carril.** La revisión agendada es `trig_01WhBkCiCdFKy6xswbhkfRdD`.
+   El criterio a 14 días es bajar del 92 % de piezas con `warn` reparables al ≤ 10 %.
+2. **Cortes siguientes del carril**, en el orden que validó Sam:
+   - **1-bis**, aprendizaje: ejemplos validados al escritor, propuestas de regla a Professor, la señal
+     de Sam;
+   - **2**, imagen por defecto conocido;
+   - **3**, los `fixable` de Sam entran solos al carril;
+   - **5**, barrido del inventario pendiente;
+   - **4**, inspección visual.
+   Diseño en el PR #296 y en `CARRIL_AUTOFIX_diseno.md` (entregado a Sam en el chat).
+3. **Siguen en pie** los puntos 2 a 6 del `v2026-10-01-v1`.
 
 ---
 
