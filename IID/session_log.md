@@ -365,6 +365,94 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-02 (v3) · EL BANCO DE REGLAS: UN ENUNCIADO O UN CAMBIO DEL JUEZ SE PRUEBA CON PIEZAS REALES ANTES DE PRODUCCIÓN
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Segunda parte de la sesión de CC del
+`v2026-10-02-v1` (rama `claude/fixables-session-88uq62`, con su PR #138 mergeado); este Actualiza va en
+la rama nueva `claude/actualiza-2026-10-02-banco`, por elección de Sam. PR mergeados [`medido` por
+GitHub]: `unrlvl-iid-functions` #307 #313 #314 #315 #320 #322 y `unrlvl-context` #143. Professor: 6
+learnings aprobados por Sam y registrados por CC (`f9886c75`, `5b083775`, `f7d327ff`, `489581c6`,
+`b9a6c7bf`, `06ba9f42`; `approved_by_sam = true`) [`medido`]. SMA no consultado: Sam no lo pidió.)_
+
+### 1 · El banco (#307)
+- El banco de reglas es `intel.watcher_rules_candidates` + `judge_replay` + `intel.rule_replay_results`:
+  un enunciado candidato se juzga sobre piezas reales sin tocar la regla en producción.
+- **Primer lote, `2026-10-02-test-de-reglas`** [`medido`]: 18 enunciados candidatos, 30 piezas reales
+  (ForumPHs 8, LucienSael 6, NeuroneSCF 10, UnrealvilleStudio 6), 3 juicios por variante. 180 pares,
+  10,83 US$, 1 fallo técnico repetido.
+
+### 2 · El juez no repite qué regla cita, pero sí si la pieza pasa
+- El 74 % de los avisos de reglas **sin cambio** (28 de 38) varía entre dos corridas iguales [`medido`].
+- A nivel pieza el juicio es estable: 0 rechazos por regla en 145 juicios, y 3 de 30 piezas cambian entre
+  tener y no tener avisos [`medido`].
+- **El ruido está en qué regla cita, no en si la pieza pasa.**
+- **Corrección:** esa tarde CC le dijo a Sam que «parte de las piezas llega a revisión por azar». **No se
+  sostiene** con estos datos.
+
+### 3 · Un enunciado nuevo cambia a qué regla se atribuye un defecto, no cuántos
+- 1,39 frente a 1,42 avisos por juicio entre las variantes [`medido`].
+- Con los 18 candidatos juntos se movieron reglas **sin** candidato [`medido`]: `HR-LEGAL-01` dio un aviso
+  falso 3 de 3 veces, `HR-GEN-11` pasó de 9 a 15 avisos y `HR-FPHS-08` perdió un aviso verdadero.
+
+### 4 · Confirmación con los candidatos solos: sólo HR-NSCF-06 repite
+- **Lote `2026-10-02-confirmacion`** [`medido`]: 4 candidatos solos, 18 piezas de NeuroneSCF y ForumPHs,
+  6,91 US$.
+- **`HR-NSCF-06`** repitió: de 1 a 11 y de 1 a 8 avisos en 30 juicios.
+- **`HR-NSCF-05`** invirtió la dirección. **`HR-FPHS-12`** no salió limpio. **`HR-FPHS-05`** quitó un aviso
+  falso, pero el juez lo trasladó a `HR-LEGAL-01`/`02`. Ninguno de los tres se promovió.
+- **`HR-NSCF-06` a producción** tras el «sí, promueve HR-NSCF-06» de Sam: migración `20261002234000`,
+  aplicada a las 19:54 UTC; el enunciado anterior queda guardado en `notes` [`medido`].
+- **#313** (mergeado): registro de la confirmación y la promoción. La migración del registro se renombró
+  de `20261002210000` a `20261002233000` por choque con #310; aplicada por CC el 2026-10-02 [`medido` en `supabase_migrations.schema_migrations`].
+
+### 5 · Un cambio del juez, medido con el banco y revertido (#314, #315)
+- **#314:** el juez recibía la ficha de lo que la pieza nombra, para `HR-NSCF-08`. `content-run-stage` desplegado como v184 y
+  medido con el banco [`medido`]: 1 pieza mejora (`1f81a727`) y 2 empeoran (`bea0754e`, aviso falso nuevo;
+  `6be0fe81`, calla donde debía avisar).
+- **#315** lo revierte; `content-run-stage` desplegado como v186 y verificado igual a `main` [`medido`].
+- **La premisa de #314 era errónea:** «4 de 8 aciertos» era del enunciado candidato; la regla en producción
+  acertaba 6 de 7 [`deducido`].
+
+### 6 · La cita del aviso y la lectura por mayoría (#320)
+- `judge_replay` guarda una cita posterior por aviso (`intel.rule_replay_results.explanations`).
+- Vista nueva `intel.v_rule_replay_mayoria`: mayoría de corridas, con el efecto lateral sobre reglas sin
+  candidato. `v_rule_replay_diff` queda marcada **REEMPLAZADA** y no se borra (un `DROP` desde CC se
+  cancela).
+- Migraciones `20261002235000` y `20261002235100`, aplicadas por CC el 2026-10-02 [`medido` en `supabase_migrations.schema_migrations`].
+
+### 7 · El gasto de las pruebas es de estructura
+- Los juicios de prueba se asentaban `refacturable`. Corregido a `estructura` [`medido`]: 371 filas,
+  22,56 US$.
+  - 350 del banco = 21,20 US$: Claude Sonnet 5, 10.124.603 tokens de entrada a 2 US$/M y 95.113 de salida
+    a 10 US$/M.
+  - 21 del modo prueba del carril = 1,36 US$.
+- Desde #320, un juicio callado y la cita se asientan `estructura`.
+
+### 8 · Juez candidato separado de producción (#322)
+- `intel.rule_replay_judges` y `scripts/juez_candidato.sh` (lo corre Sam). Migración `20261002235200`, aplicada por CC el 2026-10-02 [`medido` en `supabase_migrations.schema_migrations`].
+- Un cambio del juez se prueba con un juez candidato antes de tocar el de producción.
+
+### 9 · Despliegue final y prueba de humo
+- `content-run-stage` v191 verificada igual a `main` (blob `116bf08`) [`medido`].
+- **Lote `2026-10-02-humo-citas`**, pieza `5fcdc19d` [`medido`]: la cita se guarda; 0,004 US$ por variante.
+  La cita de `HR-NSCF-05` decía «Cumple la regla»: la cita deja ver un aviso falso.
+
+### 10 · Protocolo y skill (`unrlvl-context` #143)
+- `skills/banco-de-reglas/SKILL.md` v1.0, `skills/INDEX.md` 1.20 y `CC_PROTOCOL.md` v18 §18: ningún
+  cambio de enunciado ni del juez llega a producción sin pasar por el banco.
+
+### 11 · Interruptores del carril auto-fix [`medido` el 2026-10-02 por la noche]
+- `autofix_enabled`, `autofix_fixables_enabled` y `autofix_sweep_enabled` = `true`, con tope de 10 US$
+  diarios. Los encendió Sam en otra sesión (Professor `17c186a0`).
+- `autofix_image_enabled`, `autofix_learning_enabled` y `autofix_rule_proposals_enabled` = `false`.
+
+### 12 · Abierto (decisiones de Sam)
+1. **`HR-FPHS-12` y la exención de prensa:** lo ve Sam en el Orchestrator.
+2. **Secretos en texto plano en `intel.iid_scheduler_config`:** sigue abierto.
+3. **Las 6 preguntas de criterio del test de reglas:** sin cambios.
+4. **Cuándo encender** imagen, aprendizaje y propuestas de regla del carril.
+5. **`HR-NSCF-08`** sólo se retoma por el banco, con juez candidato.
+
 ## 2026-10-02 (v2) · EL PATRÓN CONFIRMA, EL AUTO-FIX TERMINA LO QUE EMPIEZA Y EL SEGUIMIENTO LLEGA UNA VEZ AL DÍA
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. Quinta parte de la sesión de CC iniciada el

@@ -1,5 +1,19 @@
 # ForumPHs — Session Log
 
+## 2026-10-02 (v3) — HR-FPHS-05 y HR-FPHS-12 no pasan a producción por el banco de reglas
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-02 (v3). SMA no consultado: Sam no lo pidió.
+
+- **Banco de reglas** [`medido`]: lote `2026-10-02-test-de-reglas` (30 piezas, 8 de ForumPHs) y
+  confirmación con los candidatos solos (`2026-10-02-confirmacion`, 18 piezas de NeuroneSCF y ForumPHs).
+  - **`HR-FPHS-05`:** quitó un aviso falso, pero el juez lo trasladó a `HR-LEGAL-01`/`02`. No se promovió.
+  - **`HR-FPHS-12`:** en la confirmación no salió limpio. No se promovió.
+  - Con los 18 candidatos juntos, `HR-FPHS-08` (sin candidato) perdió un aviso verdadero.
+- **Pendiente de Sam:** la exención de prensa para `HR-FPHS-12` la decide Sam en el Orchestrator.
+
+---
+
 ## 2026-10-01 (v2) — Una casa también puede ser PH, y el carrusel `69f34e2b` queda completo
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo
