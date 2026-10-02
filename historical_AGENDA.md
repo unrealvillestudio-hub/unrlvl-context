@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-02 (v1) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v1`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-30-v2`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-30 · v2026-09-30-v2 (**CIERRE DEL 2026-09-30 (v2) — FORUMPHS SPEAKS REHECHO, Y fphs-chat SE VERSIONA DONDE SE VERSIONAN LAS EF.** Amplía el `v2026-09-30-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `forumphs-com` #12, `forumphs-speaks` #3, `unrlvl-iid-functions` #275 y `unrlvl-context` #127 [`medido` por GitHub]; `fphs-chat` build `_64` desplegado por Sam [`medido`]. La ley se nombra por lo que es; Speaks firma sin personas; regla «las EF se versionan en `unrlvl-iid-functions`» escrita en CAPABILITIES 1.28. 5 learnings en Professor. Detalle en `brands/ForumPHs/session_log.md` 2026-09-30 (v2).)_
+
+---
+
 ## Migración 2026-10-01 (v7) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-01-v7`,
