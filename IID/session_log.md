@@ -442,7 +442,14 @@ medidos sobre la pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816` (ForumPHs · meta_
 
 ### 9 · Abierto
 1. **Primer resumen diario:** 2026-10-03 07:02 UTC. Lo verifica `trig_01JTXTT46y7LHVD29VurNCCb` (13:30 UTC).
-2. **Pieza `fadfe938-…`:** resultado del barrido con la propuesta de Sam (pendiente `S-1002-06`).
+2. **Pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816`:** el barrido aplicó la propuesta de Sam a las 20:34 UTC
+   (`fixable_applied`, 0,25 US$; resolvió `HR-FPHS-05` y `FIXABLE-PROPUESTA`) [`medido`]. Quedó **a medias**:
+   el gancho cambió y la imagen no. CC la recompuso a mano (0 US$) y la causa se corrige en
+   `unrlvl-iid-functions` #316: en el camino de pieza existente el recompose dependía de
+   `autofix_image_enabled`. Pendiente: merge y despliegue de `content-run-stage`.
+3. **Desfase previo declarado:** `social.adapted[canal].title` no se actualiza cuando cambia `copy.title`,
+   ni por el auto-fix ni por `piece-edit` [`medido`]. El juez lo recibe como `title_adapted`. Decisión
+   aparte.
 
 ## 2026-10-02 · EL CARRIL AUTO-FIX CORRIGE ANTES DE LA BANDEJA (corte 1)
 

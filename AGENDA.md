@@ -62,8 +62,13 @@ Quinta parte de la sesión de CC iniciada el 2026-09-30 («30sep - Warns en Tele
 
 ### Sam, queda esto
 1. **Leer el primer resumen diario** (2026-10-03, 07:02 UTC) y decir si la forma sirve.
-2. **Revisar la pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816`** (ForumPHs · meta_ig · «El reporte de mora
-   de su vecino puede terminar costándole a usted») cuando el barrido la devuelva corregida.
+2. **Revisar la pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816`** (ForumPHs · meta_ig · título nuevo «Hay una
+   notificación que decide quién hereda una deuda ajena»), en Calibración. El barrido aplicó tu propuesta
+   a las 20:34 UTC (0,25 US$, resolvió `HR-FPHS-05` y `FIXABLE-PROPUESTA`) y CC recompuso el texto de la
+   imagen (0 US$) [`medido`].
+3. **Mergear `unrlvl-iid-functions` #316 y desplegar `content-run-stage`.** El auto-fix de una pieza
+   existente no recomponía el texto de la imagen cuando cambiaba el gancho, porque ese paso dependía de
+   `autofix_image_enabled` [`medido` en `fadfe938`].
 
 ### Próxima sesión
 1. **2026-10-03 13:30 UTC** (`trig_01JTXTT46y7LHVD29VurNCCb`): opción A en `watcher_log`, el primer
