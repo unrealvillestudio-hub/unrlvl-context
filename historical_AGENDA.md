@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-02 (v4) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v4`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-10-01-v1`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR.** Amplía el `v2026-09-30-v4` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30 y `BluePrints` #11 [`medido` por GitHub]. Una pieza, una pestaña; `sin_imagen` a Arreglos; Retenidas a «Más»; orden por la próxima franja; aprobar no se repite. **Incidente:** `publish-slot-reserver` 12 h en 500 y 45 piezas aprobadas sin fecha, con disparador de CC; datos reparados y **v21 desplegada por CC a petición expresa de Sam** [`medido`]. 11 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01.)_
+
+---
+
 ## Migración 2026-10-02 (v3) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v3`,

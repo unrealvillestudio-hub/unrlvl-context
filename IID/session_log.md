@@ -365,6 +365,59 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-02 (v4) · EL CARRIL AUTO-FIX, COMPLETO Y ENCENDIDO: TEXTO, TÍTULO DEL CANAL E IMAGEN SE CORRIGEN ENTEROS
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Sexta parte de la sesión de CC iniciada el
+2026-09-30 («30sep - Warns en Telegram»). PR mergeados [`medido` por GitHub]: `unrlvl-iid-functions`
+#316 #318 #321 #323 #324 #325. Sin migraciones. `content-run-stage` verificada igual a `main` tras cada
+despliegue: v185, v188, v190, v192, v193 y v194 [`medido`]. Professor: 5 learnings aprobados por Sam
+(`de4f452f`, `cf756b39`, `8ddd80ca`, `73b8698a`, `6bb1aeac`) [`medido`].)_
+
+### 1 · La imagen dice lo que dice la pieza (#316)
+- Medido en `fadfe938-50ac-4ad1-b305-c7548a6c8816` (ForumPHs · meta_ig): el barrido aplicó la propuesta de
+  Sam, cambió el gancho y la imagen siguió diciendo «…es el de su vecino». En la pieza existente el
+  recompose dependía de `autofix_image_enabled`. Ahora recompone el overlay (0 US$) si el texto se aplicó.
+
+### 2 · Un aviso que ya estaba no lo causó la corrección (#318)
+- Medido en `intel.autofix_attempts`: de 9 descartes por `no_improvement`, en 7 la corrección resolvía el
+  aviso original y aparecía OTRO. Ahora el original se juzga otra vez; lo que también muestra ya estaba.
+- El motivo de Arreglos cuenta el intercambio en vez de «no pudo resolver X».
+- Efecto [`medido`]: de 2 de 12 intentos de texto aceptados a 10 de 15 esa misma noche.
+
+### 3 · Título del canal y duplicación (#321, #323)
+- El título y el gancho adaptados del canal se re-derivan antes del re-juicio, en el auto-fix (#321) y en
+  la reparación de G2-F (#323). La duplicación compara canal contra canal (`corpusTextOf`).
+- Lo preparó un agente en un worktree aislado; CC lo revisó, corrigió un cruce con #318 y lo integró.
+  `hosts_vercel_test` deja de barrer `.claude/worktrees/` (#323).
+
+### 4 · El carril, entero encendido (decisión de Sam, 21:53 UTC)
+- Sam: «si queremos que funcione deberíamos encenderlos o para qué es el carril auto-fix».
+  `autofix_image_enabled`, `autofix_learning_enabled` y `autofix_rule_proposals_enabled` pasan a `true`;
+  todo el carril queda encendido [`medido`].
+- **#324:** el barrido vuelve, sólo por la imagen, a las piezas que miró con la imagen apagada. Antes de
+  desplegarlo se midió que las 9 piezas que toma son producción normal y que las 2 pruebas F1 de «C -
+  Sesión fixable» quedan fuera (pedido de Sam).
+- **#325:** la imagen tiene hasta `autofix_max_attempts` intentos y, si sigue con un defecto, la pieza va
+  a Arreglos con su motivo («Auto-fix: la imagen sigue con …»).
+
+### 5 · Lo medido con todo encendido (21:53 → 23:23 UTC)
+- Imagen: 6 regeneraciones aceptadas (5 limpias, 1 mejorada), unos 0,04 US$ cada una.
+- Overlay: 4 recomposiciones. Texto: 5 de 7 intentos aceptados.
+- `fadfe938`: la imagen quedó limpia tras #325 (22:47 UTC), revisada a ojo.
+- Gasto del carril auto-fix en el día: 3,64 US$ [`medido` en `ops_generation_ledger`].
+- **Sin ver todavía en producción:** las correcciones aprendidas en el escritor (0 piezas nacidas desde
+  el encendido) y la primera propuesta de regla (la función corre; 0 creadas, el máximo es 2 de 5).
+
+### 6 · Fuera del carril de esta sesión (se declara)
+- Los acentos de marca (ámbar de UnrealvilleStudio, Mercurio de LucienSael) en imágenes y en la vista del
+  Orchestrator son de «C - Sesión fixable». Sam: «los accent son de otra sesión».
+
+### 7 · Abierto
+1. **2026-10-03 13:30 UTC** (`trig_01JTXTT46y7LHVD29VurNCCb`): primer día con el carril entero, el primer
+   resumen diario y la opción A.
+2. **Pendiente de Sam:** `S-1002-15`, revisar `fadfe938-50ac-4ad1-b305-c7548a6c8816` en Calibración.
+3. **`piece-edit`** sigue sin re-derivar el título del canal cuando Sam edita el título a mano.
+
 ## 2026-10-02 (v3) · EL BANCO DE REGLAS: UN ENUNCIADO O UN CAMBIO DEL JUEZ SE PRUEBA CON PIEZAS REALES ANTES DE PRODUCCIÓN
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. Segunda parte de la sesión de CC del

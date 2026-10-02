@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-10-02-v3",
+    "version": "2026-10-02-v4",
     "maintained_by": "Claude — do not edit manually",
-    "previous": "2026-10-02-v2",
+    "previous": "2026-10-02-v3",
     "previous_chain": [
+      "2026-10-02-v3",
       "2026-10-02-v2",
       "2026-10-02-v1",
       "2026-10-01-v4",
@@ -280,6 +281,16 @@
       "professor": "8 learnings de este tramo aprobados por Sam; ids en brands/NeuroneSCF/session_log.md 2026-09-30.",
       "skill": "skills/sesion-de-fixables v1.2; skills/INDEX.md 1.18.",
       "pendiente": "TikTok del sprint de 48 h (3, manual_pending) a cargo de Sam; recompose debe copiar la portada nueva a assets.carousel.slides[0]."
+    },
+    "_sesion_2026-10-02-v4": {
+      "date": "2026-10-02",
+      "conducted_by": "Sam x CC. Sexta parte de la sesión de CC iniciada el 2026-09-30 («30sep - Warns en Telegram»): CÓDIGO y OPERACIÓN del carril auto-fix. Professor cerrado ANTES de este Actualiza: 5 learnings aprobados por Sam (de4f452f, cf756b39, 8ddd80ca, 73b8698a, 6bb1aeac) [medido].",
+      "prs_mergeados": "unrlvl-iid-functions #316 #318 #321 #323 #324 #325 [medido por GitHub]. Sin migraciones. content-run-stage v194 verificada igual a main [medido].",
+      "interruptores_autofix": "Medido el 2026-10-02 a las 21:53 UTC, por decisión de Sam: autofix_enabled, autofix_fixables_enabled, autofix_sweep_enabled (tope 10 US$/día), autofix_image_enabled, autofix_learning_enabled y autofix_rule_proposals_enabled = true. El carril queda ENTERO encendido. Sustituye, sin borrarla, la lectura de _sesion_2026-10-02-v3.interruptores_autofix (anterior al encendido).",
+      "carril_autofix": "Texto: un aviso que ya estaba no descarta la corrección (#318) — aceptados de 2/12 a 10/15. Título y gancho del canal re-derivados tras corregir, en auto-fix y G2-F (#321, #323); duplicación canal contra canal (#321). Imagen: overlay recompuesto en piezas existentes (#316), hasta 2 intentos y residuo a Arreglos con motivo (#325); el barrido vuelve por la imagen de lo mirado con la imagen apagada (#324). Con todo encendido (21:53→23:23 UTC): 6 regeneraciones aceptadas, 4 overlays, texto 5/7; gasto auto-fix del día 3,64 US$ [medido].",
+      "pendiente": "Sin ver en producción: correcciones aprendidas en el escritor y la primera propuesta de regla. Revisión programada 2026-10-03 13:30 UTC (trig_01JTXTT46y7LHVD29VurNCCb).",
+      "nodos_que_cambian": "_meta (versión y esta entrada). Nada se borra.",
+      "detalle": "IID/session_log.md 2026-10-02 (v4) y AGENDA.md v2026-10-02-v4."
     },
     "_sesion_2026-10-02-v3": {
       "date": "2026-10-02",
