@@ -365,6 +365,85 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-02 (v2) · EL PATRÓN CONFIRMA, EL AUTO-FIX TERMINA LO QUE EMPIEZA Y EL SEGUIMIENTO LLEGA UNA VEZ AL DÍA
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Quinta parte de la sesión de CC iniciada el
+2026-09-30 («30sep - Warns en Telegram»). PR mergeados [`medido` por GitHub]: `unrlvl-iid-functions`
+#292 #300 #302 #303 #304 #306 #308 #309 #310 y `unrlvl-context` #139 #140 #141. Migraciones
+`20261002150000` a `20261002180000` y `20261002210000` aplicadas por CC y verificadas por su guarda
+[`medido`]. Professor: 8 learnings aprobados por Sam y registrados (`e824de0b`, `86d83b5f`, `fd2f95be`,
+`72a74eaa`, `c58c0b44`, `d9d965ac`, `a5d9dd66`, `17c186a0`) [`medido`].)_
+
+### 1 · El acuse resuelto conserva qué y dónde (#292, CERRADO)
+- Mergeado y desplegado por Sam; `ops-alert-dispatch` verificado contra `origin/main` [`medido`].
+- Sam lo confirmó en Telegram: «"Publicada" en telegram viene con la información completa» [`reportado`].
+
+### 2 · El patrón confirma lo que el juez no marcó (#300, opción A)
+- Para las reglas `enforced_on = piece_and_brief` con `verify_pattern`: si el patrón encuentra el hecho y
+  el juez no marcó la regla, cuenta como incumplida (`warn` → `warned`; otra severidad → `violated`, REJECT
+  en `hard_rules`), con el fragmento en `gate_detail.pattern_confirmed`. Corre dentro de `judge()`, antes
+  del insert en `watcher_log`.
+- **Corrección de la premisa** [`medido`]: el caso que lo motivó (meta_ig de ForumPHs «citando la Ley 284»)
+  estaba mal medido. CC midió `copy.raw` y `adapted_pre_judgment`, no `social.adapted`; el texto que se
+  publica ya no citaba la ley y el juez acertó. La protección sigue siendo válida; el caso no la necesitaba.
+  **Se mide el campo que se publica.**
+
+### 3 · El juez LLM no repite su juicio; lo determinista sí
+- El mismo texto recibió aviso a las 17:01 y ninguno a las 17:15 [`medido`]. El banco de reglas midió que el
+  74 % de los avisos cambia entre dos corridas [`reportado`, sesión del banco].
+- El juez de reglas duras evalúa 27 reglas en una llamada de ~9.872 tokens de entrada [`medido`].
+- Los pasos deterministas leen siempre lo mismo y entero, con límites fijos y conocidos. Por eso una regla
+  expresable como patrón no debe depender del juez (sección 2).
+
+### 4 · Avisos: Telegram es el canal (#303, #304)
+- **#303:** el correo a content-approval se apaga (rutas de correo y crons `alerting-digest-4h` e
+  `iid-approval-digest-daily`); se quedan `iid-inbound` y la alarma «juez ciego». El regulador deja **una**
+  fila por corrida en `research_gate_log`.
+- **#304:** crons 119, 121 y 86 archivados en `intel.archivo_retirados` y retirados; `iid-brief-generator`
+  borrado por Sam (`docs/RETIRO_iid-brief-generator.md`). La recomposición que saca la imagen limpia
+  `needs_fix` y pasa la pieza a calibración si sólo le faltaba la imagen.
+
+### 5 · El auto-fix termina lo que empieza (#306, #308, #309)
+Sam: «corregir a medias no es corregir y si el auto-fix no funciona hay que corregirlo». Tres defectos
+medidos sobre la pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816` (ForumPHs · meta_ig):
+- **#306:** un timeout técnico del juez tiraba una corrección buena, y el bucle se rendía al primer intento
+  rechazado. Ahora el re-juicio caído se repite (presupuesto 90 s) y se agotan los intentos.
+- **#308:** al re-juzgarla, la pieza se comparaba consigo misma en duplicación (`excludePieceId`).
+- **#309:** un código nuevo y ruidoso tiraba una corrección buena. Ahora un defecto nuevo se confirma con
+  un segundo juicio antes de descartar. Cada final deja `autofixEndReason`.
+
+### 6 · Los pendientes para Sam: de nota suelta a resumen diario (#300, #302, #310)
+- **#300 / #302:** cada pendiente era un episodio `FOLLOW_UP_NOTE` que sonaba en Telegram y se recordaba
+  cada 24 h; CC podía cerrarlo con motivo. En un día se abrieron 37 y 27 se cumplieron en menos de 1 h
+  [`medido`].
+- **#310** (pedido de Sam: «no necesito que me recuerdes cada merge … antes de empezar el día … asociándolo
+  al nombre de la sesión»): el pendiente es una fila de `alerting.seguimiento` (`S-MMDD-NN`) que no envía
+  nada. `alerting.enviar_seguimiento_del_dia()` manda **un** `FOLLOW_UP_DAILY` (`acuse`, sólo Telegram)
+  agrupado por sesión, con «— en <sitio>» y «(desde DD-MM)». `FOLLOW_UP_NOTE` queda inactiva; las 5 notas
+  abiertas pasaron a la tabla.
+- **Hora:** dato en `intel.iid_scheduler_config.seguimiento_hora_local`, en el huso del operador. Sam fijó
+  07:00 UTC (valor 9 en CEST). El 2026-10-25 pasa a 8 (`trig_01Tew7wkWfUrunLaeEYuBjBC`).
+- **Protocolo:** CC_PROTOCOL v15 → v16 → v17, §17 (#139, #140, #141). v16 añade el `piece_id` completo y el
+  cierre por CC; v17, el resumen diario.
+
+### 7 · Interruptores del auto-fix
+- `autofix_fixables_enabled` = true y `autofix_sweep_enabled` = true, ambos por decisión de Sam el
+  2026-10-02 [`medido`]. El barrido toma primero los fixables con propuesta y después el inventario
+  `awaiting_approval` que el carril nunca miró (242 piezas al encenderlo [`medido`]), hasta 3 por pasada y
+  con tope de 10 US$ diarios.
+- `fadfe938-50ac-4ad1-b305-c7548a6c8816` marcada fixable por Sam con la propuesta «el texto es confuso
+  sobre el destinatario y el doliente, regenerar el copy correctamente» [`medido` en
+  `intel.approval_calibration`].
+
+### 8 · Reglas de operación nuevas
+- **Aprobado + mergeado = aplicar**: el «mergeado» de Sam basta para aplicar la migración de un cambio que
+  ya aprobó.
+- **Una pieza se nombra por su `piece_id` completo**, con marca, canal y título.
+
+### 9 · Abierto
+1. **Primer resumen diario:** 2026-10-03 07:02 UTC. Lo verifica `trig_01JTXTT46y7LHVD29VurNCCb` (13:30 UTC).
+2. **Pieza `fadfe938-…`:** resultado del barrido con la propuesta de Sam (pendiente `S-1002-06`).
+
 ## 2026-10-02 · EL CARRIL AUTO-FIX CORRIGE ANTES DE LA BANDEJA (corte 1)
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. PR mergeados [`medido` por GitHub]:

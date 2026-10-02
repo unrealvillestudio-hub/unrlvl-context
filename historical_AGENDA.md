@@ -18,6 +18,16 @@ _Primera migración: 2026-06-28_
 
 ---
 
+## Migración 2026-10-02 (v2) — cabecera de AGENDA.md (1 línea de versión)
+
+> **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v2`,
+> la versión que pasa de las 10 más recientes baja **íntegra**, sin proponerlo, porque es metadata y no
+> ítems. Baja 1 línea: `v2026-09-30-v3`. Su bloque «CIERRE» sigue en `AGENDA.md`.
+
+_Actualizada: 2026-09-30 · v2026-09-30-v3 (**ARCHIVADO DE CABECERA — LA CABECERA CONSERVA LAS 10 VERSIONES MÁS RECIENTES.** Amplía el `v2026-09-30-v2` inmediatamente debajo; **no lo reescribe**. Regla de Sam (2026-09-30): esta cabecera guarda sólo las 10 versiones más recientes y las anteriores bajan **íntegras** a `historical_AGENDA.md` en cada Actualiza (escrita en `protocols/HRD_PROTOCOL.md` v1.12, paso 10). Esta pasada baja 16 líneas, del `v2026-09-09-v1` al `v2026-09-26-v1`, a `historical_AGENDA.md` → «Migración 2026-09-30». En el mismo PR: `CC_PROTOCOL.md` v14 §16 — las EF se versionan y se despliegan desde `unrlvl-iid-functions`.)_
+
+---
+
 ## Migración 2026-10-02 (v1) — cabecera de AGENDA.md (1 línea de versión)
 
 > **Regla fija de la cabecera** (`protocols/HRD_PROTOCOL.md`, paso 10): al entrar `v2026-10-02-v1`,
