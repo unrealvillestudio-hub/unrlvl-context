@@ -1,7 +1,13 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-10-02-v17 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-10-02-v18 (base previa: 2026-10-02-v17) | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v18 (2026-10-02):** una adición, ninguna derogación. **§18 — un cambio de regla o del juez pasa
+> por el banco antes de producción.** Ningún cambio del `statement`, la `condition` o el `applies_when` de
+> una regla de `intel.watcher_rules`, ni de las instrucciones del juez (`content-watcher`), llega a
+> producción sin pasar por el banco de reglas. Sam: «sí, haz 1, 2, 3 y 4». El método vive en
+> `skills/banco-de-reglas/SKILL.md`; la §18 lo invoca y no lo copia. §17 queda íntegra.
+>
 > **Cambios v17 (2026-10-02):** la §17 cambia de forma, no de fondo. **Los pendientes para Sam ya no llegan
 > uno a uno: se acumulan y llegan en UN mensaje al día, agrupados por sesión.** Sam: «no necesito que me
 > recuerdes cada merge … lo haremos como mensaje de seguimiento antes de empezar el día y me vas a mandar
@@ -773,6 +779,38 @@ evitar que Sam se enterara por accidente se había vuelto ruido.
 > - **Cómo se cerró:** las cinco notas se abrieron el mismo día, `A-1002-05` a `A-1002-09`, entregadas
 >   por Telegram y por correo [medido].
 >
+---
+
+## 18. UN CAMBIO DE REGLA O DEL JUEZ PASA POR EL BANCO ANTES DE PRODUCCIÓN (v18)
+
+**La regla (Sam, 2026-10-02: «sí, haz 1, 2, 3 y 4»):** ningún cambio del `statement`, la `condition` o el
+`applies_when` de una regla de `intel.watcher_rules`, ni de las instrucciones del juez (`content-watcher`),
+llega a producción sin pasar por el banco de reglas.
+
+**Qué exige:**
+1. **Un lote nuevo** por cada estado de código, con piezas reales de las marcas afectadas. Un lote no se
+   reusa después de un despliegue.
+2. **Tres pasadas por pieza**, leídas por mayoría en `intel.v_rule_replay_mayoria`, con el texto delante
+   en los casos que cambian.
+3. **Una prueba de confirmación con los candidatos solos**, en un lote aparte. Se promueve sólo lo que
+   mejora en las dos pruebas y sin efecto lateral sobre reglas sin candidato.
+4. **El «sí» explícito de Sam por cada regla** que se promueve. La promoción es una migración en
+   `unrlvl-iid-functions` que guarda el enunciado anterior en `notes`.
+5. **Un cambio del juez se prueba con un juez candidato** que despliega Sam
+   (`scripts/juez_candidato.sh`), y se mide otra vez en un lote nuevo después de desplegar.
+
+**Por qué existe (2026-10-02):**
+- El juez no repite su propio juicio: entre dos corridas iguales varió el 74 % de los avisos de reglas
+  sin cambio [`medido` en el banco].
+- De 18 enunciados candidatos, 4 parecían mejorar y sólo HR-NSCF-06 se confirmó al probarse solo; pasó
+  a producción con la migración `20261002234000` [`medido`]. Otro candidato invirtió la dirección y otro
+  trasladó su aviso a reglas sin candidato [`medido`].
+- El cambio del juez #314 midió 1 mejora y 2 regresiones, y se revirtió en #315 en menos de una hora
+  [`medido`].
+
+**El método completo** —piezas del banco, tandas, lectura de citas, costo y casos— vive en
+`skills/banco-de-reglas/SKILL.md`. **Esta sección lo invoca y no lo copia.**
+
 ---
 
 ## ARCHIVO HISTÓRICO — CC_PROTOCOL v2026-06-06-v1 (archivado 2026-06-08)
