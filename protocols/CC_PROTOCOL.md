@@ -1,7 +1,14 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-10-02-v16 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-10-02-v17 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v17 (2026-10-02):** la §17 cambia de forma, no de fondo. **Los pendientes para Sam ya no llegan
+> uno a uno: se acumulan y llegan en UN mensaje al día, agrupados por sesión.** Sam: «no necesito que me
+> recuerdes cada merge … lo haremos como mensaje de seguimiento antes de empezar el día y me vas a mandar
+> lo que ha quedado pendiente del día anterior asociándolo al nombre de la sesión correspondiente».
+> `sesion` pasa a ser siempre el nombre de la sesión; el sitio donde se actúa va aparte, en `donde`.
+> Mecanismo en `unrlvl-iid-functions#310`. El texto v15/v16 de la §17 queda archivado bajo guard.
+>
 > **Cambios v16 (2026-10-02):** dos adiciones a la §17, ninguna derogación. **(1) Una pieza se nombra
 > siempre por su `piece_id` completo** cuando CC manda a Sam a revisarla —en el chat, en una nota de
 > seguimiento o en un PR—. Sam: «cuando me mandes a revisar una pieza en el orchestrator debes darme siempre
@@ -674,51 +681,98 @@ invoca y no lo copia:** dos textos de la misma regla son dos reglas en cuanto al
 
 ---
 
-## 17. LO QUE QUEDA PARA SAM LE LLEGA POR TELEGRAM — NOTA DE SEGUIMIENTO
+## 17. LO QUE QUEDA PARA SAM LE LLEGA UNA VEZ AL DÍA, AGRUPADO POR SESIÓN (v17)
 
-**La regla (Sam, 2026-10-02):** «Quiero que estos follow up me los mandes por telegram como nota de
-seguimiento y en qué sesión debo atenderlo. No me entero de estos seguimientos si no es por accidente.»
-Y, al proponérsele como regla: «sí a la regla».
+**La regla (Sam, 2026-10-02):** «no necesito que me recuerdes cada merge … lo haremos como mensaje de
+seguimiento antes de empezar el día y me vas a mandar lo que ha quedado pendiente del día anterior
+asociándolo al nombre de la sesión correspondiente y así empezar por donde lo dejamos.» Hora elegida por
+Sam: 07:00 UTC.
 
 **Qué hace CC:**
 1. **Al cerrar cada tramo de trabajo que deja algo pendiente para Sam** —un PR por mergear o desplegar,
-   una decisión, una pieza que revisar, una captura que mandar— abre **una nota por pendiente**:
-   `SELECT alerting.abrir_nota_de_seguimiento(asunto, que_hacer, sesion, origen, cuando);`
-2. **`sesion` dice dónde se atiende.** Si hace falta CC, el título de la sesión (lo devuelve
-   `get_session`). Si no, la superficie donde Sam lo hace: el Orchestrator, GitHub o su terminal.
-3. **Sin enlaces.** La función los rechaza, y el canal tampoco los transporta. Un PR se nombra por
-   repo y número.
-4. **Un pendiente por nota, un asunto por pendiente.** Abrir otra nota con el mismo asunto suma una
-   ocurrencia en vez de duplicarla.
-5. **La nota no sustituye el bloque 🟩 del chat: lo replica** en el canal que Sam sí mira.
-6. **En el reporte del tramo** van las referencias públicas de las notas abiertas (`A-MMDD-NN`), con la
-   entrega comprobada: `alerting.alert_events.channel_refs` trae `telegram`.
-7. **Cuando el pendiente se cumple, CC cierra la nota con su motivo** (v16):
-   `SELECT alerting.cerrar_nota_de_seguimiento(ref, motivo);`. El mensaje de Telegram se edita como
-   «🟢 resuelto» con la línea «Cierre». Se comprueba en `net._http_response`: 200 «resuelto editado».
-   Sólo cierra notas de seguimiento; las alertas del sistema las cierra el dato.
+   una decisión, una pieza que revisar, una captura que mandar— registra **un pendiente por asunto**:
+   `SELECT alerting.abrir_nota_de_seguimiento(asunto, que_hacer, sesion, origen, cuando, donde);`
+   **No se envía nada en ese momento.** El pendiente queda en `alerting.seguimiento` (`S-MMDD-NN`).
+2. **`sesion` es SIEMPRE el nombre de la sesión** donde se retoma, el título que devuelve `get_session`.
+   Es lo que agrupa el resumen. **`donde`** es el sitio donde Sam actúa: GitHub, Vercel, el Orchestrator
+   o su terminal. No se mezclan: «GitHub» no es una sesión.
+3. **Sin enlaces.** La función y la tabla los rechazan. Un PR se nombra por repo y número.
+4. **Un asunto, un pendiente.** Registrar otra vez el mismo asunto actualiza el que está abierto.
+5. **El pendiente no sustituye el bloque 🟩 del chat.** El chat sigue siendo el reporte del tramo; el
+   resumen es el punto de partida del día siguiente.
+6. **En el reporte del tramo** van las referencias `S-MMDD-NN` registradas.
+7. **Cuando el pendiente se cumple, CC lo cierra con su motivo:**
+   `SELECT alerting.cerrar_nota_de_seguimiento(ref, motivo);`. Un `S-` se cierra sin mensaje. Una nota
+   vieja `A-` se sigue cerrando como en v16. Sólo pendientes y notas de seguimiento: las alertas del
+   sistema las cierra el dato.
 8. **Una pieza se nombra por su `piece_id` completo** (v16), siempre que CC mande a Sam a revisarla, en el
-   chat, en la nota o en un PR. Junto al `piece_id` van la marca, el canal y el título. Un prefijo
-   («fadfe938») no basta: Sam la busca en el Orchestrator por su id. Regla de Sam del 2026-10-02.
+   chat, en el pendiente o en un PR. Junto al `piece_id` van la marca, el canal y el título.
 
-**Qué NO va a nota:**
+**Qué NO va a pendiente:**
 - **Lo que hace CC.** Va en el bloque 🟧 y en AGENDA.
 - **Lo que ya avisa una regla automática** (un fallo del carril, un cron apagado, una bandeja que se
-  acumula). Duplicarlo sería ruido en el mismo canal.
+  acumula). Ya llega por su propia alerta.
 
-**Cómo funciona** (`unrlvl-iid-functions#300`, migración `20261002150000`):
-- regla `FOLLOW_UP_NOTE`, severidad `action_required`: llega por Telegram y por correo;
-- botones Leído y Posponer;
-- recordatorio cada 24 h hasta que Sam la marca leída;
-- caduca a los 7 días.
+**Cómo funciona** (`unrlvl-iid-functions#310`, migración `20261002210000`):
+- `alerting.enviar_seguimiento_del_dia()` corre cada hora y envía cuando, en el huso del operador
+  (`alert_operators.timezone`), es la hora `seguimiento_hora_local` de `intel.iid_scheduler_config`.
+  Cambiar la hora es un `UPDATE`;
+- un mensaje `FOLLOW_UP_DAILY` (`acuse`, sólo Telegram) por día, agrupado por sesión, con «— en <sitio>»
+  y «(desde DD-MM)»; sin pendientes no se envía;
+- el resumen del día anterior se da por resuelto sin editar su mensaje;
+- `FOLLOW_UP_NOTE` está inactiva desde v17.
 
-**Por qué existe:**
-- **El caso:** el 2026-10-02, cinco pendientes de la sesión «30sep - Warns en Telegram» —un despliegue,
-  una pieza que no había que aprobar sin editar, dos decisiones y una captura— existían sólo en el chat.
-- **El efecto:** Sam se enteraba de ellos por accidente.
-- **Cómo se cerró:** las cinco notas se abrieron el mismo día, `A-1002-05` a `A-1002-09`, entregadas
-  por Telegram y por correo [medido].
+**Por qué cambió:** el 2026-10-02 se abrieron 37 notas sueltas, cada una con su mensaje y su recordatorio;
+27 se cumplieron en menos de una hora [medido en `alerting.alert_events`, regla `FOLLOW_UP_NOTE`]. El canal que tenía que
+evitar que Sam se enterara por accidente se había vuelto ruido.
 
+> ⛔ NO OPERATIVO — §17 v15/v16, sustituida por la v17 de arriba el 2026-10-02. Se conserva como historia.
+>
+> ### 17 (v15/v16). LO QUE QUEDA PARA SAM LE LLEGA POR TELEGRAM — NOTA DE SEGUIMIENTO
+>
+> **La regla (Sam, 2026-10-02):** «Quiero que estos follow up me los mandes por telegram como nota de
+> seguimiento y en qué sesión debo atenderlo. No me entero de estos seguimientos si no es por accidente.»
+> Y, al proponérsele como regla: «sí a la regla».
+>
+> **Qué hace CC:**
+> 1. **Al cerrar cada tramo de trabajo que deja algo pendiente para Sam** —un PR por mergear o desplegar,
+>    una decisión, una pieza que revisar, una captura que mandar— abre **una nota por pendiente**:
+>    `SELECT alerting.abrir_nota_de_seguimiento(asunto, que_hacer, sesion, origen, cuando);`
+> 2. **`sesion` dice dónde se atiende.** Si hace falta CC, el título de la sesión (lo devuelve
+>    `get_session`). Si no, la superficie donde Sam lo hace: el Orchestrator, GitHub o su terminal.
+> 3. **Sin enlaces.** La función los rechaza, y el canal tampoco los transporta. Un PR se nombra por
+>    repo y número.
+> 4. **Un pendiente por nota, un asunto por pendiente.** Abrir otra nota con el mismo asunto suma una
+>    ocurrencia en vez de duplicarla.
+> 5. **La nota no sustituye el bloque 🟩 del chat: lo replica** en el canal que Sam sí mira.
+> 6. **En el reporte del tramo** van las referencias públicas de las notas abiertas (`A-MMDD-NN`), con la
+>    entrega comprobada: `alerting.alert_events.channel_refs` trae `telegram`.
+> 7. **Cuando el pendiente se cumple, CC cierra la nota con su motivo** (v16):
+>    `SELECT alerting.cerrar_nota_de_seguimiento(ref, motivo);`. El mensaje de Telegram se edita como
+>    «🟢 resuelto» con la línea «Cierre». Se comprueba en `net._http_response`: 200 «resuelto editado».
+>    Sólo cierra notas de seguimiento; las alertas del sistema las cierra el dato.
+> 8. **Una pieza se nombra por su `piece_id` completo** (v16), siempre que CC mande a Sam a revisarla, en el
+>    chat, en la nota o en un PR. Junto al `piece_id` van la marca, el canal y el título. Un prefijo
+>    («fadfe938») no basta: Sam la busca en el Orchestrator por su id. Regla de Sam del 2026-10-02.
+>
+> **Qué NO va a nota:**
+> - **Lo que hace CC.** Va en el bloque 🟧 y en AGENDA.
+> - **Lo que ya avisa una regla automática** (un fallo del carril, un cron apagado, una bandeja que se
+>   acumula). Duplicarlo sería ruido en el mismo canal.
+>
+> **Cómo funciona** (`unrlvl-iid-functions#300`, migración `20261002150000`):
+> - regla `FOLLOW_UP_NOTE`, severidad `action_required`: llega por Telegram y por correo;
+> - botones Leído y Posponer;
+> - recordatorio cada 24 h hasta que Sam la marca leída;
+> - caduca a los 7 días.
+>
+> **Por qué existe:**
+> - **El caso:** el 2026-10-02, cinco pendientes de la sesión «30sep - Warns en Telegram» —un despliegue,
+>   una pieza que no había que aprobar sin editar, dos decisiones y una captura— existían sólo en el chat.
+> - **El efecto:** Sam se enteraba de ellos por accidente.
+> - **Cómo se cerró:** las cinco notas se abrieron el mismo día, `A-1002-05` a `A-1002-09`, entregadas
+>   por Telegram y por correo [medido].
+>
 ---
 
 ## ARCHIVO HISTÓRICO — CC_PROTOCOL v2026-06-06-v1 (archivado 2026-06-08)
