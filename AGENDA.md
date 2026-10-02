@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-02 · v2026-10-02-v2 (**EL PATRÓN CONFIRMA LO QUE EL JUEZ NO MARCÓ, EL AUTO-FIX TERMINA LO QUE EMPIEZA Y LOS PENDIENTES PARA SAM LLEGAN UNA VEZ AL DÍA, AGRUPADOS POR SESIÓN.** Amplía el `v2026-10-02-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #292 #300 #302 #303 #304 #306 #308 #309 #310 y `unrlvl-context` #139 #140 #141 [`medido` por GitHub]. Migraciones `20261002150000`–`20261002180000` y `20261002210000` aplicadas por CC y verificadas [`medido`]. Correo a content-approval apagado; crons 119/121/86 e `iid-brief-generator` retirados; fixables y barrido del auto-fix encendidos por Sam; resumen diario de pendientes a las 07:00 UTC. CC_PROTOCOL v17. Professor: 8 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-02 (v2).)_
 _Actualizada: 2026-10-02 · v2026-10-02-v1 (**EL CARRIL AUTO-FIX CORRIGE ANTES DE LA BANDEJA, Y MARISOL REVISA NEURONESCF.** Amplía el `v2026-10-01-v7` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #295 #296 y `Orchestrator` #62 #63 [`medido` por GitHub]. Migraciones `20261001120000` y `20261001130000` aplicadas por CC y verificadas; `content-run-stage` v171 desplegada por Sam y verificada contra `main`; carril encendido por CC a pedido de Sam [`medido`]. Professor: 6 learnings aprobados, más `0a2bfad5`. Detalle en `IID/session_log.md` 2026-10-02 y 2026-10-01 (v8).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v7 (**UN CARRUSEL SE APRUEBA ENTERO: LA VISTA DE LA PIEZA MUESTRA TODAS SUS LÁMINAS.** Amplía el `v2026-10-01-v6` inmediatamente debajo; **no lo reescribe**. PR mergeado `Orchestrator` #61 [`medido` por GitHub], desplegado en `7d14348` [`medido`] y verificado por Sam [`reportado`]. El artefacto pinta todas las láminas con el mismo criterio que la publicación. Sam declara el carril listo para calibrar, aprobar, arreglar y fluir. Learning `0a2bfad5` pendiente de aprobación. Detalle en `IID/session_log.md` 2026-10-01 (v7).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v6 (**CIERRE DE LA COLA DE CORRECCIÓN DE LA SESIÓN DE FIXABLES, Y UNA CASA TAMBIÉN PUEDE SER PH.** Amplía el `v2026-10-01-v5` inmediatamente debajo; **no lo reescribe**. 70 piezas regeneradas, 88 láminas revisadas y 22 carruseles completos; cron 137, tablas, funciones y respaldos temporales borrados, con confirmación de Sam [`medido`: 0 restantes]. Learning `6d26e96e` (Los Álamos), aprobado por Sam. Detalle en `IID/session_log.md` 2026-10-01 (v6) y `brands/ForumPHs/session_log.md` 2026-10-01 (v2).)_
@@ -8,9 +9,73 @@ _Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA 
 _Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR.** Amplía el `v2026-10-01-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #60, `unrlvl-iid-functions` #282 #283 #284 #285 #286, `ImageLab` #31, `CopyLab` #43 y `unrlvl-ops` #16 #17 [`medido` por GitHub]. Cinco migraciones aplicadas por CC con autorización de Sam. Búsquedas web y fallos con costo explicado; 187 filas históricas reclasificadas con respaldo; alerta `COST_NOT_COMPUTED`; tarifa de Haiku 4.5. Entidad `StudioOperations` (sin términos: su informe Cliente no se genera). `brand-context-builder` con puerta y PR; `iid-ecommerce*` retiradas. Pestaña «Manual» con «Publicada». unrlvl-ops multimarca y móvil. 8 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01 (v2).)_
 _Actualizada: 2026-10-01 · v2026-10-01-v1 (**CIERRE DEL 2026-10-01 — LAS BANDEJAS DICEN LA VERDAD, Y EL RESERVADOR DE FRANJAS VUELVE A REPARTIR.** Amplía el `v2026-09-30-v4` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #56 #57 #58 #59, `unrlvl-iid-functions` #273 #281, `ImageLab` #30 y `BluePrints` #11 [`medido` por GitHub]. Una pieza, una pestaña; `sin_imagen` a Arreglos; Retenidas a «Más»; orden por la próxima franja; aprobar no se repite. **Incidente:** `publish-slot-reserver` 12 h en 500 y 45 piezas aprobadas sin fecha, con disparador de CC; datos reparados y **v21 desplegada por CC a petición expresa de Sam** [`medido`]. 11 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01.)_
 _Actualizada: 2026-09-30 · v2026-09-30-v4 (**CIERRE DEL 2026-09-30 (v4) — EL REGULADOR DECIDE ANTES DE INVESTIGAR, REPARTE POR MARCA Y POR CANAL, Y LOS HALLAZGOS QUE SOBRAN VAN A UNA RESERVA QUE CADUCA.** Amplía el `v2026-09-30-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #274 #276 #279 #280 [`medido` por GitHub]; migraciones `20260930010000` a `20260930040000` aplicadas por CC y verificadas; `iid-research` v65, `iid-process` v70 e `iid-core` v78 desplegadas por Sam y verificadas contra `main` [`medido`]. Tres alertas nuevas que preguntan por el dato; 14 agentes sin marca retirados con archivo; informe quincenal retirado. Detalle en `IID/session_log.md` 2026-09-30 (v4).)_
-_Actualizada: 2026-09-30 · v2026-09-30-v3 (**ARCHIVADO DE CABECERA — LA CABECERA CONSERVA LAS 10 VERSIONES MÁS RECIENTES.** Amplía el `v2026-09-30-v2` inmediatamente debajo; **no lo reescribe**. Regla de Sam (2026-09-30): esta cabecera guarda sólo las 10 versiones más recientes y las anteriores bajan **íntegras** a `historical_AGENDA.md` en cada Actualiza (escrita en `protocols/HRD_PROTOCOL.md` v1.12, paso 10). Esta pasada baja 16 líneas, del `v2026-09-09-v1` al `v2026-09-26-v1`, a `historical_AGENDA.md` → «Migración 2026-09-30». En el mismo PR: `CC_PROTOCOL.md` v14 §16 — las EF se versionan y se despliegan desde `unrlvl-iid-functions`.)_
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-02 (v1)» (1 línea, `v2026-09-30-v2`), «Migración 2026-10-01 (v7)» (1 línea, `v2026-09-30-v1`) y «Migración 2026-10-01 (v6)» (1 línea, `v2026-09-29-v2`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-02 (v2)» (1 línea, `v2026-09-30-v3`), «Migración 2026-10-02 (v1)» (1 línea, `v2026-09-30-v2`) y «Migración 2026-10-01 (v7)» (1 línea, `v2026-09-30-v1`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-02-v2 — El patrón confirma lo que el juez no marcó, el auto-fix termina lo que empieza y los pendientes llegan una vez al día
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-02-v1` queda íntegro debajo.
+Quinta parte de la sesión de CC iniciada el 2026-09-30 («30sep - Warns en Telegram»). Detalle en
+`IID/session_log.md` 2026-10-02 (v2).)_
+
+### Hecho [`medido`]
+- **#292** — el acuse resuelto conserva marca, canal y franja. Desplegado y verificado; Sam lo confirmó
+  en Telegram [`reportado`].
+- **#300** — el patrón confirma lo que el juez no marcó (opción A, reglas `piece_and_brief` con
+  `verify_pattern`). **Corrección:** el caso que lo motivó estaba mal medido (se midió `copy.raw`, no
+  `social.adapted`); la protección sigue siendo válida.
+- **#303** — correo a content-approval apagado (rutas y crons `alerting-digest-4h` e
+  `iid-approval-digest-daily`); una sola fila por corrida en la bitácora del regulador.
+- **#304** — crons 119, 121 y 86 archivados y retirados; `iid-brief-generator` borrado por Sam; la
+  recomposición que saca la imagen limpia `needs_fix`.
+- **#306, #308, #309** — el auto-fix no tira una corrección porque el juez se cayó, no se rinde al primer
+  intento, no compara la pieza consigo misma y confirma un defecto nuevo con un segundo juicio.
+- **#300, #302 → #310** — los pendientes para Sam pasan de nota suelta en Telegram a **un resumen diario
+  agrupado por sesión** (`alerting.seguimiento`, `FOLLOW_UP_DAILY`, 07:00 UTC). `FOLLOW_UP_NOTE` inactiva.
+- **CC_PROTOCOL v15 → v17** (§17; context #139, #140, #141): pendientes para Sam, `piece_id` completo,
+  cierre por CC y resumen diario.
+- **Interruptores:** `autofix_fixables_enabled` y `autofix_sweep_enabled` encendidos por Sam (tope 10 US$
+  diarios). La pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816` (ForumPHs · meta_ig) está marcada fixable con
+  su propuesta.
+- **Reglas de operación:** aprobado + mergeado = aplicar; una pieza se nombra por su `piece_id` completo.
+- **Professor:** `e824de0b`, `86d83b5f`, `fd2f95be`, `72a74eaa`, `c58c0b44`, `d9d965ac`, `a5d9dd66` y
+  `17c186a0`, aprobados por Sam.
+
+### Verificación contra fuente (paso 10-bis) del `v2026-10-02-v1`
+- **«Sam, queda esto», punto 1** (secretos en texto plano en `intel.iid_scheduler_config`) → **ABIERTO**:
+  esta sesión no lo tocó.
+- **«Sam, queda esto», punto 2** (Marisol ve «Revisas: NeuroneSCF») → **ABIERTO**: sin medición en esta
+  sesión.
+- **«Próxima sesión», punto 1** (medir los primeros intentos del carril, `trig_01WhBkCiCdFKy6xswbhkfRdD`) →
+  **ABIERTO**: es de la sesión del carril.
+- **«Próxima sesión», punto 2** (cortes siguientes) → **PARCIAL** [`medido` en
+  `intel.iid_scheduler_config`]: el corte 3 (fixables) y el 5 (barrido) quedaron **encendidos** hoy;
+  `autofix_image_enabled` y `autofix_learning_enabled` siguen en `false` (cortes 2 y 1-bis).
+- **«Próxima sesión», punto 3** (puntos 2 a 6 del `v2026-10-01-v1`) → **ABIERTOS**: esta sesión no los tocó.
+
+### Barrido de archivado (paso 10)
+- **Cabecera:** baja íntegra 1 línea (`v2026-09-30-v3`) a `historical_AGENDA.md` → «Migración
+  2026-10-02 (v2)». La cabecera queda con 10.
+- **Cuerpo:** ningún ítem cumple las tres condiciones de archivado en este bloque; no se mueve nada más.
+
+### Sam, queda esto
+1. **Leer el primer resumen diario** (2026-10-03, 07:02 UTC) y decir si la forma sirve.
+2. **Revisar la pieza `fadfe938-50ac-4ad1-b305-c7548a6c8816`** (ForumPHs · meta_ig · título nuevo «Hay una
+   notificación que decide quién hereda una deuda ajena»), en Calibración. El barrido aplicó tu propuesta
+   a las 20:34 UTC (0,25 US$, resolvió `HR-FPHS-05` y `FIXABLE-PROPUESTA`) y CC recompuso el texto de la
+   imagen (0 US$) [`medido`].
+3. **Mergear `unrlvl-iid-functions` #316 y desplegar `content-run-stage`.** El auto-fix de una pieza
+   existente no recomponía el texto de la imagen cuando cambiaba el gancho, porque ese paso dependía de
+   `autofix_image_enabled` [`medido` en `fadfe938`].
+
+### Próxima sesión
+1. **2026-10-03 13:30 UTC** (`trig_01JTXTT46y7LHVD29VurNCCb`): opción A en `watcher_log`, el primer
+   `FOLLOW_UP_DAILY`, el regulador y las alertas.
+2. **Barrido del auto-fix:** gasto diario contra el tope de 10 US$ y resultado sobre el inventario.
+3. **2026-10-25 06:30 UTC** (`trig_01Tew7wkWfUrunLaeEYuBjBC`): `seguimiento_hora_local` pasa de 9 a 8 para
+   seguir en 07:00 UTC.
 
 ---
 
