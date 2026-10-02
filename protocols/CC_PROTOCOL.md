@@ -1,7 +1,13 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-10-02-v15 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-10-02-v16 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v16 (2026-10-02):** dos adiciones a la §17, ninguna derogación. **(1) Una pieza se nombra
+> siempre por su `piece_id` completo** cuando CC manda a Sam a revisarla —en el chat, en una nota de
+> seguimiento o en un PR—. Sam: «cuando me mandes a revisar una pieza en el orchestrator debes darme siempre
+> el piece_id». **(2) La nota cumplida la cierra CC con su motivo** (`alerting.cerrar_nota_de_seguimiento`,
+> `unrlvl-iid-functions#302`).
+>
 > **Cambios v15 (2026-10-02):** una adición, ninguna derogación. **§17 — lo que queda para Sam le
 > llega por Telegram como nota de seguimiento, con la sesión donde se atiende.** Al cerrar cada tramo
 > que deja algo pendiente para Sam, CC abre una nota por pendiente con
@@ -687,6 +693,13 @@ Y, al proponérsele como regla: «sí a la regla».
 5. **La nota no sustituye el bloque 🟩 del chat: lo replica** en el canal que Sam sí mira.
 6. **En el reporte del tramo** van las referencias públicas de las notas abiertas (`A-MMDD-NN`), con la
    entrega comprobada: `alerting.alert_events.channel_refs` trae `telegram`.
+7. **Cuando el pendiente se cumple, CC cierra la nota con su motivo** (v16):
+   `SELECT alerting.cerrar_nota_de_seguimiento(ref, motivo);`. El mensaje de Telegram se edita como
+   «🟢 resuelto» con la línea «Cierre». Se comprueba en `net._http_response`: 200 «resuelto editado».
+   Sólo cierra notas de seguimiento; las alertas del sistema las cierra el dato.
+8. **Una pieza se nombra por su `piece_id` completo** (v16), siempre que CC mande a Sam a revisarla, en el
+   chat, en la nota o en un PR. Junto al `piece_id` van la marca, el canal y el título. Un prefijo
+   («fadfe938») no basta: Sam la busca en el Orchestrator por su id. Regla de Sam del 2026-10-02.
 
 **Qué NO va a nota:**
 - **Lo que hace CC.** Va en el bloque 🟧 y en AGENDA.
