@@ -1,7 +1,13 @@
 # CC_PROTOCOL — Protocolo de Claude Code · Unrealville Studio
-**Versión:** 2026-09-30-v14 | **Mantenido por:** Sam + Claude
+**Versión:** 2026-10-02-v15 | **Mantenido por:** Sam + Claude
 **Fuente de verdad de cómo CC debe comportarse en TODOS los repos del ecosistema.**
 
+> **Cambios v15 (2026-10-02):** una adición, ninguna derogación. **§17 — lo que queda para Sam le
+> llega por Telegram como nota de seguimiento, con la sesión donde se atiende.** Al cerrar cada tramo
+> que deja algo pendiente para Sam, CC abre una nota por pendiente con
+> `alerting.abrir_nota_de_seguimiento(asunto, que_hacer, sesion, origen, cuando)`. Nace del 2026-10-02:
+> «No me entero de estos seguimientos si no es por accidente.» Mecanismo en `unrlvl-iid-functions#300`.
+>
 > **Cambios v14 (2026-09-30):** una adición, ninguna derogación. **§16 — las Edge Functions se versionan y
 > se despliegan desde `unrlvl-iid-functions`.** Antes de tocar una EF se localiza su fuente allí. Si no
 > está, entra primero tal como corre, con `SNAPSHOT.md`, y el cambio va en un commit aparte. Una copia en
@@ -659,6 +665,46 @@ invoca y no lo copia:** dos textos de la misma regla son dos reglas en cuanto al
 - **Cómo se cerró:**
   - `unrlvl-iid-functions#275`: snapshot `_44` + cambio, desplegado como build `_64`;
   - `forumphs-speaks#4`: la copia se retira y queda una nota que remite a la ubicación vigente.
+
+---
+
+## 17. LO QUE QUEDA PARA SAM LE LLEGA POR TELEGRAM — NOTA DE SEGUIMIENTO
+
+**La regla (Sam, 2026-10-02):** «Quiero que estos follow up me los mandes por telegram como nota de
+seguimiento y en qué sesión debo atenderlo. No me entero de estos seguimientos si no es por accidente.»
+Y, al proponérsele como regla: «sí a la regla».
+
+**Qué hace CC:**
+1. **Al cerrar cada tramo de trabajo que deja algo pendiente para Sam** —un PR por mergear o desplegar,
+   una decisión, una pieza que revisar, una captura que mandar— abre **una nota por pendiente**:
+   `SELECT alerting.abrir_nota_de_seguimiento(asunto, que_hacer, sesion, origen, cuando);`
+2. **`sesion` dice dónde se atiende.** Si hace falta CC, el título de la sesión (lo devuelve
+   `get_session`). Si no, la superficie donde Sam lo hace: el Orchestrator, GitHub o su terminal.
+3. **Sin enlaces.** La función los rechaza, y el canal tampoco los transporta. Un PR se nombra por
+   repo y número.
+4. **Un pendiente por nota, un asunto por pendiente.** Abrir otra nota con el mismo asunto suma una
+   ocurrencia en vez de duplicarla.
+5. **La nota no sustituye el bloque 🟩 del chat: lo replica** en el canal que Sam sí mira.
+6. **En el reporte del tramo** van las referencias públicas de las notas abiertas (`A-MMDD-NN`), con la
+   entrega comprobada: `alerting.alert_events.channel_refs` trae `telegram`.
+
+**Qué NO va a nota:**
+- **Lo que hace CC.** Va en el bloque 🟧 y en AGENDA.
+- **Lo que ya avisa una regla automática** (un fallo del carril, un cron apagado, una bandeja que se
+  acumula). Duplicarlo sería ruido en el mismo canal.
+
+**Cómo funciona** (`unrlvl-iid-functions#300`, migración `20261002150000`):
+- regla `FOLLOW_UP_NOTE`, severidad `action_required`: llega por Telegram y por correo;
+- botones Leído y Posponer;
+- recordatorio cada 24 h hasta que Sam la marca leída;
+- caduca a los 7 días.
+
+**Por qué existe:**
+- **El caso:** el 2026-10-02, cinco pendientes de la sesión «30sep - Warns en Telegram» —un despliegue,
+  una pieza que no había que aprobar sin editar, dos decisiones y una captura— existían sólo en el chat.
+- **El efecto:** Sam se enteraba de ellos por accidente.
+- **Cómo se cerró:** las cinco notas se abrieron el mismo día, `A-1002-05` a `A-1002-09`, entregadas
+  por Telegram y por correo [medido].
 
 ---
 
