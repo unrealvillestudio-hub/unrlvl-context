@@ -529,7 +529,8 @@ _(Sam: «de acuerdo con tus recomendaciones en F2 y F3», 2026-10-02.)_
    `scheduled` [`medido`].
 7. **Lo que dejó el barrido:**
    - Merge de ImageLab #37 y CopyLab #52, y después recomponer los 6 carruseles retenidos.
-   - Decisiones de Sam: el velo de LucienSael; `fe6730dd` n1, un mechón magenta (se publica el 2026-10-06);
+   - Decisiones de Sam: el velo de LucienSael; `fe6730dd` n1, un mechón magenta (se publica el 2026-10-06;
+     nota `S-1003-03` abierta el 2026-10-03);
      `800b8335` n2, con franjas negras; `d915295b` n1; `4f13cc52` (F1 y F2 en una sola actualización);
      `152b8d2b` (llevar «Nanotribología» a la base).
    - Mejoras propuestas, todavía sin PR:

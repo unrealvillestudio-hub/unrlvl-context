@@ -97,7 +97,8 @@ clonados; API REST de GitHub para `unrlvl-blog`.)_
    los 6 carruseles retenidos.
 6. **Decidir sobre lo que dejó el barrido:**
    - el velo de LucienSael (texto naranja sobre caras o fondos cálidos en 9 carruseles);
-   - `fe6730dd` n1, un mechón magenta (**se publica el 2026-10-06**);
+   - `fe6730dd` n1, un mechón magenta (**se publica el 2026-10-06**; nota `S-1003-03`, que incluye también
+     `800b8335` n2 y `d915295b` n1);
    - `800b8335` n2, con franjas negras (2026-10-23);
    - `d915295b` n1, una imagen dentro de otra;
    - `4f13cc52`, con «## » literales en vivo (F1 y F2 en una sola actualización);
