@@ -5,6 +5,31 @@
 > menciones de abajo son registro histórico y describen el estado de entonces; el identificador que tuvo
 > aparece acá como `generadorLocal` y su historia completa queda en el cuerpo del PR de A3.
 
+## 2026-10-03 — El blog de la marca lo sirve CoreProject con el formato editorial, y unrlvl-blog queda archivado
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-03. SMA no consultado: Sam no lo pidió.
+
+- **`CoreProject` #12–#18** (mergeados [`medido`]): la negrita se pinta (#12); portada mobile-first (#13);
+  fuentes del propio dominio (#14); formato editorial F1, acentos del BP y «Keep reading» con imagen (#15);
+  miniaturas enteras (#16); sin desborde horizontal en el teléfono (#17); el lector entiende `![img-N]` (#18).
+- **`unrlvl-blog`:** su PR #3 quedó cerrado sin mergear porque el repo no está desplegado en ningún proyecto de
+  Vercel (0 de 34) [`medido`]; **Sam lo archivó en GitHub el 2026-10-03** (`archived = true`) [`medido`]. El
+  blog de la marca lo sirve `CoreProject` (`unrlvl-core-project`).
+- **BP UNRLVL v1.6:** el ámbar es `#FFB020`, el que ya usa el sitio (BluePrints #13). Wordmark en
+  `public.brand_logo`.
+- **F2:** tope de imágenes dentro del artículo = 2 [`medido` el 2026-10-03].
+- **Pieza de prueba F1 `800b8335`:** `scheduled` [`medido` el 2026-10-03].
+- **Barrido de piezas existentes (F2, publicadas y agendadas)** [`medido` el 2026-10-03]:
+  - Publicadas que el sitio sirve: `424bbbe2` y `b351da19` con 2 imágenes, verificadas en el HTML en vivo.
+    `2c391e74` y `11d72451` quedan sin imágenes (429 de Vertex y el juez), sin `![img-` en el sitio.
+  - Agendadas: `b95e8d0a`, `93138c7a`, `b25f4378`, `9d6a7188` y `800b8335` completas.
+  - **`800b8335` n2 tiene franjas negras** que el juez dejó pasar (se publica el 2026-10-23).
+  - Las 12 imágenes son racks o circuitos: ningún tema de la marca tiene `visual_directive`.
+  - F3: 2 carruseles en espera recompuestos. `0c704fe8` queda retenido hasta ImageLab #37.
+
+---
+
 ## 2026-10-01 (v2) — Las operaciones del estudio tienen marca propia, y los informes suman varias marcas
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo

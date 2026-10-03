@@ -1,5 +1,29 @@
 # ForumPHs — Session Log
 
+## 2026-10-03 — Formato editorial en forumphs.com, Jade en la portada y el carrusel sigue la maqueta v4
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-03. SMA no consultado: Sam no lo pidió.
+
+- **`forumphs-com` #13–#16** (mergeados [`medido`]): la negrita se pinta (#13); formato editorial F1, acentos
+  del BP, sin letra capital, «Sigue leyendo» con imagen y Jade como tercer acento en la portada (#14);
+  miniaturas enteras (#15); el lector entiende `![img-N]` (#16).
+- **Acento Jade** (BluePrints #12). Paleta del carrusel: rol nuevo `carbon_m` `#141927`; wordmark en
+  `public.brand_logo`.
+- **F2:** tope de imágenes dentro del artículo = 2 [`medido` el 2026-10-03].
+- **Sigue abierto:** `S-1002-15`, revisar `fadfe938-50ac-4ad1-b305-c7548a6c8816` en Calibración
+  (`awaiting_approval`, nota sin cerrar) [`medido` el 2026-10-03].
+- **Barrido de piezas existentes (F2, publicadas y agendadas)** [`medido` el 2026-10-03]:
+  - Publicadas que el sitio sirve, verificadas en el HTML en vivo: `c4b3e01f`, `d6b791ef` y `8ea6305c` con 2
+    imágenes; `8f63cb40` y `a4597530` con 1.
+  - `9b055238` está descartada (410) y no se tocó.
+  - Agendadas: `d1570557` y `1a532b29` con 2 imágenes; `1df47c51` y `7e73fd16` con 1 (el juez rechazó la n2:
+    expresión dramática y collage).
+  - Detalles menores: alts que cuentan mal a las personas (`c4b3e01f` n1, `8ea6305c` n2) y pizarras con
+    garabatos.
+
+---
+
 ## 2026-10-02 (v3) — HR-FPHS-05 y HR-FPHS-12 no pasan a producción por el banco de reglas
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
