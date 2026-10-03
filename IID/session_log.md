@@ -365,6 +365,136 @@ La credencial Vertex (Service Account JSON) vivía SOLO en el Vercel de ImageLab
 
 ## §9 — SESSION LOG (novedad al tope)
 
+## 2026-10-03 · UPGRADE EDITORIAL MULTIMARCA F0–F3: EL TEXTO SE PINTA, EL ARTÍCULO LLEVA IMÁGENES Y EL CARRUSEL SIGUE LA MAQUETA V4
+
+_(Entrada al tope de la §9. **No reescribe ninguna anterior**. Sesión de CC `session_01G5goP8Jq8SSKLAPcdrvdNt`
+(rama `ccr-c46370b8-vio6sj` en cada repo), del 2026-10-01 al 2026-10-03: upgrade visual editorial de
+UnrealvilleStudio, NeuroneSCF, LucienSael y ForumPHs según la **maqueta v4 aprobada por Sam el 2026-10-02**.
+PR mergeados [`medido` con `git log origin/main` de cada repo el 2026-10-03]: `luciensael` #3–#10,
+`CoreProject` #12–#18, `forumphs-com` #13–#16, `Orchestrator` #64 #65 #66, `CopyLab` #45–#51, `ImageLab`
+#34 #35 #36, `BluePrints` #12 #13 y `unrlvl-iid-functions` #311 #312 #317 #319 #326 #327 #328. Cinco
+migraciones aplicadas por CC. EF desplegadas por Sam con `--no-verify-jwt` [`reportado`]. Professor: 13
+learnings aprobados por Sam (`211da71b`, `fe20470b`, `db9e7059`, `c069c596`, `d8cd4123`, `bb4f12c0`,
+`729b4ef3`, `df3173e9`, `ec97b4ab`, `91d8214a`, `71170ae5`, `ee5a855c`, `ebd4c01c`) [`medido`: 13 de 13 con
+`approved_by_sam = true`].)_
+
+### 1 · F0 — la negrita del generador se pinta (`**` deja de verse)
+- `luciensael` #3 · `CoreProject` #12 · `forumphs-com` #13 · `Orchestrator` #64 (vista previa) ·
+  `unrlvl-iid-functions` #311 (`blog-promoter`: el formato llega al blog de Shopify).
+- **`unrlvl-blog` #3 quedó cerrado sin mergear** [`medido` por la API REST de GitHub: cerrado el 2026-10-02
+  17:32 UTC, `merged = false`]: el repo no está desplegado en ningún proyecto de Vercel (0 de 34 proyectos del
+  equipo) [`medido`]. **Sam archivó el repo en GitHub el 2026-10-03** (`archived = true`) [`medido`]. El blog
+  de UnrealvilleStudio lo sirve `CoreProject` (`unrlvl-core-project`).
+
+### 2 · F1 — markdown mínimo y formato editorial
+- **CopyLab:** #45 escribe markdown mínimo cuando el canal lo pinta; #46 `format_pass` estructura una pieza ya
+  escrita sin reescribirla; #47 la cita va a 2 párrafos o más de su origen.
+- **Carril (`unrlvl-iid-functions`):** #312 le dice a CopyLab cuándo el canal pinta el formato
+  (`BODY_FORMAT_BY_PROVIDER`: `vercel_html` y `shopify_blog` → `markdown_min`); #317 acción `editorial_format`
+  para piezas anteriores a F1; #319 lo opcional que incumple se poda.
+- **Sitios:** `luciensael` #6, `CoreProject` #15 y `forumphs-com` #14 (formato editorial, acentos del BP,
+  «Keep reading» / «Sigue leyendo» con imagen; ForumPHs sin letra capital y con Jade en la portada).
+  `Orchestrator` #65 (vista previa del formato).
+- **BluePrints:** #12 (acentos 2026-10-02: ámbar UVS, Jade FPHs, Menta NSCF, Mercurio Lucien; firma de texto de
+  Lucien) y #13 (BP UNRLVL v1.6: el ámbar es `#FFB020`).
+- **Reformateo de piezas anteriores a F1** (opción a de Sam): 67 de 69 — `scheduled` 22/22, `awaiting` 28/29
+  (`eb7534a8`, FAQ, excluida) y `published` 18/18 [`medido` el 2026-10-02].
+  - 12 piezas con subtítulos apilados vuelven a «## original» (Sam: «quédate con el original»).
+  - Voseo corregido en NSCF `hair-science-3cd0773f`.
+  - Los 3 artículos de NSCF en Shopify actualizados con `articleUpdate` y verificados **idénticos carácter a
+    carácter**: `615312982343` = `3cd0773f`, `615304069447` = `152b8d2b`, `615378223431` = `d915295b`
+    [`medido`]. `miami-humedad` (editado a mano en Shopify) no se tocó.
+  - Notas `S-1002-29` y `S-1002-30` cerradas [`medido` en `alerting.seguimiento`].
+
+### 3 · Defectos de los sitios arreglados en el camino
+- **Imágenes del blog a su proporción:** las compuestas son 1:1 con el titular abajo y el recorte 16:9 quitaba
+  el titular (11 de 11) [`medido`]. `luciensael` #7, `CoreProject` #16, `forumphs-com` #15. Tema de NSCF v1.5
+  publicado por Sam (theme `201829843271`) [`reportado`].
+- **Desborde horizontal en el teléfono** (Chrome Android con zoom deja unos 300 px): `luciensael` #8,
+  `CoreProject` #17; rejillas `minmax(min(100%,292px),1fr)`.
+- `luciensael` #4 (Writing entra al blog, sección viva, mobile-first), #5 (contacto y fuentes propias), #9 (la
+  sección Writing de la portada lleva imagen). `CoreProject` #13 (portada mobile-first) y #14 (fuentes del
+  propio dominio).
+
+### 4 · F2 — imágenes dentro del artículo
+_(Sam: «de acuerdo con tus recomendaciones en F2 y F3», 2026-10-02.)_
+- **Lectores primero:** `luciensael` #10, `CoreProject` #18, `forumphs-com` #16, `Orchestrator` #66.
+- **CopyLab #48** (`image_pass`: elige tras qué bloque va cada imagen y escribe su alt).
+- **`unrlvl-iid-functions` #326** (productor): acción `inline_images` en 2 pasos, barrido `inline_images_sweep`,
+  `blog-promoter` v1.4 pinta `<figure class="inline-figure">`, y la marca `![img-N]` sale de todo texto plano.
+- **Segunda vuelta tras la prueba controlada** (Sam: «Sí a 3, 4 y 5», 2026-10-03): CopyLab #49 (`alt_pass` con
+  visión: el alt se escribe mirando la imagen; `slide_pass`; voseo corregido en la instrucción de reparación de
+  G2-F) y `unrlvl-iid-functions` #327 (juez visual `/api/inspect` para cada imagen interna, regla
+  `IMG-GEN-06`; `alt_pass`; `slide_pass`).
+- **Contrato:** marca de bloque `![img-N]` en `copy.aife_filtered`; dato `assets.inline_images[]`; tope por canal
+  `intel.brand_publish_channels.config.inline_images_max` (0..3, 0 si falta); preset global
+  `imagelab_presets` canal `BLOG_INLINE` 16:9 (`BI0101`); cron `content-inline-images-10min` (jobid 146,
+  `8-59/10`, activo) [`medido` el 2026-10-03].
+- **Topes** [`medido` el 2026-10-03]: UVS 2, NSCF 2, ForumPHs 2 y **LucienSael 0** hasta su avatar (Sam), con
+  `config.inline_images_paused_note`.
+- **Prueba controlada** (`6fc8e90c`, LucienSael): la primera vuelta dio un alt que no describía la imagen y una
+  imagen con franjas negras → cron pausado → arreglos #49 y #327 → imágenes regeneradas con juez
+  (`inspection.ran = true`) y `alt_source = 'image'` [`medido`]. Lucien salió con caras distintas en las 2
+  imágenes → nota `S-1003-01` (avatar propio) y tope 0.
+
+### 5 · F3 — carrusel según la maqueta v4
+- **ImageLab #34** (compositor 1.3.0): barra por lámina, i / n, eyebrow, palabra clave, cifra con barra y fuente,
+  pasos con crítico, CTA de texto subrayado, «Desliza» con flecha geométrica, logotipo del pie, fondo surface
+  sin foto; colores por **función** como dato.
+- **ImageLab #35** (1.3.1): satori mide sin kerning y dibuja con kerning → las fuentes llegan sin kern/GPOS; el
+  hueco entre palabras pasa de 16,9 px a ≤1 px [`medido`].
+- **ImageLab #36** (1.3.2): la flecha del CTA del cierre señala abajo. Motivo de Sam: riesgo de «funcionalidad
+  inexistente» en anuncios de Meta [`reportado` por guías de terceros].
+- **CopyLab #50** (el cierre no ofrece CTAs de gesto —`cta_story`— ni de botón —`cta_ads`, `cta_ultrashort`—) y
+  **#51** (las opciones de CTA del dato también pasan por las reglas de la marca, `HR-GEN-19`; opción b de Sam).
+- **Tabla nueva `public.brand_logo`** (role `signature`, kind `image|wordmark`, RLS, SELECT sólo
+  `service_role`): migración `20261003010000`, aplicada.
+- **Siembra `20261003040000`**, aplicada: `tokens.palette` (funciones `keyword`, `progress_on`, `progress_off`,
+  `counter`, `critical`, `light`, `muted`, `surface`, `figure`…) y `tokens.carousel` en las 4 filas CAROUSEL;
+  5 roles nuevos de `brand_palette` (NSCF `accent_glow` `#0095D4`, `bg_deep` `#0A0D14`, `surface_1`
+  `#111520`, `surface_2` `#161C2A`; ForumPHs `carbon_m` `#141927`); 4 filas de `brand_logo` (UVS y ForumPHs
+  wordmark; NSCF PNG y Lucien SVG como data URI, md5 verificado contra la siembra: `cb04015c…` y
+  `bd731982…`) [`medido`: 4 filas el 2026-10-03].
+- **Acción `carousel_recompose`** (recompone todas las láminas sin generar imagen; guarda `previous_slides`).
+  Prueba en `85517171` (NSCF, elegida por Sam): 1.3.2, `slide_pass` correcto, flecha abajo; el cierre quedó sin
+  CTA propio tras corregir los CTAs con urgencia [`medido`].
+- **Migración de datos `20261003050000`** (`unrlvl-iid-functions` #328), aplicada: 19 CTAs de NeuroneSCF sin
+  «ahora/hoy/ya/now/today» (opción a de Sam, textos aprobados). El texto anterior queda en el archivo de la
+  migración, porque `public.ctas` no tiene historial. «SHOP NOW» se deja a propósito. Medido el 2026-10-03:
+  0 celdas de NeuroneSCF con esas palabras, sin contar «SHOP NOW».
+- **Hallazgo:** otras 7 marcas fuera del carril (D7Herbal, DiamondDetails, PatriciaOsorioComunidad,
+  PatriciaOsorioPersonal, PatriciaOsorioVizosSalon, VivoseMask, VizosCosmetics) tienen **46 celdas** con
+  urgencia [`medido` el 2026-10-03 con `\m(ahora|hoy|ya|now|today)\M`, sin contar «SHOP NOW»].
+
+### 6 · Migraciones y EF
+- Migraciones aplicadas por CC, todas con su pin en `supabase/MIGRACIONES_CONGELADAS.md`: `20261003010000`
+  (`brand_logo`) · `20261003020000` (preset `BLOG_INLINE`) · `20261003030000` (cron
+  `content-inline-images-10min`) · `20261003040000` (carrusel de cada marca como dato) · `20261003050000`
+  (CTAs de NeuroneSCF sin urgencia).
+- EF desplegadas por Sam con `--no-verify-jwt` [`reportado`]: `content-run-stage` (F1 #312/#317/#319, F2+F3
+  #326, segunda vuelta #327), `blog-promoter` v1.4, `content-watcher` y `content-scheduler` (bloque
+  `INLINE-MARK-STRIP`, #326).
+
+### 7 · Barrido de piezas existentes con F1–F3 (Sam, 2026-10-03)
+- F3: `carousel_recompose` de los 18 carruseles en espera (los 13 publicados no se tocan, decisión de Sam).
+- F2: imágenes dentro del artículo en piezas publicadas y agendadas de UVS y ForumPHs (Vercel).
+- F2: NeuroneSCF (Shopify), agendadas y publicadas, con `articleUpdate` verificado y sin tocar los artículos
+  editados a mano.
+- «RESULTADO DEL BARRIDO: pendiente»
+
+### 8 · Abierto
+1. **`S-1003-01`** — avatar propio de LucienSael; después, tope de imágenes del artículo de 0 a 2.
+2. **`S-1003-02`** — piezas de LucienSael que mezclan idiomas (`6fc8e90c`: subtítulos en inglés y cuerpo en
+   español en un blog en-US). Medir cuántas son y la causa en el carril.
+3. **CTAs con urgencia en 7 marcas fuera del carril** (46 celdas): al entrar al carril, o antes si Sam lo pide.
+4. **Texto de los posts sociales según la maqueta v4 §3** (hashtags del set fijo del genoma, párrafos de 1–3
+   líneas, un solo CTA al final): brecha medida por el agente de F3 el 2026-10-02. PR aparte, por datos y reglas.
+5. **Logotipos de NSCF y Lucien como data URI** en `brand_logo`: si Sam los sube al bucket `brand-assets`,
+   cambia una fila.
+6. **Barrido de pendientes y aprobaciones:** 250 piezas en `awaiting_approval` y 47 en `challenged` [`medido`
+   el 2026-10-03 hacia las 01:20 UTC]. Piezas de prueba F1: `71b5ef47` sigue `challenged` y `800b8335` ya está
+   `scheduled` [`medido`].
+
 ## 2026-10-02 (v4) · EL CARRIL AUTO-FIX, COMPLETO Y ENCENDIDO: TEXTO, TÍTULO DEL CANAL E IMAGEN SE CORRIGEN ENTEROS
 
 _(Entrada al tope de la §9. **No reescribe ninguna anterior**. Sexta parte de la sesión de CC iniciada el

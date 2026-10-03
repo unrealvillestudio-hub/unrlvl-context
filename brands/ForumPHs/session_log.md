@@ -1,5 +1,22 @@
 # ForumPHs — Session Log
 
+## 2026-10-03 — Formato editorial en forumphs.com, Jade en la portada y el carrusel sigue la maqueta v4
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-03. SMA no consultado: Sam no lo pidió.
+
+- **`forumphs-com` #13–#16** (mergeados [`medido`]): la negrita se pinta (#13); formato editorial F1, acentos
+  del BP, sin letra capital, «Sigue leyendo» con imagen y Jade como tercer acento en la portada (#14);
+  miniaturas enteras (#15); el lector entiende `![img-N]` (#16).
+- **Acento Jade** (BluePrints #12). Paleta del carrusel: rol nuevo `carbon_m` `#141927`; wordmark en
+  `public.brand_logo`.
+- **F2:** tope de imágenes dentro del artículo = 2 [`medido` el 2026-10-03].
+- **Sigue abierto:** `S-1002-15`, revisar `fadfe938-50ac-4ad1-b305-c7548a6c8816` en Calibración
+  (`awaiting_approval`, nota sin cerrar) [`medido` el 2026-10-03].
+- **Barrido de piezas existentes (F2, publicadas y agendadas):** «RESULTADO DEL BARRIDO: pendiente»
+
+---
+
 ## 2026-10-02 (v3) — HR-FPHS-05 y HR-FPHS-12 no pasan a producción por el banco de reglas
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del

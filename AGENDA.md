@@ -1,4 +1,5 @@
 # AGENDA — Unrealville Studio
+_Actualizada: 2026-10-03 · v2026-10-03-v1 (**UPGRADE EDITORIAL MULTIMARCA F0–F3: EL TEXTO SE PINTA, EL ARTÍCULO LLEVA IMÁGENES Y EL CARRUSEL SIGUE LA MAQUETA V4.** Amplía el `v2026-10-02-v4` inmediatamente debajo; **no lo reescribe**. Sesión de CC `session_01G5goP8Jq8SSKLAPcdrvdNt` (2026-10-01 → 2026-10-03) en UnrealvilleStudio, NeuroneSCF, LucienSael y ForumPHs. PR mergeados `luciensael` #3–#10, `CoreProject` #12–#18, `forumphs-com` #13–#16, `Orchestrator` #64 #65 #66, `CopyLab` #45–#51, `ImageLab` #34 #35 #36, `BluePrints` #12 #13 y `unrlvl-iid-functions` #311 #312 #317 #319 #326 #327 #328 [`medido` con `git log`]; `unrlvl-blog` #3 cerrado sin mergear y el repo archivado por Sam. Cinco migraciones (`20261003010000`–`20261003050000`) aplicadas por CC. Imágenes dentro del artículo con tope por canal (LucienSael 0 hasta su avatar); carrusel con compositor 1.3.2 y paleta como dato; 19 CTAs de NeuroneSCF sin urgencia. Professor: 13 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-03.)_
 _Actualizada: 2026-10-02 · v2026-10-02-v4 (**EL CARRIL AUTO-FIX, COMPLETO Y ENCENDIDO: TEXTO, TÍTULO DEL CANAL E IMAGEN SE CORRIGEN ENTEROS, Y LO QUE NO SE LIMPIA VA A ARREGLOS CON SU MOTIVO.** Amplía el `v2026-10-02-v3` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #316 #318 #321 #323 #324 #325 [`medido` por GitHub]; sin migraciones; `content-run-stage` v194 verificada igual a `main` [`medido`]. Imagen, aprendizaje y propuestas de regla encendidos por Sam a las 21:53 UTC. Professor: 5 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-02 (v4).)_
 _Actualizada: 2026-10-02 · v2026-10-02-v3 (**EL BANCO DE REGLAS: NINGÚN CAMBIO DE ENUNCIADO NI DEL JUEZ LLEGA A PRODUCCIÓN SIN PROBARSE CON PIEZAS REALES; HR-NSCF-06 PASA Y EL CAMBIO DEL JUEZ #314 SE REVIERTE.** Amplía el `v2026-10-02-v2` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #307 #313 #314 #315 #320 #322 y `unrlvl-context` #143 [`medido` por GitHub]. Migración `20261002234000` (`HR-NSCF-06`) aplicada a las 19:54 UTC; `content-run-stage` v191 verificada igual a `main` [`medido`]. El juez no repite qué regla cita (74 % de los avisos varía) pero sí si la pieza pasa; de 18 candidatos sólo `HR-NSCF-06` se confirmó al probarse solo. Gasto de las pruebas reclasificado a `estructura` (371 filas, 22,56 US$). CC_PROTOCOL v18 §18 y skill `banco-de-reglas` v1.0. Professor: 6 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-02 (v3).)_
 _Actualizada: 2026-10-02 · v2026-10-02-v2 (**EL PATRÓN CONFIRMA LO QUE EL JUEZ NO MARCÓ, EL AUTO-FIX TERMINA LO QUE EMPIEZA Y LOS PENDIENTES PARA SAM LLEGAN UNA VEZ AL DÍA, AGRUPADOS POR SESIÓN.** Amplía el `v2026-10-02-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `unrlvl-iid-functions` #292 #300 #302 #303 #304 #306 #308 #309 #310 y `unrlvl-context` #139 #140 #141 [`medido` por GitHub]. Migraciones `20261002150000`–`20261002180000` y `20261002210000` aplicadas por CC y verificadas [`medido`]. Correo a content-approval apagado; crons 119/121/86 e `iid-brief-generator` retirados; fixables y barrido del auto-fix encendidos por Sam; resumen diario de pendientes a las 07:00 UTC. CC_PROTOCOL v17. Professor: 8 learnings aprobados. Detalle en `IID/session_log.md` 2026-10-02 (v2).)_
@@ -8,9 +9,92 @@ _Actualizada: 2026-10-01 · v2026-10-01-v6 (**CIERRE DE LA COLA DE CORRECCIÓN D
 _Actualizada: 2026-10-01 · v2026-10-01-v5 (**CIERRE DEL 2026-10-01 (v5) — GOOGLE COBRA LA IMAGEN POR TOKEN Y EL LIBRO YA LO ASIENTA ASÍ; LA IMAGEN QUE SE QUEDA SIN CUOTA SE REINTENTA SOLA Y EL OCR SIEMPRE VA A UNA MARCA.** Amplía el `v2026-10-01-v4` inmediatamente debajo; **no lo reescribe**. Sesión de CC del 2026-10-01 con acceso de lectura a Google Cloud (cuenta `claude-ops`). PR mergeados `ImageLab` #32 y `unrlvl-iid-functions` #288 #289 #290 #291 #293 #294 [`medido` por GitHub]. Migraciones `20261001060000` a `20261001110000` aplicadas y verificadas [`medido`]. Professor: 8 learnings aprobados por Sam. Detalle en `IID/session_log.md` 2026-10-01 y `labs/ImageLab/session_log.md`.)_
 _Actualizada: 2026-10-01 · v2026-10-01-v4 (**CIERRE DEL 2026-10-01 (v4) — LOS CARRUSELES DE NSCF SE CIERRAN CON IMAGEN PROPIA POR LÁMINA, UNA PUBLICACIÓN FALLIDA VUELVE AL PUBLICADOR Y LA ESCASEZ QUEDA PROHIBIDA.** Amplía el `v2026-10-01-v3` inmediatamente debajo; **no lo reescribe**. Segunda mitad de la sesión de CC del 2026-09-29/30 (la de #270). PR mergeados `SocialLab` #7, `unrlvl-context` #123 #124 [`medido` por GitHub]. 11 carruseles NSCF/UVS/ForumPHs publicados con imagen por lámina [`medido`]; regla `HR-GEN-19`; 8 learnings aprobados en Professor; skill `sesion-de-fixables` v1.2. Detalle en `brands/NeuroneSCF/session_log.md` e `IID/session_log.md` 2026-09-30.)
 _Actualizada: 2026-10-01 · v2026-10-01-v3 (**CIERRE DEL 2026-10-01 (v3) — LA PROCEDENCIA SE ANOTA SIN BLOQUEAR, EL REGULADOR CUENTA LA INVESTIGACIÓN EN CURSO Y EL ACUSE RESUELTO CONSERVA QUÉ Y DÓNDE.** Amplía el `v2026-10-01-v2` inmediatamente debajo; **no lo reescribe**. PR mergeado `unrlvl-iid-functions` #287 [`medido` por GitHub]; #292 abierto. Migración `20261001050000` aplicada y verificada; `iid-process` v71 e `iid-research` v67 verificadas contra `origin/main`. Un hallazgo que cita la Ley 284, un año o a un competidor se escribe y se transforma al redactar; una marca con un memo sin destilar no abre otra investigación; el aviso «PUBLICADA» resuelto dejará de esconder marca y canal. Professor: 4 learnings. Detalle en `IID/session_log.md` 2026-10-01 (v3).)_
-_Actualizada: 2026-10-01 · v2026-10-01-v2 (**CIERRE DEL 2026-10-01 (v2) — LOS COSTOS SE COMPUTAN SIEMPRE, LAS OPERACIONES DEL ESTUDIO SON UNA ENTIDAD Y LO MANUAL SE PUBLICA DESDE EL ORCHESTRATOR.** Amplía el `v2026-10-01-v1` inmediatamente debajo; **no lo reescribe**. PR mergeados `Orchestrator` #60, `unrlvl-iid-functions` #282 #283 #284 #285 #286, `ImageLab` #31, `CopyLab` #43 y `unrlvl-ops` #16 #17 [`medido` por GitHub]. Cinco migraciones aplicadas por CC con autorización de Sam. Búsquedas web y fallos con costo explicado; 187 filas históricas reclasificadas con respaldo; alerta `COST_NOT_COMPUTED`; tarifa de Haiku 4.5. Entidad `StudioOperations` (sin términos: su informe Cliente no se genera). `brand-context-builder` con puerta y PR; `iid-ecommerce*` retiradas. Pestaña «Manual» con «Publicada». unrlvl-ops multimarca y móvil. 8 learnings en Professor. Detalle en `IID/session_log.md` 2026-10-01 (v2).)_
 
-_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-02 (v4)» (1 línea, `v2026-10-01-v1`), «Migración 2026-10-02 (v3)» (1 línea, `v2026-09-30-v4`) y «Migración 2026-10-02 (v2)» (1 línea, `v2026-09-30-v3`)._
+_Cabecera: se conservan las 10 versiones más recientes; las anteriores están **íntegras** en `historical_AGENDA.md` (regla de Sam del 2026-09-30, `protocols/HRD_PROTOCOL.md` paso 10). Las tres últimas migraciones de cabecera: «Migración 2026-10-03» (1 línea, `v2026-10-01-v2`), «Migración 2026-10-02 (v4)» (1 línea, `v2026-10-01-v1`) y «Migración 2026-10-02 (v3)» (1 línea, `v2026-09-30-v4`)._
+
+---
+
+## 🗓️ CIERRE 2026-10-03-v1 — Upgrade editorial multimarca F0–F3: el texto se pinta, el artículo lleva imágenes y el carrusel sigue la maqueta v4
+
+_(Bloque al tope. **No reescribe ninguna versión anterior**: el `v2026-10-02-v4` queda íntegro debajo.
+Sesión de CC `session_01G5goP8Jq8SSKLAPcdrvdNt` (rama `ccr-c46370b8-vio6sj` en cada repo), del 2026-10-01 al
+2026-10-03, sobre la maqueta v4 aprobada por Sam el 2026-10-02. Detalle en `IID/session_log.md` 2026-10-03 y
+en los `session_log.md` de NeuroneSCF, LucienSael, UnrealvilleStudio y ForumPHs.)_
+
+### Hecho [`medido`]
+- **F0 — la negrita se pinta:** `luciensael` #3, `CoreProject` #12, `forumphs-com` #13, `Orchestrator` #64,
+  `unrlvl-iid-functions` #311 (blog de Shopify). **`unrlvl-blog` #3 cerrado sin mergear** (el repo no está en
+  ninguno de los 34 proyectos de Vercel) y **el repo, archivado por Sam en GitHub** el 2026-10-03; el blog de
+  UVS lo sirve `CoreProject`.
+- **F1 — markdown mínimo y formato editorial:** CopyLab #45 #46 #47; `unrlvl-iid-functions` #312 #317 #319;
+  sitios `luciensael` #6, `CoreProject` #15, `forumphs-com` #14; `Orchestrator` #65; BluePrints #12 #13
+  (acentos por marca; el ámbar de UNRLVL es `#FFB020`). Reformateo de piezas anteriores a F1: 67 de 69; los 3
+  artículos de NSCF en Shopify verificados idénticos carácter a carácter; `S-1002-29` y `S-1002-30` cerradas.
+- **Sitios:** imágenes del blog a su proporción (`luciensael` #7, `CoreProject` #16, `forumphs-com` #15; tema
+  NSCF v1.5 publicado por Sam [`reportado`]); sin desborde horizontal en el teléfono (`luciensael` #8,
+  `CoreProject` #17); `luciensael` #4 #5 #9; `CoreProject` #13 #14.
+- **F2 — imágenes dentro del artículo:** lectores `luciensael` #10, `CoreProject` #18, `forumphs-com` #16,
+  `Orchestrator` #66; CopyLab #48 #49; `unrlvl-iid-functions` #326 #327 (juez visual `IMG-GEN-06`, alt escrito
+  mirando la imagen). Preset `BI0101` (`BLOG_INLINE`), cron 146 `content-inline-images-10min` activo. Topes:
+  UVS 2, NSCF 2, ForumPHs 2, **LucienSael 0** hasta su avatar.
+- **F3 — carrusel según la maqueta v4:** ImageLab #34 #35 #36 (compositor 1.3.2); CopyLab #50 #51; tabla
+  `public.brand_logo` con 4 filas; paleta y carrusel de cada marca como dato; acción `carousel_recompose`
+  probada en `85517171`; 19 CTAs de NeuroneSCF sin urgencia (`unrlvl-iid-functions` #328; 0 celdas con
+  urgencia al cierre, sin contar «SHOP NOW»).
+- **Migraciones** (todas con pin en `supabase/MIGRACIONES_CONGELADAS.md`): `20261003010000`, `20261003020000`,
+  `20261003030000`, `20261003040000`, `20261003050000`. **EF** desplegadas por Sam con `--no-verify-jwt`
+  [`reportado`]: `content-run-stage`, `blog-promoter` v1.4, `content-watcher`, `content-scheduler`.
+- **Professor:** `211da71b`, `fe20470b`, `db9e7059`, `c069c596`, `d8cd4123`, `bb4f12c0`, `729b4ef3`,
+  `df3173e9`, `ec97b4ab`, `91d8214a`, `71170ae5`, `ee5a855c` y `ebd4c01c`, aprobados por Sam (13 de 13).
+- **Barrido de piezas existentes con F1–F3** (Sam, 2026-10-03; F3 en los 18 carruseles en espera, F2 en UVS,
+  ForumPHs y NeuroneSCF): «RESULTADO DEL BARRIDO: pendiente»
+
+### Verificación contra fuente (paso 10-bis) del `v2026-10-02-v4`
+_(Consultas de sólo lectura el 2026-10-03 hacia las 01:20 UTC: `alerting.seguimiento`,
+`content.content_pieces`, `intel.brand_publish_channels`, `cron.job`, `public.brand_logo`,
+`public.imagelab_presets`, `public.ctas`, `public.professor_learnings`; `git log origin/main` de los repos
+clonados; API REST de GitHub para `unrlvl-blog`.)_
+- **«Sam, queda esto», punto 1** (revisar `fadfe938`, `S-1002-15`) → **ABIERTO**: la pieza sigue en
+  `awaiting_approval` y la nota sin cerrar (`cerrada_at` nulo) [`medido`].
+- **«Sam, queda esto», punto 2** (`71b5ef47` en Arreglos) → **ABIERTO**: sigue `challenged` [`medido`]. La otra
+  pieza de prueba F1, `800b8335`, ya está `scheduled` [`medido`]: la lista de pendientes de esta sesión la daba
+  como `challenged`, y eso ya no es cierto.
+- **«Próxima sesión», punto 1** (revisión del 2026-10-03 13:30 UTC, `trig_01JTXTT46y7LHVD29VurNCCb`) →
+  **ABIERTO**: a la hora de la medición todavía no había llegado.
+- **«Próxima sesión», punto 2** (`piece-edit` no re-deriva el título del canal) → **ABIERTO**: ningún commit en
+  `supabase/functions/piece-edit` de `unrlvl-iid-functions@origin/main` desde el 2026-10-02 [`medido`].
+- **Ítems de esta sesión, verificados contra la fuente:** `S-1002-29` y `S-1002-30` → **CERRADO**;
+  `S-1003-01` y `S-1003-02` → **ABIERTO** [`medido` en `alerting.seguimiento`]. Topes de F2, preset `BI0101`,
+  cron 146 activo, 4 filas de `brand_logo`, 0 celdas de NeuroneSCF con urgencia y 13 de 13 learnings con
+  `approved_by_sam = true` → **CERRADO** [`medido`]. `unrlvl-blog`: PR #3 cerrado sin mergear y
+  `archived = true` → **CERRADO** [`medido`].
+- **`FOCO INMEDIATO`:** sus puntos (comm-arsenal, bucles de Marisol, destilados, deudas DB y cuentas de Meta de
+  ForumPHs) no tocan esta sesión; no se re-verifican en esta pasada.
+
+### Barrido de archivado (paso 10)
+- **Cabecera:** baja íntegra 1 línea (`v2026-10-01-v2`) a `historical_AGENDA.md` → «Migración 2026-10-03 —
+  cabecera de AGENDA.md». La cabecera queda con 10.
+- **Cuerpo:** sin ítems archivables en esta pasada. Candidatos evaluados y retenidos con su motivo en el
+  informe del PR; no se mueve nada sin confirmación de Sam.
+
+### Sam, queda esto
+1. **`S-1003-01` — crear el avatar propio de LucienSael.** Después, el tope de imágenes del artículo de Lucien
+   pasa de 0 a 2.
+2. **Decidir cuándo se limpian los CTAs con urgencia de 7 marcas fuera del carril** (D7Herbal, DiamondDetails,
+   PatriciaOsorioComunidad, PatriciaOsorioPersonal, PatriciaOsorioVizosSalon, VivoseMask, VizosCosmetics; 46
+   celdas [`medido`]): al entrar al carril, o antes.
+3. **Opcional: subir los logotipos de NSCF y Lucien al bucket `brand-assets`**; hoy van como data URI en
+   `public.brand_logo` y el cambio es de una fila.
+4. **Sigue de antes:** `S-1002-15` (`fadfe938`) y `71b5ef47`.
+
+### Próxima sesión
+1. **`S-1003-02`** — piezas de LucienSael que mezclan idiomas: medir cuántas son y la causa en el carril.
+2. **Texto de los posts sociales según la maqueta v4 §3** (hashtags del set fijo del genoma, párrafos de 1–3
+   líneas, un solo CTA al final): brecha medida el 2026-10-02 por el agente de F3. PR aparte, por datos y reglas.
+3. **Barrido de pendientes y aprobaciones:** 250 piezas en `awaiting_approval` y 47 en `challenged` [`medido`
+   el 2026-10-03], frente a unas 243 de `PIEZAS_PARA_REVISAR_2026-10-02.md`.
+4. **La regeneración real de `ecosystem.md` y `ecosystem_filemap.md`** sigue abierta sin fecha: no existe
+   generador en el repo.
 
 ---
 

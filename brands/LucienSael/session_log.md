@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-10-03 — Formato editorial en luciensael.com, y las imágenes del artículo esperan al avatar propio
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-03. SMA no consultado: Sam no lo pidió.
+
+- **Sitio** (`luciensael` #3–#10, mergeados [`medido`]): la negrita se pinta (#3); Writing entra al blog,
+  sección viva y mobile-first (#4); contacto a `iam@luciensael.com` y fuentes propias (#5); formato editorial
+  F1, acentos del BP y «Keep reading» con imagen (#6); miniaturas enteras (#7); sin desborde horizontal en el
+  teléfono (#8); la sección Writing de la portada lleva imagen (#9); el lector entiende `![img-N]` (#10).
+- **Acento Mercurio y firma de texto de Lucien** (BluePrints #12). Logotipo SVG como data URI en
+  `public.brand_logo`.
+- **Prueba controlada de F2 en `6fc8e90c`:** la primera vuelta dio un alt que no describía la imagen y una
+  imagen con franjas negras; tras CopyLab #49 y `unrlvl-iid-functions` #327 se regeneraron con juez visual y
+  alt escrito mirando la imagen [`medido`]. **Lucien salió con caras distintas en las 2 imágenes.**
+- **Tope de imágenes dentro del artículo = 0** hasta el avatar propio (decisión de Sam), con
+  `config.inline_images_paused_note` [`medido` el 2026-10-03].
+- **Abierto:**
+  1. `S-1003-01` — crear el avatar propio de LucienSael (Lucien tiene que ser el mismo en todas las imágenes).
+  2. `S-1003-02` — piezas que mezclan idiomas (`6fc8e90c`: subtítulos en inglés y cuerpo en español en un blog
+     en-US). Medir cuántas son y la causa en el carril.
+  3. `71b5ef47` (blog) sigue `challenged` [`medido` el 2026-10-03].
+
+---
+
 ## 2026-10-01 — Veinticinco textos de imagen y trece carruseles
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. Todo lo

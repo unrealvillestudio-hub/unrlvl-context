@@ -4,6 +4,33 @@ _Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags 
 
 ---
 
+## 2026-10-03 — El blog de Shopify recibe el formato editorial, los CTAs dejan la urgencia y el carrusel sigue la maqueta v4
+
+> **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
+> ecosistema está en `IID/session_log.md` 2026-10-03. SMA no consultado: Sam no lo pidió.
+
+- **F0 y F1 en Shopify:** `blog-promoter` lleva el formato al blog de Shopify (`unrlvl-iid-functions` #311) y
+  `shopify_blog` pinta `markdown_min` (#312).
+- **Los 3 artículos de la marca en Shopify**, actualizados con `articleUpdate` y verificados **idénticos
+  carácter a carácter** [`medido`]: `615312982343` = `3cd0773f`, `615304069447` = `152b8d2b`,
+  `615378223431` = `d915295b`. `miami-humedad` (editado a mano en Shopify) no se tocó.
+- **Voseo corregido** en `hair-science-3cd0773f` (aprobado por Sam; `S-1002-30` cerrada [`medido`]).
+- **Tema de NSCF v1.5** publicado por Sam (theme `201829843271`) [`reportado`]: las imágenes del blog se ven a su
+  proporción.
+- **Acento Menta** (BluePrints #12). Paleta del carrusel como dato: roles nuevos `accent_glow` `#0095D4`,
+  `bg_deep` `#0A0D14`, `surface_1` `#111520`, `surface_2` `#161C2A`; logotipo PNG como data URI en
+  `public.brand_logo` (migraciones `20261003040000` y `20261003010000`).
+- **F2:** tope de imágenes dentro del artículo = 2 [`medido` el 2026-10-03].
+- **F3:** prueba de `carousel_recompose` en `85517171` (elegida por Sam): compositor 1.3.2, flecha abajo; el
+  cierre quedó sin CTA propio tras corregir los CTAs con urgencia [`medido`].
+- **19 CTAs sin «ahora/hoy/ya/now/today»** (opción a de Sam, textos aprobados): migración `20261003050000`,
+  `unrlvl-iid-functions` #328. «SHOP NOW» se deja a propósito. Medido el 2026-10-03: 0 celdas con esas
+  palabras, sin contar «SHOP NOW».
+- **Barrido de piezas existentes (F2, agendadas y publicadas, con `articleUpdate` verificado):**
+  «RESULTADO DEL BARRIDO: pendiente»
+
+---
+
 ## 2026-10-02 (v3) — HR-NSCF-06 pasa a producción por el banco de reglas, y el cambio del juez para HR-NSCF-08 se revierte
 
 > **Entrada de CC.** No reescribe ninguna entrada anterior, que queda íntegra debajo. El detalle del
