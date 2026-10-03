@@ -118,6 +118,9 @@ clonados; API REST de GitHub para `unrlvl-blog`.)_
    - `visual_directive` para los temas de UVS (12 de 12 imágenes son racks o circuitos);
    - que el plan no elija como foco una enumeración técnica;
    - el alt cuesta 3 veces lo estimado.
+6. **`S-1003-04` — modelo de contrato de concesión de derechos de uso de imagen de Irja** vía avatar
+   sintético generado a partir de su foto (ForumPHs, Facility Manager y Operations), como aporte a su
+   participación en la sociedad. Sam (2026-10-03): «lo veremos en su momento».
 
 ---
 
