@@ -23,6 +23,12 @@
   2. `S-1003-02` — piezas que mezclan idiomas (`6fc8e90c`: subtítulos en inglés y cuerpo en español en un blog
      en-US). Medir cuántas son y la causa en el carril.
   3. `71b5ef47` (blog) sigue `challenged` [`medido` el 2026-10-03].
+  4. **Barrido F3** [`medido` el 2026-10-03]: los 13 carruseles en espera, recompuestos con 1.3.2 y
+     `slide_pass`.
+     - `82c355aa`, `f70036e3` y `5d5591a1` quedan retenidos hasta ImageLab #37 (desborde del pie).
+     - El texto naranja se lee mal sobre caras o fondos cálidos en 9 carruseles: Sam decide si se oscurece
+       el velo.
+     - 5 portadas antiguas tienen fondo en díptico o la persona duplicada.
 
 ---
 

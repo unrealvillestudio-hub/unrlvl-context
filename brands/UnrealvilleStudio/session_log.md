@@ -20,7 +20,13 @@
   `public.brand_logo`.
 - **F2:** tope de imágenes dentro del artículo = 2 [`medido` el 2026-10-03].
 - **Pieza de prueba F1 `800b8335`:** `scheduled` [`medido` el 2026-10-03].
-- **Barrido de piezas existentes (F2, publicadas y agendadas):** «RESULTADO DEL BARRIDO: pendiente»
+- **Barrido de piezas existentes (F2, publicadas y agendadas)** [`medido` el 2026-10-03]:
+  - Publicadas que el sitio sirve: `424bbbe2` y `b351da19` con 2 imágenes, verificadas en el HTML en vivo.
+    `2c391e74` y `11d72451` quedan sin imágenes (429 de Vertex y el juez), sin `![img-` en el sitio.
+  - Agendadas: `b95e8d0a`, `93138c7a`, `b25f4378`, `9d6a7188` y `800b8335` completas.
+  - **`800b8335` n2 tiene franjas negras** que el juez dejó pasar (se publica el 2026-10-23).
+  - Las 12 imágenes son racks o circuitos: ningún tema de la marca tiene `visual_directive`.
+  - F3: 2 carruseles en espera recompuestos. `0c704fe8` queda retenido hasta ImageLab #37.
 
 ---
 

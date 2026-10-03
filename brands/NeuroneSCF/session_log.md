@@ -26,8 +26,18 @@ _Actualizado: 2026-09-29 v3 (sesión de fixables: voseo, competidores, hashtags 
 - **19 CTAs sin «ahora/hoy/ya/now/today»** (opción a de Sam, textos aprobados): migración `20261003050000`,
   `unrlvl-iid-functions` #328. «SHOP NOW» se deja a propósito. Medido el 2026-10-03: 0 celdas con esas
   palabras, sin contar «SHOP NOW».
-- **Barrido de piezas existentes (F2, agendadas y publicadas, con `articleUpdate` verificado):**
-  «RESULTADO DEL BARRIDO: pendiente»
+- **Barrido de piezas existentes (F2, agendadas y publicadas, con `articleUpdate` verificado)** [`medido`
+  el 2026-10-03]:
+  - Agendadas: las 5 cerradas, con 7 imágenes `ok` y 1 `failed` (`861681cd` n1, rechazada por el juez).
+  - Publicadas: `3cd0773f` y `9336b402` actualizadas en Shopify y verificadas idénticas a lo esperado.
+  - Publicadas sin tocar:
+    - `d915295b`: su n1 es una imagen dentro de otra, y el juez la aprobó.
+    - `152b8d2b`: en Shopify dice «Nanotribología» y en la base «Nano Tribología».
+    - `4f13cc52`: anterior a F1; en vivo se ven «## » literales.
+    - `46e6b3c5` (miami-humedad): editado a mano.
+  - **A revisar antes del 2026-10-06:** `fe6730dd` n1 (un mechón magenta suelto).
+  - F3: 3 carruseles en espera recompuestos. `ea5a269b` y `3c58d5a1` quedan retenidos hasta CopyLab #52.
+  - Costo ≈ $0,65 (`deducido`).
 
 ---
 

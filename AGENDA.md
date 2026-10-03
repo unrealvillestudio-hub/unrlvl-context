@@ -47,7 +47,14 @@ en los `session_log.md` de NeuroneSCF, LucienSael, UnrealvilleStudio y ForumPHs.
 - **Professor:** `211da71b`, `fe20470b`, `db9e7059`, `c069c596`, `d8cd4123`, `bb4f12c0`, `729b4ef3`,
   `df3173e9`, `ec97b4ab`, `91d8214a`, `71170ae5`, `ee5a855c` y `ebd4c01c`, aprobados por Sam (13 de 13).
 - **Barrido de piezas existentes con F1–F3** (Sam, 2026-10-03; F3 en los 18 carruseles en espera, F2 en UVS,
-  ForumPHs y NeuroneSCF): «RESULTADO DEL BARRIDO: pendiente»
+  ForumPHs y NeuroneSCF), medido hacia las 02:15 UTC:
+  - **F3:** 18 recompuestos con 1.3.2 y `slide_pass`, 0 CTAs con urgencia, unos $0,18. Quedan **6
+    retenidos**: 4 por desborde (ImageLab #37) y 2 por cierre o eyebrow (CopyLab #52).
+  - **F2 UVS y ForumPHs:** 26 de 34 imágenes `ok`. Las 9 publicadas que se sirven quedan verificadas en el
+    HTML en vivo. 4 fallos por 429 de Vertex y 4 por el juez. Unos $2,97.
+  - **F2 NeuroneSCF:** 5 agendadas cerradas (7 `ok`, 1 `failed`). 2 artículos publicados actualizados en
+    Shopify y verificados; 4 sin tocar, con motivo. Unos $0,65.
+  - Detalle en `IID/session_log.md` 2026-10-03 §7.
 
 ### Verificación contra fuente (paso 10-bis) del `v2026-10-02-v4`
 _(Consultas de sólo lectura el 2026-10-03 hacia las 01:20 UTC: `alerting.seguimiento`,
@@ -86,6 +93,15 @@ clonados; API REST de GitHub para `unrlvl-blog`.)_
 3. **Opcional: subir los logotipos de NSCF y Lucien al bucket `brand-assets`**; hoy van como data URI en
    `public.brand_logo` y el cambio es de una fila.
 4. **Sigue de antes:** `S-1002-15` (`fadfe938`) y `71b5ef47`.
+5. **Mergear ImageLab #37 y CopyLab #52** (y confirmar el despliegue de ImageLab). Después, CC recompone
+   los 6 carruseles retenidos.
+6. **Decidir sobre lo que dejó el barrido:**
+   - el velo de LucienSael (texto naranja sobre caras o fondos cálidos en 9 carruseles);
+   - `fe6730dd` n1, un mechón magenta (**se publica el 2026-10-06**);
+   - `800b8335` n2, con franjas negras (2026-10-23);
+   - `d915295b` n1, una imagen dentro de otra;
+   - `4f13cc52`, con «## » literales en vivo (F1 y F2 en una sola actualización);
+   - `152b8d2b`, «Nanotribología».
 
 ### Próxima sesión
 1. **`S-1003-02`** — piezas de LucienSael que mezclan idiomas: medir cuántas son y la causa en el carril.
@@ -95,6 +111,12 @@ clonados; API REST de GitHub para `unrlvl-blog`.)_
    el 2026-10-03], frente a unas 243 de `PIEZAS_PARA_REVISAR_2026-10-02.md`.
 4. **La regeneración real de `ecosystem.md` y `ecosystem_filemap.md`** sigue abierta sin fecha: no existe
    generador en el repo.
+5. **Mejoras que dejó el barrido F2** (sin PR todavía):
+   - que un 429 de Vertex no gaste intento de imagen (4 imágenes fallidas por cuota);
+   - que el juez detecte franjas negras y una imagen dentro de otra;
+   - `visual_directive` para los temas de UVS (12 de 12 imágenes son racks o circuitos);
+   - que el plan no elija como foco una enumeración técnica;
+   - el alt cuesta 3 veces lo estimado.
 
 ---
 

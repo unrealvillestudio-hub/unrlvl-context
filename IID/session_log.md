@@ -480,7 +480,40 @@ _(Sam: «de acuerdo con tus recomendaciones en F2 y F3», 2026-10-02.)_
 - F2: imágenes dentro del artículo en piezas publicadas y agendadas de UVS y ForumPHs (Vercel).
 - F2: NeuroneSCF (Shopify), agendadas y publicadas, con `articleUpdate` verificado y sin tocar los artículos
   editados a mano.
-- «RESULTADO DEL BARRIDO: pendiente»
+- **Resultado del barrido** [`medido` por los 3 agentes, revisado por CC sobre las hojas; 2026-10-03 hacia
+  las 02:15 UTC]:
+  - **F3:** 18 carruseles en espera recompuestos con el compositor 1.3.2 y `slide_pass` (LucienSael 13,
+    NeuroneSCF 3, UnrealvilleStudio 2; más `85517171`, la prueba). 0 CTAs con urgencia. Unos $0,18. Los 13
+    publicados no se tocaron (0 con `previous_slides`). Defectos:
+    - 4 láminas desbordan el pie: `82c355aa` n3, `0c704fe8` n3, `f70036e3` n2 y `5d5591a1` n4. Se arreglan
+      con ImageLab #37 (compositor 1.3.3, ajuste vertical), abierto.
+    - `ea5a269b`: el cierre eligió una frase de búsqueda (`cta_seo`). `3c58d5a1` y `ea5a269b`: eyebrows que
+      nombran el carrusel o el método («Dato clave del carrusel», «El contexto adversario»). Se arreglan con
+      CopyLab #52, abierto.
+    - LucienSael: el texto naranja se lee mal sobre caras o fondos cálidos en 9 carruseles (decisión de Sam
+      sobre el velo). Además, 5 portadas antiguas de Lucien tienen fondo en díptico o la persona duplicada.
+    - Esos 6 carruseles (4 + 2) no se aprueban hasta el merge de #37 y #52 y su recomposición.
+  - **F2 UnrealvilleStudio y ForumPHs (Vercel):** 19 piezas, 34 imágenes planificadas, **26 `ok` y 8
+    `failed`**. Las 9 publicadas que el sitio sirve muestran exactamente sus imágenes `ok`, y ninguna deja
+    `![img-` en el HTML en vivo (`net.http_get`). `9b055238` está descartada (410) y no se tocó.
+    - 4 fallos por 429 de Vertex, que gastaron los 2 intentos: `8f63cb40` n2, `2c391e74` n1 y n2,
+      `11d72451` n1.
+    - 4 fallos por el juez o por SAFETY: `11d72451` n2, `a4597530` n2, `1df47c51` n2, `7e73fd16` n2.
+    - Defecto que el juez dejó pasar: `800b8335` n2 tiene franjas negras (agendada para el 2026-10-23).
+    - UnrealvilleStudio: las 12 imágenes son racks o circuitos. Ningún tema de la marca tiene
+      `visual_directive` en `intel.brand_topics` (que esa sea la causa es `deducido`).
+    - Costo ≈ $2,97 en `public.ops_generation_ledger`. El alt cuesta ≈ $0,034 por imagen (3 veces lo
+      estimado) y el plan ≈ $0,036 por pieza.
+  - **F2 NeuroneSCF (Shopify):**
+    - Agendadas: las 5 cerradas, con 7 imágenes `ok` y 1 `failed` (`861681cd` n1, rechazada por el juez).
+    - Publicadas: `3cd0773f` (615312982343) y `9336b402` (615345652039) actualizadas con `articleUpdate` y
+      verificadas idénticas a lo esperado (normalizando entidades).
+    - Publicadas sin tocar:
+      - `d915295b`: su n1 es una imagen dentro de otra, y el juez la aprobó.
+      - `152b8d2b`: en Shopify dice «Nanotribología» y en la base «Nano Tribología».
+      - `4f13cc52`: anterior a F1; el sitio en vivo muestra «## » literales.
+      - `46e6b3c5`: editado a mano.
+    - Costo ≈ $0,65 (`deducido`).
 
 ### 8 · Abierto
 1. **`S-1003-01`** — avatar propio de LucienSael; después, tope de imágenes del artículo de 0 a 2.
@@ -494,6 +527,16 @@ _(Sam: «de acuerdo con tus recomendaciones en F2 y F3», 2026-10-02.)_
 6. **Barrido de pendientes y aprobaciones:** 250 piezas en `awaiting_approval` y 47 en `challenged` [`medido`
    el 2026-10-03 hacia las 01:20 UTC]. Piezas de prueba F1: `71b5ef47` sigue `challenged` y `800b8335` ya está
    `scheduled` [`medido`].
+7. **Lo que dejó el barrido:**
+   - Merge de ImageLab #37 y CopyLab #52, y después recomponer los 6 carruseles retenidos.
+   - Decisiones de Sam: el velo de LucienSael; `fe6730dd` n1, un mechón magenta (se publica el 2026-10-06);
+     `800b8335` n2, con franjas negras; `d915295b` n1; `4f13cc52` (F1 y F2 en una sola actualización);
+     `152b8d2b` (llevar «Nanotribología» a la base).
+   - Mejoras propuestas, todavía sin PR:
+     - que un 429 no gaste intento de imagen;
+     - que el juez detecte franjas negras y una imagen dentro de otra;
+     - `visual_directive` para los temas de UVS;
+     - que el plan no elija como foco una frase que enumera términos técnicos (`11d72451` n2).
 
 ## 2026-10-02 (v4) · EL CARRIL AUTO-FIX, COMPLETO Y ENCENDIDO: TEXTO, TÍTULO DEL CANAL E IMAGEN SE CORRIGEN ENTEROS
 
